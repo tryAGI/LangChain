@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
+        <RootNamespace>LangChain.Providers</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>LangChain Providers, LLMs and Chat models abstractions.</Description>
+        <PackageTags>langchain;providers;llms;abstractions</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Remove="System.Net.Http" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="PolySharp">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+</Project>

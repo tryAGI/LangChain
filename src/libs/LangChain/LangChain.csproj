@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>LangChain meta-package with the most used things.</Description>
+        <PackageTags>langchain;meta;llms</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
+      <ProjectReference Include="..\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
+    </ItemGroup>
+
+</Project>

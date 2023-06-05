@@ -1,0 +1,77 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{23506EB8-1B27-4FD0-B570-2F5EF2C33034}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Packages.props = src\Directory.Packages.props
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7E7E-4624-A99E-79D3F190F386}"
+	ProjectSection(SolutionItems) = preProject
+		src\libs\Directory.Build.props = src\libs\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{BA93B426-D455-4891-9BB7-22D670B75EF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI", "src\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj", "{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain", "src\libs\LangChain\LangChain.csproj", "{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Splitters", "Splitters", "{3FFE3B0E-578A-46A8-9E0B-789980D68ED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.Abstractions", "src\libs\Splitters\LangChain.Splitters.Abstractions\LangChain.Splitters.Abstractions.csproj", "{24321C32-14D3-4C19-BA50-76D25FAB06EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp", "src\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj", "{556A802D-2693-48FC-AE96-9C5438284A06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDEE2E22-C239-4921-83B2-9797F765FD6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp.UnitTests", "src\tests\LangChain.Splitters.CSharp.UnitTests\LangChain.Splitters.CSharp.UnitTests.csproj", "{C9D4A93D-3256-4E24-8054-87C03350A151}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24321C32-14D3-4C19-BA50-76D25FAB06EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24321C32-14D3-4C19-BA50-76D25FAB06EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24321C32-14D3-4C19-BA50-76D25FAB06EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24321C32-14D3-4C19-BA50-76D25FAB06EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{556A802D-2693-48FC-AE96-9C5438284A06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{556A802D-2693-48FC-AE96-9C5438284A06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{556A802D-2693-48FC-AE96-9C5438284A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{556A802D-2693-48FC-AE96-9C5438284A06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9D4A93D-3256-4E24-8054-87C03350A151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9D4A93D-3256-4E24-8054-87C03350A151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9D4A93D-3256-4E24-8054-87C03350A151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D4A93D-3256-4E24-8054-87C03350A151}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
+		{BA93B426-D455-4891-9BB7-22D670B75EF6} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
+		{3FFE3B0E-578A-46A8-9E0B-789980D68ED2} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
+		{24321C32-14D3-4C19-BA50-76D25FAB06EE} = {3FFE3B0E-578A-46A8-9E0B-789980D68ED2}
+		{556A802D-2693-48FC-AE96-9C5438284A06} = {3FFE3B0E-578A-46A8-9E0B-789980D68ED2}
+		{C9D4A93D-3256-4E24-8054-87C03350A151} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+	EndGlobalSection
+EndGlobal
