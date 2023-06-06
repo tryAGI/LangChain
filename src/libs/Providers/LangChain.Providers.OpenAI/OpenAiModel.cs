@@ -14,18 +14,18 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <summary>
     /// 
     /// </summary>
-    public required string ApiKey { get; init; }
-
+    public string Id { get; init; } = OpenAI_API.Models.Model.ChatGPTTurbo;
+    
     /// <summary>
     /// 
     /// </summary>
-    public string Model { get; init; } = OpenAI_API.Models.Model.ChatGPTTurbo;
+    public required string ApiKey { get; init; }
     
     /// <inheritdoc/>
     public Usage TotalUsage { get; private set; }
     
     /// <inheritdoc/>
-    public int ContextLength => OpenAiModelHelpers.CalculateContextLength(Model);
+    public int ContextLength => OpenAiModelHelpers.CalculateContextLength(Id);
 
     #endregion
 
@@ -99,24 +99,29 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     public int CountTokens(string text)
     {
         return OpenAiModelHelpers.CountTokens(
-            modelId: Model,
+            modelId: Id,
             text: text);
+    }
+
+    /// <inheritdoc/>
+    public int CountTokens(IReadOnlyCollection<Message> messages)
+    {
+        return CountTokens(string.Join(
+            Environment.NewLine,
+            messages.Select(static x => x.Content)));
     }
 
     /// <inheritdoc/>
     public int CountTokens(ChatRequest request)
     {
-        return CountTokens(string.Join(
-            Environment.NewLine,
-            request.Messages
-                .Select(static x => x.Content)));
+        return CountTokens(request.Messages);
     }
-
+    
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {
         return OpenAiModelHelpers.CalculatePriceInUsd(
-            modelId: Model,
+            modelId: Id,
             completionTokens: completionTokens,
             promptTokens: promptTokens);
     }

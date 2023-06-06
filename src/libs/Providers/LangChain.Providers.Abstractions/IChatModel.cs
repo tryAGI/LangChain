@@ -8,6 +8,11 @@ public interface IChatModel
     /// <summary>
     /// 
     /// </summary>
+    public string Id { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public Usage TotalUsage { get; }
     
     /// <summary>
@@ -31,6 +36,13 @@ public interface IChatModel
     /// <param name="text"></param>
     /// <returns></returns>
     public int CountTokens(string text);
+
+    /// <summary>
+    /// Counts the number of tokens in the given prompt and input.
+    /// </summary>
+    /// <param name="messages"></param>
+    /// <returns></returns>
+    public int CountTokens(IReadOnlyCollection<Message> messages);
 
     /// <summary>
     /// Counts the number of tokens in the given prompt and input.
