@@ -8,16 +8,6 @@ public static class ChatModelExtensions
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
-    public static Message AsSystemMessage(this string text)
-    {
-        return new Message(text, MessageRole.System);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="model"></param>
     /// <param name="prompt"></param>
     /// <param name="cancellationToken"></param>
