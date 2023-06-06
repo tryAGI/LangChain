@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDEE2E22
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp.UnitTests", "src\tests\LangChain.Splitters.CSharp.UnitTests\LangChain.Splitters.CSharp.UnitTests.csproj", "{C9D4A93D-3256-4E24-8054-87C03350A151}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI.UnitTests", "src\tests\LangChain.Providers.OpenAI.UnitTests\LangChain.Providers.OpenAI.UnitTests.csproj", "{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{C9D4A93D-3256-4E24-8054-87C03350A151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9D4A93D-3256-4E24-8054-87C03350A151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9D4A93D-3256-4E24-8054-87C03350A151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -73,5 +79,6 @@ Global
 		{24321C32-14D3-4C19-BA50-76D25FAB06EE} = {3FFE3B0E-578A-46A8-9E0B-789980D68ED2}
 		{556A802D-2693-48FC-AE96-9C5438284A06} = {3FFE3B0E-578A-46A8-9E0B-789980D68ED2}
 		{C9D4A93D-3256-4E24-8054-87C03350A151} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 	EndGlobalSection
 EndGlobal

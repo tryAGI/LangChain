@@ -96,6 +96,23 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     }
 
     /// <inheritdoc/>
+    public int CountTokens(string text)
+    {
+        return OpenAiModelHelpers.CountTokens(
+            modelId: Model,
+            text: text);
+    }
+
+    /// <inheritdoc/>
+    public int CountTokens(ChatRequest request)
+    {
+        return CountTokens(string.Join(
+            Environment.NewLine,
+            request.Messages
+                .Select(static x => x.Content)));
+    }
+
+    /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {
         return OpenAiModelHelpers.CalculatePriceInUsd(
