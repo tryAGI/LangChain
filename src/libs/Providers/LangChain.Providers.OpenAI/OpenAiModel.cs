@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using OpenAI_API;
 using OpenAI_API.Chat;
+using OpenAI_API.Models;
 
 namespace LangChain.Providers;
 
@@ -14,12 +15,12 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <summary>
     /// 
     /// </summary>
-    public string Id { get; init; } = OpenAI_API.Models.Model.ChatGPTTurbo;
+    public string Id { get; init; }
     
     /// <summary>
     /// 
     /// </summary>
-    public required string ApiKey { get; init; }
+    public string ApiKey { get; init; }
     
     /// <inheritdoc/>
     public Usage TotalUsage { get; private set; }
@@ -34,19 +35,14 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <summary>
     /// Wrapper around OpenAI large language models.
     /// </summary>
-    public OpenAiModel()
-    {
-    }
-    
-    /// <summary>
-    /// Wrapper around OpenAI large language models.
-    /// </summary>
     /// <param name="apiKey"></param>
+    /// <param name="id"></param>
     /// <exception cref="ArgumentNullException"></exception>
     [SetsRequiredMembers]
-    public OpenAiModel(string apiKey)
+    public OpenAiModel(string apiKey, string id)
     {
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+        Id = id ?? throw new ArgumentNullException(nameof(id));
     }
 
     #endregion
@@ -60,6 +56,10 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     {
         var api = new OpenAIAPI(apiKeys: ApiKey);
         var chat = api.Chat.CreateConversation();
+        chat.Model = new Model(Id)
+        {
+            OwnedBy = "openai"
+        };
         
         foreach (var message in request.Messages)
         {

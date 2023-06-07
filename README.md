@@ -12,8 +12,10 @@ We proceed from the position of the maximum choice of available options and are 
 
 ### Usage
 ```csharp
-var model = new OpenAiModel("API_KEY");
+var model = new Gpt4Model("API_KEY");
 var response = await model.GenerateAsync("Hello, World of AI!");
+
+var numberOfTokens = model.CountTokens("Hello, World of AI!");
 ```
 
 ## Support
