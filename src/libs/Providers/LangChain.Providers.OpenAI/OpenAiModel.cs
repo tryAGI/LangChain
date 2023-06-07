@@ -54,7 +54,10 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         ChatRequest request,
         CancellationToken cancellationToken = default)
     {
-        var api = new OpenAIAPI(apiKeys: ApiKey);
+        var api = new OpenAIAPI(apiKeys: ApiKey)
+        {
+            HttpClientFactory = new SimpleHttpClientFactory(),
+        };
         var chat = api.Chat.CreateConversation();
         chat.Model = new Model(Id)
         {
