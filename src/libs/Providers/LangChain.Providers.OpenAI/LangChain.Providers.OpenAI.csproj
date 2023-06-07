@@ -14,6 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Betalgo.OpenAI" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" />
         <PackageReference Include="PolySharp">
             <PrivateAssets>all</PrivateAssets>

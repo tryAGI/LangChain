@@ -1,4 +1,4 @@
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI.Tokenizers;
+using OpenAI.Tokenizer.GPT3;
 
 namespace LangChain.Providers;
 
@@ -79,6 +79,6 @@ public static class OpenAiModelHelpers
     /// <returns></returns>
     public static int CountTokens(string modelId, string text)
     {
-        return GPT3Tokenizer.Encode(text).Count;
+        return TokenizerGpt3.TokenCount(text);
     }
 }
