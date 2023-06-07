@@ -6,6 +6,9 @@
         
         <!-- NU5104: A stable release of a package should not have a prerelease dependency. -->
         <NoWarn>$(NoWarn);NU5104</NoWarn>
+        
+        <!-- CS8002: Referenced assembly 'OpenAI, Version=7.0.0.0, Culture=neutral, PublicKeyToken=null' does not have a strong name. -->
+        <NoWarn>$(NoWarn);CS8002</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
