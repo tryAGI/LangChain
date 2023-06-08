@@ -9,6 +9,9 @@
         
         <!-- CS8002: Referenced assembly 'OpenAI, Version=7.0.0.0, Culture=neutral, PublicKeyToken=null' does not have a strong name. -->
         <NoWarn>$(NoWarn);CS8002</NoWarn>
+
+        <!-- CS1685: The predefined type 'RuntimeHelpers' is defined in multiple assemblies in the global alias. -->
+        <NoWarn>$(NoWarn);CS1685</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -17,16 +20,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Betalgo.OpenAI" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" />
+        <PackageReference Include="OpenAI" />
         <PackageReference Include="PolySharp">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="OpenAI" />
+        <PackageReference Include="TiktokenSharp" />
     </ItemGroup>
 
     <ItemGroup>

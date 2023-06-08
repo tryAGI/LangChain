@@ -1,4 +1,4 @@
-using OpenAI.Tokenizer.GPT3;
+using TiktokenSharp;
 
 namespace LangChain.Providers;
 
@@ -72,13 +72,20 @@ public static class OpenAiModelHelpers
     }
 
     /// <summary>
+    /// Used library:
+    /// https://github.com/aiqinxuancai/TiktokenSharp
     /// 
+    /// Possible libraries with tokenizers:
+    /// https://github.com/microsoft/semantic-kernel
+    /// https://github.com/betalgo/openai
+    /// https://github.com/aiqinxuancai/TiktokenSharp
+    /// https://github.com/dmitry-brazhenko/SharpToken
     /// </summary>
     /// <param name="modelId"></param>
     /// <param name="text"></param>
     /// <returns></returns>
     public static int CountTokens(string modelId, string text)
     {
-        return TokenizerGpt3.TokenCount(text);
+        return TikToken.EncodingForModel(modelId).Encode(text).Count;
     }
 }

@@ -1,6 +1,6 @@
 namespace LangChain.Providers;
 
-internal class SimpleHttpClientFactory : IHttpClientFactory
+internal sealed class SimpleHttpClientFactory : IHttpClientFactory
 {
     public HttpClient CreateClient(string name)
     {
