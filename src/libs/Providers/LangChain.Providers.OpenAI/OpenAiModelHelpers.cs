@@ -1,5 +1,3 @@
-using TiktokenSharp;
-
 namespace LangChain.Providers;
 
 /// <summary>
@@ -73,7 +71,7 @@ public static class OpenAiModelHelpers
 
     /// <summary>
     /// Used library:
-    /// https://github.com/aiqinxuancai/TiktokenSharp
+    /// https://github.com/tryAGI/Tiktoken
     /// 
     /// Possible libraries with tokenizers:
     /// https://github.com/microsoft/semantic-kernel
@@ -86,6 +84,6 @@ public static class OpenAiModelHelpers
     /// <returns></returns>
     public static int CountTokens(string modelId, string text)
     {
-        return TikToken.EncodingForModel(modelId).Encode(text).Count;
+        return Tiktoken.Encoding.ForModel(modelId).Encode(text).Count;
     }
 }
