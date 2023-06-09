@@ -27,6 +27,8 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     
     /// <inheritdoc/>
     public int ContextLength => OpenAiModelHelpers.CalculateContextLength(Id);
+    
+    private Tiktoken.Encoding Encoding { get; set; }
 
     #endregion
 
@@ -43,6 +45,8 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     {
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         Id = id ?? throw new ArgumentNullException(nameof(id));
+        
+        Encoding = Tiktoken.Encoding.ForModel(Id);
     }
 
     #endregion
@@ -101,9 +105,7 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <inheritdoc/>
     public int CountTokens(string text)
     {
-        return OpenAiModelHelpers.CountTokens(
-            modelId: Id,
-            text: text);
+        return Encoding.CountTokens(text);
     }
 
     /// <inheritdoc/>

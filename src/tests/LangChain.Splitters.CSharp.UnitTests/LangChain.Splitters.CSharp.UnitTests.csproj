@@ -5,19 +5,19 @@
     </PropertyGroup>
 
     <ItemGroup Label="Usings">
-        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
-        <Using Include="FluentAssertions"/>
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+        <Using Include="FluentAssertions" />
     </ItemGroup>
 
     <ItemGroup Label="Usings">
-        <Compile Remove="Resources\**\*.*"/>
+        <Compile Remove="Resources\**\*.*" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="MSTest.TestAdapter"/>
-        <PackageReference Include="MSTest.TestFramework"/>
-        <PackageReference Include="FluentAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="MSTest.TestAdapter" />
+        <PackageReference Include="MSTest.TestFramework" />
+        <PackageReference Include="FluentAssertions" />
         <PackageReference Include="GitHubActionsTestLogger">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj"/>
+        <ProjectReference Include="..\..\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj" />
     </ItemGroup>
 
 </Project>
