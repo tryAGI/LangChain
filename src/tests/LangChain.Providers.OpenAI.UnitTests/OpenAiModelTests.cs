@@ -1,9 +1,7 @@
-using LangChain.Providers;
-
-namespace LangChain.Splitters.CSharp.UnitTests;
+namespace LangChain.Providers.OpenAI.UnitTests;
 
 [TestClass]
-public class CSharpSplitterTests
+public class OpenAiModelTests
 {
     [TestMethod]
     public void CountTokens()
@@ -11,7 +9,7 @@ public class CSharpSplitterTests
         var text = H.Resources.SocketIoClient_cs.AsString();
 
         OpenAiModelHelpers.CountTokens(modelId: "text-davinci-003", text).Should().Be(5904);
-        OpenAiModelHelpers.CountTokens(modelId: "gpt-3.5-turbo", text).Should().Be(4300);
-        OpenAiModelHelpers.CountTokens(modelId: "gpt-4", text).Should().Be(4300);
+        new Gpt35TurboModel(apiKey: "random").CountTokens(text).Should().Be(4300);
+        new Gpt4Model(apiKey: "random").CountTokens(text).Should().Be(4300);
     }
 }
