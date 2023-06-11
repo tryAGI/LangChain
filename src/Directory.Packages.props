@@ -15,6 +15,6 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.4" />
     <PackageVersion Include="OpenAI" Version="1.7.2" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
-    <PackageVersion Include="Tiktoken" Version="0.9.6" />
+    <PackageVersion Include="Tiktoken" Version="0.9.7" />
   </ItemGroup>
 </Project>
