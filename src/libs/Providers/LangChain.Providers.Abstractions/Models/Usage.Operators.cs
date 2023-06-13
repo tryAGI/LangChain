@@ -27,7 +27,7 @@ public readonly partial record struct Usage
         return new Usage(PromptTokens: (int)Math.Ceiling(a.PromptTokens * b),
             CompletionTokens: (int)Math.Ceiling(a.CompletionTokens * b),
             Messages: a.Messages,
-            PriceInUsd: (int)Math.Ceiling(a.PriceInUsd * b));
+            PriceInUsd: a.PriceInUsd * b);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public readonly partial record struct Usage
         return new Usage(PromptTokens: (int)Math.Ceiling(a.PromptTokens / b),
             CompletionTokens: (int)Math.Ceiling(a.CompletionTokens / b),
             Messages: a.Messages,
-            PriceInUsd: (int)Math.Ceiling(a.PriceInUsd / b));
+            PriceInUsd: a.PriceInUsd / b);
     }
     
     /// <summary>

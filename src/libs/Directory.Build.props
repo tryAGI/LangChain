@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <PropertyGroup Label="Nuget">
-        <Version>0.2.5</Version>
+        <Version>0.2.6</Version>
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Authors>tryAGI and contributors</Authors>
