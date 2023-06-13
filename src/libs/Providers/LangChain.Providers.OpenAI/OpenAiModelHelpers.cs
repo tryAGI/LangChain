@@ -6,10 +6,10 @@ namespace LangChain.Providers;
 public static class OpenAiModelHelpers
 {
     /// <summary>
-    /// According https://openai.com/pricing/
-    /// gpt-4	        $0.03 / 1K tokens	$0.06 / 1K tokens
-    /// gpt-4-32	    $0.06 / 1K tokens	$0.12 / 1K tokens
-    /// gpt-3.5-turbo	$0.002 / 1K tokens
+    /// According https://openai.com/pricing/ <br/>
+    /// gpt-4	        $0.03 / 1K tokens	$0.06 / 1K tokens <br/>
+    /// gpt-4-32	    $0.06 / 1K tokens	$0.12 / 1K tokens <br/>
+    /// gpt-3.5-turbo	$0.002 / 1K tokens <br/>
     /// </summary>
     /// <param name="modelId">The model id we want to know the context size for.</param>
     /// <param name="completionTokens"></param>
@@ -38,8 +38,8 @@ public static class OpenAiModelHelpers
     }
 
     /// <summary>
-    /// Calculates the maximum number of tokens possible to generate for a model.
-    /// According https://platform.openai.com/docs/models/overview
+    /// Calculates the maximum number of tokens possible to generate for a model. <br/>
+    /// According https://platform.openai.com/docs/models/overview <br/>
     /// </summary>
     /// <param name="modelId"></param>
     /// <returns></returns>
@@ -70,14 +70,14 @@ public static class OpenAiModelHelpers
     }
 
     /// <summary>
-    /// Used library:
-    /// https://github.com/tryAGI/Tiktoken
-    /// 
-    /// Possible libraries with tokenizers:
-    /// https://github.com/microsoft/semantic-kernel
-    /// https://github.com/betalgo/openai
-    /// https://github.com/aiqinxuancai/TiktokenSharp
-    /// https://github.com/dmitry-brazhenko/SharpToken
+    /// Used library: <br/>
+    /// https://github.com/tryAGI/Tiktoken <br/>
+    ///  <br/>
+    /// Possible libraries with tokenizers: <br/>
+    /// https://github.com/microsoft/semantic-kernel <br/>
+    /// https://github.com/betalgo/openai <br/>
+    /// https://github.com/aiqinxuancai/TiktokenSharp <br/>
+    /// https://github.com/dmitry-brazhenko/SharpToken <br/>
     /// </summary>
     /// <param name="modelId"></param>
     /// <param name="text"></param>

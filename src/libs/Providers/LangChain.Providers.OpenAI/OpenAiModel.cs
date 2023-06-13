@@ -92,7 +92,6 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         var usage = new Usage(
             PromptTokens: promptTokens,
             CompletionTokens: completionTokens,
-            TotalTokens: chat.MostResentAPIResult.Usage.TotalTokens,
             Messages: 1,
             PriceInUsd: priceInUsd);
         TotalUsage += usage;
