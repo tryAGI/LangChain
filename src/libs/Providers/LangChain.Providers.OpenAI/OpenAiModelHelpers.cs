@@ -1,5 +1,7 @@
 namespace LangChain.Providers;
 
+#pragma warning disable CS0618
+
 /// <summary>
 /// 
 /// </summary>
@@ -17,18 +19,40 @@ public static class OpenAiModelHelpers
     {
         var promptPricePerToken = modelId switch
         {
-            "gpt-4" or "gpt-4-0314" or "gpt-4-0613" => 0.03 * 0.001,
-            "gpt-4-32" or "gpt-4-32k-0314" or "gpt-4-32k-0613" => 0.06 * 0.001,
-            "gpt-3.5-turbo" or "gpt-3.5-turbo-0301" or "gpt-3.5-turbo-0613" => 0.0015 * 0.001,
-            "gpt-3.5-turbo-16k" => 0.003 * 0.001,
+            OpenAiModelIds.Gpt4 => 0.03 * 0.001,
+            OpenAiModelIds.Gpt4_0314 => 0.03 * 0.001,
+            OpenAiModelIds.Gpt4_0613 => 0.03 * 0.001,
+            
+            OpenAiModelIds.Gpt4_32k => 0.06 * 0.001,
+            OpenAiModelIds.Gpt4_32k_0314 => 0.06 * 0.001,
+            OpenAiModelIds.Gpt4_32k_0613 => 0.06 * 0.001,
+            
+            OpenAiModelIds.Gpt35Turbo => 0.0015 * 0.001,
+            OpenAiModelIds.Gpt35Turbo_0301 => 0.0015 * 0.001,
+            OpenAiModelIds.Gpt35Turbo_0613 => 0.0015 * 0.001,
+            
+            OpenAiModelIds.Gpt35Turbo_16k => 0.003 * 0.001,
+            OpenAiModelIds.Gpt35Turbo_16k_0613 => 0.003 * 0.001,
+            
             _ => throw new NotImplementedException(),
         };
         var completionPricePerToken = modelId switch
         {
-            "gpt-4" or "gpt-4-0314" or "gpt-4-0613" => 0.06 * 0.001,
-            "gpt-4-32" or "gpt-4-32k-0314" or "gpt-4-32k-0613" => 0.12 * 0.001,
-            "gpt-3.5-turbo" or "gpt-3.5-turbo-0301" or "gpt-3.5-turbo-0613" => 0.002 * 0.001,
-            "gpt-3.5-turbo-16k" => 0.004 * 0.001,
+            OpenAiModelIds.Gpt4 => 0.06 * 0.001,
+            OpenAiModelIds.Gpt4_0314 => 0.06 * 0.001,
+            OpenAiModelIds.Gpt4_0613 => 0.06 * 0.001,
+            
+            OpenAiModelIds.Gpt4_32k => 0.12 * 0.001,
+            OpenAiModelIds.Gpt4_32k_0314 => 0.12 * 0.001,
+            OpenAiModelIds.Gpt4_32k_0613 => 0.12 * 0.001,
+            
+            OpenAiModelIds.Gpt35Turbo => 0.002 * 0.001,
+            OpenAiModelIds.Gpt35Turbo_0301 => 0.002 * 0.001,
+            OpenAiModelIds.Gpt35Turbo_0613 => 0.002 * 0.001,
+            
+            OpenAiModelIds.Gpt35Turbo_16k => 0.004 * 0.001,
+            OpenAiModelIds.Gpt35Turbo_16k_0613 => 0.004 * 0.001,
+            
             _ => throw new NotImplementedException(),
         };
         
@@ -47,10 +71,20 @@ public static class OpenAiModelHelpers
     {
         return modelId switch
         {
-            "gpt-4" or "gpt-4-0314" or "gpt-4-0613" => 8_192,
-            "gpt-4-32" or "gpt-4-32k-0314" or "gpt-4-32k-0613" => 32_768,
-            "gpt-3.5-turbo" or "gpt-3.5-turbo-0301" or "gpt-3.5-turbo-0613" => 4_096,
-            "gpt-3.5-turbo-16k" => 16_384,
+            OpenAiModelIds.Gpt4 => 8_192,
+            OpenAiModelIds.Gpt4_0314 => 8_192,
+            OpenAiModelIds.Gpt4_0613 => 8_192,
+            
+            OpenAiModelIds.Gpt4_32k => 32_768,
+            OpenAiModelIds.Gpt4_32k_0314 => 32_768,
+            OpenAiModelIds.Gpt4_32k_0613 => 32_768,
+            
+            OpenAiModelIds.Gpt35Turbo => 4_096,
+            OpenAiModelIds.Gpt35Turbo_0301 => 4_096,
+            OpenAiModelIds.Gpt35Turbo_0613 => 4_096,
+            
+            OpenAiModelIds.Gpt35Turbo_16k => 16_384,
+            OpenAiModelIds.Gpt35Turbo_16k_0613 => 16_384,
             
             "ada" or "text-ada-001" => 2_049,
             "text-babbage-001" => 2_040,
