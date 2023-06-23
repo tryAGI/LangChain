@@ -40,7 +40,6 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <param name="apiKey"></param>
     /// <param name="id"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    [SetsRequiredMembers]
     public OpenAiModel(string apiKey, string id)
     {
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));

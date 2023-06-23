@@ -14,7 +14,6 @@ public class Gpt35Turbo16KModel : OpenAiModel
     /// </summary>
     /// <param name="apiKey"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    [SetsRequiredMembers]
     public Gpt35Turbo16KModel(string apiKey) : base(apiKey, id: OpenAiModelIds.Gpt35Turbo_16k)
     {
     }
