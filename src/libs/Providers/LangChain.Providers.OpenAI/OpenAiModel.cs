@@ -1,8 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using OpenAI_API;
-using OpenAI_API.Chat;
-using OpenAI_API.Models;
-
 namespace LangChain.Providers;
 
 /// <summary>
@@ -26,9 +21,12 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     public Usage TotalUsage { get; private set; }
     
     /// <inheritdoc/>
-    public int ContextLength => OpenAiModelHelpers.CalculateContextLength(Id);
+    public int ContextLength => ApiHelpers.CalculateContextLength(Id);
     
-    private Tiktoken.Encoding Encoding { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public Tiktoken.Encoding Encoding { get; private set; }
 
     #endregion
 
@@ -57,33 +55,33 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         ChatRequest request,
         CancellationToken cancellationToken = default)
     {
-        var api = new OpenAIAPI(apiKeys: ApiKey)
+        using var httpClient = new HttpClient
         {
-            HttpClientFactory = new SimpleHttpClientFactory(),
+            Timeout = TimeSpan.FromMinutes(5),
         };
-        var chat = api.Chat.CreateConversation();
-        chat.Model = new Model(Id)
+        var api = new OpenAiApi(apiKey: ApiKey, httpClient);
+        var response = await api.CreateChatCompletionAsync(new CreateChatCompletionRequest
         {
-            OwnedBy = "openai"
-        };
-        
-        foreach (var message in request.Messages)
-        {
-            chat.AppendMessage(new ChatMessage(
-                role: message.Role switch
+            Messages = request.Messages
+                .Select(static x => x.Role switch
                 {
-                    MessageRole.System => ChatMessageRole.System,
-                    MessageRole.Ai => ChatMessageRole.Assistant,
-                    MessageRole.Human => ChatMessageRole.User,
-                    _ => ChatMessageRole.User,
-                },
-                content: message.Content));
-        }
+                    MessageRole.System => new ChatCompletionRequestMessage
+                    {
+                        Role = ChatCompletionRequestMessageRole.System,
+                        Content = x.Content,
+                    },
+                    MessageRole.Ai => x.Content.AsAssistantMessage(),
+                    MessageRole.Human => x.Content.AsUserMessage(),
+                    _ => x.Content.AsUserMessage(),
+                })
+                .ToArray(),
+            Model = Id,
+        }, cancellationToken).ConfigureAwait(false);
         
-        var markdown = await chat.GetResponseFromChatbotAsync().ConfigureAwait(false);
+        var message = response.GetFirstChoiceMessage();
         
-        var completionTokens = chat.MostResentAPIResult.Usage.CompletionTokens;
-        var promptTokens = chat.MostResentAPIResult.Usage.PromptTokens;
+        var completionTokens = response.Usage?.Completion_tokens ?? 0;
+        var promptTokens = response.Usage?.Prompt_tokens ?? 0;
         var priceInUsd = CalculatePriceInUsd(
             completionTokens: completionTokens,
             promptTokens: promptTokens);
@@ -96,7 +94,7 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         TotalUsage += usage;
             
         return new ChatResponse(
-            Messages: new []{ new Message(markdown, MessageRole.Ai) },
+            Messages: new []{ new Message(message.Content ?? string.Empty, MessageRole.Ai) },
             Usage: usage);
     }
 
@@ -123,7 +121,7 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {
-        return OpenAiModelHelpers.CalculatePriceInUsd(
+        return ApiHelpers.CalculatePriceInUsd(
             modelId: Id,
             completionTokens: completionTokens,
             promptTokens: promptTokens);

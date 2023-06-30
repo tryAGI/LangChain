@@ -14,18 +14,21 @@
         <NoWarn>$(NoWarn);CS1685</NoWarn>
     </PropertyGroup>
 
+    <ItemGroup Label="Usings">
+        <Using Include="tryAGI.OpenAI" />
+    </ItemGroup>
+
     <PropertyGroup Label="NuGet">
         <Description>OpenAI API LLM and Chat model provider.</Description>
         <PackageTags>langchain;llms;openai;api</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OpenAI" />
         <PackageReference Include="PolySharp">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Tiktoken" />
+        <PackageReference Include="tryAGI.OpenAI" />
     </ItemGroup>
 
     <ItemGroup>

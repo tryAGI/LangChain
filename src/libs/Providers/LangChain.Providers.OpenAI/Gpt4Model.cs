@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace LangChain.Providers;
 
 /// <inheritdoc/>
@@ -16,7 +14,7 @@ public class Gpt4Model : OpenAiModel
     /// </summary>
     /// <param name="apiKey"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Gpt4Model(string apiKey) : base(apiKey, id: OpenAiModelIds.Gpt4)
+    public Gpt4Model(string apiKey) : base(apiKey, id: ModelIds.Gpt4)
     {
     }
 

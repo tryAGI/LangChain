@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace LangChain.Providers;
 
 /// <inheritdoc/>
@@ -16,7 +14,7 @@ public class Gpt35TurboModel : OpenAiModel
     /// </summary>
     /// <param name="apiKey"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Gpt35TurboModel(string apiKey) : base(apiKey, id: OpenAiModelIds.Gpt35Turbo)
+    public Gpt35TurboModel(string apiKey) : base(apiKey, id: ModelIds.Gpt35Turbo)
     {
     }
 
