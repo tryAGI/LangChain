@@ -23,10 +23,9 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// <inheritdoc/>
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
     
-    /// <summary>
-    /// 
-    /// </summary>
-    public Tiktoken.Encoding Encoding { get; private set; }
+    private HttpClient HttpClient { get; set; }
+    private Tiktoken.Encoding Encoding { get; set; }
+    private ICollection<ChatCompletionFunctions> GlobalFunctions { get; set; } = new List<ChatCompletionFunctions>();
 
     #endregion
 
@@ -75,6 +74,8 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
                     _ => x.Content.AsUserMessage(),
                 })
                 .ToArray(),
+            Functions = GlobalFunctions,
+            Function_call = Function_call4.Auto,
             Model = Id,
         }, cancellationToken).ConfigureAwait(false);
         
@@ -125,6 +126,17 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
             modelId: Id,
             completionTokens: completionTokens,
             promptTokens: promptTokens);
+    }
+    
+    /// <summary>
+    /// Adds user-defined OpenAI functions to each request to the model.
+    /// </summary>
+    /// <param name="functions"></param>
+    /// <returns></returns>
+    [CLSCompliant(false)]
+    public void AddGlobalFunctions(ICollection<ChatCompletionFunctions> functions)
+    {
+        GlobalFunctions = functions ?? throw new ArgumentNullException(nameof(functions));
     }
     
     #endregion
