@@ -93,7 +93,9 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         TotalUsage += usage;
             
         return new ChatResponse(
-            Messages: new []{ new Message(message.Content ?? string.Empty, MessageRole.Ai) },
+            Messages: request.Messages
+                .Concat(new []{ new Message(message.Content ?? string.Empty, MessageRole.Ai) })
+                .ToArray(),
             Usage: usage);
     }
 
