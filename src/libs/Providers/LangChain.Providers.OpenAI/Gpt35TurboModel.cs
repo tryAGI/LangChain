@@ -13,8 +13,9 @@ public class Gpt35TurboModel : OpenAiModel
     /// <remarks>On June 27th, 2023, gpt-3.5-turbo will be updated to point from gpt-3.5-turbo-0301 to gpt-3.5-turbo-0613.</remarks>
     /// </summary>
     /// <param name="apiKey"></param>
+    /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Gpt35TurboModel(string apiKey) : base(apiKey, id: ModelIds.Gpt35Turbo)
+    public Gpt35TurboModel(string apiKey, HttpClient httpClient) : base(apiKey, httpClient, id: ModelIds.Gpt35Turbo)
     {
     }
 

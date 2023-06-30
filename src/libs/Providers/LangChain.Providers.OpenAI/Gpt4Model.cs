@@ -13,8 +13,9 @@ public class Gpt4Model : OpenAiModel
     /// <remarks>On June 27th, 2023, gpt-4 will be updated to point from gpt-4-0314 to gpt-4-0613, the latest model iteration.</remarks>
     /// </summary>
     /// <param name="apiKey"></param>
+    /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Gpt4Model(string apiKey) : base(apiKey, id: ModelIds.Gpt4)
+    public Gpt4Model(string apiKey, HttpClient httpClient) : base(apiKey, httpClient, id: ModelIds.Gpt4)
     {
     }
 

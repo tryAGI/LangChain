@@ -11,8 +11,9 @@ public class Gpt35Turbo16KModel : OpenAiModel
     /// Training data: Up to Sep 2021 <br/>
     /// </summary>
     /// <param name="apiKey"></param>
+    /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Gpt35Turbo16KModel(string apiKey) : base(apiKey, id: ModelIds.Gpt35Turbo_16k)
+    public Gpt35Turbo16KModel(string apiKey, HttpClient httpClient) : base(apiKey, httpClient, id: ModelIds.Gpt35Turbo_16k)
     {
     }
 

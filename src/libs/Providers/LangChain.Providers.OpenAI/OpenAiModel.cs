@@ -36,10 +36,12 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     /// </summary>
     /// <param name="apiKey"></param>
     /// <param name="id"></param>
+    /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public OpenAiModel(string apiKey, string id)
+    public OpenAiModel(string apiKey, HttpClient httpClient, string id)
     {
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
         
         Encoding = Tiktoken.Encoding.ForModel(Id);
@@ -54,11 +56,7 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         ChatRequest request,
         CancellationToken cancellationToken = default)
     {
-        using var httpClient = new HttpClient
-        {
-            Timeout = TimeSpan.FromMinutes(5),
-        };
-        var api = new OpenAiApi(apiKey: ApiKey, httpClient);
+        var api = new OpenAiApi(apiKey: ApiKey, HttpClient);
         var response = await api.CreateChatCompletionAsync(new CreateChatCompletionRequest
         {
             Messages = request.Messages
