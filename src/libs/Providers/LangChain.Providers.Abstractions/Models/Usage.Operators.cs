@@ -10,7 +10,8 @@ public readonly partial record struct Usage
     /// <returns></returns>
     public static Usage operator +(Usage a, Usage b)
     {
-        return new Usage(PromptTokens: a.PromptTokens + b.PromptTokens,
+        return new Usage(
+            PromptTokens: a.PromptTokens + b.PromptTokens,
             CompletionTokens: a.CompletionTokens + b.CompletionTokens,
             Messages: a.Messages + b.Messages,
             PriceInUsd: a.PriceInUsd + b.PriceInUsd);
@@ -22,9 +23,25 @@ public readonly partial record struct Usage
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
+    public static Usage operator -(Usage a, Usage b)
+    {
+        return new Usage(
+            PromptTokens: a.PromptTokens - b.PromptTokens,
+            CompletionTokens: a.CompletionTokens - b.CompletionTokens,
+            Messages: a.Messages - b.Messages,
+            PriceInUsd: a.PriceInUsd - b.PriceInUsd);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
     public static Usage operator *(Usage a, double b)
     {
-        return new Usage(PromptTokens: (int)Math.Ceiling(a.PromptTokens * b),
+        return new Usage(
+            PromptTokens: (int)Math.Ceiling(a.PromptTokens * b),
             CompletionTokens: (int)Math.Ceiling(a.CompletionTokens * b),
             Messages: a.Messages,
             PriceInUsd: a.PriceInUsd * b);
@@ -38,7 +55,8 @@ public readonly partial record struct Usage
     /// <returns></returns>
     public static Usage operator /(Usage a, double b)
     {
-        return new Usage(PromptTokens: (int)Math.Ceiling(a.PromptTokens / b),
+        return new Usage(
+            PromptTokens: (int)Math.Ceiling(a.PromptTokens / b),
             CompletionTokens: (int)Math.Ceiling(a.CompletionTokens / b),
             Messages: a.Messages,
             PriceInUsd: a.PriceInUsd / b);
@@ -76,5 +94,17 @@ public readonly partial record struct Usage
     public static Usage Divide(Usage left, double right)
     {
         return left / right;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static Usage Subtract(Usage left, Usage right)
+    {
+        return left - right;
     }
 }

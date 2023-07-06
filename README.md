@@ -18,6 +18,62 @@ var response = await model.GenerateAsync("Hello, World of AI!");
 var numberOfTokens = model.CountTokens("Hello, World of AI!");
 ```
 
+### OpenAI Functions:
+WeatherService:
+```csharp
+[OpenAiFunctions]
+public interface IWeatherFunctions
+{
+    [Description("Get the current weather in a given location")]
+    public Task<Weather> GetCurrentWeatherAsync(
+        [Description("The city and state, e.g. San Francisco, CA")] string location,
+        Unit unit = Unit.Celsius,
+        CancellationToken cancellationToken = default);
+}
+
+public class WeatherService : IWeatherFunctions
+{
+    public Task<Weather> GetCurrentWeatherAsync(string location, Unit unit = Unit.Celsius, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(new Weather
+        {
+            Location = location,
+            Temperature = 22.0,
+            Unit = unit,
+            Description = "Sunny",
+        });
+    }
+}
+```
+```csharp
+using var client = new HttpClient();
+var model = new Gpt35TurboModel(apiKey, client);
+
+var service = new WeatherService();
+model.AddGlobalFunctions(service.AsFunctions(), service.AsCalls());
+
+var response = await model.GenerateAsync(new ChatRequest(
+    Messages: new []
+    {
+        "You are a helpful weather assistant.".AsSystemMessage(),
+        "What's the weather like today?".AsHumanMessage(),
+        "Sure! Could you please provide me with your location?".AsAiMessage(),
+        "Dubai, UAE".AsHumanMessage(),
+    }));
+
+Console.WriteLine(response.Messages.AsHistory());
+```
+Result:
+```
+System: You are a helpful weather assistant.
+Human: What's the weather like today?
+AI: Sure! Could you please provide me with your location?
+Human: Dubai, UAE
+Function call: GetCurrentWeather({"location": "Dubai, UAE"})
+Function result: GetCurrentWeather -> {"location":"Dubai, UAE","temperature":22,"unit":"celsius","description":"Sunny"}
+AI: The weather in Dubai, UAE today is sunny with a temperature of 22 degrees Celsius.
+```
+
 ## Support
 
 Priority place for bugs: https://github.com/tryAGI/LangChain/issues  

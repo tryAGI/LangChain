@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup Label="Base packages">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
+    <PackageReference Include="FluentAssertions" Version="6.11.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="GlobalUsings">
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <Using Include="FluentAssertions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
+  </ItemGroup>
+
+</Project>

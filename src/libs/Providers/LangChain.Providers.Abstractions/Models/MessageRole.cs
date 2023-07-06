@@ -24,4 +24,14 @@ public enum MessageRole
     /// Role of message with arbitrary speaker.
     /// </summary>
     Chat,
+    
+    /// <summary>
+    /// Role of message that defines a function call request.
+    /// </summary>
+    FunctionCall,
+    
+    /// <summary>
+    /// Role of message that defines a function call response.
+    /// </summary>
+    FunctionResult,
 }
