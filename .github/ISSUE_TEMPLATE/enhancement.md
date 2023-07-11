@@ -1,5 +1,5 @@
 ---
-name: Enhancement Request
+name: 💡Enhancement Request
 about: Suggest an enhancement to the project
 labels: kind/enhancement, triage/untriaged
 ---

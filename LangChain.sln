@@ -8,6 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{23506EB8-1
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Packages.props = src\Directory.Packages.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		.github\ISSUE_TEMPLATE\bug-report.yaml = .github\ISSUE_TEMPLATE\bug-report.yaml
+		.github\ISSUE_TEMPLATE\enhancement.md = .github\ISSUE_TEMPLATE\enhancement.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7E7E-4624-A99E-79D3F190F386}"
