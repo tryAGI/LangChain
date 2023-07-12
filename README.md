@@ -20,6 +20,24 @@ var response = await model.GenerateAsync("Hello, World of AI!");
 var numberOfTokens = model.CountTokens("Hello, World of AI!");
 ```
 
+### Chains
+```csharp
+var model = new Gpt4Model("API_KEY");
+
+var template = "What is a good name for a company that makes {product}?";
+var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1){"product"}));
+
+var chain = new LlmChain(new LlmChainInput(model, prompt));
+
+var result = await chain.Call(new ChainValues(new Dictionary<string, object>(1)
+{
+    { "product", "colourful socks" }
+}));
+
+// The result is an object with a `text` property.
+Console.WriteLine(result.Value["text"]);
+```
+
 ### OpenAI Functions:
 WeatherService:
 ```csharp
@@ -75,6 +93,8 @@ Function call: GetCurrentWeather({"location": "Dubai, UAE"})
 Function result: GetCurrentWeather -> {"location":"Dubai, UAE","temperature":22,"unit":"celsius","description":"Sunny"}
 AI: The weather in Dubai, UAE today is sunny with a temperature of 22 degrees Celsius.
 ```
+
+Also see [examples](./src/examples) for example usage.
 
 ## Support
 
