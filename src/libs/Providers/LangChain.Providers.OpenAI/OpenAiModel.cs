@@ -144,7 +144,7 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         var usage = GetUsage(response);
         TotalUsage += usage;
 
-        if (CallFunctionsAutomatically && message.Function_call != null)
+        while (CallFunctionsAutomatically && message.Function_call != null)
         {
             var functionName = message.Function_call.Name ?? string.Empty;
             var func = Calls[functionName];
@@ -154,7 +154,8 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
             if (ReplyToFunctionCallsAutomatically)
             {
                 response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-                messages.Add(ToMessage(response.GetFirstChoiceMessage()));
+                message = response.GetFirstChoiceMessage();
+                messages.Add(ToMessage(message));
                 usage += GetUsage(response);
                 TotalUsage += usage;
             }
