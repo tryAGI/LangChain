@@ -35,8 +35,8 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
     
     private HttpClient HttpClient { get; set; }
     private Tiktoken.Encoding Encoding { get; set; }
-    private ICollection<ChatCompletionFunctions> GlobalFunctions { get; set; } = new List<ChatCompletionFunctions>();
-    private IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = new Dictionary<string, Func<string, CancellationToken, Task<string>>>();
+    private List<ChatCompletionFunctions> GlobalFunctions { get; set; } = new();
+    private Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = new();
 
     #endregion
 
@@ -205,8 +205,23 @@ public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
         ICollection<ChatCompletionFunctions> functions,
         IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> calls)
     {
-        GlobalFunctions = functions ?? throw new ArgumentNullException(nameof(functions));
-        Calls = calls ?? throw new ArgumentNullException(nameof(calls));
+        functions = functions ?? throw new ArgumentNullException(nameof(functions));
+        calls = calls ?? throw new ArgumentNullException(nameof(calls));
+        
+        GlobalFunctions.AddRange(functions);
+        foreach (var call in calls)
+        {
+            Calls.Add(call.Key, call.Value);
+        }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ClearGlobalFunctions()
+    {
+        GlobalFunctions.Clear();
+        Calls.Clear();
     }
     
     #endregion

@@ -3,12 +3,6 @@
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
         <RootNamespace>LangChain.Providers</RootNamespace>
-        
-        <!-- NU5104: A stable release of a package should not have a prerelease dependency. -->
-        <NoWarn>$(NoWarn);NU5104</NoWarn>
-        
-        <!-- CS8002: Referenced assembly 'OpenAI, Version=7.0.0.0, Culture=neutral, PublicKeyToken=null' does not have a strong name. -->
-        <NoWarn>$(NoWarn);CS8002</NoWarn>
 
         <!-- CS1685: The predefined type 'RuntimeHelpers' is defined in multiple assemblies in the global alias. -->
         <NoWarn>$(NoWarn);CS1685</NoWarn>
