@@ -33,7 +33,6 @@ var result = await chain.Call(new ChainValues(new Dictionary<string, object>(1)
 {
     { "product", "colourful socks" }
 }));
-
 // The result is an object with a `text` property.
 Console.WriteLine(result.Value["text"]);
 ```
