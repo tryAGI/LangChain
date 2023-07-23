@@ -1,15 +1,11 @@
 namespace LangChain.Providers;
 
-/// <inheritdoc/>
+/// <inheritdoc cref="ModelIds.ClaudeInstant" />
 public class ClaudeInstantModel : AnthropicModel
 {
     #region Constructors
 
-    /// <summary>
-    /// Low-latency, high throughout. <br/>
-    /// Max tokens: 100,000 tokens <br/>
-    /// Training data: Up to February 2023 <br/>
-    /// </summary>
+    /// <inheritdoc cref="ModelIds.ClaudeInstant" />
     public ClaudeInstantModel(string apiKey, HttpClient httpClient) : base(apiKey, httpClient, id: ModelIds.ClaudeInstant)
     {
     }

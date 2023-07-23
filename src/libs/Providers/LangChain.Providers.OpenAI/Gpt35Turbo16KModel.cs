@@ -1,15 +1,11 @@
 namespace LangChain.Providers;
 
-/// <inheritdoc/>
+/// <inheritdoc cref="ModelIds.Gpt35Turbo_16k" />
 public class Gpt35Turbo16KModel : OpenAiModel
 {
     #region Constructors
 
-    /// <summary>
-    /// Same capabilities as the standard gpt-3.5-turbo model but with 4 times the context. <br/>
-    /// Max tokens: 16,384 tokens <br/>
-    /// Training data: Up to Sep 2021 <br/>
-    /// </summary>
+    /// <inheritdoc cref="ModelIds.Gpt35Turbo_16k" />
     /// <param name="apiKey"></param>
     /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
