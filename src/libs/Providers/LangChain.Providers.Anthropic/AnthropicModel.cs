@@ -24,14 +24,28 @@ public class AnthropicModel : IChatModel, ISupportsCountTokens, IPaidLargeLangua
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
     
     private HttpClient HttpClient { get; set; }
-    private Tiktoken.Encoding Encoding { get; set; }
+    private Tiktoken.Encoding Encoding { get; } = Tiktoken.Encoding.Get("cl100k_base");
 
     #endregion
 
     #region Constructors
 
     /// <summary>
-    /// Wrapper around OpenAI large language models.
+    /// Wrapper around Anthropic large language models.
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <param name="httpClient"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public AnthropicModel(AnthropicConfiguration configuration, HttpClient httpClient)
+    {
+        configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
+        Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
+        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    }
+
+    /// <summary>
+    /// Wrapper around Anthropic large language models.
     /// </summary>
     /// <param name="apiKey"></param>
     /// <param name="id"></param>
@@ -42,8 +56,6 @@ public class AnthropicModel : IChatModel, ISupportsCountTokens, IPaidLargeLangua
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
-        
-        Encoding = Tiktoken.Encoding.ForModel(Id);
     }
 
     #endregion

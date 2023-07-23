@@ -45,6 +45,22 @@ public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageM
     /// <summary>
     /// Wrapper around OpenAI large language models.
     /// </summary>
+    /// <param name="configuration"></param>
+    /// <param name="httpClient"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public OpenAiModel(OpenAiConfiguration configuration, HttpClient httpClient)
+    {
+        configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
+        Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
+        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        
+        Encoding = Tiktoken.Encoding.ForModel(Id);
+    }
+    
+    /// <summary>
+    /// Wrapper around OpenAI large language models.
+    /// </summary>
     /// <param name="apiKey"></param>
     /// <param name="id"></param>
     /// <param name="httpClient"></param>
