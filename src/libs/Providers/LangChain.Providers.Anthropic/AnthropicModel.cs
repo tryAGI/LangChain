@@ -1,9 +1,9 @@
 namespace LangChain.Providers;
 
 /// <summary>
-/// https://openai.com/
+/// 
 /// </summary>
-public class AnthropicModel : IChatModel, IPaidLargeLanguageModel
+public class AnthropicModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageModel
 {
     #region Properties
 

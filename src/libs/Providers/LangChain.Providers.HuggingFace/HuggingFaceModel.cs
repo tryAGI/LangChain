@@ -24,7 +24,6 @@ public class HuggingFaceModel : IChatModel
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
     
     private HttpClient HttpClient { get; set; }
-    private Tiktoken.Encoding Encoding { get; set; }
 
     #endregion
 
@@ -42,8 +41,6 @@ public class HuggingFaceModel : IChatModel
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
-        
-        Encoding = Tiktoken.Encoding.ForModel(Id);
     }
 
     #endregion
@@ -92,22 +89,6 @@ public class HuggingFaceModel : IChatModel
             },
         }, cancellationToken).ConfigureAwait(false);
     }
-
-    private Usage GetUsage(IReadOnlyCollection<Message> messages)
-    {
-        var completionTokens = CountTokens(messages.Last().Content);
-        var promptTokens = CountTokens(messages
-            .Take(messages.Count - 1)
-            .Select(ToRequestMessage)
-            .ToArray()
-            .AsPrompt());
-        
-        return new Usage(
-            PromptTokens: promptTokens,
-            CompletionTokens: completionTokens,
-            Messages: 1,
-            PriceInUsd: 0.0);
-    }
     
     /// <inheritdoc/>
     public async Task<ChatResponse> GenerateAsync(
@@ -119,32 +100,12 @@ public class HuggingFaceModel : IChatModel
         
         messages.Add(ToMessage(response));
         
-        var usage = GetUsage(messages);
+        var usage = Usage.Empty; // Unsupported
         TotalUsage += usage;
         
         return new ChatResponse(
             Messages: messages,
             Usage: usage);
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(string text)
-    {
-        return Encoding.CountTokens(text);
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(IReadOnlyCollection<Message> messages)
-    {
-        return CountTokens(string.Join(
-            Environment.NewLine,
-            messages.Select(static x => x.Content)));
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(ChatRequest request)
-    {
-        return CountTokens(request.Messages);
     }
     
     #endregion

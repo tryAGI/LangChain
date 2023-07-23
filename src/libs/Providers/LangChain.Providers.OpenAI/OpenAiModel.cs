@@ -3,7 +3,7 @@ namespace LangChain.Providers;
 /// <summary>
 /// https://openai.com/
 /// </summary>
-public class OpenAiModel : IChatModel, IPaidLargeLanguageModel
+public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageModel
 {
     #region Properties
 

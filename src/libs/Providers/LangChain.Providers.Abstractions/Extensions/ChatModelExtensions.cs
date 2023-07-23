@@ -1,7 +1,7 @@
 ﻿namespace LangChain.Providers;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class ChatModelExtensions
 {
@@ -26,7 +26,7 @@ public static class ChatModelExtensions
             }),
             cancellationToken).ConfigureAwait(false);
 
-        return response.Messages.First().Content;
+        return response.Messages.Last().Content;
     }
 
     /// <summary>
@@ -35,9 +35,10 @@ public static class ChatModelExtensions
     /// <param name="model"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+    public static void EnsureNumbersOfTokensBelowContextLength<T>(
+        this T model,
         int value)
+        where T : IChatModel, ISupportsCountTokens
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
         
@@ -54,9 +55,10 @@ public static class ChatModelExtensions
     /// <param name="model"></param>
     /// <param name="text"></param>
     /// <returns></returns>
-    public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+    public static void EnsureNumbersOfTokensBelowContextLength<T>(
+        this T model,
         string text)
+        where T : IChatModel, ISupportsCountTokens
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
 
@@ -69,9 +71,10 @@ public static class ChatModelExtensions
     /// <param name="model"></param>
     /// <param name="messages"></param>
     /// <returns></returns>
-    public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+    public static void EnsureNumbersOfTokensBelowContextLength<T>(
+        this T model,
         IReadOnlyCollection<Message> messages)
+        where T : IChatModel, ISupportsCountTokens
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
 
@@ -84,9 +87,10 @@ public static class ChatModelExtensions
     /// <param name="model"></param>
     /// <param name="request"></param>
     /// <returns></returns>
-    public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+    public static void EnsureNumbersOfTokensBelowContextLength<T>(
+        this T model,
         ChatRequest request)
+        where T : IChatModel, ISupportsCountTokens
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
 

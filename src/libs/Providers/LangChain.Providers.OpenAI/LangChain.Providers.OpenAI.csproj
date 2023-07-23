@@ -3,9 +3,6 @@
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
         <RootNamespace>LangChain.Providers</RootNamespace>
-
-        <!-- CS1685: The predefined type 'RuntimeHelpers' is defined in multiple assemblies in the global alias. -->
-        <NoWarn>$(NoWarn);CS1685</NoWarn>
     </PropertyGroup>
 
     <ItemGroup Label="Usings">

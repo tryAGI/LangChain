@@ -29,25 +29,4 @@ public interface IChatModel
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Counts the number of tokens in the given prompt and input.
-    /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
-    public int CountTokens(string text);
-
-    /// <summary>
-    /// Counts the number of tokens in the given prompt and input.
-    /// </summary>
-    /// <param name="messages"></param>
-    /// <returns></returns>
-    public int CountTokens(IReadOnlyCollection<Message> messages);
-
-    /// <summary>
-    /// Counts the number of tokens in the given prompt and input.
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
-    public int CountTokens(ChatRequest request);
 }
