@@ -8,6 +8,7 @@
     <PackageVersion Include="FluentAssertions" Version="6.11.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.2" />
     <PackageVersion Include="H.Resources.Generator" Version="1.5.1" />
+    <PackageVersion Include="HuggingFace" Version="0.2.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.15.230531.5-preview" />
@@ -15,6 +16,6 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.4" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="Tiktoken" Version="1.0.1" />
-    <PackageVersion Include="tryAGI.OpenAI" Version="1.2.0" />
+    <PackageVersion Include="tryAGI.OpenAI" Version="1.5.0" />
   </ItemGroup>
 </Project>
