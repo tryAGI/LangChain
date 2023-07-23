@@ -17,5 +17,8 @@
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="Tiktoken" Version="1.0.1" />
     <PackageVersion Include="tryAGI.OpenAI" Version="1.5.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
   </ItemGroup>
 </Project>
