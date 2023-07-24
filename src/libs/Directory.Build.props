@@ -15,6 +15,7 @@
 
     <PropertyGroup Label="Nuget">
         <Version>0.5.1</Version>
+        <PackageTags>langchain</PackageTags>
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Authors>tryAGI and contributors</Authors>

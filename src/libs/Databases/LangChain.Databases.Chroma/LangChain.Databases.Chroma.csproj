@@ -5,12 +5,12 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>LangChain Providers, LLMs and Chat models abstractions.</Description>
-        <PackageTags>$(PackageTags);abstractions</PackageTags>
+        <Description>Chroma for LangChain.</Description>
+        <PackageTags>$(PackageTags);chroma</PackageTags>
     </PropertyGroup>
 
-    <ItemGroup Label="Usings">
-        <Using Remove="System.Net.Http" />
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Chroma" />
     </ItemGroup>
 
 </Project>

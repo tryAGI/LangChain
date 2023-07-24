@@ -5,12 +5,12 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>LangChain Providers, LLMs and Chat models abstractions.</Description>
-        <PackageTags>$(PackageTags);abstractions</PackageTags>
+        <Description>Qdrant for LangChain.</Description>
+        <PackageTags>$(PackageTags);qdrant</PackageTags>
     </PropertyGroup>
 
-    <ItemGroup Label="Usings">
-        <Using Remove="System.Net.Http" />
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Qdrant" />
     </ItemGroup>
 
 </Project>

@@ -5,12 +5,12 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>LangChain Providers, LLMs and Chat models abstractions.</Description>
-        <PackageTags>$(PackageTags);abstractions</PackageTags>
+        <Description>SQLite for LangChain.</Description>
+        <PackageTags>$(PackageTags);sql;sqlite</PackageTags>
     </PropertyGroup>
 
-    <ItemGroup Label="Usings">
-        <Using Remove="System.Net.Http" />
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Sqlite" />
     </ItemGroup>
 
 </Project>

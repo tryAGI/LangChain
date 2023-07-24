@@ -1,0 +1,13 @@
+<Project>
+
+    <Import Project="..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <RootNamespace>LangChain.Extensions</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <PackageTags>$(PackageTags);extensions</PackageTags>
+    </PropertyGroup>
+
+</Project>
