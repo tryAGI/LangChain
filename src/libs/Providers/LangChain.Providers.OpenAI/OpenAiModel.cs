@@ -125,8 +125,12 @@ public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageM
             Messages = messages
                 .Select(ToRequestMessage)
                 .ToArray(),
-            Functions = GlobalFunctions,
-            Function_call = Function_call4.Auto,
+            Functions = GlobalFunctions.Count == 0
+                ? null
+                : GlobalFunctions,
+            Function_call = GlobalFunctions.Count == 0
+                ? Function_call4.None
+                : Function_call4.Auto,
             Model = Id,
         }, cancellationToken).ConfigureAwait(false);
     }
