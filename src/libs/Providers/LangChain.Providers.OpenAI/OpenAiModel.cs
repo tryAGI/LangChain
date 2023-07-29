@@ -50,6 +50,7 @@ public partial class OpenAiModel :
     /// <summary>
     /// 
     /// </summary>
+    [CLSCompliant(false)]
     public OpenAiApi Api { get; private set; }
 
     #endregion
