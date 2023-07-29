@@ -49,12 +49,7 @@ public partial class OpenAiModel : IEmbeddingModel
         return response.Data.First().Embedding.ToArray();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="texts"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <inheritdoc/>
     public async Task<IReadOnlyCollection<IReadOnlyCollection<double>>> EmbedDocumentsAsync(
         string[] texts,
         CancellationToken cancellationToken = default)
