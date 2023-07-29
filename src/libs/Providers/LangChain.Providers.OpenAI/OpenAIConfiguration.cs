@@ -12,6 +12,9 @@ public class OpenAiConfiguration
     {
         
     };
+
+    /// <inheritdoc cref="IModelWithUniqueUserIdentifier.User"/>
+    public string? User { get; set; }
     
     /// <summary>
     /// 

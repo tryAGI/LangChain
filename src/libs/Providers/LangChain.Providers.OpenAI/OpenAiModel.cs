@@ -1,10 +1,21 @@
 namespace LangChain.Providers;
 
+// ReSharper disable MemberCanBePrivate.Global
+
 /// <summary>
 /// https://openai.com/
 /// </summary>
-public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageModel
+public partial class OpenAiModel :
+    ISupportsCountTokens,
+    IPaidLargeLanguageModel,
+    IModelWithUniqueUserIdentifier
 {
+    #region Fields
+
+    private readonly object _usageLock = new();
+    
+    #endregion
+    
     #region Properties
 
     /// <summary>
@@ -17,26 +28,29 @@ public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageM
     /// </summary>
     public string ApiKey { get; init; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool CallFunctionsAutomatically { get; set; } = true;
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool ReplyToFunctionCallsAutomatically { get; set; } = true;
-    
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IChatModel.TotalUsage"/>
     public Usage TotalUsage { get; private set; }
+
+    /// <inheritdoc/>
+    public string User { get; set; } = string.Empty;
     
     /// <inheritdoc/>
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
     
-    private HttpClient HttpClient { get; set; }
-    private Tiktoken.Encoding Encoding { get; set; }
-    private List<ChatCompletionFunctions> GlobalFunctions { get; set; } = new();
-    private Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = new();
+    /// <summary>
+    /// 
+    /// </summary>
+    public HttpClient HttpClient { get; private set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public Tiktoken.Encoding Encoding { get; private set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public OpenAiApi Api { get; private set; }
 
     #endregion
 
@@ -53,9 +67,11 @@ public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageM
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
+        EmbeddingModelId = configuration.EmbeddingModelId ?? throw new ArgumentException("EmbeddingModelId is not defined", nameof(configuration));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         
         Encoding = Tiktoken.Encoding.ForModel(Id);
+        Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
     }
     
     /// <summary>
@@ -72,119 +88,12 @@ public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageM
         Id = id ?? throw new ArgumentNullException(nameof(id));
         
         Encoding = Tiktoken.Encoding.ForModel(Id);
+        Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
     }
 
     #endregion
 
     #region Methods
-
-    private static ChatCompletionRequestMessage ToRequestMessage(Message message)
-    {
-        return new ChatCompletionRequestMessage
-        {
-            Role = message.Role switch
-            {
-                MessageRole.System => ChatCompletionRequestMessageRole.System,
-                MessageRole.Ai => ChatCompletionRequestMessageRole.Assistant,
-                MessageRole.FunctionCall => ChatCompletionRequestMessageRole.Assistant,
-                MessageRole.Human => ChatCompletionRequestMessageRole.User,
-                MessageRole.FunctionResult => ChatCompletionRequestMessageRole.Function,
-                _ => ChatCompletionRequestMessageRole.User,
-            },
-            Name = string.IsNullOrWhiteSpace(message.FunctionName)
-                ? null
-                : message.FunctionName,
-            Content = message.Content,
-        };
-    }
-    
-    private static Message ToMessage(ChatCompletionResponseMessage message)
-    {
-        return new Message(
-            Content: message.Function_call?.Arguments ?? message.Content ?? string.Empty,
-            Role: message.Role switch
-            {
-                ChatCompletionResponseMessageRole.System => MessageRole.System,
-                ChatCompletionResponseMessageRole.User => MessageRole.Human,
-                ChatCompletionResponseMessageRole.Assistant when message.Function_call != null => MessageRole.FunctionCall,
-                ChatCompletionResponseMessageRole.Assistant => MessageRole.Ai,
-                ChatCompletionResponseMessageRole.Function => MessageRole.FunctionResult,
-                _ => MessageRole.Human,
-            },
-            FunctionName: message.Function_call?.Name);
-    }
-    
-    private async Task<CreateChatCompletionResponse> CreateChatCompletionAsync(
-        IReadOnlyCollection<Message> messages,
-        CancellationToken cancellationToken = default)
-    {
-        var api = new OpenAiApi(apiKey: ApiKey, HttpClient);
-        
-        return await api.CreateChatCompletionAsync(new CreateChatCompletionRequest
-        {
-            Messages = messages
-                .Select(ToRequestMessage)
-                .ToArray(),
-            Functions = GlobalFunctions.Count == 0
-                ? null
-                : GlobalFunctions,
-            Function_call = GlobalFunctions.Count == 0
-                ? Function_call4.None
-                : Function_call4.Auto,
-            Model = Id,
-        }, cancellationToken).ConfigureAwait(false);
-    }
-
-    private Usage GetUsage(CreateChatCompletionResponse response)
-    {
-        var completionTokens = response.Usage?.Completion_tokens ?? 0;
-        var promptTokens = response.Usage?.Prompt_tokens ?? 0;
-        var priceInUsd = CalculatePriceInUsd(
-            completionTokens: completionTokens,
-            promptTokens: promptTokens);
-        
-        return new Usage(
-            PromptTokens: promptTokens,
-            CompletionTokens: completionTokens,
-            Messages: 1,
-            PriceInUsd: priceInUsd);
-    }
-    
-    /// <inheritdoc/>
-    public async Task<ChatResponse> GenerateAsync(
-        ChatRequest request,
-        CancellationToken cancellationToken = default)
-    {
-        var messages = request.Messages.ToList();
-        var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-        
-        var message = response.GetFirstChoiceMessage();
-        messages.Add(ToMessage(message));
-        
-        var usage = GetUsage(response);
-        TotalUsage += usage;
-
-        while (CallFunctionsAutomatically && message.Function_call != null)
-        {
-            var functionName = message.Function_call.Name ?? string.Empty;
-            var func = Calls[functionName];
-            var json = await func(message.Function_call.Arguments ?? string.Empty, cancellationToken).ConfigureAwait(false);
-            messages.Add(json.AsFunctionResultMessage(functionName));
-
-            if (ReplyToFunctionCallsAutomatically)
-            {
-                response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-                message = response.GetFirstChoiceMessage();
-                messages.Add(ToMessage(message));
-                usage += GetUsage(response);
-                TotalUsage += usage;
-            }
-        }
-        
-        return new ChatResponse(
-            Messages: messages,
-            Usage: usage);
-    }
 
     /// <inheritdoc/>
     public int CountTokens(string text)
@@ -213,36 +122,6 @@ public class OpenAiModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageM
             modelId: Id,
             completionTokens: completionTokens,
             promptTokens: promptTokens);
-    }
-
-    /// <summary>
-    /// Adds user-defined OpenAI functions to each request to the model.
-    /// </summary>
-    /// <param name="functions"></param>
-    /// <param name="calls"></param>
-    /// <returns></returns>
-    [CLSCompliant(false)]
-    public void AddGlobalFunctions(
-        ICollection<ChatCompletionFunctions> functions,
-        IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> calls)
-    {
-        functions = functions ?? throw new ArgumentNullException(nameof(functions));
-        calls = calls ?? throw new ArgumentNullException(nameof(calls));
-        
-        GlobalFunctions.AddRange(functions);
-        foreach (var call in calls)
-        {
-            Calls.Add(call.Key, call.Value);
-        }
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    public void ClearGlobalFunctions()
-    {
-        GlobalFunctions.Clear();
-        Calls.Clear();
     }
     
     #endregion
