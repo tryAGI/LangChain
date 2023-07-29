@@ -27,6 +27,11 @@ public class OpenAiConfiguration
     /// https://platform.openai.com/docs/models/model-endpoint-compatibility <br/>
     /// </summary>
     public string? ModelId { get; set; }
+
+    /// <summary>
+    /// ID of the embedding model to use. <br/>
+    /// </summary>
+    public string EmbeddingModelId { get; set; } = EmbeddingModelIds.Ada002;
     
     /// <summary>
     /// What sampling temperature to use, between 0 and 2. <br/>
