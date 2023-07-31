@@ -6,6 +6,11 @@
 public class OpenAiConfiguration
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public const string SectionName = "OpenAI";
+
+    /// <summary>
     /// Default configuration according to the official API documentation. <br/>
     /// </summary>
     public static OpenAiConfiguration Default { get; } = new()

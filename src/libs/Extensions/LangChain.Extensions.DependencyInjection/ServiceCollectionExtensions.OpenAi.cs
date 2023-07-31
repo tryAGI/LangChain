@@ -22,7 +22,7 @@ public static partial class ServiceCollectionExtensions
 
         _ = services
             .AddOptions<OpenAiConfiguration>()
-            .BindConfiguration("OpenAI");
+            .BindConfiguration(configSectionPath: OpenAiConfiguration.SectionName);
         _ = services
             .AddHttpClient<OpenAiModel>();
         _ = services

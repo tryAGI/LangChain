@@ -6,6 +6,11 @@
 public class AnthropicConfiguration
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public const string SectionName = "Anthropic";
+    
+    /// <summary>
     /// Default configuration according to the official API documentation. <br/>
     /// </summary>
     public static AnthropicConfiguration Default { get; } = new()

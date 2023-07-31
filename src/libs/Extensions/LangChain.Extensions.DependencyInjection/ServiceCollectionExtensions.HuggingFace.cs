@@ -22,7 +22,7 @@ public static partial class ServiceCollectionExtensions
 
         _ = services
             .AddOptions<HuggingFaceConfiguration>()
-            .BindConfiguration("HuggingFace");
+            .BindConfiguration(configSectionPath: HuggingFaceConfiguration.SectionName);
         _ = services
             .AddHttpClient<HuggingFaceModel>();
         _ = services

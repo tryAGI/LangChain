@@ -22,7 +22,7 @@ public static partial class ServiceCollectionExtensions
 
         _ = services
             .AddOptions<AnthropicConfiguration>()
-            .BindConfiguration(configSectionPath: "Anthropic");
+            .BindConfiguration(configSectionPath: AnthropicConfiguration.SectionName);
         _ = services
             .AddHttpClient<AnthropicModel>();
         _ = services
