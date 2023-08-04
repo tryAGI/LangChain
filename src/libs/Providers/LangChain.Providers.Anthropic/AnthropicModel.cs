@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace LangChain.Providers;
 
 /// <summary>
@@ -110,11 +112,13 @@ public class AnthropicModel : IChatModel, ISupportsCountTokens, IPaidLargeLangua
             completionTokens: completionTokens,
             promptTokens: promptTokens);
         
-        return new Usage(
-            PromptTokens: promptTokens,
-            CompletionTokens: completionTokens,
-            Messages: 1,
-            PriceInUsd: priceInUsd);
+        return Usage.Empty with
+        {
+            PromptTokens = promptTokens,
+            CompletionTokens = completionTokens,
+            Messages = 1,
+            PriceInUsd = priceInUsd,
+        };
     }
     
     /// <inheritdoc/>
@@ -123,11 +127,15 @@ public class AnthropicModel : IChatModel, ISupportsCountTokens, IPaidLargeLangua
         CancellationToken cancellationToken = default)
     {
         var messages = request.Messages.ToList();
+        var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
         
         messages.Add(ToMessage(response));
         
-        var usage = GetUsage(messages);
+        var usage = GetUsage(messages) with
+        {
+            Time = watch.Elapsed,
+        };
         TotalUsage += usage;
         
         return new ChatResponse(

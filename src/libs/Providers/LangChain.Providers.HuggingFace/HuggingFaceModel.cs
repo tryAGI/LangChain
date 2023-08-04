@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace LangChain.Providers;
 
 /// <summary>
@@ -110,11 +112,16 @@ public class HuggingFaceModel : IChatModel
         CancellationToken cancellationToken = default)
     {
         var messages = request.Messages.ToList();
+        var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
         
         messages.Add(ToMessage(response));
         
-        var usage = Usage.Empty; // Unsupported
+        // Unsupported
+        var usage = Usage.Empty with
+        {
+            Time = watch.Elapsed,
+        };
         TotalUsage += usage;
         
         return new ChatResponse(

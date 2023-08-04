@@ -14,6 +14,7 @@ public readonly partial record struct Usage
             PromptTokens: a.PromptTokens + b.PromptTokens,
             CompletionTokens: a.CompletionTokens + b.CompletionTokens,
             Messages: a.Messages + b.Messages,
+            Time: a.Time + b.Time,
             PriceInUsd: a.PriceInUsd + b.PriceInUsd);
     }
 
@@ -29,6 +30,7 @@ public readonly partial record struct Usage
             PromptTokens: a.PromptTokens - b.PromptTokens,
             CompletionTokens: a.CompletionTokens - b.CompletionTokens,
             Messages: a.Messages - b.Messages,
+            Time: a.Time - b.Time,
             PriceInUsd: a.PriceInUsd - b.PriceInUsd);
     }
     
@@ -44,6 +46,11 @@ public readonly partial record struct Usage
             PromptTokens: (int)Math.Ceiling(a.PromptTokens * b),
             CompletionTokens: (int)Math.Ceiling(a.CompletionTokens * b),
             Messages: a.Messages,
+#if NET6_0_OR_GREATER
+            Time: a.Time * b,
+#else
+            Time: TimeSpan.FromTicks((long)(a.Time.Ticks * b)),
+#endif
             PriceInUsd: a.PriceInUsd * b);
     }
 
@@ -59,6 +66,11 @@ public readonly partial record struct Usage
             PromptTokens: (int)Math.Ceiling(a.PromptTokens / b),
             CompletionTokens: (int)Math.Ceiling(a.CompletionTokens / b),
             Messages: a.Messages,
+#if NET6_0_OR_GREATER
+            Time: a.Time / b,
+#else
+            Time: TimeSpan.FromTicks((long)(a.Time.Ticks / b)),
+#endif
             PriceInUsd: a.PriceInUsd / b);
     }
     

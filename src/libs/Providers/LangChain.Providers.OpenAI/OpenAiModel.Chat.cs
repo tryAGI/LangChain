@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace LangChain.Providers;
 
 public partial class OpenAiModel : IChatModel
@@ -84,12 +86,14 @@ public partial class OpenAiModel : IChatModel
         var priceInUsd = CalculatePriceInUsd(
             completionTokens: completionTokens,
             promptTokens: promptTokens);
-        
-        return new Usage(
-            PromptTokens: promptTokens,
-            CompletionTokens: completionTokens,
-            Messages: 1,
-            PriceInUsd: priceInUsd);
+
+        return Usage.Empty with
+        {
+            PromptTokens = promptTokens,
+            CompletionTokens = completionTokens,
+            Messages = 1,
+            PriceInUsd = priceInUsd,
+        };
     }
     
     /// <inheritdoc/>
@@ -98,12 +102,16 @@ public partial class OpenAiModel : IChatModel
         CancellationToken cancellationToken = default)
     {
         var messages = request.Messages.ToList();
+        var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
         
         var message = response.GetFirstChoiceMessage();
         messages.Add(ToMessage(message));
         
-        var usage = GetUsage(response);
+        var usage = GetUsage(response) with
+        {
+            Time = watch.Elapsed,
+        };
         lock (_usageLock)
         {
             TotalUsage += usage;

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace LangChain.Providers;
 
 public partial class OpenAiModel : IEmbeddingModel
@@ -21,11 +23,11 @@ public partial class OpenAiModel : IEmbeddingModel
             completionTokens: 0,
             promptTokens: promptTokens);
         
-        return new Usage(
-            PromptTokens: promptTokens,
-            CompletionTokens: 0,
-            Messages: 0,
-            PriceInUsd: priceInUsd);
+        return Usage.Empty with
+        {
+            PromptTokens = promptTokens,
+            PriceInUsd = priceInUsd,
+        };
     }
 
     /// <inheritdoc/>
@@ -33,6 +35,7 @@ public partial class OpenAiModel : IEmbeddingModel
         string text,
         CancellationToken cancellationToken = default)
     {
+        var watch = Stopwatch.StartNew();
         var response = await Api.CreateEmbeddingAsync(new CreateEmbeddingRequest
         {
             Input = text,
@@ -40,7 +43,10 @@ public partial class OpenAiModel : IEmbeddingModel
             User = User,
         }, cancellationToken).ConfigureAwait(false);
 
-        var usage = GetUsage(response);
+        var usage = GetUsage(response) with
+        {
+            Time = watch.Elapsed,
+        };
         lock (_usageLock)
         {
             TotalUsage += usage;
