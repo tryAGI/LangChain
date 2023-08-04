@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
+        <NoWarn>$(NoWarn);CA1031</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Include="Aspose.Pdf" />
+        <Using Remove="System.Net.Http" />
+    </ItemGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>LangChain PDF document source.</Description>
+        <PackageTags>$(PackageTags);pdf</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Aspose.PDF" />
+    </ItemGroup>
+
+</Project>

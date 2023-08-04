@@ -91,6 +91,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.AzureSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.AzureCognitiveSearch", "src\libs\Databases\LangChain.Databases.AzureCognitiveSearch\LangChain.Databases.AzureCognitiveSearch.csproj", "{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{7F35205F-1692-4702-AA88-3C29BBB121BC}"
+	ProjectSection(SolutionItems) = preProject
+		src\libs\Sources\Directory.Build.props = src\libs\Sources\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Abstractions", "src\libs\Sources\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj", "{A9C31641-768E-42F5-BFAD-79FC856CC4BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Pdf", "src\libs\Sources\LangChain.Sources.Pdf\LangChain.Sources.Pdf.csproj", "{51D01599-B641-4A7A-85AD-666087DBDF21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -193,6 +202,14 @@ Global
 		{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9C31641-768E-42F5-BFAD-79FC856CC4BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C31641-768E-42F5-BFAD-79FC856CC4BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C31641-768E-42F5-BFAD-79FC856CC4BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C31641-768E-42F5-BFAD-79FC856CC4BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51D01599-B641-4A7A-85AD-666087DBDF21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51D01599-B641-4A7A-85AD-666087DBDF21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51D01599-B641-4A7A-85AD-666087DBDF21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51D01599-B641-4A7A-85AD-666087DBDF21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -223,5 +240,8 @@ Global
 		{BBE06AB3-EE1E-4A99-A0DE-E934757140C6} = {C58D122C-808F-43F9-BB23-4E517046F533}
 		{C80634D2-A7AC-4366-A59D-AB3A1E4BDEEA} = {C58D122C-808F-43F9-BB23-4E517046F533}
 		{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC} = {C58D122C-808F-43F9-BB23-4E517046F533}
+		{7F35205F-1692-4702-AA88-3C29BBB121BC} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
+		{A9C31641-768E-42F5-BFAD-79FC856CC4BE} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
+		{51D01599-B641-4A7A-85AD-666087DBDF21} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 	EndGlobalSection
 EndGlobal
