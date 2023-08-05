@@ -1,8 +1,8 @@
 using System.Text.Json;
-using LangChain.NET.Chat;
-using LangChain.NET.Schema;
+using LangChain.Chat;
+using LangChain.Schema;
 
-namespace LangChain.NET.Prompts;
+namespace LangChain.Prompts;
 
 public abstract class BaseMessagePromptTemplate
 {

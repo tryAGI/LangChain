@@ -1,6 +1,6 @@
-using LangChain.NET.Callback;
+using LangChain.Callback;
 
-namespace LangChain.NET.Schema;
+namespace LangChain.Schema;
 
 using System;
 

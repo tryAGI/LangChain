@@ -1,10 +1,10 @@
-using LangChain.NET.Chat;
+using LangChain.Chat;
 
-namespace LangChain.NET.Schema;
+namespace LangChain.Schema;
 
 public abstract class BasePromptValue
 {
-    internal abstract BaseChatMessage[] ToChatMessages();
+    public abstract BaseChatMessage[] ToChatMessages();
     
     public abstract override string ToString();
 }

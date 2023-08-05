@@ -1,6 +1,6 @@
-using LangChain.NET.Schema;
+using LangChain.Schema;
 
-namespace LangChain.NET.Prompts;
+namespace LangChain.Prompts;
 
 public class PromptTemplateInput : IPromptTemplateInput
 {

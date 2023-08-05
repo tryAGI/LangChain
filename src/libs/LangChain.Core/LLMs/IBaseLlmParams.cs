@@ -1,7 +1,7 @@
-using LangChain.NET.Base;
-using LangChain.NET.Cache;
+using LangChain.Base;
+using LangChain.Cache;
 
-namespace LangChain.NET.LLMS;
+namespace LangChain.LLMS;
 
 public interface IBaseLlmParams : IBaseLanguageModelParams
 {

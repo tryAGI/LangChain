@@ -1,7 +1,7 @@
-using LangChain.NET.Base;
-using LangChain.NET.Schema;
+using LangChain.Base;
+using LangChain.Schema;
 
-namespace LangChain.NET.Callback;
+namespace LangChain.Callback;
 
 public class CallbackManagerForToolRun : BaseRunManager
 {

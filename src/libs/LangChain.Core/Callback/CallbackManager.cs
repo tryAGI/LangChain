@@ -1,9 +1,9 @@
-using LangChain.NET.Base;
-using LangChain.NET.Chat;
-using LangChain.NET.LLMS;
-using LangChain.NET.Schema;
+using LangChain.Base;
+using LangChain.Chat;
+using LangChain.LLMS;
+using LangChain.Schema;
 
-namespace LangChain.NET.Callback;
+namespace LangChain.Callback;
 
 using System;
 using System.Collections.Generic;

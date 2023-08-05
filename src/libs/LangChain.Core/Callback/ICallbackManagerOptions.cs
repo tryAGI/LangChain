@@ -1,4 +1,4 @@
-namespace LangChain.NET.Callback;
+namespace LangChain.Callback;
 
 public interface ICallbackManagerOptions
 {

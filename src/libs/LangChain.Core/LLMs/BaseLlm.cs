@@ -1,8 +1,8 @@
-using LangChain.NET.Base;
-using LangChain.NET.Cache;
-using LangChain.NET.Schema;
+using LangChain.Base;
+using LangChain.Cache;
+using LangChain.Schema;
 
-namespace LangChain.NET.LLMS;
+namespace LangChain.LLMS;
 
 public abstract class BaseLlm : BaseLanguageModel
 {

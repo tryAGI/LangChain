@@ -1,6 +1,8 @@
-namespace LangChain.NET.Schema;
+using LangChain.Abstractions.Schema;
 
-public class ChainValues
+namespace LangChain.Schema;
+
+public class ChainValues : IChainValues
 {
     public ChainValues(object? getFinalOutput)
     {

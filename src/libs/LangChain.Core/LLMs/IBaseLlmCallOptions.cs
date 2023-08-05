@@ -1,5 +1,5 @@
-using LangChain.NET.Base;
+using LangChain.Base;
 
-namespace LangChain.NET.LLMS;
+namespace LangChain.LLMS;
 
 public interface IBaseLlmCallOptions : IBaseLanguageModelCallOptions { }

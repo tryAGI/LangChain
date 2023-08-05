@@ -1,4 +1,4 @@
-namespace LangChain.NET.Cache;
+namespace LangChain.Cache;
 
 public abstract class BaseCache
 {

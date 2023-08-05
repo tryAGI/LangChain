@@ -1,4 +1,6 @@
-namespace LangChain.NET.Schema;
+using LangChain.Abstractions.Schema;
+
+namespace LangChain.Schema;
 
 public class InputValues
 {
@@ -7,5 +9,5 @@ public class InputValues
         this.Value = value;
     }
     
-    public Dictionary<string, object> Value { get; set; } = new();
+    public Dictionary<string, object> Value { get; }
 }

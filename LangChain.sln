@@ -40,6 +40,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp", "src\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj", "{556A802D-2693-48FC-AE96-9C5438284A06}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDEE2E22-C239-4921-83B2-9797F765FD6A}"
+	ProjectSection(SolutionItems) = preProject
+		src\tests\Directory.Build.props = src\tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp.UnitTests", "src\tests\LangChain.Splitters.CSharp.UnitTests\LangChain.Splitters.CSharp.UnitTests.csproj", "{C9D4A93D-3256-4E24-8054-87C03350A151}"
 EndProject
@@ -103,6 +106,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core", "src\libs\LangChain.Core\LangChain.Core.csproj", "{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.LeonardoAi", "src\libs\Providers\LangChain.Providers.LeonardoAi\LangChain.Providers.LeonardoAi.csproj", "{A7C56F0F-B283-4263-A45B-98869D7EE442}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.UnitTest", "src\tests\LangChain.UnitTest\LangChain.UnitTest.csproj", "{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.IntegrationTests", "src\tests\LangChain.IntegrationTests\LangChain.IntegrationTests.csproj", "{1B3FBF29-8468-4658-A816-3324E4B8DCBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Azure", "examples\LangChain.Samples.Azure\LangChain.Samples.Azure.csproj", "{19364D78-991B-4D31-BEAB-22CFA1022852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Memory", "examples\LangChain.Samples.Memory\LangChain.Samples.Memory.csproj", "{4E351E1C-B280-4686-AEAF-4788C857366E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Prompts", "examples\LangChain.Samples.Prompts\LangChain.Samples.Prompts.csproj", "{02B0A544-C941-4A3B-8BF8-74354EDDACDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Azure", "src\libs\Providers\LangChain.Providers.Azure\LangChain.Providers.Azure.csproj", "{D848B7F2-F035-43EA-AF18-080738502372}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.SequentialChain", "examples\LangChain.Samples.SequentialChain\LangChain.Samples.SequentialChain.csproj", "{233DF40E-6459-41F7-AEAE-C32398F474DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -222,6 +239,34 @@ Global
 		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3FBF29-8468-4658-A816-3324E4B8DCBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3FBF29-8468-4658-A816-3324E4B8DCBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3FBF29-8468-4658-A816-3324E4B8DCBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3FBF29-8468-4658-A816-3324E4B8DCBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19364D78-991B-4D31-BEAB-22CFA1022852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19364D78-991B-4D31-BEAB-22CFA1022852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19364D78-991B-4D31-BEAB-22CFA1022852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19364D78-991B-4D31-BEAB-22CFA1022852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E351E1C-B280-4686-AEAF-4788C857366E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E351E1C-B280-4686-AEAF-4788C857366E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E351E1C-B280-4686-AEAF-4788C857366E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E351E1C-B280-4686-AEAF-4788C857366E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02B0A544-C941-4A3B-8BF8-74354EDDACDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02B0A544-C941-4A3B-8BF8-74354EDDACDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02B0A544-C941-4A3B-8BF8-74354EDDACDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02B0A544-C941-4A3B-8BF8-74354EDDACDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D848B7F2-F035-43EA-AF18-080738502372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D848B7F2-F035-43EA-AF18-080738502372}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D848B7F2-F035-43EA-AF18-080738502372}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D848B7F2-F035-43EA-AF18-080738502372}.Release|Any CPU.Build.0 = Release|Any CPU
+		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -257,5 +302,12 @@ Global
 		{51D01599-B641-4A7A-85AD-666087DBDF21} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 		{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
 		{A7C56F0F-B283-4263-A45B-98869D7EE442} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{1B3FBF29-8468-4658-A816-3324E4B8DCBE} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{19364D78-991B-4D31-BEAB-22CFA1022852} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
+		{4E351E1C-B280-4686-AEAF-4788C857366E} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
+		{02B0A544-C941-4A3B-8BF8-74354EDDACDD} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
+		{D848B7F2-F035-43EA-AF18-080738502372} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{233DF40E-6459-41F7-AEAE-C32398F474DF} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 	EndGlobalSection
 EndGlobal

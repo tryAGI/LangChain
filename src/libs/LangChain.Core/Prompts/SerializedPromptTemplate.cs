@@ -1,4 +1,4 @@
-namespace LangChain.NET.Prompts;
+namespace LangChain.Prompts;
 
 public class SerializedPromptTemplate : SerializedBasePromptTemplate
 {

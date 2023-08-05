@@ -1,8 +1,8 @@
-using LangChain.NET.Chat;
-using LangChain.NET.Prompts.Base;
-using LangChain.NET.Schema;
+using LangChain.Chat;
+using LangChain.Prompts.Base;
+using LangChain.Schema;
 
-namespace LangChain.NET.Prompts;
+namespace LangChain.Prompts;
 
 public class ChatPromptTemplate : BaseChatPromptTemplate
 {

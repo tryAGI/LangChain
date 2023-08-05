@@ -1,6 +1,6 @@
-using LangChain.NET.Schema;
+using LangChain.Schema;
 
-namespace LangChain.NET.Base;
+namespace LangChain.Base;
 
 public abstract class BaseLanguageModel : BaseLangChain
 {

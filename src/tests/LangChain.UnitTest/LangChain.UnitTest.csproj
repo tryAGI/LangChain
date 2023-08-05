@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\libs\LangChain\LangChain.csproj" />
+        <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Moq" />
+    </ItemGroup>
+
+</Project>

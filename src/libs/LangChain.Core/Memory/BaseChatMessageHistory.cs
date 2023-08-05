@@ -1,6 +1,6 @@
-﻿using LangChain.NET.Chat;
+﻿using LangChain.Chat;
 
-namespace LangChain.NET.Memory
+namespace LangChain.Memory
 {
     public abstract class BaseChatMessageHistory
     {

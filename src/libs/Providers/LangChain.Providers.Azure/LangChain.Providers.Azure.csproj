@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Include="tryAGI.OpenAI" />
+    </ItemGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>OpenAI API LLM and Chat model provider.</Description>
+        <PackageTags>$(PackageTags);openai;api</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="tryAGI.OpenAI" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

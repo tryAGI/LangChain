@@ -24,6 +24,7 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" Version="0.17.230718.1-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Sqlite" Version="0.17.230718.1-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Weaviate" Version="0.17.230718.1-preview" />
+    <PackageVersion Include="Moq" Version="4.18.4" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.0.4" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.4" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />

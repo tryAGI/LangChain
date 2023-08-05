@@ -1,4 +1,4 @@
-namespace LangChain.NET.Chat;
+namespace LangChain.Chat;
 
 public abstract class BaseChatMessage
 {

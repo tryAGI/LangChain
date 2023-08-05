@@ -1,8 +1,8 @@
-using LangChain.NET.Base;
-using LangChain.NET.Callback;
-using LangChain.NET.Prompts.Base;
+using LangChain.Base;
+using LangChain.Callback;
+using LangChain.Prompts.Base;
 
-namespace LangChain.NET.Chains.LLM;
+namespace LangChain.Chains.LLM;
 
 public class LlmChainInput: ILlmChainInput
 {

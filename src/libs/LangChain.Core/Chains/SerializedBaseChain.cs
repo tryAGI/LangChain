@@ -1,4 +1,4 @@
-namespace LangChain.NET.Chains;
+namespace LangChain.Chains;
 
 public abstract class SerializedBaseChain
 {

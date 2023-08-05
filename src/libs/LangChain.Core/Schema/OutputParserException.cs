@@ -1,4 +1,4 @@
-namespace LangChain.NET.Schema;
+namespace LangChain.Schema;
 
 public class OutputParserException : Exception
 {

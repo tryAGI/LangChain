@@ -1,7 +1,7 @@
-using LangChain.NET.Prompts.Base;
-using LangChain.NET.Schema;
+using LangChain.Prompts.Base;
+using LangChain.Schema;
 
-namespace LangChain.NET.Prompts;
+namespace LangChain.Prompts;
 
 using System;
 using System.Collections.Generic;

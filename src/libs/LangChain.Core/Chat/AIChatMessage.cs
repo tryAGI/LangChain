@@ -1,6 +1,6 @@
-namespace LangChain.NET.Chat;
+namespace LangChain.Chat;
 
-internal sealed class AiChatMessage : BaseChatMessage
+public sealed class AiChatMessage : BaseChatMessage
 {
     public AiChatMessage(string text) : base(text){}
     

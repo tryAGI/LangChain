@@ -1,4 +1,4 @@
-namespace LangChain.NET.Chat;
+namespace LangChain.Chat;
 
 internal sealed class SystemChatMessage : BaseChatMessage
 {

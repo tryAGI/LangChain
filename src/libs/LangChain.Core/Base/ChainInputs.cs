@@ -1,6 +1,6 @@
-using LangChain.NET.Callback;
+using LangChain.Callback;
 
-namespace LangChain.NET.Base;
+namespace LangChain.Base;
 
 public class ChainInputs : IChainInputs
 {

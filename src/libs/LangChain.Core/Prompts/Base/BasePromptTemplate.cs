@@ -1,6 +1,6 @@
-using LangChain.NET.Schema;
+using LangChain.Schema;
 
-namespace LangChain.NET.Prompts.Base;
+namespace LangChain.Prompts.Base;
 
 public abstract class BasePromptTemplate
 {

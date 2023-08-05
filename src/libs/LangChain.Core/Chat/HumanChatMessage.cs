@@ -1,6 +1,6 @@
-namespace LangChain.NET.Chat;
+namespace LangChain.Chat;
 
-internal sealed class HumanChatMessage : BaseChatMessage
+public sealed class HumanChatMessage : BaseChatMessage
 {
     public HumanChatMessage(string text) : base(text){}
     

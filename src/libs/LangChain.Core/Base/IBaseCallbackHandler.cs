@@ -1,7 +1,7 @@
-using LangChain.NET.LLMS;
-using LangChain.NET.Schema;
+using LangChain.LLMS;
+using LangChain.Schema;
 
-namespace LangChain.NET.Base;
+namespace LangChain.Base;
 
 public interface IBaseCallbackHandler
 {

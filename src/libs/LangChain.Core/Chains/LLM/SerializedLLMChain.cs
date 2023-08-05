@@ -1,7 +1,7 @@
-using LangChain.NET.LLMS;
-using LangChain.NET.Prompts;
+using LangChain.LLMS;
+using LangChain.Prompts;
 
-namespace LangChain.NET.Chains.LLM;
+namespace LangChain.Chains.LLM;
 
 public class SerializedLlmChain : SerializedBaseChain
 {

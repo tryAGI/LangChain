@@ -1,14 +1,14 @@
-using LangChain.NET.Chat;
-using LangChain.NET.Schema;
+using LangChain.Chat;
+using LangChain.Schema;
 
-namespace LangChain.NET.Prompts.Base;
+namespace LangChain.Prompts.Base;
 
 public class StringPromptValue : BasePromptValue
 {
     public string Value { get; set; }
 
 
-    internal override BaseChatMessage[] ToChatMessages()
+    public override BaseChatMessage[] ToChatMessages()
     {
         return new[] { new HumanChatMessage(Value) };
     }

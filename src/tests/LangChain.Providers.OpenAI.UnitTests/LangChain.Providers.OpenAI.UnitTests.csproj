@@ -5,23 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup Label="Usings">
-        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-        <Using Include="FluentAssertions" />
-    </ItemGroup>
-
-    <ItemGroup Label="Usings">
         <Compile Remove="Resources\**\*.*" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="MSTest.TestAdapter" />
-        <PackageReference Include="MSTest.TestFramework" />
-        <PackageReference Include="FluentAssertions" />
-        <PackageReference Include="GitHubActionsTestLogger">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="H.Resources.Generator">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

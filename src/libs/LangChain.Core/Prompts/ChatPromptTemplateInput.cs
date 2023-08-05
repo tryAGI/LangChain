@@ -1,6 +1,6 @@
-using LangChain.NET.Prompts.Base;
+using LangChain.Prompts.Base;
 
-namespace LangChain.NET.Prompts;
+namespace LangChain.Prompts;
 
 public class ChatPromptTemplateInput : IBasePromptTemplateInput
 {

@@ -1,4 +1,4 @@
-namespace LangChain.NET.Base;
+namespace LangChain.Base;
 
 public abstract class Handler : BaseCallbackHandler
 {

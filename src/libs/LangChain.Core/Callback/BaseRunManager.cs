@@ -1,6 +1,6 @@
-using LangChain.NET.Base;
+using LangChain.Base;
 
-namespace LangChain.NET.Callback;
+namespace LangChain.Callback;
 
 public class BaseRunManager
 {
