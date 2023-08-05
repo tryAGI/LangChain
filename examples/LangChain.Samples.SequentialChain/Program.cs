@@ -2,11 +2,12 @@
 //
 // using LangChain.Chains.LLM;
 // using LangChain.Chains.Sequentials;
-// using LangChain.LLMS.OpenAi;
+// using LangChain.Providers;
 // using LangChain.Prompts;
 // using LangChain.Schema;
 //
-// var llm = new OpenAi();
+// using var httpClient = new HttpClient();
+// var llm = new Gpt4Model("api-key", httpClient);
 //
 // var firstTemplate = "What is a good name for a company that makes {product}?";
 // var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1){"product"}));
@@ -34,3 +35,4 @@
 //
 // // The result is an object with a `text` property.
 // Console.WriteLine(result.Value["text"]);
+Console.WriteLine("Test");
