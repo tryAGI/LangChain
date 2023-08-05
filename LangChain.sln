@@ -102,6 +102,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Pdf", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core", "src\libs\LangChain.Core\LangChain.Core.csproj", "{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.LeonardoAi", "src\libs\Providers\LangChain.Providers.LeonardoAi\LangChain.Providers.LeonardoAi.csproj", "{A7C56F0F-B283-4263-A45B-98869D7EE442}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -216,6 +218,10 @@ Global
 		{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7C56F0F-B283-4263-A45B-98869D7EE442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -250,5 +256,6 @@ Global
 		{A9C31641-768E-42F5-BFAD-79FC856CC4BE} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 		{51D01599-B641-4A7A-85AD-666087DBDF21} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 		{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
+		{A7C56F0F-B283-4263-A45B-98869D7EE442} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 	EndGlobalSection
 EndGlobal

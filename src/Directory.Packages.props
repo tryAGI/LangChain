@@ -10,6 +10,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.2" />
     <PackageVersion Include="H.Resources.Generator" Version="1.5.1" />
     <PackageVersion Include="HuggingFace" Version="0.2.2" />
+    <PackageVersion Include="LeonardoAi" Version="0.1.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.15.230531.5-preview" />
