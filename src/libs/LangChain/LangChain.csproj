@@ -16,6 +16,7 @@
       <ProjectReference Include="..\Providers\LangChain.Providers.Anthropic\LangChain.Providers.Anthropic.csproj" />
       <ProjectReference Include="..\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj" />
       <ProjectReference Include="..\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
+      <ProjectReference Include="..\Splitters\LangChain.Splitters.Abstractions\LangChain.Splitters.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>
