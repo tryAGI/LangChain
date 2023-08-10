@@ -7,7 +7,7 @@ namespace LangChain.UnitTest;
 public class MemoryTests
 {
     [TestMethod]
-    public async Task TestInMemoryHistory_WhenAddingMessages_ShouldStoreInMememory()
+    public void TestInMemoryHistory_WhenAddingMessages_ShouldStoreInMememory()
     {
         ChatMessageHistory inMemoryHistory = CreateInMemoryHistoryExample();
 
@@ -18,7 +18,7 @@ public class MemoryTests
     }
 
     [TestMethod]
-    public  async Task TestInMemoryHistory_WhenCleanMethodIsCalled_ShouldCleanHistory()
+    public void TestInMemoryHistory_WhenCleanMethodIsCalled_ShouldCleanHistory()
     {
         ChatMessageHistory inMemoryHistory = CreateInMemoryHistoryExample();
 

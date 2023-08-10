@@ -9,7 +9,6 @@ public static class DocumentExtensions
     /// 
     /// </summary>
     /// <param name="document"></param>
-    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public static IReadOnlyCollection<Document> AsArray(this Document document)
     {

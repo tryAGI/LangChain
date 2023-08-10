@@ -35,17 +35,16 @@ public static class ChatModelExtensions
     /// <param name="model"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static void EnsureNumbersOfTokensBelowContextLength<T>(
-        this T model,
+    public static void EnsureNumbersOfTokensBelowContextLength(
+        this ISupportsCountTokens model,
         int value)
-        where T : IChatModel, ISupportsCountTokens
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
         
         if (value > model.ContextLength)
         {
             throw new InvalidOperationException(
-                $"The current number of tokens({value}) is greater than the context length({model.ContextLength}) of the current model({model.Id}).");
+                $"The current number of tokens({value}) is greater than the context length({model.ContextLength}) of the current model.");
         }
     }
 
@@ -56,9 +55,8 @@ public static class ChatModelExtensions
     /// <param name="text"></param>
     /// <returns></returns>
     public static void EnsureNumbersOfTokensBelowContextLength<T>(
-        this T model,
+        this ISupportsCountTokens model,
         string text)
-        where T : IChatModel, ISupportsCountTokens
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
 
