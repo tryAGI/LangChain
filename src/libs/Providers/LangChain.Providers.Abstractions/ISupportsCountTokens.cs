@@ -6,11 +6,6 @@ namespace LangChain.Providers;
 public interface ISupportsCountTokens
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public int ContextLength { get; }
-    
-    /// <summary>
     /// Counts the number of tokens in the given prompt and input.
     /// </summary>
     /// <param name="text"></param>

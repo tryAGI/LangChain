@@ -72,7 +72,7 @@ public class SequentialChainTests
     }
     
     [TestMethod]
-    public async Task Should_Throw_Exception_On_Duplicate_Output_Key()
+    public void Should_Throw_Exception_On_Duplicate_Output_Key()
     {
         // Arrange
         var chain1 = CreateFakeChainMock(new[] {"input1"}, new []{"duplicateOutput"}).Object;
@@ -93,7 +93,7 @@ public class SequentialChainTests
         fakeChainMock.Setup(_ => _.InputKeys).Returns(inputVariables);
         fakeChainMock.Setup(_ => _.OutputKeys).Returns(outputVariables);
         fakeChainMock.Setup(x => x.CallAsync(It.IsAny<IChainValues>()))
-            .Returns<IChainValues>(async (chainValues) =>
+            .Returns<IChainValues>(async chainValues =>
             {
                 var output = new ChainValues();
 
