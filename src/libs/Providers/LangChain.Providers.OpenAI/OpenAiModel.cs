@@ -6,7 +6,6 @@ namespace LangChain.Providers;
 /// https://openai.com/
 /// </summary>
 public partial class OpenAiModel :
-    ISupportsCountTokens,
     IPaidLargeLanguageModel,
     IModelWithUniqueUserIdentifier
 {
@@ -41,11 +40,6 @@ public partial class OpenAiModel :
     /// 
     /// </summary>
     public HttpClient HttpClient { get; private set; }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    public Tiktoken.Encoding Encoding { get; private set; }
     
     /// <summary>
     /// 
@@ -96,26 +90,6 @@ public partial class OpenAiModel :
 
     #region Methods
 
-    /// <inheritdoc/>
-    public int CountTokens(string text)
-    {
-        return Encoding.CountTokens(text);
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(IReadOnlyCollection<Message> messages)
-    {
-        return CountTokens(string.Join(
-            Environment.NewLine,
-            messages.Select(static x => x.Content)));
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(ChatRequest request)
-    {
-        return CountTokens(request.Messages);
-    }
-    
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {

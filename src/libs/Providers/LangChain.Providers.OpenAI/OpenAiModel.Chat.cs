@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace LangChain.Providers;
 
-public partial class OpenAiModel : IChatModel
+public partial class OpenAiModel : IChatModelWithTokenCounting
 {
     #region Properties
 

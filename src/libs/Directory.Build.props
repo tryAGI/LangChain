@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <PropertyGroup Label="Nuget">
-        <Version>0.8.3</Version>
+        <Version>0.8.4</Version>
         <PackageTags>langchain</PackageTags>
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>

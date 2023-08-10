@@ -5,7 +5,7 @@ namespace LangChain.Providers;
 /// <summary>
 /// 
 /// </summary>
-public class AnthropicModel : IChatModel, ISupportsCountTokens, IPaidLargeLanguageModel
+public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageModel
 {
     #region Properties
 

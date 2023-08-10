@@ -55,17 +55,12 @@ public static class ChatModelExtensions
     /// <param name="text"></param>
     /// <returns></returns>
     public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+        this IChatModelWithTokenCounting model,
         string text)
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
-
-        if (model is not ISupportsCountTokens supportsCountTokens)
-        {
-            throw NotSupportCountingTokens(model);
-        }
         
-        model.EnsureNumbersOfTokensBelowContextLength(supportsCountTokens.CountTokens(text));
+        model.EnsureNumbersOfTokensBelowContextLength(model.CountTokens(text));
     }
 
     /// <summary>
@@ -75,17 +70,12 @@ public static class ChatModelExtensions
     /// <param name="messages"></param>
     /// <returns></returns>
     public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+        this IChatModelWithTokenCounting model,
         IReadOnlyCollection<Message> messages)
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
 
-        if (model is not ISupportsCountTokens supportsCountTokens)
-        {
-            throw NotSupportCountingTokens(model);
-        }
-
-        model.EnsureNumbersOfTokensBelowContextLength(supportsCountTokens.CountTokens(messages));
+        model.EnsureNumbersOfTokensBelowContextLength(model.CountTokens(messages));
     }
 
     /// <summary>
@@ -95,22 +85,11 @@ public static class ChatModelExtensions
     /// <param name="request"></param>
     /// <returns></returns>
     public static void EnsureNumbersOfTokensBelowContextLength(
-        this IChatModel model,
+        this IChatModelWithTokenCounting model,
         ChatRequest request)
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
 
-        if (model is not ISupportsCountTokens supportsCountTokens)
-        {
-            throw NotSupportCountingTokens(model);
-        }
-
-        model.EnsureNumbersOfTokensBelowContextLength(supportsCountTokens.CountTokens(request));
-    }
-    
-    private static InvalidOperationException NotSupportCountingTokens(IChatModel model)
-    {
-        throw new InvalidOperationException(
-            $"The current model({model.GetType().Name}) does not support counting tokens.");
+        model.EnsureNumbersOfTokensBelowContextLength(model.CountTokens(request));
     }
 }
