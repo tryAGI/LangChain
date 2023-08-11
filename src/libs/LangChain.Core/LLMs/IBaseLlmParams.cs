@@ -3,6 +3,7 @@ using LangChain.Cache;
 
 namespace LangChain.LLMS;
 
+/// <inheritdoc />
 public interface IBaseLlmParams : IBaseLanguageModelParams
 {
     internal decimal? Concurrency { get; set; }

@@ -1,6 +1,5 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
-using LangChain.Callback;
 using LangChain.Chains;
 using LangChain.Schema;
 
@@ -9,14 +8,25 @@ namespace LangChain.Base;
 using System.Collections.Generic;
 using LoadValues = Dictionary<string, object>;
 
+/// <inheritdoc />
 public abstract class BaseChain : IChain
 {
     const string RunKey = "__run";
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public abstract string ChainType();
 
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract string[] InputKeys { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract string[] OutputKeys { get; }
 
     /// <summary>
@@ -54,6 +64,11 @@ public abstract class BaseChain : IChain
     /// <returns></returns>
     public abstract Task<IChainValues> CallAsync(IChainValues values);
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputs"></param>
+    /// <returns></returns>
     public async Task<ChainValues> Apply(List<ChainValues> inputs)
     {
         var tasks = inputs.Select(async (input, idx) => await CallAsync(input));
@@ -70,6 +85,13 @@ public abstract class BaseChain : IChain
         });
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public static async Task<BaseChain> Deserialize(SerializedBaseChain data, LoadValues? values = null)
     {
         switch (data.Type)

@@ -9,13 +9,27 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+/// <summary>
+/// 
+/// </summary>
 public class CallbackManager
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public List<BaseCallbackHandler> Handlers { get; private set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public List<BaseCallbackHandler> InheritableHandlers { get; private set; }
     public string Name { get; } = "callback_manager";
     private readonly string? _parentRunId;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="parentRunId"></param>
     public CallbackManager(string? parentRunId = null)
     {
         Handlers = new List<BaseCallbackHandler>();

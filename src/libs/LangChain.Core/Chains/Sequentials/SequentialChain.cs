@@ -5,15 +5,31 @@ using LangChain.Schema;
 
 namespace LangChain.Chains.Sequentials;
 
+/// <inheritdoc />
 public class SequentialChain : BaseChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public IChain[] Chains { get; }
+    
+    /// <inheritdoc />
     public override string[] InputKeys { get; }
+    
+    /// <inheritdoc />
     public override string[] OutputKeys { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public bool ReturnAll { get; }
 
     private HashSet<string> _allOutputKeys;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
     public SequentialChain(SequentialChainInput input)
     {
         Chains = input.Chains;

@@ -4,20 +4,34 @@ using LangChain.Schema;
 
 namespace LangChain.LLMS;
 
+/// <inheritdoc />
 public abstract class BaseLlm : BaseLanguageModel
 {
     private readonly BaseCache? _cache;
     
+    /// <inheritdoc />
     protected BaseLlm(IBaseLlmParams parameters) : base(parameters)
     {
         _cache = parameters.Cache;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="promptValues"></param>
+    /// <param name="stop"></param>
+    /// <returns></returns>
     public override async Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, List<string>? stop)
     {
         return await Generate(promptValues.Select(p => p.ToString()).ToArray(), stop);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="prompts"></param>
+    /// <param name="stop"></param>
+    /// <returns></returns>
     public abstract Task<LlmResult> Generate(string[] prompts, List<string>? stop);
 
     /// <summary>

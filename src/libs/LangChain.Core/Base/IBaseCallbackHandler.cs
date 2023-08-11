@@ -3,10 +3,25 @@ using LangChain.Schema;
 
 namespace LangChain.Base;
 
+/// <summary>
+/// 
+/// </summary>
 public interface IBaseCallbackHandler
 {
+    /// <summary>
+    /// 
+    /// </summary>
     string Name { get; }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="llm"></param>
+    /// <param name="prompts"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <param name="extraParams"></param>
+    /// <returns></returns>
     public Task HandleLlmStartAsync(
         BaseLlm llm,
         string[] prompts,
@@ -14,16 +29,37 @@ public interface IBaseCallbackHandler
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <returns></returns>
     public Task HandleLlmNewTokenAsync(
         string token,
         string runId,
         string? parentRunId = null);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="err"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <returns></returns>
     public Task HandleLlmErrorAsync(
         Exception err,
         string runId,
         string? parentRunId = null);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="output"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <returns></returns>
     public Task HandleLlmEndAsync(
         LlmResult output,
         string runId,

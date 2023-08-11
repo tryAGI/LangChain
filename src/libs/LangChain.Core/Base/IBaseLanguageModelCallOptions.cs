@@ -1,5 +1,6 @@
 namespace LangChain.Base;
 
-public interface IBaseLanguageModelCallOptions
-{
-}
+/// <summary>
+/// 
+/// </summary>
+public interface IBaseLanguageModelCallOptions;

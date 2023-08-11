@@ -2,11 +2,26 @@ using LangChain.Schema;
 
 namespace LangChain.Prompts.Base;
 
+/// <summary>
+/// 
+/// </summary>
 public abstract class BasePromptTemplate
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public List<string> InputVariables { get; private set;  }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public InputValues PartialVariables { get; }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
+    /// <exception cref="Exception"></exception>
     public BasePromptTemplate(IBasePromptTemplateInput input)
     {
         if (input.InputVariables.Contains("stop"))
@@ -18,8 +33,18 @@ public abstract class BasePromptTemplate
         PartialVariables = new InputValues(input.PartialVariables);
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public abstract Task<BasePromptTemplate> Partial(PartialValues values);
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userVariables"></param>
+    /// <returns></returns>
     public async Task<InputValues> MergePartialAndUserVariables(InputValues userVariables)
     {
         InputValues partialValues = new InputValues(new Dictionary<string, object>());
@@ -43,14 +68,38 @@ public abstract class BasePromptTemplate
         return allKwargs;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public abstract Task<string> Format(InputValues values);
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public abstract Task<BasePromptValue> FormatPromptValue(InputValues values);
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected abstract string GetPromptType();
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public abstract SerializedBasePromptTemplate Serialize();
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public static async Task<BasePromptTemplate> Deserialize(SerializedBasePromptTemplate data)
     {
         switch (data.Type)

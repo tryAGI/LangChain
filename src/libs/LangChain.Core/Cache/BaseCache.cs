@@ -1,5 +1,6 @@
 namespace LangChain.Cache;
 
-public abstract class BaseCache
-{
-}
+/// <summary>
+/// 
+/// </summary>
+public abstract class BaseCache;
