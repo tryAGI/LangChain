@@ -21,7 +21,7 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <param name="promptValues"></param>
     /// <param name="stop"></param>
     /// <returns></returns>
-    public override async Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, List<string>? stop)
+    public override async Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, IReadOnlyCollection<string>? stop)
     {
         return await Generate(promptValues.Select(p => p.ToString()).ToArray(), stop);
     }
@@ -32,7 +32,7 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <param name="prompts"></param>
     /// <param name="stop"></param>
     /// <returns></returns>
-    public abstract Task<LlmResult> Generate(string[] prompts, List<string>? stop);
+    public abstract Task<LlmResult> Generate(string[] prompts, IReadOnlyCollection<string>? stop);
 
     /// <summary>
     /// Call the LLM using the provided prompt.

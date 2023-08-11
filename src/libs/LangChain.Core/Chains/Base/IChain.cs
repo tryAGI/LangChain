@@ -6,5 +6,5 @@ public interface IChain
 {
     string[] InputKeys { get; }
     string[] OutputKeys { get; }
-    Task<IChainValues> CallAsync(IChainValues chainValues);
+    Task<IChainValues> CallAsync(IChainValues values);
 }

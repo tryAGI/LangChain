@@ -8,4 +8,16 @@ public class OutputParserException : Exception
     {
         Output = output;
     }
+
+    public OutputParserException()
+    {
+    }
+
+    public OutputParserException(string message) : base(message)
+    {
+    }
+
+    public OutputParserException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

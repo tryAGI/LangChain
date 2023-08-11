@@ -127,13 +127,13 @@ public class PromptTemplate : BaseStringPromptTemplate
     public delegate string Interpolator(string template, Dictionary<string, object> inputValues);
     public delegate List<ParsedFStringNode> Parser(string template);
 
-    public static Dictionary<TemplateFormatOptions, Interpolator> DefaultFormatterMapping = new Dictionary<TemplateFormatOptions, Interpolator>
+    public static Dictionary<TemplateFormatOptions, Interpolator> DefaultFormatterMapping { get; } = new Dictionary<TemplateFormatOptions, Interpolator>
     {
         { TemplateFormatOptions.FString, InterpolateFString },
         { TemplateFormatOptions.Jinja2, (_, __) => "" }
     };
 
-    public static Dictionary<TemplateFormatOptions, Parser> DefaultParserMapping = new Dictionary<TemplateFormatOptions, Parser>
+    public static Dictionary<TemplateFormatOptions, Parser> DefaultParserMapping { get; } = new Dictionary<TemplateFormatOptions, Parser>
     {
         { TemplateFormatOptions.FString, ParseFString },
         { TemplateFormatOptions.Jinja2, _ => new List<ParsedFStringNode>() }
