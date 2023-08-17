@@ -121,6 +121,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Azure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.SequentialChain", "examples\LangChain.Samples.SequentialChain\LangChain.Samples.SequentialChain.csproj", "{233DF40E-6459-41F7-AEAE-C32398F474DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Kendra", "src\libs\Databases\LangChain.Databases.Kendra\LangChain.Databases.Kendra.csproj", "{B456F59B-4DE6-4BC9-B83B-CD796985DD98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +269,10 @@ Global
 		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{233DF40E-6459-41F7-AEAE-C32398F474DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B456F59B-4DE6-4BC9-B83B-CD796985DD98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B456F59B-4DE6-4BC9-B83B-CD796985DD98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B456F59B-4DE6-4BC9-B83B-CD796985DD98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B456F59B-4DE6-4BC9-B83B-CD796985DD98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -309,5 +315,6 @@ Global
 		{02B0A544-C941-4A3B-8BF8-74354EDDACDD} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 		{D848B7F2-F035-43EA-AF18-080738502372} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{233DF40E-6459-41F7-AEAE-C32398F474DF} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
+		{B456F59B-4DE6-4BC9-B83B-CD796985DD98} = {C58D122C-808F-43F9-BB23-4E517046F533}
 	EndGlobalSection
 EndGlobal

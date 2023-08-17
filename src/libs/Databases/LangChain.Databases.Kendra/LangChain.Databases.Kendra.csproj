@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Remove="System.Net.Http" />
+    </ItemGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>Amazon Kendra for LangChain.</Description>
+        <PackageTags>$(PackageTags);amazon;kendra</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AWSSDK.Kendra" />
+    </ItemGroup>
+
+</Project>
