@@ -24,7 +24,7 @@ public interface IWeatherFunctions
     public Weather GetCurrentWeather(
         [Description("The city and state, e.g. San Francisco, CA")] string location,
         Unit unit = Unit.Celsius);
-    
+
     [Description("Get the current weather in a given location")]
     public Task<Weather> GetCurrentWeatherAsync(
         [Description("The city and state, e.g. San Francisco, CA")] string location,
@@ -44,7 +44,7 @@ public class WeatherService : IWeatherFunctions
             Description = "Sunny",
         };
     }
-    
+
     public Task<Weather> GetCurrentWeatherAsync(string location, Unit unit = Unit.Celsius, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(new Weather

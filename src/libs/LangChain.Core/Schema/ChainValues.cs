@@ -11,7 +11,7 @@ public class ChainValues : IChainValues
             {"text", getFinalOutput}
         };
     }
-    
+
     public ChainValues(string inputKey, object value)
     {
         Value = new Dictionary<string, object>()
@@ -19,12 +19,12 @@ public class ChainValues : IChainValues
             {inputKey, value}
         };
     }
-    
+
     public ChainValues(Dictionary<string, object> value)
     {
         Value = value;
     }
-    
+
     public ChainValues(ChainValues value)
     {
         Value = value.Value;

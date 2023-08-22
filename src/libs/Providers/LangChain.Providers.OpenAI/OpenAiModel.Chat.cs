@@ -10,12 +10,12 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
     /// 
     /// </summary>
     public bool CallFunctionsAutomatically { get; set; } = true;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool ReplyToFunctionCallsAutomatically { get; set; } = true;
-    
+
     private List<ChatCompletionFunctions> GlobalFunctions { get; set; } = new();
     private Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = new();
 
@@ -42,7 +42,7 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
             Content = message.Content,
         };
     }
-    
+
     private static Message ToMessage(ChatCompletionResponseMessage message)
     {
         return new Message(
@@ -58,7 +58,7 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
             },
             FunctionName: message.Function_call?.Name);
     }
-    
+
     private async Task<CreateChatCompletionResponse> CreateChatCompletionAsync(
         IReadOnlyCollection<Message> messages,
         CancellationToken cancellationToken = default)
@@ -95,7 +95,7 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
             PriceInUsd = priceInUsd,
         };
     }
-    
+
     /// <inheritdoc/>
     public async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
@@ -104,10 +104,10 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-        
+
         var message = response.GetFirstChoiceMessage();
         messages.Add(ToMessage(message));
-        
+
         var usage = GetUsage(response) with
         {
             Time = watch.Elapsed,
@@ -136,12 +136,12 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
                 }
             }
         }
-        
+
         return new ChatResponse(
             Messages: messages,
             Usage: usage);
     }
-    
+
     /// <summary>
     /// Adds user-defined OpenAI functions to each request to the model.
     /// </summary>
@@ -155,14 +155,14 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
     {
         functions = functions ?? throw new ArgumentNullException(nameof(functions));
         calls = calls ?? throw new ArgumentNullException(nameof(calls));
-        
+
         GlobalFunctions.AddRange(functions);
         foreach (var call in calls)
         {
             Calls.Add(call.Key, call.Value);
         }
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -171,6 +171,6 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
         GlobalFunctions.Clear();
         Calls.Clear();
     }
-    
+
     #endregion
 }

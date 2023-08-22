@@ -13,7 +13,7 @@ public partial class LeonardoAiModel
     /// 
     /// </summary>
     public string Id { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -23,7 +23,7 @@ public partial class LeonardoAiModel
     /// 
     /// </summary>
     public HttpClient HttpClient { get; private set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -46,10 +46,10 @@ public partial class LeonardoAiModel
         ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        
+
         Api = new LeonardoAiApi(apiKey: ApiKey, HttpClient);
     }
-    
+
     /// <summary>
     /// Wrapper around OpenAI large language models.
     /// </summary>
@@ -62,7 +62,7 @@ public partial class LeonardoAiModel
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
-        
+
         Api = new LeonardoAiApi(apiKey: ApiKey, HttpClient);
     }
 

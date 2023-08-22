@@ -8,7 +8,7 @@ public partial class OpenAiModel : ISupportsModeration
 
     /// <inheritdoc cref="OpenAiConfiguration.ModerationModelId"/>
     public string ModerationModelId { get; init; } = ModerationModelIds.Latest;
-    
+
     /// <inheritdoc/>
     public int RecommendedModerationChunkSize => 2_000;
 
@@ -27,6 +27,6 @@ public partial class OpenAiModel : ISupportsModeration
 
         return response.Results.First().Flagged;
     }
-    
+
     #endregion
 }

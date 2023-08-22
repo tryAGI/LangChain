@@ -15,10 +15,10 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
 
     /// <inheritdoc />
     public abstract Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleLlmErrorAsync(Exception err, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null);
 
@@ -28,28 +28,28 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
 
     /// <inheritdoc />
     public abstract Task HandleChainStartAsync(Dictionary<string, object> chain, Dictionary<string, object> inputs, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleChainErrorAsync(Exception err, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleChainEndAsync(Dictionary<string, object> outputs, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleToolStartAsync(Dictionary<string, object> tool, string input, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleToolErrorAsync(Exception err, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleToolEndAsync(string output, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleTextAsync(string text, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null);
-    
+
     /// <inheritdoc />
     public abstract Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null);
 
@@ -57,12 +57,12 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     /// 
     /// </summary>
     public bool IgnoreLlm { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool IgnoreChain { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -83,7 +83,7 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     protected BaseCallbackHandler(IBaseCallbackHandlerInput input) : this()
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         IgnoreLlm = input.IgnoreLlm;
         IgnoreChain = input.IgnoreChain;
         IgnoreAgent = input.IgnoreAgent;

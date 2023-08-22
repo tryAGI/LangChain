@@ -13,7 +13,7 @@ public class HuggingFaceModel : IChatModel
     /// 
     /// </summary>
     public string Id { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -21,10 +21,10 @@ public class HuggingFaceModel : IChatModel
 
     /// <inheritdoc/>
     public Usage TotalUsage { get; private set; }
-    
+
     /// <inheritdoc/>
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
-    
+
     private HttpClient HttpClient { get; set; }
 
     #endregion
@@ -75,20 +75,20 @@ public class HuggingFaceModel : IChatModel
             _ => throw new NotImplementedException(),
         };
     }
-    
+
     private static Message ToMessage(ICollection<GenerateTextResponseValue> message)
     {
         return new Message(
             Content: message.First().Generated_text,
             Role: MessageRole.Ai);
     }
-    
+
     private async Task<ICollection<GenerateTextResponseValue>> CreateChatCompletionAsync(
         IReadOnlyCollection<Message> messages,
         CancellationToken cancellationToken = default)
     {
         var api = new HuggingFaceApi(apiKey: ApiKey, HttpClient);
-        
+
         return await api.GenerateTextAsync(modelId: Id, body: new GenerateTextRequest
         {
             Inputs = messages
@@ -105,7 +105,7 @@ public class HuggingFaceModel : IChatModel
             },
         }, cancellationToken).ConfigureAwait(false);
     }
-    
+
     /// <inheritdoc/>
     public async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
@@ -114,20 +114,20 @@ public class HuggingFaceModel : IChatModel
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-        
+
         messages.Add(ToMessage(response));
-        
+
         // Unsupported
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
         };
         TotalUsage += usage;
-        
+
         return new ChatResponse(
             Messages: messages,
             Usage: usage);
     }
-    
+
     #endregion
 }

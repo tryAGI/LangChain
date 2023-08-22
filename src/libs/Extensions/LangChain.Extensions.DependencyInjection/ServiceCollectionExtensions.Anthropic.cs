@@ -29,7 +29,7 @@ public static partial class ServiceCollectionExtensions
             .AddScoped<AnthropicModel>(static services => new AnthropicModel(
                 configuration: services.GetRequiredService<IOptions<AnthropicConfiguration>>().Value,
                 httpClient: services.GetRequiredService<HttpClient>()));
-        
+
         return services;
     }
 }

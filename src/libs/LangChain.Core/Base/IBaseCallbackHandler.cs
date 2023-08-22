@@ -12,7 +12,7 @@ public interface IBaseCallbackHandler
     /// 
     /// </summary>
     string Name { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>

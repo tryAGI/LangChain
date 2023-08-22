@@ -12,16 +12,16 @@ public partial class OpenAiModel :
     #region Fields
 
     private readonly object _usageLock = new();
-    
+
     #endregion
-    
+
     #region Properties
 
     /// <summary>
     /// 
     /// </summary>
     public string Id { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -32,15 +32,15 @@ public partial class OpenAiModel :
 
     /// <inheritdoc/>
     public string User { get; set; } = string.Empty;
-    
+
     /// <inheritdoc/>
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
-    
+
     /// <summary>
     /// 
     /// </summary>
     public HttpClient HttpClient { get; private set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -64,11 +64,11 @@ public partial class OpenAiModel :
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
         EmbeddingModelId = configuration.EmbeddingModelId ?? throw new ArgumentException("EmbeddingModelId is not defined", nameof(configuration));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        
+
         Encoding = Tiktoken.Encoding.ForModel(Id);
         Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
     }
-    
+
     /// <summary>
     /// Wrapper around OpenAI large language models.
     /// </summary>
@@ -81,7 +81,7 @@ public partial class OpenAiModel :
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
-        
+
         Encoding = Tiktoken.Encoding.ForModel(Id);
         Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
     }
@@ -98,6 +98,6 @@ public partial class OpenAiModel :
             completionTokens: completionTokens,
             promptTokens: promptTokens);
     }
-    
+
     #endregion
 }

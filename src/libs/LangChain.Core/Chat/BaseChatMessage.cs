@@ -13,12 +13,12 @@ public abstract class BaseChatMessage
     {
         Text = text;
     }
-        
+
     /// <summary>
     /// 
     /// </summary>
     public string Text { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>

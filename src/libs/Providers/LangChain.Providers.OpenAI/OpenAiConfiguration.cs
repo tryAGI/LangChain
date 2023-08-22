@@ -15,17 +15,17 @@ public class OpenAiConfiguration
     /// </summary>
     public static OpenAiConfiguration Default { get; } = new()
     {
-        
+
     };
 
     /// <inheritdoc cref="IModelWithUniqueUserIdentifier.User"/>
     public string? User { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string? ApiKey { get; set; }
-    
+
     /// <summary>
     /// ID of the model to use. <br/>
     /// See the model endpoint compatibility table for details on which models work with the Chat API. <br/>
@@ -42,7 +42,7 @@ public class OpenAiConfiguration
     /// ID of the moderation model to use. <br/>
     /// </summary>
     public string ModerationModelId { get; set; } = ModerationModelIds.Latest;
-    
+
     /// <summary>
     /// What sampling temperature to use, between 0 and 2. <br/>
     /// Higher values like 0.8 will make the output more random,
@@ -51,14 +51,14 @@ public class OpenAiConfiguration
     /// Defaults to 1. <br/>
     /// </summary>
     public double Temperature { get; set; } = 1.0;
-    
+
     /// <summary>
     /// The maximum number of tokens to generate in the chat completion. <br/>
     /// The total length of input tokens and generated tokens is limited by the model's context length. <br/>
     /// Defaults to int.MaxValue. <br/>
     /// </summary>
     public int MaxTokens { get; set; } = int.MaxValue;
-    
+
     /// <summary>
     /// An alternative to sampling with temperature, called nucleus sampling,
     /// where the model considers the results of the tokens with top_p probability mass.
@@ -67,7 +67,7 @@ public class OpenAiConfiguration
     /// Defaults to 1. <br/>
     /// </summary>
     public double TopP { get; set; } = 1.0;
-    
+
     /// <summary>
     /// Number between -2.0 and 2.0. <br/>
     /// Positive values penalize new tokens based on their existing frequency in the text so far,
@@ -75,7 +75,7 @@ public class OpenAiConfiguration
     /// Defaults to 0. <br/>
     /// </summary>
     public double FrequencyPenalty { get; set; }
-    
+
     /// <summary>
     /// Number between -2.0 and 2.0. <br/>
     /// Positive values penalize new tokens based on whether they appear in the text so far,
@@ -89,7 +89,7 @@ public class OpenAiConfiguration
     /// Defaults to 1. <br/>
     /// </summary>
     public int N { get; set; } = 1;
-    
+
     /// <summary>
     /// Modify the likelihood of specified tokens appearing in the completion. <br/>
     /// Accepts a json object that maps tokens (specified by their token ID in the tokenizer)
@@ -99,7 +99,7 @@ public class OpenAiConfiguration
     /// values like -100 or 100 should result in a ban or exclusive selection of the relevant token. <br/>
     /// </summary>
     public IReadOnlyDictionary<string, int>? LogitBias { get; set; } = new Dictionary<string, int>();
-    
+
     /// <summary>
     /// If set, partial message deltas will be sent, like in ChatGPT. <br/>
     /// Tokens will be sent as data-only server-sent events as they become available. <br/>

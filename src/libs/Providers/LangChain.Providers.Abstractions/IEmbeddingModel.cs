@@ -9,12 +9,12 @@ public interface IEmbeddingModel
     /// 
     /// </summary>
     public string EmbeddingModelId { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public Usage TotalUsage { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>

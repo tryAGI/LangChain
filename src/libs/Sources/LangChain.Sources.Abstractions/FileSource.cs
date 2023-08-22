@@ -31,7 +31,7 @@ public class FileSource : ISource
             {
                 Content = content,
             }).AsArray();
-            
+
             return Task.FromResult(documents);
         }
         catch (Exception exception)

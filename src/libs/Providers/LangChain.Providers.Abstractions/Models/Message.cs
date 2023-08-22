@@ -18,7 +18,7 @@ public readonly record struct Message(
         Content: string.Empty,
         Role: MessageRole.Human,
         FunctionName: null);
-    
+
     /// <summary>
     /// 
     /// </summary>

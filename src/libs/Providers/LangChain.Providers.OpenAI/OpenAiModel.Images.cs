@@ -73,6 +73,6 @@ public partial class OpenAiModel : IGenerateImageModel
             response.Data.First().B64_json ??
             throw new InvalidOperationException("B64_json is null"));
     }
-    
+
     #endregion
 }

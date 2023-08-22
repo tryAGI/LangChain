@@ -9,12 +9,12 @@ public enum DocumentPartType
     /// 
     /// </summary>
     Unknown,
-    
+
     /// <summary>
     /// 
     /// </summary>
     Method,
-    
+
     /// <summary>
     /// 
     /// </summary>

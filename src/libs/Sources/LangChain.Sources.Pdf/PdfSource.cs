@@ -11,7 +11,7 @@ public class PdfSource : ISource
     /// 
     /// </summary>
     public required string Path { get; init; }
-    
+
     /// <inheritdoc/>
     public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
     {
@@ -20,7 +20,7 @@ public class PdfSource : ISource
             using var pdfDocument = new Aspose.Pdf.Document(Path);
             var textAbsorber = new TextAbsorber();
             pdfDocument.Pages.Accept(textAbsorber);
-        
+
             var documents = (Document.Empty with
             {
                 Content = textAbsorber.Text,

@@ -29,7 +29,7 @@ public static partial class ServiceCollectionExtensions
             .AddScoped<OpenAiModel>(static services => new OpenAiModel(
                 configuration: services.GetRequiredService<IOptions<OpenAiConfiguration>>().Value,
                 httpClient: services.GetRequiredService<HttpClient>()));
-        
+
         return services;
     }
 }

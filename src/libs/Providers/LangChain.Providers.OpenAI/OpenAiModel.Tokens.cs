@@ -5,7 +5,7 @@ namespace LangChain.Providers;
 public partial class OpenAiModel : ISupportsCountTokens
 {
     #region Properties
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -34,6 +34,6 @@ public partial class OpenAiModel : ISupportsCountTokens
     {
         return CountTokens(request.Messages);
     }
-    
+
     #endregion
 }

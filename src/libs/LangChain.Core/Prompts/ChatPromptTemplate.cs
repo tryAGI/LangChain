@@ -62,8 +62,8 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
 
         return resultMessages.ToArray();
     }
-    
-    
+
+
     public static ChatPromptTemplate FromPromptMessages(List<BaseMessagePromptTemplate> promptMessages)
     {
         var flattenedMessages = new List<BaseMessagePromptTemplate>();
@@ -75,7 +75,8 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
 
         var inputVariables = new HashSet<string>();
 
-        return new ChatPromptTemplate(new ChatPromptTemplateInput(){
+        return new ChatPromptTemplate(new ChatPromptTemplateInput()
+        {
             InputVariables = inputVariables.ToList(),
             PromptMessages = flattenedMessages,
             ValidateTemplate = false

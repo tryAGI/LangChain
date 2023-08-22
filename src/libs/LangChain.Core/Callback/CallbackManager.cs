@@ -18,7 +18,7 @@ public class CallbackManager
     /// 
     /// </summary>
     public List<BaseCallbackHandler> Handlers { get; private set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -183,7 +183,7 @@ public class CallbackManager
 
         foreach (var handler in handlers)
         {
-            manager.AddHandler(handler);            
+            manager.AddHandler(handler);
         }
 
         return manager;
@@ -202,7 +202,7 @@ public class CallbackManager
                 callbackManager = new CallbackManager();
                 callbackManager.SetHandlers(inheritableHandlers?.Cast<BaseCallbackHandler>().ToList() ?? new List<BaseCallbackHandler>(), true);
             }
-            
+
             callbackManager = callbackManager.Copy(
                 localHandlers,
                 false);

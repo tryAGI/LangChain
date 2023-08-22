@@ -9,12 +9,12 @@ public interface IBaseCallbackHandlerInput
     /// 
     /// </summary>
     bool IgnoreLlm { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     bool IgnoreChain { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>

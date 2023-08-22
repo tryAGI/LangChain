@@ -4,7 +4,7 @@ namespace LangChain.Chat;
 public sealed class HumanChatMessage : BaseChatMessage
 {
     /// <inheritdoc />
-    public HumanChatMessage(string text) : base(text){}
-    
+    public HumanChatMessage(string text) : base(text) { }
+
     internal override ChatMessageType GetType() => ChatMessageType.User;
 }

@@ -17,7 +17,7 @@ public class ChatTests
             { "foo", "Foo" },
             { "bar", "Bar" },
         }));
-        
+
         var chatMessages = messages.ToChatMessages();
 
         chatMessages.Length.Should().Be(4);
@@ -27,7 +27,7 @@ public class ChatTests
         chatMessages[2].Text.Should().Be("I'm an AI. I'm Foo. I'm Bar.");
         chatMessages[3].Text.Should().Be("I'm a generic message. I'm Foo. I'm Bar.");
     }
-    
+
     [TestMethod]
     public async Task TestFormat_WhenInvalidInputs_ShouldThrowError()
     {
@@ -40,7 +40,7 @@ public class ChatTests
                 { "foo", "Foo" },
             }))).Should().ThrowAsync<ArgumentException>();
     }
-    
+
     [TestMethod]
     public void TestFormat_WhenInvalidVariables_ShouldThrowError()
     {
@@ -61,7 +61,7 @@ public class ChatTests
             },
             InputVariables = new List<string>(3) { "foo", "bar", "context", "baz" }
         });
-        
+
         act.Should().Throw<ArgumentException>();
     }
 
@@ -72,23 +72,23 @@ public class ChatTests
             new PromptTemplate(new PromptTemplateInput("Here's some context: {context}",
                 new List<string>(1) { "context" }));
 
-        var userPrompt = new PromptTemplate(new PromptTemplateInput("Hello {foo}, I'm {bar}.", new List<string>(3) {"foo", "bar"}));
+        var userPrompt = new PromptTemplate(new PromptTemplateInput("Hello {foo}, I'm {bar}.", new List<string>(3) { "foo", "bar" }));
 
         var testPrompt = ChatPromptTemplate.FromPromptMessages(new List<BaseMessagePromptTemplate>(2)
         {
             new SystemMessagePromptTemplate(promptTemplate),
             new HumanMessagePromptTemplate(userPrompt)
         });
-        
+
         var messages = await testPrompt.FormatPromptValue(new InputValues(new Dictionary<string, object>(3)
         {
             { "context", "This is the context" },
             { "foo", "Foo" },
             { "bar", "Bar" },
         }));
-        
+
         var chatMessages = messages.ToChatMessages();
-        
+
         chatMessages.Length.Should().Be(2);
 
         chatMessages[0].Text.Should().Be("Here's some context: This is the context");
@@ -101,8 +101,8 @@ public class ChatTests
         var promptTemplate =
             new PromptTemplate(new PromptTemplateInput("Here's some context: {context}",
                 new List<string>(1) { "context" }));
-        
-        var userPrompt = new PromptTemplate(new PromptTemplateInput("Hello {foo}, I'm {bar}.", new List<string>(3) {"foo", "bar"}));
+
+        var userPrompt = new PromptTemplate(new PromptTemplateInput("Hello {foo}, I'm {bar}.", new List<string>(3) { "foo", "bar" }));
 
         var testPromptInner = ChatPromptTemplate.FromPromptMessages(new List<BaseMessagePromptTemplate>(2)
         {
@@ -114,22 +114,22 @@ public class ChatTests
         {
             AiMessagePromptTemplate.FromTemplate("I'm an AI. I'm {foo}. I'm {bar}.")
         });
-        
+
         var messages = await testPrompt.FormatPromptValue(new InputValues(new Dictionary<string, object>(3)
         {
             { "context", "This is the context" },
             { "foo", "Foo" },
             { "bar", "Bar" },
         }));
-        
+
         var chatMessages = messages.ToChatMessages();
-        
+
         chatMessages.Length.Should().Be(3);
 
         chatMessages[0].Text.Should().Be("Here's some context: This is the context");
         chatMessages[1].Text.Should().Be("Hello Foo, I'm Bar.");
     }
-    
+
     private static ChatPromptTemplate GenerateTestPromptTemplate()
     {
         var systemPrompt =

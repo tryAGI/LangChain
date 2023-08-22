@@ -12,7 +12,7 @@ public static class DocumentExtensions
     /// <returns></returns>
     public static IReadOnlyCollection<Document> AsArray(this Document document)
     {
-        return new []
+        return new[]
         {
             document,
         };

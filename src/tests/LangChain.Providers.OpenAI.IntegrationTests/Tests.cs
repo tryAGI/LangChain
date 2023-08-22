@@ -15,16 +15,16 @@ public class GeneralTests
 
         var service = new WeatherService();
         model.AddGlobalFunctions(service.AsFunctions(), service.AsCalls());
-    
+
         var response = await model.GenerateAsync(new ChatRequest(
-            Messages: new []
+            Messages: new[]
             {
                 "You are a helpful weather assistant.".AsSystemMessage(),
                 "What's the weather like today?".AsHumanMessage(),
                 "Sure! Could you please provide me with your location?".AsAiMessage(),
                 "Dubai, UAE".AsHumanMessage(),
             }));
-        
+
         Console.WriteLine(response.Messages.AsHistory());
     }
 }

@@ -4,7 +4,7 @@ namespace LangChain.Base;
 public abstract class BaseLangChain : IBaseLangChainParams
 {
     private const bool DefaultVerbosity = false;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -17,7 +17,7 @@ public abstract class BaseLangChain : IBaseLangChainParams
     protected BaseLangChain(IBaseLangChainParams parameters)
     {
         parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
-        
+
         Verbose = parameters.Verbose ?? DefaultVerbosity;
     }
 }

@@ -62,7 +62,7 @@ public class CSharpSplitter : ISplitter
         CancellationToken cancellationToken = default)
     {
         requiredNames = requiredNames ?? throw new ArgumentNullException(nameof(requiredNames));
-        
+
         var tree = CSharpSyntaxTree.ParseText(content, cancellationToken: cancellationToken);
         var root = await tree.GetRootAsync(cancellationToken).ConfigureAwait(false);
 

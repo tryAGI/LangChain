@@ -4,7 +4,7 @@ namespace LangChain.Chat;
 public sealed class AiChatMessage : BaseChatMessage
 {
     /// <inheritdoc />
-    public AiChatMessage(string text) : base(text){}
-    
+    public AiChatMessage(string text) : base(text) { }
+
     internal override ChatMessageType GetType() => ChatMessageType.Ai;
 }

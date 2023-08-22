@@ -11,17 +11,17 @@ public class BaseRunManager
     /// 
     /// </summary>
     public string RunId { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     protected List<BaseCallbackHandler> Handlers { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     protected List<BaseCallbackHandler> InheritableHandlers { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>

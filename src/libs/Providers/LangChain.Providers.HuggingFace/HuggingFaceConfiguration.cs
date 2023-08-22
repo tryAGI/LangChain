@@ -15,14 +15,14 @@ public class HuggingFaceConfiguration
     /// </summary>
     public static HuggingFaceConfiguration Default { get; } = new()
     {
-        
+
     };
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string? ApiKey { get; set; }
-    
+
     /// <summary>
     /// ID of the model to use. <br/>
     /// </summary>

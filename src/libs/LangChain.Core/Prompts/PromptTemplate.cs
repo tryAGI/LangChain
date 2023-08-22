@@ -13,7 +13,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     public string Template { get; set; }
     public TemplateFormatOptions? TemplateFormat { get; set; } = TemplateFormatOptions.FString;
     public bool? ValidateTemplate { get; set; } = true;
-    
+
     public new Dictionary<string, object> PartialVariables { get; set; } = new();
 
     public PromptTemplate(IPromptTemplateInput input)
@@ -138,7 +138,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         { TemplateFormatOptions.FString, ParseFString },
         { TemplateFormatOptions.Jinja2, _ => new List<ParsedFStringNode>() }
     };
-    
+
     public static string InterpolateFString(string template, Dictionary<string, object> values)
     {
         List<ParsedFStringNode> nodes = ParseFString(template);
@@ -147,19 +147,19 @@ public class PromptTemplate : BaseStringPromptTemplate
             if (node.Type == "variable")
             {
                 var parsedNode = node as VariableNode;
-                
+
                 if (values.ContainsKey(parsedNode.Name))
                 {
                     return res + values[parsedNode.Name];
                 }
-                
+
                 throw new ArgumentException($"Missing value for input {parsedNode.Name}");
             }
 
             return res + (node as LiteralNode).Text;
         });
     }
-    
+
     public static List<ParsedFStringNode> ParseFString(string template)
     {
         // Core logic replicated from internals of pythons built in Formatter class.
@@ -224,7 +224,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         return DefaultFormatterMapping[templateFormat](template, inputValues);
     }
 
-    
+
     public void CheckValidTemplate(string template, TemplateFormatOptions templateFormatOptions, List<string> inputVariables)
     {
         if (!DefaultFormatterMapping.ContainsKey(templateFormatOptions))
@@ -243,7 +243,7 @@ public class PromptTemplate : BaseStringPromptTemplate
             throw new Exception("Invalid prompt schema.");
         }
     }
-    
+
     public static List<ParsedFStringNode> ParseTemplate(string template, TemplateFormatOptions templateFormat)
     {
         return DefaultParserMapping[templateFormat](template);

@@ -8,6 +8,6 @@ public class InputValues
     {
         this.Value = value;
     }
-    
+
     public Dictionary<string, object> Value { get; }
 }

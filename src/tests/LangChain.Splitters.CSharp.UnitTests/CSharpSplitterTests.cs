@@ -9,7 +9,7 @@ public class CSharpSplitterTests
         var splitter = new CSharpSplitter();
         var members = await splitter.SplitAsync(H.Resources.SocketIoClient_cs.AsString()).ConfigureAwait(false);
 
-        members.Select(static x => x.Name).ToArray().Should().BeEquivalentTo(new []
+        members.Select(static x => x.Name).ToArray().Should().BeEquivalentTo(new[]
         {
             "SocketIoClient",
             "EngineIoClient_MessageReceived",
@@ -26,7 +26,7 @@ public class CSharpSplitterTests
             "Dispose",
         });
     }
-    
+
     [TestMethod]
     public async Task Cut()
     {
@@ -42,9 +42,9 @@ public class CSharpSplitterTests
                     x != "SocketIoClient" &&
                     x != "EngineIoClient_MessageReceived")
                 .ToArray()).ConfigureAwait(false);
-        
+
         var newMembers = await splitter.SplitAsync(newContent).ConfigureAwait(false);
-        newMembers.Select(static x => x.Name).ToArray().Should().BeEquivalentTo(new []
+        newMembers.Select(static x => x.Name).ToArray().Should().BeEquivalentTo(new[]
         {
             "GetOnKey",
             "ConnectToNamespacesAsync",

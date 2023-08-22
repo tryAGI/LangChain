@@ -16,7 +16,7 @@ public static class MessageStringExtensions
     {
         return new Message(text, MessageRole.System);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -26,7 +26,7 @@ public static class MessageStringExtensions
     {
         return new Message(text, MessageRole.Human);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -36,7 +36,7 @@ public static class MessageStringExtensions
     {
         return new Message(text, MessageRole.Ai);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -77,9 +77,9 @@ public static class MessageStringExtensions
     public static string AsHistory(this IReadOnlyCollection<Message> messages)
     {
         messages = messages ?? throw new ArgumentNullException(nameof(messages));
-        
+
         var builder = new StringBuilder(capacity: messages.Count * 64);
-        foreach(var message in messages)
+        foreach (var message in messages)
         {
             builder.Append(message.Role switch
             {

@@ -24,7 +24,7 @@ public readonly partial record struct Usage(
         Messages: 0,
         Time: TimeSpan.Zero,
         PriceInUsd: 0.0d);
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -7,7 +7,7 @@ public class ChainInputs : IChainInputs
 {
     /// <inheritdoc />
     public CallbackManager? CallbackManager { get; set; }
-    
+
     /// <inheritdoc />
     public bool? Verbose { get; set; }
 }

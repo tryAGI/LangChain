@@ -13,30 +13,30 @@ public class SequentialChainTests
     public async Task Sequential_Usage_Single_Inputs()
     {
         // Arrange
-        var chain1 = CreateFakeChainMock(new[] {"foo"}, new []{"bar"}).Object;
-        var chain2 = CreateFakeChainMock(new[] {"bar"}, new []{"baz"}).Object;
-        var chain = new SequentialChain(new SequentialChainInput(new[] {chain1, chain2}, new []{"foo"}));
+        var chain1 = CreateFakeChainMock(new[] { "foo" }, new[] { "bar" }).Object;
+        var chain2 = CreateFakeChainMock(new[] { "bar" }, new[] { "baz" }).Object;
+        var chain = new SequentialChain(new SequentialChainInput(new[] { chain1, chain2 }, new[] { "foo" }));
 
         // Act
         var outputs = await chain.CallAsync(new ChainValues("foo", "123"));
-        
+
         // Assert
         outputs.Value.Count.Should().Be(1);
         outputs.Value.First().Key.Should().Be("baz");
         outputs.Value.First().Value.Should().Be("123foofoo");
     }
-    
+
     [TestMethod]
     public async Task Sequential_Usage_Single_Inputs_With_ReturnAll()
     {
         // Arrange
-        var chain1 = CreateFakeChainMock(new[] {"foo"}, new []{"bar"}).Object;
-        var chain2 = CreateFakeChainMock(new[] {"bar"}, new []{"baz"}).Object;
-        var chain = new SequentialChain(new SequentialChainInput(new[] {chain1, chain2}, new []{"foo"}, returnAll: true));
+        var chain1 = CreateFakeChainMock(new[] { "foo" }, new[] { "bar" }).Object;
+        var chain2 = CreateFakeChainMock(new[] { "bar" }, new[] { "baz" }).Object;
+        var chain = new SequentialChain(new SequentialChainInput(new[] { chain1, chain2 }, new[] { "foo" }, returnAll: true));
 
         // Act
         var outputs = await chain.CallAsync(new ChainValues("foo", "123"));
-        
+
         // Assert
         outputs.Value.Count.Should().Be(2);
         outputs.Value.ContainsKey("bar").Should().BeTrue();
@@ -44,13 +44,13 @@ public class SequentialChainTests
         outputs.Value["bar"].Should().Be("123foo");
         outputs.Value["baz"].Should().Be("123foofoo");
     }
-    
+
     [TestMethod]
     public void Should_Throw_Exception_On_Empty_Chains()
     {
         // Arrange
         var input = new SequentialChainInput(Array.Empty<IChain>(), Array.Empty<string>());
-        
+
         // Act
         var act = new Action(() => new SequentialChain(input));
 
@@ -62,24 +62,24 @@ public class SequentialChainTests
     public void Should_Throw_Exception_On_Wrongly_Specify_ReturnAll()
     {
         // Arrange
-        var input = new SequentialChainInput(Array.Empty<IChain>(), Array.Empty<string>(), new string[]{"output1"}, true);
-        
+        var input = new SequentialChainInput(Array.Empty<IChain>(), Array.Empty<string>(), new string[] { "output1" }, true);
+
         // Act
         var act = new Action(() => new SequentialChain(input));
 
         act.Should().Throw<ArgumentException>()
             .WithMessage("Either specify variables to return using `outputVariables` or use `returnAll` param. Cannot apply both conditions at the same time.");
     }
-    
+
     [TestMethod]
     public void Should_Throw_Exception_On_Duplicate_Output_Key()
     {
         // Arrange
-        var chain1 = CreateFakeChainMock(new[] {"input1"}, new []{"duplicateOutput"}).Object;
-        var chain2 = CreateFakeChainMock(new []{"duplicateOutput"}, new []{"duplicateOutput"}).Object;
-        
+        var chain1 = CreateFakeChainMock(new[] { "input1" }, new[] { "duplicateOutput" }).Object;
+        var chain2 = CreateFakeChainMock(new[] { "duplicateOutput" }, new[] { "duplicateOutput" }).Object;
+
         // Act 
-        Action act = () => new SequentialChain(new SequentialChainInput(new[] {chain1, chain2}, new []{"Some Input"}));
+        Action act = () => new SequentialChain(new SequentialChainInput(new[] { chain1, chain2 }, new[] { "Some Input" }));
 
         // Assert
         act.Should().Throw<ArgumentException>()
@@ -89,11 +89,11 @@ public class SequentialChainTests
     private Mock<IChain> CreateFakeChainMock(string[] inputVariables, string[] outputVariables)
     {
         var fakeChainMock = new Mock<IChain>();
-        
+
         fakeChainMock.Setup(_ => _.InputKeys).Returns(inputVariables);
         fakeChainMock.Setup(_ => _.OutputKeys).Returns(outputVariables);
         fakeChainMock.Setup(x => x.CallAsync(It.IsAny<IChainValues>()))
-            .Returns<IChainValues>(async chainValues =>
+            .Returns<IChainValues>(chainValues =>
             {
                 var output = new ChainValues();
 
@@ -104,7 +104,7 @@ public class SequentialChainTests
                     output.Value.Add(outputVariable, outputValue);
                 }
 
-                return output;
+                return Task.FromResult<IChainValues>(output);
             });
 
         return fakeChainMock;

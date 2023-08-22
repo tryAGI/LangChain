@@ -8,7 +8,7 @@ public partial class OpenAiModel : IEmbeddingModel
 
     /// <inheritdoc cref="OpenAiConfiguration.EmbeddingModelId"/>
     public string EmbeddingModelId { get; init; } = EmbeddingModelIds.Ada002;
-    
+
     /// <inheritdoc/>
     public int MaximumInputLength => ApiHelpers.CalculateContextLength(EmbeddingModelId);
 
@@ -22,7 +22,7 @@ public partial class OpenAiModel : IEmbeddingModel
         var priceInUsd = CalculatePriceInUsd(
             completionTokens: 0,
             promptTokens: promptTokens);
-        
+
         return Usage.Empty with
         {
             PromptTokens = promptTokens,
@@ -64,6 +64,6 @@ public partial class OpenAiModel : IEmbeddingModel
             texts
                 .Select(text => EmbedQueryAsync(text, cancellationToken))).ConfigureAwait(false);
     }
-    
+
     #endregion
 }

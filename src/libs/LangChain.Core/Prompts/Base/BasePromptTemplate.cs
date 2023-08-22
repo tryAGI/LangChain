@@ -10,13 +10,13 @@ public abstract class BasePromptTemplate
     /// <summary>
     /// 
     /// </summary>
-    public List<string> InputVariables { get; private set;  }
-    
+    public List<string> InputVariables { get; private set; }
+
     /// <summary>
     /// 
     /// </summary>
     public InputValues PartialVariables { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -28,18 +28,18 @@ public abstract class BasePromptTemplate
         {
             throw new Exception("Cannot have an input variable named 'stop', as it is used internally, please rename.");
         }
-        
+
         InputVariables = input.InputVariables;
         PartialVariables = new InputValues(input.PartialVariables);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
     public abstract Task<BasePromptTemplate> Partial(PartialValues values);
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -48,12 +48,12 @@ public abstract class BasePromptTemplate
     public async Task<InputValues> MergePartialAndUserVariables(InputValues userVariables)
     {
         InputValues partialValues = new InputValues(new Dictionary<string, object>());
-        
+
         foreach (KeyValuePair<string, object> entry in PartialVariables.Value)
         {
             string key = entry.Key;
             object value = entry.Value;
-            
+
             if (value is string stringValue)
             {
                 partialValues.Value[key] = stringValue;
@@ -63,37 +63,37 @@ public abstract class BasePromptTemplate
                 partialValues.Value[key] = await asyncFunc();
             }
         }
-        
+
         InputValues allKwargs = new InputValues(partialValues.Value.Concat(userVariables.Value).ToDictionary(x => x.Key, x => x.Value));
         return allKwargs;
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
     public abstract Task<string> Format(InputValues values);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
     public abstract Task<BasePromptValue> FormatPromptValue(InputValues values);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
     protected abstract string GetPromptType();
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
     public abstract SerializedBasePromptTemplate Serialize();
-    
+
     /// <summary>
     /// 
     /// </summary>

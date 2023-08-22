@@ -18,7 +18,7 @@ public static class ChatModelExtensions
         CancellationToken cancellationToken = default)
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
-        
+
         var response = await model.GenerateAsync(
             request: new ChatRequest(Messages: new[]
             {
@@ -40,7 +40,7 @@ public static class ChatModelExtensions
         int value)
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
-        
+
         if (value > model.ContextLength)
         {
             throw new InvalidOperationException(
@@ -59,7 +59,7 @@ public static class ChatModelExtensions
         string text)
     {
         model = model ?? throw new ArgumentNullException(nameof(model));
-        
+
         model.EnsureNumbersOfTokensBelowContextLength(model.CountTokens(text));
     }
 

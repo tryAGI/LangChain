@@ -10,7 +10,7 @@ public class PromptTemplateInput : IPromptTemplateInput
         this.InputVariables = inputVariables;
         this.PartialVariables = partialVariables ?? new();
     }
-    
+
     public string Template { get; private set; }
     public TemplateFormatOptions? TemplateFormat { get; set; }
 

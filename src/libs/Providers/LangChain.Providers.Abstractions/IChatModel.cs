@@ -9,12 +9,12 @@ public interface IChatModel
     /// 
     /// </summary>
     public string Id { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public Usage TotalUsage { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -29,7 +29,7 @@ public static partial class ServiceCollectionExtensions
             .AddScoped<HuggingFaceModel>(static services => new HuggingFaceModel(
                 configuration: services.GetRequiredService<IOptions<HuggingFaceConfiguration>>().Value,
                 httpClient: services.GetRequiredService<HttpClient>()));
-        
+
         return services;
     }
 }

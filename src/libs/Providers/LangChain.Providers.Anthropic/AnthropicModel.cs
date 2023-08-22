@@ -13,7 +13,7 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
     /// 
     /// </summary>
     public string Id { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -21,10 +21,10 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
 
     /// <inheritdoc/>
     public Usage TotalUsage { get; private set; }
-    
+
     /// <inheritdoc/>
     public int ContextLength => ApiHelpers.CalculateContextLength(Id);
-    
+
     private HttpClient HttpClient { get; set; }
     private Tiktoken.Encoding Encoding { get; } = Tiktoken.Encoding.Get("cl100k_base");
 
@@ -76,20 +76,20 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
             _ => throw new NotImplementedException(),
         };
     }
-    
+
     private static Message ToMessage(CreateCompletionResponse message)
     {
         return new Message(
             Content: message.Completion,
             Role: MessageRole.Ai);
     }
-    
+
     private async Task<CreateCompletionResponse> CreateChatCompletionAsync(
         IReadOnlyCollection<Message> messages,
         CancellationToken cancellationToken = default)
     {
         var api = new AnthropicApi(apiKey: ApiKey, HttpClient);
-        
+
         return await api.CompleteAsync(new CreateCompletionRequest
         {
             Prompt = messages
@@ -111,7 +111,7 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
         var priceInUsd = CalculatePriceInUsd(
             completionTokens: completionTokens,
             promptTokens: promptTokens);
-        
+
         return Usage.Empty with
         {
             PromptTokens = promptTokens,
@@ -120,7 +120,7 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
             PriceInUsd = priceInUsd,
         };
     }
-    
+
     /// <inheritdoc/>
     public async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
@@ -129,15 +129,15 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-        
+
         messages.Add(ToMessage(response));
-        
+
         var usage = GetUsage(messages) with
         {
             Time = watch.Elapsed,
         };
         TotalUsage += usage;
-        
+
         return new ChatResponse(
             Messages: messages,
             Usage: usage);
@@ -162,7 +162,7 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
     {
         return CountTokens(request.Messages);
     }
-    
+
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {
@@ -171,6 +171,6 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
             completionTokens: completionTokens,
             promptTokens: promptTokens);
     }
-    
+
     #endregion
 }

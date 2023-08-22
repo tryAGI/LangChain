@@ -14,7 +14,7 @@ public interface IGenerateImageModel
     public Task<Uri> GenerateImageAsUrlAsync(
         string prompt,
         CancellationToken cancellationToken = default);
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -24,7 +24,7 @@ public interface IGenerateImageModel
     public Task<Stream> GenerateImageAsStreamAsync(
         string prompt,
         CancellationToken cancellationToken = default);
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -33,7 +33,7 @@ public readonly partial record struct Usage
             Time: a.Time - b.Time,
             PriceInUsd: a.PriceInUsd - b.PriceInUsd);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -73,7 +73,7 @@ public readonly partial record struct Usage
 #endif
             PriceInUsd: a.PriceInUsd / b);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>

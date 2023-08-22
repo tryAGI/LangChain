@@ -12,13 +12,13 @@ public class SequentialChain : BaseChain
     /// 
     /// </summary>
     public IChain[] Chains { get; }
-    
+
     /// <inheritdoc />
     public override string[] InputKeys { get; }
-    
+
     /// <inheritdoc />
     public override string[] OutputKeys { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -36,25 +36,25 @@ public class SequentialChain : BaseChain
         InputKeys = input.InputVariables;
         OutputKeys = input.OutputVariables ?? Array.Empty<string>();
         ReturnAll = input.ReturnAll;
-        
+
         Validate();
-        
-        if(OutputKeys.Length == 0 && !ReturnAll)
+
+        if (OutputKeys.Length == 0 && !ReturnAll)
         {
             OutputKeys = Chains[^1].OutputKeys;
         }
-        
+
 
     }
-    
+
     public override string ChainType()
     {
         return "sequential_chain";
     }
     public override async Task<IChainValues> CallAsync(IChainValues values)
     {
-        var allChainValues = new ChainValues(new  Dictionary<string, object>(_allOutputKeys.Count));
-        foreach (var input in InputKeys)  
+        var allChainValues = new ChainValues(new Dictionary<string, object>(_allOutputKeys.Count));
+        foreach (var input in InputKeys)
         {
             allChainValues.Value[input] = values.Value[input];
         }
@@ -106,7 +106,7 @@ public class SequentialChain : BaseChain
 #else
         _allOutputKeys = new HashSet<string>();
 #endif
-        
+
         _allOutputKeys.UnionWith(InputKeys);
         foreach (var chain in Chains)
         {

@@ -4,7 +4,7 @@ namespace LangChain.Memory;
 
 public class ChatMessageHistory : BaseChatMessageHistory
 {
-    public ChatMessageHistory() 
+    public ChatMessageHistory()
     {
         Messages = new List<BaseChatMessage>();
     }

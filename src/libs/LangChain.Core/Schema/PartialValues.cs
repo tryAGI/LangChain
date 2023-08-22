@@ -6,6 +6,6 @@ public class PartialValues
     {
         this.Value = value;
     }
-    
+
     public Dictionary<string, string> Value { get; set; } = new();
 }

@@ -31,8 +31,8 @@ public class LlmChain : BaseChain, ILlmChainInput
     }
 
     protected async Task<object?> GetFinalOutput(
-        List<Generation> generations, 
-        BasePromptValue promptValue, 
+        List<Generation> generations,
+        BasePromptValue promptValue,
         CallbackManagerForChainRun? runManager = null)
     {
         return generations[0].Text;
@@ -50,17 +50,17 @@ public class LlmChain : BaseChain, ILlmChainInput
         if (values.Value.TryGetValue("stop", out var value))
         {
             var stopList = value as List<string>;
-                
+
             stop = stopList;
         }
-        
+
         BasePromptValue promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value));
         var generationResult = await Llm.GeneratePrompt(new List<BasePromptValue> { promptValue }.ToArray(), stop);
         var generations = generationResult.Generations;
-        
+
         return new ChainValues(await GetFinalOutput(generations.ToList(), promptValue));
     }
-    
+
     public async Task<object> Predict(ChainValues values)
     {
         var output = await CallAsync(values);

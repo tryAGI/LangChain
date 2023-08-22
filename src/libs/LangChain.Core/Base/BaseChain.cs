@@ -63,7 +63,7 @@ public abstract class BaseChain : IChain
     /// <param name="values">The <see cref="ChainValues"/> to use.</param>
     /// <returns></returns>
     public abstract Task<IChainValues> CallAsync(IChainValues values);
-    
+
     /// <summary>
     /// 
     /// </summary>

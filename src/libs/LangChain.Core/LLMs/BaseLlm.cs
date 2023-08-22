@@ -8,7 +8,7 @@ namespace LangChain.LLMS;
 public abstract class BaseLlm : BaseLanguageModel
 {
     private readonly BaseCache? _cache;
-    
+
     /// <inheritdoc />
     protected BaseLlm(IBaseLlmParams parameters) : base(parameters)
     {
