@@ -52,7 +52,7 @@ public partial class OpenAiModel : IEmbeddingModel
             TotalUsage += usage;
         }
 
-        return response.Data.First().Embedding.ToArray();
+        return response.Data.First().Embedding1.ToArray();
     }
 
     /// <inheritdoc/>
