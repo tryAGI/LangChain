@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Include="Anyscale" />
+    </ItemGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>Anyscale Endpoints Chat model provider.</Description>
+        <PackageTags>$(PackageTags);anyscale;api</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Anyscale" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>
