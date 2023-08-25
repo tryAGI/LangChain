@@ -31,7 +31,7 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="System.Text.Json" Version="7.0.3" />
-    <PackageVersion Include="Tiktoken" Version="1.0.1" />
+    <PackageVersion Include="Tiktoken" Version="1.1.1" />
     <PackageVersion Include="tryAGI.OpenAI" Version="1.7.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0" />
