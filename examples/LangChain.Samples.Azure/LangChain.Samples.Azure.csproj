@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\libs\LangChain\LangChain.csproj" />
+        <ProjectReference Include="..\..\src\libs\Providers\LangChain.Providers.Azure\LangChain.Providers.Azure.csproj" />
     </ItemGroup>
 
 </Project>
