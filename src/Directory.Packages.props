@@ -5,16 +5,16 @@
   <ItemGroup>
     <PackageVersion Include="Anthropic" Version="0.3.0" />
     <PackageVersion Include="Anyscale" Version="1.0.0" />
-    <PackageVersion Include="Aspose.PDF" Version="23.7.0" />
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.200.25" />
+    <PackageVersion Include="Aspose.PDF" Version="23.8.0" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.200.27" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
-    <PackageVersion Include="FluentAssertions" Version="6.11.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageVersion Include="H.Resources.Generator" Version="1.5.1" />
     <PackageVersion Include="HuggingFace" Version="0.2.3" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.15.230531.5-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.AzureCognitiveSearch" Version="0.17.230711.7-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.AzureSearch" Version="0.17.230718.1-preview" />
@@ -31,7 +31,7 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="System.Text.Json" Version="7.0.3" />
-    <PackageVersion Include="Tiktoken" Version="1.1.1" />
+    <PackageVersion Include="Tiktoken" Version="1.1.2" />
     <PackageVersion Include="tryAGI.OpenAI" Version="1.7.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0" />
