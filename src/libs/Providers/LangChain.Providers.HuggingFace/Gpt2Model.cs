@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.HuggingFace;
 
 /// <inheritdoc cref="RecommendedModelIds.Gpt2" />
 public class Gpt2Model : HuggingFaceModel

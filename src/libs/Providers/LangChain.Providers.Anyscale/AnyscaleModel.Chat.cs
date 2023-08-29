@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using tryAGI.OpenAI;
 
-namespace LangChain.Providers;
+namespace LangChain.Providers.Anyscale;
 
 public partial class AnyscaleModel : IChatModelWithTokenCounting
 {

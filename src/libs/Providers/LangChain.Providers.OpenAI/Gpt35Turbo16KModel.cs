@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.OpenAI;
 
 /// <inheritdoc cref="ModelIds.Gpt35Turbo_16k" />
 public class Gpt35Turbo16KModel : OpenAiModel

@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.Anyscale;
 
 /// <inheritdoc cref="ModelIds.CodeLlama_34B" />
 /// <param name="apiKey"></param>

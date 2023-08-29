@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.OpenAI;
 
 // ReSharper disable MemberCanBePrivate.Global
 

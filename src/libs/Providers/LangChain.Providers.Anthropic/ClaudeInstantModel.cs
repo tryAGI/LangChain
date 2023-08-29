@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.Anthropic;
 
 /// <inheritdoc cref="ModelIds.ClaudeInstant" />
 public class ClaudeInstantModel : AnthropicModel

@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.OpenAI;
 
 public partial class OpenAiModel
 {

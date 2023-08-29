@@ -1,7 +1,7 @@
 ﻿using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
-using LangChain.Providers;
 using LangChain.Prompts;
+using LangChain.Providers.OpenAI;
 using LangChain.Schema;
 
 using var httpClient = new HttpClient();

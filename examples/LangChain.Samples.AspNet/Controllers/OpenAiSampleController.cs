@@ -1,4 +1,5 @@
 using LangChain.Providers;
+using LangChain.Providers.OpenAI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LangChain.Samples.AspNet.Controllers;

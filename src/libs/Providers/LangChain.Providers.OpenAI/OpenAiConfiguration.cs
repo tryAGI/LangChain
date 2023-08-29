@@ -1,4 +1,4 @@
-﻿namespace LangChain.Providers;
+﻿namespace LangChain.Providers.OpenAI;
 
 /// <summary>
 /// 
@@ -25,6 +25,11 @@ public class OpenAiConfiguration
     /// 
     /// </summary>
     public string? ApiKey { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? Endpoint { get; set; }
 
     /// <summary>
     /// ID of the model to use. <br/>

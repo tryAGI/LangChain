@@ -1,6 +1,6 @@
 ﻿using LangChain.Chains.LLM;
 using LangChain.Prompts;
-using LangChain.Providers;
+using LangChain.Providers.OpenAI;
 using LangChain.Schema;
 
 const string apiKey = "API-KEY";

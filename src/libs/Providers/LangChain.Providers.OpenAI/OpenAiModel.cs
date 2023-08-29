@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.OpenAI;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -67,6 +67,11 @@ public partial class OpenAiModel :
 
         Encoding = Tiktoken.Encoding.ForModel(Id);
         Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
+        if (configuration.Endpoint != null &&
+            !string.IsNullOrWhiteSpace(configuration.Endpoint))
+        {
+            Api.BaseUrl = configuration.Endpoint;
+        }
     }
 
     /// <summary>

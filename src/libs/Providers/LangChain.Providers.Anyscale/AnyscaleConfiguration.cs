@@ -1,4 +1,4 @@
-﻿namespace LangChain.Providers;
+﻿namespace LangChain.Providers.Anyscale;
 
 /// <summary>
 /// 

@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.LeonardoAi;
 
 // ReSharper disable MemberCanBePrivate.Global
 

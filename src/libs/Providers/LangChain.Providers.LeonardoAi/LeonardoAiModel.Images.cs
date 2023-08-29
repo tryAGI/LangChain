@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.LeonardoAi;
 
 public partial class LeonardoAiModel : IGenerateImageModel
 {

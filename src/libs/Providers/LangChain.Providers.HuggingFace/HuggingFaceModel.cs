@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace LangChain.Providers;
+namespace LangChain.Providers.HuggingFace;
 
 /// <summary>
 /// 

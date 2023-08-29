@@ -1,4 +1,4 @@
-namespace LangChain.Providers;
+namespace LangChain.Providers.OpenAI;
 
 /// <inheritdoc cref="ModelIds.Gpt4" />
 public class Gpt4Model : OpenAiModel

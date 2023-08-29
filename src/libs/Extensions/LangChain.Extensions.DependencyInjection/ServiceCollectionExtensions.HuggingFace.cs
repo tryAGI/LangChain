@@ -1,4 +1,4 @@
-﻿using LangChain.Providers;
+﻿using LangChain.Providers.HuggingFace;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 

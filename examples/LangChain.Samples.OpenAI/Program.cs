@@ -1,4 +1,5 @@
 ﻿using LangChain.Providers;
+using LangChain.Providers.OpenAI;
 
 var apiKey =
     Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
