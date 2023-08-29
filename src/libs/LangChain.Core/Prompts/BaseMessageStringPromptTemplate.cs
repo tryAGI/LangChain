@@ -1,5 +1,5 @@
-using LangChain.Chat;
 using LangChain.Prompts.Base;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
@@ -15,10 +15,10 @@ public abstract class BaseMessageStringPromptTemplate : BaseMessagePromptTemplat
 
     public override List<string> InputVariables => this.Prompt.InputVariables;
 
-    public abstract Task<BaseChatMessage> Format(InputValues values);
+    public abstract Task<Message> Format(InputValues values);
 
-    public override async Task<List<BaseChatMessage>> FormatMessages(InputValues values)
+    public override async Task<List<Message>> FormatMessages(InputValues values)
     {
-        return new List<BaseChatMessage> { await this.Format(values) };
+        return new List<Message> { await this.Format(values) };
     }
 }

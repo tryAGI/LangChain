@@ -1,5 +1,5 @@
-using LangChain.Chat;
 using LangChain.Prompts.Base;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
@@ -8,9 +8,9 @@ public class HumanMessagePromptTemplate : BaseMessageStringPromptTemplate
 {
     public HumanMessagePromptTemplate(BaseStringPromptTemplate prompt) : base(prompt) { }
 
-    public override async Task<BaseChatMessage> Format(InputValues values)
+    public override async Task<Message> Format(InputValues values)
     {
-        return new HumanChatMessage(await this.Prompt.Format(values));
+        return (await this.Prompt.Format(values)).AsHumanMessage();
     }
 
     public static HumanMessagePromptTemplate FromTemplate(string template)

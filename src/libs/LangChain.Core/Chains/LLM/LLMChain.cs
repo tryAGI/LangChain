@@ -2,7 +2,9 @@ using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
 using LangChain.Prompts.Base;
+using LangChain.Providers;
 using LangChain.Schema;
+using Generation = LangChain.Schema.Generation;
 
 namespace LangChain.Chains.LLM;
 
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 public class LlmChain : BaseChain, ILlmChainInput
 {
     public BasePromptTemplate Prompt { get; }
-    public BaseLanguageModel Llm { get; }
+    public IChatModel Llm { get; }
     public string OutputKey { get; set; }
     public override string ChainType() => "llm_chain";
 
@@ -55,10 +57,9 @@ public class LlmChain : BaseChain, ILlmChainInput
         }
 
         BasePromptValue promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value));
-        var generationResult = await Llm.GeneratePrompt(new List<BasePromptValue> { promptValue }.ToArray(), stop);
-        var generations = generationResult.Generations;
+        var response = await Llm.GenerateAsync(new ChatRequest(promptValue.ToChatMessages(), stop));
 
-        return new ChainValues(await GetFinalOutput(generations.ToList(), promptValue));
+        return new ChainValues(response.Messages.Last().Content);
     }
 
     public async Task<object> Predict(ChainValues values)

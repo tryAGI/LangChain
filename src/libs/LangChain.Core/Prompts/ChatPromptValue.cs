@@ -1,14 +1,14 @@
 using System.Text.Json;
-using LangChain.Chat;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
 
 public class ChatPromptValue : BasePromptValue
 {
-    public BaseChatMessage[] Messages { get; set; }
+    public IReadOnlyCollection<Message> Messages { get; set; }
 
-    public ChatPromptValue(BaseChatMessage[] messages)
+    public ChatPromptValue(IReadOnlyCollection<Message> messages)
     {
         this.Messages = messages;
     }
@@ -18,7 +18,7 @@ public class ChatPromptValue : BasePromptValue
         return JsonSerializer.Serialize(this.Messages);
     }
 
-    public override BaseChatMessage[] ToChatMessages()
+    public override IReadOnlyCollection<Message> ToChatMessages()
     {
         return this.Messages;
     }

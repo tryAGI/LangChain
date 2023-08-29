@@ -1,5 +1,5 @@
-using LangChain.Chat;
 using LangChain.Prompts.Base;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
@@ -36,11 +36,11 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
         throw new NotImplementedException();
     }
 
-    public override async Task<BaseChatMessage[]> FormatMessages(InputValues values)
+    public override async Task<IReadOnlyCollection<Message>> FormatMessages(InputValues values)
     {
         var allValues = await this.MergePartialAndUserVariables(values);
 
-        var resultMessages = new List<BaseChatMessage>();
+        var resultMessages = new List<Message>();
 
         foreach (var promptMessage in this.PromptMessages)
         {

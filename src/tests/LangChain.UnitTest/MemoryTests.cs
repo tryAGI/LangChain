@@ -1,5 +1,5 @@
-﻿using LangChain.Chat;
-using LangChain.Memory;
+﻿using LangChain.Memory;
+using LangChain.Providers;
 
 namespace LangChain.UnitTest;
 
@@ -13,8 +13,8 @@ public class MemoryTests
 
         inMemoryHistory.Messages.Should().HaveCount(2);
 
-        inMemoryHistory.Messages.FirstOrDefault(x => x.Text == "hi!").Should().BeOfType<HumanChatMessage>();
-        inMemoryHistory.Messages.FirstOrDefault(x => x.Text == "whats up?").Should().BeOfType<AiChatMessage>();
+        inMemoryHistory.Messages.FirstOrDefault(x => x.Content == "hi!").Role.Should().Be(MessageRole.Human);
+        inMemoryHistory.Messages.FirstOrDefault(x => x.Content == "whats up?").Role.Should().Be(MessageRole.Ai);
     }
 
     [TestMethod]

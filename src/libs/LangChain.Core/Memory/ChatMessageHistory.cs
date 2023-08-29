@@ -1,4 +1,4 @@
-﻿using LangChain.Chat;
+﻿using LangChain.Providers;
 
 namespace LangChain.Memory;
 
@@ -6,9 +6,9 @@ public class ChatMessageHistory : BaseChatMessageHistory
 {
     public ChatMessageHistory()
     {
-        Messages = new List<BaseChatMessage>();
+        Messages = new List<Message>();
     }
-    public override void AddMessage(BaseChatMessage message)
+    public override void AddMessage(Message message)
     {
         Messages.Add(message);
     }

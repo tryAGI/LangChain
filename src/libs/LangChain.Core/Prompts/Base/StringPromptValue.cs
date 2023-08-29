@@ -1,4 +1,4 @@
-using LangChain.Chat;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts.Base;
@@ -12,9 +12,9 @@ public class StringPromptValue : BasePromptValue
     public string Value { get; set; }
 
 
-    public override BaseChatMessage[] ToChatMessages()
+    public override IReadOnlyCollection<Message> ToChatMessages()
     {
-        return new[] { new HumanChatMessage(Value) };
+        return new[] { Value.AsHumanMessage() };
     }
 
     public override string ToString() => Value;

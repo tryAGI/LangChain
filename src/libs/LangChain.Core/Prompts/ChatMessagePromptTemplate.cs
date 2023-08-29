@@ -1,5 +1,5 @@
-using LangChain.Chat;
 using LangChain.Prompts.Base;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
@@ -13,9 +13,9 @@ public class ChatMessagePromptTemplate : BaseMessageStringPromptTemplate
         this.Role = role;
     }
 
-    public override async Task<BaseChatMessage> Format(InputValues values)
+    public override async Task<Message> Format(InputValues values)
     {
-        return new ChatMessage(await this.Prompt.Format(values));
+        return (await this.Prompt.Format(values)).AsChatMessage();
     }
 
     public static ChatMessagePromptTemplate FromTemplate(string template, string role)

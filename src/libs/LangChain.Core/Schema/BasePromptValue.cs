@@ -1,10 +1,10 @@
-using LangChain.Chat;
+using LangChain.Providers;
 
 namespace LangChain.Schema;
 
 public abstract class BasePromptValue
 {
-    public abstract BaseChatMessage[] ToChatMessages();
+    public abstract IReadOnlyCollection<Message> ToChatMessages();
 
     public abstract override string ToString();
 }

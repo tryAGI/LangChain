@@ -1,5 +1,5 @@
-using LangChain.Chat;
 using LangChain.Prompts.Base;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
@@ -8,7 +8,7 @@ public abstract class BaseChatPromptTemplate : BasePromptTemplate
 {
     protected BaseChatPromptTemplate(IBasePromptTemplateInput input) : base(input) { }
 
-    public abstract Task<BaseChatMessage[]> FormatMessages(InputValues values);
+    public abstract Task<IReadOnlyCollection<Message>> FormatMessages(InputValues values);
 
     public override async Task<string> Format(InputValues values)
     {

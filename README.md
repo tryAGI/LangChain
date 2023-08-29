@@ -14,7 +14,9 @@ We proceed from the position of the maximum choice of available options and are 
 
 ## Usage
 ```csharp
-var model = new Gpt4Model("API_KEY");
+const string apiKey = "API_KEY";
+using var httpClient = new HttpClient();
+var model = new Gpt4Model(apiKey, httpClient);
 var response = await model.GenerateAsync("Hello, World of AI!");
 
 var numberOfTokens = model.CountTokens("Hello, World of AI!");
@@ -22,19 +24,27 @@ var numberOfTokens = model.CountTokens("Hello, World of AI!");
 
 ### Chains
 ```csharp
-var model = new Gpt4Model("API_KEY");
+const string apiKey = "API_KEY";
+using var httpClient = new HttpClient();
+var model = new Gpt4Model(apiKey, httpClient);
 
 var template = "What is a good name for a company that makes {product}?";
 var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1){"product"}));
 
 var chain = new LlmChain(new LlmChainInput(model, prompt));
 
-var result = await chain.Call(new ChainValues(new Dictionary<string, object>(1)
+var result = await chain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
 {
     { "product", "colourful socks" }
 }));
 // The result is an object with a `text` property.
 Console.WriteLine(result.Value["text"]);
+
+// Since the LLMChain is a single-input, single-output chain, we can also call it with `run`.
+// This takes in a string and returns the `text` property.
+var result2 = await chain.Run("colourful socks");
+
+Console.WriteLine(result2);
 ```
 
 ### OpenAI Functions:

@@ -20,12 +20,12 @@ public class ChatTests
 
         var chatMessages = messages.ToChatMessages();
 
-        chatMessages.Length.Should().Be(4);
+        chatMessages.Count.Should().Be(4);
 
-        chatMessages[0].Text.Should().Be("Here's some context: This is the context");
-        chatMessages[1].Text.Should().Be("Hello Foo, I'm Bar. Thanks for the This is the context");
-        chatMessages[2].Text.Should().Be("I'm an AI. I'm Foo. I'm Bar.");
-        chatMessages[3].Text.Should().Be("I'm a generic message. I'm Foo. I'm Bar.");
+        chatMessages.ElementAt(0).Content.Should().Be("Here's some context: This is the context");
+        chatMessages.ElementAt(1).Content.Should().Be("Hello Foo, I'm Bar. Thanks for the This is the context");
+        chatMessages.ElementAt(2).Content.Should().Be("I'm an AI. I'm Foo. I'm Bar.");
+        chatMessages.ElementAt(3).Content.Should().Be("I'm a generic message. I'm Foo. I'm Bar.");
     }
 
     [TestMethod]
@@ -89,10 +89,10 @@ public class ChatTests
 
         var chatMessages = messages.ToChatMessages();
 
-        chatMessages.Length.Should().Be(2);
+        chatMessages.Count.Should().Be(2);
 
-        chatMessages[0].Text.Should().Be("Here's some context: This is the context");
-        chatMessages[1].Text.Should().Be("Hello Foo, I'm Bar.");
+        chatMessages.ElementAt(0).Content.Should().Be("Here's some context: This is the context");
+        chatMessages.ElementAt(1).Content.Should().Be("Hello Foo, I'm Bar.");
     }
 
     [TestMethod]
@@ -124,10 +124,10 @@ public class ChatTests
 
         var chatMessages = messages.ToChatMessages();
 
-        chatMessages.Length.Should().Be(3);
+        chatMessages.Count.Should().Be(3);
 
-        chatMessages[0].Text.Should().Be("Here's some context: This is the context");
-        chatMessages[1].Text.Should().Be("Hello Foo, I'm Bar.");
+        chatMessages.ElementAt(0).Content.Should().Be("Here's some context: This is the context");
+        chatMessages.ElementAt(01).Content.Should().Be("Hello Foo, I'm Bar.");
     }
 
     private static ChatPromptTemplate GenerateTestPromptTemplate()

@@ -1,5 +1,5 @@
 using System.Text.Json;
-using LangChain.Chat;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Prompts;
@@ -8,7 +8,7 @@ public abstract class BaseMessagePromptTemplate
 {
     public abstract List<string> InputVariables { get; }
 
-    public abstract Task<List<BaseChatMessage>> FormatMessages(InputValues values);
+    public abstract Task<List<Message>> FormatMessages(InputValues values);
 
     public SerializedMessagePromptTemplate Serialize()
     {

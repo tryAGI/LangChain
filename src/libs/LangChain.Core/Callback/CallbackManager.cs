@@ -1,6 +1,6 @@
 using LangChain.Base;
-using LangChain.Chat;
 using LangChain.LLMS;
+using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Callback;
@@ -64,7 +64,7 @@ public class CallbackManager
 
     public async Task<CallbackManagerForLlmRun> HandleChatModelStart(
         BaseLlm llm,
-        List<List<BaseChatMessage>> messages,
+        List<List<Message>> messages,
         string? runId = null,
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null)
@@ -238,7 +238,7 @@ public class CallbackManager
         return callbackManager;
     }
 
-    private static string GetBufferString(List<BaseChatMessage> messages)
+    private static string GetBufferString(List<Message> messages)
     {
         // Implement your logic here to convert messages to a string
         throw new NotImplementedException();
