@@ -64,7 +64,7 @@ public partial class AnyscaleModel :
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
-        Encoding = Tiktoken.Encoding.ForModel(Id);
+        Encoding = Tiktoken.Encoding.TryForModel(Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
         Api = new AnyscaleApi(apiKey: ApiKey, HttpClient);
     }
 
@@ -81,7 +81,7 @@ public partial class AnyscaleModel :
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
 
-        Encoding = Tiktoken.Encoding.ForModel(Id);
+        Encoding = Tiktoken.Encoding.TryForModel(Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
         Api = new AnyscaleApi(apiKey: ApiKey, HttpClient);
     }
 

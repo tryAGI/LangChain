@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Anthropic" Version="0.3.0" />
-    <PackageVersion Include="Anyscale" Version="1.0.0" />
+    <PackageVersion Include="Anyscale" Version="1.0.1" />
     <PackageVersion Include="Aspose.PDF" Version="23.9.0" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.201.16" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
@@ -32,7 +32,7 @@
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="System.Text.Json" Version="7.0.3" />
     <PackageVersion Include="Tiktoken" Version="1.1.2" />
-    <PackageVersion Include="tryAGI.OpenAI" Version="1.8.0" />
+    <PackageVersion Include="tryAGI.OpenAI" Version="1.8.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
