@@ -98,10 +98,10 @@ public partial class OpenAiModel :
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {
-        return ApiHelpers.CalculatePriceInUsd(
+        return ApiHelpers.TryCalculatePriceInUsd(
             modelId: Id,
             completionTokens: completionTokens,
-            promptTokens: promptTokens);
+            promptTokens: promptTokens) ?? 0.0;
     }
 
     #endregion
