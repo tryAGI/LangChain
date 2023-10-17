@@ -58,8 +58,9 @@ public class LlmChain : BaseChain, ILlmChainInput
 
         BasePromptValue promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value));
         var response = await Llm.GenerateAsync(new ChatRequest(promptValue.ToChatMessages(), stop));
-
-        return new ChainValues(response.Messages.Last().Content);
+        if(string.IsNullOrEmpty(OutputKey))
+            return new ChainValues(response.Messages.Last().Content);
+        return new ChainValues(OutputKey,response.Messages.Last().Content);
     }
 
     public async Task<object> Predict(ChainValues values)
