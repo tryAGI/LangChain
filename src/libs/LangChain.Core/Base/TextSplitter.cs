@@ -13,11 +13,11 @@ public abstract class TextSplitter
 {
     private readonly int _chunkSize;
     private readonly int _chunkOverlap;
-    private readonly Func<string, int> _lengthFunction;
+    private readonly LengthFunctionDelegate _lengthFunction;
 
-    
+    public delegate int LengthFunctionDelegate(string str);
 
-    protected TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, Func<string,int>? lengthFunction = null)
+    protected TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, LengthFunctionDelegate? lengthFunction = null)
     {
         if (chunkOverlap > chunkSize)
         {
@@ -26,7 +26,7 @@ public abstract class TextSplitter
 
         _chunkSize = chunkSize;
         _chunkOverlap = chunkOverlap;
-        _lengthFunction = lengthFunction ?? new Func<string, int>((str) => str.Length);
+        _lengthFunction = lengthFunction ?? new LengthFunctionDelegate((str) => str.Length);
     }
 
     public abstract List<string> SplitText(string text);
