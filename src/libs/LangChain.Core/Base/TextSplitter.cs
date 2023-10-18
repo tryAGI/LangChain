@@ -29,6 +29,10 @@ public abstract class TextSplitter
         _lengthFunction = lengthFunction ?? new Func<string, int>((str) => str.Length);
     }
 
+    protected int ChunkSize => _chunkSize;
+
+    protected int ChunkOverlap => _chunkOverlap;
+
     public abstract List<string> SplitText(string text);
 
     /// <summary>
@@ -87,6 +91,7 @@ public abstract class TextSplitter
     /// </summary>
     protected List<string> MergeSplits(IEnumerable<string> splits, string separator)
     {
+        var separatorLen = _lengthFunction(separator);
         var docs = new List<string>(); // result of chunks
         var currentDoc = new List<string>(); // documents of current chunk
         int total = 0;
@@ -94,9 +99,9 @@ public abstract class TextSplitter
         foreach (var split in splits)
         {
             int len = _lengthFunction(split);
-
+            
             // if we can't fit the next split into current chunk
-            if (total + len >= _chunkSize)
+            if (total + len + (currentDoc.Count>0?separatorLen:0)>= _chunkSize)
             {
                 // if the chunk is already was too big
                 if (total > _chunkSize)
@@ -116,9 +121,9 @@ public abstract class TextSplitter
                     }
 
                     // start erasing docs from the beginning of the chunk until we can fit the next split
-                    while (total > _chunkOverlap || (total + len > _chunkSize && total > 0))
+                    while (total > _chunkOverlap || (total + len + (currentDoc.Count > 1 ? separatorLen : 0) > _chunkSize && total > 0))
                     {
-                        total -= _lengthFunction(currentDoc[0]);
+                        total -= _lengthFunction(currentDoc[0]) + (currentDoc.Count > 1 ? separatorLen : 0);
                         currentDoc.RemoveAt(0);
                     }
                 }
@@ -126,7 +131,7 @@ public abstract class TextSplitter
 
             // add the next split to the current chunk
             currentDoc.Add(split);
-            total += len; // recalculate the total length of the current chunk
+            total += len + (currentDoc.Count > 1 ? separatorLen : 0); // recalculate the total length of the current chunk
         }
 
         // add the last chunk
