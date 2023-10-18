@@ -40,4 +40,13 @@ public readonly record struct Message(
     {
         return left + right;
     }
+
+    public override string ToString()
+    {
+        if (FunctionName!=null)
+        {
+            return $"{Role}({FunctionName}):\n{Content}";
+        }
+        return $"{Role}: {Content}";
+    }
 }

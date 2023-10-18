@@ -57,7 +57,20 @@ public class LlmChain : BaseChain, ILlmChainInput
         }
 
         BasePromptValue promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value));
+        var chatMessages = promptValue.ToChatMessages();
+        if (Verbose == true)
+        {
+            
+            Console.WriteLine(string.Join("\n\n", chatMessages));
+            Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
+        }
         var response = await Llm.GenerateAsync(new ChatRequest(promptValue.ToChatMessages(), stop));
+        if (Verbose == true)
+        {
+            
+            Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
+            Console.WriteLine("\n".PadLeft(Console.WindowWidth, '<'));
+        }
         if(string.IsNullOrEmpty(OutputKey))
             return new ChainValues(response.Messages.Last().Content);
         return new ChainValues(OutputKey,response.Messages.Last().Content);
