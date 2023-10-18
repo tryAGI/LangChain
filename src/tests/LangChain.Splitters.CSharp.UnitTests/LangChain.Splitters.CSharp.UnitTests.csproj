@@ -8,6 +8,7 @@
         <Compile Remove="Resources\**\*.*" />
     </ItemGroup>
 
+
     <ItemGroup>
         <PackageReference Include="H.Resources.Generator">
             <PrivateAssets>all</PrivateAssets>
@@ -16,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\libs\LangChain.Core\LangChain.Core.csproj" />
         <ProjectReference Include="..\..\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj" />
     </ItemGroup>
 
