@@ -14,7 +14,6 @@
     </ItemGroup>
 
     <PropertyGroup Label="Nuget">
-        <Version>0.10.3</Version>
         <PackageTags>langchain</PackageTags>
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -36,6 +35,18 @@
 
     <ItemGroup Label="Source Link">
         <PackageReference Include="DotNet.ReproducibleBuilds">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <PropertyGroup Label="Versioning">
+        <MinVerMinimumMajorMinor>0.11</MinVerMinimumMajorMinor>
+        <MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
+    </PropertyGroup>
+    
+    <ItemGroup Label="Versioning">
+        <PackageReference Include="MinVer">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
