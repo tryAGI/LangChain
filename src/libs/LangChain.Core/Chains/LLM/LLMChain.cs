@@ -71,8 +71,10 @@ public class LlmChain : BaseChain, ILlmChainInput
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '<'));
         }
+        
         if(string.IsNullOrEmpty(OutputKey))
             return new ChainValues(response.Messages.Last().Content);
+            
         return new ChainValues(OutputKey,response.Messages.Last().Content);
     }
 
