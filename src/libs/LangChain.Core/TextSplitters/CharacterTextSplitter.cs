@@ -9,7 +9,7 @@ public class CharacterTextSplitter:TextSplitter
 {
     private readonly string? _separator;
 
-    public CharacterTextSplitter(string? separator = "\n\n", int chunkSize = 4000, int chunkOverlap = 200, LengthFunctionDelegate? lengthFunction = null) : base(chunkSize, chunkOverlap, lengthFunction)
+    public CharacterTextSplitter(string? separator = "\n\n", int chunkSize = 4000, int chunkOverlap = 200, Func<string, int>? lengthFunction = null) : base(chunkSize, chunkOverlap, lengthFunction)
     {
         _separator = separator;
     }
