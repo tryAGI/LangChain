@@ -41,6 +41,10 @@ public readonly record struct Message(
         return left + right;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
         if (FunctionName!=null)

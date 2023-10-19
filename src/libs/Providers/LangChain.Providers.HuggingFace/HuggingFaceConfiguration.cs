@@ -28,30 +28,30 @@ public class HuggingFaceConfiguration
     /// </summary>
     public string? ModelId { get; set; }
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Top_k"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Top_k"/>
     public int? TopK { get; set; } = default!;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Top_p"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Top_p"/>
     public double? TopP { get; set; } = default!;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Temperature"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Temperature"/>
     public double? Temperature { get; set; } = 1D;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Repetition_penalty"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Repetition_penalty"/>
     public double? RepetitionPenalty { get; set; } = default!;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Max_new_tokens"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Max_new_tokens"/>
     public int? MaxNewTokens { get; set; } = default!;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Max_time"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Max_time"/>
     public double? MaxTime { get; set; } = default!;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Return_full_text"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Return_full_text"/>
     public object? ReturnFullText { get; set; } = default!;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Num_return_sequences"/>
+    /// <inheritdoc cref="GenerateTextRequestParameters.Num_return_sequences"/>
     public int? NumReturnSequences { get; set; } = 1;
 
-    /// <inheritdoc cref="HuggingFace.GenerateTextRequestParameters.Do_sample"/>   
+    /// <inheritdoc cref="GenerateTextRequestParameters.Do_sample"/>   
     public bool? DoSample { get; set; } = default!;
 }

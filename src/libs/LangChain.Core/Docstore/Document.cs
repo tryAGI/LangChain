@@ -1,4 +1,6 @@
-﻿namespace LangChain.Docstore;
+﻿using System.Globalization;
+
+namespace LangChain.Docstore;
 
 /// <summary>
 /// Class for storing document
@@ -41,9 +43,9 @@ public class Document
     public string Lookup(string searchString)
     {
         // if there is a new search string, reset the index
-        if (searchString.ToLower() != LookupStr)
+        if (searchString.ToLower(CultureInfo.InvariantCulture) != LookupStr)
         {
-            LookupStr = searchString.ToLower();
+            LookupStr = searchString.ToLower(CultureInfo.InvariantCulture);
             LookupIndex = 0;
         }
         else
@@ -52,7 +54,7 @@ public class Document
         }
 
         // get all the paragraphs that contain the search string
-        var lookups = Paragraphs().Where(p => p.ToLower().Contains(LookupStr)).ToList();
+        var lookups = Paragraphs().Where(p => p.ToLower(CultureInfo.InvariantCulture).Contains(LookupStr)).ToList();
 
         if (lookups.Count == 0)
         {
