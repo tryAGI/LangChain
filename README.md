@@ -12,6 +12,12 @@ While the [SemanticKernel](https://github.com/microsoft/semantic-kernel/) is goo
 We proceed from the position of the maximum choice of available options and are open to using third-party libraries within individual implementations.  
 ❤️ Our project includes https://github.com/jeastham1993/langchain-dotnet and tries to be updated with the latest changes there ❤️  
 
+I want to note:
+- I’m unlikely to be able to make serious progress alone, so my goal is to unite the efforts of C# developers to create a C# version of LangChain and control the quality of the final project
+- I try to accept any Pull Request within 24 hours (of course, it depends, but I will try)
+- I'm also looking for developers to join the core team. I will sponsor them whenever possible and also share any money received.
+- I also respond quite quickly on Discord for any questions related to the project
+
 ## Usage
 ```csharp
 const string apiKey = "API_KEY";
