@@ -17,8 +17,9 @@ public class PdfPigPdfSource : ISource
     {
         try
         {
-            using PdfDocument document = PdfDocument.Open(Path);
-            var content = String.Join("\n\n", document.GetPages().Select(page => page.Text));
+            using PdfDocument document = PdfDocument.Open(Path, new ParsingOptions());
+            var pages = document.GetPages();
+            var content = String.Join("\n\n", pages.Select(page => page.Text));
 
             var documents = (Document.Empty with
             {

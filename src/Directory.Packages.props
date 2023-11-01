@@ -30,7 +30,7 @@
     <PackageVersion Include="Moq" Version="4.20.69" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
-    <PackageVersion Include="PdfPig" Version="0.1.8" />
+    <PackageVersion Include="PdfPig" Version="0.1.9-alpha-20231029-17d50" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="System.Text.Json" Version="7.0.3" />
     <PackageVersion Include="Tiktoken" Version="1.1.3" />
