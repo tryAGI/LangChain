@@ -5,7 +5,7 @@ namespace LangChain.Sources;
 /// <summary>
 /// 
 /// </summary>
-public class PdfSource : ISource
+public class AsposePdfSource : ISource
 {
     /// <summary>
     /// 

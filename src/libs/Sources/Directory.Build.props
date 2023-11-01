@@ -3,7 +3,7 @@
     <Import Project="..\Directory.Build.props" />
 
     <PropertyGroup>
-        <RootNamespace>LangChain.Sources</RootNamespace>
+        <RootNamespace>LangChain.DocumentLoaders</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
