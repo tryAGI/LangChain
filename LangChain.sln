@@ -123,6 +123,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Kendra"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Anyscale", "src\libs\Providers\LangChain.Providers.Anyscale\LangChain.Providers.Anyscale.csproj", "{A4946307-A1B5-4F85-9C5A-31BDAE38D24E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Pdf.IntegrationTests", "src\tests\LangChain.Sources.Pdf.IntegrationTests\LangChain.Sources.Pdf.IntegrationTests.csproj", "{324183A0-92F9-44C7-A919-AEC164C50EA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase", "src\libs\Sources\LangChain.Sources.WebBase\LangChain.Sources.WebBase.csproj", "{01DC2D34-958F-4381-99AD-E91E3CEE31FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase.IntegrationTests", "src\tests\LangChain.Sources.WebBase.IntegrationTests\LangChain.Sources.WebBase.IntegrationTests.csproj", "{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -277,6 +283,18 @@ Global
 		{A4946307-A1B5-4F85-9C5A-31BDAE38D24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4946307-A1B5-4F85-9C5A-31BDAE38D24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4946307-A1B5-4F85-9C5A-31BDAE38D24E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{324183A0-92F9-44C7-A919-AEC164C50EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{324183A0-92F9-44C7-A919-AEC164C50EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{324183A0-92F9-44C7-A919-AEC164C50EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{324183A0-92F9-44C7-A919-AEC164C50EA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01DC2D34-958F-4381-99AD-E91E3CEE31FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01DC2D34-958F-4381-99AD-E91E3CEE31FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01DC2D34-958F-4381-99AD-E91E3CEE31FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01DC2D34-958F-4381-99AD-E91E3CEE31FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -321,5 +339,8 @@ Global
 		{233DF40E-6459-41F7-AEAE-C32398F474DF} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 		{B456F59B-4DE6-4BC9-B83B-CD796985DD98} = {C58D122C-808F-43F9-BB23-4E517046F533}
 		{A4946307-A1B5-4F85-9C5A-31BDAE38D24E} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{324183A0-92F9-44C7-A919-AEC164C50EA6} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{01DC2D34-958F-4381-99AD-E91E3CEE31FD} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
+		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 	EndGlobalSection
 EndGlobal

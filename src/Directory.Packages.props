@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="AngleSharp" Version="1.0.5" />
     <PackageVersion Include="Anthropic" Version="0.3.0" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="23.10.0" />
@@ -29,6 +30,7 @@
     <PackageVersion Include="Moq" Version="4.20.69" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageVersion Include="PdfPig" Version="0.1.9-alpha-20231029-17d50" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
     <PackageVersion Include="System.Text.Json" Version="7.0.3" />
     <PackageVersion Include="Tiktoken" Version="1.1.3" />

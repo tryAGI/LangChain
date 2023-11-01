@@ -6,6 +6,7 @@
 
     <ItemGroup Label="Usings">
         <Using Include="LeonardoAi" />
+        <Using Include="System.Net.Http" />
     </ItemGroup>
 
     <PropertyGroup Label="NuGet">

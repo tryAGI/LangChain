@@ -1,11 +1,11 @@
-using Aspose.Pdf.Text;
+using UglyToad.PdfPig;
 
 namespace LangChain.Sources;
 
 /// <summary>
 /// 
 /// </summary>
-public class PdfSource : ISource
+public class PdfPigPdfSource : ISource
 {
     /// <summary>
     /// 
@@ -17,13 +17,13 @@ public class PdfSource : ISource
     {
         try
         {
-            using var pdfDocument = new Aspose.Pdf.Document(Path);
-            var textAbsorber = new TextAbsorber();
-            pdfDocument.Pages.Accept(textAbsorber);
+            using PdfDocument document = PdfDocument.Open(Path, new ParsingOptions());
+            var pages = document.GetPages();
+            var content = String.Join("\n\n", pages.Select(page => page.Text));
 
             var documents = (Document.Empty with
             {
-                Content = textAbsorber.Text,
+                Content = content,
             }).AsArray();
 
             return Task.FromResult(documents);

@@ -6,12 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup Label="Usings">
-        <Using Include="Aspose.Pdf" />
         <Using Remove="System.Net.Http" />
     </ItemGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>LangChain PDF document source.</Description>
+        <Description>LangChain web document source.</Description>
         <PackageTags>$(PackageTags);pdf</PackageTags>
     </PropertyGroup>
 
@@ -20,8 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Aspose.PDF" />
-      <PackageReference Include="PdfPig" />
+      <PackageReference Include="AngleSharp" />
     </ItemGroup>
 
 </Project>
