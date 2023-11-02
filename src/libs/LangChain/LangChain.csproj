@@ -12,7 +12,6 @@
     <ItemGroup>
       <ProjectReference Include="..\LangChain.Core\LangChain.Core.csproj" />
       <ProjectReference Include="..\Extensions\LangChain.Extensions.DependencyInjection\LangChain.Extensions.DependencyInjection.csproj" />
-      <ProjectReference Include="..\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
       <ProjectReference Include="..\Providers\LangChain.Providers.Anthropic\LangChain.Providers.Anthropic.csproj" />
       <ProjectReference Include="..\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj" />
       <ProjectReference Include="..\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
