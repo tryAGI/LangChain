@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7
 		src\libs\Directory.Build.props = src\libs\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{BA93B426-D455-4891-9BB7-22D670B75EF6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}"
 	ProjectSection(SolutionItems) = preProject
 		src\libs\Providers\Directory.Build.props = src\libs\Providers\Directory.Build.props
@@ -139,10 +137,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA93B426-D455-4891-9BB7-22D670B75EF6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -308,7 +302,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{BA93B426-D455-4891-9BB7-22D670B75EF6} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
 		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
