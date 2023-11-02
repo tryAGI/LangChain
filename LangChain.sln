@@ -131,6 +131,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core.UnitTests", "src\tests\LangChain.Core.UnitTests\LangChain.Core.UnitTests.csproj", "{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Chroma.IntegrationTests", "src\tests\LangChain.Databases.Chroma.IntegrationTests\LangChain.Databases.Chroma.IntegrationTests.csproj", "{302CD326-ADC3-484E-8F41-A54934A01D70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -297,6 +299,10 @@ Global
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{302CD326-ADC3-484E-8F41-A54934A01D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{302CD326-ADC3-484E-8F41-A54934A01D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{302CD326-ADC3-484E-8F41-A54934A01D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{302CD326-ADC3-484E-8F41-A54934A01D70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -347,5 +353,6 @@ Global
 		{01DC2D34-958F-4381-99AD-E91E3CEE31FD} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{302CD326-ADC3-484E-8F41-A54934A01D70} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 	EndGlobalSection
 EndGlobal

@@ -9,6 +9,10 @@
         <PackageTags>$(PackageTags);chroma</PackageTags>
     </PropertyGroup>
 
+    <ItemGroup Label="Usings">
+        <Using Include="System.Net.Http" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Chroma" />
     </ItemGroup>

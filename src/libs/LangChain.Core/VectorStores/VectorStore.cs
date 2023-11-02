@@ -31,7 +31,7 @@ public abstract class VectorStore
     /// <returns></returns>
     public abstract Task<IEnumerable<string>> AddTextsAsync(
         IEnumerable<string> texts,
-        IEnumerable<Dictionary<string, object>> metadatas = null,
+        IEnumerable<Dictionary<string, object>>? metadatas = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

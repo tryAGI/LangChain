@@ -1,7 +1,10 @@
+using System.Text.Json;
+using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Docstore;
 using LangChain.VectorStores;
 using Microsoft.SemanticKernel.AI.Embeddings;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
+using Microsoft.SemanticKernel.Connectors.Memory.Chroma.Http.ApiSchema;
 using Microsoft.SemanticKernel.Memory;
 
 namespace LangChain.Databases;
@@ -19,19 +22,57 @@ public class ChromaVectorStore : VectorStore
 
     private readonly ChromaMemoryStore _store;
 
-    /// <summary>
-    /// Collection name
-    /// </summary>
-    public string CollectionName { get; init; } = LangchainDefaultCollectionName;
+    private readonly ChromaClient _client;
+    private readonly string _collectionName;
 
     /// <inheritdoc />
-    public ChromaVectorStore(HttpClient httpClient, string endpoint)
+    public ChromaVectorStore(
+        HttpClient httpClient,
+        string endpoint,
+        IEmbeddings embeddings,
+        string collectionName = LangchainDefaultCollectionName)
     {
-        var client = new ChromaClient(httpClient, endpoint);
+        _client = new ChromaClient(httpClient, endpoint);
+        Embeddings = embeddings;
+        _collectionName = collectionName;
 
-        client.CreateCollectionAsync(CollectionName).GetAwaiter().GetResult();
+        _store = new ChromaMemoryStore(_client);
+
+        _client.CreateCollectionAsync(_collectionName).GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// Get collection
+    /// </summary>
+    public async Task<ChromaCollectionModel?> GetCollectionAsync()
+    {
+        return await _client.GetCollectionAsync(_collectionName).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Delete collection
+    /// </summary>
+    public async Task DeleteCollectionAsync()
+    {
+        await _store.DeleteCollectionAsync(_collectionName).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Get collection
+    /// </summary>
+    public async Task<Document?> GetDocumentByIdAsync(string id)
+    {
+        var record = await _store.GetAsync(_collectionName, id, withEmbedding: true).ConfigureAwait(false);
+
+        if (record == null)
+        {
+            return null;
+        }
         
-        _store = new ChromaMemoryStore(client);
+        var text = record.Metadata.Text;
+        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(record.Metadata.AdditionalMetadata) ?? new Dictionary<string, object>();
+
+        return new Document(text, metadata);
     }
 
     /// <inheritdoc />
@@ -41,40 +82,44 @@ public class ChromaVectorStore : VectorStore
     {
         var documentsArray = documents.ToArray();
         var texts = new string[documentsArray.Length];
+        var ids = new string[documentsArray.Length];
         var metadatas = new Dictionary<string, object>[documentsArray.Length];
         for (var index = 0; index < documentsArray.Length; index++)
         {
-            var pageContent = documentsArray[index].PageContent;
-            texts[index] = pageContent;
-
-            var metadata = documentsArray[index].Metadata;
-            metadata["text"] = pageContent;
-            if (!metadata.ContainsKey("id"))
-            {
-                metadata["id"] = Guid.NewGuid().ToString();
-            }
-
-            metadatas[index] = metadata;
+            ids[index] = Guid.NewGuid().ToString();
+            texts[index] = documentsArray[index].PageContent;
+            metadatas[index] = documentsArray[index].Metadata;
         }
 
-        var ids = await AddCoreAsync(texts, metadatas, cancellationToken).ConfigureAwait(false);
+        var result = await AddCoreAsync(texts, metadatas, ids, cancellationToken).ConfigureAwait(false);
 
-        return ids;
+        return result;
     }
 
     /// <inheritdoc />
     public override async Task<IEnumerable<string>> AddTextsAsync(
         IEnumerable<string> texts,
-        IEnumerable<Dictionary<string, object>> metadatas = null,
+        IEnumerable<Dictionary<string, object>>? metadatas = null,
         CancellationToken cancellationToken = default)
     {
-        var ids = await AddCoreAsync(
-                texts.ToArray(),
-                metadatas.ToArray(),
+        var textsArray = texts.ToArray();
+        var metadatasArray = metadatas?.ToArray() ?? new Dictionary<string, object>?[textsArray.Length];
+        var ids = new string[textsArray.Length];
+
+        for (var index = 0; index < textsArray.Length; index++)
+        {
+            ids[index] = Guid.NewGuid().ToString();
+            metadatasArray[index] ??= new Dictionary<string, object>();
+        }
+
+        var result = await AddCoreAsync(
+                textsArray,
+                metadatasArray as Dictionary<string, object>[],
+                ids,
                 cancellationToken)
             .ConfigureAwait(false);
 
-        return ids;
+        return result;
     }
 
     /// <inheritdoc />
@@ -82,7 +127,7 @@ public class ChromaVectorStore : VectorStore
         IEnumerable<string> ids,
         CancellationToken cancellationToken = default)
     {
-        await _store.RemoveBatchAsync(CollectionName, ids, cancellationToken).ConfigureAwait(false);
+        await _store.RemoveBatchAsync(_collectionName, ids, cancellationToken).ConfigureAwait(false);
 
         return true;
     }
@@ -203,6 +248,7 @@ public class ChromaVectorStore : VectorStore
     private async Task<IEnumerable<string>> AddCoreAsync(
         string[] texts,
         Dictionary<string, object>[] metadatas,
+        string[] ids,
         CancellationToken cancellationToken)
     {
         var embeddings = await Embeddings
@@ -212,31 +258,31 @@ public class ChromaVectorStore : VectorStore
         var records = new MemoryRecord[texts.Length];
         for (var index = 0; index < texts.Length; index++)
         {
-            // TODO: check: description, externalSourceName, additionalMetadata, key
+            // TODO: check: description, externalSourceName, key
             records[index] = new MemoryRecord
             (
                 new MemoryRecordMetadata
                 (
                     isReference: false,
-                    id: metadatas[index]["id"].ToString(),
+                    id: ids[index],
                     text: texts[index],
                     description: string.Empty,
                     externalSourceName: string.Empty,
-                    additionalMetadata: string.Empty
+                    additionalMetadata: JsonSerializer.Serialize(metadatas[index])
                 ),
                 new Embedding<float>(embeddings[index]),
                 key: null
             );
         }
 
-        var ids = new List<string>(texts.Length);
-        var idsIterator = _store.UpsertBatchAsync(CollectionName, records, cancellationToken);
-        await foreach (var item in idsIterator.ConfigureAwait(false))
+        var resultIds = new List<string>(texts.Length);
+        var resultIdsIterator = _store.UpsertBatchAsync(_collectionName, records, cancellationToken);
+        await foreach (var item in resultIdsIterator.ConfigureAwait(false))
         {
-            ids.Add(item);
+            resultIds.Add(item);
         }
 
-        return ids;
+        return resultIds;
     }
 
     private async Task<IEnumerable<(Document, float)>> SimilaritySearchWithVectorCoreAsync(
@@ -246,16 +292,22 @@ public class ChromaVectorStore : VectorStore
     {
         var matches = await _store
             .GetNearestMatchesAsync(
-                CollectionName,
+                _collectionName,
                 new Embedding<float>(embeddings),
                 k,
                 cancellationToken: cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        // TODO: extract metadata from MemoryRecord.Metadata.AdditionalMetadata
         return matches.Select(
             record =>
-                (new Document(record.Item1.Metadata.Text, new Dictionary<string, object>()), (float)record.Item2));
+            {
+                var text = record.Item1.Metadata.Text;
+                var metadata =
+                    JsonSerializer.Deserialize<Dictionary<string, object>>(record.Item1.Metadata.AdditionalMetadata)
+                    ?? new Dictionary<string, object>();
+
+                return (new Document(text, metadata), (float)record.Item2);
+            });
     }
 }
