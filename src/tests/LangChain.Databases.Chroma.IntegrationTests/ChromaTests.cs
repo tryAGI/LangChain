@@ -2,12 +2,20 @@
 using LangChain.Docstore;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
 using Moq;
+using Newtonsoft.Json;
 
 namespace LangChain.Databases.Chroma.IntegrationTests;
 
 [TestClass]
 public class ChromaTests
 {
+    public Dictionary<string,float[]> EmbeddingsDict { get; } = new();
+
+    public ChromaTests()
+    {
+        PopulateEmbedding();
+    }
+
     [TestMethod]
     public async Task CreateAndDeleteCollection_Ok()
     {
@@ -146,6 +154,75 @@ public class ChromaTests
     [TestMethod]
     public async Task SimilaritySearch_Ok()
     {
+        using var httpClient = new HttpClient();
+        var embeddingsMock = CreateFakeEmbeddings();
+        var collectionName = GenerateCollectionName();
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+
+        await chroma.AddTextsAsync(EmbeddingsDict.Keys);
+
+        var similar = await chroma.SimilaritySearchAsync("lemon", k: 5);
+        similar.Should().HaveCount(5);
+
+        var similarTexts = similar.Select(s => s.PageContent).ToArray();
+
+        similarTexts[0].Should().BeEquivalentTo("lemon");
+        similarTexts.Should().Contain("orange");
+        similarTexts.Should().Contain("peach");
+        similarTexts.Should().Contain("banana");
+        similarTexts.Should().Contain("apple");
+    }
+
+    [TestMethod]
+    public async Task SimilaritySearchByVector_Ok()
+    {
+        using var httpClient = new HttpClient();
+        var embeddingsMock = CreateFakeEmbeddings();
+        var collectionName = GenerateCollectionName();
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+
+        await chroma.AddTextsAsync(EmbeddingsDict.Keys);
+
+        var similar = await chroma.SimilaritySearchByVectorAsync(EmbeddingsDict["lemon"], k: 5);
+        similar.Should().HaveCount(5);
+
+        var similarTexts = similar.Select(s => s.PageContent).ToArray();
+
+        similarTexts[0].Should().BeEquivalentTo("lemon");
+        similarTexts.Should().Contain("orange");
+        similarTexts.Should().Contain("peach");
+        similarTexts.Should().Contain("banana");
+        similarTexts.Should().Contain("apple");
+    }
+
+    [TestMethod]
+    public async Task SimilaritySearchWithScores_Ok()
+    {
+        using var httpClient = new HttpClient();
+        var embeddingsMock = CreateFakeEmbeddings();
+        var collectionName = GenerateCollectionName();
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+
+        await chroma.AddTextsAsync(EmbeddingsDict.Keys);
+
+        var similar = await chroma.SimilaritySearchWithScoreAsync("lemon", k: 5);
+        similar.Should().HaveCount(5);
+
+        var first = similar.First();
+        
+        first.Item1.PageContent.Should().BeEquivalentTo("lemon");
+        first.Item2.Should().BeGreaterOrEqualTo(1f);
+    }
+
+    private void PopulateEmbedding()
+    {
+        foreach (var embeddingFile in Directory.EnumerateFiles("embeddings"))
+        {
+            var jsonRaw = File.ReadAllText(embeddingFile);
+            var json = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(jsonRaw);
+            var kv = json.First();
+            EmbeddingsDict.Add(kv.Key, kv.Value);
+        }
     }
 
     private static string GenerateCollectionName() => "test-" + Guid.NewGuid().ToString("N");
@@ -154,36 +231,19 @@ public class ChromaTests
     {
         var mock = new Mock<IEmbeddings>();
 
-        var embeddingsDict = new Dictionary<string, float[]>
-        {
-            ["computer"] = new float[] { 1 },
-            ["laptop"] = new float[] { 1 },
-            ["mainframe"] = new float[] { 1 },
-            ["pc"] = new float[] { 1 },
-            ["keyboard"] = new float[] { 1 },
-            ["mouse"] = new float[] { 1 },
-            ["apple"] = new float[] { 1 },
-            ["orange"] = new float[] { 1 },
-            ["lemon"] = new float[] { 1 },
-            ["peach"] = new float[] { 1 },
-            ["banana"] = new float[] { 1 },
-            ["tomato"] = new float[] { 1 },
-            ["tree"] = new float[] { 1 }
-        };
-
         mock.Setup(x => x.EmbedQueryAsync(
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()))
             .Returns<string, CancellationToken>(
                 (query, _) =>
                 {
-                    var embedding = embeddingsDict.TryGetValue(query, out var value)
+                    var embedding = EmbeddingsDict.TryGetValue(query, out var value)
                         ? value
                         : throw new ArgumentException("not in dict");
 
                     return Task.FromResult(embedding);
                 });
-        
+
         mock.Setup(x => x.EmbedDocumentsAsync(
             It.IsAny<string[]>(),
             It.IsAny<CancellationToken>()))
@@ -195,7 +255,7 @@ public class ChromaTests
                     for (int index = 0; index < texts.Length; index++)
                     {
                         var text = texts[index];
-                        embeddings[index] = embeddingsDict.TryGetValue(text, out var value)
+                        embeddings[index] = EmbeddingsDict.TryGetValue(text, out var value)
                             ? value
                             : throw new ArgumentException("not in dict");
                     }
