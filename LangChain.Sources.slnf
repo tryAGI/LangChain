@@ -3,10 +3,9 @@
     "path": "LangChain.sln",
     "projects": [
       "src\\libs\\Sources\\LangChain.Sources.Abstractions\\LangChain.Sources.Abstractions.csproj",
-      "src\\libs\\Sources\\LangChain.Sources.Pdf\\LangChain.Sources.Pdf.csproj",
-      "src\\libs\\Sources\\LangChain.Sources.WebBase\\LangChain.Sources.WebBase.csproj",
-      "src\\tests\\LangChain.Sources.Pdf.IntegrationTests\\LangChain.Sources.Pdf.IntegrationTests.csproj",
-      "src\\tests\\LangChain.Sources.WebBase.IntegrationTests\\LangChain.Sources.WebBase.IntegrationTests.csproj"
+      "src\\libs\\LangChain.Core\\LangChain.Core.csproj",
+      "src\\tests\\LangChain.UnitTest\\LangChain.UnitTest.csproj",
+      "src\\libs\\Providers\\LangChain.Providers.Abstractions\\LangChain.Providers.Abstractions.csproj"
     ]
   }
 }

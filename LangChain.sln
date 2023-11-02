@@ -1,15 +1,17 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{23506EB8-1B27-4FD0-B570-2F5EF2C33034}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		LICENSE = LICENSE
-		README.md = README.md
+		.github\dependabot.yml = .github\dependabot.yml
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Packages.props = src\Directory.Packages.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		LICENSE = LICENSE
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
-		.github\dependabot.yml = .github\dependabot.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7E7E-4624-A99E-79D3F190F386}"
@@ -17,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7
 		src\libs\Directory.Build.props = src\libs\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{BA93B426-D455-4891-9BB7-22D670B75EF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{BA93B426-D455-4891-9BB7-22D670B75EF6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}"
 	ProjectSection(SolutionItems) = preProject
@@ -97,15 +99,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{7F35
 		src\libs\Sources\Directory.Build.props = src\libs\Sources\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Abstractions", "src\libs\Sources\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj", "{A9C31641-768E-42F5-BFAD-79FC856CC4BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.Abstractions", "src\libs\Sources\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj", "{A9C31641-768E-42F5-BFAD-79FC856CC4BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Pdf", "src\libs\Sources\LangChain.Sources.Pdf\LangChain.Sources.Pdf.csproj", "{51D01599-B641-4A7A-85AD-666087DBDF21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core", "src\libs\LangChain.Core\LangChain.Core.csproj", "{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Core", "src\libs\LangChain.Core\LangChain.Core.csproj", "{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.LeonardoAi", "src\libs\Providers\LangChain.Providers.LeonardoAi\LangChain.Providers.LeonardoAi.csproj", "{A7C56F0F-B283-4263-A45B-98869D7EE442}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.UnitTest", "src\tests\LangChain.UnitTest\LangChain.UnitTest.csproj", "{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.UnitTest", "src\tests\LangChain.UnitTest\LangChain.UnitTest.csproj", "{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.IntegrationTests", "src\tests\LangChain.IntegrationTests\LangChain.IntegrationTests.csproj", "{1B3FBF29-8468-4658-A816-3324E4B8DCBE}"
 EndProject
@@ -128,6 +130,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase", "src\libs\Sources\LangChain.Sources.WebBase\LangChain.Sources.WebBase.csproj", "{01DC2D34-958F-4381-99AD-E91E3CEE31FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase.IntegrationTests", "src\tests\LangChain.Sources.WebBase.IntegrationTests\LangChain.Sources.WebBase.IntegrationTests.csproj", "{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core.UnitTests", "src\tests\LangChain.Core.UnitTests\LangChain.Core.UnitTests.csproj", "{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -295,10 +299,17 @@ Global
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
 		{BA93B426-D455-4891-9BB7-22D670B75EF6} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{E55391DE-F8F3-4CC2-A0E3-2406C76E9C68} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
 		{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
 		{3FFE3B0E-578A-46A8-9E0B-789980D68ED2} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
@@ -342,5 +353,6 @@ Global
 		{324183A0-92F9-44C7-A919-AEC164C50EA6} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{01DC2D34-958F-4381-99AD-E91E3CEE31FD} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 	EndGlobalSection
 EndGlobal
