@@ -31,7 +31,7 @@ public partial class OpenAiModel : IEmbeddingModel
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<double>> EmbedQueryAsync(
+    public async Task<float[]> EmbedQueryAsync(
         string text,
         CancellationToken cancellationToken = default)
     {
@@ -52,11 +52,11 @@ public partial class OpenAiModel : IEmbeddingModel
             TotalUsage += usage;
         }
 
-        return response.Data.First().Embedding1.ToArray();
+        return response.Data.First().Embedding1.Select(static x => (float)x).ToArray();
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<IReadOnlyCollection<double>>> EmbedDocumentsAsync(
+    public async Task<float[][]> EmbedDocumentsAsync(
         string[] texts,
         CancellationToken cancellationToken = default)
     {

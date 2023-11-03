@@ -43,8 +43,6 @@ public class SequentialChain : BaseChain
         {
             OutputKeys = Chains[^1].OutputKeys;
         }
-
-
     }
 
     public override string ChainType()
