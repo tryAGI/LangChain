@@ -1,7 +1,7 @@
 ﻿using LangChain.Providers;
 using LangChain.Providers.LLamaSharp;
 
-namespace LangChain.IntegrationTests;
+namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 [TestClass]
 public class LLamaSharpTests
