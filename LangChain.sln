@@ -40,6 +40,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDEE2E22-C239-4921-83B2-9797F765FD6A}"
 	ProjectSection(SolutionItems) = preProject
 		src\tests\Directory.Build.props = src\tests\Directory.Build.props
+		src\tests\Directory.Build.targets = src\tests\Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp.UnitTests", "src\tests\LangChain.Splitters.CSharp.UnitTests\LangChain.Splitters.CSharp.UnitTests.csproj", "{C9D4A93D-3256-4E24-8054-87C03350A151}"

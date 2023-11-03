@@ -1,0 +1,7 @@
+<Project>
+    
+    <PropertyGroup Condition="'$(CI)' == 'true'">
+        <DefineConstants>$(DefineConstants);CONTINUOUS_INTEGRATION_BUILD</DefineConstants>
+    </PropertyGroup>
+
+</Project>

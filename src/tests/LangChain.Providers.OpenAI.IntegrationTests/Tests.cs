@@ -4,6 +4,9 @@ namespace LangChain.Providers.OpenAI.IntegrationTests;
 public class GeneralTests
 {
     [TestMethod]
+#if CONTINUOUS_INTEGRATION_BUILD
+    [Ignore]
+#endif
     public async Task GetWeather()
     {
         var apiKey =
