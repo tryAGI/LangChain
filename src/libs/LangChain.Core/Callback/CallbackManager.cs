@@ -1,6 +1,7 @@
 using LangChain.Base;
 using LangChain.LLMS;
 using LangChain.Providers;
+using LangChain.Retrievers;
 using LangChain.Schema;
 
 namespace LangChain.Callback;
@@ -118,6 +119,31 @@ public class CallbackManager
         }
 
         return new CallbackManagerForChainRun(runId, Handlers, InheritableHandlers, _parentRunId);
+    }
+
+    public async Task<CallbackManagerForRetrieverRun> HandleRetrieverStart(
+        BaseRetriever retriever,
+        string query,
+        string? runId = null,
+        string? parentRunId = null,
+        Dictionary<string, object>? extraParams = null)
+    {
+        foreach (var handler in Handlers)
+        {
+            if (!handler.IgnoreLlm)
+            {
+                try
+                {
+                    await handler.HandleRetrieverStartAsync(query, runId ?? Guid.NewGuid().ToString(), _parentRunId);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleRetrieverStart: {ex}");
+                }
+            }
+        }
+
+        return new CallbackManagerForRetrieverRun(runId, Handlers, InheritableHandlers, _parentRunId);
     }
 
     public void AddHandler(BaseCallbackHandler handler, bool inherit = true)

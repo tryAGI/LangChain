@@ -118,4 +118,20 @@ public interface IBaseCallbackHandler
         Dictionary<string, object> action,
         string runId,
         string? parentRunId = null);
+    
+    public Task HandleRetrieverStartAsync(
+        string query,
+        string runId,
+        string? parentRunId);
+
+    public Task HandleRetrieverEndAsync(
+        string query,
+        string runId,
+        string? parentRunId);
+
+    public Task HandleRetrieverErrorAsync(
+        Exception error,
+        string query,
+        string runId,
+        string? parentRunId);
 }

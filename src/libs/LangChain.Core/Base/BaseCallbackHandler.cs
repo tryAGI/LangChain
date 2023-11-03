@@ -53,6 +53,15 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     /// <inheritdoc />
     public abstract Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null);
 
+    /// <inheritdoc />
+    public abstract Task HandleRetrieverStartAsync(string query, string runId, string? parentRunId);
+
+    /// <inheritdoc />
+    public abstract Task HandleRetrieverEndAsync(string query, string runId, string? parentRunId);
+
+    /// <inheritdoc />
+    public abstract Task HandleRetrieverErrorAsync(Exception error, string query, string runId, string? parentRunId);
+
     /// <summary>
     /// 
     /// </summary>
@@ -67,6 +76,8 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     /// 
     /// </summary>
     public bool IgnoreAgent { get; set; }
+
+    public bool IgnoreRetriever { get; set; }
 
     /// <summary>
     /// 
