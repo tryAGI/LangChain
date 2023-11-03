@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI.IntegrationTests", "src\tests\LangChain.Providers.OpenAI.IntegrationTests\LangChain.Providers.OpenAI.IntegrationTests.csproj", "{2713AC94-51D9-4C0C-9727-B32F5D9E1FD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.HuggingFace", "src\libs\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj", "{F0199630-D084-45FB-894A-B6B3E6059EF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.HuggingFace", "src\libs\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj", "{F0199630-D084-45FB-894A-B6B3E6059EF9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{238D18D4-CBEF-46BF-B08C-F1E593DAB398}"
 	ProjectSection(SolutionItems) = preProject
@@ -108,7 +108,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Leonard
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.UnitTest", "src\tests\LangChain.UnitTest\LangChain.UnitTest.csproj", "{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.IntegrationTests", "src\tests\LangChain.IntegrationTests\LangChain.IntegrationTests.csproj", "{1B3FBF29-8468-4658-A816-3324E4B8DCBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.IntegrationTests", "src\tests\LangChain.IntegrationTests\LangChain.IntegrationTests.csproj", "{1B3FBF29-8468-4658-A816-3324E4B8DCBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Azure", "examples\LangChain.Samples.Azure\LangChain.Samples.Azure.csproj", "{19364D78-991B-4D31-BEAB-22CFA1022852}"
 EndProject
@@ -131,6 +131,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase.IntegrationTests", "src\tests\LangChain.Sources.WebBase.IntegrationTests\LangChain.Sources.WebBase.IntegrationTests.csproj", "{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core.UnitTests", "src\tests\LangChain.Core.UnitTests\LangChain.Core.UnitTests.csproj", "{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LLamaSharp", "src\libs\Providers\LangChain.Providers.LLamaSharp\LangChain.Providers.LLamaSharp.csproj", "{5D4EA710-785D-4085-8AD3-4988C54B077A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.IntegrationTests.LLamaSharp", "src\tests\LangChain.IntegrationTests.LLamaSharp\LangChain.IntegrationTests.LLamaSharp.csproj", "{874D53CB-3A89-43BF-841E-13856349962C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -298,6 +302,14 @@ Global
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D4EA710-785D-4085-8AD3-4988C54B077A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D4EA710-785D-4085-8AD3-4988C54B077A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D4EA710-785D-4085-8AD3-4988C54B077A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D4EA710-785D-4085-8AD3-4988C54B077A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{874D53CB-3A89-43BF-841E-13856349962C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874D53CB-3A89-43BF-841E-13856349962C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{874D53CB-3A89-43BF-841E-13856349962C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874D53CB-3A89-43BF-841E-13856349962C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -348,5 +360,10 @@ Global
 		{01DC2D34-958F-4381-99AD-E91E3CEE31FD} = {7F35205F-1692-4702-AA88-3C29BBB121BC}
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{5D4EA710-785D-4085-8AD3-4988C54B077A} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{874D53CB-3A89-43BF-841E-13856349962C} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB5F8528-962A-4578-B4DF-4533A51B67E2}
 	EndGlobalSection
 EndGlobal
