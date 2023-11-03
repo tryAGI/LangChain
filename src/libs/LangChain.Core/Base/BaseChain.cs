@@ -35,7 +35,7 @@ public abstract class BaseChain : IChain
     /// <param name="input">The string input to use to execute the chain.</param>
     /// <returns>A text value containing the result of the chain.</returns>
     /// <exception cref="ArgumentException">If the type of chain used expects multiple inputs, this method will throw an ArgumentException.</exception>
-    public async Task<string?> Run(string input)
+    public virtual async Task<string?> Run(string input)
     {
         var isKeylessInput = InputKeys.Length <= 1;
 
@@ -51,10 +51,32 @@ public abstract class BaseChain : IChain
         if (keys.Count(p => p != RunKey) == 1)
         {
             var returnValue = returnValues.Value.FirstOrDefault(p => p.Key != RunKey).Value;
-            return returnValue == null ? null : returnValue.ToString();
+
+            return returnValue?.ToString();
         }
 
         throw new Exception("Return values have multiple keys, 'run' only supported when one key currently");
+    }
+    
+    /// <summary>
+    /// Run the chain using a simple input/output.
+    /// </summary>
+    /// <param name="input">The dict input to use to execute the chain.</param>
+    /// <returns>A text value containing the result of the chain.</returns>
+    public virtual async Task<string> Run(Dictionary<string, object> input)
+    {
+        var keysLengthDifferent = InputKeys.Length != input.Count;
+
+        if (!keysLengthDifferent)
+        {
+            throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Length} but, received {input.Count}");
+        }
+
+        var returnValues = await CallAsync(new ChainValues(input));
+
+        var returnValue = returnValues.Value.FirstOrDefault(kv => kv.Key == OutputKeys[0]).Value;
+
+        return returnValue?.ToString();
     }
 
     /// <summary>

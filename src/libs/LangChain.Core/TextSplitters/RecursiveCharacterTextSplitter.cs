@@ -57,7 +57,7 @@ public class RecursiveCharacterTextSplitter:TextSplitter
             }
             else
             {
-                if (goodSplits.Any())
+                if (goodSplits.Count != 0)
                 {
                     List<string> mergedText = MergeSplits(goodSplits, separator);
                     finalChunks.AddRange(mergedText);
@@ -69,7 +69,7 @@ public class RecursiveCharacterTextSplitter:TextSplitter
             }
         }
 
-        if (goodSplits.Any())
+        if (goodSplits.Count != 0)
         {
             List<string> mergedText = MergeSplits(goodSplits, separator);
             finalChunks.AddRange(mergedText);
