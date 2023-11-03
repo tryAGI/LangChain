@@ -24,6 +24,7 @@ public class ChromaVectorStore : VectorStore
 
     private readonly ChromaClient _client;
     private readonly string _collectionName;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
     /// <inheritdoc />
     public ChromaVectorStore(
@@ -39,6 +40,18 @@ public class ChromaVectorStore : VectorStore
         _store = new ChromaMemoryStore(_client);
 
         _client.CreateCollectionAsync(_collectionName).GetAwaiter().GetResult();
+
+        _jsonSerializerOptions = new JsonSerializerOptions
+        {
+            Converters =
+            {
+                new ObjectAsPrimitiveConverter(
+                    floatFormat: FloatFormat.Double,
+                    unknownNumberFormat: UnknownNumberFormat.Error,
+                    objectFormat: ObjectFormat.Expando)
+            },
+            WriteIndented = true,
+        };
     }
 
     /// <summary>
@@ -70,7 +83,7 @@ public class ChromaVectorStore : VectorStore
         }
         
         var text = record.Metadata.Text;
-        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(record.Metadata.AdditionalMetadata) ?? new Dictionary<string, object>();
+        var metadata = DeserializeMetadata(record.Metadata);
 
         return new Document(text, metadata);
     }
@@ -268,7 +281,7 @@ public class ChromaVectorStore : VectorStore
                     text: texts[index],
                     description: string.Empty,
                     externalSourceName: string.Empty,
-                    additionalMetadata: JsonSerializer.Serialize(metadatas[index])
+                    additionalMetadata: SerializeMetadata(metadatas[index])
                 ),
                 new Embedding<float>(embeddings[index]),
                 key: null
@@ -303,11 +316,21 @@ public class ChromaVectorStore : VectorStore
             record =>
             {
                 var text = record.Item1.Metadata.Text;
-                var metadata =
-                    JsonSerializer.Deserialize<Dictionary<string, object>>(record.Item1.Metadata.AdditionalMetadata)
-                    ?? new Dictionary<string, object>();
+                var metadata = DeserializeMetadata(record.Item1.Metadata);
 
                 return (new Document(text, metadata), (float)record.Item2);
             });
+    }
+
+    private string SerializeMetadata(Dictionary<string, object> metadata)
+    {
+        return JsonSerializer.Serialize(metadata, _jsonSerializerOptions);
+    }
+
+    private Dictionary<string, object> DeserializeMetadata(MemoryRecordMetadata metadata)
+    {
+        // TODO: issue with this method is it returns values as JsonElements instead of primitive types
+        return JsonSerializer.Deserialize<Dictionary<string, object>>(metadata.AdditionalMetadata, _jsonSerializerOptions)
+               ?? new Dictionary<string, object>();
     }
 }

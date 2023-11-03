@@ -6,7 +6,14 @@ using Newtonsoft.Json;
 
 namespace LangChain.Databases.Chroma.IntegrationTests;
 
+/// <summary>
+/// In order to run tests please run chroma locally, e.g. with docker
+/// docker run -p 8000:8000 chromadb/chroma
+/// </summary>
 [TestClass]
+#if CONTINUOUS_INTEGRATION_BUILD
+[Ignore]
+#endif
 public class ChromaTests
 {
     public Dictionary<string,float[]> EmbeddingsDict { get; } = new();
@@ -68,12 +75,12 @@ public class ChromaTests
         var actualFirstDocument = await chroma.GetDocumentByIdAsync(firstId);
         actualFirstDocument.Should().NotBeNull();
         actualFirstDocument.PageContent.Should().BeEquivalentTo(documents[0].PageContent);
-        actualFirstDocument.Metadata["color"].ToString().Should().BeEquivalentTo(documents[0].Metadata["color"].ToString());
+        actualFirstDocument.Metadata["color"].Should().BeEquivalentTo(documents[0].Metadata["color"]);
         
         var actualSecondDocument = await chroma.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
         actualSecondDocument.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
-        actualSecondDocument.Metadata["color"].ToString().Should().BeEquivalentTo(documents[1].Metadata["color"].ToString());
+        actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(documents[1].Metadata["color"]);
     }
 
     [TestMethod]
@@ -88,7 +95,9 @@ public class ChromaTests
         var metadatas = new Dictionary<string, object>[2];
         metadatas[0] = new Dictionary<string, object>
         {
-            ["color"] = "red"
+            ["string"] = "red",
+            ["double"] = 1.01d,
+            ["guid"] = 1.01d,
         };
         
         metadatas[1] = new Dictionary<string, object>
@@ -109,12 +118,14 @@ public class ChromaTests
         var actualFirstDocument = await chroma.GetDocumentByIdAsync(firstId);
         actualFirstDocument.Should().NotBeNull();
         actualFirstDocument.PageContent.Should().BeEquivalentTo(texts[0]);
-        actualFirstDocument.Metadata["color"].ToString().Should().BeEquivalentTo(metadatas[0]["color"].ToString());
+        actualFirstDocument.Metadata["string"].Should().BeEquivalentTo(metadatas[0]["string"]);
+        actualFirstDocument.Metadata["double"].Should().BeEquivalentTo(metadatas[0]["double"]);
+        actualFirstDocument.Metadata["guid"].Should().BeEquivalentTo(metadatas[0]["guid"]);
 
         var actualSecondDocument = await chroma.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
         actualSecondDocument.PageContent.Should().BeEquivalentTo(texts[1]);
-        actualSecondDocument.Metadata["color"].ToString().Should().BeEquivalentTo(metadatas[1]["color"].ToString());
+        actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(metadatas[1]["color"]);
     }
 
     [TestMethod]
