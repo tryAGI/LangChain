@@ -24,18 +24,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{
 		src\libs\Providers\Directory.Build.props = src\libs\Providers\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI", "src\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj", "{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.OpenAI", "src\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj", "{5E9DECF7-8783-4A3D-8722-6A781C6ECB7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain", "src\libs\LangChain\LangChain.csproj", "{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain", "src\libs\LangChain\LangChain.csproj", "{25E93A89-D51C-41B9-BDA6-0B3E03ACDD52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Splitters", "Splitters", "{3FFE3B0E-578A-46A8-9E0B-789980D68ED2}"
 	ProjectSection(SolutionItems) = preProject
 		src\libs\Splitters\Directory.Build.props = src\libs\Splitters\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.Abstractions", "src\libs\Splitters\LangChain.Splitters.Abstractions\LangChain.Splitters.Abstractions.csproj", "{24321C32-14D3-4C19-BA50-76D25FAB06EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Splitters.Abstractions", "src\libs\Splitters\LangChain.Splitters.Abstractions\LangChain.Splitters.Abstractions.csproj", "{24321C32-14D3-4C19-BA50-76D25FAB06EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp", "src\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj", "{556A802D-2693-48FC-AE96-9C5438284A06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Splitters.CSharp", "src\libs\Splitters\LangChain.Splitters.CSharp\LangChain.Splitters.CSharp.csproj", "{556A802D-2693-48FC-AE96-9C5438284A06}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDEE2E22-C239-4921-83B2-9797F765FD6A}"
 	ProjectSection(SolutionItems) = preProject
@@ -43,55 +43,55 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDEE2E22
 		src\tests\Directory.Build.targets = src\tests\Directory.Build.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.CSharp.UnitTests", "src\tests\LangChain.Splitters.CSharp.UnitTests\LangChain.Splitters.CSharp.UnitTests.csproj", "{C9D4A93D-3256-4E24-8054-87C03350A151}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Splitters.CSharp.UnitTests", "src\tests\LangChain.Splitters.CSharp.UnitTests\LangChain.Splitters.CSharp.UnitTests.csproj", "{C9D4A93D-3256-4E24-8054-87C03350A151}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI.UnitTests", "src\tests\LangChain.Providers.OpenAI.UnitTests\LangChain.Providers.OpenAI.UnitTests.csproj", "{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.OpenAI.UnitTests", "src\tests\LangChain.Providers.OpenAI.UnitTests\LangChain.Providers.OpenAI.UnitTests.csproj", "{E0AC9E4C-EF03-4BF4-8B00-4E710FE80270}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.OpenAI.IntegrationTests", "src\tests\LangChain.Providers.OpenAI.IntegrationTests\LangChain.Providers.OpenAI.IntegrationTests.csproj", "{2713AC94-51D9-4C0C-9727-B32F5D9E1FD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.OpenAI.IntegrationTests", "src\tests\LangChain.Providers.OpenAI.IntegrationTests\LangChain.Providers.OpenAI.IntegrationTests.csproj", "{2713AC94-51D9-4C0C-9727-B32F5D9E1FD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.HuggingFace", "src\libs\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj", "{F0199630-D084-45FB-894A-B6B3E6059EF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.HuggingFace", "src\libs\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj", "{F0199630-D084-45FB-894A-B6B3E6059EF9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{238D18D4-CBEF-46BF-B08C-F1E593DAB398}"
 	ProjectSection(SolutionItems) = preProject
 		src\libs\Extensions\Directory.Build.props = src\libs\Extensions\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Anthropic", "src\libs\Providers\LangChain.Providers.Anthropic\LangChain.Providers.Anthropic.csproj", "{F7DC8E98-34C7-4C90-8211-A2DBD63AE542}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Anthropic", "src\libs\Providers\LangChain.Providers.Anthropic\LangChain.Providers.Anthropic.csproj", "{F7DC8E98-34C7-4C90-8211-A2DBD63AE542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.HuggingFace", "examples\LangChain.Samples.HuggingFace\LangChain.Samples.HuggingFace.csproj", "{DED4E301-BC1D-4C15-8459-A63CCC44CDC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.HuggingFace", "examples\LangChain.Samples.HuggingFace\LangChain.Samples.HuggingFace.csproj", "{DED4E301-BC1D-4C15-8459-A63CCC44CDC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.OpenAI", "examples\LangChain.Samples.OpenAI\LangChain.Samples.OpenAI.csproj", "{876DBB8B-C656-49F9-8C84-7406FFB56738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.OpenAI", "examples\LangChain.Samples.OpenAI\LangChain.Samples.OpenAI.csproj", "{876DBB8B-C656-49F9-8C84-7406FFB56738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.AspNet", "examples\LangChain.Samples.AspNet\LangChain.Samples.AspNet.csproj", "{B0BA018A-8B2A-47B4-A8F4-EEBF7A33A01C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.AspNet", "examples\LangChain.Samples.AspNet\LangChain.Samples.AspNet.csproj", "{B0BA018A-8B2A-47B4-A8F4-EEBF7A33A01C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Extensions.DependencyInjection", "src\libs\Extensions\LangChain.Extensions.DependencyInjection\LangChain.Extensions.DependencyInjection.csproj", "{B057484B-7B0B-4A51-B32D-B408C813AE4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Extensions.DependencyInjection", "src\libs\Extensions\LangChain.Extensions.DependencyInjection\LangChain.Extensions.DependencyInjection.csproj", "{B057484B-7B0B-4A51-B32D-B408C813AE4C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{C58D122C-808F-43F9-BB23-4E517046F533}"
 	ProjectSection(SolutionItems) = preProject
 		src\libs\Databases\Directory.Build.props = src\libs\Databases\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Sqlite", "src\libs\Databases\LangChain.Databases.Sqlite\LangChain.Databases.Sqlite.csproj", "{29ED65E5-26C1-4964-AF24-4AE523B9398A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Sqlite", "src\libs\Databases\LangChain.Databases.Sqlite\LangChain.Databases.Sqlite.csproj", "{29ED65E5-26C1-4964-AF24-4AE523B9398A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Weaviate", "src\libs\Databases\LangChain.Databases.Weaviate\LangChain.Databases.Weaviate.csproj", "{DF867267-2C8F-4C9F-A243-E4CE030DFD03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Weaviate", "src\libs\Databases\LangChain.Databases.Weaviate\LangChain.Databases.Weaviate.csproj", "{DF867267-2C8F-4C9F-A243-E4CE030DFD03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Redis", "src\libs\Databases\LangChain.Databases.Redis\LangChain.Databases.Redis.csproj", "{FF00273D-38ED-4546-95CE-7FA120D4D5ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Redis", "src\libs\Databases\LangChain.Databases.Redis\LangChain.Databases.Redis.csproj", "{FF00273D-38ED-4546-95CE-7FA120D4D5ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Qdrant", "src\libs\Databases\LangChain.Databases.Qdrant\LangChain.Databases.Qdrant.csproj", "{27E2AE84-5E3B-44EA-B3BB-D4995E532C61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Qdrant", "src\libs\Databases\LangChain.Databases.Qdrant\LangChain.Databases.Qdrant.csproj", "{27E2AE84-5E3B-44EA-B3BB-D4995E532C61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Postgres", "src\libs\Databases\LangChain.Databases.Postgres\LangChain.Databases.Postgres.csproj", "{2A5335CE-7609-4356-9E1D-412FC720C6F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Postgres", "src\libs\Databases\LangChain.Databases.Postgres\LangChain.Databases.Postgres.csproj", "{2A5335CE-7609-4356-9E1D-412FC720C6F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Pinecone", "src\libs\Databases\LangChain.Databases.Pinecone\LangChain.Databases.Pinecone.csproj", "{6BA2F2EE-4D7F-4E25-AC94-41370C6FAAB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Pinecone", "src\libs\Databases\LangChain.Databases.Pinecone\LangChain.Databases.Pinecone.csproj", "{6BA2F2EE-4D7F-4E25-AC94-41370C6FAAB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.DuckDb", "src\libs\Databases\LangChain.Databases.DuckDb\LangChain.Databases.DuckDb.csproj", "{F5066081-3148-4F51-A241-676CC6A5812D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.DuckDb", "src\libs\Databases\LangChain.Databases.DuckDb\LangChain.Databases.DuckDb.csproj", "{F5066081-3148-4F51-A241-676CC6A5812D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Chroma", "src\libs\Databases\LangChain.Databases.Chroma\LangChain.Databases.Chroma.csproj", "{BBE06AB3-EE1E-4A99-A0DE-E934757140C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Chroma", "src\libs\Databases\LangChain.Databases.Chroma\LangChain.Databases.Chroma.csproj", "{BBE06AB3-EE1E-4A99-A0DE-E934757140C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.AzureSearch", "src\libs\Databases\LangChain.Databases.AzureSearch\LangChain.Databases.AzureSearch.csproj", "{C80634D2-A7AC-4366-A59D-AB3A1E4BDEEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.AzureSearch", "src\libs\Databases\LangChain.Databases.AzureSearch\LangChain.Databases.AzureSearch.csproj", "{C80634D2-A7AC-4366-A59D-AB3A1E4BDEEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.AzureCognitiveSearch", "src\libs\Databases\LangChain.Databases.AzureCognitiveSearch\LangChain.Databases.AzureCognitiveSearch.csproj", "{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.AzureCognitiveSearch", "src\libs\Databases\LangChain.Databases.AzureCognitiveSearch\LangChain.Databases.AzureCognitiveSearch.csproj", "{2D234BFF-CE2B-4C1E-9C2A-C1FEBFCC53FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{7F35205F-1692-4702-AA88-3C29BBB121BC}"
 	ProjectSection(SolutionItems) = preProject
@@ -100,39 +100,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{7F35
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.Abstractions", "src\libs\Sources\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj", "{A9C31641-768E-42F5-BFAD-79FC856CC4BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Pdf", "src\libs\Sources\LangChain.Sources.Pdf\LangChain.Sources.Pdf.csproj", "{51D01599-B641-4A7A-85AD-666087DBDF21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.Pdf", "src\libs\Sources\LangChain.Sources.Pdf\LangChain.Sources.Pdf.csproj", "{51D01599-B641-4A7A-85AD-666087DBDF21}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Core", "src\libs\LangChain.Core\LangChain.Core.csproj", "{5CBBDBE5-FE7F-4F6A-9D29-74BD6F5F4C6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.LeonardoAi", "src\libs\Providers\LangChain.Providers.LeonardoAi\LangChain.Providers.LeonardoAi.csproj", "{A7C56F0F-B283-4263-A45B-98869D7EE442}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LeonardoAi", "src\libs\Providers\LangChain.Providers.LeonardoAi\LangChain.Providers.LeonardoAi.csproj", "{A7C56F0F-B283-4263-A45B-98869D7EE442}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.UnitTest", "src\tests\LangChain.UnitTest\LangChain.UnitTest.csproj", "{56EC40E7-C73C-4BC8-9AF8-7DB5B14D031D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.IntegrationTests", "src\tests\LangChain.IntegrationTests\LangChain.IntegrationTests.csproj", "{1B3FBF29-8468-4658-A816-3324E4B8DCBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.IntegrationTests", "src\tests\LangChain.IntegrationTests\LangChain.IntegrationTests.csproj", "{1B3FBF29-8468-4658-A816-3324E4B8DCBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Azure", "examples\LangChain.Samples.Azure\LangChain.Samples.Azure.csproj", "{19364D78-991B-4D31-BEAB-22CFA1022852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Azure", "examples\LangChain.Samples.Azure\LangChain.Samples.Azure.csproj", "{19364D78-991B-4D31-BEAB-22CFA1022852}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Memory", "examples\LangChain.Samples.Memory\LangChain.Samples.Memory.csproj", "{4E351E1C-B280-4686-AEAF-4788C857366E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Memory", "examples\LangChain.Samples.Memory\LangChain.Samples.Memory.csproj", "{4E351E1C-B280-4686-AEAF-4788C857366E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Prompts", "examples\LangChain.Samples.Prompts\LangChain.Samples.Prompts.csproj", "{02B0A544-C941-4A3B-8BF8-74354EDDACDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Prompts", "examples\LangChain.Samples.Prompts\LangChain.Samples.Prompts.csproj", "{02B0A544-C941-4A3B-8BF8-74354EDDACDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Azure", "src\libs\Providers\LangChain.Providers.Azure\LangChain.Providers.Azure.csproj", "{D848B7F2-F035-43EA-AF18-080738502372}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Azure", "src\libs\Providers\LangChain.Providers.Azure\LangChain.Providers.Azure.csproj", "{D848B7F2-F035-43EA-AF18-080738502372}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.SequentialChain", "examples\LangChain.Samples.SequentialChain\LangChain.Samples.SequentialChain.csproj", "{233DF40E-6459-41F7-AEAE-C32398F474DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.SequentialChain", "examples\LangChain.Samples.SequentialChain\LangChain.Samples.SequentialChain.csproj", "{233DF40E-6459-41F7-AEAE-C32398F474DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Kendra", "src\libs\Databases\LangChain.Databases.Kendra\LangChain.Databases.Kendra.csproj", "{B456F59B-4DE6-4BC9-B83B-CD796985DD98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Kendra", "src\libs\Databases\LangChain.Databases.Kendra\LangChain.Databases.Kendra.csproj", "{B456F59B-4DE6-4BC9-B83B-CD796985DD98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Anyscale", "src\libs\Providers\LangChain.Providers.Anyscale\LangChain.Providers.Anyscale.csproj", "{A4946307-A1B5-4F85-9C5A-31BDAE38D24E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Anyscale", "src\libs\Providers\LangChain.Providers.Anyscale\LangChain.Providers.Anyscale.csproj", "{A4946307-A1B5-4F85-9C5A-31BDAE38D24E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Pdf.IntegrationTests", "src\tests\LangChain.Sources.Pdf.IntegrationTests\LangChain.Sources.Pdf.IntegrationTests.csproj", "{324183A0-92F9-44C7-A919-AEC164C50EA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.Pdf.IntegrationTests", "src\tests\LangChain.Sources.Pdf.IntegrationTests\LangChain.Sources.Pdf.IntegrationTests.csproj", "{324183A0-92F9-44C7-A919-AEC164C50EA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase", "src\libs\Sources\LangChain.Sources.WebBase\LangChain.Sources.WebBase.csproj", "{01DC2D34-958F-4381-99AD-E91E3CEE31FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.WebBase", "src\libs\Sources\LangChain.Sources.WebBase\LangChain.Sources.WebBase.csproj", "{01DC2D34-958F-4381-99AD-E91E3CEE31FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.WebBase.IntegrationTests", "src\tests\LangChain.Sources.WebBase.IntegrationTests\LangChain.Sources.WebBase.IntegrationTests.csproj", "{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.WebBase.IntegrationTests", "src\tests\LangChain.Sources.WebBase.IntegrationTests\LangChain.Sources.WebBase.IntegrationTests.csproj", "{454BA81E-861D-4908-B4D3-D1F2CDEF2C81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Core.UnitTests", "src\tests\LangChain.Core.UnitTests\LangChain.Core.UnitTests.csproj", "{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Core.UnitTests", "src\tests\LangChain.Core.UnitTests\LangChain.Core.UnitTests.csproj", "{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Chroma.IntegrationTests", "src\tests\LangChain.Databases.Chroma.IntegrationTests\LangChain.Databases.Chroma.IntegrationTests.csproj", "{302CD326-ADC3-484E-8F41-A54934A01D70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Chroma.IntegrationTests", "src\tests\LangChain.Databases.Chroma.IntegrationTests\LangChain.Databases.Chroma.IntegrationTests.csproj", "{302CD326-ADC3-484E-8F41-A54934A01D70}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LLamaSharp", "src\libs\Providers\LangChain.Providers.LLamaSharp\LangChain.Providers.LLamaSharp.csproj", "{955F163E-8330-4240-934E-3849F6E366C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LLamaSharp.IntegrationTests", "src\tests\LangChain.Providers.LLamaSharp.IntegrationTests\LangChain.Providers.LLamaSharp.IntegrationTests.csproj", "{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -304,6 +308,14 @@ Global
 		{302CD326-ADC3-484E-8F41-A54934A01D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{302CD326-ADC3-484E-8F41-A54934A01D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{302CD326-ADC3-484E-8F41-A54934A01D70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955F163E-8330-4240-934E-3849F6E366C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955F163E-8330-4240-934E-3849F6E366C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955F163E-8330-4240-934E-3849F6E366C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955F163E-8330-4240-934E-3849F6E366C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -355,5 +367,10 @@ Global
 		{454BA81E-861D-4908-B4D3-D1F2CDEF2C81} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{91CCC7E4-70E2-4589-8F7A-9B5BA2844DD1} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{302CD326-ADC3-484E-8F41-A54934A01D70} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{955F163E-8330-4240-934E-3849F6E366C7} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
 	EndGlobalSection
 EndGlobal
