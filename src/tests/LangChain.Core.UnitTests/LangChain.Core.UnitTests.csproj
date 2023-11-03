@@ -9,6 +9,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Moq" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Update="Resources\state_of_the_union.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

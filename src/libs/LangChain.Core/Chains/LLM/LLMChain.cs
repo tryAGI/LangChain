@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class LlmChain(LlmChainInput fields) : BaseChain, ILlmChainInput
+public class LlmChain(LlmChainInput fields) : BaseChain, ILlmChain
 {
     public BasePromptTemplate Prompt { get; } = fields.Prompt;
     public IChatModel Llm { get; } = fields.Llm;
