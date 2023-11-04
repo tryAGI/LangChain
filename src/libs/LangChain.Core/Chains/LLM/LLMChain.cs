@@ -25,7 +25,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     public CallbackManager? CallbackManager { get; set; }
 
     public bool Verbose { get; set; }
-    public Callbacks? Callbacks { get; set; }
+    public ICallbacks? Callbacks { get; set; }
     public List<string> Tags { get; set; }
     public Dictionary<string, object> Metadata { get; set; }
 

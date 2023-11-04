@@ -11,7 +11,7 @@ public interface IBaseChainInput
     /// Each custom chain can optionally call additional callback methods, see Callback docs
     /// for full details.
     /// </summary>
-    public Callbacks? Callbacks { get; set; }
+    public ICallbacks? Callbacks { get; set; }
     
     /// <summary>
     /// Whether or not run in verbose mode. In verbose mode, some intermediate logs

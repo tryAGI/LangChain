@@ -45,7 +45,7 @@ public abstract class BaseRetriever
 	public virtual async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(
 		string query,
 		string? runId = null,
-		Callbacks? callbacks = null,
+		ICallbacks? callbacks = null,
 		bool verbose = false,
 		List<string>? tags = null,
 		Dictionary<string, object>? metadata = null)

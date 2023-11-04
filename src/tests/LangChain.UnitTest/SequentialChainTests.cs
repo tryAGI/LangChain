@@ -95,7 +95,7 @@ public class SequentialChainTests
         fakeChainMock.Setup(_ => _.OutputKeys).Returns(outputVariables);
         fakeChainMock.Setup(x => x.CallAsync(
                 It.IsAny<IChainValues>(),
-                It.IsAny<Callbacks?>(),
+                It.IsAny<ICallbacks?>(),
                 It.IsAny<List<string>>(),
                 It.IsAny<Dictionary<string, object>>()))
             .Returns<IChainValues, CallbackManager?, List<string>, Dictionary<string, object>>((chainValues, _, _, _) =>

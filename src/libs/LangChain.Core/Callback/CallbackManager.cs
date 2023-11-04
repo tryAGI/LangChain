@@ -31,7 +31,13 @@ public class CallbackManager
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="inheritableMetadata"></param>
     /// <param name="parentRunId"></param>
+    /// <param name="handlers"></param>
+    /// <param name="inheritableHandlers"></param>
+    /// <param name="tags"></param>
+    /// <param name="inheritableTags"></param>
+    /// <param name="metadata"></param>
     public CallbackManager(
         List<BaseCallbackHandler>? handlers = null,
         List<BaseCallbackHandler>? inheritableHandlers = null,
@@ -281,8 +287,8 @@ public class CallbackManager
     // TODO: review! motivation?
     // ICallbackManagerOptions? options = null,
     public static async Task<CallbackManager> Configure(
-        Callbacks? inheritableCallbacks = null,
-        Callbacks? localCallbacks = null,
+        ICallbacks? inheritableCallbacks = null,
+        ICallbacks? localCallbacks = null,
         bool verbose = false,
         List<string>? localTags = null,
         List<string>? inheritableTags = null,
@@ -307,16 +313,15 @@ public class CallbackManager
                     break;
 
                 case ManagerCallbacks managerCallbacks:
-                    callbackManager = new CallbackManager(parentRunId: managerCallbacks.Value.ParentRunId)
-                    {
-                        // handlers=inheritable_callbacks.handlers.copy(),
-                        // inheritable_handlers=inheritable_callbacks.inheritable_handlers.copy(),
-                        // parent_run_id=inheritable_callbacks.parent_run_id,
-                        // tags=inheritable_callbacks.tags.copy(),
-                        // inheritable_tags=inheritable_callbacks.inheritable_tags.copy(),
-                        // metadata=inheritable_callbacks.metadata.copy(),
-                        // inheritable_metadata=inheritable_callbacks.inheritable_metadata.copy(),
-                    };
+                    // ToList() and ToDictionary() used to create copy
+                    callbackManager = new CallbackManager(
+                        managerCallbacks.Value.Handlers.ToList(),
+                        managerCallbacks.Value.InheritableHandlers.ToList(),
+                        managerCallbacks.Value.Tags.ToList(),
+                        managerCallbacks.Value.InheritableTags.ToList(),
+                        managerCallbacks.Value.Metadata.ToDictionary(kv => kv.Key, kv => kv.Value),
+                        managerCallbacks.Value.InheritableMetadata.ToDictionary(kv => kv.Key, kv => kv.Value),
+                        parentRunId: managerCallbacks.Value.ParentRunId);
                     break;
 
                 default:
@@ -328,7 +333,7 @@ public class CallbackManager
             {
                 HandlersCallbacks localHandlersCallbacks => localHandlersCallbacks.Value,
                 ManagerCallbacks managerCallbacks => managerCallbacks.Value.Handlers,
-                _ => new()
+                _ => new List<BaseCallbackHandler>()
             };
 
             callbackManager = callbackManager.Copy(localHandlers, false);

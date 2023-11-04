@@ -90,7 +90,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <returns></returns>
     public async Task<IChainValues> CallAsync(
         IChainValues values,
-        Callbacks? callbacks = null,
+        ICallbacks? callbacks = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null)
     {
@@ -109,7 +109,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
         {
             var result = await CallAsync(values, runManager);
 
-            await runManager.HandleChainEndAsync(result.Value);
+            await runManager.HandleChainEndAsync(result);
 
             return result;
         }

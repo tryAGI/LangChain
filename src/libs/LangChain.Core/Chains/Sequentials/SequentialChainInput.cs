@@ -30,7 +30,7 @@ public class SequentialChainInput : IChainInputs
     public bool ReturnAll { get; }
 
     public bool Verbose { get; set; }
-    public Callbacks? Callbacks { get; set; }
+    public ICallbacks? Callbacks { get; set; }
     public List<string> Tags { get; set; }
     public Dictionary<string, object> Metadata { get; set; }
 

@@ -10,7 +10,7 @@ public interface IChain
 
     Task<IChainValues> CallAsync(
         IChainValues values,
-        Callbacks? callbacks = null,
+        ICallbacks? callbacks = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null);
 }
