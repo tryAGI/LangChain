@@ -1,4 +1,5 @@
 ﻿using LangChain.Providers;
+using LangChain.Providers.Downloader;
 using LangChain.Providers.LLamaSharp;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
@@ -14,7 +15,7 @@ public class LLamaSharpTests
     {
         var model = new LLamaSharpModel(new LLamaSharpConfiguration
         {
-            PathToModelFile = Path.Combine(Environment.ExpandEnvironmentVariables("%LLAMA_MODELS%"), "ggml-model-f32-q4_0.bin"),
+            PathToModelFile = HuggingFaceModelDownloader.Instance.GetModel("AsakusaRinne/LLamaSharpSamples", "LLaMa/7B/ggml-model-f32-q4_0.bin", version: "v0.3.0").Result,
         });
 
         var response=model.GenerateAsync(new ChatRequest(new List<Message>
@@ -39,7 +40,7 @@ public class LLamaSharpTests
     {
         var model = new LLamaSharpModel(new LLamaSharpConfiguration
         {
-            PathToModelFile = Path.Combine(Environment.ExpandEnvironmentVariables("%LLAMA_MODELS%"), "ggml-model-f32-q4_0.bin"),
+            PathToModelFile = HuggingFaceModelDownloader.Instance.GetModel("AsakusaRinne/LLamaSharpSamples", "LLaMa/7B/ggml-model-f32-q4_0.bin", version: "v0.3.0").Result,
             Mode = ELLamaSharpModelMode.Instruction
         });
 
