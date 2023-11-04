@@ -7,15 +7,16 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 [TestClass]
 public class LLamaSharpTests
 {
+    string ModelPath=>HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf","main").Result;
     [TestMethod]
 #if CONTINUOUS_INTEGRATION_BUILD
     [Ignore]
 #endif
     public void PrepromptTest()
     {
-        var model = new LLamaSharpModel(new LLamaSharpConfiguration
+        var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
         {
-            PathToModelFile = HuggingFaceModelDownloader.Instance.GetModel("AsakusaRinne/LLamaSharpSamples", "LLaMa/7B/ggml-model-f32-q4_0.bin", version: "v0.3.0").Result,
+            PathToModelFile = ModelPath,
         });
 
         var response=model.GenerateAsync(new ChatRequest(new List<Message>
@@ -28,7 +29,7 @@ public class LLamaSharpTests
             "Bob".AsHumanMessage(),
         })).Result;
 
-        Assert.AreEqual(response.Messages.Last().Content, "Jack");
+        Assert.AreEqual("Jack",response.Messages.Last().Content );
 
     }
 
@@ -38,19 +39,19 @@ public class LLamaSharpTests
 #endif
     public void InstructionTest()
     {
-        var model = new LLamaSharpModel(new LLamaSharpConfiguration
+        var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
         {
-            PathToModelFile = HuggingFaceModelDownloader.Instance.GetModel("AsakusaRinne/LLamaSharpSamples", "LLaMa/7B/ggml-model-f32-q4_0.bin", version: "v0.3.0").Result,
-            Mode = ELLamaSharpModelMode.Instruction
+            PathToModelFile = ModelPath,
+            Temperature=0
         });
 
-        var response=model.GenerateAsync(new ChatRequest(new List<Message>
+        var response = model.GenerateAsync(new ChatRequest(new List<Message>
         {
-            "You are a calculator. You will be provided with expression. You must calculate it and print the result. Do not add any addition information.".AsSystemMessage(),
-            "2 + 2".AsSystemMessage(),
+            "You are a calculator. Print the result of this expression: 2 + 2.".AsSystemMessage(),
+            "Result:".AsSystemMessage(),
         })).Result;
 
-        Assert.IsTrue(response.Messages.Last().Content.Trim().Equals("4"));
+        Assert.AreEqual("4",response.Messages.Last().Content.Trim());
 
     }
 }
