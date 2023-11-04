@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj" />
     <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.LLamaSharp\LangChain.Providers.LLamaSharp.csproj" />
   </ItemGroup>
 
