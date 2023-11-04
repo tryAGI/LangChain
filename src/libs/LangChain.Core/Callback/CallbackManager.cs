@@ -1,17 +1,13 @@
+using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.LLMS;
 using LangChain.Providers;
 using LangChain.Retrievers;
-using LangChain.Schema;
 
 namespace LangChain.Callback;
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 /// <summary>
-/// 
+/// Base callback manager that handles callbacks from LangChain.
 /// </summary>
 public class CallbackManager
 {
@@ -25,17 +21,75 @@ public class CallbackManager
     /// </summary>
     public List<BaseCallbackHandler> InheritableHandlers { get; private set; }
     public string Name { get; } = "callback_manager";
-    private readonly string? _parentRunId;
+    public readonly string? ParentRunId;
+
+    protected List<string> Tags { get; }
+    protected List<string> InheritableTags { get; }
+    protected Dictionary<string, object> Metadata { get; }
+    protected Dictionary<string, object> InheritableMetadata { get; }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="parentRunId"></param>
-    public CallbackManager(string? parentRunId = null)
+    public CallbackManager(
+        List<BaseCallbackHandler>? handlers = null,
+        List<BaseCallbackHandler>? inheritableHandlers = null,
+        List<string>? tags = null,
+        List<string>? inheritableTags = null,
+        Dictionary<string, object>? metadata = null,
+        Dictionary<string, object>? inheritableMetadata = null,
+        string? parentRunId = null)
     {
-        Handlers = new List<BaseCallbackHandler>();
-        InheritableHandlers = new List<BaseCallbackHandler>();
-        _parentRunId = parentRunId;
+        Handlers = handlers ?? new List<BaseCallbackHandler>();
+        InheritableHandlers = inheritableHandlers ?? new List<BaseCallbackHandler>();
+        ParentRunId = parentRunId;
+
+        Tags = tags ?? new();
+        InheritableTags = inheritableTags ?? new();
+        Metadata = metadata ?? new();
+        InheritableMetadata = inheritableMetadata ?? new();
+    }
+
+    public void AddTags(List<string> tags, bool inherit = true)
+    {
+        Tags.RemoveAll(tag => tags.Contains(tag));
+        Tags.AddRange(tags);
+
+        if (inherit)
+        {
+            InheritableTags.AddRange(tags);
+        }
+    }
+
+    public void RemoveTags(List<string> tags)
+    {
+        foreach (var tag in tags)
+        {
+            Tags.Remove(tag);
+            InheritableTags.Remove(tag);
+        }
+    }
+
+    public void AddMetadata(Dictionary<string, object> metadata, bool inherit = true)
+    {
+        foreach (var kv in metadata)
+        {
+            Metadata[kv.Key] = kv.Value;
+            if (inherit)
+            {
+                InheritableMetadata[kv.Key] = kv.Value;
+            }
+        }
+    }
+
+    public void RemoveMetadata(List<string> keys)
+    {
+        foreach (var key in keys)
+        {
+            Metadata.Remove(key);
+            InheritableMetadata.Remove(key);
+        }
     }
 
     public async Task<CallbackManagerForLlmRun> HandleLlmStart(
@@ -51,7 +105,7 @@ public class CallbackManager
             {
                 try
                 {
-                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId ?? Guid.NewGuid().ToString(), _parentRunId, extraParams);
+                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId ?? Guid.NewGuid().ToString(), ParentRunId, extraParams);
                 }
                 catch (Exception ex)
                 {
@@ -60,7 +114,7 @@ public class CallbackManager
             }
         }
 
-        return new CallbackManagerForLlmRun(runId, Handlers, InheritableHandlers, _parentRunId);
+        return new CallbackManagerForLlmRun(runId, Handlers, InheritableHandlers, ParentRunId);
     }
 
     public async Task<CallbackManagerForLlmRun> HandleChatModelStart(
@@ -94,31 +148,30 @@ public class CallbackManager
             }
         }
 
-        return new CallbackManagerForLlmRun(runId, Handlers, InheritableHandlers, _parentRunId);
+        return new CallbackManagerForLlmRun(runId, Handlers, InheritableHandlers, ParentRunId);
     }
 
     public async Task<CallbackManagerForChainRun> HandleChainStart(
         BaseChain chain,
-        ChainValues inputs,
+        IChainValues inputs,
         string? runId = null)
     {
         foreach (var handler in Handlers)
         {
-            //TODO: Implement methods
-            // if (!handler.IgnoreChain)
-            // {
-            //     try
-            //     {
-            //         await handler.HandleChainStart(chain, inputs, runId ?? Guid.NewGuid().ToString(), _parentRunId);
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainStart: {ex}");
-            //     }
-            // }
+            if (!handler.IgnoreChain)
+            {
+                try
+                {
+                    await handler.HandleChainStartAsync(chain, inputs.Value, runId ?? Guid.NewGuid().ToString(), ParentRunId);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainStart: {ex}");
+                }
+            }
         }
 
-        return new CallbackManagerForChainRun(runId, Handlers, InheritableHandlers, _parentRunId);
+        return new CallbackManagerForChainRun(runId, Handlers, InheritableHandlers, ParentRunId);
     }
 
     public async Task<CallbackManagerForRetrieverRun> HandleRetrieverStart(
@@ -128,13 +181,17 @@ public class CallbackManager
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null)
     {
+        runId ??= Guid.NewGuid().ToString();
+
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreLlm)
             {
                 try
                 {
-                    await handler.HandleRetrieverStartAsync(query, runId ?? Guid.NewGuid().ToString(), _parentRunId);
+                    // TODO: pass retriever or dumpd(retriever) serialized: Dict[str, Any] ?
+                    // TODO: pass extraParams ?
+                    await handler.HandleRetrieverStartAsync(query, runId, ParentRunId);
                 }
                 catch (Exception ex)
                 {
@@ -143,7 +200,17 @@ public class CallbackManager
             }
         }
 
-        return new CallbackManagerForRetrieverRun(runId, Handlers, InheritableHandlers, _parentRunId);
+        var manager = new CallbackManagerForRetrieverRun(
+            runId,
+            Handlers,
+            InheritableHandlers,
+            ParentRunId,
+            Tags,
+            InheritableTags,
+            Metadata,
+            InheritableMetadata);
+
+        return manager;
     }
 
     public void AddHandler(BaseCallbackHandler handler, bool inherit = true)
@@ -153,11 +220,6 @@ public class CallbackManager
         {
             InheritableHandlers.Add(handler);
         }
-    }
-
-    public void AddHandler(BaseCallbackHandler handler)
-    {
-        throw new NotImplementedException();
     }
 
     public void RemoveHandler(BaseCallbackHandler handler)
@@ -183,12 +245,13 @@ public class CallbackManager
 
     public CallbackManager Copy(List<BaseCallbackHandler>? additionalHandlers = null, bool inherit = true)
     {
-        var manager = new CallbackManager(_parentRunId);
+        var manager = new CallbackManager(parentRunId: ParentRunId);
         foreach (var handler in Handlers)
         {
             var inheritable = InheritableHandlers.Contains(handler);
             manager.AddHandler(handler, inheritable);
         }
+
         if (additionalHandlers != null)
         {
             foreach (var handler in additionalHandlers)
@@ -215,33 +278,77 @@ public class CallbackManager
         return manager;
     }
 
+    // TODO: review! motivation?
+    // ICallbackManagerOptions? options = null,
     public static async Task<CallbackManager> Configure(
-        List<BaseCallbackHandler>? inheritableHandlers = null,
-        List<BaseCallbackHandler>? localHandlers = null,
-        ICallbackManagerOptions? options = null)
+        Callbacks? inheritableCallbacks = null,
+        Callbacks? localCallbacks = null,
+        bool verbose = false,
+        List<string>? localTags = null,
+        List<string>? inheritableTags = null,
+        Dictionary<string, object>? localMetadata = null,
+        Dictionary<string,object>? inheritableMetadata = null)
     {
-        CallbackManager callbackManager = null;
-        if (inheritableHandlers != null || localHandlers != null)
+        // TODO: parentRunId using AsyncLocal
+        // python version using `contextvars` lib
+        //      run_tree = get_run_tree_context()
+        //      parent_run_id = None if run_tree is None else getattr(run_tree, "id")
+        string parentId = null;
+
+        CallbackManager callbackManager;
+
+        if (inheritableCallbacks != null || localCallbacks != null)
         {
-            if (inheritableHandlers is List<BaseCallbackHandler> || inheritableHandlers == null)
+            switch (inheritableCallbacks)
             {
-                callbackManager = new CallbackManager();
-                callbackManager.SetHandlers(inheritableHandlers?.Cast<BaseCallbackHandler>().ToList() ?? new List<BaseCallbackHandler>(), true);
+                case HandlersCallbacks inheritableHandlers:
+                    callbackManager = new CallbackManager(parentRunId: parentId);
+                    callbackManager.SetHandlers(inheritableHandlers.Value, true);
+                    break;
+
+                case ManagerCallbacks managerCallbacks:
+                    callbackManager = new CallbackManager(parentRunId: managerCallbacks.Value.ParentRunId)
+                    {
+                        // handlers=inheritable_callbacks.handlers.copy(),
+                        // inheritable_handlers=inheritable_callbacks.inheritable_handlers.copy(),
+                        // parent_run_id=inheritable_callbacks.parent_run_id,
+                        // tags=inheritable_callbacks.tags.copy(),
+                        // inheritable_tags=inheritable_callbacks.inheritable_tags.copy(),
+                        // metadata=inheritable_callbacks.metadata.copy(),
+                        // inheritable_metadata=inheritable_callbacks.inheritable_metadata.copy(),
+                    };
+                    break;
+
+                default:
+                    callbackManager = new CallbackManager(parentRunId: parentId);
+                    break;
             }
 
-            callbackManager = callbackManager.Copy(
-                localHandlers,
-                false);
+            var localHandlers = localCallbacks switch
+            {
+                HandlersCallbacks localHandlersCallbacks => localHandlersCallbacks.Value,
+                ManagerCallbacks managerCallbacks => managerCallbacks.Value.Handlers,
+                _ => new()
+            };
+
+            callbackManager = callbackManager.Copy(localHandlers, false);
         }
-        var verboseEnabled = (Environment.GetEnvironmentVariable("LANGCHAIN_VERBOSE") != null || options?.Verbose == true);
+        else
+        {
+            callbackManager = new CallbackManager(parentRunId: parentId);
+        }
+
+        if (inheritableTags != null) callbackManager.AddTags(inheritableTags);
+        if (localTags != null) callbackManager.AddTags(localTags, inherit: false);
+        
+        if (inheritableMetadata != null) callbackManager.AddMetadata(inheritableMetadata);
+        if (localMetadata != null) callbackManager.AddMetadata(localMetadata, inherit: false);
+
+        var verboseEnabled = (Environment.GetEnvironmentVariable("LANGCHAIN_VERBOSE") != null || verbose);
         var tracingV2Enabled = (Environment.GetEnvironmentVariable("LANGCHAIN_TRACING_V2") != null);
         var tracingEnabled = tracingV2Enabled || (Environment.GetEnvironmentVariable("LANGCHAIN_TRACING") != null);
         if (verboseEnabled || tracingEnabled)
         {
-            if (callbackManager == null)
-            {
-                callbackManager = new CallbackManager();
-            }
             //TODO: Implement handlers
             /*if (!callbackManager.Handlers.Any(h => h.Name == ConsoleCallbackHandler.Name))
             {
@@ -261,84 +368,13 @@ public class CallbackManager
                 }
             }*/
         }
+
         return callbackManager;
     }
 
     private static string GetBufferString(List<Message> messages)
     {
         // Implement your logic here to convert messages to a string
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmStartAsync(Dictionary<string, object> llm, string[] prompts, string runId, string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChatModelStartAsync(Dictionary<string, object> llm, List<List<object>> messages, string runId, string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainStartAsync(Dictionary<string, object> chain, Dictionary<string, object> inputs, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainEndAsync(Dictionary<string, object> outputs, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolStartAsync(Dictionary<string, object> tool, string input, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolEndAsync(string output, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleTextAsync(string text, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
-    {
         throw new NotImplementedException();
     }
 }

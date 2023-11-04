@@ -1,6 +1,7 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
+using LangChain.Callback;
 using LangChain.Schema;
 
 namespace LangChain.Chains.Sequentials;
@@ -30,7 +31,7 @@ public class SequentialChain : BaseChain
     /// 
     /// </summary>
     /// <param name="input"></param>
-    public SequentialChain(SequentialChainInput input)
+    public SequentialChain(SequentialChainInput input) : base(input)
     {
         Chains = input.Chains;
         InputKeys = input.InputVariables;
@@ -45,11 +46,9 @@ public class SequentialChain : BaseChain
         }
     }
 
-    public override string ChainType()
-    {
-        return "sequential_chain";
-    }
-    public override async Task<IChainValues> CallAsync(IChainValues values)
+    public override string ChainType() => "sequential_chain";
+
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
         var allChainValues = new ChainValues(new Dictionary<string, object>(_allOutputKeys.Count));
         foreach (var input in InputKeys)

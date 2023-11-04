@@ -1,5 +1,6 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
+using LangChain.Callback;
 using LangChain.Chains.Sequentials;
 using LangChain.Schema;
 using Moq;
@@ -92,8 +93,12 @@ public class SequentialChainTests
 
         fakeChainMock.Setup(_ => _.InputKeys).Returns(inputVariables);
         fakeChainMock.Setup(_ => _.OutputKeys).Returns(outputVariables);
-        fakeChainMock.Setup(x => x.CallAsync(It.IsAny<IChainValues>()))
-            .Returns<IChainValues>(chainValues =>
+        fakeChainMock.Setup(x => x.CallAsync(
+                It.IsAny<IChainValues>(),
+                It.IsAny<Callbacks?>(),
+                It.IsAny<List<string>>(),
+                It.IsAny<Dictionary<string, object>>()))
+            .Returns<IChainValues, CallbackManager?, List<string>, Dictionary<string, object>>((chainValues, _, _, _) =>
             {
                 var output = new ChainValues();
 

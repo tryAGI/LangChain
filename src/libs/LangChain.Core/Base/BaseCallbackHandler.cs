@@ -1,3 +1,4 @@
+using LangChain.Abstractions.Chains.Base;
 using LangChain.LLMS;
 using LangChain.Schema;
 
@@ -27,7 +28,7 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
         Dictionary<string, object>? extraParams = null);
 
     /// <inheritdoc />
-    public abstract Task HandleChainStartAsync(Dictionary<string, object> chain, Dictionary<string, object> inputs, string runId, string? parentRunId = null);
+    public abstract Task HandleChainStartAsync(IChain chain, Dictionary<string, object> inputs, string runId, string? parentRunId = null);
 
     /// <inheritdoc />
     public abstract Task HandleChainErrorAsync(Exception err, string runId, string? parentRunId = null);

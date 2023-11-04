@@ -5,27 +5,31 @@ namespace LangChain.Callback;
 /// <summary>
 /// 
 /// </summary>
-public class BaseRunManager
+public abstract class BaseRunManager
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary> </summary>
     public string RunId { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary> </summary>
     protected List<BaseCallbackHandler> Handlers { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary> </summary>
     protected List<BaseCallbackHandler> InheritableHandlers { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary> </summary>
     protected string? ParentRunId { get; }
+
+    /// <summary> </summary>
+    protected List<string> Tags { get; }
+
+    /// <summary> </summary>
+    protected List<string> InheritableTags { get; }
+
+    /// <summary> </summary>
+    protected Dictionary<string, object> Metadata { get; }
+
+    /// <summary> </summary>
+    protected Dictionary<string, object> InheritableMetadata { get; }
 
     /// <summary>
     /// 
@@ -34,18 +38,42 @@ public class BaseRunManager
     /// <param name="handlers"></param>
     /// <param name="inheritableHandlers"></param>
     /// <param name="parentRunId"></param>
-    public BaseRunManager(string runId, List<BaseCallbackHandler> handlers, List<BaseCallbackHandler> inheritableHandlers, string? parentRunId = null)
+    /// <param name="tags"></param>
+    /// <param name="inheritableTags"></param>
+    /// <param name="metadata"></param>
+    /// <param name="inheritableMetadata"></param>
+    public BaseRunManager(
+        string runId,
+        List<BaseCallbackHandler> handlers,
+        List<BaseCallbackHandler> inheritableHandlers,
+        string? parentRunId = null,
+        List<string>? tags = null,
+        List<string>? inheritableTags = null,
+        Dictionary<string, object>? metadata = null,
+        Dictionary<string, object>? inheritableMetadata = null)
     {
         RunId = runId;
         Handlers = handlers;
         InheritableHandlers = inheritableHandlers;
+        Tags = tags;
+        InheritableTags = inheritableTags ?? new();
+        Metadata = metadata ?? new();
+        InheritableMetadata = inheritableMetadata ?? new();
         ParentRunId = parentRunId;
     }
 
+    protected BaseRunManager()
+        : this(
+            runId: Guid.NewGuid().ToString("N"),
+            handlers: new(),
+            inheritableHandlers: new())
+    {
+    }
+
     /// <summary>
-    /// 
+    /// Run when text is received.
     /// </summary>
-    /// <param name="text"></param>
+    /// <param name="text">The received text.</param>
     public async Task HandleText(string text)
     {
         foreach (var handler in Handlers)
@@ -60,4 +88,16 @@ public class BaseRunManager
             }
         }
     }
+
+    /// <summary>
+    /// Return a manager that doesn't perform any operations.
+    /// TODO: test every BaseRunManager implementation for IRunManagerImplementation
+    /// TODO: (static abstract not supported by some target runtimes)
+    /// </summary>
+    public static T GetNoopManager<T>() where T : IRunManagerImplementation<T>, new()
+    {
+        return new T();
+    }
 }
+
+public interface IRunManagerImplementation<TThis> where TThis : IRunManagerImplementation<TThis>, new();

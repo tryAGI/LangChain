@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class LlmChain(LlmChainInput fields) : BaseChain, ILlmChain
+public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 {
     public BasePromptTemplate Prompt { get; } = fields.Prompt;
     public IChatModel Llm { get; } = fields.Llm;
@@ -22,8 +22,12 @@ public class LlmChain(LlmChainInput fields) : BaseChain, ILlmChain
 
     public override string ChainType() => "llm_chain";
 
-    public bool? Verbose { get; set; }
     public CallbackManager? CallbackManager { get; set; }
+
+    public bool Verbose { get; set; }
+    public Callbacks? Callbacks { get; set; }
+    public List<string> Tags { get; set; }
+    public Dictionary<string, object> Metadata { get; set; }
 
     public override string[] InputKeys => Prompt.InputVariables.ToArray();
     public override string[] OutputKeys => new[] { OutputKey };
@@ -40,8 +44,9 @@ public class LlmChain(LlmChainInput fields) : BaseChain, ILlmChain
     /// Execute the chain.
     /// </summary>
     /// <param name="values">The values to use when executing the chain.</param>
+    /// <param name="runManager"></param>
     /// <returns>The resulting output <see cref="ChainValues"/>.</returns>
-    public override async Task<IChainValues> CallAsync(IChainValues values)
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
         List<string>? stop = new List<string>();
 
@@ -79,5 +84,4 @@ public class LlmChain(LlmChainInput fields) : BaseChain, ILlmChain
         var output = await CallAsync(values);
         return output.Value[OutputKey];
     }
-
 }

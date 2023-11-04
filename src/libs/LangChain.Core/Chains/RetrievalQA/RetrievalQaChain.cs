@@ -1,3 +1,4 @@
+using LangChain.Callback;
 using LangChain.Docstore;
 using LangChain.Retrievers;
 
@@ -13,10 +14,10 @@ public class RetrievalQaChain(RetrievalQaChainInput fields) : BaseRetrievalQaCha
     
     public override string ChainType() => "retrieval_qa";
 
-    public override async Task<IEnumerable<Document>> GetDocsAsync(string question)
+    public override async Task<IEnumerable<Document>> GetDocsAsync(string question, CallbackManagerForChainRun runManager)
     {
-        // todo: runid
-        var runId = "???";
-        return await _retriever.GetRelevantDocumentsAsync(question, runId, fields.CallbackManager);
+        return await _retriever.GetRelevantDocumentsAsync(
+            question,
+            callbacks: new ManagerCallbacks(runManager.GetChild()));
     }
 }

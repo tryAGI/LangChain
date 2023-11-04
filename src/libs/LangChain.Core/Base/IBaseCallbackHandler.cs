@@ -1,3 +1,4 @@
+using LangChain.Abstractions.Chains.Base;
 using LangChain.LLMS;
 using LangChain.Schema;
 
@@ -73,7 +74,7 @@ public interface IBaseCallbackHandler
         Dictionary<string, object>? extraParams = null);
 
     public Task HandleChainStartAsync(
-        Dictionary<string, object> chain,
+        IChain chain,
         Dictionary<string, object> inputs,
         string runId,
         string? parentRunId = null);

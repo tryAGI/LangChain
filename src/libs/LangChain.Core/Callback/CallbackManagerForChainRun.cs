@@ -3,19 +3,28 @@ using LangChain.Schema;
 
 namespace LangChain.Callback;
 
-public class CallbackManagerForChainRun : BaseRunManager
+public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForChainRun>
 {
-    public CallbackManagerForChainRun(string runId, List<BaseCallbackHandler> handlers, List<BaseCallbackHandler> inheritableHandlers, string? parentRunId = null)
+    public CallbackManagerForChainRun()
+    {
+        
+    }
+
+    public CallbackManagerForChainRun(
+        string runId,
+        List<BaseCallbackHandler> handlers,
+        List<BaseCallbackHandler> inheritableHandlers,
+        string? parentRunId = null)
         : base(runId, handlers, inheritableHandlers, parentRunId)
     {
     }
 
-    public CallbackManager GetChild()
-    {
-        var manager = new CallbackManager(RunId);
-        manager.SetHandlers(InheritableHandlers);
-        return manager;
-    }
+    // public CallbackManager GetChild()
+    // {
+    //     var manager = new CallbackManager(RunId);
+    //     manager.SetHandlers(InheritableHandlers);
+    //     return manager;
+    // }
 
     public async Task HandleChainEndAsync(ChainValues output)
     {
@@ -67,7 +76,7 @@ public class CallbackManagerForChainRun : BaseRunManager
         throw new NotImplementedException();
     }
 
-    public async Task HandleChainErrorAsync(Exception error, string runId, string? parentRunId = null)
+    public async Task HandleChainErrorAsync(Exception error)
     {
         foreach (var handler in Handlers)
         {
@@ -85,9 +94,22 @@ public class CallbackManagerForChainRun : BaseRunManager
         }
     }
 
-    public Task HandleChainEndAsync(Dictionary<string, object> outputs, string runId, string? parentRunId = null)
+    public async Task HandleChainEndAsync(Dictionary<string, object> outputs)
     {
-        throw new NotImplementedException();
+        foreach (var handler in Handlers)
+        {
+            if (!handler.IgnoreLlm)
+            {
+                try
+                {
+                    await handler.HandleChainEndAsync(outputs, RunId, ParentRunId);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainError: {ex}");
+                }
+            }
+        }
     }
 
     public Task HandleToolStartAsync(Dictionary<string, object> tool, string input, string runId, string? parentRunId = null)

@@ -1,10 +1,9 @@
 using LangChain.Base;
-using LangChain.Callback;
 using LangChain.Chains.CombineDocuments;
 
 namespace LangChain.Chains.RetrievalQA;
 
-public class BaseRetrievalQaChainInput(BaseCombineDocumentsChain combineDocumentsChain) : IChainInputs
+public class BaseRetrievalQaChainInput(BaseCombineDocumentsChain combineDocumentsChain) : ChainInputs
 {
     /// <summary> Chain to use to combine the documents. </summary>
     public BaseCombineDocumentsChain CombineDocumentsChain { get; } = combineDocumentsChain;
@@ -14,6 +13,4 @@ public class BaseRetrievalQaChainInput(BaseCombineDocumentsChain combineDocument
 
     public string InputKey { get; set; } = "input_documents";
     public string OutputKey { get; set; } = "output_text";
-    public bool? Verbose { get; set; }
-    public CallbackManager? CallbackManager { get; set; }
 }

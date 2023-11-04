@@ -1,6 +1,7 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
+using LangChain.Callback;
 using LangChain.Docstore;
 using LangChain.Schema;
 
@@ -17,7 +18,7 @@ namespace LangChain.Chains.CombineDocuments;
 /// determine whether it's safe to pass a list of documents into this chain or whether
 /// that will longer than the context length).
 /// </summary>
-public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput fields) : BaseChain, IChain
+public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput fields) : BaseChain(fields), IChain
 {
     public readonly string InputKey = fields.InputKey;
     public readonly string OutputKey = fields.OutputKey;
@@ -29,8 +30,9 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     /// Prepare inputs, call combine docs, prepare outputs.
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="runManager"></param>
     /// <returns></returns>
-    public override async Task<IChainValues> CallAsync(IChainValues values)
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
         var docs = values.Value[InputKey];
 
