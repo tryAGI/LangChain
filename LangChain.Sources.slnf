@@ -5,7 +5,7 @@
       "src\\libs\\LangChain.Core\\LangChain.Core.csproj",
       "src\\libs\\Providers\\LangChain.Providers.LLamaSharp\\LangChain.Providers.LLamaSharp.csproj",
 	  "src\\libs\\Providers\\LangChain.Providers.HuggingFace\\LangChain.Providers.HuggingFace.csproj",
-	  "src\\tests\\LangChain.Providers.LLamaSharp.IntegrationTests\\LangChain.Providers.LLamaSharp.IntegrationTests.csproj",
+	  "src\\tests\\LangChain.IntegrationTests.LLamaSharp\\LangChain.IntegrationTests.LLamaSharp.csproj",
       "src\\tests\\LangChain.UnitTest\\LangChain.UnitTest.csproj"
     ]
   }
