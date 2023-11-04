@@ -54,4 +54,49 @@ public class LLamaSharpTests
         Assert.AreEqual("4",response.Messages.Last().Content.Trim());
 
     }
+
+    float VectorDistance(float[] a, float[] b)
+    {
+        float result = 0;
+        for (int i = 0; i < a.Length; i++)
+        {
+            result += (a[i] - b[i]) * (a[i] - b[i]);
+        }
+
+        return result;
+
+    }
+    [TestMethod]
+#if CONTINUOUS_INTEGRATION_BUILD
+    [Ignore]
+#endif
+    public void EmbeddingsTest()
+    {
+        var model = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
+        {
+            PathToModelFile = ModelPath,
+            Temperature = 0
+        });
+
+        string[] texts = new string[]
+        {
+            "I spent entire day watching TV",
+            "My dog name is Bob",
+            "This icecream is delicious",
+            "It is cold in space"
+        };
+
+        var database = model.EmbedDocumentsAsync(texts).Result;
+
+
+        var query = model.EmbedQueryAsync("How do you call your pet?").Result;
+
+        var zipped = database.Zip(texts);
+
+        var ordered= zipped.Select(x=>new {text=x.Second,dist=VectorDistance(x.First,query)});
+        
+        var closest = ordered.OrderBy(x => x.dist).First();
+
+        Assert.AreEqual("My dog name is Bob", closest.text);
+    }
 }
