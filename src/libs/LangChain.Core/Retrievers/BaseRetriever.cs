@@ -4,7 +4,10 @@ using LangChain.Docstore;
 namespace LangChain.Retrievers;
 
 /// <summary>
-/// BaseRetriever
+/// Abstract base class for a Document retrieval system.
+/// 
+/// A retrieval system is defined as something that can take string queries and return
+/// the most 'relevant' Documents from some source.
 /// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/schema/retriever.html" />
 /// </summary>
 public abstract class BaseRetriever
@@ -18,7 +21,7 @@ public abstract class BaseRetriever
 	/// <param name="runId"></param>
 	/// <param name="callbacks"></param>
 	/// <returns></returns>
-	public async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(string query, string runId, CallbackManager? callbacks = null)
+	public virtual async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(string query, string runId, CallbackManager? callbacks = null)
 	{
 		var runManager = await callbacks.HandleRetrieverStart(this, query, runId);
 		try

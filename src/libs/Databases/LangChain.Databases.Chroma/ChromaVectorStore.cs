@@ -329,7 +329,6 @@ public class ChromaVectorStore : VectorStore
 
     private Dictionary<string, object> DeserializeMetadata(MemoryRecordMetadata metadata)
     {
-        // TODO: issue with this method is it returns values as JsonElements instead of primitive types
         return JsonSerializer.Deserialize<Dictionary<string, object>>(metadata.AdditionalMetadata, _jsonSerializerOptions)
                ?? new Dictionary<string, object>();
     }

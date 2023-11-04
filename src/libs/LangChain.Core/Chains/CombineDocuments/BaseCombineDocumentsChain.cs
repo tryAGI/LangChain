@@ -33,7 +33,7 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     public override async Task<IChainValues> CallAsync(IChainValues values)
     {
         var docs = values.Value[InputKey];
-        
+
         //Other keys are assumed to be needed for LLM prediction
         var otherKeys = values.Value
             .Where(kv => kv.Key != InputKey)

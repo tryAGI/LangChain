@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Chains\QuestionAnswering\" />
     <Folder Include="Docstore\" />
     <Folder Include="TextSplitters\" />
   </ItemGroup>
