@@ -32,7 +32,7 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     /// <returns></returns>
     public override async Task<IChainValues> CallAsync(IChainValues values)
     {
-        var docs = values.Value[InputKey];
+        var docs = values.Value["input_documents"];
 
         //Other keys are assumed to be needed for LLM prediction
         var otherKeys = values.Value

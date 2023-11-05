@@ -16,15 +16,14 @@ public class VectorStoreIndexWrapper
         _vectorStore = vectorStore;
     }
 
-    public Task<string?> QueryAsync(string question, BaseCombineDocumentsChain llm, string documentsKey= "input_documents", string questionKey="question", string outputKey= "output_text")
+    public Task<string?> QueryAsync(string question, BaseCombineDocumentsChain llm, string inputKey= "question", string outputKey= "output_text")
     {
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 llm,
                 _vectorStore.AsRetreiver())
             {
-                InputKey= questionKey,
-                DocumentsKey= documentsKey,
+                InputKey= inputKey,
                 OutputKey= outputKey,
             }
         );
