@@ -1,4 +1,5 @@
-﻿using LangChain.Chains.CombineDocuments;
+﻿using LangChain.Abstractions.Embeddings.Base;
+using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
@@ -9,6 +10,7 @@ using LangChain.Providers;
 using LangChain.Providers.Downloader;
 using LangChain.Providers.LLamaSharp;
 using LangChain.TextSplitters;
+using Microsoft.SemanticKernel.AI.Embeddings;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
@@ -103,6 +105,48 @@ public class LLamaSharpTests
 
         Assert.AreEqual("My dog name is Bob", closest.PageContent);
     }
+    
+    
+    #region Helpers
+    IEmbeddings CreateEmbeddings()
+    {
+        var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
+        {
+            PathToModelFile = ModelPath,
+            Temperature = 0
+        });
+        return embeddings;
+
+    }
+
+    IChatModel CreateInstructionModel()
+    {
+        var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
+        {
+            PathToModelFile = ModelPath,
+            Temperature = 0
+        });
+        return model;
+
+    }
+
+    VectorStoreIndexWrapper CreateVectorStoreIndex(IEmbeddings embeddings, string[] texts)
+    {
+        InMemoryVectorStore vectorStore = new InMemoryVectorStore(embeddings);
+        var textSplitter = new CharacterTextSplitter();
+        VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
+        var index = indexCreator.FromDocumentsAsync(texts.Select(x => new Document(x)).ToList()).Result;
+        return index;
+    }
+
+    PromptTemplate CreatePromptTemplate()
+    {
+        string prompt = "Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.\n\n{context}\n\nQuestion: {question}\nHelpful Answer:";
+        var template = new PromptTemplate(new PromptTemplateInput(prompt, new List<string>() { "context", "question" }));
+        return template;
+    }
+    #endregion
+
 
     [TestMethod]
 #if CONTINUOUS_INTEGRATION_BUILD
@@ -111,19 +155,9 @@ public class LLamaSharpTests
     public void DocumentsQuestionAnsweringTest()
     {
         // setup
-        var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
-        {
-            PathToModelFile = ModelPath,
-            Temperature = 0
-        });
+        var embeddings = CreateEmbeddings();
+        var model = CreateInstructionModel();
 
-        var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
-        {
-            PathToModelFile = ModelPath,
-            Temperature = 0
-        });
-
-        InMemoryVectorStore vectorStore = new InMemoryVectorStore(embeddings);
         string[] texts = new string[]
         {
             "I spent entire day watching TV",
@@ -131,30 +165,25 @@ public class LLamaSharpTests
             "This icecream is delicious",
             "It is cold in space"
         };
-        var textSplitter = new CharacterTextSplitter();
-        VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter); 
-        var index=indexCreator.FromDocumentsAsync(texts.Select(x=>new Document(x)).ToList()).Result;
+        
+        var index = CreateVectorStoreIndex(embeddings, texts);
+        var template = CreatePromptTemplate();
+        
+        var chain = new LlmChain(new LlmChainInput(model, template));
 
-        string prompt = "Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.\n\n{context}\n\nQuestion: {question}\nHelpful Answer:";
-        var template = new PromptTemplate(new PromptTemplateInput(prompt, new List<string>() { "context", "question" }));
-        var chain = new LlmChain(new LlmChainInput(model, template)
-        {
-            OutputKey = "text"
-        });
         var stuffDocumentsChain = new StuffDocumentsChain(new StuffDocumentsChainInput(chain)
         {
-            InputKey = "context",
-            DocumentVariableName = "context",
-            OutputKey = "text",
+            DocumentVariableName = "context", // variable name in prompt template
+                                              // for the documents
         });
 
 
         // test
-        var query = "What is the good name for a pet? Tell me only the name, no explanations.";
-        var answer=index.QueryAsync(query, stuffDocumentsChain,
-            documentsKey: "context",
-            questionKey: "question",
-            outputKey: "text").Result;
+        var question = "What is the good name for a pet?";
+        var answer=index.QueryAsync(question, stuffDocumentsChain,
+            inputKey:"question" // variable name in prompt template for the question
+                                // it would be passed by to stuffDocumentsChain
+            ).Result;
             
 
 

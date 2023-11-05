@@ -36,14 +36,15 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
     /// <exception cref="NotImplementedException"></exception>
     public override async Task<IChainValues> CallAsync(IChainValues values)
     {
+        
         var question = values.Value[_inputKey].ToString();
 
         var docs = (await GetDocsAsync(question)).ToList();
 
         var input = new Dictionary<string, object>
         {
-            [fields.DocumentsKey] = docs,
-            [_inputKey] = question
+            ["input_documents"] = docs,
+            [_inputKey]= question
         };
 
         var answer = await _combineDocumentsChain.Run(input);
