@@ -9,11 +9,11 @@ namespace LangChain.Indexes;
 
 public class VectorStoreIndexWrapper
 {
-    private readonly VectorStore _vectorStore;
+    public VectorStore Store { get; }
 
     public VectorStoreIndexWrapper(VectorStore vectorStore)
     {
-        _vectorStore = vectorStore;
+        Store = vectorStore;
     }
 
     public Task<string?> QueryAsync(string question, BaseCombineDocumentsChain llm, string inputKey= "question", string outputKey= "output_text")
@@ -21,7 +21,7 @@ public class VectorStoreIndexWrapper
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 llm,
-                _vectorStore.AsRetreiver())
+                Store.AsRetreiver())
             {
                 InputKey= inputKey,
                 OutputKey= outputKey,
