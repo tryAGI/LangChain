@@ -1,5 +1,6 @@
+using LangChain.Base;
 using UglyToad.PdfPig;
-
+using Document=LangChain.Docstore.Document;
 namespace LangChain.Sources;
 
 /// <summary>
@@ -7,10 +8,13 @@ namespace LangChain.Sources;
 /// </summary>
 public class PdfPigPdfSource : ISource
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public required string Path { get; init; }
+
+    public string Path { get; }
+
+    public PdfPigPdfSource(string path)
+    {
+        Path = path;
+    }
 
     /// <inheritdoc/>
     public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
@@ -19,14 +23,17 @@ public class PdfPigPdfSource : ISource
         {
             using PdfDocument document = PdfDocument.Open(Path, new ParsingOptions());
             var pages = document.GetPages();
-            var content = String.Join("\n\n", pages.Select(page => page.Text));
 
-            var documents = (Document.Empty with
+
+            var documents = pages.Select(page => new Document(page.Text, new Dictionary<string, object>
             {
-                Content = content,
-            }).AsArray();
+                {"path",Path},
+                {"page",page.Number}
+  
 
-            return Task.FromResult(documents);
+            })).ToArray();
+
+            return Task.FromResult<IReadOnlyCollection<Document>>(documents);
         }
         catch (Exception exception)
         {

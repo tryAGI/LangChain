@@ -1,5 +1,6 @@
 using Aspose.Pdf.Text;
-
+using LangChain.Base;
+using Document = LangChain.Docstore.Document;
 namespace LangChain.Sources;
 
 /// <summary>
@@ -20,13 +21,9 @@ public class AsposePdfSource : ISource
             using var pdfDocument = new Aspose.Pdf.Document(Path);
             var textAbsorber = new TextAbsorber();
             pdfDocument.Pages.Accept(textAbsorber);
-
-            var documents = (Document.Empty with
-            {
-                Content = textAbsorber.Text,
-            }).AsArray();
-
-            return Task.FromResult(documents);
+            
+            var documents = new Document[] { new(textAbsorber.Text, new Dictionary<string, object> { { "path", Path } }) };
+            return Task.FromResult<IReadOnlyCollection<Document>>(documents);
         }
         catch (Exception exception)
         {
