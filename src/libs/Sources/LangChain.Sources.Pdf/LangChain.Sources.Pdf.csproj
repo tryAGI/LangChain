@@ -16,12 +16,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj" />
+      <PackageReference Include="Aspose.PDF" />
+      <PackageReference Include="PdfPig" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Aspose.PDF" />
-      <PackageReference Include="PdfPig" />
+      <ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
     </ItemGroup>
 
 </Project>

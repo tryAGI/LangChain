@@ -23,17 +23,24 @@ public abstract class BaseRetriever
 	/// <returns></returns>
 	public virtual async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(string query, string runId, CallbackManager? callbacks = null)
 	{
-		var runManager = await callbacks.HandleRetrieverStart(this, query, runId);
-		try
+		CallbackManagerForRetrieverRun runManager=null;
+        if (callbacks != null)
+        {
+            runManager = await callbacks.HandleRetrieverStart(this, query, runId);
+        }
+        
+        try
 		{
 			var docs = await GetRelevantDocumentsAsync(query);
-			await runManager.HandleRetrieverEndAsync(query);
+			if(runManager!=null)
+			    await runManager.HandleRetrieverEndAsync(query);
 
 			return docs;
 		}
 		catch (Exception exception)
 		{
-			await runManager.HandleRetrieverErrorAsync(exception, query);
+            if (runManager != null)
+                await runManager.HandleRetrieverErrorAsync(exception, query);
 			throw;
 		}
 	}

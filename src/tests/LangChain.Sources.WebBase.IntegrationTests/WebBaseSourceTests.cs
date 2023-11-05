@@ -16,7 +16,7 @@ public class WebBaseSourceTests
         documents.Should().NotBeEmpty();
         var first = documents.First();
 
-        first.Content.Should().Contain("Web scraping, web harvesting, or web data extraction is");
-        first.Content.Should().Contain("This page was last edited on");
+        first.PageContent.Should().Contain("Web scraping, web harvesting, or web data extraction is");
+        first.PageContent.Should().Contain("This page was last edited on");
     }
 }

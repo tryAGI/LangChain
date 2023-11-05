@@ -39,7 +39,7 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
             .Where(kv => kv.Key != InputKey)
             .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-        var (output, returnDict) = await CombineDocsAsync(docs as List<Document>, otherKeys);
+        var (output, returnDict) = await CombineDocsAsync((docs as List<Document>), otherKeys);
 
         returnDict[OutputKey] = output;
 

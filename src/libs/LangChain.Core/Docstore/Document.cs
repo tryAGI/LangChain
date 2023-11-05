@@ -11,11 +11,16 @@ namespace LangChain.Docstore;
 /// </summary>
 public class Document
 {
-    public Document(string content, Dictionary<string, object> metadata)
+    public Document(string content, Dictionary<string, object>? metadata=null)
     {
+        metadata ??= new Dictionary<string, object>();
         PageContent = content;
         Metadata = metadata;
     }
+
+    public static Document Empty { get; } = new(
+        content: string.Empty,
+        metadata: new Dictionary<string, object>());
 
     public string PageContent { get; set; }
     public int LookupIndex { get; set; }

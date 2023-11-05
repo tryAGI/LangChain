@@ -9,20 +9,18 @@ namespace LangChain.VectorStores;
 /// </summary>
 public class VectorStoreRetriever : BaseRetriever
 {
-    private static readonly HashSet<string> _allowedSearchTypes = new() { "similarity", "similarity_score_threshold", "mmr" };
-
     public VectorStore Vectorstore { get; init; }
-    
-    // TODO: enum
-    private string SearchType { get; init; } = "similarity";
+
+
+    private ESearchType SearchType { get; init; }
     private float? ScoreThreshold { get; init; }
 
-    public VectorStoreRetriever(VectorStore vectorstore, string searchType, float? scoreThreshold)
+    public VectorStoreRetriever(VectorStore vectorstore, ESearchType searchType = ESearchType.Similarity,
+        float? scoreThreshold = null)
     {
-        if (!_allowedSearchTypes.Contains(searchType))
-            throw new ArgumentException($"{searchType} not supported");
+        SearchType = searchType;
 
-        if (SearchType == "similarity_score_threshold" && ScoreThreshold == null)
+        if (SearchType == ESearchType.SimilarityScoreThreshold && ScoreThreshold == null)
             throw new ArgumentException($"ScoreThreshold required for {SearchType}");
 
         Vectorstore = vectorstore;
@@ -34,14 +32,14 @@ public class VectorStoreRetriever : BaseRetriever
     {
         switch (SearchType)
         {
-            case "similarity":
+            case ESearchType.Similarity:
                 return await Vectorstore.SimilaritySearchAsync(query, k);
 
-            case "similarity_score_threshold":
+            case ESearchType.SimilarityScoreThreshold:
                 var docsAndSimilarities = await Vectorstore.SimilaritySearchWithRelevanceScores(query, k);
                 return docsAndSimilarities.Select(dws => dws.Item1);
 
-            case "mmr":
+            case ESearchType.MMR:
                 return await Vectorstore.MaxMarginalRelevanceSearch(query, k);
 
             default:

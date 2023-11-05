@@ -15,11 +15,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LangChain.Sources.Abstractions\LangChain.Sources.Abstractions.csproj" />
+      <PackageReference Include="AngleSharp" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AngleSharp" />
+      <ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
     </ItemGroup>
 
 </Project>

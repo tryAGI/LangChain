@@ -69,7 +69,7 @@ public abstract class TextSplitter
         return documents;
     }
 
-    public List<Document> SplitDocuments(List<Document> documents)
+    public List<Document> SplitDocuments(IEnumerable<Document> documents)
     {
         var texts = documents.Select(doc => doc.PageContent).ToList();
         var metadatas = documents.Select(doc => doc.Metadata).ToList();

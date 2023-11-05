@@ -12,7 +12,8 @@ public class BaseRetrievalQaChainInput(BaseCombineDocumentsChain combineDocument
     /// <summary> Return the source documents or not. </summary>
     public bool ReturnSourceDocuments { get; set; }
 
-    public string InputKey { get; set; } = "input_documents";
+    public string InputKey { get; set; } = "question";
+    public string DocumentsKey { get; set; } = "input_documents";
     public string OutputKey { get; set; } = "output_text";
     public bool? Verbose { get; set; }
     public CallbackManager? CallbackManager { get; set; }

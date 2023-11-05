@@ -14,7 +14,7 @@ public class StringPromptValue : BasePromptValue
 
     public override IReadOnlyCollection<Message> ToChatMessages()
     {
-        return new[] { Value.AsHumanMessage() };
+        return new[] { Value.AsSystemMessage() };
     }
 
     public override string ToString() => Value;

@@ -67,7 +67,7 @@ public abstract class BaseChain : IChain
     {
         var keysLengthDifferent = InputKeys.Length != input.Count;
 
-        if (!keysLengthDifferent)
+        if (keysLengthDifferent)
         {
             throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Length} but, received {input.Count}");
         }
