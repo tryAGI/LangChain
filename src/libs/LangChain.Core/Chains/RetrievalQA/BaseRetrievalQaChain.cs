@@ -38,12 +38,12 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
     {
         var question = values.Value[_inputKey].ToString();
 
-        var docs = await GetDocsAsync(question);
+        var docs = (await GetDocsAsync(question)).ToList();
 
         var input = new Dictionary<string, object>
         {
-            ["input_documents"] = docs,
-            ["question"] = question
+            [fields.DocumentsKey] = docs,
+            [_inputKey] = question
         };
 
         var answer = await _combineDocumentsChain.Run(input);

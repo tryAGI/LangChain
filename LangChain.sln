@@ -138,6 +138,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LLamaSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LLamaSharp.IntegrationTests", "src\tests\LangChain.Providers.LLamaSharp.IntegrationTests\LangChain.Providers.LLamaSharp.IntegrationTests.csproj", "{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.InMemory", "src\libs\Databases\LangChain.Databases.InMemory\LangChain.Databases.InMemory.csproj", "{A71579D1-CCAF-4F4C-B2E7-01968F11484F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -316,6 +318,10 @@ Global
 		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -369,6 +375,7 @@ Global
 		{302CD326-ADC3-484E-8F41-A54934A01D70} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{955F163E-8330-4240-934E-3849F6E366C7} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{A71579D1-CCAF-4F4C-B2E7-01968F11484F} = {C58D122C-808F-43F9-BB23-4E517046F533}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
