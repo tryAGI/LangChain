@@ -19,7 +19,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
     {
     }
 
-    public async Task HandleChainEndAsync(IChainValues output)
+    public async Task HandleChainEndAsync(IChainValues input, IChainValues output)
     {
         foreach (var handler in Handlers)
         {
@@ -27,7 +27,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
             {
                 try
                 {
-                    await handler.HandleChainEndAsync(output.Value, RunId, ParentRunId);
+                    await handler.HandleChainEndAsync(input.Value, output.Value, RunId, ParentRunId);
                 }
                 catch (Exception ex)
                 {
@@ -37,7 +37,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
         }
     }
 
-    public async Task HandleChainErrorAsync(Exception error)
+    public async Task HandleChainErrorAsync(Exception error, IChainValues input)
     {
         foreach (var handler in Handlers)
         {
@@ -45,7 +45,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
             {
                 try
                 {
-                    await handler.HandleChainErrorAsync(error, RunId, ParentRunId);
+                    await handler.HandleChainErrorAsync(error, RunId, input.Value, ParentRunId);
                 }
                 catch (Exception ex)
                 {

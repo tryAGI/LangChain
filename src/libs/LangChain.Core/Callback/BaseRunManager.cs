@@ -91,7 +91,6 @@ public abstract class BaseRunManager
 
     /// <summary>
     /// Return a manager that doesn't perform any operations.
-    /// TODO: test every BaseRunManager implementation for IRunManagerImplementation
     /// TODO: (static abstract not supported by some target runtimes)
     /// </summary>
     public static T GetNoopManager<T>() where T : IRunManagerImplementation<T>, new()

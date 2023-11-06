@@ -1,5 +1,6 @@
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
+using LangChain.Base.Tracers;
 using LangChain.LLMS;
 using LangChain.Providers;
 using LangChain.Retrievers;
@@ -111,7 +112,7 @@ public class CallbackManager
             {
                 try
                 {
-                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId ?? Guid.NewGuid().ToString(), ParentRunId, extraParams);
+                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId ?? Guid.NewGuid().ToString(), ParentRunId, extraParams: extraParams);
                 }
                 catch (Exception ex)
                 {
@@ -130,27 +131,18 @@ public class CallbackManager
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null)
     {
-        List<string> messageStrings = null;
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreLlm)
             {
-                /*try
+                try
                 {
-                    if (handler is IHandleChatModelStart handleChatModelStartHandler)
-                    {
-                        await handleChatModelStartHandler.HandleChatModelStart(llm, messages, runId ?? Guid.NewGuid().ToString(), _parentRunId, extraParams);
-                    }
-                    else if (handler is IHandleLLMStart handleLLMStartHandler)
-                    {
-                        messageStrings = messages.Select(x => GetBufferString(x)).ToList();
-                        await handleLLMStartHandler.HandleLLMStart(llm, messageStrings, runId ?? Guid.NewGuid().ToString(), _parentRunId, extraParams);
-                    }
+                    await handler.HandleChatModelStartAsync(llm, messages, runId ?? Guid.NewGuid().ToString(), ParentRunId, extraParams);
                 }
                 catch (Exception ex)
                 {
                     Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleLLMStart: {ex}");
-                }*/
+                }
             }
         }
 
@@ -354,32 +346,28 @@ public class CallbackManager
         var tracingEnabled = tracingV2Enabled || (Environment.GetEnvironmentVariable("LANGCHAIN_TRACING") != null);
         if (verboseEnabled || tracingEnabled)
         {
-            //TODO: Implement handlers
-            /*if (!callbackManager.Handlers.Any(h => h.Name == ConsoleCallbackHandler.Name))
+            // TODO: replace inlined name "console_callback_handler" with const
+            if (callbackManager.Handlers.All(h => h.Name != "console_callback_handler"))
             {
                 var consoleHandler = new ConsoleCallbackHandler();
-                callbackManager.AddHandler(consoleHandler, true);
+                callbackManager.AddHandler(consoleHandler, inherit: true);
             }
-            if (!callbackManager.Handlers.Any(h => h.Name == "langchain_tracer"))
-            {
-                if (tracingV2Enabled)
-                {
-                    callbackManager.AddHandler(await GetTracingV2CallbackHandler(), true);
-                }
-                else
-                {
-                    var session = Environment.GetEnvironmentVariable("LANGCHAIN_SESSION");
-                    callbackManager.AddHandler(await GetTracingCallbackHandler(session), true);
-                }
-            }*/
+
+            // TODO: implement handlers
+            // if (callbackManager.Handlers.All(h => h.Name != "langchain_tracer"))
+            // {
+            //     if (tracingV2Enabled)
+            //     {
+            //         callbackManager.AddHandler(await GetTracingV2CallbackHandler(), true);
+            //     }
+            //     else
+            //     {
+            //         var session = Environment.GetEnvironmentVariable("LANGCHAIN_SESSION");
+            //         callbackManager.AddHandler(await GetTracingCallbackHandler(session), true);
+            //     }
+            // }
         }
 
         return callbackManager;
-    }
-
-    private static string GetBufferString(List<Message> messages)
-    {
-        // Implement your logic here to convert messages to a string
-        throw new NotImplementedException();
     }
 }

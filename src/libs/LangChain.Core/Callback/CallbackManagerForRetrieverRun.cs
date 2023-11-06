@@ -1,4 +1,5 @@
 using LangChain.Base;
+using LangChain.Docstore;
 
 namespace LangChain.Callback;
 
@@ -30,8 +31,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
     /// <summary>
     /// Run when retriever ends running.
     /// </summary>
-    /// <param name="query"></param>
-    public async Task HandleRetrieverEndAsync(string query)
+    public async Task HandleRetrieverEndAsync(string query, IEnumerable<Document> docs)
     {
         foreach (var handler in Handlers)
         {
@@ -39,7 +39,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
             {
                 try
                 {
-                    await handler.HandleRetrieverEndAsync(query, RunId, ParentRunId);
+                    await handler.HandleRetrieverEndAsync(query, docs.ToList(), RunId, ParentRunId);
                 }
                 catch (Exception ex)
                 {
@@ -52,8 +52,6 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
     /// <summary>
     /// Run when retriever errors.
     /// </summary>
-    /// <param name="error"></param>
-    /// <param name="query"></param>
     public async Task HandleRetrieverErrorAsync(Exception error, string query)
     {
         foreach (var handler in Handlers)

@@ -109,13 +109,13 @@ public abstract class BaseChain(IChainInputs fields) : IChain
         {
             var result = await CallAsync(values, runManager);
 
-            await runManager.HandleChainEndAsync(result);
+            await runManager.HandleChainEndAsync(values, result);
 
             return result;
         }
         catch (Exception e)
         {
-            await runManager.HandleChainErrorAsync(e);
+            await runManager.HandleChainErrorAsync(e, values);
             throw;
         }
     }

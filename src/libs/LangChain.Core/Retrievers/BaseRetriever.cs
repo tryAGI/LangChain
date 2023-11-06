@@ -63,7 +63,7 @@ public abstract class BaseRetriever
 		try
 		{
 			var docs = await GetRelevantDocumentsCoreAsync(query, runManager);
-			await runManager.HandleRetrieverEndAsync(query);
+			await runManager.HandleRetrieverEndAsync(query, docs.ToList());
 
 			return docs;
 		}
