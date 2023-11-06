@@ -35,9 +35,6 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
         IgnoreChatModel = input.IgnoreChatModel;
     }
 
-    // public abstract Task HandleLlmStartAsync(BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
-        // Dictionary<string, object>? extraParams = null);
-
     /// <inheritdoc />
     public abstract Task HandleLlmStartAsync(
         BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
