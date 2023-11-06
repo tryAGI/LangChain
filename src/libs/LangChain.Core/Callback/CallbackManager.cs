@@ -106,13 +106,15 @@ public class CallbackManager
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null)
     {
+        runId ??= Guid.NewGuid().ToString();
+
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreLlm)
             {
                 try
                 {
-                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId ?? Guid.NewGuid().ToString(), ParentRunId, extraParams: extraParams);
+                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId, ParentRunId, extraParams: extraParams);
                 }
                 catch (Exception ex)
                 {
@@ -131,13 +133,15 @@ public class CallbackManager
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null)
     {
+        runId ??= Guid.NewGuid().ToString();
+
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreLlm)
             {
                 try
                 {
-                    await handler.HandleChatModelStartAsync(llm, messages, runId ?? Guid.NewGuid().ToString(), ParentRunId, extraParams);
+                    await handler.HandleChatModelStartAsync(llm, messages, runId, ParentRunId, extraParams);
                 }
                 catch (Exception ex)
                 {
@@ -154,13 +158,15 @@ public class CallbackManager
         IChainValues inputs,
         string? runId = null)
     {
+        runId ??= Guid.NewGuid().ToString();
+
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreChain)
             {
                 try
                 {
-                    await handler.HandleChainStartAsync(chain, inputs.Value, runId ?? Guid.NewGuid().ToString(), ParentRunId);
+                    await handler.HandleChainStartAsync(chain, inputs.Value, runId, ParentRunId);
                 }
                 catch (Exception ex)
                 {

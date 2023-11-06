@@ -6,6 +6,11 @@ public static class MemoryExtensions
 {
     public static IReadOnlyCollection<Message> WithHistory(this IReadOnlyCollection<Message> messages, BaseMemory? memory)
     {
+        if (memory == null)
+        {
+            return messages;
+        }
+
         var history = "These are our previous conversations:\n";
         var previousMessages = memory.LoadMemoryVariables(null);
         if (previousMessages.Value is { } messageDict &&
@@ -22,5 +27,4 @@ public static class MemoryExtensions
             history.AsHumanMessage(),
         }.Concat(messages).ToArray();
     }
-
 }

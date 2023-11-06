@@ -11,7 +11,7 @@ namespace LangChain.Base.Tracers;
 /// </summary>
 public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallbackHandler(input)
 {
-    private Dictionary<string, Run> RunMap { get; } = new();
+    protected Dictionary<string, Run> RunMap { get; } = new();
 
     protected abstract Task PersistRun(Run run);
 
@@ -34,13 +34,13 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
         var run = new Run
         {
-            id = runId,
+            Id = runId,
             ParentRunId = parentRunId,
             //todo:
             // serialized = serialized,
-            inputs = new Dictionary<string, object> { ["prompts"] = prompts },
-            extra = extraParams,
-            events = new List<Dictionary<string, object>>
+            Inputs = new Dictionary<string, object> { ["prompts"] = prompts },
+            ExtraData = extraParams,
+            Events = new List<Dictionary<string, object>>
             {
                 new()
                 {
@@ -48,12 +48,12 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
                     ["time"] = startTime
                 }
             },
-            start_time = startTime,
-            execution_order = executionOrder,
-            child_execution_order = executionOrder,
-            run_type = "llm",
-            tags = tags ?? new List<string>(),
-            name = name
+            StartTime = startTime,
+            ExecutionOrder = executionOrder,
+            ChildExecutionOrder = executionOrder,
+            RunType = "llm",
+            Tags = tags ?? new List<string>(),
+            Name = name
         };
 
         StartTrace(run);
@@ -67,14 +67,14 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_llm_error callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "llm")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "llm")
         {
             throw new TracerException($"No LLM Run found to be traced for {runId}");
         }
 
-        run.error = err.ToString();
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.end_time });
+        run.Error = err.ToString();
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
 
         EndTrace(run);
         await HandleLlmErrorAsync(run);
@@ -87,24 +87,24 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_llm_end callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "llm")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "llm")
         {
             throw new TracerException($"No LLM Run found to be traced for {runId}");
         }
 
-        run.outputs = output.LlmOutput;
+        run.Outputs = output.LlmOutput;
         for (int i = 0; i < output.Generations.Length; i++)
         {
             var generation = output.Generations[i];
-            var outputGeneration = (run.outputs["generations"] as List<Dictionary<string, string>>)[i];
+            var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>>)[i];
             if (outputGeneration.ContainsKey("message"))
             {
                 outputGeneration["message"] = (generation as ChatGeneration)?.Message;
             }
         }
 
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object> { { "name", "end" }, { "time", run.end_time } });
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object> { { "name", "end" }, { "time", run.EndTime } });
 
         EndTrace(run);
         await HandleLlmEndAsync(run);
@@ -117,14 +117,14 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_llm_new_token callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "llm")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "llm")
         {
             throw new TracerException($"No LLM Run found to be traced for {runId}");
         }
 
         var eventData = new Dictionary<string, object> { ["token"] = token };
 
-        run.events.Add(
+        run.Events.Add(
             new()
             {
                 ["name"] = "new_token",
@@ -162,19 +162,19 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
         var chainRun = new Run
         {
-            id = runId,
+            Id = runId,
             ParentRunId = parentRunId,
             // serialized=serialized,
-            inputs = inputs,
-            extra = extraParams,
-            events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
-            start_time = startTime,
-            execution_order = executionOrder,
-            child_execution_order = executionOrder,
-            child_runs = new(),
-            run_type = runType ?? "chain",
-            name = name,
-            tags = tags ?? new()
+            Inputs = inputs,
+            ExtraData = extraParams,
+            Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
+            StartTime = startTime,
+            ExecutionOrder = executionOrder,
+            ChildExecutionOrder = executionOrder,
+            ChildRuns = new(),
+            RunType = runType ?? "chain",
+            Name = name,
+            Tags = tags ?? new()
         };
 
         StartTrace(chainRun);
@@ -200,11 +200,11 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException($"No chain Run found to be traced for {runId}");
         }
 
-        run.error = err.ToString();
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.end_time });
+        run.Error = err.ToString();
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
 
-        run.inputs = inputs;
+        run.Inputs = inputs;
         EndTrace(run);
         await HandleChainErrorAsync(run);
     }
@@ -228,11 +228,11 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException($"No chain Run found to be traced for {runId}");
         }
 
-        run.outputs = outputs;
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.end_time });
+        run.Outputs = outputs;
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.EndTime });
 
-        run.inputs = inputs;
+        run.Inputs = inputs;
 
         EndTrace(run);
         await HandleChainEndAsync(run);
@@ -257,19 +257,19 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
         var run = new Run
         {
-            id = runId,
+            Id = runId,
             ParentRunId = parentRunId,
-            serialized = tool,
-            inputs = new Dictionary<string, object> { ["input"] = input },
-            extra = extraParams,
-            events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
-            start_time = startTime,
-            execution_order = executionOrder,
-            child_execution_order = executionOrder,
-            child_runs = new(),
-            run_type = "tool",
-            tags = tags ?? new(),
-            name = name,
+            Serialized = tool,
+            Inputs = new Dictionary<string, object> { ["input"] = input },
+            ExtraData = extraParams,
+            Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
+            StartTime = startTime,
+            ExecutionOrder = executionOrder,
+            ChildExecutionOrder = executionOrder,
+            ChildRuns = new(),
+            RunType = "tool",
+            Tags = tags ?? new(),
+            Name = name,
         };
 
         StartTrace(run);
@@ -286,14 +286,14 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_tool_error callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "tool")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "tool")
         {
             throw new TracerException($"No retriever Run found to be traced for {runId}");
         }
 
-        run.error = err.ToString();
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.end_time });
+        run.Error = err.ToString();
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
         EndTrace(run);
         await HandleToolErrorAsync(run);
     }
@@ -312,17 +312,17 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_tool_end callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "tool")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "tool")
         {
             throw new TracerException($"No retriever Run found to be traced for {runId}");
         }
 
-        run.outputs = new Dictionary<string, object>()
+        run.Outputs = new Dictionary<string, object>()
         {
             ["output"] = output
         };
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.end_time });
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.EndTime });
         EndTrace(run);
         await HandleToolEndAsync(run);
     }
@@ -347,19 +347,19 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
         var run = new Run
         {
-            id = runId,
-            name = name ?? "Retriever",
+            Id = runId,
+            Name = name ?? "Retriever",
             ParentRunId = parentRunId,
             // serialized=serialized,
-            inputs = new Dictionary<string, object> { ["query"] = query },
-            extra = extraParams,
-            events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
-            start_time = startTime,
-            execution_order = executionOrder,
-            child_execution_order = executionOrder,
-            tags = tags,
-            child_runs = new(),
-            run_type = "retriever",
+            Inputs = new Dictionary<string, object> { ["query"] = query },
+            ExtraData = extraParams,
+            Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
+            StartTime = startTime,
+            ExecutionOrder = executionOrder,
+            ChildExecutionOrder = executionOrder,
+            Tags = tags,
+            ChildRuns = new(),
+            RunType = "retriever",
         };
 
         StartTrace(run);
@@ -380,15 +380,15 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_retriever_end callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "retriever")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "retriever")
         {
             throw new TracerException($"No retriever Run found to be traced for {runId}");
         }
 
-        run.outputs = new Dictionary<string, object> { ["documents"] = documents };
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object>
-            { ["name"] = "end", ["time"] = run.end_time });
+        run.Outputs = new Dictionary<string, object> { ["documents"] = documents };
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object>
+            { ["name"] = "end", ["time"] = run.EndTime });
 
         EndTrace(run);
         await HandleRetrieverEndAsync(run);
@@ -405,17 +405,17 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             throw new TracerException("No run_id provided for on_retriever_end callback.");
         }
 
-        if (!RunMap.TryGetValue(runId, out var run) || run.run_type != "retriever")
+        if (!RunMap.TryGetValue(runId, out var run) || run.RunType != "retriever")
         {
             throw new TracerException($"No retriever Run found to be traced for {runId}");
         }
 
-        run.error = error.ToString();
-        run.end_time = DateTime.UtcNow;
-        run.events.Add(new Dictionary<string, object>
+        run.Error = error.ToString();
+        run.EndTime = DateTime.UtcNow;
+        run.Events.Add(new Dictionary<string, object>
         {
             ["name"] = "error",
-            ["time"] = run.end_time
+            ["time"] = run.EndTime
         });
 
         EndTrace(run);
@@ -512,7 +512,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// </summary>
     /// <param name="parentRun"></param>
     /// <param name="childRun"></param>
-    private static void AddChildRun(Run parentRun, Run childRun) => parentRun.child_runs.Add(childRun);
+    private static void AddChildRun(Run parentRun, Run childRun) => parentRun.ChildRuns.Add(childRun);
 
     //Start a trace for a run.
     private void StartTrace(Run run)
@@ -523,8 +523,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             {
                 AddChildRun(parentRun, run);
 
-                parentRun.child_execution_order =
-                    Math.Max(parentRun.child_execution_order ?? 0, run.child_execution_order ?? 0);
+                parentRun.ChildExecutionOrder =
+                    Math.Max(parentRun.ChildExecutionOrder ?? 0, run.ChildExecutionOrder ?? 0);
             }
             else
             {
@@ -532,7 +532,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             }
         }
 
-        RunMap[run.id] = run;
+        RunMap[run.Id] = run;
         OnRunCreate(run);
     }
 
@@ -547,10 +547,10 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         {
             if (RunMap.TryGetValue(run.ParentRunId, out var parentRun))
             {
-                if (run.child_execution_order != null && parentRun.child_execution_order != null &&
-                    run.child_execution_order > parentRun.child_execution_order)
+                if (run.ChildExecutionOrder != null && parentRun.ChildExecutionOrder != null &&
+                    run.ChildExecutionOrder > parentRun.ChildExecutionOrder)
                 {
-                    parentRun.child_execution_order = run.child_execution_order;
+                    parentRun.ChildExecutionOrder = run.ChildExecutionOrder;
                 }
             }
             else
@@ -559,7 +559,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             }
         }
 
-        RunMap.Remove(run.id);
+        RunMap.Remove(run.Id);
         OnRunUpdate(run);
     }
 
@@ -573,7 +573,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
         if (RunMap.TryGetValue(parentRunId, out var parentRun))
         {
-            if (parentRun.child_execution_order == null)
+            if (parentRun.ChildExecutionOrder == null)
             {
                 throw new TracerException($"Parent run with id {parentRunId} has no child execution order.");
             }
