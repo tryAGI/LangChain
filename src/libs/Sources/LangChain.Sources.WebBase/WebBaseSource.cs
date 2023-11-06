@@ -1,4 +1,6 @@
 using AngleSharp;
+using LangChain.Base;
+using LangChain.Docstore;
 
 namespace LangChain.Sources;
 
@@ -46,10 +48,7 @@ public class WebBaseSource : ISource
 
         content = html.TextContent;
 
-        var documents = (Document.Empty with
-        {
-            Content = content
-        }).AsArray();
+        var documents = new Document[] { new(content, new Dictionary<string, object> { { "url", url } }) };
 
         return documents;
     }

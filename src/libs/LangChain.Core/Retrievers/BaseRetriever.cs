@@ -69,7 +69,8 @@ public abstract class BaseRetriever
 		}
 		catch (Exception exception)
 		{
-			await runManager.HandleRetrieverErrorAsync(exception, query);
+            if (runManager != null)
+                await runManager.HandleRetrieverErrorAsync(exception, query);
 			throw;
 		}
 	}

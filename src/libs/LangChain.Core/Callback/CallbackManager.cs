@@ -193,9 +193,8 @@ public class CallbackManager
             {
                 try
                 {
-                    // TODO: pass retriever or dumpd(retriever) serialized: Dict[str, Any] ?
                     // TODO: pass extraParams ?
-                    await handler.HandleRetrieverStartAsync(query, runId, ParentRunId);
+                    await handler.HandleRetrieverStartAsync(retriever, query, runId, ParentRunId, extraParams: extraParams);
                 }
                 catch (Exception ex)
                 {

@@ -13,6 +13,6 @@ public class LlmChainInput(
 {
     public BasePromptTemplate Prompt { get; set; } = prompt;
     public IChatModel Llm { get; set; } = llm;
-    public string OutputKey { get; set; }
+    public string OutputKey { get; set; } = "text";
     public BaseMemory? Memory { get; set; } = memory;
 }

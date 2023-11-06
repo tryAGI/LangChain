@@ -2,6 +2,7 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Docstore;
 using LangChain.LLMS;
 using LangChain.Providers;
+using LangChain.Retrievers;
 using LangChain.Schema;
 
 namespace LangChain.Base.Tracers;
@@ -16,7 +17,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     protected abstract Task PersistRun(Run run);
 
     public override async Task HandleLlmStartAsync(
-        BaseLlm serialized,
+        BaseLlm llm,
         string[] prompts,
         string runId,
         string? parentRunId = null,
@@ -36,7 +37,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         {
             Id = runId,
             ParentRunId = parentRunId,
-            //todo:
+            //todo: pass llm or dumpd(llm)
             // serialized = serialized,
             Inputs = new Dictionary<string, object> { ["prompts"] = prompts },
             ExtraData = extraParams,
@@ -142,7 +143,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         throw new NotImplementedException();
     }
 
-    public override async Task HandleChainStartAsync(IChain chain,
+    public override async Task HandleChainStartAsync(
+        IChain chain,
         Dictionary<string, object> inputs,
         string runId,
         string? parentRunId = null,
@@ -330,7 +332,11 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// <summary>
     /// Run when Retriever starts running.
     /// </summary>
-    public override async Task HandleRetrieverStartAsync(string query, string runId, string? parentRunId,
+    public override async Task HandleRetrieverStartAsync(
+        BaseRetriever retriever,
+        string query,
+        string runId,
+        string? parentRunId,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
         string? runType = null,
@@ -350,6 +356,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             Id = runId,
             Name = name ?? "Retriever",
             ParentRunId = parentRunId,
+            // TODO: pass retriever or dumpd(retriever)?
             // serialized=serialized,
             Inputs = new Dictionary<string, object> { ["query"] = query },
             ExtraData = extraParams,

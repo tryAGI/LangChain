@@ -31,10 +31,10 @@ public class ChromaVectorStore : VectorStore
         HttpClient httpClient,
         string endpoint,
         IEmbeddings embeddings,
-        string collectionName = LangchainDefaultCollectionName)
+        string collectionName = LangchainDefaultCollectionName):base(embeddings)
     {
         _client = new ChromaClient(httpClient, endpoint);
-        Embeddings = embeddings;
+  
         _collectionName = collectionName;
 
         _store = new ChromaMemoryStore(_client);

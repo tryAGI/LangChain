@@ -9,8 +9,15 @@ namespace LangChain.VectorStores;
 /// </summary>
 public abstract class VectorStore
 {
-    protected IEmbeddings Embeddings { get; init; }
-    protected Func<float, float>? OverrideRelevanceScoreFn { get; init; }
+    protected IEmbeddings Embeddings { get; }
+    protected Func<float, float>? OverrideRelevanceScoreFn { get;  }
+
+    protected VectorStore(IEmbeddings embeddings, Func<float, float>? overrideRelevanceScoreFn=null)
+    {
+        Embeddings = embeddings;
+        OverrideRelevanceScoreFn = overrideRelevanceScoreFn;
+    }
+
 
     /// <summary>
     /// Run more documents through the embeddings and add to the vectorstore.
@@ -237,4 +244,9 @@ public abstract class VectorStore
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     protected abstract Func<float, float> SelectRelevanceScoreFn();
+
+    public VectorStoreRetriever AsRetreiver(ESearchType searchType=ESearchType.Similarity, float? scoreThreshold = null)
+    {
+        return new VectorStoreRetriever(this, searchType, scoreThreshold);
+    }
 }

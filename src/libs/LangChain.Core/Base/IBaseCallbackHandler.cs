@@ -2,6 +2,7 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Docstore;
 using LangChain.LLMS;
 using LangChain.Providers;
+using LangChain.Retrievers;
 using LangChain.Schema;
 
 namespace LangChain.Base;
@@ -111,6 +112,7 @@ public interface IBaseCallbackHandler
         string? parentRunId = null);
     
     public Task HandleRetrieverStartAsync(
+        BaseRetriever retriever,
         string query,
         string runId,
         string? parentRunId,
