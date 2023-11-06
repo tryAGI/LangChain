@@ -1,12 +1,13 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Base;
+using LangChain.Callback;
 
 namespace LangChain.Chains.Sequentials;
 
 /// <summary>
 /// 
 /// </summary>
-public class SequentialChainInput
+public class SequentialChainInput : IChainInputs
 {
     /// <summary>
     /// 
@@ -27,6 +28,11 @@ public class SequentialChainInput
     /// 
     /// </summary>
     public bool ReturnAll { get; }
+
+    public bool Verbose { get; set; }
+    public ICallbacks? Callbacks { get; set; }
+    public List<string> Tags { get; set; }
+    public Dictionary<string, object> Metadata { get; set; }
 
     /// <summary>
     /// 

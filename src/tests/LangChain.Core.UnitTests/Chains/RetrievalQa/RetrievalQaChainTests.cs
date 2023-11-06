@@ -28,7 +28,10 @@ public class RetrievalQaChainTests
                 m => m.GetRelevantDocumentsAsync(
                     It.Is<string>(x => x == "question?"),
                     It.IsAny<string>(),
-                    It.IsAny<CallbackManager>()),
+                    It.IsAny<ICallbacks?>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<List<string>>(),
+                    It.IsAny<Dictionary<string, object>>()),
                 Times.Once());
 
         combineDocumentsMock
@@ -49,8 +52,11 @@ public class RetrievalQaChainTests
                 .GetRelevantDocumentsAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<CallbackManager>()))
-            .Returns<string, string, CallbackManager>((query, _, _) =>
+                    It.IsAny<ICallbacks>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<List<string>>(),
+                    It.IsAny<Dictionary<string, object>>()))
+            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>>((query, _, _, _, _, _) =>
             {
                 var docs = new List<Document>
                 {

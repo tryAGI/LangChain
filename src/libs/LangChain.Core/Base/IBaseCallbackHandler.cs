@@ -1,4 +1,8 @@
+using LangChain.Abstractions.Chains.Base;
+using LangChain.Docstore;
 using LangChain.LLMS;
+using LangChain.Providers;
+using LangChain.Retrievers;
 using LangChain.Schema;
 
 namespace LangChain.Base;
@@ -16,21 +20,13 @@ public interface IBaseCallbackHandler
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="llm"></param>
-    /// <param name="prompts"></param>
-    /// <param name="runId"></param>
-    /// <param name="parentRunId"></param>
-    /// <param name="extraParams"></param>
-    /// <returns></returns>
-    public Task HandleLlmStartAsync(
-        BaseLlm llm,
-        string[] prompts,
-        string runId,
-        string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null);
+    public abstract Task HandleLlmStartAsync(
+        BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
+        List<string>? tags = null, Dictionary<string, object>? metadata = null,
+        string name = null, Dictionary<string, object>? extraParams = null);
 
     /// <summary>
-    /// 
+    /// Run on new LLM token. Only available when streaming is enabled.
     /// </summary>
     /// <param name="token"></param>
     /// <param name="runId"></param>
@@ -41,49 +37,40 @@ public interface IBaseCallbackHandler
         string runId,
         string? parentRunId = null);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="err"></param>
-    /// <param name="runId"></param>
-    /// <param name="parentRunId"></param>
-    /// <returns></returns>
     public Task HandleLlmErrorAsync(
         Exception err,
         string runId,
         string? parentRunId = null);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="output"></param>
-    /// <param name="runId"></param>
-    /// <param name="parentRunId"></param>
-    /// <returns></returns>
     public Task HandleLlmEndAsync(
         LlmResult output,
         string runId,
         string? parentRunId = null);
 
-    public Task HandleChatModelStartAsync(
-        Dictionary<string, object> llm,
-        List<List<object>> messages,
+    public Task HandleChatModelStartAsync(BaseLlm llm,
+        List<List<Message>> messages,
         string runId,
         string? parentRunId = null,
         Dictionary<string, object>? extraParams = null);
 
-    public Task HandleChainStartAsync(
-        Dictionary<string, object> chain,
+    public Task HandleChainStartAsync(IChain chain,
         Dictionary<string, object> inputs,
         string runId,
-        string? parentRunId = null);
+        string? parentRunId = null,
+        List<string>? tags = null,
+        Dictionary<string, object>? metadata = null,
+        string runType = null,
+        string name = null,
+        Dictionary<string, object>? extraParams = null);
 
     public Task HandleChainErrorAsync(
         Exception err,
         string runId,
+        Dictionary<string, object> inputs,
         string? parentRunId = null);
 
     public Task HandleChainEndAsync(
+        Dictionary<string, object>? inputs,
         Dictionary<string, object> outputs,
         string runId,
         string? parentRunId = null);
@@ -92,7 +79,12 @@ public interface IBaseCallbackHandler
         Dictionary<string, object> tool,
         string input,
         string runId,
-        string? parentRunId = null);
+        string? parentRunId = null,
+        List<string>? tags = null,
+        Dictionary<string, object>? metadata = null,
+        string runType = null,
+        string name = null,
+        Dictionary<string, object>? extraParams = null);
 
     public Task HandleToolErrorAsync(
         Exception err,
@@ -120,12 +112,19 @@ public interface IBaseCallbackHandler
         string? parentRunId = null);
     
     public Task HandleRetrieverStartAsync(
+        BaseRetriever retriever,
         string query,
         string runId,
-        string? parentRunId);
+        string? parentRunId,
+        List<string>? tags = null,
+        Dictionary<string, object>? metadata = null,
+        string? runType = null,
+        string? name = null,
+        Dictionary<string, object>? extraParams = null);
 
     public Task HandleRetrieverEndAsync(
         string query,
+        List<Document> documents,
         string runId,
         string? parentRunId);
 

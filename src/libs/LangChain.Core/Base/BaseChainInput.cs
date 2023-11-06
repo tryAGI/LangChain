@@ -2,8 +2,7 @@ using LangChain.Callback;
 
 namespace LangChain.Base;
 
-/// <inheritdoc />
-public interface IChainInputs : IBaseLangChainParams
+public interface IBaseChainInput
 {
     /// <summary>
     /// Optional list of callback handlers (or callback manager). Defaults to None.
@@ -13,6 +12,12 @@ public interface IChainInputs : IBaseLangChainParams
     /// for full details.
     /// </summary>
     public ICallbacks? Callbacks { get; set; }
+    
+    /// <summary>
+    /// Whether or not run in verbose mode. In verbose mode, some intermediate logs
+    /// will be printed to the console. 
+    /// </summary>
+    public bool Verbose { get; set; }
     
     /// <summary>
     /// Optional list of tags associated with the chain. Defaults to None.

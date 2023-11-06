@@ -12,7 +12,25 @@ namespace LangChain.Retrievers;
 /// </summary>
 public abstract class BaseRetriever
 {
-	protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsAsync(string query, int k = 4);
+	/// <summary>
+	/// Optional list of tags associated with the retriever. Defaults to None
+	/// These tags will be associated with each call to this retriever,
+	/// and passed as arguments to the handlers defined in `callbacks`.
+	/// You can use these to eg identify a specific instance of a retriever with its 
+	/// use case.
+	/// </summary>
+	public List<string> Tags { get; set; }
+	
+	/// <summary>
+	/// Optional metadata associated with the retriever. Defaults to None
+	/// This metadata will be associated with each call to this retriever,
+	/// and passed as arguments to the handlers defined in `callbacks`.
+	/// You can use these to eg identify a specific instance of a retriever with its 
+	/// use case.
+	/// </summary>
+	public Dictionary<string, object> Metadata { get; set; }
+
+	protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(string query, CallbackManagerForRetrieverRun runManager = null);
 
 	/// <summary>
 	/// Retrieve documents relevant to a query.
@@ -20,20 +38,32 @@ public abstract class BaseRetriever
 	/// <param name="query">string to find relevant documents for</param>
 	/// <param name="runId"></param>
 	/// <param name="callbacks"></param>
-	/// <returns></returns>
-	public virtual async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(string query, string runId, CallbackManager? callbacks = null)
+	/// <param name="verbose"></param>
+	/// <param name="tags"></param>
+	/// <param name="metadata"></param>
+	/// <returns>Relevant documents</returns>
+	public virtual async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(
+		string query,
+		string? runId = null,
+		ICallbacks? callbacks = null,
+		bool verbose = false,
+		List<string>? tags = null,
+		Dictionary<string, object>? metadata = null)
 	{
-		CallbackManagerForRetrieverRun runManager=null;
-        if (callbacks != null)
-        {
-            runManager = await callbacks.HandleRetrieverStart(this, query, runId);
-        }
-        
-        try
+		var callbackManager = await CallbackManager.Configure(
+			callbacks,
+			localCallbacks: null,
+			verbose: verbose,
+			localTags: Tags,
+			inheritableTags: tags,
+			localMetadata: Metadata,
+			inheritableMetadata: metadata);
+
+		var runManager = await callbackManager.HandleRetrieverStart(this, query, runId);
+		try
 		{
-			var docs = await GetRelevantDocumentsAsync(query);
-			if(runManager!=null)
-			    await runManager.HandleRetrieverEndAsync(query);
+			var docs = await GetRelevantDocumentsCoreAsync(query, runManager);
+			await runManager.HandleRetrieverEndAsync(query, docs.ToList());
 
 			return docs;
 		}

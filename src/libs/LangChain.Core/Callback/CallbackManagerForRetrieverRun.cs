@@ -1,19 +1,37 @@
 using LangChain.Base;
+using LangChain.Docstore;
 
 namespace LangChain.Callback;
 
-public class CallbackManagerForRetrieverRun : BaseRunManager
+
+
+/// <summary>
+/// Callback manager for retriever run.
+/// </summary>
+public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForRetrieverRun>
 {
+    public CallbackManagerForRetrieverRun()
+    {
+        
+    }
+
     public CallbackManagerForRetrieverRun(
         string runId,
         List<BaseCallbackHandler> handlers,
         List<BaseCallbackHandler> inheritableHandlers,
-        string? parentRunId = null)
-        : base(runId, handlers, inheritableHandlers, parentRunId)
+        string? parentRunId = null,
+        List<string>? tags = null,
+        List<string>? inheritableTags = null,
+        Dictionary<string, object>? metadata = null,
+        Dictionary<string,object>? inheritableMetadata = null)
+        : base(runId, handlers, inheritableHandlers, parentRunId, tags, inheritableTags, metadata, inheritableMetadata)
     {
     }
 
-    public async Task HandleRetrieverEndAsync(string query)
+    /// <summary>
+    /// Run when retriever ends running.
+    /// </summary>
+    public async Task HandleRetrieverEndAsync(string query, IEnumerable<Document> docs)
     {
         foreach (var handler in Handlers)
         {
@@ -21,7 +39,7 @@ public class CallbackManagerForRetrieverRun : BaseRunManager
             {
                 try
                 {
-                    await handler.HandleRetrieverEndAsync(query, RunId, ParentRunId);
+                    await handler.HandleRetrieverEndAsync(query, docs.ToList(), RunId, ParentRunId);
                 }
                 catch (Exception ex)
                 {
@@ -31,6 +49,9 @@ public class CallbackManagerForRetrieverRun : BaseRunManager
         }
     }
 
+    /// <summary>
+    /// Run when retriever errors.
+    /// </summary>
     public async Task HandleRetrieverErrorAsync(Exception error, string query)
     {
         foreach (var handler in Handlers)

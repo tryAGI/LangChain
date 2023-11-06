@@ -1,23 +1,25 @@
+using LangChain.Abstractions.Schema;
 using LangChain.Base;
-using LangChain.Schema;
 
 namespace LangChain.Callback;
 
-public class CallbackManagerForChainRun : BaseRunManager
+public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForChainRun>
 {
-    public CallbackManagerForChainRun(string runId, List<BaseCallbackHandler> handlers, List<BaseCallbackHandler> inheritableHandlers, string? parentRunId = null)
+    public CallbackManagerForChainRun()
+    {
+        
+    }
+
+    public CallbackManagerForChainRun(
+        string runId,
+        List<BaseCallbackHandler> handlers,
+        List<BaseCallbackHandler> inheritableHandlers,
+        string? parentRunId = null)
         : base(runId, handlers, inheritableHandlers, parentRunId)
     {
     }
 
-    public CallbackManager GetChild()
-    {
-        var manager = new CallbackManager(RunId);
-        manager.SetHandlers(InheritableHandlers);
-        return manager;
-    }
-
-    public async Task HandleChainEndAsync(ChainValues output)
+    public async Task HandleChainEndAsync(IChainValues input, IChainValues output)
     {
         foreach (var handler in Handlers)
         {
@@ -25,7 +27,7 @@ public class CallbackManagerForChainRun : BaseRunManager
             {
                 try
                 {
-                    await handler.HandleChainEndAsync(output.Value, RunId, ParentRunId);
+                    await handler.HandleChainEndAsync(input.Value, output.Value, RunId, ParentRunId);
                 }
                 catch (Exception ex)
                 {
@@ -35,39 +37,7 @@ public class CallbackManagerForChainRun : BaseRunManager
         }
     }
 
-    public Task HandleLlmStartAsync(Dictionary<string, object> llm, string[] prompts, string runId, string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChatModelStartAsync(Dictionary<string, object> llm, List<List<object>> messages, string runId, string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainStartAsync(Dictionary<string, object> chain, Dictionary<string, object> inputs, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task HandleChainErrorAsync(Exception error, string runId, string? parentRunId = null)
+    public async Task HandleChainErrorAsync(Exception error, IChainValues input)
     {
         foreach (var handler in Handlers)
         {
@@ -75,7 +45,7 @@ public class CallbackManagerForChainRun : BaseRunManager
             {
                 try
                 {
-                    await handler.HandleChainErrorAsync(error, RunId, ParentRunId);
+                    await handler.HandleChainErrorAsync(error, RunId, input.Value, ParentRunId);
                 }
                 catch (Exception ex)
                 {
@@ -85,37 +55,7 @@ public class CallbackManagerForChainRun : BaseRunManager
         }
     }
 
-    public Task HandleChainEndAsync(Dictionary<string, object> outputs, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolStartAsync(Dictionary<string, object> tool, string input, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolEndAsync(string output, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task HandleTextAsync(string text, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
     {
         throw new NotImplementedException();
     }

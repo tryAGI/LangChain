@@ -35,7 +35,10 @@ var chatPrompt = ChatPromptTemplate.FromPromptMessages(new List<BaseMessagePromp
     HumanMessagePromptTemplate.FromTemplate("{text}")
 });
 
-var chainB = new LlmChain(new LlmChainInput(chat, chatPrompt));
+var chainB = new LlmChain(new LlmChainInput(chat, chatPrompt)
+{
+    Verbose = true
+});
 
 var resultB = await chainB.CallAsync(new ChainValues(new Dictionary<string, object>(3)
 {

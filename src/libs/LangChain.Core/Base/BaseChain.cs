@@ -1,5 +1,6 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
+using LangChain.Callback;
 using LangChain.Chains;
 using LangChain.Schema;
 
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using LoadValues = Dictionary<string, object>;
 
 /// <inheritdoc />
-public abstract class BaseChain : IChain
+public abstract class BaseChain(IChainInputs fields) : IChain
 {
     const string RunKey = "__run";
 
@@ -57,7 +58,7 @@ public abstract class BaseChain : IChain
 
         throw new Exception("Return values have multiple keys, 'run' only supported when one key currently");
     }
-    
+
     /// <summary>
     /// Run the chain using a simple input/output.
     /// </summary>
@@ -83,8 +84,49 @@ public abstract class BaseChain : IChain
     /// Execute the chain, using the values provided.
     /// </summary>
     /// <param name="values">The <see cref="ChainValues"/> to use.</param>
+    /// <param name="callbacks"></param>
+    /// <param name="tags"></param>
+    /// <param name="metadata"></param>
     /// <returns></returns>
-    public abstract Task<IChainValues> CallAsync(IChainValues values);
+    public async Task<IChainValues> CallAsync(
+        IChainValues values,
+        ICallbacks? callbacks = null,
+        List<string>? tags = null,
+        Dictionary<string, object>? metadata = null)
+    {
+        var callbackManager = await CallbackManager.Configure(
+            callbacks,
+            fields.Callbacks,
+            fields.Verbose,
+            tags,
+            fields.Tags,
+            metadata,
+            fields.Metadata);
+        
+        var runManager = await callbackManager.HandleChainStart(this, values);
+
+        try
+        {
+            var result = await CallAsync(values, runManager);
+
+            await runManager.HandleChainEndAsync(values, result);
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            await runManager.HandleChainErrorAsync(e, values);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Execute the chain, using the values provided.
+    /// </summary>
+    /// <param name="values">The <see cref="ChainValues"/> to use.</param>
+    /// <param name="runManager"></param>
+    /// <returns></returns>
+    protected abstract Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager);
 
     /// <summary>
     /// 

@@ -3,9 +3,7 @@ namespace LangChain.Base;
 /// <inheritdoc />
 public abstract class Handler : BaseCallbackHandler
 {
-    /// <inheritdoc />
-    public override IBaseCallbackHandler Copy()
+    protected Handler(IBaseCallbackHandlerInput input) : base(input)
     {
-        throw new NotImplementedException();
     }
 }

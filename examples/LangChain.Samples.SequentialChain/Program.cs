@@ -12,6 +12,7 @@ var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new 
 
 var chainOne = new LlmChain(new LlmChainInput(llm, firstPrompt)
 {
+    Verbose = true,
     OutputKey = "company_name"
 });
 
@@ -20,11 +21,15 @@ var secondPrompt = new PromptTemplate(new PromptTemplateInput(secondTemplate, ne
 
 var chainTwo = new LlmChain(new LlmChainInput(llm, secondPrompt));
 
-var overallChain = new SequentialChain(new SequentialChainInput(new []
-{
-    chainOne,
-    chainTwo
-}, new []{"product"}));
+var overallChain = new SequentialChain(new SequentialChainInput(
+    new[]
+    {
+        chainOne,
+        chainTwo
+    },
+    new[] { "product" },
+    new[] { "company_name", "text" }
+));
 
 var result = await overallChain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
 {
@@ -32,4 +37,4 @@ var result = await overallChain.CallAsync(new ChainValues(new Dictionary<string,
 }));
 
 Console.WriteLine(result.Value["text"]);
-Console.WriteLine("Test");
+Console.WriteLine("SequentialChain sample finished.");

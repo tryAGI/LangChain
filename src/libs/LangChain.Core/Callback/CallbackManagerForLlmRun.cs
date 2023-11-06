@@ -10,32 +10,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
     {
     }
 
-    public Task HandleToolEndAsync(string output, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleTextAsync(string text, string runId, string parentRunId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleLlmStartAsync(Dictionary<string, object> llm, string[] prompts, string runId, string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
-    {
-        throw new NotImplementedException();
-    }
-
+    // TODO: remove?
     public async Task HandleLlmNewTokenAsync(string token, string runId, string parentRunId)
     {
         foreach (var handler in Handlers)
@@ -88,36 +63,5 @@ public class CallbackManagerForLlmRun : BaseRunManager
                 }
             }
         }
-    }
-
-    public Task HandleChatModelStartAsync(Dictionary<string, object> llm, List<List<object>> messages, string runId, string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainStartAsync(Dictionary<string, object> chain, Dictionary<string, object> inputs, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleChainEndAsync(Dictionary<string, object> outputs, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolStartAsync(Dictionary<string, object> tool, string input, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task HandleToolErrorAsync(Exception err, string runId, string? parentRunId = null)
-    {
-        throw new NotImplementedException();
     }
 }
