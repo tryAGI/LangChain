@@ -109,7 +109,7 @@ Function result: GetCurrentWeather -> {"location":"Dubai, UAE","temperature":22,
 AI: The weather in Dubai, UAE today is sunny with a temperature of 22 degrees Celsius.
 ```
 
-Also see [examples](./src/examples) for example usage.
+Also see [examples](./examples) for example usage.
 
 ## Support
 
