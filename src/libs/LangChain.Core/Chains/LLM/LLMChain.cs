@@ -73,10 +73,24 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '<'));
         }
         
-        if(string.IsNullOrEmpty(OutputKey))
-            return new ChainValues(response.Messages.Last().Content);
+        Dictionary<string, object> returnDict = new Dictionary<string, object>();
+
+
+        if (string.IsNullOrEmpty(OutputKey))
+            returnDict["text"] = response.Messages.Last().Content;
+        else
+            returnDict[OutputKey] = response.Messages.Last().Content;
             
-        return new ChainValues(OutputKey,response.Messages.Last().Content);
+        // merge dictionaries
+        foreach (var kv in returnDict)
+        {
+            if (!returnDict.ContainsKey(kv.Key))
+            {
+                values.Value[kv.Key] = returnDict[kv.Key];
+            }
+        }
+
+        return values;
     }
     
     public async Task<object> Predict(ChainValues values)

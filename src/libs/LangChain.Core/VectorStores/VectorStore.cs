@@ -166,7 +166,7 @@ public abstract class VectorStore
     /// 
     /// Maximal marginal relevance optimizes for similarity to query AND diversity among selected documents.
     /// </summary>
-    /// <param name="query">Query to look up documents similar to.</param>
+    /// <param name="query">Set to look up documents similar to.</param>
     /// <param name="k">Number of Documents to return. Defaults to 4.</param>
     /// <param name="fetchK">Number of Documents to fetch to pass to MMR algorithm.</param>
     /// <param name="lambdaMult"> Number between 0 and 1 that determines the degree

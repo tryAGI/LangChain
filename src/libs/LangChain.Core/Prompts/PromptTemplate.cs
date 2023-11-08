@@ -115,7 +115,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     {
         if (string.IsNullOrEmpty(data.Template))
         {
-            throw new Exception("Prompt template must have a template");
+            throw new Exception("Template template must have a template");
         }
 
         return new PromptTemplate(new PromptTemplateInput(data.Template, data.InputVariables)
@@ -159,7 +159,29 @@ public class PromptTemplate : BaseStringPromptTemplate
             return res + (node as LiteralNode).Text;
         });
     }
+    /// <summary>
+    /// Safer version of <see cref="InterpolateFString"/> that will not throw an exception if a variable is missing.
+    /// </summary>
+    public static string InterpolateFStringSafe(string template, Dictionary<string, object> values)
+    {
+        List<ParsedFStringNode> nodes = ParseFString(template);
+        return nodes.Aggregate("", (res, node) =>
+        {
+            if (node.Type == "variable")
+            {
+                var parsedNode = node as VariableNode;
 
+                if (values.ContainsKey(parsedNode.Name))
+                {
+                    return res + values[parsedNode.Name];
+                }
+
+                return res + "{" + parsedNode.Name + "}";
+            }
+
+            return res + (node as LiteralNode).Text;
+        });
+    }
     public static List<ParsedFStringNode> ParseFString(string template)
     {
         // Core logic replicated from internals of pythons built in Formatter class.

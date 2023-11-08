@@ -13,7 +13,7 @@ public class StuffDocumentsChainInput(ILlmChain llmChain) : BaseCombineDocuments
     public ILlmChain LlmChain { get; } = llmChain;
 
     /// <summary>
-    /// Prompt to use to format each document, gets passed to `format_document`.
+    /// Template to use to format each document, gets passed to `format_document`.
     /// </summary>
     public BasePromptTemplate DocumentPrompt { get; set; } = new PromptTemplate(
         new PromptTemplateInput(

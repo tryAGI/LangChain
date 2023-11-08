@@ -6,6 +6,16 @@ namespace LangChain.Providers.LLamaSharp;
 
 public class LLamaSharpEmbeddings:IEmbeddings
 {
+
+    public static LLamaSharpEmbeddings FromPath(string path, float temperature = 0)
+    {
+        return new LLamaSharpEmbeddings(new LLamaSharpConfiguration
+        {
+            PathToModelFile = path,
+            Temperature = temperature
+        });
+
+    }
     protected readonly LLamaSharpConfiguration _configuration;
     protected readonly LLamaWeights _model;
     protected readonly ModelParams _parameters;

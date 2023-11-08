@@ -42,10 +42,19 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
             .ToDictionary(kv => kv.Key, kv => kv.Value);
 
         var (output, returnDict) = await CombineDocsAsync((docs as List<Document>), otherKeys);
-
+        
         returnDict[OutputKey] = output;
 
-        return new ChainValues(returnDict);
+        // merge dictionaries
+        foreach (var kv in returnDict)
+        {
+            if (!returnDict.ContainsKey(kv.Key))
+            {
+                values.Value[kv.Key] = returnDict[kv.Key];
+            }
+        }
+
+        return values;
     }
 
     /// <summary>

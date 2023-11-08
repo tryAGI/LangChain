@@ -5,12 +5,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Docstore;
+using LangChain.Indexes;
+using LangChain.TextSplitters;
 using LangChain.VectorStores;
 
 namespace LangChain.Databases.InMemory
 {
     public class InMemoryVectorStore:VectorStore
     {
+        public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(IEmbeddings embeddings,List<Document> documents)
+        {
+            InMemoryVectorStore vectorStore = new InMemoryVectorStore(embeddings);
+            var textSplitter = new CharacterTextSplitter();
+            VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
+            var index = await indexCreator.FromDocumentsAsync(documents);
+            return index;
+        }
 
         private readonly Func<float[], float[], float> _distanceFunction;
         List<(float[] vec, string id, Document doc)> _storage = new List<(float[] vec, string id, Document doc)>();

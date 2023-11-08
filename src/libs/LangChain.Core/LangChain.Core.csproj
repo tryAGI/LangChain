@@ -7,6 +7,12 @@
     <NoWarn>$(NoWarn);CA1716;CA1819;CA1012;CA2227;CA1707;CA2214;CA1854;CA1040;CA1051;CS1591;CS8600;CS8602;CS8603;CS1998;CS1574;CS8604;CS0219;CS8629;CA2237</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Chains\QuestionAnswering\**" />
+    <EmbeddedResource Remove="Chains\QuestionAnswering\**" />
+    <None Remove="Chains\QuestionAnswering\**" />
+  </ItemGroup>
+
   <ItemGroup Label="Usings">
     <Using Remove="System.Net.Http" />
   </ItemGroup>
@@ -32,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Chains\QuestionAnswering\" />
+    <Folder Include="Chains\StackableChains\Exceptions\" />
     <Folder Include="Docstore\" />
     <Folder Include="TextSplitters\" />
   </ItemGroup>

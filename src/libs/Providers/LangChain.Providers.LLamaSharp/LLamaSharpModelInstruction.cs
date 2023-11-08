@@ -6,6 +6,16 @@ namespace LangChain.Providers.LLamaSharp;
 
 public class LLamaSharpModelInstruction:LLamaSharpModelBase
 {
+    public static LLamaSharpModelInstruction FromPath(string path, float temperature = 0)
+    {
+        return new LLamaSharpModelInstruction(new LLamaSharpConfiguration
+        {
+            PathToModelFile = path,
+            Temperature = temperature
+        });
+
+    }
+
     public LLamaSharpModelInstruction(LLamaSharpConfiguration configuration) : base(configuration)
     {
     }

@@ -13,7 +13,7 @@ public class VectorStoreRetriever : BaseRetriever
     public VectorStore Vectorstore { get; init; }
     
     private ESearchType SearchType { get; init; }
-    private int K { get; init; } = 4;
+    public int K { get; set; } = 4;
 
     private float? ScoreThreshold { get; init; }
 
