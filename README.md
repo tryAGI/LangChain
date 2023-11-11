@@ -111,6 +111,17 @@ AI: The weather in Dubai, UAE today is sunny with a temperature of 22 degrees Ce
 
 Also see [examples](./examples) for example usage.
 
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## Support
 
 Priority place for bugs: https://github.com/tryAGI/LangChain/issues  
