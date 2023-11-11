@@ -8,6 +8,17 @@
   "commitConvention": "angular",
   "contributors": [
     {
+      "login": "HavenDV",
+      "name": "Konstantin S.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3002068?v=4",
+      "profile": "https://www.upwork.com/freelancers/~017b1ad6f6af9cc189",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
+    },
+    {
       "login": "TesAnti",
       "name": "TesAnti",
       "avatar_url": "https://avatars.githubusercontent.com/u/8780022?v=4",
