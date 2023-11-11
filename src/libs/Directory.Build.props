@@ -42,7 +42,7 @@
 
     <PropertyGroup Label="Versioning">
         <MinVerTagPrefix>v</MinVerTagPrefix>
-        <MinVerDefaultPreReleaseIdentifiers>dev.0</MinVerDefaultPreReleaseIdentifiers>
+        <MinVerDefaultPreReleaseIdentifiers>dev</MinVerDefaultPreReleaseIdentifiers>
     </PropertyGroup>
     
     <ItemGroup Label="Versioning">
