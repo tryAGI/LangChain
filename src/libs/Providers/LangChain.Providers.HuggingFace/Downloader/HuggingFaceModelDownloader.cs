@@ -36,7 +36,7 @@ public class HuggingFaceModelDownloader
     /// <summary>
     /// Downloads a model from HuggingFace with caching and return path to it
     /// </summary>
-    public async Task<string> GetModel(string repository, string fileName, string version="master", string storagePath = null)
+    public async Task<string> GetModel(string repository, string fileName, string version = "master", string? storagePath = null)
     {
         storagePath ??= HuggingFaceModelDownloader.DefaultStoragePath;
         var repositoryPath = Path.Combine(storagePath, repository);

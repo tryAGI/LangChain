@@ -9,4 +9,8 @@ public class StackableChainException : Exception
     public StackableChainException()
     {
     }
+
+    public StackableChainException(string message) : base(message)
+    {
+    }
 }

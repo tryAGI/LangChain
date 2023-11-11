@@ -189,13 +189,13 @@ public class ChromaVectorStore : VectorStore
     }
 
     /// <inheritdoc />
-    public override async Task<IEnumerable<Document>> MaxMarginalRelevanceSearchByVector(
+    public override Task<IEnumerable<Document>> MaxMarginalRelevanceSearchByVector(
         IEnumerable<float> embedding,
         int k = 4,
         int fetchK = 20,
         float lambdaMult = 0.5f,
         CancellationToken cancellationToken = default)
-        => throw new NotSupportedException("Querying not supported by SemanticKernel impl.");
+        => Task.FromResult<IEnumerable<Document>>(throw new NotSupportedException("Querying not supported by SemanticKernel impl."));
 
     /// <inheritdoc />
     public override async Task<IEnumerable<Document>> MaxMarginalRelevanceSearch(

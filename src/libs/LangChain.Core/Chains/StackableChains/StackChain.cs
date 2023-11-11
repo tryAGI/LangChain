@@ -9,8 +9,8 @@ public class StackChain : BaseStackableChain
     private readonly BaseStackableChain _a;
     private readonly BaseStackableChain _b;
 
-    public string[] IsolatedInputKeys { get; set; } = new string[0];
-    public string[] IsolatedOutputKeys { get; set; } = new string[0];
+    public string[] IsolatedInputKeys { get; set; } = Array.Empty<string>();
+    public string[] IsolatedOutputKeys { get; set; } = Array.Empty<string>();
 
     public StackChain(BaseStackableChain a, BaseStackableChain b)
     {

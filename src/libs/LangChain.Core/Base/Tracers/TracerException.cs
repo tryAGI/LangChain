@@ -12,4 +12,8 @@ public class TracerException : Exception
     public TracerException()
     {
     }
+
+    public TracerException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }
