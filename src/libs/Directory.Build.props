@@ -41,8 +41,8 @@
     </ItemGroup>
 
     <PropertyGroup Label="Versioning">
-        <MinVerMinimumMajorMinor>0.11</MinVerMinimumMajorMinor>
-        <MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <MinVerDefaultPreReleaseIdentifiers>dev.0</MinVerDefaultPreReleaseIdentifiers>
     </PropertyGroup>
     
     <ItemGroup Label="Versioning">
