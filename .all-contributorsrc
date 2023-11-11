@@ -28,6 +28,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "khoroshevj",
+      "name": "Khoroshev Evgeniy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13628506?v=4",
+      "profile": "https://github.com/khoroshevj",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
