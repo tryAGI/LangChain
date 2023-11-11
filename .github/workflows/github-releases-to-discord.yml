@@ -5,6 +5,7 @@ on:
 
 jobs:
   github-releases-to-discord:
+    name: GitHub Releases To Discord
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
