@@ -5,12 +5,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{23506EB8-1B27-4FD0-B570-2F5EF2C33034}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		.github\dependabot.yml = .github\dependabot.yml
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Packages.props = src\Directory.Packages.props
-		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		LICENSE = LICENSE
-		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -139,6 +136,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.LLamaSharp.IntegrationTests", "src\tests\LangChain.Providers.LLamaSharp.IntegrationTests\LangChain.Providers.LLamaSharp.IntegrationTests.csproj", "{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.InMemory", "src\libs\Databases\LangChain.Databases.InMemory\LangChain.Databases.InMemory.csproj", "{A71579D1-CCAF-4F4C-B2E7-01968F11484F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
+		.github\workflows\todo.yml = .github\workflows\todo.yml
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -376,6 +381,7 @@ Global
 		{955F163E-8330-4240-934E-3849F6E366C7} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{A71579D1-CCAF-4F4C-B2E7-01968F11484F} = {C58D122C-808F-43F9-BB23-4E517046F533}
+		{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B} = {23506EB8-1B27-4FD0-B570-2F5EF2C33034}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

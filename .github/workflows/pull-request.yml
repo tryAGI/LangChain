@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-test:
-    name: Build abd test
+    name: Build and test
     uses: HavenDV/workflows/.github/workflows/dotnet_build-test-publish.yml@main
     with:
       generate-build-number: false
