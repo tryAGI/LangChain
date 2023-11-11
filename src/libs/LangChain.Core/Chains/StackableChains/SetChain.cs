@@ -4,10 +4,10 @@ using LangChain.Callback;
 
 namespace LangChain.Chains.HelperChains;
 
-public class SetChain: BaseStackableChain
+public class SetChain : BaseStackableChain
 {
     private readonly string _query;
-    public SetChain(string query, string outputKey="query")
+    public SetChain(string query, string outputKey = "query")
     {
         OutputKeys = new[] { outputKey };
         _query = query;

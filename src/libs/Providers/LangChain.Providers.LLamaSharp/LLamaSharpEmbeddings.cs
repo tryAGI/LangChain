@@ -4,7 +4,7 @@ using LLama;
 
 namespace LangChain.Providers.LLamaSharp;
 
-public class LLamaSharpEmbeddings:IEmbeddings
+public class LLamaSharpEmbeddings : IEmbeddings
 {
 
     public static LLamaSharpEmbeddings FromPath(string path, float temperature = 0)

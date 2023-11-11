@@ -12,7 +12,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
 {
     public CallbackManagerForRetrieverRun()
     {
-        
+
     }
 
     public CallbackManagerForRetrieverRun(
@@ -23,7 +23,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
         List<string>? tags = null,
         List<string>? inheritableTags = null,
         Dictionary<string, object>? metadata = null,
-        Dictionary<string,object>? inheritableMetadata = null)
+        Dictionary<string, object>? inheritableMetadata = null)
         : base(runId, handlers, inheritableHandlers, parentRunId, tags, inheritableTags, metadata, inheritableMetadata)
     {
     }

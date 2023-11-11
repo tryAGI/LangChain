@@ -21,7 +21,7 @@ public class TextSplitterTests
         var actual = texts[0].PageContent;
 
         Console.WriteLine(texts[0]);
-        Assert.AreEqual(expected,actual);
+        Assert.AreEqual(expected, actual);
 
     }
 
@@ -39,8 +39,8 @@ public class TextSplitterTests
         };
 
         var documents =
-            textSplitter.CreateDocuments(new List<string>() {state_of_the_union_txt, state_of_the_union_txt},metadatas);
-        
+            textSplitter.CreateDocuments(new List<string>() { state_of_the_union_txt, state_of_the_union_txt }, metadatas);
+
         var expected = 1;
         var actual = (int)documents[0].Metadata["document"];
 
@@ -56,19 +56,19 @@ public class TextSplitterTests
 
         var state_of_the_union_txt = H.Resources.state_of_the_union_txt.AsString();
         var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 100, chunkOverlap: 20);
-        
-        
+
+
         var texts = textSplitter.CreateDocuments(new List<string>() { state_of_the_union_txt });
 
 
         var expected1 =
             "Madam Speaker, Madam Vice President, our First Lady and Second Gentleman. Members of Congress and";
         var actual1 = texts[0].PageContent;
-        Assert.AreEqual(expected1,actual1);
+        Assert.AreEqual(expected1, actual1);
 
         var expected2 = "of Congress and the Cabinet. Justices of the Supreme Court. My fellow Americans.";
         var actual2 = texts[1].PageContent;
-        Assert.AreEqual(expected2,actual2);
+        Assert.AreEqual(expected2, actual2);
 
 
     }

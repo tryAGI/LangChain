@@ -16,7 +16,7 @@ namespace LangChain.Databases.Chroma.IntegrationTests;
 #endif
 public class ChromaTests
 {
-    public Dictionary<string,float[]> EmbeddingsDict { get; } = new();
+    public Dictionary<string, float[]> EmbeddingsDict { get; } = new();
 
     public ChromaTests()
     {
@@ -68,7 +68,7 @@ public class ChromaTests
 
         var firstId = ids.First();
         var secondId = ids.Skip(1).First();
-        
+
         firstId.Should().NotBeEmpty();
         secondId.Should().NotBeEmpty();
 
@@ -76,7 +76,7 @@ public class ChromaTests
         actualFirstDocument.Should().NotBeNull();
         actualFirstDocument.PageContent.Should().BeEquivalentTo(documents[0].PageContent);
         actualFirstDocument.Metadata["color"].Should().BeEquivalentTo(documents[0].Metadata["color"]);
-        
+
         var actualSecondDocument = await chroma.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
         actualSecondDocument.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
@@ -99,7 +99,7 @@ public class ChromaTests
             ["double"] = 1.01d,
             ["guid"] = 1.01d,
         };
-        
+
         metadatas[1] = new Dictionary<string, object>
         {
             ["color"] = "orange"
@@ -135,7 +135,7 @@ public class ChromaTests
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
         var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
-        
+
         var documents = new[]
         {
             new Document("apple", new Dictionary<string, object>
@@ -220,7 +220,7 @@ public class ChromaTests
         similar.Should().HaveCount(5);
 
         var first = similar.First();
-        
+
         first.Item1.PageContent.Should().BeEquivalentTo("lemon");
         first.Item2.Should().BeGreaterOrEqualTo(1f);
     }

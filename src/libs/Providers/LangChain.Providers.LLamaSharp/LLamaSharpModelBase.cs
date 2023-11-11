@@ -3,11 +3,11 @@ using LLama;
 
 namespace LangChain.Providers.LLamaSharp;
 
-public abstract class LLamaSharpModelBase:IChatModel
+public abstract class LLamaSharpModelBase : IChatModel
 {
     public string Id { get; }
     public Usage TotalUsage { get; protected set; }
-    public int ContextLength =>_configuration.ContextSize;
+    public int ContextLength => _configuration.ContextSize;
 
     protected readonly LLamaSharpConfiguration _configuration;
     protected readonly LLamaWeights _model;

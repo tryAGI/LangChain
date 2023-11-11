@@ -6,7 +6,7 @@
 public class HuggingFaceModelDownloader
 {
     public static HuggingFaceModelDownloader Instance { get; } = new HuggingFaceModelDownloader();
-    
+
 
     /// <summary>
     /// The HttpClient used to download the models
@@ -21,7 +21,7 @@ public class HuggingFaceModelDownloader
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "LangChain", "CSharp", "Models");
 
-    private async Task DownloadModel(string url, string path, CancellationToken? cancellationToken=null)
+    private async Task DownloadModel(string url, string path, CancellationToken? cancellationToken = null)
     {
         var client = HttpClient;
 
@@ -29,7 +29,7 @@ public class HuggingFaceModelDownloader
         {
             using ProgressBar progress = new ProgressBar();
 
-            await client.DownloadAsync(url, file, progress, cancellationToken??CancellationToken.None).ConfigureAwait(false);
+            await client.DownloadAsync(url, file, progress, cancellationToken ?? CancellationToken.None).ConfigureAwait(false);
         }
     }
 
@@ -52,7 +52,7 @@ public class HuggingFaceModelDownloader
             Directory.CreateDirectory(directory);
         }
         var downloadMarkerPath = modelPath + ".hfdownload"; // to verify if the download is complete
-        if (!File.Exists(modelPath)||File.Exists(downloadMarkerPath))
+        if (!File.Exists(modelPath) || File.Exists(downloadMarkerPath))
         {
             File.WriteAllText(downloadMarkerPath, "");
             File.Delete(modelPath);
@@ -61,7 +61,7 @@ public class HuggingFaceModelDownloader
             await DownloadModel(downloadUrl, modelPath).ConfigureAwait(false);
             File.Delete(downloadMarkerPath);
         }
-        
+
 
         return modelPath;
     }

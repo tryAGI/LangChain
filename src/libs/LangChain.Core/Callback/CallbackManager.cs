@@ -290,7 +290,7 @@ public class CallbackManager
         List<string>? localTags = null,
         List<string>? inheritableTags = null,
         Dictionary<string, object>? localMetadata = null,
-        Dictionary<string,object>? inheritableMetadata = null)
+        Dictionary<string, object>? inheritableMetadata = null)
     {
         // TODO: parentRunId using AsyncLocal
         // python version using `contextvars` lib
@@ -342,7 +342,7 @@ public class CallbackManager
 
         if (inheritableTags != null) callbackManager.AddTags(inheritableTags);
         if (localTags != null) callbackManager.AddTags(localTags, inherit: false);
-        
+
         if (inheritableMetadata != null) callbackManager.AddMetadata(inheritableMetadata);
         if (localMetadata != null) callbackManager.AddMetadata(localMetadata, inherit: false);
 

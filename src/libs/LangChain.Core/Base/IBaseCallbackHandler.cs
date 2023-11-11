@@ -110,7 +110,7 @@ public interface IBaseCallbackHandler
         Dictionary<string, object> action,
         string runId,
         string? parentRunId = null);
-    
+
     public Task HandleRetrieverStartAsync(
         BaseRetriever retriever,
         string query,

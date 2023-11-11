@@ -47,7 +47,7 @@ public readonly record struct Message(
     /// <returns></returns>
     public override string ToString()
     {
-        if (FunctionName!=null)
+        if (FunctionName != null)
         {
             return $"{Role}({FunctionName}):\n{Content}";
         }

@@ -31,10 +31,10 @@ public class ChromaVectorStore : VectorStore
         HttpClient httpClient,
         string endpoint,
         IEmbeddings embeddings,
-        string collectionName = LangchainDefaultCollectionName):base(embeddings)
+        string collectionName = LangchainDefaultCollectionName) : base(embeddings)
     {
         _client = new ChromaClient(httpClient, endpoint);
-  
+
         _collectionName = collectionName;
 
         _store = new ChromaMemoryStore(_client);
@@ -81,7 +81,7 @@ public class ChromaVectorStore : VectorStore
         {
             return null;
         }
-        
+
         var text = record.Metadata.Text;
         var metadata = DeserializeMetadata(record.Metadata);
 
@@ -216,7 +216,7 @@ public class ChromaVectorStore : VectorStore
                 lambdaMult,
                 cancellationToken)
             .ConfigureAwait(false);
-        
+
         return documents;
     }
 

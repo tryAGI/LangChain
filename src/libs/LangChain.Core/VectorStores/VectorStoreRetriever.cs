@@ -11,7 +11,7 @@ namespace LangChain.VectorStores;
 public class VectorStoreRetriever : BaseRetriever
 {
     public VectorStore Vectorstore { get; init; }
-    
+
     private ESearchType SearchType { get; init; }
     public int K { get; set; } = 4;
 

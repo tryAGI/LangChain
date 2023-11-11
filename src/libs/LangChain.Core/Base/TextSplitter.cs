@@ -15,9 +15,9 @@ public abstract class TextSplitter
     private readonly int _chunkOverlap;
     private readonly Func<string, int> _lengthFunction;
 
-    
 
-    protected TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, Func<string,int>? lengthFunction = null)
+
+    protected TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, Func<string, int>? lengthFunction = null)
     {
         if (chunkOverlap > chunkSize)
         {
@@ -99,9 +99,9 @@ public abstract class TextSplitter
         foreach (var split in splits)
         {
             int len = _lengthFunction(split);
-            
+
             // if we can't fit the next split into current chunk
-            if (total + len + (currentDoc.Count>0?separatorLen:0)>= _chunkSize)
+            if (total + len + (currentDoc.Count > 0 ? separatorLen : 0) >= _chunkSize)
             {
                 // if the chunk is already was too big
                 if (total > _chunkSize)

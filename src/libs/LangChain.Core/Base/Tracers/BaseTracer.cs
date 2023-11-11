@@ -255,7 +255,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var startTime = DateTime.UtcNow;
 
         if (metadata != null)
-        { extraParams.Add("metadata", metadata);}
+        { extraParams.Add("metadata", metadata); }
 
         var run = new Run
         {
@@ -395,7 +395,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.Outputs = new Dictionary<string, object> { ["documents"] = documents };
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object>
-            { ["name"] = "end", ["time"] = run.EndTime });
+        { ["name"] = "end", ["time"] = run.EndTime });
 
         EndTrace(run);
         await HandleRetrieverEndAsync(run);

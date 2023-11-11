@@ -9,16 +9,16 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 public class ChainTests
 {
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-    
+
     [TestMethod]
     public void PromptTest()
     {
-        var chain=
-            Set("World", outputKey:"var2")
-            |Set("Hello", outputKey: "var1")
-            |Template("{var1}, {var2}", outputKey: "prompt");
+        var chain =
+            Set("World", outputKey: "var2")
+            | Set("Hello", outputKey: "var1")
+            | Template("{var1}, {var2}", outputKey: "prompt");
 
-        var res = chain.Run(resultKey:"prompt").Result;
+        var res = chain.Run(resultKey: "prompt").Result;
 
         Assert.AreEqual("Hello, World", res);
     }
@@ -39,12 +39,12 @@ Information:
 The pet name is 
 ";
 
-        var chain=
+        var chain =
             Set("My dog name is Bob", outputKey: "information")
-            |Template(promptText, outputKey: "prompt")
-            |LLM(llm,inputKey:"prompt", outputKey:"text");
+            | Template(promptText, outputKey: "prompt")
+            | LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var res = chain.Run(resultKey:"text").Result;
+        var res = chain.Run(resultKey: "text").Result;
 
         Assert.AreEqual("Bob", res);
     }
@@ -67,7 +67,7 @@ The pet name is
         var index = InMemoryVectorStore
             .CreateIndexFromDocuments(embeddings, documents).Result;
 
-        string prompt1Text = 
+        string prompt1Text =
             @"Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 {context}
@@ -85,7 +85,7 @@ Answer: Jerry
 Human: {pet_sentence}
 Answer: ";
 
-        
+
 
         var chainQuestion =
             Set("What is the good name for a pet?", outputKey: "question")

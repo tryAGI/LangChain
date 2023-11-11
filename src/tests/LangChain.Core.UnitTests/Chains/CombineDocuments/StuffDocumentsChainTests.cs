@@ -69,7 +69,7 @@ public class StuffDocumentsChainTests
             CreateDocument("First", ("page", 1)),
             CreateDocument("Second", ("page", 2))
         };
-        
+
         var result = await chain.CombineDocsAsync(docs, new Dictionary<string, object> { [otherKey] = "hello!" });
 
         result.Output.Should().BeEquivalentTo("predict response");
@@ -79,7 +79,7 @@ public class StuffDocumentsChainTests
             .Verify(
                 m => m.Predict(
                     It.Is<ChainValues>(x =>
-                        x.Value[documentVariableName].ToString() == "Page=1.Content=First+Page=2.Content=Second" && 
+                        x.Value[documentVariableName].ToString() == "Page=1.Content=First+Page=2.Content=Second" &&
                         x.Value[otherKey].ToString() == "hello!")),
                 Times.Once());
     }
@@ -100,7 +100,7 @@ public class StuffDocumentsChainTests
         return mock;
     }
 
-    private Document CreateDocument(string content) => new(content, new ());
+    private Document CreateDocument(string content) => new(content, new());
 
     private Document CreateDocument(string content, params (string Key, object Value)[] metadatas)
     {

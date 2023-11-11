@@ -118,7 +118,7 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
 
     /// <inheritdoc />
     public abstract Task HandleRetrieverEndAsync(
-        string query, 
+        string query,
         List<Document> documents,
         string runId,
         string? parentRunId);

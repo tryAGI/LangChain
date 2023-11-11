@@ -5,12 +5,12 @@ using LangChain.Indexes;
 
 namespace LangChain.Chains.HelperChains;
 
-public class RetreiveDocumentsChain:BaseStackableChain
+public class RetreiveDocumentsChain : BaseStackableChain
 {
     private readonly VectorStoreIndexWrapper _index;
     private readonly int _amount;
 
-    public RetreiveDocumentsChain(VectorStoreIndexWrapper index, string inputKey="query", string outputKey="documents", int amount=4)
+    public RetreiveDocumentsChain(VectorStoreIndexWrapper index, string inputKey = "query", string outputKey = "documents", int amount = 4)
     {
         _index = index;
         _amount = amount;

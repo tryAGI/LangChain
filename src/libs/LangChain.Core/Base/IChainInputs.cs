@@ -13,7 +13,7 @@ public interface IChainInputs : IBaseLangChainParams
     /// for full details.
     /// </summary>
     public ICallbacks? Callbacks { get; set; }
-    
+
     /// <summary>
     /// Optional list of tags associated with the chain. Defaults to None.
     /// These tags will be associated with each call to this chain,
@@ -21,7 +21,7 @@ public interface IChainInputs : IBaseLangChainParams
     /// You can use these to eg identify a specific instance of a chain with its use case.
     /// </summary>
     public List<string> Tags { get; set; }
-    
+
     /// <summary>
     /// Optional metadata associated with the chain. Defaults to None.
     /// This metadata will be associated with each call to this chain,

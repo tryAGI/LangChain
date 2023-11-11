@@ -12,7 +12,7 @@ namespace LangChain.Core.UnitTests
             var loader = new TextLoader(filepath);
             var documents = loader.Load();
             Assert.AreEqual(1, documents.Count);
-            
+
         }
     }
 }

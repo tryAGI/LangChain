@@ -8,7 +8,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 {
     public ConsoleCallbackHandler() : this(new ConsoleCallbackHandlerInput())
     {
-        
+
     }
 
     public override string Name => "console_callback_handler";
@@ -41,7 +41,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override async Task HandleLlmEndAsync(Run run)
     {
         var crumbs = GetBreadcrumbs(run);
-        
+
         Print($"{GetColoredText("[llm/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting LLM run with output:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Outputs, "[response]")}"
             );
@@ -187,7 +187,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         {
             return System.Text.Json.JsonSerializer.Serialize(obj);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             return @default;
         }
@@ -212,12 +212,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     private static class ConsoleFormats
     {
-        public static string Normal      = Console.IsOutputRedirected ? "" : "\x1b[39m";
-        public static string Red         = Console.IsOutputRedirected ? "" : "\x1b[91m";
-        public static string Green       = Console.IsOutputRedirected ? "" : "\x1b[92m";
-        public static string Yellow      = Console.IsOutputRedirected ? "" : "\x1b[93m";
-        public static string Blue        = Console.IsOutputRedirected ? "" : "\x1b[94m";
-        public static string Bold        = Console.IsOutputRedirected ? "" : "\x1b[1m";
-        public static string Underline   = Console.IsOutputRedirected ? "" : "\x1b[4m";
+        public static string Normal = Console.IsOutputRedirected ? "" : "\x1b[39m";
+        public static string Red = Console.IsOutputRedirected ? "" : "\x1b[91m";
+        public static string Green = Console.IsOutputRedirected ? "" : "\x1b[92m";
+        public static string Yellow = Console.IsOutputRedirected ? "" : "\x1b[93m";
+        public static string Blue = Console.IsOutputRedirected ? "" : "\x1b[94m";
+        public static string Bold = Console.IsOutputRedirected ? "" : "\x1b[1m";
+        public static string Underline = Console.IsOutputRedirected ? "" : "\x1b[4m";
     }
 }

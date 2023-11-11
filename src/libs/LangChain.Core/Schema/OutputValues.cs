@@ -6,6 +6,6 @@ public class OutputValues
     {
         this.Value = value;
     }
-    
+
     public Dictionary<string, object> Value { get; set; } = new();
 }

@@ -4,13 +4,13 @@ using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
-public class StackChain:BaseStackableChain
+public class StackChain : BaseStackableChain
 {
     private readonly BaseStackableChain _a;
     private readonly BaseStackableChain _b;
 
-    public string[] IsolatedInputKeys { get; set; }=new string[0];
-    public string[] IsolatedOutputKeys { get; set; }=new string[0];
+    public string[] IsolatedInputKeys { get; set; } = new string[0];
+    public string[] IsolatedOutputKeys { get; set; } = new string[0];
 
     public StackChain(BaseStackableChain a, BaseStackableChain b)
     {
@@ -38,7 +38,7 @@ public class StackChain:BaseStackableChain
         // since it is reference type, the values would be changed anyhow
         var originalValues = values;
 
-        if (IsolatedInputKeys.Length>0)
+        if (IsolatedInputKeys.Length > 0)
         {
             var res = new ChainValues();
             foreach (var key in IsolatedInputKeys)
@@ -51,12 +51,12 @@ public class StackChain:BaseStackableChain
         await _b.CallAsync(values);
         if (IsolatedOutputKeys.Length > 0)
         {
-     
+
             foreach (var key in IsolatedOutputKeys)
             {
                 originalValues.Value[key] = values.Value[key];
             }
-    
+
         }
         return originalValues;
     }
@@ -65,7 +65,7 @@ public class StackChain:BaseStackableChain
 
     public async Task<IChainValues> Run()
     {
-        
+
         var res = await CallAsync(new ChainValues());
         return res;
     }

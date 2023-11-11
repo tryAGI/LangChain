@@ -4,7 +4,7 @@ using LangChain.Docstore;
 
 namespace LangChain.DocumentLoaders;
 
-public class TextLoader:BaseLoader
+public class TextLoader : BaseLoader
 {
     private string filePath;
     private Encoding fileEncoding;

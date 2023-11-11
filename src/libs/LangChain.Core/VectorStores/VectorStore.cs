@@ -10,9 +10,9 @@ namespace LangChain.VectorStores;
 public abstract class VectorStore
 {
     protected IEmbeddings Embeddings { get; }
-    protected Func<float, float>? OverrideRelevanceScoreFn { get;  }
+    protected Func<float, float>? OverrideRelevanceScoreFn { get; }
 
-    protected VectorStore(IEmbeddings embeddings, Func<float, float>? overrideRelevanceScoreFn=null)
+    protected VectorStore(IEmbeddings embeddings, Func<float, float>? overrideRelevanceScoreFn = null)
     {
         Embeddings = embeddings;
         OverrideRelevanceScoreFn = overrideRelevanceScoreFn;
@@ -135,7 +135,7 @@ public abstract class VectorStore
         var passedThreshold = docsAndSimilaritiesArray.Where(x => x.Item2 >= scoreThreshold).ToList();
 
         // TODO: log? if No relevant docs were retrieved using the relevance score threshold {scoreThreshold}
-        
+
         return passedThreshold;
     }
 
@@ -245,7 +245,7 @@ public abstract class VectorStore
     /// <exception cref="NotImplementedException"></exception>
     protected abstract Func<float, float> SelectRelevanceScoreFn();
 
-    public VectorStoreRetriever AsRetreiver(ESearchType searchType=ESearchType.Similarity, float? scoreThreshold = null)
+    public VectorStoreRetriever AsRetreiver(ESearchType searchType = ESearchType.Similarity, float? scoreThreshold = null)
     {
         return new VectorStoreRetriever(this, searchType, scoreThreshold);
     }

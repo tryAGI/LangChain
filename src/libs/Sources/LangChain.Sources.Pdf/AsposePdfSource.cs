@@ -21,7 +21,7 @@ public class AsposePdfSource : ISource
             using var pdfDocument = new Aspose.Pdf.Document(Path);
             var textAbsorber = new TextAbsorber();
             pdfDocument.Pages.Accept(textAbsorber);
-            
+
             var documents = new Document[] { new(textAbsorber.Text, new Dictionary<string, object> { { "path", Path } }) };
             return Task.FromResult<IReadOnlyCollection<Document>>(documents);
         }

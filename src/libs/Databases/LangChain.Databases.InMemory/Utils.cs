@@ -3,7 +3,7 @@
 namespace LangChain.Databases.InMemory
 {
 
-    public class Utils
+    public static class Utils
     {
         public static float ComputeEuclideanDistance(float[] vector1, float[] vector2)
         {

@@ -47,7 +47,7 @@ public class RetrievalQaChainTests
     private Mock<BaseRetriever> CreateRetrieverMock()
     {
         var mock = new Mock<BaseRetriever>();
-        
+
         mock.Setup(x => x
                 .GetRelevantDocumentsAsync(
                     It.IsAny<string>(),
@@ -82,5 +82,5 @@ public class RetrievalQaChainTests
         return mock;
     }
 
-    private Document CreateDocument(string content) => new(content, new ());
+    private Document CreateDocument(string content) => new(content, new());
 }

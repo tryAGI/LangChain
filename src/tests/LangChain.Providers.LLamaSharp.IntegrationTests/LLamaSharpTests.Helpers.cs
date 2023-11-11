@@ -9,7 +9,7 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 public partial class LLamaSharpTests
 {
-   
+
     IEmbeddings CreateEmbeddings()
     {
         var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration

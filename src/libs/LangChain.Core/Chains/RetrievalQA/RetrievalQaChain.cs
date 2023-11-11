@@ -11,7 +11,7 @@ namespace LangChain.Chains.RetrievalQA;
 public class RetrievalQaChain(RetrievalQaChainInput fields) : BaseRetrievalQaChain(fields)
 {
     private readonly BaseRetriever _retriever = fields.Retriever;
-    
+
     public override string ChainType() => "retrieval_qa";
 
     public override async Task<IEnumerable<Document>> GetDocsAsync(string question, CallbackManagerForChainRun runManager)

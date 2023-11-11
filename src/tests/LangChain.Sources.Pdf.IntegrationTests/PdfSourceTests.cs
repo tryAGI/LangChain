@@ -11,7 +11,7 @@ public class PdfSourceTests
         var documents = await loader.LoadAsync();
 
         documents.Should().NotBeEmpty();
-        
+
 
         // check text from page 1
         documents.First().PageContent.Should().Contain("A Simple PDF File");

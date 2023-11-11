@@ -7,11 +7,11 @@ using LangChain.Prompts;
 
 namespace LangChain.Chains.HelperChains;
 
-public class PromptChain: BaseStackableChain
+public class PromptChain : BaseStackableChain
 {
     private readonly string _template;
 
-    public PromptChain(string template,string outputKey="prompt")
+    public PromptChain(string template, string outputKey = "prompt")
     {
         OutputKeys = new[] { outputKey };
         _template = template;
@@ -40,12 +40,12 @@ public class PromptChain: BaseStackableChain
         var missing = InputKeys.Except(valueKeys);
         if (missing.Any())
         {
-            throw new Exception($"Input keys must contain all variables in template. Missing: {string.Join(",",missing)}");
+            throw new Exception($"Input keys must contain all variables in template. Missing: {string.Join(",", missing)}");
         }
-        
-        var formattedPrompt = PromptTemplate.InterpolateFString(_template,values.Value);
 
-        values.Value[OutputKeys[0]]= formattedPrompt;
+        var formattedPrompt = PromptTemplate.InterpolateFString(_template, values.Value);
+
+        values.Value[OutputKeys[0]] = formattedPrompt;
 
         return Task.FromResult(values);
     }

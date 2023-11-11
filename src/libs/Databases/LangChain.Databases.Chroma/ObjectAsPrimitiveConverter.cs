@@ -35,7 +35,7 @@ public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
         {
             throw new ArgumentNullException(nameof(writer));
         }
-        
+
         if (value.GetType() == typeof(object))
         {
             writer.WriteStartObject();
@@ -65,47 +65,47 @@ public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
                 return reader.GetString();
 
             case JsonTokenType.Number:
-            {
-                if (reader.TryGetInt32(out var i))
-                    return i;
-
-                if (reader.TryGetInt64(out var l))
-                    return l;
-
-                switch (FloatFormat)
                 {
-                    // BigInteger could be added here.
-                    case FloatFormat.Decimal when reader.TryGetDecimal(out var m):
-                        return m;
-                    case FloatFormat.Double when reader.TryGetDouble(out var d):
-                        return d;
-                }
+                    if (reader.TryGetInt32(out var i))
+                        return i;
 
-                using var doc = JsonDocument.ParseValue(ref reader);
-                if (UnknownNumberFormat == UnknownNumberFormat.JsonElement)
-                {
-                    return doc.RootElement.Clone();
-                }
+                    if (reader.TryGetInt64(out var l))
+                        return l;
 
-                throw new JsonException($"Cannot parse number {doc.RootElement}");
-            }
-            case JsonTokenType.StartArray:
-            {
-                var list = new List<object?>();
-                while (reader.Read())
-                {
-                    switch (reader.TokenType)
+                    switch (FloatFormat)
                     {
-                        case JsonTokenType.EndArray:
-                            return list;
-
-                        default:
-                            list.Add(Read(ref reader, typeof(object), options));
-                            break;
+                        // BigInteger could be added here.
+                        case FloatFormat.Decimal when reader.TryGetDecimal(out var m):
+                            return m;
+                        case FloatFormat.Double when reader.TryGetDouble(out var d):
+                            return d;
                     }
+
+                    using var doc = JsonDocument.ParseValue(ref reader);
+                    if (UnknownNumberFormat == UnknownNumberFormat.JsonElement)
+                    {
+                        return doc.RootElement.Clone();
+                    }
+
+                    throw new JsonException($"Cannot parse number {doc.RootElement}");
                 }
-                throw new JsonException();
-            }
+            case JsonTokenType.StartArray:
+                {
+                    var list = new List<object?>();
+                    while (reader.Read())
+                    {
+                        switch (reader.TokenType)
+                        {
+                            case JsonTokenType.EndArray:
+                                return list;
+
+                            default:
+                                list.Add(Read(ref reader, typeof(object), options));
+                                break;
+                        }
+                    }
+                    throw new JsonException();
+                }
             case JsonTokenType.StartObject:
                 var dict = CreateDictionary();
                 while (reader.Read())
@@ -131,12 +131,12 @@ public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
                 throw new JsonException($"Unknown token {reader.TokenType}");
         }
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    private IDictionary<string, object?> CreateDictionary() => 
+    private IDictionary<string, object?> CreateDictionary() =>
         ObjectFormat == ObjectFormat.Expando
             ? new ExpandoObject()
             : new Dictionary<string, object?>();

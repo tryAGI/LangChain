@@ -20,7 +20,7 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 [TestClass]
 public partial class LLamaSharpTests
 {
-    string ModelPath=>HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf","main").Result;
+    string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
     [TestMethod]
 #if CONTINUOUS_INTEGRATION_BUILD
     [Ignore]
@@ -32,7 +32,7 @@ public partial class LLamaSharpTests
             PathToModelFile = ModelPath,
         });
 
-        var response=model.GenerateAsync(new ChatRequest(new List<Message>
+        var response = model.GenerateAsync(new ChatRequest(new List<Message>
         {
             "You are simple assistant. If human say 'Bob' then you will respond with 'Jack'.".AsSystemMessage(),
             "Bob".AsHumanMessage(),
@@ -42,7 +42,7 @@ public partial class LLamaSharpTests
             "Bob".AsHumanMessage(),
         })).Result;
 
-        Assert.AreEqual("Jack",response.Messages.Last().Content );
+        Assert.AreEqual("Jack", response.Messages.Last().Content);
 
     }
 
@@ -55,7 +55,7 @@ public partial class LLamaSharpTests
         var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
         {
             PathToModelFile = ModelPath,
-            Temperature=0
+            Temperature = 0
         });
 
         var response = model.GenerateAsync(new ChatRequest(new List<Message>
@@ -64,7 +64,7 @@ public partial class LLamaSharpTests
             "Result:".AsSystemMessage(),
         })).Result;
 
-        Assert.AreEqual("4",response.Messages.Last().Content.Trim());
+        Assert.AreEqual("4", response.Messages.Last().Content.Trim());
 
     }
 
@@ -79,7 +79,7 @@ public partial class LLamaSharpTests
         return result;
 
     }
-    
+
     [TestMethod]
 #if CONTINUOUS_INTEGRATION_BUILD
     [Ignore]
@@ -104,11 +104,11 @@ public partial class LLamaSharpTests
         vectorStore.AddTextsAsync(texts).Wait();
 
         var query = "How do you call your pet?";
-        var closest = vectorStore.SimilaritySearchAsync(query,k:1).Result.First();
+        var closest = vectorStore.SimilaritySearchAsync(query, k: 1).Result.First();
 
         Assert.AreEqual("My dog name is Bob", closest.PageContent);
     }
-    
+
     [TestMethod]
 #if CONTINUOUS_INTEGRATION_BUILD
     [Ignore]
@@ -126,10 +126,10 @@ public partial class LLamaSharpTests
             "This icecream is delicious",
             "It is cold in space"
         };
-        
+
         var index = CreateVectorStoreIndex(embeddings, texts);
         var template = CreatePromptTemplate();
-        
+
         var chain = new LlmChain(new LlmChainInput(model, template));
 
         var stuffDocumentsChain = new StuffDocumentsChain(new StuffDocumentsChainInput(chain)
@@ -141,16 +141,16 @@ public partial class LLamaSharpTests
 
         // test
         var question = "What is the good name for a pet?";
-        var answer=index.QueryAsync(question, stuffDocumentsChain,
-            inputKey:"question" // variable name in prompt template for the question
-                                // it would be passed by to stuffDocumentsChain
+        var answer = index.QueryAsync(question, stuffDocumentsChain,
+            inputKey: "question" // variable name in prompt template for the question
+                                 // it would be passed by to stuffDocumentsChain
             ).Result;
-            
+
 
         Assert.IsTrue(answer.Contains("Bob"));
     }
 
-    IChain CreateChain1(IChatModel model,IEmbeddings embeddings)
+    IChain CreateChain1(IChatModel model, IEmbeddings embeddings)
     {
 
         string[] texts = new string[]
@@ -172,7 +172,7 @@ public partial class LLamaSharpTests
         var stuffDocumentsChain = new StuffDocumentsChain(new StuffDocumentsChainInput(llmchain)
         {
             DocumentVariableName = "context",
-                                        
+
         });
 
         var chain = new RetrievalQaChain(
@@ -197,7 +197,7 @@ public partial class LLamaSharpTests
         // setup
         var embeddings = CreateEmbeddings();
         var model = CreateInstructionModel();
-  
+
         var chain1 = CreateChain1(model, embeddings);
 
         var prompt =
@@ -213,10 +213,10 @@ Answer:";
 
         var sequence = new SequentialChain(
             new SequentialChainInput(
-                new [] { chain1, chain2 },
-                inputVariables:new[]{"question"}));
+                new[] { chain1, chain2 },
+                inputVariables: new[] { "question" }));
 
-        var answer=sequence.Run("What is the good name for a pet?").Result;
+        var answer = sequence.Run("What is the good name for a pet?").Result;
 
         Assert.AreEqual("Bob", answer);
     }

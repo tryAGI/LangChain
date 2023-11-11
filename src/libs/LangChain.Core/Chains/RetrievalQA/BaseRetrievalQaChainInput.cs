@@ -7,7 +7,7 @@ public class BaseRetrievalQaChainInput(BaseCombineDocumentsChain combineDocument
 {
     /// <summary> Chain to use to combine the documents. </summary>
     public BaseCombineDocumentsChain CombineDocumentsChain { get; } = combineDocumentsChain;
-    
+
     /// <summary> Return the source documents or not. </summary>
     public bool ReturnSourceDocuments { get; set; }
 

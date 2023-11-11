@@ -5,7 +5,7 @@ using LangChain.Chains.HelperChains.Exceptions;
 
 namespace LangChain.Chains.HelperChains;
 
-public abstract class BaseStackableChain:IChain
+public abstract class BaseStackableChain : IChain
 {
     public string Name { get; set; }
     public virtual string[] InputKeys { get; protected set; }
@@ -54,11 +54,11 @@ public abstract class BaseStackableChain:IChain
         }
         catch (Exception ex)
         {
-            var name=Name??GenerateName();
-            var inputValues= FormatInputValues(values);
+            var name = Name ?? GenerateName();
+            var inputValues = FormatInputValues(values);
             var message = $"Error occured in {name} with inputs \n{inputValues}\n.";
 
-            throw new StackableChainException(message,ex);
+            throw new StackableChainException(message, ex);
         }
 
     }
@@ -68,5 +68,10 @@ public abstract class BaseStackableChain:IChain
     public static StackChain operator |(BaseStackableChain a, BaseStackableChain b)
     {
         return new StackChain(a, b);
+    }
+
+    public static StackChain BitwiseOr(BaseStackableChain left, BaseStackableChain right)
+    {
+        return left | right;
     }
 }

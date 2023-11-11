@@ -8,7 +8,7 @@ using var httpClient = new HttpClient();
 var llm = new Gpt35TurboModel(apiKey, httpClient);
 
 var template = "What is a good name for a company that makes {product}?";
-var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1){"product"}));
+var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
 
 var chain = new LlmChain(new LlmChainInput(llm, prompt));
 

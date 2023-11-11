@@ -61,18 +61,18 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var chatMessages = promptValue.ToChatMessages().WithHistory(Memory);
         if (Verbose == true)
         {
-            
+
             Console.WriteLine(string.Join("\n\n", chatMessages));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
         }
         var response = await Llm.GenerateAsync(new ChatRequest(chatMessages, stop));
         if (Verbose == true)
         {
-            
+
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '<'));
         }
-        
+
         Dictionary<string, object> returnDict = new Dictionary<string, object>();
 
 
@@ -80,7 +80,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             returnDict["text"] = response.Messages.Last().Content;
         else
             returnDict[OutputKey] = response.Messages.Last().Content;
-            
+
         // merge dictionaries
         foreach (var kv in returnDict)
         {
@@ -92,7 +92,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 
         return values;
     }
-    
+
     public async Task<object> Predict(ChainValues values)
     {
         var output = await CallAsync(values);

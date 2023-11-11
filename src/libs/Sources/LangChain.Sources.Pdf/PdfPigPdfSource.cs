@@ -1,6 +1,6 @@
 using LangChain.Base;
 using UglyToad.PdfPig;
-using Document=LangChain.Docstore.Document;
+using Document = LangChain.Docstore.Document;
 namespace LangChain.Sources;
 
 /// <summary>
@@ -29,7 +29,7 @@ public class PdfPigPdfSource : ISource
             {
                 {"path",Path},
                 {"page",page.Number}
-  
+
 
             })).ToArray();
 

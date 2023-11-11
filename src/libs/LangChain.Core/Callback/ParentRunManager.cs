@@ -9,7 +9,7 @@ public class ParentRunManager : BaseRunManager
 {
     public ParentRunManager()
     {
-        
+
     }
 
     public ParentRunManager(
@@ -20,7 +20,7 @@ public class ParentRunManager : BaseRunManager
         List<string>? tags = null,
         List<string>? inheritableTags = null,
         Dictionary<string, object>? metadata = null,
-        Dictionary<string,object>? inheritableMetadata = null)
+        Dictionary<string, object>? inheritableMetadata = null)
         : base(runId, handlers, inheritableHandlers, parentRunId, tags, inheritableTags, metadata, inheritableMetadata)
     {
     }
@@ -40,7 +40,7 @@ public class ParentRunManager : BaseRunManager
         manager.AddMetadata(InheritableMetadata);
 
         if (tag != null)
-            manager.AddTags(new List<string> { tag }, inherit: false); 
+            manager.AddTags(new List<string> { tag }, inherit: false);
 
         return manager;
     }

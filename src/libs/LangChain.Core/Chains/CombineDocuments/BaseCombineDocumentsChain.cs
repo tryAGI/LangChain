@@ -23,8 +23,8 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     public readonly string InputKey = fields.InputKey;
     public readonly string OutputKey = fields.OutputKey;
 
-    public override string[] InputKeys => new [] { InputKey };
-    public override string[] OutputKeys => new [] { OutputKey };
+    public override string[] InputKeys => new[] { InputKey };
+    public override string[] OutputKeys => new[] { OutputKey };
 
     /// <summary>
     /// Prepare inputs, call combine docs, prepare outputs.
@@ -42,7 +42,7 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
             .ToDictionary(kv => kv.Key, kv => kv.Value);
 
         var (output, returnDict) = await CombineDocsAsync((docs as List<Document>), otherKeys);
-        
+
         returnDict[OutputKey] = output;
 
         // merge dictionaries

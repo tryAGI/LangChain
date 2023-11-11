@@ -12,13 +12,13 @@ public interface IBaseChainInput
     /// for full details.
     /// </summary>
     public ICallbacks? Callbacks { get; set; }
-    
+
     /// <summary>
     /// Whether or not run in verbose mode. In verbose mode, some intermediate logs
     /// will be printed to the console. 
     /// </summary>
     public bool Verbose { get; set; }
-    
+
     /// <summary>
     /// Optional list of tags associated with the chain. Defaults to None.
     /// These tags will be associated with each call to this chain,
@@ -26,7 +26,7 @@ public interface IBaseChainInput
     /// You can use these to eg identify a specific instance of a chain with its use case.
     /// </summary>
     public List<string> Tags { get; set; }
-    
+
     /// <summary>
     /// Optional metadata associated with the chain. Defaults to None.
     /// This metadata will be associated with each call to this chain,

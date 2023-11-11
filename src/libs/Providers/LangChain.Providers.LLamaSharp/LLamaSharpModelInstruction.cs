@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace LangChain.Providers.LLamaSharp;
 
-public class LLamaSharpModelInstruction:LLamaSharpModelBase
+public class LLamaSharpModelInstruction : LLamaSharpModelBase
 {
     public static LLamaSharpModelInstruction FromPath(string path, float temperature = 0)
     {
@@ -25,14 +25,14 @@ public class LLamaSharpModelInstruction:LLamaSharpModelBase
     }
     public override async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        var prompt = ToPrompt(request.Messages)+"\n";
+        var prompt = ToPrompt(request.Messages) + "\n";
 
         var watch = Stopwatch.StartNew();
 
 
         var context = _model.CreateContext(_parameters);
         var ex = new InstructExecutor(context);
-     
+
         var inferenceParams = new InferenceParams()
         {
             Temperature = _configuration.Temperature,
@@ -49,7 +49,7 @@ public class LLamaSharpModelInstruction:LLamaSharpModelBase
             buf += text;
         }
 
-        buf=SanitizeOutput(buf);
+        buf = SanitizeOutput(buf);
         var result = request.Messages.ToList();
         result.Add(buf.AsAiMessage());
 

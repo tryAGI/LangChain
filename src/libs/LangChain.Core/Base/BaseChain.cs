@@ -102,7 +102,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             fields.Tags,
             metadata,
             fields.Metadata);
-        
+
         var runManager = await callbackManager.HandleChainStart(this, values);
 
         try

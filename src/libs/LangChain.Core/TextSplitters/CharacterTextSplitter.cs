@@ -5,7 +5,7 @@ namespace LangChain.TextSplitters;
 /// <summary>
 /// Implementation of splitting text that looks at characters
 /// </summary>
-public class CharacterTextSplitter:TextSplitter
+public class CharacterTextSplitter : TextSplitter
 {
     private readonly string? _separator;
 
@@ -17,14 +17,14 @@ public class CharacterTextSplitter:TextSplitter
     public override List<string> SplitText(string text)
     {
         List<string> splits;
-        if (_separator!=null)
+        if (_separator != null)
         {
             splits = text.Split(new[] { _separator }, StringSplitOptions.None).ToList();
         }
         else
         {
-            splits = new List<string> { text};
+            splits = new List<string> { text };
         }
-        return this.MergeSplits(splits,_separator);
+        return this.MergeSplits(splits, _separator);
     }
 }

@@ -5,18 +5,18 @@ using LangChain.Prompts;
 
 namespace LangChain.Chains.HelperChains;
 
-public class StuffDocumentsChain:BaseStackableChain
+public class StuffDocumentsChain : BaseStackableChain
 {
     public string DocumentsSeparator { get; set; } = "\n\n";
 
     public string Format { get; set; } = "{document}";
     public string FormatKey { get; set; } = "document";
 
-    public StuffDocumentsChain(string inputKey="documents", string outputKey="combined")
+    public StuffDocumentsChain(string inputKey = "documents", string outputKey = "combined")
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
-    
+
     }
 
     public StuffDocumentsChain WithSeparator(string separator)
@@ -25,7 +25,7 @@ public class StuffDocumentsChain:BaseStackableChain
         return this;
     }
 
-    public StuffDocumentsChain WithFormat(string format, string key="document")
+    public StuffDocumentsChain WithFormat(string format, string key = "document")
     {
         Format = format;
         FormatKey = key;
@@ -39,11 +39,11 @@ public class StuffDocumentsChain:BaseStackableChain
         {
             throw new ArgumentException($"{InputKeys[0]} is not a list of documents");
         }
-      
+
         var docStrings = new List<string>();
         foreach (var doc in docs)
         {
-            var docString = PromptTemplate.InterpolateFStringSafe(Format,new Dictionary<string, object>{{FormatKey,doc.PageContent}});
+            var docString = PromptTemplate.InterpolateFStringSafe(Format, new Dictionary<string, object> { { FormatKey, doc.PageContent } });
             docStrings.Add(docString);
         }
 

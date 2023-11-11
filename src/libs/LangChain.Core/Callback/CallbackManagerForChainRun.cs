@@ -7,7 +7,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
 {
     public CallbackManagerForChainRun()
     {
-        
+
     }
 
     public CallbackManagerForChainRun(

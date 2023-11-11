@@ -23,10 +23,10 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
 
     public CallbackManager? CallbackManager { get; set; }
 
-    public override string[] InputKeys => new [] { _inputKey };
+    public override string[] InputKeys => new[] { _inputKey };
     public override string[] OutputKeys => fields.ReturnSourceDocuments
-        ? new [] { _outputKey, SourceDocuments }
-        : new [] { _outputKey };
+        ? new[] { _outputKey, SourceDocuments }
+        : new[] { _outputKey };
 
     /// <summary>
     /// Run get_relevant_text and llm on input query.
@@ -51,7 +51,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
         var input = new Dictionary<string, object>
         {
             ["input_documents"] = docs,
-            [_inputKey]= question
+            [_inputKey] = question
         };
 
         var answer = await _combineDocumentsChain.Run(input);

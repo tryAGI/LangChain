@@ -18,13 +18,13 @@ public static class Chain
         return new SetChain(value, outputKey);
     }
 
-    public static BaseStackableChain LLM(IChatModel llm, 
+    public static BaseStackableChain LLM(IChatModel llm,
         string inputKey = "prompt", string outputKey = "text")
     {
         return new LLMChain(llm, inputKey, outputKey);
     }
 
-    public static BaseStackableChain RetreiveDocuments(VectorStoreIndexWrapper index, 
+    public static BaseStackableChain RetreiveDocuments(VectorStoreIndexWrapper index,
         string inputKey = "query", string outputKey = "documents")
     {
         return new RetreiveDocumentsChain(index, inputKey, outputKey);

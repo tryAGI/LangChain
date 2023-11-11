@@ -11,7 +11,7 @@ namespace LangChain.Docstore;
 /// </summary>
 public class Document
 {
-    public Document(string content, Dictionary<string, object>? metadata=null)
+    public Document(string content, Dictionary<string, object>? metadata = null)
     {
         metadata ??= new Dictionary<string, object>();
         PageContent = content;
@@ -32,7 +32,7 @@ public class Document
     /// </summary>
     public List<string> Paragraphs()
     {
-        return PageContent.Split(new []{"\n\n"},StringSplitOptions.None).ToList();
+        return PageContent.Split(new[] { "\n\n" }, StringSplitOptions.None).ToList();
     }
     /// <summary>
     /// Summary of the page (the first paragraph)
@@ -81,5 +81,5 @@ public class Document
         var serializedMetadata = string.Join(", ", Metadata.Select(x => $"{{{x.Key}:{x.Value}}}"));
         return $"(PageContent='{PageContent}', LookupStr='{LookupStr}', Metadata={serializedMetadata}), LookupIndex={LookupIndex}";
     }
-    
+
 }
