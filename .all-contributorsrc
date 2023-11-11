@@ -17,6 +17,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "TesAnti",
+      "name": "TesAnti",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8780022?v=4",
+      "profile": "https://github.com/TesAnti",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
