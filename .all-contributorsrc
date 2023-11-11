@@ -39,6 +39,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "SiegDuch",
+      "name": "SiegDuch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/104992451?v=4",
+      "profile": "https://github.com/SiegDuch",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
