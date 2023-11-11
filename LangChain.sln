@@ -142,6 +142,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
 	EndProjectSection
 EndProject
 Global
