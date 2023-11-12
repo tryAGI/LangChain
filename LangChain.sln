@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{23506EB8-1
 		src\Directory.Packages.props = src\Directory.Packages.props
 		LICENSE = LICENSE
 		README.md = README.md
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7E7E-4624-A99E-79D3F190F386}"
