@@ -1,18 +1,17 @@
-﻿namespace LangChain.Databases.InMemory
+﻿namespace LangChain.Databases.InMemory;
+
+/// <summary>
+/// 
+/// </summary>
+public enum EDistanceMetrics
 {
     /// <summary>
     /// 
     /// </summary>
-    public enum EDistanceMetrics
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        Euclidean,
+    Euclidean,
         
-        /// <summary>
-        /// 
-        /// </summary>
-        Manhattan
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    Manhattan
 }
