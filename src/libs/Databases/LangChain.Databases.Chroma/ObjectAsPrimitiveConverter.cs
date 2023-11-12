@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace LangChain.Databases;
 
 /// <inheritdoc />
-/// <see cref="https://stackoverflow.com/questions/65972825/c-sharp-deserializing-nested-json-to-nested-dictionarystring-object"/>
+/// According: https://stackoverflow.com/questions/65972825/c-sharp-deserializing-nested-json-to-nested-dictionarystring-object
 public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
 {
     FloatFormat FloatFormat { get; init; }
@@ -116,7 +116,7 @@ public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
                             return dict;
 
                         case JsonTokenType.PropertyName:
-                            var key = reader.GetString();
+                            var key = reader.GetString() ?? string.Empty;
                             reader.Read();
                             dict.Add(key, Read(ref reader, typeof(object), options));
                             break;

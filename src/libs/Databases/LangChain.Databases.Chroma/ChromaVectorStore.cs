@@ -11,7 +11,7 @@ namespace LangChain.Databases;
 
 /// <summary>
 /// ChromaDB vector store.
-/// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/vectorstores/chroma.html"/>
+/// According: https://api.python.langchain.com/en/latest/_modules/langchain/vectorstores/chroma.html
 /// </summary>
 public class ChromaVectorStore : VectorStore
 {
@@ -57,6 +57,7 @@ public class ChromaVectorStore : VectorStore
     /// <summary>
     /// Get collection
     /// </summary>
+    [CLSCompliant(false)]
     public async Task<ChromaCollectionModel?> GetCollectionAsync()
     {
         return await _client.GetCollectionAsync(_collectionName).ConfigureAwait(false);
