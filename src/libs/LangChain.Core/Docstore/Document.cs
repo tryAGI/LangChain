@@ -27,12 +27,14 @@ public class Document
     public string LookupStr { get; set; }
     public Dictionary<string, object> Metadata { get; set; }
 
+    private static readonly string[] separator = { "\n\n" };
+
     /// <summary>
     /// Paragraphs of the page.
     /// </summary>
     public List<string> Paragraphs()
     {
-        return PageContent.Split(new[] { "\n\n" }, StringSplitOptions.None).ToList();
+        return PageContent.Split(separator, StringSplitOptions.None).ToList();
     }
     /// <summary>
     /// Summary of the page (the first paragraph)
@@ -48,7 +50,7 @@ public class Document
     public string Lookup(string searchString)
     {
         // if there is a new search string, reset the index
-        if (searchString.ToLower(CultureInfo.InvariantCulture) != LookupStr)
+        if (!searchString.Equals(LookupStr, StringComparison.OrdinalIgnoreCase))
         {
             LookupStr = searchString.ToLower(CultureInfo.InvariantCulture);
             LookupIndex = 0;
@@ -59,8 +61,9 @@ public class Document
         }
 
         // get all the paragraphs that contain the search string
-        var lookups = Paragraphs().Where(p => p.ToLower(CultureInfo.InvariantCulture).Contains(LookupStr)).ToList();
-
+        var lookups = Paragraphs()
+            .Where(p => p.ToLower(CultureInfo.InvariantCulture).Contains(LookupStr))
+            .ToList();
         if (lookups.Count == 0)
         {
             return "No Results";

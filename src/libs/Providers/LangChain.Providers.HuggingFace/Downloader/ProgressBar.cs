@@ -5,18 +5,19 @@ namespace LangChain.Providers.Downloader;
 /// <summary>
 /// An ASCII progress bar
 /// </summary>
-internal class ProgressBar : IDisposable, IProgress<double>
+internal sealed class ProgressBar : IDisposable, IProgress<double>
 {
     private const int blockCount = 10;
     private readonly TimeSpan animationInterval = TimeSpan.FromSeconds(1.0 / 8);
     private const string animation = @"|/-\";
 
     private readonly Timer timer;
+    private readonly object timerLock = new();
 
-    private double currentProgress = 0;
+    private double currentProgress;
     private string currentText = string.Empty;
-    private bool disposed = false;
-    private int animationIndex = 0;
+    private bool disposed;
+    private int animationIndex;
 
     public ProgressBar()
     {
@@ -38,9 +39,9 @@ internal class ProgressBar : IDisposable, IProgress<double>
         Interlocked.Exchange(ref currentProgress, value);
     }
 
-    private void TimerHandler(object state)
+    private void TimerHandler(object? state)
     {
-        lock (timer)
+        lock (timerLock)
         {
             if (disposed) return;
 
@@ -71,7 +72,7 @@ internal class ProgressBar : IDisposable, IProgress<double>
         outputBuilder.Append('\b', currentText.Length - commonPrefixLength);
 
         // Output new suffix
-        outputBuilder.Append(text.Substring(commonPrefixLength));
+        outputBuilder.Append(text[commonPrefixLength..]);
 
         // If the new text is shorter than the old one: delete overlapping characters
         int overlapCount = currentText.Length - text.Length;
@@ -92,10 +93,11 @@ internal class ProgressBar : IDisposable, IProgress<double>
 
     public void Dispose()
     {
-        lock (timer)
+        lock (timerLock)
         {
             disposed = true;
             UpdateText(string.Empty);
+            timer.Dispose();
         }
     }
 

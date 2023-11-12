@@ -1,5 +1,8 @@
 ﻿namespace LangChain.Providers.LLamaSharp;
 
+/// <summary>
+/// 
+/// </summary>
 public class LLamaSharpConfiguration
 {
     /// <summary>
@@ -20,8 +23,14 @@ public class LLamaSharpConfiguration
     /// </summary>
     public float Temperature { get; set; } = 0.7f;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public int Seed { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public int MaxTokens { get; set; } = 600;
 
 }

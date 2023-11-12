@@ -61,7 +61,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         var inputs = await GetInputs(docs, otherKeys);
         var predict = await _llmChain.Predict(new ChainValues(inputs.Value));
 
-        return (predict.ToString(), new Dictionary<string, object>());
+        return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
 
     public override async Task<int?> PromptLength(List<Document> docs, Dictionary<string, object> otherKeys)

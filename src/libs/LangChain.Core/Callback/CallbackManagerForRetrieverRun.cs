@@ -3,8 +3,6 @@ using LangChain.Docstore;
 
 namespace LangChain.Callback;
 
-
-
 /// <summary>
 /// Callback manager for retriever run.
 /// </summary>
@@ -31,7 +29,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
     /// <summary>
     /// Run when retriever ends running.
     /// </summary>
-    public async Task HandleRetrieverEndAsync(string query, IEnumerable<Document> docs)
+    public async Task HandleRetrieverEndAsync(string query, IReadOnlyCollection<Document> docs)
     {
         foreach (var handler in Handlers)
         {

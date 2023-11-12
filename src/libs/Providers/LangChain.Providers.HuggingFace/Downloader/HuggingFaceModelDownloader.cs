@@ -5,6 +5,9 @@
 /// </summary>
 public class HuggingFaceModelDownloader
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static HuggingFaceModelDownloader Instance { get; } = new HuggingFaceModelDownloader();
 
 
@@ -46,7 +49,7 @@ public class HuggingFaceModelDownloader
         }
 
         var modelPath = Path.Combine(repositoryPath, version, fileName);
-        var directory = Path.GetDirectoryName(modelPath);
+        var directory = Path.GetDirectoryName(modelPath) ?? string.Empty;
         if (!Directory.Exists(directory))
         {
             Directory.CreateDirectory(directory);
@@ -56,7 +59,7 @@ public class HuggingFaceModelDownloader
         {
             File.WriteAllText(downloadMarkerPath, "");
             File.Delete(modelPath);
-            Console.WriteLine($"No model file found. Downloading...");
+            Console.WriteLine("No model file found. Downloading...");
             var downloadUrl = $"https://huggingface.co/{repository}/resolve/{version}/{fileName}";
             await DownloadModel(downloadUrl, modelPath).ConfigureAwait(false);
             File.Delete(downloadMarkerPath);

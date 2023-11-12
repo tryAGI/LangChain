@@ -27,6 +27,12 @@ public class WebBaseSource : ISource
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
     protected async Task<IReadOnlyCollection<Document>> LoadCoreAsync(string url)
     {
         var config = Configuration.Default.WithDefaultLoader();

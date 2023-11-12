@@ -3,6 +3,7 @@ using LLama;
 
 namespace LangChain.Providers.LLamaSharp;
 
+[CLSCompliant(false)]
 public abstract class LLamaSharpModelBase : IChatModel
 {
     public string Id { get; }

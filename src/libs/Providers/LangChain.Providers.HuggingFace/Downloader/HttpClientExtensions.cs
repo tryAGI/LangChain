@@ -5,7 +5,7 @@ internal static class HttpClientExtensions
     public static async Task DownloadAsync(this HttpClient client, string requestUri, Stream destination, IProgress<double>? progress = null, CancellationToken cancellationToken = default)
     {
         // Get the http headers first to examine the content length
-        using (var response = await client.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+        using (var response = await client.GetAsync(new Uri(requestUri), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
         {
             var contentLength = response.Content.Headers.ContentLength;
 
