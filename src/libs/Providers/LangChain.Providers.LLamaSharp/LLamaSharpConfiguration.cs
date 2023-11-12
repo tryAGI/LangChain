@@ -8,7 +8,7 @@ public class LLamaSharpConfiguration
     /// <summary>
     /// Path to *.bin file
     /// </summary>
-    public string? PathToModelFile { get; set; }
+    public string PathToModelFile { get; set; } = string.Empty;
 
     /// <summary>
     /// Context size

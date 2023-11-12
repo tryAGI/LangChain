@@ -3,34 +3,78 @@ using LLama;
 
 namespace LangChain.Providers.LLamaSharp;
 
+/// <summary>
+/// 
+/// </summary>
 [CLSCompliant(false)]
 public abstract class LLamaSharpModelBase : IChatModel
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public string Id { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public Usage TotalUsage { get; protected set; }
-    public int ContextLength => _configuration.ContextSize;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int ContextLength => Configuration.ContextSize;
 
-    protected readonly LLamaSharpConfiguration _configuration;
-    protected readonly LLamaWeights _model;
-    protected readonly ModelParams _parameters;
+    /// <summary>
+    /// 
+    /// </summary>
+    protected LLamaSharpConfiguration Configuration { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    protected LLamaWeights Model { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    protected ModelParams Parameters { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     protected LLamaSharpModelBase(LLamaSharpConfiguration configuration)
     {
-        _parameters = new ModelParams(configuration.PathToModelFile)
+        Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        Parameters = new ModelParams(configuration.PathToModelFile)
         {
             ContextSize = (uint)configuration.ContextSize,
             Seed = (uint)configuration.Seed,
 
         };
-        _model = LLamaWeights.LoadFromFile(_parameters);
-        _configuration = configuration;
+        Model = LLamaWeights.LoadFromFile(Parameters);
+        Configuration = configuration;
         Id = Path.GetFileNameWithoutExtension(configuration.PathToModelFile);
     }
 
-    public abstract Task<ChatResponse>
-        GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public abstract Task<ChatResponse> GenerateAsync(
+        ChatRequest request,
+        CancellationToken cancellationToken = default);
 
-    protected string ConvertRole(MessageRole role)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
+    protected static string ConvertRole(MessageRole role)
     {
         return role switch
         {
@@ -40,11 +84,23 @@ public abstract class LLamaSharpModelBase : IChatModel
             _ => throw new NotSupportedException($"the role {role} is not supported")
         };
     }
-    protected string ConvertMessage(Message message)
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    protected static string ConvertMessage(Message message)
     {
         return $"{ConvertRole(message.Role)}{message.Content}";
     }
-    protected string ToPrompt(IEnumerable<Message> messages)
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="messages"></param>
+    /// <returns></returns>
+    protected static string ToPrompt(IEnumerable<Message> messages)
     {
         return string.Join("\n", messages.Select(ConvertMessage).ToArray());
     }

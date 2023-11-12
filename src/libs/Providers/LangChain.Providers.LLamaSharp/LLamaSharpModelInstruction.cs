@@ -4,8 +4,18 @@ using System.Diagnostics;
 
 namespace LangChain.Providers.LLamaSharp;
 
+/// <summary>
+/// 
+/// </summary>
+[CLSCompliant(false)]
 public class LLamaSharpModelInstruction : LLamaSharpModelBase
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="temperature"></param>
+    /// <returns></returns>
     public static LLamaSharpModelInstruction FromPath(string path, float temperature = 0)
     {
         return new LLamaSharpModelInstruction(new LLamaSharpConfiguration
@@ -16,13 +26,32 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="configuration"></param>
     public LLamaSharpModelInstruction(LLamaSharpConfiguration configuration) : base(configuration)
     {
     }
-    string SanitizeOutput(string res)
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="res"></param>
+    /// <returns></returns>
+    private static string SanitizeOutput(string res)
     {
-        return res.Replace("\n>", "").Trim();
+        return res
+            .Replace("\n>", string.Empty)
+            .Trim();
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public override async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
         var prompt = ToPrompt(request.Messages) + "\n";
@@ -30,14 +59,14 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
         var watch = Stopwatch.StartNew();
 
 
-        var context = _model.CreateContext(_parameters);
+        var context = Model.CreateContext(Parameters);
         var ex = new InstructExecutor(context);
 
         var inferenceParams = new InferenceParams()
         {
-            Temperature = _configuration.Temperature,
+            Temperature = Configuration.Temperature,
             AntiPrompts = new List<string> { ">" },
-            MaxTokens = _configuration.MaxTokens,
+            MaxTokens = Configuration.MaxTokens,
 
         };
 
@@ -49,7 +78,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
             buf += text;
         }
 
-        buf = SanitizeOutput(buf);
+        buf = LLamaSharpModelInstruction.SanitizeOutput(buf);
         var result = request.Messages.ToList();
         result.Add(buf.AsAiMessage());
 

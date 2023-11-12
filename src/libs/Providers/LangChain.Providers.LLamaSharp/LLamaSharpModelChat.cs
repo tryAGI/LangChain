@@ -1,22 +1,42 @@
 ﻿using System.Diagnostics;
 using LLama;
-using System.Reflection;
 using LLama.Common;
 
 namespace LangChain.Providers.LLamaSharp
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
     public class LLamaSharpModelChat : LLamaSharpModelBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
         public LLamaSharpModelChat(LLamaSharpConfiguration configuration) : base(configuration)
         {
         }
 
-
-        string SanitizeOutput(string res)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
+        private static string SanitizeOutput(string res)
         {
-            return res.Replace("Human:", "").Replace("Assistant:", "").Trim();
+            return res
+                .Replace("Human:", string.Empty)
+                .Replace("Assistant:", string.Empty)
+                .Trim();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<ChatResponse> GenerateAsync(ChatRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -25,14 +45,14 @@ namespace LangChain.Providers.LLamaSharp
             var watch = Stopwatch.StartNew();
 
 
-            var context = _model.CreateContext(_parameters);
+            var context = Model.CreateContext(Parameters);
             var ex = new InteractiveExecutor(context);
             ChatSession session = new ChatSession(ex);
             var inferenceParams = new InferenceParams()
             {
-                Temperature = _configuration.Temperature,
+                Temperature = Configuration.Temperature,
                 AntiPrompts = new List<string> { "Human:" },
-                MaxTokens = _configuration.MaxTokens,
+                MaxTokens = Configuration.MaxTokens,
 
             };
 
@@ -44,7 +64,7 @@ namespace LangChain.Providers.LLamaSharp
                 buf += text;
             }
 
-            buf = SanitizeOutput(buf);
+            buf = LLamaSharpModelChat.SanitizeOutput(buf);
             var result = request.Messages.ToList();
             result.Add(buf.AsAiMessage());
 
