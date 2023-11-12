@@ -37,7 +37,7 @@ public class VectorStoreIndexCreator
     /// <summary>
     /// Create a vectorstore index from documents.
     /// </summary>
-    public async Task<VectorStoreIndexWrapper> FromDocumentsAsync(List<Document> documents)
+    public async Task<VectorStoreIndexWrapper> FromDocumentsAsync(IReadOnlyCollection<Document> documents)
     {
         var subDocs = TextSplitter.SplitDocuments(documents);
         await VectorStore.AddDocumentsAsync(subDocs);

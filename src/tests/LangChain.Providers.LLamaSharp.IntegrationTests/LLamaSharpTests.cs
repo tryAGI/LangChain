@@ -144,17 +144,15 @@ public partial class LLamaSharpTests
         var answer = index.QueryAsync(question, stuffDocumentsChain,
             inputKey: "question" // variable name in prompt template for the question
                                  // it would be passed by to stuffDocumentsChain
-            ).Result;
+            ).Result ?? string.Empty;
 
 
         Assert.IsTrue(answer.Contains("Bob"));
     }
 
-    IChain CreateChain1(IChatModel model, IEmbeddings embeddings)
+    private IChain CreateChain1(IChatModel model, IEmbeddings embeddings)
     {
-
-        string[] texts = new string[]
-        {
+        string[] texts = {
             "I spent entire day watching TV",
             "My dog name is Bob",
             "This icecream is delicious",

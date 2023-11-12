@@ -8,9 +8,15 @@ namespace LangChain.Sources;
 /// </summary>
 public class PdfPigPdfSource : ISource
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public string Path { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
     public PdfPigPdfSource(string path)
     {
         Path = path;

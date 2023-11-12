@@ -34,7 +34,7 @@ public class ChromaTests
         var actual = await chroma.GetCollectionAsync();
 
         actual.Should().NotBeNull();
-        actual.Id.Should().NotBeEmpty();
+        actual!.Id.Should().NotBeEmpty();
         actual.Name.Should().BeEquivalentTo(collectionName);
 
         await chroma.DeleteCollectionAsync();
@@ -74,12 +74,12 @@ public class ChromaTests
 
         var actualFirstDocument = await chroma.GetDocumentByIdAsync(firstId);
         actualFirstDocument.Should().NotBeNull();
-        actualFirstDocument.PageContent.Should().BeEquivalentTo(documents[0].PageContent);
+        actualFirstDocument!.PageContent.Should().BeEquivalentTo(documents[0].PageContent);
         actualFirstDocument.Metadata["color"].Should().BeEquivalentTo(documents[0].Metadata["color"]);
 
         var actualSecondDocument = await chroma.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
-        actualSecondDocument.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
+        actualSecondDocument!.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(documents[1].Metadata["color"]);
     }
 
@@ -117,14 +117,14 @@ public class ChromaTests
 
         var actualFirstDocument = await chroma.GetDocumentByIdAsync(firstId);
         actualFirstDocument.Should().NotBeNull();
-        actualFirstDocument.PageContent.Should().BeEquivalentTo(texts[0]);
+        actualFirstDocument!.PageContent.Should().BeEquivalentTo(texts[0]);
         actualFirstDocument.Metadata["string"].Should().BeEquivalentTo(metadatas[0]["string"]);
         actualFirstDocument.Metadata["double"].Should().BeEquivalentTo(metadatas[0]["double"]);
         actualFirstDocument.Metadata["guid"].Should().BeEquivalentTo(metadatas[0]["guid"]);
 
         var actualSecondDocument = await chroma.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
-        actualSecondDocument.PageContent.Should().BeEquivalentTo(texts[1]);
+        actualSecondDocument!.PageContent.Should().BeEquivalentTo(texts[1]);
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(metadatas[1]["color"]);
     }
 
@@ -230,7 +230,9 @@ public class ChromaTests
         foreach (var embeddingFile in Directory.EnumerateFiles("embeddings"))
         {
             var jsonRaw = File.ReadAllText(embeddingFile);
-            var json = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(jsonRaw);
+            var json =
+                JsonConvert.DeserializeObject<Dictionary<string, float[]>>(jsonRaw) ??
+                throw new InvalidOperationException("json is null");
             var kv = json.First();
             EmbeddingsDict.Add(kv.Key, kv.Value);
         }
