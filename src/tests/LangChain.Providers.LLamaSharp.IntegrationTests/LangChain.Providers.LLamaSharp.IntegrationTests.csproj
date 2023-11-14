@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Databases\LangChain.Databases.Chroma\LangChain.Databases.Chroma.csproj" />
     <ProjectReference Include="..\..\libs\Databases\LangChain.Databases.InMemory\LangChain.Databases.InMemory.csproj" />
+    <ProjectReference Include="..\..\libs\Extensions\LangChain.Extensions.Docker\LangChain.Extensions.Docker.csproj" />
     <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj" />
     <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.LLamaSharp\LangChain.Providers.LLamaSharp.csproj" />
   </ItemGroup>
