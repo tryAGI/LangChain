@@ -11,6 +11,9 @@ public class DockerTests
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
 
     [TestMethod]
+#if CONTINUOUS_INTEGRATION_BUILD
+    [Ignore]
+#endif
     public void SimpleHelloWorldTest()
     {
         var model = LLamaSharpModelInstruction.FromPath(ModelPath);
