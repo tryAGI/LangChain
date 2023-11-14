@@ -18,7 +18,7 @@ public class RetreiveDocumentsChain : BaseStackableChain
         OutputKeys = new[] { outputKey };
     }
 
-    protected override async Task<IChainValues> InternallCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         var retreiver = _index.Store.AsRetreiver();
         retreiver.K = _amount;

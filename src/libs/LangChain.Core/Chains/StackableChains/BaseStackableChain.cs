@@ -46,7 +46,7 @@ public abstract class BaseStackableChain : IChain
     {
         try
         {
-            return InternallCall(values);
+            return InternalCall(values);
         }
         catch (StackableChainException)
         {
@@ -63,7 +63,7 @@ public abstract class BaseStackableChain : IChain
 
     }
 
-    protected abstract Task<IChainValues> InternallCall(IChainValues values);
+    protected abstract Task<IChainValues> InternalCall(IChainValues values);
 
     public static StackChain operator |(BaseStackableChain a, BaseStackableChain b)
     {

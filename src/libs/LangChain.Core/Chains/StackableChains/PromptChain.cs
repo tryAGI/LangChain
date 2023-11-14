@@ -33,7 +33,7 @@ public class PromptChain : BaseStackableChain
 
 
 
-    protected override Task<IChainValues> InternallCall(IChainValues values)
+    protected override Task<IChainValues> InternalCall(IChainValues values)
     {
         // validate that input keys containing all variables
         var valueKeys = values.Value.Keys;

@@ -33,7 +33,7 @@ public class StackChain : BaseStackableChain
         return this;
     }
 
-    protected override async Task<IChainValues> InternallCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         // since it is reference type, the values would be changed anyhow
         var originalValues = values;
