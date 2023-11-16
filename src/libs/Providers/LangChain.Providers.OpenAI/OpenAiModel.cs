@@ -1,3 +1,6 @@
+using OpenAI;
+using OpenAI.Constants;
+
 namespace LangChain.Providers.OpenAI;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -34,18 +37,13 @@ public partial class OpenAiModel :
     public string User { get; set; } = string.Empty;
 
     /// <inheritdoc/>
-    public int ContextLength => ApiHelpers.CalculateContextLength(Id);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public HttpClient HttpClient { get; private set; }
+    public int ContextLength => ContextLengths.Get(Id);
 
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public OpenAiApi Api { get; private set; }
+    public OpenAIClient Api { get; private set; }
 
     #endregion
 
@@ -55,22 +53,20 @@ public partial class OpenAiModel :
     /// Wrapper around OpenAI large language models.
     /// </summary>
     /// <param name="configuration"></param>
-    /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public OpenAiModel(OpenAiConfiguration configuration, HttpClient httpClient)
+    public OpenAiModel(OpenAiConfiguration configuration)
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
         EmbeddingModelId = configuration.EmbeddingModelId ?? throw new ArgumentException("EmbeddingModelId is not defined", nameof(configuration));
-        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
         Encoding = Tiktoken.Encoding.TryForModel(Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
-        Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
+        Api = new OpenAIClient(ApiKey);
         if (configuration.Endpoint != null &&
             !string.IsNullOrWhiteSpace(configuration.Endpoint))
         {
-            Api.BaseUrl = configuration.Endpoint;
+            //Api.BaseUrl = configuration.Endpoint;
         }
     }
 
@@ -79,16 +75,14 @@ public partial class OpenAiModel :
     /// </summary>
     /// <param name="apiKey"></param>
     /// <param name="id"></param>
-    /// <param name="httpClient"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public OpenAiModel(string apiKey, HttpClient httpClient, string id)
+    public OpenAiModel(string apiKey, string id)
     {
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
-        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
 
         Encoding = Tiktoken.Encoding.TryForModel(Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
-        Api = new OpenAiApi(apiKey: ApiKey, HttpClient);
+        Api = new OpenAIClient(ApiKey);
     }
 
     #endregion
@@ -98,10 +92,10 @@ public partial class OpenAiModel :
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int promptTokens, int completionTokens)
     {
-        return ApiHelpers.TryCalculatePriceInUsd(
-            modelId: Id,
-            completionTokens: completionTokens,
-            promptTokens: promptTokens) ?? 0.0;
+        return ChatPrices.TryGet(
+            model: new ChatModel(Id),
+            outputTokens: completionTokens,
+            inputTokens: promptTokens) ?? 0.0;
     }
 
     #endregion

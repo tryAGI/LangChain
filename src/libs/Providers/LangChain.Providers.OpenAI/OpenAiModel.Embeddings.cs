@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using OpenAI.Embeddings;
 
 namespace LangChain.Providers.OpenAI;
 
@@ -7,18 +8,18 @@ public partial class OpenAiModel : IEmbeddingModel
     #region Properties
 
     /// <inheritdoc cref="OpenAiConfiguration.EmbeddingModelId"/>
-    public string EmbeddingModelId { get; init; } = EmbeddingModelIds.Ada002;
+    public string EmbeddingModelId { get; init; } = global::OpenAI.Constants.EmbeddingModel.Ada002;
 
     /// <inheritdoc/>
-    public int MaximumInputLength => ApiHelpers.CalculateContextLength(EmbeddingModelId);
+    public int MaximumInputLength => ContextLengths.Get(EmbeddingModelId);
 
     #endregion
 
     #region Methods
 
-    private Usage GetUsage(CreateEmbeddingResponse response)
+    private Usage GetUsage(EmbeddingsResponse response)
     {
-        var promptTokens = response.Usage.Prompt_tokens;
+        var promptTokens = response.Usage.PromptTokens ?? 0;
         var priceInUsd = CalculatePriceInUsd(
             completionTokens: 0,
             promptTokens: promptTokens);
@@ -36,12 +37,12 @@ public partial class OpenAiModel : IEmbeddingModel
         CancellationToken cancellationToken = default)
     {
         var watch = Stopwatch.StartNew();
-        var response = await Api.CreateEmbeddingAsync(new CreateEmbeddingRequest
-        {
-            Input = text,
-            Model = EmbeddingModelId,
-            User = User,
-        }, cancellationToken).ConfigureAwait(false);
+        var response = await Api.EmbeddingsEndpoint.CreateEmbeddingAsync(
+            request: new EmbeddingsRequest(
+                input: text,
+                model: EmbeddingModelId,
+                user: User),
+            cancellationToken).ConfigureAwait(false);
 
         var usage = GetUsage(response) with
         {
@@ -52,7 +53,7 @@ public partial class OpenAiModel : IEmbeddingModel
             TotalUsage += usage;
         }
 
-        return response.Data.First().Embedding1.Select(static x => (float)x).ToArray();
+        return response.Data[0].Embedding.Select(static x => (float)x).ToArray();
     }
 
     /// <inheritdoc/>

@@ -27,8 +27,7 @@ public static partial class ServiceCollectionExtensions
             .AddHttpClient<OpenAiModel>();
         _ = services
             .AddScoped<OpenAiModel>(static services => new OpenAiModel(
-                configuration: services.GetRequiredService<IOptions<OpenAiConfiguration>>().Value,
-                httpClient: services.GetRequiredService<HttpClient>()));
+                services.GetRequiredService<IOptions<OpenAiConfiguration>>().Value));
 
         return services;
     }

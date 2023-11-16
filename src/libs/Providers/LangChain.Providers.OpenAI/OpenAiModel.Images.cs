@@ -1,3 +1,7 @@
+using OpenAI.Constants;
+using OpenAI.Images;
+using OpenAI.Models;
+
 namespace LangChain.Providers.OpenAI;
 
 public partial class OpenAiModel : IGenerateImageModel
@@ -9,19 +13,23 @@ public partial class OpenAiModel : IGenerateImageModel
         string prompt,
         CancellationToken cancellationToken = default)
     {
-        const CreateImageRequestSize size = CreateImageRequestSize._256x256;
-        var response = await Api.CreateImageAsync(new CreateImageRequest
-        {
-            Prompt = prompt,
-            N = 1,
-            Size = size,
-            Response_format = CreateImageRequestResponse_format.Url,
-            User = User,
-        }, cancellationToken).ConfigureAwait(false);
+        var response = await Api.ImagesEndPoint.GenerateImageAsync(
+            request: new ImageGenerationRequest(
+                prompt: prompt,
+                model: Model.DallE_3,
+                numberOfResults: 1,
+                quality: ImageQuality.Standard,
+                responseFormat: ResponseFormat.Url,
+                size: ImageResolution._256x256,
+                user: User),
+            cancellationToken).ConfigureAwait(false);
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = ApiHelpers.CalculatePriceInUsd(size),
+            PriceInUsd = ImagePrices.TryGet(
+                model: ImageModel.DallE3,
+                resolution: ImageResolution._256x256,
+                quality: ImageQuality.Standard) ?? 0.0,
         };
         lock (_usageLock)
         {
@@ -29,7 +37,7 @@ public partial class OpenAiModel : IGenerateImageModel
         }
 
         return new Uri(
-            response.Data.First().Url ??
+            response[0] ??
             throw new InvalidOperationException("Url is null"));
     }
 
@@ -50,19 +58,23 @@ public partial class OpenAiModel : IGenerateImageModel
         string prompt,
         CancellationToken cancellationToken = default)
     {
-        const CreateImageRequestSize size = CreateImageRequestSize._256x256;
-        var response = await Api.CreateImageAsync(new CreateImageRequest
-        {
-            Prompt = prompt,
-            N = 1,
-            Size = size,
-            Response_format = CreateImageRequestResponse_format.B64_json,
-            User = User,
-        }, cancellationToken).ConfigureAwait(false);
+        var response = await Api.ImagesEndPoint.GenerateImageAsync(
+            request: new ImageGenerationRequest(
+                prompt: prompt,
+                model: Model.DallE_3,
+                numberOfResults: 1,
+                quality: ImageQuality.Standard,
+                responseFormat: ResponseFormat.B64_Json,
+                size: ImageResolution._256x256,
+                user: User),
+            cancellationToken).ConfigureAwait(false);
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = ApiHelpers.CalculatePriceInUsd(size),
+            PriceInUsd = ImagePrices.TryGet(
+                model: ImageModel.DallE3,
+                resolution: ImageResolution._256x256,
+                quality: ImageQuality.Standard) ?? 0.0,
         };
         lock (_usageLock)
         {
@@ -70,7 +82,7 @@ public partial class OpenAiModel : IGenerateImageModel
         }
 
         return Convert.FromBase64String(
-            response.Data.First().B64_json ??
+            response[0] ??
             throw new InvalidOperationException("B64_json is null"));
     }
 
