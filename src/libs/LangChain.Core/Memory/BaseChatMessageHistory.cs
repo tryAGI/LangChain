@@ -6,17 +6,18 @@ public abstract class BaseChatMessageHistory
 {
     public IList<Message> Messages { get; set; } = new List<Message>();
 
-    public void AddUserMessage(string message)
+    public async Task AddUserMessage(string message)
     {
-        AddMessage(message.AsHumanMessage());
+        await AddMessage(message.AsHumanMessage());
+        
     }
 
-    public void AddAiMessage(string message)
+    public async Task AddAiMessage(string message)
     {
-        AddMessage(message.AsAiMessage());
+        await AddMessage(message.AsAiMessage());
     }
 
-    public abstract void AddMessage(Message message);
+    public abstract Task AddMessage(Message message);
 
-    public abstract void Clear();
+    public abstract Task Clear();
 }

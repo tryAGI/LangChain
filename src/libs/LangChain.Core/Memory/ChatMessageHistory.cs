@@ -4,13 +4,15 @@ namespace LangChain.Memory;
 
 public class ChatMessageHistory : BaseChatMessageHistory
 {
-    public override void AddMessage(Message message)
+    public override Task AddMessage(Message message)
     {
         Messages.Add(message);
+        return Task.CompletedTask;
     }
 
-    public override void Clear()
+    public override Task Clear()
     {
         Messages.Clear();
+        return Task.CompletedTask;
     }
 }

@@ -63,16 +63,5 @@ public class StackChain : BaseStackableChain
 
 
 
-    public async Task<IChainValues> Run()
-    {
-
-        var res = await CallAsync(new ChainValues());
-        return res;
-    }
-
-    public async Task<string> Run(string resultKey)
-    {
-        var res = await CallAsync(new ChainValues());
-        return res.Value[resultKey].ToString();
-    }
+    
 }

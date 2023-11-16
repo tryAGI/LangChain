@@ -1,38 +1,51 @@
 ﻿using LangChain.Abstractions.Chains.Base;
 using LangChain.Chains.HelperChains;
+using LangChain.Chains.StackableChains;
 using LangChain.Indexes;
+using LangChain.Memory;
 using LangChain.Providers;
 
 namespace LangChain.Chains;
 
 public static class Chain
 {
-    public static BaseStackableChain Template(string template,
+    public static PromptChain Template(string template,
         string outputKey = "prompt")
     {
         return new PromptChain(template, outputKey);
     }
 
-    public static BaseStackableChain Set(string value, string outputKey = "value")
+    public static SetChain Set(string value, string outputKey = "value")
     {
         return new SetChain(value, outputKey);
     }
 
-    public static BaseStackableChain LLM(IChatModel llm,
+    public static SetLambdaChain Set(Func<string> valueGetter, string outputKey = "value")
+    {
+        return new SetLambdaChain(valueGetter, outputKey);
+    }
+
+    public static LLMChain LLM(IChatModel llm,
         string inputKey = "prompt", string outputKey = "text")
     {
         return new LLMChain(llm, inputKey, outputKey);
     }
 
-    public static BaseStackableChain RetreiveDocuments(VectorStoreIndexWrapper index,
+    public static RetreiveDocumentsChain RetreiveDocuments(VectorStoreIndexWrapper index,
         string inputKey = "query", string outputKey = "documents")
     {
         return new RetreiveDocumentsChain(index, inputKey, outputKey);
     }
 
-    public static BaseStackableChain StuffDocuments(
+    public static StuffDocumentsChain StuffDocuments(
         string inputKey = "documents", string outputKey = "combined")
     {
         return new StuffDocumentsChain(inputKey, outputKey);
+    }
+
+    public static UpdateMemoryChain UpdateMemory(BaseChatMemory memory,
+        string requestKey = "query", string responseKey = "text")
+    {
+        return new UpdateMemoryChain(memory, requestKey, responseKey);
     }
 }

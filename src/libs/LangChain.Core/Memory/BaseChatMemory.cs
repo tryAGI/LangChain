@@ -5,25 +5,31 @@ namespace LangChain.Memory;
 public abstract class BaseChatMemory : BaseMemory
 {
     protected BaseChatMessageHistory ChatHistory { get; set; }
-    public bool ReturnMessages { get; set; }
+    public string? OutputKey { get; set; }
+    public string? InputKey { get; set; }
+    
+    // note: return type can't be implemented because of Any type as return type in Buffer property
 
-    public BaseChatMemory(BaseChatMemoryInput input)
+    protected BaseChatMemory(BaseChatMessageHistory chatHistory)
     {
-        if (input.ChatHistory is null) ChatHistory = new ChatMessageHistory();
-        else ChatHistory = input.ChatHistory;
-        ReturnMessages = input.ReturnMessages;
+        ChatHistory = chatHistory;
     }
 
-    public abstract override OutputValues LoadMemoryVariables(InputValues inputValues);
-
-    public override void SaveContext(InputValues inputValues, OutputValues outputValues)
+    /// <summary>
+    /// This used just to save user message as input and AI message as output
+    /// </summary>
+    /// <param name="inputValues"></param>
+    /// <param name="outputValues"></param>
+    public override Task SaveContext(InputValues inputValues, OutputValues outputValues)
     {
         ChatHistory.AddUserMessage(inputValues.Value[inputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
         ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
+        return Task.CompletedTask;
     }
 
-    public void Clear()
+    public override Task Clear()
     {
         ChatHistory.Clear();
+        return Task.CompletedTask;
     }
 }

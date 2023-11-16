@@ -2,6 +2,7 @@
 using LangChain.Abstractions.Schema;
 using LangChain.Callback;
 using LangChain.Chains.HelperChains.Exceptions;
+using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
@@ -77,5 +78,18 @@ public abstract class BaseStackableChain : IChain
     public static StackChain BitwiseOr(BaseStackableChain left, BaseStackableChain right)
     {
         return left | right;
+    }
+
+    public async Task<IChainValues> Run()
+    {
+
+        var res = await CallAsync(new ChainValues());
+        return res;
+    }
+
+    public async Task<string> Run(string resultKey)
+    {
+        var res = await CallAsync(new ChainValues());
+        return res.Value[resultKey].ToString();
     }
 }
