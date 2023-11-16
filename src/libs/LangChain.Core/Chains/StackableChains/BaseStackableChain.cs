@@ -44,9 +44,13 @@ public abstract class BaseStackableChain : IChain
     public Task<IChainValues> CallAsync(IChainValues values, ICallbacks? callbacks = null,
         List<string>? tags = null, Dictionary<string, object>? metadata = null)
     {
+        if (values == null)
+        {
+            throw new ArgumentNullException(nameof(values));
+        }
         try
         {
-            return InternallCall(values);
+            return InternalCall(values);
         }
         catch (StackableChainException)
         {
@@ -63,7 +67,7 @@ public abstract class BaseStackableChain : IChain
 
     }
 
-    protected abstract Task<IChainValues> InternallCall(IChainValues values);
+    protected abstract Task<IChainValues> InternalCall(IChainValues values);
 
     public static StackChain operator |(BaseStackableChain a, BaseStackableChain b)
     {

@@ -18,7 +18,7 @@ public class LLMChain : BaseStackableChain
         _llm = llm;
     }
 
-    protected override async Task<IChainValues> InternallCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         var prompt = values.Value[InputKeys[0]].ToString();
         var response = await _llm.GenerateAsync(new ChatRequest(new List<Message>() { prompt.AsSystemMessage() }));

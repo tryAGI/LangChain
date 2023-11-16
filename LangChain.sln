@@ -4,12 +4,12 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{23506EB8-1B27-4FD0-B570-2F5EF2C33034}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Packages.props = src\Directory.Packages.props
 		LICENSE = LICENSE
 		README.md = README.md
-		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{EB6F52EE-7E7E-4624-A99E-79D3F190F386}"
@@ -140,11 +140,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.InMemor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
+		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Extensions.Docker", "src\libs\Extensions\LangChain.Extensions.Docker\LangChain.Extensions.Docker.csproj", "{12186ED0-49FE-47E8-BCD6-81424575D603}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -328,6 +330,10 @@ Global
 		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A71579D1-CCAF-4F4C-B2E7-01968F11484F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12186ED0-49FE-47E8-BCD6-81424575D603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12186ED0-49FE-47E8-BCD6-81424575D603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12186ED0-49FE-47E8-BCD6-81424575D603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12186ED0-49FE-47E8-BCD6-81424575D603}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -383,6 +389,7 @@ Global
 		{B89821C6-D8E9-4D0E-9BB6-13E3C0A24D9D} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{A71579D1-CCAF-4F4C-B2E7-01968F11484F} = {C58D122C-808F-43F9-BB23-4E517046F533}
 		{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B} = {23506EB8-1B27-4FD0-B570-2F5EF2C33034}
+		{12186ED0-49FE-47E8-BCD6-81424575D603} = {238D18D4-CBEF-46BF-B08C-F1E593DAB398}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

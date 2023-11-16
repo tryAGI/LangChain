@@ -32,7 +32,7 @@ public class StuffDocumentsChain : BaseStackableChain
         return this;
     }
 
-    protected override Task<IChainValues> InternallCall(IChainValues values)
+    protected override Task<IChainValues> InternalCall(IChainValues values)
     {
         var documentsObject = values.Value[InputKeys[0]];
         if (documentsObject is not List<Document> docs)
