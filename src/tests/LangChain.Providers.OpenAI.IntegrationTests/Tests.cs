@@ -1,8 +1,10 @@
-// namespace LangChain.Providers.OpenAI.IntegrationTests;
-//
-// [TestClass]
-// public class GeneralTests
-// {
+using NUnit.Framework;
+
+namespace LangChain.Providers.OpenAI.IntegrationTests;
+
+[TestFixture, Explicit]
+public class GeneralTests
+{
 //     [TestMethod]
 // #if CONTINUOUS_INTEGRATION_BUILD
 //     [Ignore]
@@ -30,4 +32,4 @@
 //
 //         Console.WriteLine(response.Messages.AsHistory());
 //     }
-// }
+}

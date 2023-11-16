@@ -9,6 +9,7 @@ public partial class OpenAiModel : ITextToSpeechModel<OpenAiTextToSpeechSettings
     #region Methods
 
     /// <inheritdoc/>
+    [CLSCompliant(false)]
     public async Task<byte[]> GenerateSpeechAsync(
         string input,
         OpenAiTextToSpeechSettings? settings = default,

@@ -20,11 +20,10 @@ public abstract class BaseChatMemory : BaseMemory
     /// </summary>
     /// <param name="inputValues"></param>
     /// <param name="outputValues"></param>
-    public override Task SaveContext(InputValues inputValues, OutputValues outputValues)
+    public override async Task SaveContext(InputValues inputValues, OutputValues outputValues)
     {
-        ChatHistory.AddUserMessage(inputValues.Value[inputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
-        ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
-        return Task.CompletedTask;
+        await ChatHistory.AddUserMessage(inputValues.Value[inputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
+        await ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
     }
 
     public override Task Clear()

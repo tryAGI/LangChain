@@ -8,4 +8,9 @@
     <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+
 </Project>

@@ -6,6 +6,7 @@ namespace LangChain.Providers.OpenAI;
 /// <summary>
 /// According https://platform.openai.com/docs/guides/text-to-speech.
 /// </summary>
+[CLSCompliant(false)]
 public readonly record struct OpenAiTextToSpeechSettings(
     TextToSpeechModel Model,
     SpeechVoice Voice,
