@@ -62,13 +62,13 @@ public partial class AnyscaleModel : IChatModelWithTokenCounting
         var completionTokens = response.Usage?.Completion_tokens ?? 0;
         var promptTokens = response.Usage?.Prompt_tokens ?? 0;
         var priceInUsd = CalculatePriceInUsd(
-            completionTokens: completionTokens,
-            promptTokens: promptTokens);
+            outputTokens: completionTokens,
+            inputTokens: promptTokens);
 
         return Usage.Empty with
         {
-            PromptTokens = promptTokens,
-            CompletionTokens = completionTokens,
+            InputTokens = promptTokens,
+            OutputTokens = completionTokens,
             Messages = 1,
             PriceInUsd = priceInUsd,
         };

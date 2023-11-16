@@ -2,9 +2,9 @@
 
 var inMemoryHistory = new ChatMessageHistory();
 
-inMemoryHistory.AddUserMessage("hi!");
+await inMemoryHistory.AddUserMessage("hi!");
 
-inMemoryHistory.AddAiMessage("whats up?");
+await inMemoryHistory.AddAiMessage("whats up?");
 
 foreach (var message in inMemoryHistory.Messages)
 {

@@ -90,12 +90,12 @@ public partial class AnyscaleModel :
     #region Methods
 
     /// <inheritdoc/>
-    public double CalculatePriceInUsd(int promptTokens, int completionTokens)
+    public double CalculatePriceInUsd(int inputTokens, int outputTokens)
     {
         return ApiHelpers.CalculatePriceInUsd(
             modelId: Id,
-            completionTokens: completionTokens,
-            promptTokens: promptTokens);
+            completionTokens: outputTokens,
+            promptTokens: inputTokens);
     }
 
     #endregion

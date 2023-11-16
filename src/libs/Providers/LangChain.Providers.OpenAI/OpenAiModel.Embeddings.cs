@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using OpenAI.Constants;
 using OpenAI.Embeddings;
 
 namespace LangChain.Providers.OpenAI;
@@ -8,7 +9,7 @@ public partial class OpenAiModel : IEmbeddingModel
     #region Properties
 
     /// <inheritdoc cref="OpenAiConfiguration.EmbeddingModelId"/>
-    public string EmbeddingModelId { get; init; } = global::OpenAI.Constants.EmbeddingModel.Ada002;
+    public string EmbeddingModelId { get; init; } = EmbeddingModel.Ada002;
 
     /// <inheritdoc/>
     public int MaximumInputLength => ContextLengths.Get(EmbeddingModelId);
@@ -19,14 +20,14 @@ public partial class OpenAiModel : IEmbeddingModel
 
     private Usage GetUsage(EmbeddingsResponse response)
     {
-        var promptTokens = response.Usage.PromptTokens ?? 0;
-        var priceInUsd = CalculatePriceInUsd(
-            completionTokens: 0,
-            promptTokens: promptTokens);
+        var tokens = response.Usage.PromptTokens ?? 0;
+        var priceInUsd = EmbeddingPrices.TryGet(
+            model: new EmbeddingModel(EmbeddingModelId),
+            tokens: tokens) ?? 0.0D;
 
         return Usage.Empty with
         {
-            PromptTokens = promptTokens,
+            InputTokens = tokens,
             PriceInUsd = priceInUsd,
         };
     }

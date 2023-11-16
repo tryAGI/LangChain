@@ -68,16 +68,16 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
 
     private Usage GetUsage(global::OpenAI.Chat.ChatResponse response)
     {
-        var completionTokens = response.Usage.CompletionTokens ?? 0;
-        var promptTokens = response.Usage.PromptTokens ?? 0;
+        var outputTokens = response.Usage.CompletionTokens ?? 0;
+        var inputTokens = response.Usage.PromptTokens ?? 0;
         var priceInUsd = CalculatePriceInUsd(
-            completionTokens: completionTokens,
-            promptTokens: promptTokens);
+            outputTokens: outputTokens,
+            inputTokens: inputTokens);
 
         return Usage.Empty with
         {
-            PromptTokens = promptTokens,
-            CompletionTokens = completionTokens,
+            InputTokens = inputTokens,
+            OutputTokens = outputTokens,
             Messages = 1,
             PriceInUsd = priceInUsd,
         };

@@ -6,9 +6,12 @@ using System.Formats.Tar;
 
 namespace LangChain.Extensions.Docker
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DockerChain : BaseStackableChain
     {
-        class SuppressProgress : IProgress<JSONMessage>
+        sealed class SuppressProgress : IProgress<JSONMessage>
         {
             public void Report(JSONMessage value)
             {
@@ -17,10 +20,30 @@ namespace LangChain.Extensions.Docker
         }
 
         private readonly DockerClient _client;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string Image { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string Filename { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string Command { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="filename"></param>
+        /// <param name="command"></param>
+        /// <param name="inputKey"></param>
+        /// <param name="outputKey"></param>
         public DockerChain(string image= "python:3", string filename="main.py", string command="python", string inputKey="code",string outputKey="result")
         {
             Image = image;
@@ -29,13 +52,13 @@ namespace LangChain.Extensions.Docker
             InputKeys = new[] {inputKey};
             OutputKeys = new[] {outputKey};
 
-            _client = new DockerClientConfiguration()
-                .CreateClient();
+            using var configuration = new DockerClientConfiguration();
+            _client = configuration.CreateClient();
         }
 
-        private string SanitizeCode(string code)
+        private static string SanitizeCode(string code)
         {
-            if (code.StartsWith("```"))
+            if (code.StartsWith("```", StringComparison.Ordinal))
             {
                 // remove first and last lines
                 var lines = code.Split("\n");
@@ -44,16 +67,23 @@ namespace LangChain.Extensions.Docker
             }
             return code;
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         protected override async Task<IChainValues> InternalCall(IChainValues values)
         {
-
+            values = values ?? throw new ArgumentNullException(nameof(values));
+            
             await _client.Images.CreateImageAsync(new ImagesCreateParameters()
             {
                 FromImage = Image
             }, null, new SuppressProgress(), CancellationToken.None).ConfigureAwait(false);
 
 
-            var code = SanitizeCode(values.Value[InputKeys[0]].ToString());
+            var code = SanitizeCode(values.Value[InputKeys[0]].ToString() ?? string.Empty);
 
 
             var tempDir = Path.GetTempPath();
@@ -61,10 +91,10 @@ namespace LangChain.Extensions.Docker
             var appDir = Path.Combine(tempDir, "app");
             Directory.CreateDirectory(appDir);
             var tempFile = Path.Combine(appDir, Filename);
-            await File.WriteAllTextAsync(tempFile, code);
+            await File.WriteAllTextAsync(tempFile, code).ConfigureAwait(false);
 
             MemoryStream archiveStream = new MemoryStream();
-            await TarFile.CreateFromDirectoryAsync(tempDir,archiveStream,false);
+            await TarFile.CreateFromDirectoryAsync(tempDir,archiveStream,false).ConfigureAwait(false);
             archiveStream.Seek(0, SeekOrigin.Begin);
             
             Directory.Delete(tempDir,true);

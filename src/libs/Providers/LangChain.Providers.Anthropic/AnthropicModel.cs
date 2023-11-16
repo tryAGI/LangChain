@@ -109,13 +109,13 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
             .ToArray()
             .AsPrompt());
         var priceInUsd = CalculatePriceInUsd(
-            completionTokens: completionTokens,
-            promptTokens: promptTokens);
+            outputTokens: completionTokens,
+            inputTokens: promptTokens);
 
         return Usage.Empty with
         {
-            PromptTokens = promptTokens,
-            CompletionTokens = completionTokens,
+            InputTokens = promptTokens,
+            OutputTokens = completionTokens,
             Messages = 1,
             PriceInUsd = priceInUsd,
         };
@@ -164,12 +164,12 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
     }
 
     /// <inheritdoc/>
-    public double CalculatePriceInUsd(int promptTokens, int completionTokens)
+    public double CalculatePriceInUsd(int inputTokens, int outputTokens)
     {
         return ApiHelpers.CalculatePriceInUsd(
             modelId: Id,
-            completionTokens: completionTokens,
-            promptTokens: promptTokens);
+            completionTokens: outputTokens,
+            promptTokens: inputTokens);
     }
 
     #endregion

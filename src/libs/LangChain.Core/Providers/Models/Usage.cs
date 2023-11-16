@@ -3,14 +3,14 @@ namespace LangChain.Providers;
 /// <summary>
 /// 
 /// </summary>
-/// <param name="PromptTokens"></param>
-/// <param name="CompletionTokens"></param>
+/// <param name="InputTokens"></param>
+/// <param name="OutputTokens"></param>
 /// <param name="Messages"></param>
 /// <param name="Time"></param>
 /// <param name="PriceInUsd"></param>
 public readonly partial record struct Usage(
-    int PromptTokens,
-    int CompletionTokens,
+    int InputTokens,
+    int OutputTokens,
     int Messages,
     TimeSpan Time,
     double PriceInUsd)
@@ -19,8 +19,8 @@ public readonly partial record struct Usage(
     /// 
     /// </summary>
     public static Usage Empty { get; } = new(
-        PromptTokens: 0,
-        CompletionTokens: 0,
+        InputTokens: 0,
+        OutputTokens: 0,
         Messages: 0,
         Time: TimeSpan.Zero,
         PriceInUsd: 0.0d);
@@ -28,5 +28,5 @@ public readonly partial record struct Usage(
     /// <summary>
     /// 
     /// </summary>
-    public int TotalTokens => PromptTokens + CompletionTokens;
+    public int TotalTokens => InputTokens + OutputTokens;
 }

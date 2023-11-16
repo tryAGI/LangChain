@@ -40,7 +40,7 @@ AI: ";
         var res=chain.Run().Result;
 
         Assert.AreEqual(4,memory.BufferAsMessages.Count);
-        Assert.IsTrue(res.Value["text"].ToString().ToLower()?.Trim().Contains("jimmy"));
+        Assert.IsTrue(res.Value["text"].ToString()?.ToLower()?.Trim().Contains("jimmy"));
 
     }
 

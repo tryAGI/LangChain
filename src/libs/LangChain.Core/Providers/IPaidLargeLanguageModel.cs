@@ -8,8 +8,8 @@ public interface IPaidLargeLanguageModel
     /// <summary>
     /// Returns the price for the given number of tokens in USD.
     /// </summary>
-    /// <param name="promptTokens"></param>
-    /// <param name="completionTokens"></param>
+    /// <param name="inputTokens"></param>
+    /// <param name="outputTokens"></param>
     /// <returns></returns>
-    public double CalculatePriceInUsd(int promptTokens, int completionTokens);
+    public double CalculatePriceInUsd(int inputTokens, int outputTokens);
 }

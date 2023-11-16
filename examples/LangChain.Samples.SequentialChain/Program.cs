@@ -5,7 +5,7 @@ using LangChain.Providers.OpenAI;
 using LangChain.Schema;
 
 using var httpClient = new HttpClient();
-var llm = new Gpt35TurboModel("api-key", httpClient);
+var llm = new Gpt35TurboModel("api-key");
 
 var firstTemplate = "What is a good name for a company that makes {product}?";
 var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));

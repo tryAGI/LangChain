@@ -90,12 +90,12 @@ public partial class OpenAiModel :
     #region Methods
 
     /// <inheritdoc/>
-    public double CalculatePriceInUsd(int promptTokens, int completionTokens)
+    public double CalculatePriceInUsd(int inputTokens, int outputTokens)
     {
         return ChatPrices.TryGet(
             model: new ChatModel(Id),
-            outputTokens: completionTokens,
-            inputTokens: promptTokens) ?? 0.0;
+            outputTokens: outputTokens,
+            inputTokens: inputTokens) ?? 0.0;
     }
 
     #endregion

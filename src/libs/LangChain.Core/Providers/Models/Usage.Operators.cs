@@ -11,8 +11,8 @@ public readonly partial record struct Usage
     public static Usage operator +(Usage a, Usage b)
     {
         return new Usage(
-            PromptTokens: a.PromptTokens + b.PromptTokens,
-            CompletionTokens: a.CompletionTokens + b.CompletionTokens,
+            InputTokens: a.InputTokens + b.InputTokens,
+            OutputTokens: a.OutputTokens + b.OutputTokens,
             Messages: a.Messages + b.Messages,
             Time: a.Time + b.Time,
             PriceInUsd: a.PriceInUsd + b.PriceInUsd);
@@ -27,8 +27,8 @@ public readonly partial record struct Usage
     public static Usage operator -(Usage a, Usage b)
     {
         return new Usage(
-            PromptTokens: a.PromptTokens - b.PromptTokens,
-            CompletionTokens: a.CompletionTokens - b.CompletionTokens,
+            InputTokens: a.InputTokens - b.InputTokens,
+            OutputTokens: a.OutputTokens - b.OutputTokens,
             Messages: a.Messages - b.Messages,
             Time: a.Time - b.Time,
             PriceInUsd: a.PriceInUsd - b.PriceInUsd);
@@ -43,8 +43,8 @@ public readonly partial record struct Usage
     public static Usage operator *(Usage a, double b)
     {
         return new Usage(
-            PromptTokens: (int)Math.Ceiling(a.PromptTokens * b),
-            CompletionTokens: (int)Math.Ceiling(a.CompletionTokens * b),
+            InputTokens: (int)Math.Ceiling(a.InputTokens * b),
+            OutputTokens: (int)Math.Ceiling(a.OutputTokens * b),
             Messages: a.Messages,
 #if NET6_0_OR_GREATER
             Time: a.Time * b,
@@ -63,8 +63,8 @@ public readonly partial record struct Usage
     public static Usage operator /(Usage a, double b)
     {
         return new Usage(
-            PromptTokens: (int)Math.Ceiling(a.PromptTokens / b),
-            CompletionTokens: (int)Math.Ceiling(a.CompletionTokens / b),
+            InputTokens: (int)Math.Ceiling(a.InputTokens / b),
+            OutputTokens: (int)Math.Ceiling(a.OutputTokens / b),
             Messages: a.Messages,
 #if NET6_0_OR_GREATER
             Time: a.Time / b,
