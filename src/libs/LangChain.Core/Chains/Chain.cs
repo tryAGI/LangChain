@@ -48,4 +48,18 @@ public static class Chain
     {
         return new UpdateMemoryChain(memory, requestKey, responseKey);
     }
+
+    public static TTSChain<T> TTS<T>(ITextToSpeechModel<T> model,
+        T settings,
+        string inputKey = "text", string outputKey = "audio")
+    {
+        return new TTSChain<T>(model, settings, inputKey, outputKey);
+    }
+
+    public static STTChain<T> STT<T>(ISpeechToTextModel<T> model,
+        T settings,
+        string inputKey = "audio", string outputKey = "text")
+    {
+        return new STTChain<T>(model, settings, inputKey, outputKey);
+    }
 }

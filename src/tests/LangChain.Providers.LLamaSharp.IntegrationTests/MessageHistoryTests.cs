@@ -16,7 +16,6 @@ public class MessageHistoryTests
     {
         var model = LLamaSharpModelInstruction.FromPath(ModelPath);
 
-        var memory = new ConversationBufferMemory(new ChatMessageHistory());
 
         var promptText =
             @"You are a helpful chatbot
@@ -24,24 +23,28 @@ public class MessageHistoryTests
 Human: {message}
 AI: ";
 
+        var memory = new ConversationBufferMemory(new ChatMessageHistory());
+
         var message = Set("hi, i am Jimmy", "message");
 
         var chain =
             message
-            | Set(() => memory.BufferAsString, outputKey: "chat_history")
+            | Set(() => memory.BufferAsString, outputKey: "chat_history") // get lates messages from buffer every time
             | Template(promptText, outputKey: "prompt")
             | LLM(model, inputKey: "prompt", outputKey: "text")
-            | UpdateMemory(memory, requestKey: "message", responseKey: "text");
+            | UpdateMemory(memory, requestKey: "message", responseKey: "text"); // save the messages to the buffer
                     
-        chain.Run().Wait();
+        chain.Run().Wait(); // call the chain for the first time.
+                            // memory would contain 2 messages(1 from Human, 1 from AI).
 
-        message.Query = "what is my name?";
+        message.Query = "what is my name?"; // change the message.
+                                            // This will appear as a new message from human
 
-        var res=chain.Run().Result;
+        var res=chain.Run().Result;  // call the chain for the second time.
+                                                // prompt will contain previous messages and a question about the name.
 
         Assert.AreEqual(4,memory.BufferAsMessages.Count);
-        Assert.IsTrue(res.Value["text"].ToString()?.ToLower()?.Trim().Contains("jimmy"));
-
+        Assert.IsTrue(res.Value["text"].ToString().ToLower()?.Trim().Contains("jimmy"));
     }
 
 }
