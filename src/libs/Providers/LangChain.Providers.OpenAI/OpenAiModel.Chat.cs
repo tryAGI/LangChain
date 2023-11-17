@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace LangChain.Providers.OpenAI;
 
@@ -31,19 +32,27 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
         return new global::OpenAI.Chat.Message();
     }
 
+    
     private static Message ToMessage(global::OpenAI.Chat.Message message)
     {
+        var role = message.Role switch
+        {
+            global::OpenAI.Chat.Role.System => MessageRole.System,
+            global::OpenAI.Chat.Role.User => MessageRole.Human,
+            //global::OpenAI.Chat.Role.Assistant when message.Function_call != null => MessageRole.FunctionCall,
+            global::OpenAI.Chat.Role.Assistant => MessageRole.Ai,
+            //global::OpenAI.Chat.Role.Function => MessageRole.FunctionResult,
+            _ => MessageRole.Human,
+        };
+        var content= message.Content;
+        // fix: message contains json element instead of string
+        if (content is JsonElement element && element.ValueKind==JsonValueKind.String)
+        {
+            content = element.GetString();
+        }
         return new Message(
-            Content: message.Content, //message.Function_call?.Arguments ?? 
-            Role: message.Role switch
-            {
-                global::OpenAI.Chat.Role.System => MessageRole.System,
-                global::OpenAI.Chat.Role.User => MessageRole.Human,
-                //global::OpenAI.Chat.Role.Assistant when message.Function_call != null => MessageRole.FunctionCall,
-                global::OpenAI.Chat.Role.Assistant => MessageRole.Ai,
-                //global::OpenAI.Chat.Role.Function => MessageRole.FunctionResult,
-                _ => MessageRole.Human,
-            }); //, FunctionName: message.Function_call?.Name
+            Content: content, //message.Function_call?.Arguments ?? 
+            Role: role); //, FunctionName: message.Function_call?.Name
     }
 
     private async Task<global::OpenAI.Chat.ChatResponse> CreateChatCompletionAsync(
