@@ -15,7 +15,7 @@ public static class Chain
         return new PromptChain(template, outputKey);
     }
 
-    public static SetChain Set(string value, string outputKey = "value")
+    public static SetChain Set(object value, string outputKey = "value")
     {
         return new SetChain(value, outputKey);
     }

@@ -6,18 +6,18 @@ namespace LangChain.Chains.HelperChains;
 
 public class SetChain : BaseStackableChain
 {
-    public SetChain(string query, string outputKey = "query")
+    public SetChain(object value, string outputKey = "query")
     {
         OutputKeys = new[] { outputKey };
-        Query = query;
+        Value = value;
     }
 
-    public string Query { get; set; }
+    public object Value { get; set; }
 
 
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
-        values.Value[OutputKeys[0]] = Query;
+        values.Value[OutputKeys[0]] = Value;
         return Task.FromResult(values);
     }
 
