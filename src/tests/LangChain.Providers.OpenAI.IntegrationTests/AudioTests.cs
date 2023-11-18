@@ -26,8 +26,8 @@ public class AudioTests
 
         var chain =
             Set(messageText, "message")
-            | TTS(model, ttsSettings, inputKey: "message", outputKey: "audio")
-            | STT(model, sttSettings, inputKey: "audio", outputKey: "text");
+            | TTS(model, ttsSettings, inputKey: "message", outputKey: "audio").UseCache()
+            | STT(model, sttSettings, inputKey: "audio", outputKey: "text").UseCache();
 
         var res = chain.Run().Result;
 

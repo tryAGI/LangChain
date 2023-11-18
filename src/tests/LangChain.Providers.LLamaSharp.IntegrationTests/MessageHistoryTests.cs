@@ -37,7 +37,7 @@ AI: ";
         chain.Run().Wait(); // call the chain for the first time.
                             // memory would contain 2 messages(1 from Human, 1 from AI).
 
-        message.Query = "what is my name?"; // change the message.
+        message.Value = "what is my name?"; // change the message.
                                             // This will appear as a new message from human
 
         var res=chain.Run().Result;  // call the chain for the second time.
