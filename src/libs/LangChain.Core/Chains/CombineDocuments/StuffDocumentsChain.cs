@@ -55,8 +55,8 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
     public override string ChainType() => "stuff_documents_chain";
 
     public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
-        List<Document> docs,
-        Dictionary<string, object> otherKeys)
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys)
     {
         var inputs = await GetInputs(docs, otherKeys);
         var predict = await _llmChain.Predict(new ChainValues(inputs.Value));
@@ -64,7 +64,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
 
-    public override async Task<int?> PromptLength(List<Document> docs, Dictionary<string, object> otherKeys)
+    public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
         if (_llmChain.Llm is ISupportsCountTokens supportsCountTokens)
         {
@@ -77,7 +77,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         return null;
     }
 
-    private async Task<InputValues> GetInputs(List<Document> docs, Dictionary<string, object> otherKeys)
+    private async Task<InputValues> GetInputs(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
         var docsString = await GetDocsString(docs);
 
@@ -95,7 +95,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         return new InputValues(inputs);
     }
 
-    private async Task<string> GetDocsString(List<Document> docs)
+    private async Task<string> GetDocsString(IReadOnlyList<Document> docs)
     {
         var docStrings = new List<string>();
         foreach (var doc in docs)

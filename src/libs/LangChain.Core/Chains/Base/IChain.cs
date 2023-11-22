@@ -8,9 +8,8 @@ public interface IChain
     string[] InputKeys { get; }
     string[] OutputKeys { get; }
 
-    Task<IChainValues> CallAsync(
-        IChainValues values,
+    Task<IChainValues> CallAsync(IChainValues values,
         ICallbacks? callbacks = null,
-        List<string>? tags = null,
-        Dictionary<string, object>? metadata = null);
+        IReadOnlyList<string>? tags = null,
+        IReadOnlyDictionary<string, object>? metadata = null);
 }

@@ -55,8 +55,21 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
         }
     }
 
-    public Task HandleTextAsync(string text, string runId, string? parentRunId = null)
+    public async Task HandleTextAsync(string text)
     {
-        throw new NotImplementedException();
+        foreach (var handler in Handlers)
+        {
+            if (!handler.IgnoreLlm)
+            {
+                try
+                {
+                    await handler.HandleTextAsync(text, RunId, ParentRunId);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleText: {ex}");
+                }
+            }
+        }
     }
 }

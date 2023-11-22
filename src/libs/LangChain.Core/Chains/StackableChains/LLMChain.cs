@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using LangChain.Abstractions.Schema;
-using LangChain.Callback;
 using LangChain.Providers;
 
 namespace LangChain.Chains.HelperChains;
@@ -13,7 +12,8 @@ public class LLMChain : BaseStackableChain
 
     private const string CACHE_DIR = "cache";
 
-    public LLMChain(IChatModel llm,
+    public LLMChain(
+        IChatModel llm,
         string inputKey = "prompt",
         string outputKey = "text"
         )

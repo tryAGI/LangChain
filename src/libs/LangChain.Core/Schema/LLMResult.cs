@@ -5,7 +5,7 @@ public class LlmResult
     /// <summary>
     /// List of the things generated. Each input could have multiple <see cref="Generation"/>, hence this is a list of lists.
     /// </summary>
-    public Generation[] Generations { get; set; }
+    public Generation[][] Generations { get; set; }
 
     /// <summary>
     /// Dictionary of arbitrary LLM-provider specific output.

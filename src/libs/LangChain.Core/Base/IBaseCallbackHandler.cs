@@ -20,10 +20,9 @@ public interface IBaseCallbackHandler
     /// <summary>
     /// 
     /// </summary>
-    public abstract Task HandleLlmStartAsync(
-        BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
-        List<string>? tags = null, Dictionary<string, object>? metadata = null,
-        string name = null, Dictionary<string, object>? extraParams = null);
+    public abstract Task HandleLlmStartAsync(BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
+        IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null,
+        string name = null, IReadOnlyDictionary<string, object>? extraParams = null);
 
     /// <summary>
     /// Run on new LLM token. Only available when streaming is enabled.
@@ -48,10 +47,10 @@ public interface IBaseCallbackHandler
         string? parentRunId = null);
 
     public Task HandleChatModelStartAsync(BaseLlm llm,
-        List<List<Message>> messages,
+        IReadOnlyList<List<Message>> messages,
         string runId,
         string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null);
+        IReadOnlyDictionary<string, object>? extraParams = null);
 
     public Task HandleChainStartAsync(IChain chain,
         Dictionary<string, object> inputs,

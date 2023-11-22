@@ -27,11 +27,11 @@ public class StuffDocumentsChainTests
 
         var docs = new List<Document>
         {
-            CreateDocument("First page text"),
-            CreateDocument("Second page different text")
+            new Document("First page text"),
+            new Document("Second page different text")
         };
 
-        var result = await chain.CombineDocsAsync(docs, new());
+        var result = await chain.CombineDocsAsync(docs, new Dictionary<string, object>());
 
         result.Output.Should().BeEquivalentTo("predict response");
         result.OtherKeys.Should().BeEmpty();
@@ -99,8 +99,6 @@ public class StuffDocumentsChainTests
 
         return mock;
     }
-
-    private Document CreateDocument(string content) => new(content, new());
 
     private Document CreateDocument(string content, params (string Key, object Value)[] metadatas)
     {

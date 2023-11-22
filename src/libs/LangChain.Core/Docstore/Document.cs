@@ -9,23 +9,16 @@ namespace LangChain.Docstore;
 /// - ported from langchain/docstore/document.py
 /// </remarks>
 /// </summary>
-public class Document
+public class Document(string content, Dictionary<string, object>? metadata = null)
 {
-    public Document(string content, Dictionary<string, object>? metadata = null)
-    {
-        metadata ??= new Dictionary<string, object>();
-        PageContent = content;
-        Metadata = metadata;
-    }
-
     public static Document Empty { get; } = new(
         content: string.Empty,
         metadata: new Dictionary<string, object>());
 
-    public string PageContent { get; set; }
+    public string PageContent { get; set; } = content;
     public int LookupIndex { get; set; }
     public string LookupStr { get; set; }
-    public Dictionary<string, object> Metadata { get; set; }
+    public Dictionary<string, object> Metadata { get; set; } = metadata ?? new Dictionary<string, object>();
 
     private static readonly string[] separator = { "\n\n" };
 
@@ -64,6 +57,7 @@ public class Document
         var lookups = Paragraphs()
             .Where(p => p.ToLower(CultureInfo.InvariantCulture).Contains(LookupStr))
             .ToList();
+
         if (lookups.Count == 0)
         {
             return "No Results";

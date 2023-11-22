@@ -2,6 +2,7 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
+using LangChain.Common;
 using LangChain.Docstore;
 using LangChain.Schema;
 
@@ -44,17 +45,9 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
         var (output, returnDict) = await CombineDocsAsync((docs as List<Document>), otherKeys);
 
         returnDict[OutputKey] = output;
+        returnDict.TryAddKeyValues(values.Value);
 
-        // merge dictionaries
-        foreach (var kv in returnDict)
-        {
-            if (!returnDict.ContainsKey(kv.Key))
-            {
-                values.Value[kv.Key] = returnDict[kv.Key];
-            }
-        }
-
-        return values;
+        return new ChainValues(returnDict);
     }
 
     /// <summary>
@@ -68,7 +61,7 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     /// <param name="docs">a list of documents to use to calculate the total prompt length.</param>
     /// <param name="otherKeys"></param>
     /// <returns>Returns null if the method does not depend on the prompt length, otherwise the length of the prompt in tokens.</returns>
-    public abstract Task<int?> PromptLength(List<Document> docs, Dictionary<string, object> otherKeys);
+    public abstract Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys);
 
     /// <summary>
     /// Combine documents into a single string.
@@ -77,6 +70,6 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     /// <param name="otherKeys"></param>
     /// <returns>The first element returned is the single string output. The second element returned is a dictionary of other keys to return.</returns>
     public abstract Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
-        List<Document> docs,
-        Dictionary<string, object> otherKeys);
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys);
 }
