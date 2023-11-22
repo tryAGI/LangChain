@@ -44,6 +44,6 @@ public abstract class BaseLlm : BaseLanguageModel
     {
         var generations = await Generate(new[] { prompt }, stop);
 
-        return generations.Generations[0].Text;
+        return generations.Generations[0][0].Text;
     }
 }

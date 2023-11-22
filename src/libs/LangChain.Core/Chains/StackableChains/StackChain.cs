@@ -16,7 +16,6 @@ public class StackChain : BaseStackableChain
     {
         _a = a;
         _b = b;
-
     }
 
     public StackChain AsIsolated(string[] inputKeys = null, string[] outputKeys = null)
@@ -51,7 +50,6 @@ public class StackChain : BaseStackableChain
         await _b.CallAsync(values);
         if (IsolatedOutputKeys.Length > 0)
         {
-
             foreach (var key in IsolatedOutputKeys)
             {
                 originalValues.Value[key] = values.Value[key];

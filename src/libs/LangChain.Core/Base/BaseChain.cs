@@ -129,24 +129,14 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     protected abstract Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager);
 
     /// <summary>
-    /// 
+    /// Call the chain on all inputs in the list.
     /// </summary>
-    /// <param name="inputs"></param>
-    /// <returns></returns>
-    public async Task<ChainValues> Apply(List<ChainValues> inputs)
+    public virtual async Task<List<IChainValues>> ApplyAsync(List<ChainValues> inputs)
     {
-        var tasks = inputs.Select(async (input, idx) => await CallAsync(input));
+        var tasks = inputs.Select(input=> CallAsync(input));
         var results = await Task.WhenAll(tasks);
 
-        return results.Aggregate(new ChainValues(), (acc, result) =>
-        {
-            foreach (var pair in result.Value)
-            {
-                acc.Value[pair.Key] = pair.Value;
-            }
-
-            return acc;
-        });
+        return results.ToList();
     }
 
     /// <summary>

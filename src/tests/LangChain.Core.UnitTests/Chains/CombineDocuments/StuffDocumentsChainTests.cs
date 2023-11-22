@@ -31,7 +31,7 @@ public class StuffDocumentsChainTests
             CreateDocument("Second page different text")
         };
 
-        var result = await chain.CombineDocsAsync(docs, new());
+        var result = await chain.CombineDocsAsync(docs, new Dictionary<string, object>());
 
         result.Output.Should().BeEquivalentTo("predict response");
         result.OtherKeys.Should().BeEmpty();

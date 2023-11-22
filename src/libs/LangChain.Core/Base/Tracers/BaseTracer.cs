@@ -94,13 +94,17 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         }
 
         run.Outputs = output.LlmOutput;
-        for (int i = 0; i < output.Generations.Length; i++)
+        for (var i = 0; i < output.Generations.Length; i++)
         {
-            var generation = output.Generations[i];
-            var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>>)[i];
-            if (outputGeneration.ContainsKey("message"))
+            for (var j = 0; j < output.Generations[i].Length; j++)
             {
-                outputGeneration["message"] = (generation as ChatGeneration)?.Message;
+                var generation = output.Generations[i][j];
+
+                var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>>)[i];
+                if (outputGeneration.ContainsKey("message"))
+                {
+                    outputGeneration["message"] = (generation as ChatGeneration)?.Message;
+                }
             }
         }
 

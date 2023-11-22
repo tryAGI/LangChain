@@ -6,6 +6,40 @@ using static LangChain.Chains.Chain;
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 [TestClass]
+public class PythonCodeModelTests
+{
+    string ModelPath => HuggingFaceModelDownloader.Instance.GetModel(
+        "TheBloke/Python-Code-13B-GGUF",
+        "python-code-13b.Q5_K_M.gguf",
+        "main",
+        storagePath: "/Users/khoroshev/Projects/llm").Result;
+
+    [TestMethod]
+    public void PromptTest()
+    {
+        var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
+        var promptText =
+            @"This is a conversation with your helpful AI assistant. AI assistant can generate Python Code along with necessary explanation.
+
+Context
+You are a helpful AI assistant.
+
+USER: {question}
+ASSISTANT: 
+";
+
+        var chain =
+            Set("Write a script to find minimum element of array. Do not explain and do not write tests.", outputKey: "question")
+            | Template(promptText, outputKey: "prompt")
+            | LLM(llm, inputKey: "prompt", outputKey: "text");
+
+        var res = chain.Run(resultKey: "text").Result;
+
+        Console.WriteLine(res);
+    }
+}
+
+[TestClass]
 public class ChainTests
 {
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
