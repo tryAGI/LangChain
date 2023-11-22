@@ -37,10 +37,9 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     }
 
     /// <inheritdoc />
-    public abstract Task HandleLlmStartAsync(
-        BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
-        List<string>? tags = null, Dictionary<string, object>? metadata = null,
-        string name = null, Dictionary<string, object>? extraParams = null);
+    public abstract Task HandleLlmStartAsync(BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
+        IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null,
+        string name = null, IReadOnlyDictionary<string, object>? extraParams = null);
 
     /// <inheritdoc />
     public abstract Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null);
@@ -52,9 +51,12 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     public abstract Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null);
 
     /// <inheritdoc />
-    public abstract Task HandleChatModelStartAsync(BaseLlm llm, List<List<Message>> messages, string runId,
+    public abstract Task HandleChatModelStartAsync(
+        BaseLlm llm,
+        IReadOnlyList<List<Message>> messages,
+        string runId,
         string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null);
+        IReadOnlyDictionary<string, object>? extraParams = null);
 
     /// <inheritdoc />
     public abstract Task HandleChainStartAsync(IChain chain, Dictionary<string, object> inputs,

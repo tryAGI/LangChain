@@ -1,9 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using LangChain.Abstractions.Schema;
-using LangChain.Callback;
 using LangChain.Providers;
-using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
@@ -66,18 +64,6 @@ public class LLMChain : BaseStackableChain
         values.Value[OutputKeys[0]] = responseContent;
         return values;
     }
-
-    // public LlmResult GenerateAsync(List<Dictionary<string, object>> input_list, CallbackManagerForChainRun runManager)
-    // {
-    //     var prompts, stop = await aprep_prompts(input_list, runManager);
-    //     
-    //     return await _llm.agenerate_prompt(
-    //         prompts,
-    //         stop,
-    //         callbacks=run_manager.get_child() if run_manager else None,
-    //     **self.llm_kwargs,
-    //         )
-    // }
 
     public LLMChain UseCache(bool enabled=true)
     {

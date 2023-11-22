@@ -19,14 +19,14 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     /// <summary>
     /// Chain to apply to each document individually.
     /// </summary>
-    public LlmChain LlmChain { get; init; }
-    
+    public ILlmChain LlmChain { get; init; }
+
     /// <summary>
     /// Chain to use to reduce the results of applying `llm_chain` to each doc.
     /// This typically either a ReduceDocumentChain or StuffDocumentChain.
     /// </summary>
     public BaseCombineDocumentsChain ReduceDocumentsChain { get; init; }
-    
+
     /// <summary>
     /// The variable name in the llm_chain to put the documents in.
     /// If only one variable in the llm_chain, this need not be provided.
@@ -41,6 +41,8 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
 
     public override string[] OutputKeys { get; }
 
+    public override string ChainType() => "map_reduce_documents_chain";
+
     public MapReduceDocumentsChain(MapReduceDocumentsChainInput input) : base(input)
     {
         LlmChain = input.LlmChain;
@@ -48,7 +50,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
         ReturnIntermediateSteps = input.ReturnIntermediateSteps;
 
         DocumentVariableName = ValidateAndGetDocumentKey();
-        
+
         if (ReturnIntermediateSteps)
         {
             var keys = base.OutputKeys.ToList();
@@ -63,7 +65,9 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
         string ValidateAndGetDocumentKey()
         {
             string documentKey;
-            if (String.IsNullOrEmpty(input.DocumentVariableName))
+            var inputVariable = input.DocumentVariableName;
+  
+            if (String.IsNullOrEmpty(inputVariable))
             {
                 var llmChainVariables = input.LlmChain.InputKeys;
                 if (llmChainVariables.Length == 1)
@@ -79,22 +83,23 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
             else
             {
                 var llmChainVariables = input.LlmChain.InputKeys;
-                if (!llmChainVariables.Contains(DocumentVariableName))
+                if (!llmChainVariables.Contains(inputVariable))
                 {
                     throw new ArgumentException(
-                        $"{nameof(DocumentVariableName)} {DocumentVariableName} was not found in {nameof(LlmChain)}.{nameof(LlmChain.InputKeys)}: {String.Join(",", LlmChain.InputKeys)}");
+                        $"{nameof(DocumentVariableName)} {inputVariable} was not found in {nameof(LlmChain)}.{nameof(LlmChain.InputKeys)}: {String.Join(",", LlmChain.InputKeys)}");
                 }
 
-                documentKey = input.DocumentVariableName;
+                documentKey = inputVariable;
             }
 
             return documentKey;
         }
     }
 
-    public override string ChainType() => "map_reduce_documents_chain";
-
-    public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys) => null;
+    public override async Task<int?> PromptLength(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys)
+        => throw new NotImplementedException();
 
     /// <summary>
     /// Combine documents in a map reduce manner.
@@ -105,7 +110,9 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     /// <param name="docs"></param>
     /// <param name="otherKeys"></param>
     /// <returns></returns>
-    public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
+    public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys)
     {
         var inputs = docs
             .Select(doc =>
@@ -114,7 +121,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
                 {
                     [DocumentVariableName] = doc.PageContent
                 };
-                
+
                 dictionary.TryAddKeyValues(otherKeys);
 
                 return new ChainValues(dictionary);
@@ -123,7 +130,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
 
         var mapResults = await LlmChain.ApplyAsync(inputs);
         var questionResultKey = LlmChain.OutputKey;
-        
+
         // this uses metadata from the docs, and the textual results from `results`
         var resultDocs =
             mapResults
@@ -134,10 +141,10 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
 
         if (ReturnIntermediateSteps)
         {
-            var intermediateSteps = mapResults.Select(r => r.Value[questionResultKey]);
+            var intermediateSteps = mapResults.Select(r => r.Value[questionResultKey]).ToList();
             extraReturnDict["intermediate_steps"] = intermediateSteps;
         }
-        
+
         return (result, extraReturnDict);
     }
 }

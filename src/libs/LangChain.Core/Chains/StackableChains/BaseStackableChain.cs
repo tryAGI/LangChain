@@ -43,7 +43,7 @@ public abstract class BaseStackableChain : IChain
     }
 
     public Task<IChainValues> CallAsync(IChainValues values, ICallbacks? callbacks = null,
-        List<string>? tags = null, Dictionary<string, object>? metadata = null)
+        IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null)
     {
         if (values == null)
         {

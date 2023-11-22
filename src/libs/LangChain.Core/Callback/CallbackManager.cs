@@ -58,7 +58,7 @@ public class CallbackManager
         InheritableMetadata = inheritableMetadata ?? new();
     }
 
-    public void AddTags(List<string> tags, bool inherit = true)
+    public void AddTags(IReadOnlyList<string> tags, bool inherit = true)
     {
         Tags.RemoveAll(tag => tags.Contains(tag));
         Tags.AddRange(tags);
@@ -69,7 +69,7 @@ public class CallbackManager
         }
     }
 
-    public void RemoveTags(List<string> tags)
+    public void RemoveTags(IReadOnlyList<string> tags)
     {
         foreach (var tag in tags)
         {
@@ -78,7 +78,7 @@ public class CallbackManager
         }
     }
 
-    public void AddMetadata(Dictionary<string, object> metadata, bool inherit = true)
+    public void AddMetadata(IReadOnlyDictionary<string, object> metadata, bool inherit = true)
     {
         foreach (var kv in metadata)
         {
@@ -90,7 +90,7 @@ public class CallbackManager
         }
     }
 
-    public void RemoveMetadata(List<string> keys)
+    public void RemoveMetadata(IReadOnlyList<string> keys)
     {
         foreach (var key in keys)
         {
@@ -101,10 +101,10 @@ public class CallbackManager
 
     public async Task<CallbackManagerForLlmRun> HandleLlmStart(
         BaseLlm llm,
-        List<string> prompts,
+        IReadOnlyList<string> prompts,
         string? runId = null,
         string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
+        IReadOnlyDictionary<string, object>? extraParams = null)
     {
         runId ??= Guid.NewGuid().ToString();
 
@@ -128,10 +128,10 @@ public class CallbackManager
 
     public async Task<CallbackManagerForLlmRun> HandleChatModelStart(
         BaseLlm llm,
-        List<List<Message>> messages,
+        IReadOnlyList<List<Message>> messages,
         string? runId = null,
         string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
+        IReadOnlyDictionary<string, object>? extraParams = null)
     {
         runId ??= Guid.NewGuid().ToString();
 
@@ -283,14 +283,13 @@ public class CallbackManager
 
     // TODO: review! motivation?
     // ICallbackManagerOptions? options = null,
-    public static async Task<CallbackManager> Configure(
-        ICallbacks? inheritableCallbacks = null,
+    public static async Task<CallbackManager> Configure(ICallbacks? inheritableCallbacks = null,
         ICallbacks? localCallbacks = null,
         bool verbose = false,
-        List<string>? localTags = null,
-        List<string>? inheritableTags = null,
-        Dictionary<string, object>? localMetadata = null,
-        Dictionary<string, object>? inheritableMetadata = null)
+        IReadOnlyList<string>? localTags = null,
+        IReadOnlyList<string>? inheritableTags = null,
+        IReadOnlyDictionary<string, object>? localMetadata = null,
+        IReadOnlyDictionary<string, object>? inheritableMetadata = null)
     {
         // TODO: parentRunId using AsyncLocal
         // python version using `contextvars` lib

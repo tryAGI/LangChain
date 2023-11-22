@@ -7,7 +7,7 @@ public class MapReduceDocumentsChainInput : BaseCombineDocumentsChainInput
     /// <summary>
     /// Chain to apply to each document individually.
     /// </summary>
-    public LlmChain LlmChain { get; set; }
+    public ILlmChain LlmChain { get; set; }
     
     /// <summary>
     /// Chain to use to reduce the results of applying `llm_chain` to each doc.

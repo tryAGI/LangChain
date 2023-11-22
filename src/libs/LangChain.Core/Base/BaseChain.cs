@@ -88,11 +88,10 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
     /// <returns></returns>
-    public async Task<IChainValues> CallAsync(
-        IChainValues values,
+    public async Task<IChainValues> CallAsync(IChainValues values,
         ICallbacks? callbacks = null,
-        List<string>? tags = null,
-        Dictionary<string, object>? metadata = null)
+        IReadOnlyList<string>? tags = null,
+        IReadOnlyDictionary<string, object>? metadata = null)
     {
         var callbackManager = await CallbackManager.Configure(
             callbacks,
@@ -131,7 +130,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <summary>
     /// Call the chain on all inputs in the list.
     /// </summary>
-    public virtual async Task<List<IChainValues>> ApplyAsync(List<ChainValues> inputs)
+    public virtual async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs)
     {
         var tasks = inputs.Select(input=> CallAsync(input));
         var results = await Task.WhenAll(tasks);

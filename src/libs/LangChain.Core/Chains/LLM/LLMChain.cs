@@ -85,9 +85,9 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// <summary>
     /// Call the chain on all inputs in the list.
     /// </summary>
-    public override async Task<List<IChainValues>> ApplyAsync(List<ChainValues> inputs)
+    public override async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs)
     {
-        var callbackManager = await CallbackManager.Configure(inheritableCallbacks: null, Callbacks, Verbose);
+        var callbackManager = await CallbackManager.Configure(inheritableCallbacks: null, localCallbacks: Callbacks, verbose: Verbose);
         var runManager = await callbackManager.HandleChainStart(this, new ChainValues("input_list", inputs));
 
         LlmResult response;

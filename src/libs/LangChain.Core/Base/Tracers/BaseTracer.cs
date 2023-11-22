@@ -1,4 +1,5 @@
 using LangChain.Abstractions.Chains.Base;
+using LangChain.Common;
 using LangChain.Docstore;
 using LangChain.LLMS;
 using LangChain.Providers;
@@ -16,21 +17,23 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
     protected abstract Task PersistRun(Run run);
 
-    public override async Task HandleLlmStartAsync(
-        BaseLlm llm,
+    public override async Task HandleLlmStartAsync(BaseLlm llm,
         string[] prompts,
         string runId,
         string? parentRunId = null,
-        List<string>? tags = null,
-        Dictionary<string, object>? metadata = null,
+        IReadOnlyList<string>? tags = null,
+        IReadOnlyDictionary<string, object>? metadata = null,
         string name = null,
-        Dictionary<string, object>? extraParams = null)
+        IReadOnlyDictionary<string, object>? extraParams = null)
     {
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
+
+        var extraParamsCopy = new Dictionary<string, object>();
+        extraParamsCopy.TryAddKeyValues(extraParams);
         if (metadata != null)
         {
-            extraParams.Add("metadata", metadata);
+            extraParamsCopy.Add("metadata", metadata);
         }
 
         var run = new Run
@@ -40,7 +43,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             //todo: pass llm or dumpd(llm)
             // serialized = serialized,
             Inputs = new Dictionary<string, object> { ["prompts"] = prompts },
-            ExtraData = extraParams,
+            ExtraData = extraParamsCopy,
             Events = new List<Dictionary<string, object>>
             {
                 new()
@@ -53,7 +56,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ExecutionOrder = executionOrder,
             ChildExecutionOrder = executionOrder,
             RunType = "llm",
-            Tags = tags ?? new List<string>(),
+            Tags = tags?.ToList() ?? new List<string>(),
             Name = name
         };
 
@@ -140,9 +143,10 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         await HandleLlmNewTokenAsync(run, token);
     }
 
-    public override async Task HandleChatModelStartAsync(BaseLlm llm, List<List<Message>> messages, string runId,
+    public override async Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
+        string runId,
         string? parentRunId = null,
-        Dictionary<string, object>? extraParams = null)
+        IReadOnlyDictionary<string, object>? extraParams = null)
     {
         throw new NotImplementedException();
     }

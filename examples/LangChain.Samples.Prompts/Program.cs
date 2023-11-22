@@ -14,7 +14,7 @@ var chain = new LlmChain(new LlmChainInput(llm, prompt));
 
 var result = await chain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
 {
-     { "product", "colourful socks" }
+    { "product", "colourful socks" }
 }));
 
 // The result is an object with a `text` property.

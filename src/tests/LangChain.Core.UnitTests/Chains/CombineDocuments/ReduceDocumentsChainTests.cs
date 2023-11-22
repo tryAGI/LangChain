@@ -14,8 +14,8 @@ public class ReduceDocumentsChainTests
     [TestMethod]
     public async Task CollapseAndSummarize()
     {
-        var document1 = CreateDocument("First page text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
-        var document2 = CreateDocument("Second page different text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
+        var document1 = new Document("First page text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
+        var document2 = new Document("Second page different text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
 
         var combineLlmChain = CreateFakeLlmChain(
             _ => "summarized",
@@ -57,22 +57,18 @@ public class ReduceDocumentsChainTests
         result.Output.Should().BeEquivalentTo("summarized");
         result.OtherKeys.Should().BeEmpty();
 
-        collapseLlmChain
-            .Verify(
-                m => m.Predict(
-                    It.Is<ChainValues>(x => x.Value["content"].ToString() == document1.PageContent)),
-                Times.Once());
+        AssertLlmChainPredictCalledWithContent(collapseLlmChain, "content", document1.PageContent);
+        AssertLlmChainPredictCalledWithContent(collapseLlmChain, "content", document2.PageContent);
 
-        collapseLlmChain
-            .Verify(
-                m => m.Predict(
-                    It.Is<ChainValues>(x => x.Value["content"].ToString() == document2.PageContent)),
-                Times.Once());
+        AssertLlmChainPredictCalledWithContent(combineLlmChain, "content", "first collapsed\n\nsecond collapsed");
+    }
 
-        combineLlmChain
+    private void AssertLlmChainPredictCalledWithContent(Mock<ILlmChain> mock, string valueKey, string content)
+    {
+        mock
             .Verify(
                 m => m.Predict(
-                    It.Is<ChainValues>(x => x.Value["content"].ToString() == "first collapsed\n\nsecond collapsed")),
+                    It.Is<ChainValues>(x => x.Value[valueKey].ToString() == content)),
                 Times.Once());
     }
 
@@ -99,14 +95,5 @@ public class ReduceDocumentsChainTests
             .Returns(chatModelMock.Object);
 
         return mock;
-    }
-
-    private Document CreateDocument(string content) => new(content, new());
-
-    private Document CreateDocument(string content, params (string Key, object Value)[] metadatas)
-    {
-        var metadata = metadatas.ToDictionary(kv => kv.Key, kv => kv.Value);
-
-        return new Document(content, metadata);
     }
 }
