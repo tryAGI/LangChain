@@ -41,7 +41,6 @@
   <ItemGroup>
     <Folder Include="Chains\StackableChains\Exceptions\" />
     <Folder Include="Docstore\" />
-    <Folder Include="TextSplitters\" />
   </ItemGroup>
 
 </Project>
