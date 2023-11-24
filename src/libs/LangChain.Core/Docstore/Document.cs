@@ -9,16 +9,31 @@ namespace LangChain.Docstore;
 /// - ported from langchain/docstore/document.py
 /// </remarks>
 /// </summary>
-public class Document(string content, Dictionary<string, object>? metadata = null)
+public class Document
 {
+    private readonly string _content;
+    private readonly Dictionary<string, object>? _metadata;
+
+    public Document()
+    {
+    }
+
+    public Document(string content, Dictionary<string, object>? metadata = null)
+    {
+        _content = content;
+        _metadata = metadata;
+        PageContent=content;
+        Metadata = metadata ?? new Dictionary<string, object>();
+    }
+
     public static Document Empty { get; } = new(
         content: string.Empty,
         metadata: new Dictionary<string, object>());
 
-    public string PageContent { get; set; } = content;
+    public string PageContent { get; set; }
     public int LookupIndex { get; set; }
     public string LookupStr { get; set; }
-    public Dictionary<string, object> Metadata { get; set; } = metadata ?? new Dictionary<string, object>();
+    public Dictionary<string, object> Metadata { get; set; }
 
     private static readonly string[] separator = { "\n\n" };
 
