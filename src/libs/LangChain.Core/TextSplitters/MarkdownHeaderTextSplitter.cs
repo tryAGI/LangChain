@@ -39,7 +39,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
         var content = new List<LineType>();
         string currentHeader = null;
-        int currentHeaderLen = 0; // determines current header level
+        int currentHeaderLen = 999; // determines current header level
 
         bool inCodeBlock = false;
 
@@ -69,7 +69,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
             bool headerFound = false;
 
-            if (IsHeader(strippedLine, out int hLen) && hLen > currentHeaderLen)
+            if (IsHeader(strippedLine, out int hLen) && hLen < currentHeaderLen)
             {
                 currentHeader = strippedLine.TrimStart('#').Trim();
                 currentHeaderLen = hLen;
@@ -78,14 +78,28 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
             content.Add(new LineType()
             {
-                Content = strippedLine,
+                Content = strippedLine.TrimStart('#'), // to avoid marking subheaders
                 Header = currentHeader
             });
         }
 
-        return content.Select(line => (_includeHeaders ? line.Header + "\n" : "") + line.Content).ToList();
+        List<string> result = new();
+        foreach (var line in content.GroupBy(x=>x.Header))
+        {
+            var header = line.Key;
+            var contentLines = string.Join("\n",line.Select(x => x.Content).ToList());
+            if (_includeHeaders&&!string.IsNullOrEmpty(header))
+            {
+                result.Add(header + "\n" + contentLines);
+                continue;
+            }
+            result.Add(contentLines);
+        }
+
+        return result;
     }
 
+    
     private bool IsHeader(string line, out int len)
     {
         len = 0;
