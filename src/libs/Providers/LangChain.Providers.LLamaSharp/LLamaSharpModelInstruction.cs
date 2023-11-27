@@ -47,6 +47,11 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
     }
     
     /// <summary>
+    /// Occurs when token generated.
+    /// </summary>
+    public event Action<string> TokenGenerated=delegate { };
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="request"></param>
@@ -65,7 +70,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
         var inferenceParams = new InferenceParams()
         {
             Temperature = Configuration.Temperature,
-            AntiPrompts = new List<string> { ">" },
+            AntiPrompts = Configuration.AntiPrompts,
             MaxTokens = Configuration.MaxTokens,
 
         };
@@ -76,6 +81,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
                            inferenceParams, cancellationToken))
         {
             buf += text;
+            TokenGenerated(text);
         }
 
         buf = LLamaSharpModelInstruction.SanitizeOutput(buf);
