@@ -1,8 +1,4 @@
-﻿using System.CodeDom;
-using LangChain.Base;
-using LangChain.Docstore;
-using System.Linq;
-using System.Xml.Linq;
+﻿using LangChain.Base;
 
 namespace LangChain.TextSplitters;
 
@@ -10,7 +6,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 {
     private readonly bool _includeHeaders;
 
-    public class LineType
+    private class LineType
     {
         public string Content { get; set; }
         public string Header { get; set; }
@@ -18,8 +14,9 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
 
     private string[] _headersToSplitOn;
-    private static readonly string _codeBlockseparator = "```";
-    private static readonly string[] _defauldHeaders = new[] {"#", "##", "###", "####", "#####", "######"};
+    private const string _codeBlockseparator = "```";
+    private static readonly string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
+    private static readonly string[] separator = {"\n"};
 
     public MarkdownHeaderTextSplitter(string[]? headersToSplitOn = null, bool includeHeaders = true,
         bool groupByHeaders = false)
@@ -34,7 +31,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         // Split the input text by newline character ("\n").
         var lines = text
             .Replace("\r", "") // some people are using windows
-            .Split(new[] {"\n"}, StringSplitOptions.None);
+            .Split(separator, StringSplitOptions.None);
 
 
         var content = new List<LineType>();
@@ -105,7 +102,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         len = 0;
         foreach (var header in _headersToSplitOn)
         {
-            if (line.StartsWith(header) && line[header.Length] == ' ')
+            if (line.StartsWith(header, StringComparison.Ordinal) && line[header.Length] == ' ')
             {
                 len = header.Length;
                 return true;

@@ -2,10 +2,10 @@
 
 namespace LangChain.Splitters.CSharp.UnitTests;
 
-[TestClass]
+[TestFixture]
 public class MarkdownHeaderTextSplitterTest
 {
-    [TestMethod]
+    [Test]
     public void TestMarkdown1()
     {
         var md = @"
@@ -23,7 +23,7 @@ some text
         Assert.AreEqual("Header 2", res[1].Split("\n")[0]);
     }
 
-    [TestMethod]
+    [Test]
     public void TestMarkdown2()
     {
         var md = @"

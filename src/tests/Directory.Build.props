@@ -1,6 +1,11 @@
 <Project>
 
     <Import Project="..\Directory.Build.props" />
+    
+    <PropertyGroup>
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
 
     <ItemGroup Label="Base packages">
         <PackageReference Include="Microsoft.NET.Test.Sdk" />

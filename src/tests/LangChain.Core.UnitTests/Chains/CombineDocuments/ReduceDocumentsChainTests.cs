@@ -8,10 +8,10 @@ using Moq;
 
 namespace LangChain.Core.UnitTests.Chains.CombineDocuments;
 
-[TestClass]
+[TestFixture]
 public class ReduceDocumentsChainTests
 {
-    [TestMethod]
+    [Test]
     public async Task CollapseAndSummarize()
     {
         var document1 = new Document("First page text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
@@ -30,7 +30,7 @@ public class ReduceDocumentsChainTests
         };
 
         var collapseLlmChain = CreateFakeLlmChain(
-            values => collapsed[values.Value["content"].ToString()],
+            values => collapsed[values.Value["content"].ToString() ?? ""],
             PromptTemplate.FromTemplate("Collapse this content: {content}"));
 
         var collapseDocumentsChain = new StuffDocumentsChain(new StuffDocumentsChainInput(collapseLlmChain.Object));

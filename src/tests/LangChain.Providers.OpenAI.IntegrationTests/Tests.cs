@@ -3,7 +3,7 @@ namespace LangChain.Providers.OpenAI.IntegrationTests;
 [TestFixture, Explicit]
 public class GeneralTests
 {
-//     [TestMethod]
+//     [Test]
 //     public async Task GetWeather()
 //     {
 //         var apiKey =

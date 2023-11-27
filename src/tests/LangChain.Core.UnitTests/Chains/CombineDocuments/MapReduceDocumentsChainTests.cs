@@ -9,10 +9,10 @@ using Moq;
 
 namespace LangChain.Core.UnitTests.Chains.CombineDocuments;
 
-[TestClass]
+[TestFixture]
 public class MapReduceDocumentsChainTests
 {
-    [TestMethod]
+    [Test]
     public async Task MapReduce()
     {
         var theme1 = (Theme: "First", Mapped: "First theme text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
@@ -72,7 +72,7 @@ public class MapReduceDocumentsChainTests
         result.OtherKeys["intermediate_steps"].Should().BeOfType<List<object>>();
         var intermediateSteps = result.OtherKeys["intermediate_steps"] as List<object>;
         intermediateSteps.Should().HaveCount(2);
-        intermediateSteps[0].Should().BeEquivalentTo(theme1.Mapped);
+        intermediateSteps![0].Should().BeEquivalentTo(theme1.Mapped);
         intermediateSteps[1].Should().BeEquivalentTo(theme2.Mapped);
 
         reduceDocumentsChain

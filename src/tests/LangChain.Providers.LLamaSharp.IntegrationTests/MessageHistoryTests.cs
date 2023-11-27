@@ -42,7 +42,7 @@ AI: ";
                                                 // prompt will contain previous messages and a question about the name.
 
         Assert.AreEqual(4,memory.BufferAsMessages.Count);
-        Assert.IsTrue(res.Value["text"].ToString().ToLower()?.Trim().Contains("jimmy"));
+        res.Value["text"].ToString()?.ToLower().Trim().Contains("jimmy").Should().BeTrue();
     }
 
 }
