@@ -17,14 +17,13 @@ using Microsoft.SemanticKernel.AI.Embeddings;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
-[TestClass]
+[TestFixture]
 public partial class LLamaSharpTests
 {
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    
+    [Test]
+    [Explicit]
     public void PrepromptTest()
     {
         var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
@@ -46,10 +45,8 @@ public partial class LLamaSharpTests
 
     }
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void InstructionTest()
     {
         var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
@@ -80,10 +77,8 @@ public partial class LLamaSharpTests
 
     }
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void EmbeddingsTestWithInMemory()
     {
         var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
@@ -109,10 +104,8 @@ public partial class LLamaSharpTests
         Assert.AreEqual("My dog name is Bob", closest.PageContent);
     }
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void DocumentsQuestionAnsweringTest()
     {
         // setup
@@ -186,10 +179,8 @@ public partial class LLamaSharpTests
         return chain;
     }
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void SequentialChainTest()
     {
         // setup

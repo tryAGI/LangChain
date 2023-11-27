@@ -3,10 +3,10 @@ using LangChain.Schema;
 
 namespace LangChain.UnitTest;
 
-[TestClass]
+[TestFixture]
 public class PromptTests
 {
-    [TestMethod]
+    [Test]
     public async Task TestPartials_WhenUsingPartial_ShouldFormat()
     {
         var message = new PromptTemplate(new PromptTemplateInput("{foo}{bar}", new List<string>(2) { "foo" },
@@ -17,7 +17,7 @@ public class PromptTests
         formatted.Should().Be("foobaz");
     }
 
-    [TestMethod]
+    [Test]
     public async Task TestPartials_WhenUsingFullPartial_ShouldFormat()
     {
         var message = new PromptTemplate(new PromptTemplateInput("{foo}{bar}", new List<string>(),

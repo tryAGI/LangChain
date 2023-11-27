@@ -10,10 +10,8 @@ namespace LangChain.Databases.Chroma.IntegrationTests;
 /// In order to run tests please run chroma locally, e.g. with docker
 /// docker run -p 8000:8000 chromadb/chroma
 /// </summary>
-[TestClass]
-#if CONTINUOUS_INTEGRATION_BUILD
-[Ignore]
-#endif
+[TestFixture]
+[Explicit]
 public class ChromaTests
 {
     public Dictionary<string, float[]> EmbeddingsDict { get; } = new();
@@ -23,7 +21,7 @@ public class ChromaTests
         PopulateEmbedding();
     }
 
-    [TestMethod]
+    [Test]
     public async Task CreateAndDeleteCollection_Ok()
     {
         using var httpClient = new HttpClient();
@@ -38,11 +36,12 @@ public class ChromaTests
         actual.Name.Should().BeEquivalentTo(collectionName);
 
         await chroma.DeleteCollectionAsync();
-
-        await Assert.ThrowsExceptionAsync<ChromaClientException>(() => chroma.GetCollectionAsync());
+        
+        await chroma.Invoking(y => y.GetCollectionAsync())
+            .Should().ThrowAsync<ChromaClientException>();
     }
 
-    [TestMethod]
+    [Test]
     public async Task AddDocuments_Ok()
     {
         using var httpClient = new HttpClient();
@@ -83,7 +82,7 @@ public class ChromaTests
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(documents[1].Metadata["color"]);
     }
 
-    [TestMethod]
+    [Test]
     public async Task AddTexts_Ok()
     {
         using var httpClient = new HttpClient();
@@ -128,7 +127,7 @@ public class ChromaTests
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(metadatas[1]["color"]);
     }
 
-    [TestMethod]
+    [Test]
     public async Task DeleteDocuments_Ok()
     {
         using var httpClient = new HttpClient();
@@ -162,7 +161,7 @@ public class ChromaTests
         actualSecond.Should().BeNull();
     }
 
-    [TestMethod]
+    [Test]
     public async Task SimilaritySearch_Ok()
     {
         using var httpClient = new HttpClient();
@@ -184,7 +183,7 @@ public class ChromaTests
         similarTexts.Should().Contain("apple");
     }
 
-    [TestMethod]
+    [Test]
     public async Task SimilaritySearchByVector_Ok()
     {
         using var httpClient = new HttpClient();
@@ -206,7 +205,7 @@ public class ChromaTests
         similarTexts.Should().Contain("apple");
     }
 
-    [TestMethod]
+    [Test]
     public async Task SimilaritySearchWithScores_Ok()
     {
         using var httpClient = new HttpClient();

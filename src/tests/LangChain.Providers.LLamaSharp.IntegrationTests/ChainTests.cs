@@ -6,12 +6,12 @@ using LangChain.Providers.Downloader;
 using static LangChain.Chains.Chain;
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
-[TestClass]
+[TestFixture]
 public class ChainTests
 {
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
 
-    [TestMethod]
+    [Test]
     public void PromptTest()
     {
         var chain =
@@ -24,10 +24,8 @@ public class ChainTests
         Assert.AreEqual("Hello, World", res);
     }
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void LLMChainTest()
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
@@ -50,10 +48,8 @@ The pet name is
         Assert.AreEqual("Bob", res);
     }
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void RetreivalChainTest()
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);

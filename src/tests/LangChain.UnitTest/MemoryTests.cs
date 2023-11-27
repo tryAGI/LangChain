@@ -3,10 +3,10 @@ using LangChain.Providers;
 
 namespace LangChain.UnitTest;
 
-[TestClass]
+[TestFixture]
 public class MemoryTests
 {
-    [TestMethod]
+    [Test]
     public void TestInMemoryHistory_WhenAddingMessages_ShouldStoreInMememory()
     {
         ChatMessageHistory inMemoryHistory = CreateInMemoryHistoryExample();
@@ -17,7 +17,7 @@ public class MemoryTests
         inMemoryHistory.Messages.FirstOrDefault(x => x.Content == "whats up?").Role.Should().Be(MessageRole.Ai);
     }
 
-    [TestMethod]
+    [Test]
     public void TestInMemoryHistory_WhenCleanMethodIsCalled_ShouldCleanHistory()
     {
         ChatMessageHistory inMemoryHistory = CreateInMemoryHistoryExample();

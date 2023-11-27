@@ -1,9 +1,9 @@
 namespace LangChain.Providers.OpenAI.UnitTests;
 
-[TestClass]
+[TestFixture]
 public class OpenAiModelTests
 {
-    [TestMethod]
+    [Test]
     public void CountTokens()
     {
         var text = H.Resources.SocketIoClient_cs.AsString();

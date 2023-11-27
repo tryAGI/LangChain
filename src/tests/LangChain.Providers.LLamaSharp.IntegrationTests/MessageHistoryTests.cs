@@ -3,15 +3,13 @@ using LangChain.Providers.Downloader;
 using static LangChain.Chains.Chain;
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
-[TestClass]
+[TestFixture]
 public class MessageHistoryTests
 {
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
 
-    [TestMethod]
-#if CONTINUOUS_INTEGRATION_BUILD
-    [Ignore]
-#endif
+    [Test]
+    [Explicit]
     public void TestHistory()
     {
         var model = LLamaSharpModelInstruction.FromPath(ModelPath);

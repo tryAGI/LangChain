@@ -1,9 +1,9 @@
 ﻿namespace LangChain.Sources.WebBase.IntegrationTests;
 
-[TestClass]
+[TestFixture]
 public class WebBaseSourceTests
 {
-    [TestMethod]
+    [Test]
     public async Task CheckText()
     {
         var loader = new WebBaseSource

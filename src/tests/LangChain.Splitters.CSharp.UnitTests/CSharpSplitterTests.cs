@@ -1,9 +1,9 @@
 namespace LangChain.Splitters.CSharp.UnitTests;
 
-[TestClass]
+[TestFixture]
 public class CSharpSplitterTests
 {
-    [TestMethod]
+    [Test]
     public async Task Split()
     {
         var splitter = new CSharpSplitter();
@@ -27,7 +27,7 @@ public class CSharpSplitterTests
         });
     }
 
-    [TestMethod]
+    [Test]
     public async Task Cut()
     {
         var content = H.Resources.SocketIoClient_cs.AsString();

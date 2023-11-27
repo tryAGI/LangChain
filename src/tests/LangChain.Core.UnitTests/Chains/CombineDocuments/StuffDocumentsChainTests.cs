@@ -7,10 +7,10 @@ using Moq;
 
 namespace LangChain.Core.UnitTests.Chains.CombineDocuments;
 
-[TestClass]
+[TestFixture]
 public class StuffDocumentsChainTests
 {
-    [TestMethod]
+    [Test]
     public async Task CombineDocsAsync_CombineDocs_Ok()
     {
         var llmChain = CreateFakeLlmChain();
@@ -43,7 +43,7 @@ public class StuffDocumentsChainTests
                 Times.Once());
     }
 
-    [TestMethod]
+    [Test]
     public async Task CombineDocsAsync_CustomPromptAndSeparator_Ok()
     {
         var documentVariableName = "different_name";

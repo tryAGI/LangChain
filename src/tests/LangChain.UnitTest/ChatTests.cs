@@ -3,10 +3,10 @@ using LangChain.Schema;
 
 namespace LangChain.UnitTest;
 
-[TestClass]
+[TestFixture]
 public class ChatTests
 {
-    [TestMethod]
+    [Test]
     public async Task TestFormat_WhenValidPrompts_ShouldGenerateChatMessages()
     {
         var testPrompt = GenerateTestPromptTemplate();
@@ -28,7 +28,7 @@ public class ChatTests
         chatMessages.ElementAt(3).Content.Should().Be("I'm a generic message. I'm Foo. I'm Bar.");
     }
 
-    [TestMethod]
+    [Test]
     public async Task TestFormat_WhenInvalidInputs_ShouldThrowError()
     {
         var testPrompt = GenerateTestPromptTemplate();
@@ -41,7 +41,7 @@ public class ChatTests
             }))).Should().ThrowAsync<ArgumentException>();
     }
 
-    [TestMethod]
+    [Test]
     public void TestFormat_WhenInvalidVariables_ShouldThrowError()
     {
         var promptTemplate =
@@ -65,7 +65,7 @@ public class ChatTests
         act.Should().Throw<ArgumentException>();
     }
 
-    [TestMethod]
+    [Test]
     public async Task TestFormat_WhenUsingFromPromptMessages_ShouldGenerateChatMessages()
     {
         var promptTemplate =
@@ -95,7 +95,7 @@ public class ChatTests
         chatMessages.ElementAt(1).Content.Should().Be("Hello Foo, I'm Bar.");
     }
 
-    [TestMethod]
+    [Test]
     public async Task TestFormatIsComposable_WhenUsingFromPromptMessages_ShouldGenerateChatMessages()
     {
         var promptTemplate =

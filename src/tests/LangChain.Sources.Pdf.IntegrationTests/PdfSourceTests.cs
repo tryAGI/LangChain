@@ -1,9 +1,9 @@
 ﻿namespace LangChain.Sources.Pdf.IntegrationTests;
 
-[TestClass]
+[TestFixture]
 public class PdfSourceTests
 {
-    [TestMethod]
+    [Test]
     public async Task PdfPig_CheckText()
     {
         var loader = new PdfPigPdfSource("sample.pdf");

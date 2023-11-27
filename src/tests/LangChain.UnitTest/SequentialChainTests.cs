@@ -7,10 +7,10 @@ using Moq;
 
 namespace LangChain.UnitTest;
 
-[TestClass]
+[TestFixture]
 public class SequentialChainTests
 {
-    [TestMethod]
+    [Test]
     public async Task Sequential_Usage_Single_Inputs()
     {
         // Arrange
@@ -27,7 +27,7 @@ public class SequentialChainTests
         outputs.Value.First().Value.Should().Be("123foofoo");
     }
 
-    [TestMethod]
+    [Test]
     public async Task Sequential_Usage_Single_Inputs_With_ReturnAll()
     {
         // Arrange
@@ -46,7 +46,7 @@ public class SequentialChainTests
         outputs.Value["baz"].Should().Be("123foofoo");
     }
 
-    [TestMethod]
+    [Test]
     public void Should_Throw_Exception_On_Empty_Chains()
     {
         // Arrange
@@ -59,7 +59,7 @@ public class SequentialChainTests
             .WithMessage("Sequential chain must have at least one chain.");
     }
 
-    [TestMethod]
+    [Test]
     public void Should_Throw_Exception_On_Wrongly_Specify_ReturnAll()
     {
         // Arrange
@@ -72,7 +72,7 @@ public class SequentialChainTests
             .WithMessage("Either specify variables to return using `outputVariables` or use `returnAll` param. Cannot apply both conditions at the same time.");
     }
 
-    [TestMethod]
+    [Test]
     public void Should_Throw_Exception_On_Duplicate_Output_Key()
     {
         // Arrange

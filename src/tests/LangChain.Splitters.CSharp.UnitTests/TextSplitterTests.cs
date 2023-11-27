@@ -3,10 +3,10 @@ using LangChain.TextSplitters;
 
 namespace LangChain.Splitters.CSharp.UnitTests;
 
-[TestClass]
+[TestFixture]
 public class TextSplitterTests
 {
-    [TestMethod]
+    [Test]
     public void CharacterSplitterTest()
     {
         // based on https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter
@@ -25,7 +25,7 @@ public class TextSplitterTests
 
     }
 
-    [TestMethod]
+    [Test]
     public void CharacterSplitterMetadataTest()
     {
         // based on https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter
@@ -49,7 +49,7 @@ public class TextSplitterTests
 
     }
 
-    [TestMethod]
+    [Test]
     public void RecursiveCharacterTextSplitterTest()
     {
         // based on https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/recursive_text_splitter

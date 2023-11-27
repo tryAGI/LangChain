@@ -7,10 +7,10 @@ using Moq;
 
 namespace LangChain.Core.UnitTests.Chains.RetrievalQa;
 
-[TestClass]
+[TestFixture]
 public class RetrievalQaChainTests
 {
-    [TestMethod]
+    [Test]
     public async Task Retrieval_Ok()
     {
         var retrieverMock = CreateRetrieverMock();
