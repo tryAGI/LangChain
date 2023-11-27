@@ -4,7 +4,7 @@
 
     <PropertyGroup Label="Signing">
         <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>$(SolutionDir)src\key.snk</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)../key.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <ItemGroup Label="CLSCompliant">
@@ -24,14 +24,9 @@
     </PropertyGroup>
 
     <ItemGroup Label="Nuget">
-        <None Include="$(SolutionDir)assets\nuget_icon.png" Pack="true" PackagePath="\" Visible="false" />
-        <None Include="$(SolutionDir)README.md" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="$(MSBuildThisFileDirectory)../../assets/nuget_icon.png" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="$(MSBuildThisFileDirectory)../../README.md" Pack="true" PackagePath="\" Visible="false" />
     </ItemGroup>
-
-    <PropertyGroup Label="Local NuGet Packages">
-        <GeneratePackageOnBuild Condition="'$(CI)' != 'true'">true</GeneratePackageOnBuild>
-        <PackageOutputPath Condition="'$(CI)' != 'true'">$(MSBuildThisFileDirectory)../../../LocalPackages</PackageOutputPath>
-    </PropertyGroup>
 
     <ItemGroup Label="Source Link">
         <PackageReference Include="DotNet.ReproducibleBuilds">
