@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Postgres" />
+        <PackageReference Include="Npgsql" />
     </ItemGroup>
 
 </Project>
