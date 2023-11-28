@@ -8,9 +8,9 @@ using NpgsqlTypes;
 namespace LangChain.Utilities.PostgresDatabases;
 
 /// <summary>
-/// 
+/// Postgres implementation of <see cref="SqlDatabase"/>
 /// </summary>
-public sealed class PostgresDatabase : SqlDatabase, IDisposable
+public sealed class PostgresDatabase : SqlDatabase
 {
     private readonly NpgsqlDataSource _dataSource;
 
@@ -37,6 +37,7 @@ public sealed class PostgresDatabase : SqlDatabase, IDisposable
         _dataSource = dataSourceBuilder.Build();
     }
 
+    /// <inheritdoc />
     protected override async Task<List<string>> GetAllTableNamesAsync()
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
@@ -57,6 +58,16 @@ public sealed class PostgresDatabase : SqlDatabase, IDisposable
         }
 
         return tables;
+    }
+
+    protected override async Task HasOnlyReadPrivilegesAsync()
+    {
+        // e.g. for postres
+        // SELECT DISTINCT privilege_type
+        // FROM   information_schema.table_privileges
+        // WHERE  grantee = CURRENT_USER
+        // possible values https://www.postgresql.org/docs/current/ddl-priv.html
+        // throw if not SELECT only or some flag passed to constructor?
     }
 
     /// <inheritdoc />
@@ -204,5 +215,8 @@ WHERE conrelid = (@schema || '.'  || @table)::regclass;
     }
 
     /// <inheritdoc />
-    public override void Dispose() => _dataSource.Dispose();
+    public override void Dispose()
+    {
+        _dataSource.Dispose();
+    }
 }

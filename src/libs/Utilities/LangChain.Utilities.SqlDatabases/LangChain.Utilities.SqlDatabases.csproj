@@ -14,4 +14,8 @@
         <Using Remove="System.Net.Http" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+    </ItemGroup>
+
 </Project>

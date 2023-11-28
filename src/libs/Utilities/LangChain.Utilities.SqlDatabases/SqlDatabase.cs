@@ -11,6 +11,9 @@ public abstract class SqlDatabase : IDisposable
 {
     /// <summary> </summary>
     protected string? Schema { get; }
+    
+    /// <summary> </summary>
+    protected bool ThrowIfHasWritePrivileges { get; }
 
     /// <summary> </summary>
     protected IReadOnlyList<string>? IgnoreTables { get; }
@@ -44,6 +47,7 @@ public abstract class SqlDatabase : IDisposable
     /// <param name="customTableInfo"></param>
     /// <param name="viewSupport"></param>
     /// <param name="maxStringLength"></param>
+    /// <param name="throwIfHasWritePrivileges">check and throw if any not readonly permissions</param>
     protected SqlDatabase(
         string? schema = null,
         IReadOnlyList<string>? includeTables = null,
@@ -52,12 +56,11 @@ public abstract class SqlDatabase : IDisposable
         bool indexesInTableInfo = false,
         IReadOnlyDictionary<string, string>? customTableInfo = null,
         bool viewSupport = false,
-        int maxStringLength = 300)
+        int maxStringLength = 300,
+        bool throwIfHasWritePrivileges = true)
     {
         CheckSchema(schema);
         Schema = schema;
-
-        CheckPrivileges();
 
         IgnoreTables = ignoreTables;
         IncludeTables = includeTables;
@@ -66,6 +69,7 @@ public abstract class SqlDatabase : IDisposable
         CustomTableInfo = customTableInfo;
         ViewSupport = viewSupport;
         MaxStringLength = maxStringLength;
+        ThrowIfHasWritePrivileges = throwIfHasWritePrivileges;
     }
 
     private static void CheckSchema(string? schema)
@@ -81,16 +85,25 @@ public abstract class SqlDatabase : IDisposable
         }
     }
 
-    // TODO: Check readonly privileges or if some flag set
-    private void CheckPrivileges()
+
+
+    /// <summary>
+    /// Check current connection user has only read privileges if <see cref="ThrowIfHasWritePrivileges"/> is set
+    /// </summary>
+    protected async Task CheckPrivilegesIfNeededAsync()
     {
-        // e.g. for postres
-        // SELECT DISTINCT privilege_type
-        // FROM   information_schema.table_privileges
-        // WHERE  grantee = CURRENT_USER
-        // possible values https://www.postgresql.org/docs/current/ddl-priv.html
-        // throw if not SELECT only or some flag passed to constructor?
+        if (!ThrowIfHasWritePrivileges)
+        {
+            return;
+        }
+
+        await HasOnlyReadPrivilegesAsync().ConfigureAwait(false);
     }
+
+    /// <summary>
+    /// Check current connection user has only read privileges
+    /// </summary>
+    protected abstract Task HasOnlyReadPrivilegesAsync();
 
     /// <summary>
     /// Execute a SQL command and return a dictionary representing the results.
@@ -192,6 +205,8 @@ public abstract class SqlDatabase : IDisposable
     /// </summary>
     public async Task<string> RunAsync(string command, SqlRunFetchType fetch = SqlRunFetchType.All)
     {
+        await CheckPrivilegesIfNeededAsync();
+        
         var result = await ExecuteAsync(command, fetch).ConfigureAwait(false);
 
         var res = result
