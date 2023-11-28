@@ -11,7 +11,7 @@ public abstract class SqlDatabase : IDisposable
 {
     /// <summary> </summary>
     protected string? Schema { get; }
-    
+
     /// <summary> </summary>
     protected bool ThrowIfHasWritePrivileges { get; }
 
@@ -86,7 +86,6 @@ public abstract class SqlDatabase : IDisposable
     }
 
 
-
     /// <summary>
     /// Check current connection user has only read privileges if <see cref="ThrowIfHasWritePrivileges"/> is set
     /// </summary>
@@ -140,7 +139,8 @@ public abstract class SqlDatabase : IDisposable
     public async Task<string> GetTableInfoAsync(IReadOnlyList<string>? tableNames = null)
     {
         var allTableNames = await GetUsableTableNamesAsync().ConfigureAwait(false);
-        var allTableNamesFiltered = new HashSet<string>();
+
+        HashSet<string> allTableNamesFiltered;
         if (tableNames != null && tableNames.Count != 0)
         {
             var tablesHashSet = new HashSet<string>(tableNames);
@@ -150,7 +150,11 @@ public abstract class SqlDatabase : IDisposable
                 throw new ArgumentException("table_names {missing_tables} not found in database");
             }
 
-            allTableNamesFiltered = new HashSet<string>(tableNames);
+            allTableNamesFiltered = tablesHashSet;
+        }
+        else
+        {
+            allTableNamesFiltered = new HashSet<string>(allTableNames);
         }
 
         var builder = new StringBuilder();
@@ -206,7 +210,7 @@ public abstract class SqlDatabase : IDisposable
     public async Task<string> RunAsync(string command, SqlRunFetchType fetch = SqlRunFetchType.All)
     {
         await CheckPrivilegesIfNeededAsync();
-        
+
         var result = await ExecuteAsync(command, fetch).ConfigureAwait(false);
 
         var res = result

@@ -101,7 +101,7 @@ SQL Query: ";
                 await runManager.HandleTextAsync(sqlCmd).ConfigureAwait(false);
                 intermediateSteps.Add(new Dictionary<string, object> { ["sql_cmd"] = sqlCmd });
                 result = await _fields.SqlDatabase.RunAsync(sqlCmd).ConfigureAwait(false);
-                intermediateSteps.Add(new Dictionary<string, object> { ["sql_output"] = result});
+                intermediateSteps.Add(new Dictionary<string, object> { ["sql_output"] = result });
             }
             else
             {

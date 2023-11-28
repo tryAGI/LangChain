@@ -152,6 +152,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Utilities.PostgresDatabases", "src\libs\Utilities\LangChain.Utilities.PostgresDatabases\LangChain.Utilities.PostgresDatabases.csproj", "{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Utilities.PostgresDatabases.IntegrationTests", "src\tests\LangChain.Utilities.PostgresDatabases.IntegrationTests\LangChain.Utilities.PostgresDatabases.IntegrationTests.csproj", "{A652E4C6-6988-40BD-A726-2F5A3783C129}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -342,6 +344,10 @@ Global
 		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -400,6 +406,7 @@ Global
 		{788567AF-444A-488F-BCED-C3B9F03CC38D} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
 		{7D47EC2D-2F03-4284-A07D-E56486B885C6} = {788567AF-444A-488F-BCED-C3B9F03CC38D}
 		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84} = {788567AF-444A-488F-BCED-C3B9F03CC38D}
+		{A652E4C6-6988-40BD-A726-2F5A3783C129} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

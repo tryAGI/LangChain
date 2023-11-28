@@ -75,8 +75,11 @@ public sealed class PostgresDatabase : SqlDatabase
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
 
-        using var setSchemaCommand = new NpgsqlCommand($"SET search_path TO {Schema};", connection);
-        await setSchemaCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
+        if (!String.IsNullOrEmpty(Schema))
+        {
+            using var setSchemaCommand = new NpgsqlCommand($"SET search_path TO {Schema};", connection);
+            await setSchemaCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
+        }
 
         using var command = new NpgsqlCommand(sql, connection);
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
@@ -130,7 +133,8 @@ public sealed class PostgresDatabase : SqlDatabase
     protected override async Task<string> GetSampleRowsAsync(string table)
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
-        using var command = new NpgsqlCommand($"SELECT * FROM {Schema}.{table}", connection);
+        var schemaPrefix = String.IsNullOrEmpty(Schema) ? "" : "." + Schema;
+        using var command = new NpgsqlCommand($"SELECT * FROM {schemaPrefix}{table}", connection);
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
 
         var columnsSchema = await reader.GetColumnSchemaAsync().ConfigureAwait(false);
@@ -152,6 +156,11 @@ public sealed class PostgresDatabase : SqlDatabase
                 samples.Add(sample.Length > 100 ? sample.Substring(0, 100) : sample);
             }
 
+            if (sampleRows != null)
+            {
+                sampleRows += "\n";
+            }
+
             sampleRows += String.Join("\t", samples);
         }
 
@@ -163,7 +172,9 @@ public sealed class PostgresDatabase : SqlDatabase
     private async Task<List<PgColumn>> GetColumnsAsync(string table)
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
-        var command = new NpgsqlCommand($"SELECT * FROM {Schema}.{table}", connection);
+
+        var schemaPrefix = String.IsNullOrEmpty(Schema) ? "" : "." + Schema;
+        var command = new NpgsqlCommand($"SELECT * FROM {schemaPrefix}{table}", connection);
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
 
         var columnsSchema = await reader.GetColumnSchemaAsync().ConfigureAwait(false);
@@ -186,9 +197,10 @@ public sealed class PostgresDatabase : SqlDatabase
     }
 
     private record PgConstraint(string Name, string Definition);
+
     private async Task<List<PgConstraint>> GetTableConstraintAndKeysAsync(string table)
     {
-        await using var connection = await _dataSource.OpenConnectionAsync();
+        using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
 
         var constraints = new List<PgConstraint>();
         using var command = new NpgsqlCommand(@"
@@ -196,14 +208,15 @@ SELECT
     conname,
     pg_get_constraintdef(oid) as condef
 FROM pg_catalog.pg_constraint r
-WHERE conrelid = (@schema || '.'  || @table)::regclass;
-", connection);
+WHERE @schema IS NOT NULL AND conrelid = (@schema || '.'  || @table)::regclass
+    OR conrelid = @table::regclass;",
+            connection);
 
-        command.Parameters.AddWithValue("schema", NpgsqlDbType.Text, Schema);
+        command.Parameters.AddWithValue("schema", NpgsqlDbType.Text, (object?)Schema ?? DBNull.Value);
         command.Parameters.AddWithValue("table", NpgsqlDbType.Text, table);
 
-        await using var reader = await command.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
+        using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+        while (await reader.ReadAsync().ConfigureAwait(false))
         {
             var name = (string)reader["conname"];
             var definition = (string)reader["condef"];

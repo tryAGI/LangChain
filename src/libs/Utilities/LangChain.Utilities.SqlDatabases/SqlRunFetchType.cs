@@ -9,7 +9,7 @@ public enum SqlRunFetchType
     /// Fetch all rows
     /// </summary>
     All,
-    
+
     /// <summary>
     /// Fetch only one row
     /// </summary>

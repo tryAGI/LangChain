@@ -10,8 +10,9 @@ internal class StringHelperer
         if (length > 0 && content is string contentString)
         {
             if (contentString.Length <= length)
+            {
                 return contentString;
-
+            }
 
             var substring = contentString.Substring(0, length - suffix.Length);
 
