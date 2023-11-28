@@ -1,10 +1,11 @@
 using System.Data;
 using System.Text;
+using LangChain.Utilities.SqlDatabases;
 using Npgsql;
 using Npgsql.PostgresTypes;
 using NpgsqlTypes;
 
-namespace LangChain.Databases;
+namespace LangChain.Utilities.PostgresDatabases;
 
 /// <summary>
 /// 

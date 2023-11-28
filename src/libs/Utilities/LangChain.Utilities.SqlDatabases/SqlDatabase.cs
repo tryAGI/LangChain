@@ -1,9 +1,8 @@
-using System.Collections.Immutable;
 using System.Data.Common;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LangChain.Databases;
+namespace LangChain.Utilities.SqlDatabases;
 
 /// <summary>
 /// 
@@ -128,7 +127,7 @@ public abstract class SqlDatabase : IDisposable
     public async Task<string> GetTableInfoAsync(IReadOnlyList<string>? tableNames = null)
     {
         var allTableNames = await GetUsableTableNamesAsync().ConfigureAwait(false);
-        var allTableNamesFiltered = new HashSet<string>().ToImmutableHashSet();
+        var allTableNamesFiltered = new HashSet<string>();
         if (tableNames != null && tableNames.Count != 0)
         {
             var tablesHashSet = new HashSet<string>(tableNames);
@@ -138,7 +137,7 @@ public abstract class SqlDatabase : IDisposable
                 throw new ArgumentException("table_names {missing_tables} not found in database");
             }
 
-            allTableNamesFiltered = tableNames.ToImmutableHashSet();
+            allTableNamesFiltered = new HashSet<string>(tableNames);
         }
 
         var builder = new StringBuilder();

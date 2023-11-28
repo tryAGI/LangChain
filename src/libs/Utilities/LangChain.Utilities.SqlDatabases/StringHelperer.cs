@@ -1,4 +1,4 @@
-namespace LangChain.Databases;
+namespace LangChain.Utilities.SqlDatabases;
 
 internal class StringHelperer
 {
@@ -13,9 +13,9 @@ internal class StringHelperer
                 return contentString;
 
 
-            var substring = contentString[..(length - suffix.Length)];
+            var substring = contentString.Substring(0, length - suffix.Length);
 
-            return substring[..substring.LastIndexOf(" ", StringComparison.Ordinal)] + suffix;
+            return substring.Substring(0, substring.LastIndexOf(" ", StringComparison.Ordinal)) + suffix;
         }
 
         return content.ToString();

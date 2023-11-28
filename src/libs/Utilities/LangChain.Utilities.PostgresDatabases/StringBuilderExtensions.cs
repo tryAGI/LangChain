@@ -1,8 +1,8 @@
 using System.Text;
 
-namespace LangChain.Databases;
+namespace LangChain.Utilities.PostgresDatabases;
 
-public static class StringBuilderExtensions
+internal static class StringBuilderExtensions
 {
     public static void AppendJoin(this StringBuilder builder, string separator, IEnumerable<string> collection)
     {
