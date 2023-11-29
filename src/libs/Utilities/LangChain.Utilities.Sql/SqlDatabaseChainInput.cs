@@ -2,7 +2,7 @@ using LangChain.Base;
 using LangChain.Chains.LLM;
 using LangChain.Prompts.Base;
 
-namespace LangChain.Utilities.SqlDatabases;
+namespace LangChain.Utilities.Sql;
 
 /// <summary>
 /// 

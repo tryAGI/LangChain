@@ -7,7 +7,7 @@
 
     <PropertyGroup Label="NuGet">
         <Description>LangChain Utilities PostgresDatabase.</Description>
-        <PackageTags>$(PackageTags);utilities;sqldatabase;postgres</PackageTags>
+        <PackageTags>$(PackageTags);sqldatabase;postgres</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LangChain.Utilities.SqlDatabases\LangChain.Utilities.SqlDatabases.csproj" />
+      <ProjectReference Include="..\LangChain.Utilities.Sql\LangChain.Utilities.Sql.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using LangChain.Chains.LLM;
 using LangChain.Prompts;
 using LangChain.Schema;
 
-namespace LangChain.Utilities.SqlDatabases;
+namespace LangChain.Utilities.Sql;
 
 /// <summary>
 /// Chain for interacting with SQL Database.

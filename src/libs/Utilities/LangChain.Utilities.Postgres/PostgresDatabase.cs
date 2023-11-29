@@ -1,11 +1,11 @@
 using System.Data;
 using System.Text;
-using LangChain.Utilities.SqlDatabases;
+using LangChain.Utilities.Sql;
 using Npgsql;
 using Npgsql.PostgresTypes;
 using NpgsqlTypes;
 
-namespace LangChain.Utilities.PostgresDatabases;
+namespace LangChain.Utilities.Postgres;
 
 /// <summary>
 /// Postgres implementation of <see cref="SqlDatabase"/>
@@ -133,8 +133,8 @@ public sealed class PostgresDatabase : SqlDatabase
     protected override async Task<string> GetSampleRowsAsync(string table)
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
-        var schemaPrefix = String.IsNullOrEmpty(Schema) ? "" : "." + Schema;
-        using var command = new NpgsqlCommand($"SELECT * FROM {schemaPrefix}{table}", connection);
+        var tableWithSchema = String.IsNullOrEmpty(Schema) ? table : Schema + "." + table;
+        using var command = new NpgsqlCommand($"SELECT * FROM {tableWithSchema}", connection);
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
 
         var columnsSchema = await reader.GetColumnSchemaAsync().ConfigureAwait(false);
@@ -173,8 +173,8 @@ public sealed class PostgresDatabase : SqlDatabase
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
 
-        var schemaPrefix = String.IsNullOrEmpty(Schema) ? "" : "." + Schema;
-        var command = new NpgsqlCommand($"SELECT * FROM {schemaPrefix}{table}", connection);
+        var tableWithSchema = String.IsNullOrEmpty(Schema) ? table : Schema + "." + table;
+        var command = new NpgsqlCommand($"SELECT * FROM {tableWithSchema}", connection);
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
 
         var columnsSchema = await reader.GetColumnSchemaAsync().ConfigureAwait(false);

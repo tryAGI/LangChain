@@ -1,4 +1,4 @@
-namespace LangChain.Utilities.SqlDatabases;
+namespace LangChain.Utilities.Sql;
 
 /// <summary>
 /// 

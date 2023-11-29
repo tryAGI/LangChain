@@ -1,6 +1,6 @@
 using LangChain.Prompts;
 
-namespace LangChain.Utilities.SqlDatabases;
+namespace LangChain.Utilities.Sql;
 
 /// <summary>
 /// Prompts for SqlDatabaseChain

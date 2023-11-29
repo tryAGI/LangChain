@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace LangChain.Utilities.PostgresDatabases;
+namespace LangChain.Utilities.Postgres;
 
 internal static class StringBuilderExtensions
 {

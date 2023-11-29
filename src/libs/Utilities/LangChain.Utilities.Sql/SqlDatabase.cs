@@ -2,7 +2,7 @@ using System.Data.Common;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LangChain.Utilities.SqlDatabases;
+namespace LangChain.Utilities.Sql;
 
 /// <summary>
 /// 
@@ -161,6 +161,12 @@ public abstract class SqlDatabase : IDisposable
 
         foreach (var table in allTableNamesFiltered)
         {
+            if (CustomTableInfo?.ContainsKey(table) == true)
+            {
+                builder.AppendLine(CustomTableInfo[table]);
+                continue;
+            }
+
             var createScript = await GetCreateTableScriptAsync(table).ConfigureAwait(false);
             builder.AppendLine(createScript);
 
