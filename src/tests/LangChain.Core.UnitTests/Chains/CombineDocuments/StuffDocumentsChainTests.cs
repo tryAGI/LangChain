@@ -49,7 +49,7 @@ public class StuffDocumentsChainTests
         var documentVariableName = "different_name";
         var otherKey = "other_key";
 
-        var templateInput = new PromptTemplateInput($"{{{otherKey}}}{{{documentVariableName}}}", new() { documentVariableName, otherKey });
+        var templateInput = new PromptTemplateInput($"{{{otherKey}}}{{{documentVariableName}}}", new[] { documentVariableName, otherKey });
         var llmChain = CreateFakeLlmChain(templateInput);
 
         var input = new StuffDocumentsChainInput(llmChain.Object)
@@ -58,7 +58,7 @@ public class StuffDocumentsChainTests
             DocumentPrompt = new PromptTemplate(
                 new PromptTemplateInput(
                 "Page={page}.Content={page_content}",
-                new() { "page", "page_content" })),
+                new[] { "page", "page_content" })),
             DocumentSeparator = "+"
         };
 
@@ -92,7 +92,7 @@ public class StuffDocumentsChainTests
                 .Predict(It.IsAny<ChainValues>()))
             .Returns<ChainValues>(_ => Task.FromResult((object)"predict response"));
 
-        var templateInput = documentsVariableName ?? new PromptTemplateInput("{documents_content}", new() { "documents_content" });
+        var templateInput = documentsVariableName ?? new PromptTemplateInput("{documents_content}", new[] { "documents_content" });
         var prompt = new PromptTemplate(templateInput);
 
         mock.Setup(x => x.Prompt).Returns(prompt);

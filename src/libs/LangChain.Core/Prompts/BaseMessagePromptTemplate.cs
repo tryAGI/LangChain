@@ -6,7 +6,7 @@ namespace LangChain.Prompts;
 
 public abstract class BaseMessagePromptTemplate
 {
-    public abstract List<string> InputVariables { get; }
+    public abstract IReadOnlyList<string> InputVariables { get; }
 
     public abstract Task<List<Message>> FormatMessages(InputValues values);
 

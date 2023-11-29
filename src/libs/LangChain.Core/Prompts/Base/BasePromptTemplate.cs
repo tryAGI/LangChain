@@ -10,7 +10,7 @@ public abstract class BasePromptTemplate
     /// <summary>
     /// 
     /// </summary>
-    public List<string> InputVariables { get; private set; }
+    public IReadOnlyList<string> InputVariables { get; private set; }
 
     /// <summary>
     /// 

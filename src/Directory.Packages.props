@@ -34,6 +34,7 @@
     <PackageVersion Include="Moq" Version="4.20.69" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageVersion Include="Npgsql" Version="8.0.0" />
     <PackageVersion Include="NUnit" Version="3.14.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="PdfPig" Version="0.1.9-alpha-20231119-4537e" />

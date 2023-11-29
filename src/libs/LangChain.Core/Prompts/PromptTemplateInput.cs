@@ -4,7 +4,7 @@ namespace LangChain.Prompts;
 
 public class PromptTemplateInput : IPromptTemplateInput
 {
-    public PromptTemplateInput(string template, List<string> inputVariables, Dictionary<string, object> partialVariables = null)
+    public PromptTemplateInput(string template, IReadOnlyList<string> inputVariables, Dictionary<string, object> partialVariables = null)
     {
         this.Template = template;
         this.InputVariables = inputVariables;
@@ -16,7 +16,7 @@ public class PromptTemplateInput : IPromptTemplateInput
 
     public bool? ValidateTemplate { get; set; }
 
-    public List<string> InputVariables { get; private set; }
+    public IReadOnlyList<string> InputVariables { get; private set; }
 
     public Dictionary<string, object> PartialVariables { get; private set; }
 }

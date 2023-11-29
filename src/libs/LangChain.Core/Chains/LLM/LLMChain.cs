@@ -48,13 +48,14 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// <returns>The resulting output <see cref="ChainValues"/>.</returns>
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
-        List<string>? stop = new List<string>();
-
-        if (values.Value.TryGetValue("stop", out var value))
+        List<string> stop;
+        if (values.Value.TryGetValue("stop", out var value) && value is IEnumerable<string> stopList)
         {
-            var stopList = value as List<string>;
-
-            stop = stopList;
+            stop = stopList.ToList();
+        }
+        else
+        {
+            stop = new List<string>();
         }
 
         var promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value));
@@ -77,9 +78,9 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var outputKey = string.IsNullOrEmpty(OutputKey) ? "text" : OutputKey;
         returnDict[outputKey] = response.Messages.Last().Content;
 
-        values.Value.TryAddKeyValues(returnDict);
+        returnDict.TryAddKeyValues(values.Value);
 
-        return values;
+        return new ChainValues(returnDict);
     }
 
     /// <summary>
