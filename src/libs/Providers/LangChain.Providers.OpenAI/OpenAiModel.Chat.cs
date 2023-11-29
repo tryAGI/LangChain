@@ -57,6 +57,7 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
 
     private async Task<global::OpenAI.Chat.ChatResponse> CreateChatCompletionAsync(
         IReadOnlyCollection<Message> messages,
+        IReadOnlyCollection<string>? stops = null,
         CancellationToken cancellationToken = default)
     {
         // Functions = GlobalFunctions.Count == 0
@@ -71,6 +72,7 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
                     .Select(ToRequestMessage)
                     .ToArray(),
                 model: Id,
+                stops: stops?.ToArray() ?? Array.Empty<string>(),
                 user: User),
             cancellationToken).ConfigureAwait(false);
     }
@@ -99,7 +101,7 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
     {
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
-        var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
+        var response = await CreateChatCompletionAsync(messages, request.StopSequences, cancellationToken).ConfigureAwait(false);
 
         var message = response.GetFirstChoiceMessage();
         messages.Add(ToMessage(message));

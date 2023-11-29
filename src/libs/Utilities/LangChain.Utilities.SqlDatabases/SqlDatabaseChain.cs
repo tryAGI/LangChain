@@ -65,7 +65,7 @@ SQL Query: ";
         var inputText = $"{values.Value[_fields.InputKey]}\nSQLQuery:";
         await runManager.HandleTextAsync(inputText).ConfigureAwait(false);
 
-        var tableInfo = _fields.SqlDatabase.GetTableInfoAsync(_fields.TableNamesToUse);
+        var tableInfo = await _fields.SqlDatabase.GetTableInfoAsync(_fields.TableNamesToUse).ConfigureAwait(false);
 
         var llmInputs = new Dictionary<string, object>
         {

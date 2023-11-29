@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
       <ProjectReference Include="..\..\libs\Utilities\LangChain.Utilities.PostgresDatabases\LangChain.Utilities.PostgresDatabases.csproj" />
     </ItemGroup>
 

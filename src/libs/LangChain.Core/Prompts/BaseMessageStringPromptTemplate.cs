@@ -13,7 +13,7 @@ public abstract class BaseMessageStringPromptTemplate : BaseMessagePromptTemplat
         this.Prompt = prompt;
     }
 
-    public override List<string> InputVariables => this.Prompt.InputVariables;
+    public override IReadOnlyList<string> InputVariables => this.Prompt.InputVariables;
 
     public abstract Task<Message> Format(InputValues values);
 
