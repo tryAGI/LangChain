@@ -63,14 +63,18 @@ public abstract class BaseRetriever
         try
         {
             var docs = await GetRelevantDocumentsCoreAsync(query, runManager);
-            await runManager.HandleRetrieverEndAsync(query, docs.ToList());
+            var docsList = docs.ToList();
+            await runManager.HandleRetrieverEndAsync(query, docsList);
 
-            return docs;
+            return docsList;
         }
         catch (Exception exception)
         {
             if (runManager != null)
+            {
                 await runManager.HandleRetrieverErrorAsync(exception, query);
+            }
+
             throw;
         }
     }

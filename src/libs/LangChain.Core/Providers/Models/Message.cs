@@ -11,6 +11,9 @@ public readonly record struct Message(
     MessageRole Role,
     string? FunctionName = null)
 {
+    public static Message Human(string content) => new(content, MessageRole.Human);
+    public static Message Ai(string content) => new(content, MessageRole.Ai);
+    
     /// <summary>
     /// 
     /// </summary>

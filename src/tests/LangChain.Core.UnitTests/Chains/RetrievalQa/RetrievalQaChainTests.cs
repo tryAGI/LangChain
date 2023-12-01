@@ -40,7 +40,8 @@ public class RetrievalQaChainTests
                         x["input_documents"].As<List<Document>>()
                             .Select(doc => doc.PageContent)
                             .Intersect(new string[] { "first", "second", "third" })
-                            .Count() == 3)),
+                            .Count() == 3),
+                    It.IsAny<ICallbacks?>()),
                 Times.Once());
     }
 
@@ -76,8 +77,8 @@ public class RetrievalQaChainTests
         var mock = new Mock<BaseCombineDocumentsChain>(new Mock<BaseCombineDocumentsChainInput>().Object);
 
         mock.Setup(x => x
-                .Run(It.IsAny<Dictionary<string, object>>()))
-            .Returns<Dictionary<string, object>>(input => Task.FromResult("answer"));
+                .Run(It.IsAny<Dictionary<string, object>>(), It.IsAny<ICallbacks?>()))
+            .Returns<Dictionary<string, object>, ICallbacks>((input, _) => Task.FromResult("answer"));
 
         return mock;
     }
