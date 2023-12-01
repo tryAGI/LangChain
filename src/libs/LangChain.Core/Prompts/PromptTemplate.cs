@@ -186,43 +186,31 @@ public class PromptTemplate : BaseStringPromptTemplate
     {
         // Core logic replicated from internals of pythons built in Formatter class.
         // https://github.com/python/cpython/blob/135ec7cefbaffd516b77362ad2b2ad1025af462e/Objects/stringlib/unicode_format.h#L700-L706
-        List<char> chars = template.ToList();
-        List<ParsedFStringNode> nodes = new List<ParsedFStringNode>();
-
-        Func<string, int, int> nextBracket = (bracket, start) =>
-        {
-            for (int i = start; i < chars.Count; i++)
-            {
-                if (bracket.Contains(chars[i]))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        };
+        var chars = template.AsSpan();
+        var nodes = new List<ParsedFStringNode>();
 
         int i = 0;
-        while (i < chars.Count)
+        while (i < chars.Length)
         {
-            if (chars[i] == '{' && i + 1 < chars.Count && chars[i + 1] == '{')
+            if (chars[i] == '{' && i + 1 < chars.Length && chars[i + 1] == '{')
             {
                 nodes.Add(new LiteralNode("{"));
                 i += 2;
             }
-            else if (chars[i] == '}' && i + 1 < chars.Count && chars[i + 1] == '}')
+            else if (chars[i] == '}' && i + 1 < chars.Length && chars[i + 1] == '}')
             {
                 nodes.Add(new LiteralNode("}"));
                 i += 2;
             }
             else if (chars[i] == '{')
             {
-                int j = nextBracket("}", i);
+                var j = GetNextBracketPosition(ref chars, "}", i);
                 if (j < 0)
                 {
                     throw new Exception("Unclosed '{' in template.");
                 }
 
-                nodes.Add(new VariableNode(new string(chars.GetRange(i + 1, j - (i + 1)).ToArray())));
+                nodes.Add(new VariableNode(chars.Slice(i + 1, j - (i + 1)).ToString()));
                 i = j + 1;
             }
             else if (chars[i] == '}')
@@ -231,15 +219,31 @@ public class PromptTemplate : BaseStringPromptTemplate
             }
             else
             {
-                int next = nextBracket("{}", i);
-                string text = next < 0 ? new string(chars.GetRange(i, chars.Count - i).ToArray()) : new string(chars.GetRange(i, next - i).ToArray());
+                var next = GetNextBracketPosition(ref chars, "{}", i);
+                var text = next < 0
+                    ? chars.Slice(i, chars.Length - i).ToString()
+                    : chars.Slice(i, next - i).ToString();
+
                 nodes.Add(new LiteralNode(text));
-                i = next < 0 ? chars.Count : next;
+                i = next < 0 ? chars.Length : next;
             }
         }
-        return nodes;
-    }
 
+        return nodes;
+
+        int GetNextBracketPosition(ref ReadOnlySpan<char> source, string bracket, int start)
+        {
+            for (var idx = start; idx < source.Length; idx++)
+            {
+                if (bracket.Contains(source[idx]))
+                {
+                    return idx;
+                }
+            }
+
+            return -1;
+        }
+    }
 
     public static string RenderTemplate(string template, TemplateFormatOptions templateFormat, Dictionary<string, object> inputValues)
     {

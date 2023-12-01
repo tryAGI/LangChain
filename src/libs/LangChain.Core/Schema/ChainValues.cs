@@ -36,4 +36,10 @@ public class ChainValues : IChainValues
     }
 
     public Dictionary<string, object> Value { get; set; }
+
+    public object this[string key]
+    {
+        get => Value[key];
+        set => Value[key] = value;
+    }
 }

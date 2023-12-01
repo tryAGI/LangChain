@@ -63,8 +63,13 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// Run the chain using a simple input/output.
     /// </summary>
     /// <param name="input">The dict input to use to execute the chain.</param>
+    /// <param name="callbacks">
+    /// Callbacks to use for this chain run. These will be called in
+    /// addition to callbacks passed to the chain during construction, but only
+    /// these runtime callbacks will propagate to calls to other objects.
+    /// </param>
     /// <returns>A text value containing the result of the chain.</returns>
-    public virtual async Task<string> Run(Dictionary<string, object> input)
+    public virtual async Task<string> Run(Dictionary<string, object> input, ICallbacks? callbacks = null)
     {
         var keysLengthDifferent = InputKeys.Length != input.Count;
 
@@ -73,7 +78,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Length} but, received {input.Count}");
         }
 
-        var returnValues = await CallAsync(new ChainValues(input));
+        var returnValues = await CallAsync(new ChainValues(input), callbacks);
 
         var returnValue = returnValues.Value.FirstOrDefault(kv => kv.Key == OutputKeys[0]).Value;
 
@@ -88,7 +93,8 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
     /// <returns></returns>
-    public async Task<IChainValues> CallAsync(IChainValues values,
+    public async Task<IChainValues> CallAsync(
+        IChainValues values,
         ICallbacks? callbacks = null,
         IReadOnlyList<string>? tags = null,
         IReadOnlyDictionary<string, object>? metadata = null)

@@ -18,18 +18,18 @@ namespace LangChain.Chains.CombineDocuments;
 /// </summary>
 public class StuffDocumentsChain : BaseCombineDocumentsChain
 {
-    private readonly ILlmChain _llmChain;
+    public readonly ILlmChain LlmChain;
     private readonly BasePromptTemplate _documentPrompt;
     private readonly string _documentVariableName;
-    private readonly string _documentSeparator = "\n\n";
+    private readonly string _documentSeparator;
 
     public StuffDocumentsChain(StuffDocumentsChainInput input) : base(input)
     {
-        _llmChain = input.LlmChain;
+        LlmChain = input.LlmChain;
         _documentPrompt = input.DocumentPrompt;
         _documentSeparator = input.DocumentSeparator;
 
-        var llmChainVariables = _llmChain.Prompt.InputVariables;
+        var llmChainVariables = LlmChain.Prompt.InputVariables;
 
         if (input.DocumentVariableName == null)
         {
@@ -50,7 +50,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
     }
 
     public override string[] InputKeys =>
-        base.InputKeys.Concat(_llmChain.InputKeys.Where(k => k != _documentVariableName)).ToArray();
+        base.InputKeys.Concat(LlmChain.InputKeys.Where(k => k != _documentVariableName)).ToArray();
 
     public override string ChainType() => "stuff_documents_chain";
 
@@ -59,17 +59,17 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyDictionary<string, object> otherKeys)
     {
         var inputs = await GetInputs(docs, otherKeys);
-        var predict = await _llmChain.Predict(new ChainValues(inputs.Value));
+        var predict = await LlmChain.Predict(new ChainValues(inputs.Value));
 
         return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
 
     public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
-        if (_llmChain.Llm is ISupportsCountTokens supportsCountTokens)
+        if (LlmChain.Llm is ISupportsCountTokens supportsCountTokens)
         {
             var inputs = await GetInputs(docs, otherKeys);
-            var prompt = await _llmChain.Prompt.FormatPromptValue(inputs);
+            var prompt = await LlmChain.Prompt.FormatPromptValue(inputs);
 
             return supportsCountTokens.CountTokens(prompt.ToString());
         }
@@ -84,7 +84,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         var inputs = new Dictionary<string, object>();
         foreach (var kv in otherKeys)
         {
-            if (_llmChain.Prompt.InputVariables.Contains(kv.Key))
+            if (LlmChain.Prompt.InputVariables.Contains(kv.Key))
             {
                 inputs[kv.Key] = kv.Value;
             }
