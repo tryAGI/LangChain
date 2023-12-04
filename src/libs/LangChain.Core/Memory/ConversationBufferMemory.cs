@@ -1,5 +1,4 @@
 using LangChain.Providers;
-using System.Net.Mail;
 using LangChain.Schema;
 
 namespace LangChain.Memory;
@@ -16,40 +15,28 @@ public class ConversationBufferMemory : BaseChatMemory
         ChatHistory = chatHistory;
     }
 
-
     // note: buffer property can't be implemented because of Any type as return type
 
     public string BufferAsString => GetBufferString(BufferAsMessages);
 
-    public IList<Message> BufferAsMessages => ChatHistory.Messages;
+    public IReadOnlyList<Message> BufferAsMessages => ChatHistory.Messages;
 
-    public override List<string> MemoryVariables => new List<string> {MemoryKey};
+    public override List<string> MemoryVariables => new List<string> { MemoryKey };
 
-    private string GetBufferString(
-        IEnumerable<Message> messages)
+    private string GetBufferString(IEnumerable<Message> messages)
     {
-        List<string> stringMessages = new List<string>();
+        var stringMessages = new List<string>();
 
         foreach (var m in messages)
         {
-            string role;
-            switch (m.Role)
+            string role = m.Role switch
             {
-                case MessageRole.Human:
-                    role = HumanPrefix;
-                    break;
-                case MessageRole.Ai:
-                    role = AiPrefix;
-                    break;
-                case MessageRole.System:
-                    role = "System";
-                    break;
-                case MessageRole.FunctionCall:
-                    role = "Function";
-                    break;
-                default:
-                    throw new ArgumentException($"Unsupported message type: {m.GetType().Name}");
-            }
+                MessageRole.Human => HumanPrefix,
+                MessageRole.Ai => AiPrefix,
+                MessageRole.System => "System",
+                MessageRole.FunctionCall => "Function",
+                _ => throw new ArgumentException($"Unsupported message type: {m.GetType().Name}")
+            };
 
             string message = $"{role}: {m.Content}";
             // TODO: Add special case for a function call
@@ -60,9 +47,8 @@ public class ConversationBufferMemory : BaseChatMemory
         return string.Join("\n", stringMessages);
     }
 
-
     public override OutputValues LoadMemoryVariables(InputValues? inputValues)
     {
-        return new OutputValues(new Dictionary<string, object> {{MemoryKey, BufferAsString}});
+        return new OutputValues(new Dictionary<string, object> { { MemoryKey, BufferAsString } });
     }
 }

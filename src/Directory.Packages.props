@@ -39,6 +39,7 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="PdfPig" Version="0.1.9-alpha-20231119-4537e" />
     <PackageVersion Include="PolySharp" Version="1.13.2" />
+    <PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Text.Json" Version="8.0.0" />
     <PackageVersion Include="Tiktoken" Version="1.1.3" />
