@@ -28,7 +28,6 @@ public abstract class BaseChatMemory : BaseMemory
 
     public override Task Clear()
     {
-        ChatHistory.Clear();
-        return Task.CompletedTask;
+        return ChatHistory.Clear();
     }
 }
