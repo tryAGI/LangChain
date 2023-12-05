@@ -32,7 +32,9 @@ public class VectorStoreRetriever : BaseRetriever
         ScoreThreshold = scoreThreshold;
     }
 
-    protected override async Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(string query, CallbackManagerForRetrieverRun runManager = null)
+    protected override async Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
+        string query,
+        CallbackManagerForRetrieverRun? runManager = null)
     {
         switch (SearchType)
         {

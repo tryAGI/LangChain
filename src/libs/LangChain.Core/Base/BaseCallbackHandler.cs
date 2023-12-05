@@ -39,7 +39,7 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     /// <inheritdoc />
     public abstract Task HandleLlmStartAsync(BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
         IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null,
-        string name = null, IReadOnlyDictionary<string, object>? extraParams = null);
+        string? name = null, IReadOnlyDictionary<string, object>? extraParams = null);
 
     /// <inheritdoc />
     public abstract Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null);
@@ -63,8 +63,8 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
         string runId, string? parentRunId = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
-        string runType = null,
-        string name = null,
+        string? runType = null,
+        string? name = null,
         Dictionary<string, object>? extraParams = null);
 
     /// <inheritdoc />
@@ -87,8 +87,8 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
         string? parentRunId = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
-        string runType = null,
-        string name = null,
+        string? runType = null,
+        string? name = null,
         Dictionary<string, object>? extraParams = null);
 
     /// <inheritdoc />

@@ -22,7 +22,7 @@ public interface IBaseCallbackHandler
     /// </summary>
     public abstract Task HandleLlmStartAsync(BaseLlm llm, string[] prompts, string runId, string? parentRunId = null,
         IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null,
-        string name = null, IReadOnlyDictionary<string, object>? extraParams = null);
+        string? name = null, IReadOnlyDictionary<string, object>? extraParams = null);
 
     /// <summary>
     /// Run on new LLM token. Only available when streaming is enabled.
@@ -58,8 +58,8 @@ public interface IBaseCallbackHandler
         string? parentRunId = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
-        string runType = null,
-        string name = null,
+        string? runType = null,
+        string? name = null,
         Dictionary<string, object>? extraParams = null);
 
     public Task HandleChainErrorAsync(
@@ -81,8 +81,8 @@ public interface IBaseCallbackHandler
         string? parentRunId = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
-        string runType = null,
-        string name = null,
+        string? runType = null,
+        string? name = null,
         Dictionary<string, object>? extraParams = null);
 
     public Task HandleToolErrorAsync(

@@ -7,7 +7,7 @@ public abstract class BaseLoader
 {
     public abstract List<Document> Load();
 
-    public List<Document> LoadAndSplit(TextSplitter textSplitter = null)
+    public List<Document> LoadAndSplit(TextSplitter? textSplitter = null)
     {
         if (textSplitter == null)
         {

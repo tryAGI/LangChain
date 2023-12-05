@@ -23,7 +23,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         string? parentRunId = null,
         IReadOnlyList<string>? tags = null,
         IReadOnlyDictionary<string, object>? metadata = null,
-        string name = null,
+        string? name = null,
         IReadOnlyDictionary<string, object>? extraParams = null)
     {
         var executionOrder = GetExecutionOrder(parentRunId);
@@ -255,8 +255,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         string? parentRunId = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
-        string runType = null,
-        string name = null,
+        string? runType = null,
+        string? name = null,
         Dictionary<string, object>? extraParams = null)
     {
         var executionOrder = GetExecutionOrder(parentRunId);

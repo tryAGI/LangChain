@@ -94,7 +94,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     private async Task<List<List<Document>>> SplitListOfDocsAsync(
         IReadOnlyList<Document> docs,
         int? tokenMax = null,
-        IReadOnlyDictionary<string, object> otherKeys = null)
+        IReadOnlyDictionary<string, object>? otherKeys = null)
     {
         var newResultDocList = new List<List<Document>>();
         var subResultDocs = new List<Document>();
@@ -132,7 +132,9 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     /// are strings, and where there are overlapping keys across documents the
     /// values are joined by ", "
     /// </returns>
-    private async Task<Document> CollapseDocsAsync(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys = null)
+    private async Task<Document> CollapseDocsAsync(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object>? otherKeys = null)
     {
         var dictionary = new Dictionary<string, object>
         {

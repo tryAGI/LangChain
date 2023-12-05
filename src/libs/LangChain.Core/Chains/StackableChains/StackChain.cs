@@ -18,17 +18,22 @@ public class StackChain : BaseStackableChain
         _b = b;
     }
 
-    public StackChain AsIsolated(string[] inputKeys = null, string[] outputKeys = null)
+    public StackChain AsIsolated(
+        string[]? inputKeys = null,
+        string[]? outputKeys = null)
     {
         IsolatedInputKeys = inputKeys ?? IsolatedInputKeys;
         IsolatedOutputKeys = outputKeys ?? IsolatedOutputKeys;
         return this;
     }
 
-    public StackChain AsIsolated(string inputKey = null, string outputKey = null)
+    public StackChain AsIsolated(
+        string? inputKey = null,
+        string? outputKey = null)
     {
         if (inputKey != null) IsolatedInputKeys = new[] { inputKey };
         if (outputKey != null) IsolatedOutputKeys = new[] { outputKey };
+        
         return this;
     }
 

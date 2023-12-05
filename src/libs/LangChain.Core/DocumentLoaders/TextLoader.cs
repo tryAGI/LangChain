@@ -16,7 +16,7 @@ public class TextLoader : BaseLoader
     /// <param name="encoding">File encoding to use. Null for default</param>
     /// <param name="autoDetectEncoding">Whether to try to autodetect the file encoding
     /// if the specified encoding fails.</param>
-    public TextLoader(string filePath, Encoding encoding = null, bool autoDetectEncoding = false)
+    public TextLoader(string filePath, Encoding? encoding = null, bool autoDetectEncoding = false)
     {
         this.filePath = filePath;
         this.fileEncoding = encoding ?? Encoding.Default;

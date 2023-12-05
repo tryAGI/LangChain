@@ -147,7 +147,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// <returns></returns>
     private async Task<(List<BasePromptValue>, List<string>?)> PreparePromptsAsync(
         IReadOnlyList<ChainValues> inputList,
-        CallbackManagerForChainRun runManager = null)
+        CallbackManagerForChainRun? runManager = null)
     {
         List<string>? stop = null;
         if (inputList.Count == 0)
