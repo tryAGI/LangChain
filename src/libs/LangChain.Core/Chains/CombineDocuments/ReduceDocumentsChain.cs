@@ -37,7 +37,12 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     public override string ChainType() => "reduce_documents_chain";
 
     /// <inheritdoc/>
-    public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys) => null;
+    public override Task<int?> PromptLength(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys)
+    {
+        return Task.FromResult<int?>(null);
+    }
 
     /// <summary>
     /// Combine multiple documents recursively.

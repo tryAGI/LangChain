@@ -160,12 +160,12 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     }
 
     /// <inheritdoc/>
-    public override async Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
+    public override Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
         string runId,
         string? parentRunId = null,
         IReadOnlyDictionary<string, object>? extraParams = null)
     {
-        throw new NotImplementedException();
+        return Task.FromException(new NotImplementedException());
     }
 
     /// <inheritdoc/>
@@ -466,18 +466,21 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     }
 
     /// <inheritdoc/>
-    public override async Task HandleTextAsync(string text, string runId, string? parentRunId = null)
+    public override Task HandleTextAsync(string text, string runId, string? parentRunId = null)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public override async Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
+    public override Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public override async Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
+    public override Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
     {
+        return Task.CompletedTask;
     }
 
     /*public Run OnRetry(RetryCallState retryState, string runId)

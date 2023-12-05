@@ -21,7 +21,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task PersistRun(Run run) => Task.CompletedTask;
 
     /// <inheritdoc />
-    protected override async Task HandleLlmStartAsync(Run run)
+    protected override Task HandleLlmStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -34,13 +34,18 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[llm/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering LLM run with input:", ConsoleFormats.Bold)}\n" +
             $"{JsonSerializeOrDefault(inputs, "[inputs]")}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleLlmNewTokenAsync(Run run, string token) { }
+    protected override Task HandleLlmNewTokenAsync(Run run, string token)
+    { 
+        return Task.CompletedTask;
+    }
 
     /// <inheritdoc />
-    protected override async Task HandleLlmErrorAsync(Run run)
+    protected override Task HandleLlmErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -49,10 +54,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         Print($"{GetColoredText("[llm/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] LLM run errored with error:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Error, "[error]")}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleLlmEndAsync(Run run)
+    protected override Task HandleLlmEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -61,13 +68,18 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         Print($"{GetColoredText("[llm/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting LLM run with output:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Outputs, "[response]")}"
             );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleChatModelStartAsync(Run run) { }
+    protected override Task HandleChatModelStartAsync(Run run)
+    {
+        return Task.CompletedTask;
+    }
 
     /// <inheritdoc />
-    protected override async Task HandleChainStartAsync(Run run)
+    protected override Task HandleChainStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -79,10 +91,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering {runType} run with input:", ConsoleFormats.Bold)}\n" +
             $"{input}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleChainErrorAsync(Run run)
+    protected override Task HandleChainErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -93,10 +107,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] {runType} run errored with error:", ConsoleFormats.Bold)}\n" +
             $"{error}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleChainEndAsync(Run run)
+    protected override Task HandleChainEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -108,10 +124,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting {runType} run with output:", ConsoleFormats.Bold)}\n" +
             $"{outputs}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleToolStartAsync(Run run)
+    protected override Task HandleToolStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -120,10 +138,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering Tool run with input:", ConsoleFormats.Bold)}\n" +
             $"{run.Inputs["input"].ToString()?.Trim()}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleToolErrorAsync(Run run)
+    protected override Task HandleToolErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -132,10 +152,12 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Tool run errored with error:", ConsoleFormats.Bold)}\n" +
             $"{run.Error}"
         );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleToolEndAsync(Run run)
+    protected override Task HandleToolEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
         
@@ -145,36 +167,44 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
                 $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting Tool run with output:", ConsoleFormats.Bold)}\n" +
                 $"{run.Outputs["output"].ToString()?.Trim()}"
             );
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleTextAsync(Run run)
+    protected override Task HandleTextAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleAgentActionAsync(Run run)
+    protected override Task HandleAgentActionAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleAgentEndAsync(Run run)
+    protected override Task HandleAgentEndAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleRetrieverStartAsync(Run run)
+    protected override Task HandleRetrieverStartAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleRetrieverEndAsync(Run run)
+    protected override Task HandleRetrieverEndAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleRetrieverErrorAsync(Run run)
+    protected override Task HandleRetrieverErrorAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />

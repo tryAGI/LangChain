@@ -102,10 +102,12 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     }
 
     /// <inheritdoc/>
-    public override async Task<int?> PromptLength(
+    public override Task<int?> PromptLength(
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
-        => throw new NotImplementedException();
+    {
+        return Task.FromException<int?>(new NotImplementedException());
+    }
 
     /// <summary>
     /// Combine documents in a map reduce manner.

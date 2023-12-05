@@ -113,7 +113,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     }
 
     /// <inheritdoc/>
-    public override async Task<BasePromptTemplate> AddPartial(PartialValues values)
+    public override Task<BasePromptTemplate> AddPartial(PartialValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -138,7 +138,7 @@ public class PromptTemplate : BaseStringPromptTemplate
             promptDict.PartialVariables[kvp.Key] = kvp.Value;
         }
 
-        return new PromptTemplate(promptDict);
+        return Task.FromResult<BasePromptTemplate>(new PromptTemplate(promptDict));
     }
 
     /// <inheritdoc/>
@@ -158,7 +158,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentException"></exception>
-    public async static Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
+    public static Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
     {
         data = data ?? throw new ArgumentNullException(nameof(data));
         if (string.IsNullOrEmpty(data.Template))
@@ -166,10 +166,11 @@ public class PromptTemplate : BaseStringPromptTemplate
             throw new ArgumentException("Template template must have a template");
         }
 
-        return new PromptTemplate(new PromptTemplateInput(data.Template, data.InputVariables)
-        {
-            // TemplateFormat = data.template_format
-        });
+        return Task.FromResult<PromptTemplate>(new PromptTemplate(
+            new PromptTemplateInput(data.Template, data.InputVariables)
+            {
+                // TemplateFormat = data.template_format
+            }));
     }
 
     /// <summary>

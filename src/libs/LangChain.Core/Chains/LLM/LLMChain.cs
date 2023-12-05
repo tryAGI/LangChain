@@ -80,14 +80,14 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// <param name="runManager"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    protected async Task<object?> GetFinalOutput(
+    protected Task<object?> GetFinalOutput(
         List<Generation> generations,
         BasePromptValue promptValue,
         CallbackManagerForChainRun? runManager = null)
     {
         generations = generations ?? throw new ArgumentNullException(nameof(generations));
         
-        return generations[0].Text;
+        return Task.FromResult<object?>(generations[0].Text);
     }
 
     /// <summary>

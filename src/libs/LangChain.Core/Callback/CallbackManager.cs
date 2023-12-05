@@ -420,7 +420,7 @@ public class CallbackManager
     /// <returns></returns>
     // TODO: review! motivation?
     // ICallbackManagerOptions? options = null,
-    public static async Task<CallbackManager> Configure(ICallbacks? inheritableCallbacks = null,
+    public static Task<CallbackManager> Configure(ICallbacks? inheritableCallbacks = null,
         ICallbacks? localCallbacks = null,
         bool verbose = false,
         IReadOnlyList<string>? localTags = null,
@@ -509,6 +509,6 @@ public class CallbackManager
             // }
         }
 
-        return callbackManager;
+        return Task.FromResult(callbackManager);
     }
 }

@@ -80,5 +80,8 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
 public class StrOutputParser : BaseOutputParser<string>
 {
     /// <inheritdoc/>
-    public override async Task<string> Parse(string? text) => text ?? string.Empty;
+    public override Task<string> Parse(string? text)
+    {
+        return Task.FromResult(text ?? string.Empty);
+    }
 }
