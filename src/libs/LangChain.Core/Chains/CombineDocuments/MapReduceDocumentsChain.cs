@@ -39,7 +39,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     /// </summary>
     public bool ReturnIntermediateSteps { get; init; }
 
-    public override string[] OutputKeys { get; }
+    public override IReadOnlyList<string> OutputKeys { get; }
 
     public override string ChainType() => "map_reduce_documents_chain";
 
@@ -72,7 +72,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
             if (String.IsNullOrEmpty(inputVariable))
             {
                 var llmChainVariables = input.LlmChain.InputKeys;
-                if (llmChainVariables.Length == 1)
+                if (llmChainVariables.Count == 1)
                 {
                     documentKey = llmChainVariables[0];
                 }

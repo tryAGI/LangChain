@@ -18,8 +18,8 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
 
     public override string ChainType() => "analyze_document_chain";
 
-    public override string[] InputKeys => new[] { _inputKey };
-    public override string[] OutputKeys => new[] { _outputKey };
+    public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
+    public override IReadOnlyList<string> OutputKeys => new[] { _outputKey };
 
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {

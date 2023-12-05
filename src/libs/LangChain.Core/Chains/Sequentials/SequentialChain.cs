@@ -12,13 +12,13 @@ public class SequentialChain : BaseChain
     /// <summary>
     /// 
     /// </summary>
-    public IChain[] Chains { get; }
+    public IReadOnlyList<IChain> Chains { get; }
 
     /// <inheritdoc />
-    public override string[] InputKeys { get; }
+    public override IReadOnlyList<string> InputKeys { get; }
 
     /// <inheritdoc />
-    public override string[] OutputKeys { get; }
+    public override IReadOnlyList<string> OutputKeys { get; }
 
     /// <summary>
     /// 
@@ -42,7 +42,7 @@ public class SequentialChain : BaseChain
 
         Validate();
 
-        if (OutputKeys.Length == 0 && !ReturnAll)
+        if (OutputKeys.Count == 0 && !ReturnAll)
         {
             OutputKeys = Chains[^1].OutputKeys;
         }
@@ -90,19 +90,19 @@ public class SequentialChain : BaseChain
 
     protected virtual void Validate()
     {
-        if (OutputKeys.Length > 0 && ReturnAll)
+        if (OutputKeys.Count > 0 && ReturnAll)
         {
             throw new ArgumentException(
                 "Either specify variables to return using `outputVariables` or use `returnAll` param. Cannot apply both conditions at the same time.");
         }
 
-        if (Chains.Length == 0)
+        if (Chains.Count == 0)
         {
             throw new ArgumentException("Sequential chain must have at least one chain.");
         }
 
 #if NET6_0_OR_GREATER
-        var allOutputKeysCount = Chains.Sum(_ => _.OutputKeys.Length) + InputKeys.Length;
+        var allOutputKeysCount = Chains.Sum(_ => _.OutputKeys.Count) + InputKeys.Count;
         _allOutputKeys = new HashSet<string>(allOutputKeysCount);
 #else
         _allOutputKeys = new HashSet<string>();

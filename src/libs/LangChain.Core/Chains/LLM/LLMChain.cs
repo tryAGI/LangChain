@@ -29,8 +29,8 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     public List<string> Tags { get; set; } = new();
     public Dictionary<string, object> Metadata { get; set; } = new();
 
-    public override string[] InputKeys => Prompt.InputVariables.ToArray();
-    public override string[] OutputKeys => new[] { OutputKey };
+    public override IReadOnlyList<string> InputKeys => Prompt.InputVariables.ToArray();
+    public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };
 
     protected async Task<object?> GetFinalOutput(
         List<Generation> generations,

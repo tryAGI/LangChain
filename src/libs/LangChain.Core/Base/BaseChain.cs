@@ -23,12 +23,12 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <summary>
     /// 
     /// </summary>
-    public abstract string[] InputKeys { get; }
+    public abstract IReadOnlyList<string> InputKeys { get; }
 
     /// <summary>
     /// 
     /// </summary>
-    public abstract string[] OutputKeys { get; }
+    public abstract IReadOnlyList<string> OutputKeys { get; }
 
     /// <summary>
     /// Run the chain using a simple input/output.
@@ -38,14 +38,14 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <exception cref="ArgumentException">If the type of chain used expects multiple inputs, this method will throw an ArgumentException.</exception>
     public virtual async Task<string?> Run(string input)
     {
-        var isKeylessInput = InputKeys.Length <= 1;
+        var isKeylessInput = InputKeys.Count <= 1;
 
         if (!isKeylessInput)
         {
             throw new ArgumentException($"Chain {ChainType()} expects multiple inputs, cannot use 'run'");
         }
 
-        var values = InputKeys.Length > 0 ? new ChainValues(InputKeys[0], input) : new ChainValues();
+        var values = InputKeys.Count > 0 ? new ChainValues(InputKeys[0], input) : new ChainValues();
         var returnValues = await CallAsync(values).ConfigureAwait(false);
         var keys = returnValues.Value.Keys;
 
@@ -73,11 +73,11 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
         
-        var keysLengthDifferent = InputKeys.Length != input.Count;
+        var keysLengthDifferent = InputKeys.Count != input.Count;
 
         if (keysLengthDifferent)
         {
-            throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Length} but, received {input.Count}");
+            throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Count} but, received {input.Count}");
         }
 
         var returnValues = await CallAsync(new ChainValues(input), callbacks).ConfigureAwait(false);

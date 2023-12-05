@@ -49,10 +49,10 @@ SQL Query: ";
     private readonly SqlDatabaseChainInput _fields = fields;
 
     /// <inheritdoc />
-    public override string[] InputKeys => new[] { _fields.InputKey };
+    public override IReadOnlyList<string> InputKeys => new[] { _fields.InputKey };
 
     /// <inheritdoc />
-    public override string[] OutputKeys => new[] { _fields.OutputKey };
+    public override IReadOnlyList<string> OutputKeys => new[] { _fields.OutputKey };
 
     /// <inheritdoc />
     public override string ChainType() => "sql_database_chain";

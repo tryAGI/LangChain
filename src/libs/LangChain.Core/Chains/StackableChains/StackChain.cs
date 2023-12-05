@@ -1,22 +1,15 @@
 ﻿using LangChain.Abstractions.Schema;
-using LangChain.Callback;
 using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
-public class StackChain : BaseStackableChain
+public class StackChain(
+    BaseStackableChain a,
+    BaseStackableChain b)
+    : BaseStackableChain
 {
-    private readonly BaseStackableChain _a;
-    private readonly BaseStackableChain _b;
-
-    public string[] IsolatedInputKeys { get; set; } = Array.Empty<string>();
-    public string[] IsolatedOutputKeys { get; set; } = Array.Empty<string>();
-
-    public StackChain(BaseStackableChain a, BaseStackableChain b)
-    {
-        _a = a;
-        _b = b;
-    }
+    public IReadOnlyList<string> IsolatedInputKeys { get; set; } = Array.Empty<string>();
+    public IReadOnlyList<string> IsolatedOutputKeys { get; set; } = Array.Empty<string>();
 
     public StackChain AsIsolated(
         string[]? inputKeys = null,
@@ -44,7 +37,7 @@ public class StackChain : BaseStackableChain
         // since it is reference type, the values would be changed anyhow
         var originalValues = values;
 
-        if (IsolatedInputKeys.Length > 0)
+        if (IsolatedInputKeys.Count > 0)
         {
             var res = new ChainValues();
             foreach (var key in IsolatedInputKeys)
@@ -53,9 +46,9 @@ public class StackChain : BaseStackableChain
             }
             values = res;
         }
-        await _a.CallAsync(values).ConfigureAwait(false);
-        await _b.CallAsync(values).ConfigureAwait(false);
-        if (IsolatedOutputKeys.Length > 0)
+        await a.CallAsync(values).ConfigureAwait(false);
+        await b.CallAsync(values).ConfigureAwait(false);
+        if (IsolatedOutputKeys.Count > 0)
         {
             foreach (var key in IsolatedOutputKeys)
             {

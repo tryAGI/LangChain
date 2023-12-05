@@ -12,17 +12,17 @@ public class SequentialChainInput : IChainInputs
     /// <summary>
     /// 
     /// </summary>
-    public IChain[] Chains { get; }
+    public IReadOnlyList<IChain> Chains { get; }
 
     /// <summary>
     /// 
     /// </summary>
-    public string[] InputVariables { get; }
+    public IReadOnlyList<string> InputVariables { get; }
 
     /// <summary>
     /// 
     /// </summary>
-    public string[]? OutputVariables { get; }
+    public IReadOnlyList<string>? OutputVariables { get; }
 
     /// <summary>
     /// 

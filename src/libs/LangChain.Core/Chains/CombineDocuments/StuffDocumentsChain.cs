@@ -51,7 +51,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         }
     }
 
-    public override string[] InputKeys =>
+    public override IReadOnlyList<string> InputKeys =>
         base.InputKeys.Concat(LlmChain.InputKeys.Where(k => k != _documentVariableName)).ToArray();
 
     public override string ChainType() => "stuff_documents_chain";

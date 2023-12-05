@@ -23,8 +23,8 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
 
     public CallbackManager? CallbackManager { get; set; }
 
-    public override string[] InputKeys => new[] { _inputKey };
-    public override string[] OutputKeys => fields.ReturnSourceDocuments
+    public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
+    public override IReadOnlyList<string> OutputKeys => fields.ReturnSourceDocuments
         ? new[] { _outputKey, SourceDocuments }
         : new[] { _outputKey };
 

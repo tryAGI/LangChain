@@ -5,8 +5,8 @@ namespace LangChain.Abstractions.Chains.Base;
 
 public interface IChain
 {
-    string[] InputKeys { get; }
-    string[] OutputKeys { get; }
+    IReadOnlyList<string> InputKeys { get; }
+    IReadOnlyList<string> OutputKeys { get; }
     
     Task<string?> Run(string input);
     Task<string> Run(Dictionary<string, object> input, ICallbacks? callbacks = null);

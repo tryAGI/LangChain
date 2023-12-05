@@ -101,7 +101,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         }
 
         run.Outputs = output.LlmOutput;
-        for (var i = 0; i < output.Generations.Length; i++)
+        for (var i = 0; i < output.Generations.Count; i++)
         {
             for (var j = 0; j < output.Generations[i].Length; j++)
             {

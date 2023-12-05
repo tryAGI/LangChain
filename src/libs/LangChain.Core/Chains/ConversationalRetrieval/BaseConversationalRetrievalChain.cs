@@ -16,9 +16,9 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
     /// <summary> Chain input fields </summary>
     private readonly BaseConversationalRetrievalChainInput _fields = fields;
 
-    public override string[] InputKeys => new[] { "question", "chat_history" };
+    public override IReadOnlyList<string> InputKeys => new[] { "question", "chat_history" };
 
-    public override string[] OutputKeys
+    public override IReadOnlyList<string> OutputKeys
     {
         get
         {
