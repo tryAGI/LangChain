@@ -91,6 +91,9 @@ public class StuffDocumentsChainTests
         mock.Setup(x => x
                 .Predict(It.IsAny<ChainValues>()))
             .Returns<ChainValues>(_ => Task.FromResult((object)"predict response"));
+        
+        mock.Setup(x => x.InputKeys)
+            .Returns(Array.Empty<string>());
 
         var templateInput = documentsVariableName ?? new PromptTemplateInput("{documents_content}", new[] { "documents_content" });
         var prompt = new PromptTemplate(templateInput);

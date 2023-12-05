@@ -26,7 +26,7 @@ public class ReduceDocumentsChainTests
         var collapsed = new Dictionary<string, string>
         {
             [document1.PageContent] = "first collapsed",
-            [document2.PageContent] = "second collapsed"
+            [document2.PageContent] = "second collapsed",
         };
 
         var collapseLlmChain = CreateFakeLlmChain(
@@ -39,7 +39,7 @@ public class ReduceDocumentsChainTests
         {
             CombineDocumentsChain = combineDocumentsChain,
             CollapseDocumentsChain = collapseDocumentsChain,
-            TokenMax = 100
+            TokenMax = 100,
         };
 
         var chain = new ReduceDocumentsChain(input);
@@ -52,7 +52,11 @@ public class ReduceDocumentsChainTests
 
         chain.ChainType().Should().BeEquivalentTo("reduce_documents_chain");
 
-        var result = await chain.CombineDocsAsync(new [] { document1, document2 }, new Dictionary<string, object>());
+        var result = await chain.CombineDocsAsync(new []
+        {
+            document1,
+            document2,
+        }, new Dictionary<string, object>());
 
         result.Output.Should().BeEquivalentTo("summarized");
         result.OtherKeys.Should().BeEmpty();
@@ -72,7 +76,9 @@ public class ReduceDocumentsChainTests
                 Times.Once());
     }
 
-    private Mock<ILlmChain> CreateFakeLlmChain(Func<ChainValues, string> predict, PromptTemplate promptTemplate)
+    private Mock<ILlmChain> CreateFakeLlmChain(
+        Func<ChainValues, string> predict,
+        PromptTemplate promptTemplate)
     {
         var mock = new Mock<ILlmChain>();
 
@@ -82,6 +88,9 @@ public class ReduceDocumentsChainTests
 
         mock.Setup(x => x.Prompt)
             .Returns(promptTemplate);
+        
+        mock.Setup(x => x.InputKeys)
+            .Returns(Array.Empty<string>());
 
         var supportsCountTokensMock = new Mock<ISupportsCountTokens>();
         supportsCountTokensMock

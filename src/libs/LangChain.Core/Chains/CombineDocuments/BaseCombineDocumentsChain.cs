@@ -19,7 +19,9 @@ namespace LangChain.Chains.CombineDocuments;
 /// determine whether it's safe to pass a list of documents into this chain or whether
 /// that will longer than the context length).
 /// </summary>
-public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput fields) : BaseChain(fields), IChain
+public abstract class BaseCombineDocumentsChain(
+    BaseCombineDocumentsChainInput fields)
+    : BaseChain(fields), IChain
 {
     /// <summary>
     /// 
@@ -54,7 +56,8 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
             .Where(kv => kv.Key != InputKey)
             .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-        var (output, returnDict) = await CombineDocsAsync((docs as List<Document> ?? new List<Document>()), otherKeys).ConfigureAwait(false);
+        var (output, returnDict) = await CombineDocsAsync(
+            (docs as List<Document> ?? new List<Document>()), otherKeys).ConfigureAwait(false);
 
         returnDict[OutputKey] = output;
         returnDict.TryAddKeyValues(values.Value);
@@ -73,7 +76,9 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     /// <param name="docs">a list of documents to use to calculate the total prompt length.</param>
     /// <param name="otherKeys"></param>
     /// <returns>Returns null if the method does not depend on the prompt length, otherwise the length of the prompt in tokens.</returns>
-    public abstract Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys);
+    public abstract Task<int?> PromptLength(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys);
 
     /// <summary>
     /// Combine documents into a single string.
