@@ -18,12 +18,16 @@ namespace LangChain.Chains.CombineDocuments;
 /// </summary>
 public class StuffDocumentsChain : BaseCombineDocumentsChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public ILlmChain LlmChain { get; }
     
     private readonly BasePromptTemplate _documentPrompt;
     private readonly string _documentVariableName;
     private readonly string _documentSeparator;
 
+    /// <inheritdoc/>
     public StuffDocumentsChain(StuffDocumentsChainInput input) : base(input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
@@ -52,11 +56,14 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         }
     }
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys =>
         base.InputKeys.Concat(LlmChain.InputKeys.Where(k => k != _documentVariableName)).ToArray();
 
+    /// <inheritdoc/>
     public override string ChainType() => "stuff_documents_chain";
 
+    /// <inheritdoc/>
     public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
@@ -69,6 +76,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
 
+    /// <inheritdoc/>
     public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
         otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));

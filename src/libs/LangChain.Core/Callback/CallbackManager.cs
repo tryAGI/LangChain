@@ -21,6 +21,10 @@ public class CallbackManager
     /// 
     /// </summary>
     public List<BaseCallbackHandler> InheritableHandlers { get; private set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string Name { get; } = "callback_manager";
     
     /// <summary>
@@ -28,9 +32,24 @@ public class CallbackManager
     /// </summary>
     public string? ParentRunId { get; } 
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected List<string> Tags { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     protected List<string> InheritableTags { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     protected Dictionary<string, object> Metadata { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     protected Dictionary<string, object> InheritableMetadata { get; }
 
     /// <summary>
@@ -62,6 +81,11 @@ public class CallbackManager
         InheritableMetadata = inheritableMetadata ?? new();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tags"></param>
+    /// <param name="inherit"></param>
     public void AddTags(IReadOnlyList<string> tags, bool inherit = true)
     {
         Tags.RemoveAll(tag => tags.Contains(tag));
@@ -73,6 +97,11 @@ public class CallbackManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tags"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public void RemoveTags(IReadOnlyList<string> tags)
     {
         tags = tags ?? throw new ArgumentNullException(nameof(tags));
@@ -84,6 +113,12 @@ public class CallbackManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="metadata"></param>
+    /// <param name="inherit"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public void AddMetadata(IReadOnlyDictionary<string, object> metadata, bool inherit = true)
     {
         metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
@@ -98,6 +133,11 @@ public class CallbackManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="keys"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public void RemoveMetadata(IReadOnlyList<string> keys)
     {
         keys = keys ?? throw new ArgumentNullException(nameof(keys));
@@ -109,6 +149,15 @@ public class CallbackManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="llm"></param>
+    /// <param name="prompts"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <param name="extraParams"></param>
+    /// <returns></returns>
     public async Task<CallbackManagerForLlmRun> HandleLlmStart(
         BaseLlm llm,
         IReadOnlyList<string> prompts,
@@ -141,6 +190,15 @@ public class CallbackManager
         return new CallbackManagerForLlmRun(runId, Handlers, InheritableHandlers, ParentRunId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="llm"></param>
+    /// <param name="messages"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <param name="extraParams"></param>
+    /// <returns></returns>
     public async Task<CallbackManagerForLlmRun> HandleChatModelStart(
         BaseLlm llm,
         IReadOnlyList<List<Message>> messages,
@@ -168,6 +226,14 @@ public class CallbackManager
         return new CallbackManagerForLlmRun(runId, Handlers, InheritableHandlers, ParentRunId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="chain"></param>
+    /// <param name="inputs"></param>
+    /// <param name="runId"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task<CallbackManagerForChainRun> HandleChainStart(
         BaseChain chain,
         IChainValues inputs,
@@ -194,6 +260,15 @@ public class CallbackManager
         return new CallbackManagerForChainRun(runId, Handlers, InheritableHandlers, ParentRunId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="retriever"></param>
+    /// <param name="query"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
+    /// <param name="extraParams"></param>
+    /// <returns></returns>
     public async Task<CallbackManagerForRetrieverRun> HandleRetrieverStart(
         BaseRetriever retriever,
         string query,
@@ -232,6 +307,11 @@ public class CallbackManager
         return manager;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="handler"></param>
+    /// <param name="inherit"></param>
     public void AddHandler(BaseCallbackHandler handler, bool inherit = true)
     {
         Handlers.Add(handler);
@@ -241,17 +321,31 @@ public class CallbackManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="handler"></param>
     public void RemoveHandler(BaseCallbackHandler handler)
     {
         Handlers.Remove(handler);
         InheritableHandlers.Remove(handler);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="handlers"></param>
     public void SetHandlers(IEnumerable<BaseCallbackHandler> handlers)
     {
         Handlers = handlers.ToList();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="handlers"></param>
+    /// <param name="inherit"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public void SetHandlers(List<BaseCallbackHandler> handlers, bool inherit = true)
     {
         handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
@@ -264,6 +358,12 @@ public class CallbackManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="additionalHandlers"></param>
+    /// <param name="inherit"></param>
+    /// <returns></returns>
     public CallbackManager Copy(List<BaseCallbackHandler>? additionalHandlers = null, bool inherit = true)
     {
         var manager = new CallbackManager(parentRunId: ParentRunId);
@@ -287,6 +387,12 @@ public class CallbackManager
         return manager;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="handlers"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public static CallbackManager FromHandlers(List<Handler> handlers)
     {
         handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
@@ -301,6 +407,17 @@ public class CallbackManager
         return manager;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inheritableCallbacks"></param>
+    /// <param name="localCallbacks"></param>
+    /// <param name="verbose"></param>
+    /// <param name="localTags"></param>
+    /// <param name="inheritableTags"></param>
+    /// <param name="localMetadata"></param>
+    /// <param name="inheritableMetadata"></param>
+    /// <returns></returns>
     // TODO: review! motivation?
     // ICallbackManagerOptions? options = null,
     public static async Task<CallbackManager> Configure(ICallbacks? inheritableCallbacks = null,

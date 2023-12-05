@@ -1,5 +1,6 @@
 namespace LangChain.Chains.CombineDocuments;
 
+/// <inheritdoc/>
 public class ReduceDocumentsChainInput : BaseCombineDocumentsChainInput
 {
     /// <summary>

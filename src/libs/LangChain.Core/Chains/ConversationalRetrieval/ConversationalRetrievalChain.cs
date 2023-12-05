@@ -30,8 +30,10 @@ public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fiel
 {
     private readonly ConversationalRetrievalChainInput _fields = fields;
     
+    /// <inheritdoc/>
     public override string ChainType() => "conversational_retrieval";
     
+    /// <inheritdoc/>
     protected override async Task<List<Document>> GetDocsAsync(
         string question,
         Dictionary<string, object> inputs,
@@ -44,6 +46,11 @@ public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fiel
         return ReduceTokensBelowLimit(docs);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="docs"></param>
+    /// <returns></returns>
     public List<Document> ReduceTokensBelowLimit(IEnumerable<Document> docs)
     {
         var docsList = docs.ToList();

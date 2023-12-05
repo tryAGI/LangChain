@@ -1,11 +1,13 @@
 namespace LangChain.Schema;
 
-public class PartialValues
+/// <summary>
+/// 
+/// </summary>
+public class PartialValues(
+    Dictionary<string, string> value)
 {
-    public PartialValues(Dictionary<string, string> value)
-    {
-        this.Value = value;
-    }
-
-    public Dictionary<string, string> Value { get; set; } = new();
+    /// <summary>
+    /// 
+    /// </summary>
+    public Dictionary<string, string> Value { get; set; } = value;
 }

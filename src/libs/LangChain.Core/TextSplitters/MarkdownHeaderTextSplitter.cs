@@ -2,6 +2,7 @@
 
 namespace LangChain.TextSplitters;
 
+/// <inheritdoc/>
 public class MarkdownHeaderTextSplitter : TextSplitter
 {
     private readonly bool _includeHeaders;
@@ -18,7 +19,10 @@ public class MarkdownHeaderTextSplitter : TextSplitter
     private readonly static string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
     private readonly static string[] separator = {"\n"};
 
-    public MarkdownHeaderTextSplitter(string[]? headersToSplitOn = null, bool includeHeaders = true,
+    /// <inheritdoc/>
+    public MarkdownHeaderTextSplitter(
+        string[]? headersToSplitOn = null,
+        bool includeHeaders = true,
         bool groupByHeaders = false)
     {
         _includeHeaders = includeHeaders;
@@ -26,6 +30,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         _headersToSplitOn = headersToSplitOn ?? _defauldHeaders;
     }
 
+    /// <inheritdoc/>
     public override List<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));

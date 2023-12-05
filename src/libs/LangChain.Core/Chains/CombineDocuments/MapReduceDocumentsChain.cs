@@ -39,10 +39,13 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     /// </summary>
     public bool ReturnIntermediateSteps { get; init; }
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys { get; }
 
+    /// <inheritdoc/>
     public override string ChainType() => "map_reduce_documents_chain";
 
+    /// <inheritdoc/>
     public MapReduceDocumentsChain(MapReduceDocumentsChainInput input) : base(input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
@@ -98,6 +101,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
         }
     }
 
+    /// <inheritdoc/>
     public override async Task<int?> PromptLength(
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)

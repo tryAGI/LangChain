@@ -3,13 +3,25 @@ using LangChain.Schema;
 
 namespace LangChain.Memory;
 
+/// <inheritdoc />
 public class ConversationBufferMemory : BaseChatMemory
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public string HumanPrefix { get; set; } = "Human";
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string AiPrefix { get; set; } = "AI";
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string MemoryKey { get; set; } = "history";
 
+    /// <inheritdoc />
     public ConversationBufferMemory(BaseChatMessageHistory chatHistory) : base(chatHistory)
     {
         ChatHistory = chatHistory;
@@ -17,10 +29,17 @@ public class ConversationBufferMemory : BaseChatMemory
 
     // note: buffer property can't be implemented because of Any type as return type
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string BufferAsString => GetBufferString(BufferAsMessages);
 
+    /// <summary>
+    /// 
+    /// </summary>
     public IReadOnlyList<Message> BufferAsMessages => ChatHistory.Messages;
 
+    /// <inheritdoc />
     public override List<string> MemoryVariables => new List<string> { MemoryKey };
 
     private string GetBufferString(IEnumerable<Message> messages)
@@ -47,6 +66,7 @@ public class ConversationBufferMemory : BaseChatMemory
         return string.Join("\n", stringMessages);
     }
 
+    /// <inheritdoc />
     public override OutputValues LoadMemoryVariables(InputValues? inputValues)
     {
         return new OutputValues(new Dictionary<string, object> { { MemoryKey, BufferAsString } });

@@ -2,6 +2,7 @@ using LangChain.Chains.LLM;
 
 namespace LangChain.Chains.CombineDocuments;
 
+/// <inheritdoc/>
 public class MapReduceDocumentsChainInput : BaseCombineDocumentsChainInput
 {
     /// <summary>

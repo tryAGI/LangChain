@@ -68,10 +68,17 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// <returns></returns>
     public virtual string GetFormatInstructions() => throw new NotImplementedException();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     protected virtual string Type() => throw new NotImplementedException("_type not implemented");
 }
 
+/// <inheritdoc/>
 public class StrOutputParser : BaseOutputParser<string>
 {
+    /// <inheritdoc/>
     public override async Task<string> Parse(string? text) => text;
 }

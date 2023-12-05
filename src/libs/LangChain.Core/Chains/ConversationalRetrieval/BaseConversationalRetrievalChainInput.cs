@@ -5,9 +5,10 @@ using LangChain.Providers;
 
 namespace LangChain.Chains.ConversationalRetrieval;
 
+/// <inheritdoc/>
 public class BaseConversationalRetrievalChainInput(
-        BaseCombineDocumentsChain combineDocsChain,
-        ILlmChain questionGenerator)
+    BaseCombineDocumentsChain combineDocsChain,
+    ILlmChain questionGenerator)
     : ChainInputs
 {
     /// <summary>

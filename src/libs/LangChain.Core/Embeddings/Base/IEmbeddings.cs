@@ -6,10 +6,22 @@ namespace LangChain.Abstractions.Embeddings.Base;
 /// </summary>
 public interface IEmbeddings
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="texts"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     Task<float[][]> EmbedDocumentsAsync(
         string[] texts,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     Task<float[]> EmbedQueryAsync(
         string text,
         CancellationToken cancellationToken = default);

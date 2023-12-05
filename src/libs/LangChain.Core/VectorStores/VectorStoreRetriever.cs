@@ -10,13 +10,21 @@ namespace LangChain.VectorStores;
 /// </summary>
 public class VectorStoreRetriever : BaseRetriever
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public VectorStore Vectorstore { get; init; }
 
     private ESearchType SearchType { get; init; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int K { get; set; } = 4;
 
     private float? ScoreThreshold { get; init; }
 
+    /// <inheritdoc/>
     public VectorStoreRetriever(
         VectorStore vectorstore,
         ESearchType searchType = ESearchType.Similarity,
@@ -32,6 +40,7 @@ public class VectorStoreRetriever : BaseRetriever
         ScoreThreshold = scoreThreshold;
     }
 
+    /// <inheritdoc/>
     protected override async Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,
         CallbackManagerForRetrieverRun? runManager = null)
@@ -53,6 +62,11 @@ public class VectorStoreRetriever : BaseRetriever
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="documents"></param>
+    /// <returns></returns>
     public Task<IEnumerable<string>> AddDocumentsAsync(IEnumerable<Document> documents)
         => Vectorstore.AddDocumentsAsync(documents);
 }

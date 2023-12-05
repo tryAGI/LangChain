@@ -1,5 +1,8 @@
 namespace LangChain.Common;
 
+/// <summary>
+/// 
+/// </summary>
 public static class DictionaryExtensions
 {
     /// <summary>

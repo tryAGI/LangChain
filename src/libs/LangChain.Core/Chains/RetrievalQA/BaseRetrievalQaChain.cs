@@ -21,9 +21,15 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
 
     private const string SourceDocuments = "source_documents";
 
+    /// <summary>
+    /// 
+    /// </summary>
     public CallbackManager? CallbackManager { get; set; }
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
+    
+    /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => fields.ReturnSourceDocuments
         ? new[] { _outputKey, SourceDocuments }
         : new[] { _outputKey };

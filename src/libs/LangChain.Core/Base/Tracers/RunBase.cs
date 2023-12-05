@@ -87,6 +87,10 @@ public class Run : RunBase
     /// The execution order of the run within a run trace.
     /// </summary>
     public int ExecutionOrder { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int? ChildExecutionOrder { get; set; }
 
     /// <summary>
@@ -108,6 +112,9 @@ public class Run : RunBase
     //     return values
 }
 
+/// <summary>
+/// 
+/// </summary>
 public static class RunExtensions
 {
 

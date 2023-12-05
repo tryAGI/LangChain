@@ -1,19 +1,26 @@
 namespace LangChain.Base.Tracers;
 
+/// <inheritdoc />
 public class ConsoleCallbackHandlerInput : BaseCallbackHandlerInput
 {
 }
 
+/// <inheritdoc />
 public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTracer(fields)
 {
+    /// <inheritdoc />
     public ConsoleCallbackHandler() : this(new ConsoleCallbackHandlerInput())
     {
 
     }
 
+    /// <inheritdoc />
     public override string Name => "console_callback_handler";
+    
+    /// <inheritdoc />
     protected override Task PersistRun(Run run) => Task.CompletedTask;
 
+    /// <inheritdoc />
     protected override async Task HandleLlmStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -29,8 +36,10 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleLlmNewTokenAsync(Run run, string token) { }
 
+    /// <inheritdoc />
     protected override async Task HandleLlmErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -42,6 +51,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleLlmEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -53,8 +63,10 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleChatModelStartAsync(Run run) { }
 
+    /// <inheritdoc />
     protected override async Task HandleChainStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -69,7 +81,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
-
+    /// <inheritdoc />
     protected override async Task HandleChainErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -83,6 +95,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleChainEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -97,6 +110,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleToolStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -108,6 +122,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleToolErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -119,6 +134,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleToolEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
@@ -131,34 +147,42 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             );
     }
 
+    /// <inheritdoc />
     protected override async Task HandleTextAsync(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override async Task HandleAgentActionAsync(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override async Task HandleAgentEndAsync(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override async Task HandleRetrieverStartAsync(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override async Task HandleRetrieverEndAsync(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override async Task HandleRetrieverErrorAsync(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override void OnRunCreate(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override void OnRunUpdate(Run run)
     {
     }
@@ -192,7 +216,10 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         return result;
     }
 
-    private void Print(string text) => Console.WriteLine(text);
+    private void Print(string text)
+    {
+        Console.WriteLine(text);
+    }
 
     private string GetColoredText(string text, string format)
     {

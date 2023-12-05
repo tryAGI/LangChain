@@ -4,12 +4,27 @@ using LangChain.Schema;
 
 namespace LangChain.Prompts;
 
+/// <summary>
+/// 
+/// </summary>
 public abstract class BaseMessagePromptTemplate
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract IReadOnlyList<string> InputVariables { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public abstract Task<List<Message>> FormatMessages(InputValues values);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public SerializedMessagePromptTemplate Serialize()
     {
         var serialized = new SerializedMessagePromptTemplate

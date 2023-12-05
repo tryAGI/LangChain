@@ -8,17 +8,20 @@ namespace LangChain.Indexes;
 /// <summary>
 /// Logic for creating a vectorstore index.
 /// </summary>
-public class VectorStoreIndexCreator
+/// // embeddings are not needed here because VectorStore already has them
+public class VectorStoreIndexCreator(
+    VectorStore vectorStore,
+    TextSplitter textSplitter)
 {
-    public VectorStore VectorStore { get; }
-    public TextSplitter TextSplitter { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public VectorStore VectorStore { get; } = vectorStore;
 
-    // embeddings are not needed here because VectorStore already has them
-    public VectorStoreIndexCreator(VectorStore vectorStore, TextSplitter textSplitter)
-    {
-        VectorStore = vectorStore;
-        TextSplitter = textSplitter;
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public TextSplitter TextSplitter { get; } = textSplitter;
 
     /// <summary>
     /// Create a vectorstore index from loaders.

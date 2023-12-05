@@ -5,28 +5,27 @@ namespace LangChain.TextSplitters;
 /// <summary>
 /// Implementation of splitting text that looks at characters
 /// </summary>
-public class CharacterTextSplitter : TextSplitter
+public class CharacterTextSplitter(
+    string? separator = "\n\n",
+    int chunkSize = 4000,
+    int chunkOverlap = 200,
+    Func<string, int>? lengthFunction = null)
+    : TextSplitter(chunkSize, chunkOverlap, lengthFunction)
 {
-    private readonly string? _separator;
-
-    public CharacterTextSplitter(string? separator = "\n\n", int chunkSize = 4000, int chunkOverlap = 200, Func<string, int>? lengthFunction = null) : base(chunkSize, chunkOverlap, lengthFunction)
-    {
-        _separator = separator;
-    }
-
+    /// <inheritdoc/>
     public override List<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
         
         List<string> splits;
-        if (_separator != null)
+        if (separator != null)
         {
-            splits = text.Split(new[] { _separator }, StringSplitOptions.None).ToList();
+            splits = text.Split(new[] { separator }, StringSplitOptions.None).ToList();
         }
         else
         {
             splits = new List<string> { text };
         }
-        return this.MergeSplits(splits, _separator);
+        return this.MergeSplits(splits, separator);
     }
 }

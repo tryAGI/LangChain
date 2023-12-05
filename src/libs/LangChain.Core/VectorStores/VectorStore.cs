@@ -6,17 +6,19 @@ namespace LangChain.VectorStores;
 /// <summary>
 /// VectorStore. Check https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html
 /// </summary>
-public abstract class VectorStore
+public abstract class VectorStore(
+    IEmbeddings embeddings,
+    Func<float, float>? overrideRelevanceScoreFn = null)
 {
-    protected IEmbeddings Embeddings { get; }
-    protected Func<float, float>? OverrideRelevanceScoreFn { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    protected IEmbeddings Embeddings { get; } = embeddings;
 
-    protected VectorStore(IEmbeddings embeddings, Func<float, float>? overrideRelevanceScoreFn = null)
-    {
-        Embeddings = embeddings;
-        OverrideRelevanceScoreFn = overrideRelevanceScoreFn;
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    protected Func<float, float>? OverrideRelevanceScoreFn { get; } = overrideRelevanceScoreFn;
 
     /// <summary>
     /// Run more documents through the embeddings and add to the vectorstore.
@@ -225,8 +227,18 @@ public abstract class VectorStore
         return 1.0f - distance / (float)Math.Sqrt(2);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
     protected static float CosineRelevanceScoreFn(float distance) => 1.0f - distance;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
     protected static float MaxInnerProductRelevanceScoreFn(float distance)
         => distance > 0
             ? 1.0f - distance
@@ -244,7 +256,13 @@ public abstract class VectorStore
     /// <exception cref="NotImplementedException"></exception>
     protected abstract Func<float, float> SelectRelevanceScoreFn();
 
-    public VectorStoreRetriever AsRetreiver(ESearchType searchType = ESearchType.Similarity, float? scoreThreshold = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="searchType"></param>
+    /// <param name="scoreThreshold"></param>
+    /// <returns></returns>
+    public VectorStoreRetriever AsRetriever(ESearchType searchType = ESearchType.Similarity, float? scoreThreshold = null)
     {
         return new VectorStoreRetriever(this, searchType, scoreThreshold);
     }

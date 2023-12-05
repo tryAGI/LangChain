@@ -2,18 +2,27 @@ using LangChain.Schema;
 
 namespace LangChain.Memory;
 
-public abstract class BaseChatMemory : BaseMemory
+/// <inheritdoc/>
+public abstract class BaseChatMemory(
+    BaseChatMessageHistory chatHistory)
+    : BaseMemory
 {
-    protected BaseChatMessageHistory ChatHistory { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    protected BaseChatMessageHistory ChatHistory { get; set; } = chatHistory;
+
+    /// <summary>
+    /// 
+    /// </summary>
     public string? OutputKey { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string? InputKey { get; set; }
     
     // note: return type can't be implemented because of Any type as return type in Buffer property
-
-    protected BaseChatMemory(BaseChatMessageHistory chatHistory)
-    {
-        ChatHistory = chatHistory;
-    }
 
     /// <summary>
     /// This used just to save user message as input and AI message as output
@@ -29,6 +38,7 @@ public abstract class BaseChatMemory : BaseMemory
         await ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault().ToString()].ToString()).ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public override Task Clear()
     {
         return ChatHistory.Clear();

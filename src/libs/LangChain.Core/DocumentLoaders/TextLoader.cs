@@ -4,6 +4,7 @@ using LangChain.Docstore;
 
 namespace LangChain.DocumentLoaders;
 
+/// <inheritdoc />
 public class TextLoader : BaseLoader
 {
     private string filePath;
@@ -23,6 +24,7 @@ public class TextLoader : BaseLoader
         this.autoDetectEncoding = autoDetectEncoding;
     }
 
+    /// <inheritdoc />
     public override List<Document> Load()
     {
         var text = "";

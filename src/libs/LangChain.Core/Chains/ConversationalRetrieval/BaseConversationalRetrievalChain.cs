@@ -16,8 +16,10 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
     /// <summary> Chain input fields </summary>
     private readonly BaseConversationalRetrievalChainInput _fields = fields;
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { "question", "chat_history" };
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys
     {
         get
@@ -37,6 +39,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         }
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> CallAsync(
         IChainValues values,
         CallbackManagerForChainRun? runManager)

@@ -3,9 +3,14 @@ using LangChain.Retrievers;
 
 namespace LangChain.Chains.RetrievalQA;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="combineDocumentsChain"></param>
+/// <param name="retriever"></param>
 public class RetrievalQaChainInput(
-        BaseCombineDocumentsChain combineDocumentsChain,
-        BaseRetriever retriever)
+    BaseCombineDocumentsChain combineDocumentsChain,
+    BaseRetriever retriever)
     : BaseRetrievalQaChainInput(combineDocumentsChain)
 {
     /// <summary> Documents retriever. </summary>

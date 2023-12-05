@@ -3,14 +3,28 @@ using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
+/// <inheritdoc/>
 public class StackChain(
     BaseStackableChain a,
     BaseStackableChain b)
     : BaseStackableChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public IReadOnlyList<string> IsolatedInputKeys { get; set; } = Array.Empty<string>();
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public IReadOnlyList<string> IsolatedOutputKeys { get; set; } = Array.Empty<string>();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputKeys"></param>
+    /// <param name="outputKeys"></param>
+    /// <returns></returns>
     public StackChain AsIsolated(
         string[]? inputKeys = null,
         string[]? outputKeys = null)
@@ -20,6 +34,12 @@ public class StackChain(
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
     public StackChain AsIsolated(
         string? inputKey = null,
         string? outputKey = null)
@@ -30,6 +50,7 @@ public class StackChain(
         return this;
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));

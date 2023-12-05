@@ -48,8 +48,10 @@ public class SequentialChain : BaseChain
         }
     }
 
+    /// <inheritdoc/>
     public override string ChainType() => "sequential_chain";
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
@@ -88,6 +90,10 @@ public class SequentialChain : BaseChain
         return output;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="ArgumentException"></exception>
     protected virtual void Validate()
     {
         if (OutputKeys.Count > 0 && ReturnAll)

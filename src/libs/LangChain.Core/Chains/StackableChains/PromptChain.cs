@@ -7,10 +7,12 @@ using LangChain.Prompts;
 
 namespace LangChain.Chains.HelperChains;
 
+/// <inheritdoc/>
 public class PromptChain : BaseStackableChain
 {
     private readonly string _template;
 
+    /// <inheritdoc/>
     public PromptChain(string template, string outputKey = "prompt")
     {
         OutputKeys = new[] { outputKey };
@@ -30,9 +32,7 @@ public class PromptChain : BaseStackableChain
         return variables;
     }
 
-
-
-
+    /// <inheritdoc/>
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));

@@ -4,17 +4,22 @@ using LangChain.Callback;
 
 namespace LangChain.Chains.HelperChains;
 
+/// <inheritdoc/>
 public class SetChain : BaseStackableChain
 {
+    /// <inheritdoc/>
     public SetChain(object value, string outputKey = "query")
     {
         OutputKeys = new[] { outputKey };
         Value = value;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public object Value { get; set; }
-
-
+    
+    /// <inheritdoc/>
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));

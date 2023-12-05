@@ -1,5 +1,8 @@
 namespace LangChain.Providers;
 
+/// <summary>
+/// 
+/// </summary>
 public static class SpeechToTextModelExtensions
 {
     /// <inheritdoc cref="ISpeechToTextModel.TranscribeAsync"/>

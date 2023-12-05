@@ -5,14 +5,17 @@ namespace LangChain.Base.Tracers;
 /// </summary>
 public class TracerException : Exception
 {
+    /// <inheritdoc/>
     public TracerException(string message) : base(message)
     {
     }
 
+    /// <inheritdoc/>
     public TracerException()
     {
     }
 
+    /// <inheritdoc/>
     public TracerException(string message, Exception innerException) : base(message, innerException)
     {
     }

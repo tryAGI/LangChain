@@ -10,28 +10,76 @@ using Generation = LangChain.Schema.Generation;
 
 namespace LangChain.Chains.LLM;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="fields"></param>
 public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public BasePromptTemplate Prompt { get; } = fields.Prompt;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public IChatModel Llm { get; } = fields.Llm;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public BaseMemory? Memory { get; } = fields.Memory;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string OutputKey { get; set; } = fields.OutputKey;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public bool ReturnFinalOnly { get; set; } = fields.ReturnFinalOnly;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public BaseLlmOutputParser<string> OutputParser { get; set; } = new StrOutputParser();
 
+    /// <inheritdoc/>
     public override string ChainType() => "llm_chain";
 
+    /// <summary>
+    /// 
+    /// </summary>
     public CallbackManager? CallbackManager { get; set; }
 
+    /// <inheritdoc/>
     public bool Verbose { get; set; }
+    
+    /// <inheritdoc/>
     public ICallbacks? Callbacks { get; set; }
+    
+    /// <inheritdoc/>
     public List<string> Tags { get; set; } = new();
+    
+    /// <inheritdoc/>
     public Dictionary<string, object> Metadata { get; set; } = new();
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => Prompt.InputVariables.ToArray();
+    
+    /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="generations"></param>
+    /// <param name="promptValue"></param>
+    /// <param name="runManager"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     protected async Task<object?> GetFinalOutput(
         List<Generation> generations,
         BasePromptValue promptValue,
@@ -64,14 +112,14 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 
         var promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value)).ConfigureAwait(false);
         var chatMessages = promptValue.ToChatMessages().WithHistory(Memory);
-        if (Verbose == true)
+        if (Verbose)
         {
             Console.WriteLine(string.Join("\n\n", chatMessages));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
         }
 
         var response = await Llm.GenerateAsync(new ChatRequest(chatMessages, stop)).ConfigureAwait(false);
-        if (Verbose == true)
+        if (Verbose)
         {
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '<'));
@@ -128,7 +176,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var generations = responses.Select(response =>
                 new Generation[]
                 {
-                    new Generation
+                    new()
                     {
                         Text = response.Messages.Last().Content
                     }
@@ -213,6 +261,11 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public async Task<object> Predict(ChainValues values)
     {
         var output = await CallAsync(values).ConfigureAwait(false);

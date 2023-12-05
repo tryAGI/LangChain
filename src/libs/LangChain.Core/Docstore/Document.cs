@@ -11,23 +11,49 @@ namespace LangChain.Docstore;
 /// </summary>
 public class Document
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public Document()
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="content"></param>
+    /// <param name="metadata"></param>
     public Document(string content, Dictionary<string, object>? metadata = null)
     {
         PageContent = content;
         Metadata = metadata ?? new Dictionary<string, object>();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static Document Empty { get; } = new(
         content: string.Empty,
         metadata: new Dictionary<string, object>());
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string PageContent { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int LookupIndex { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string LookupStr { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public Dictionary<string, object> Metadata { get; set; } = new();
 
     private readonly static string[] separator = { "\n\n" };
@@ -86,6 +112,7 @@ public class Document
         }
     }
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         var serializedMetadata = string.Join(", ", Metadata.Select(x => $"{{{x.Key}:{x.Value}}}"));

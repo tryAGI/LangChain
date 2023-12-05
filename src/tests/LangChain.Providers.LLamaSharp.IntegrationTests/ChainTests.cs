@@ -86,7 +86,7 @@ Answer: ";
 
         var chainQuestion =
             Set("What is the good name for a pet?", outputKey: "question")
-            | RetreiveDocuments(index, inputKey: "question", outputKey: "documents")
+            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents")
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(prompt1Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "pet_sentence");

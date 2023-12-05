@@ -1,5 +1,8 @@
 namespace LangChain.Schema;
 
+/// <summary>
+/// 
+/// </summary>
 public class LlmResult
 {
     /// <summary>

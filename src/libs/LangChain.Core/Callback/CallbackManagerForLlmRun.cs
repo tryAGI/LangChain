@@ -3,13 +3,21 @@ using LangChain.Schema;
 
 namespace LangChain.Callback;
 
+/// <inheritdoc/>
 public class CallbackManagerForLlmRun : BaseRunManager
 {
+    /// <inheritdoc/>
     public CallbackManagerForLlmRun(string runId, List<BaseCallbackHandler> handlers, List<BaseCallbackHandler> inheritableHandlers, string? parentRunId = null)
         : base(runId, handlers, inheritableHandlers, parentRunId)
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
     // TODO: remove?
     public async Task HandleLlmNewTokenAsync(string token, string runId, string parentRunId)
     {
@@ -29,6 +37,12 @@ public class CallbackManagerForLlmRun : BaseRunManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="error"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
     public async Task HandleLlmErrorAsync(Exception error, string runId, string parentRunId)
     {
         foreach (var handler in Handlers)
@@ -47,6 +61,12 @@ public class CallbackManagerForLlmRun : BaseRunManager
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="output"></param>
+    /// <param name="runId"></param>
+    /// <param name="parentRunId"></param>
     public async Task HandleLlmEndAsync(LlmResult output, string runId, string parentRunId)
     {
         foreach (var handler in Handlers)

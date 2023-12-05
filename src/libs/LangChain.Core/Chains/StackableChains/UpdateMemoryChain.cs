@@ -5,12 +5,19 @@ using LangChain.Schema;
 
 namespace LangChain.Chains.StackableChains;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="memory"></param>
+/// <param name="requestKey"></param>
+/// <param name="responseKey"></param>
 public class UpdateMemoryChain(
     BaseChatMemory memory,
     string requestKey = "query",
     string responseKey = "text")
     : BaseStackableChain
 {
+    /// <inheritdoc />
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));

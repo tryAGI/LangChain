@@ -8,14 +8,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/// <inheritdoc/>
 public class PromptTemplate : BaseStringPromptTemplate
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public string Template { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public TemplateFormatOptions? TemplateFormat { get; set; } = TemplateFormatOptions.FString;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public bool? ValidateTemplate { get; set; } = true;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public new Dictionary<string, object> PartialVariables { get; set; } = new();
 
+    /// <inheritdoc/>
     public PromptTemplate(IPromptTemplateInput input)
         : base(input)
     {
@@ -38,17 +54,28 @@ public class PromptTemplate : BaseStringPromptTemplate
         }
     }
 
+    /// <inheritdoc/>
     protected override string GetPromptType()
     {
         return "prompt";
     }
 
+    /// <inheritdoc/>
     public override async Task<string> Format(InputValues values)
     {
         InputValues allValues = await MergePartialAndUserVariables(values).ConfigureAwait(false);
         return RenderTemplate(Template, TemplateFormat.Value, allValues.Value);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="examples"></param>
+    /// <param name="suffix"></param>
+    /// <param name="inputVariables"></param>
+    /// <param name="exampleSeparator"></param>
+    /// <param name="prefix"></param>
+    /// <returns></returns>
     public static PromptTemplate FromExamples(
         IEnumerable<string> examples,
         string suffix,
@@ -60,6 +87,12 @@ public class PromptTemplate : BaseStringPromptTemplate
         return new PromptTemplate(new PromptTemplateInput(template, inputVariables.ToList()));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static PromptTemplate FromTemplate(string template, PromptTemplateInput? options = null)
     {
         var names = new HashSet<string>();
@@ -78,6 +111,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         });
     }
 
+    /// <inheritdoc/>
     public override async Task<BasePromptTemplate> AddPartial(PartialValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
@@ -106,6 +140,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         return new PromptTemplate(promptDict);
     }
 
+    /// <inheritdoc/>
     public override SerializedBasePromptTemplate Serialize()
     {
         return new SerializedPromptTemplate
@@ -115,6 +150,13 @@ public class PromptTemplate : BaseStringPromptTemplate
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     public async static Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
     {
         data = data ?? throw new ArgumentNullException(nameof(data));
@@ -129,21 +171,41 @@ public class PromptTemplate : BaseStringPromptTemplate
         });
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate string Interpolator(string template, Dictionary<string, object> inputValues);
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate List<ParsedFStringNode> Parser(string template);
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static Dictionary<TemplateFormatOptions, Interpolator> DefaultFormatterMapping { get; } = new Dictionary<TemplateFormatOptions, Interpolator>
     {
         { TemplateFormatOptions.FString, InterpolateFString },
         { TemplateFormatOptions.Jinja2, (_, __) => "" }
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static Dictionary<TemplateFormatOptions, Parser> DefaultParserMapping { get; } = new Dictionary<TemplateFormatOptions, Parser>
     {
         { TemplateFormatOptions.FString, ParseFString },
         { TemplateFormatOptions.Jinja2, _ => new List<ParsedFStringNode>() }
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static string InterpolateFString(string template, Dictionary<string, object> values)
     {
         List<ParsedFStringNode> nodes = ParseFString(template);
@@ -187,6 +249,13 @@ public class PromptTemplate : BaseStringPromptTemplate
             return res + (node as LiteralNode).Text;
         });
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public static List<ParsedFStringNode> ParseFString(string template)
     {
         // Core logic replicated from internals of pythons built in Formatter class.
@@ -250,12 +319,25 @@ public class PromptTemplate : BaseStringPromptTemplate
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="templateFormat"></param>
+    /// <param name="inputValues"></param>
+    /// <returns></returns>
     public static string RenderTemplate(string template, TemplateFormatOptions templateFormat, Dictionary<string, object> inputValues)
     {
         return DefaultFormatterMapping[templateFormat](template, inputValues);
     }
-
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="templateFormatOptions"></param>
+    /// <param name="inputVariables"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     public void CheckValidTemplate(string template, TemplateFormatOptions templateFormatOptions, List<string> inputVariables)
     {
         if (!DefaultFormatterMapping.ContainsKey(templateFormatOptions))
@@ -275,6 +357,12 @@ public class PromptTemplate : BaseStringPromptTemplate
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="templateFormat"></param>
+    /// <returns></returns>
     public static List<ParsedFStringNode> ParseTemplate(string template, TemplateFormatOptions templateFormat)
     {
         return DefaultParserMapping[templateFormat](template);

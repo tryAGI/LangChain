@@ -33,8 +33,10 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         _input = input;
     }
     
+    /// <inheritdoc/>
     public override string ChainType() => "reduce_documents_chain";
 
+    /// <inheritdoc/>
     public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys) => null;
 
     /// <summary>

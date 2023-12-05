@@ -4,19 +4,27 @@ using LangChain.Schema;
 
 namespace LangChain.Prompts;
 
-public abstract class BaseMessageStringPromptTemplate : BaseMessagePromptTemplate
+/// <inheritdoc/>
+public abstract class BaseMessageStringPromptTemplate(
+    BaseStringPromptTemplate prompt)
+    : BaseMessagePromptTemplate
 {
-    public BaseStringPromptTemplate Prompt { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public BaseStringPromptTemplate Prompt { get; set; } = prompt;
 
-    protected BaseMessageStringPromptTemplate(BaseStringPromptTemplate prompt)
-    {
-        this.Prompt = prompt;
-    }
-
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputVariables => this.Prompt.InputVariables;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public abstract Task<Message> Format(InputValues values);
 
+    /// <inheritdoc/>
     public override async Task<List<Message>> FormatMessages(InputValues values)
     {
         return new List<Message> { await this.Format(values).ConfigureAwait(false) };

@@ -62,6 +62,7 @@ public abstract class BaseRunManager
         ParentRunId = parentRunId;
     }
 
+    /// <inheritdoc/>
     protected BaseRunManager()
         : this(
             runId: Guid.NewGuid().ToString("N"),
@@ -99,4 +100,8 @@ public abstract class BaseRunManager
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TThis"></typeparam>
 public interface IRunManagerImplementation<TThis> where TThis : IRunManagerImplementation<TThis>, new();

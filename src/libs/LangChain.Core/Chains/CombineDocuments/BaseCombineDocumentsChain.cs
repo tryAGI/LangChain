@@ -21,10 +21,20 @@ namespace LangChain.Chains.CombineDocuments;
 /// </summary>
 public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput fields) : BaseChain(fields), IChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public string InputKey { get; } = fields.InputKey;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string OutputKey { get; }  = fields.OutputKey;
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { InputKey };
+    
+    /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };
 
     /// <summary>

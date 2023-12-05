@@ -8,6 +8,10 @@ using LangChain.TextSplitters;
 
 namespace LangChain.Chains.CombineDocuments;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="fields"></param>
 public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain(fields), IChain
 {
     private readonly string _inputKey = fields.InputKey;
@@ -16,11 +20,16 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
     private readonly TextSplitter _textSplitter = fields.Splitter ?? new RecursiveCharacterTextSplitter();
     private readonly BaseCombineDocumentsChain _combineDocumentsChain = fields.CombineDocumentsChain;
 
+    /// <inheritdoc/>
     public override string ChainType() => "analyze_document_chain";
 
+    /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
+    
+    /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => new[] { _outputKey };
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));

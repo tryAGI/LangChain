@@ -5,6 +5,7 @@ using LangChain.Providers;
 
 namespace LangChain.Chains.HelperChains;
 
+/// <inheritdoc/>
 public class LLMChain : BaseStackableChain
 {
     private readonly IChatModel _llm;
@@ -12,6 +13,7 @@ public class LLMChain : BaseStackableChain
 
     private const string CACHE_DIR = "cache";
 
+    /// <inheritdoc/>
     public LLMChain(
         IChatModel llm,
         string inputKey = "prompt",
@@ -40,6 +42,7 @@ public class LLMChain : BaseStackableChain
         File.WriteAllText(file, answer);
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
@@ -67,6 +70,11 @@ public class LLMChain : BaseStackableChain
         return values;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enabled"></param>
+    /// <returns></returns>
     public LLMChain UseCache(bool enabled=true)
     {
         _useCache = enabled;

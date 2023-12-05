@@ -169,7 +169,7 @@ public partial class LLamaSharpTests
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 stuffDocumentsChain,
-                index.Store.AsRetreiver())
+                index.Store.AsRetriever())
             {
                 InputKey = "question",
                 OutputKey = "pet_sentence",

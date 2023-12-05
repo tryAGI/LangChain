@@ -4,10 +4,16 @@ using LangChain.Retrievers;
 
 namespace LangChain.Chains.ConversationalRetrieval;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="retriever"></param>
+/// <param name="combineDocsChain"></param>
+/// <param name="questionGenerator"></param>
 public class ConversationalRetrievalChainInput(
-        BaseRetriever retriever,
-        BaseCombineDocumentsChain combineDocsChain,
-        ILlmChain questionGenerator)
+    BaseRetriever retriever,
+    BaseCombineDocumentsChain combineDocsChain,
+    ILlmChain questionGenerator)
     : BaseConversationalRetrievalChainInput(combineDocsChain, questionGenerator)
 {
     /// <summary>

@@ -3,13 +3,18 @@ using LangChain.Base;
 
 namespace LangChain.Callback;
 
+/// <summary>
+/// 
+/// </summary>
 public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForChainRun>
 {
+    /// <inheritdoc />
     public CallbackManagerForChainRun()
     {
 
     }
 
+    /// <inheritdoc/>
     public CallbackManagerForChainRun(
         string runId,
         List<BaseCallbackHandler> handlers,
@@ -19,6 +24,12 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="output"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task HandleChainEndAsync(IChainValues input, IChainValues output)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
@@ -44,6 +55,12 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="error"></param>
+    /// <param name="input"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task HandleChainErrorAsync(Exception error, IChainValues input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
@@ -64,6 +81,10 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="text"></param>
     public async Task HandleTextAsync(string text)
     {
         foreach (var handler in Handlers)

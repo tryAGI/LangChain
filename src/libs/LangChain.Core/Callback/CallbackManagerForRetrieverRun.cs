@@ -8,11 +8,13 @@ namespace LangChain.Callback;
 /// </summary>
 public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForRetrieverRun>
 {
+    /// <inheritdoc/>
     public CallbackManagerForRetrieverRun()
     {
 
     }
 
+    /// <inheritdoc/>
     public CallbackManagerForRetrieverRun(
         string runId,
         List<BaseCallbackHandler> handlers,

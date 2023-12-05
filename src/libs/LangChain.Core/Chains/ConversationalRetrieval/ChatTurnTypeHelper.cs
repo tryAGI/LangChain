@@ -3,8 +3,17 @@ using LangChain.Providers;
 
 namespace LangChain.Chains.ConversationalRetrieval;
 
+/// <summary>
+/// 
+/// </summary>
 public static class ChatTurnTypeHelper
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="chatHistory"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public static string GetChatHistory(IReadOnlyList<Message> chatHistory)
     {
         chatHistory = chatHistory ?? throw new ArgumentNullException(nameof(chatHistory));

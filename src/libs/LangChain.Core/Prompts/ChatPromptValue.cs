@@ -4,20 +4,23 @@ using LangChain.Schema;
 
 namespace LangChain.Prompts;
 
-public class ChatPromptValue : BasePromptValue
+/// <inheritdoc/>
+public class ChatPromptValue(
+    IReadOnlyCollection<Message> messages)
+    : BasePromptValue
 {
-    public IReadOnlyCollection<Message> Messages { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public IReadOnlyCollection<Message> Messages { get; set; } = messages;
 
-    public ChatPromptValue(IReadOnlyCollection<Message> messages)
-    {
-        this.Messages = messages;
-    }
-
+    /// <inheritdoc/>
     public override string ToString()
     {
         return JsonSerializer.Serialize(this.Messages);
     }
 
+    /// <inheritdoc/>
     public override IReadOnlyCollection<Message> ToChatMessages()
     {
         return this.Messages;

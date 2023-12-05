@@ -30,6 +30,12 @@ public abstract class BaseRetriever
     /// </summary>
     public Dictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    /// <param name="runManager"></param>
+    /// <returns></returns>
     protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,
         CallbackManagerForRetrieverRun? runManager = null);
