@@ -432,7 +432,7 @@ public class CallbackManager
         // python version using `contextvars` lib
         //      run_tree = get_run_tree_context()
         //      parent_run_id = None if run_tree is None else getattr(run_tree, "id")
-        string parentId = null;
+        string? parentId = null;
 
         CallbackManager callbackManager;
 

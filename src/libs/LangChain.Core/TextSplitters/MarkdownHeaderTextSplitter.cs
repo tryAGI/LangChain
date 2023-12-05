@@ -42,7 +42,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
 
         var content = new List<LineType>();
-        string currentHeader = null;
+        string? currentHeader = null;
         int currentHeaderLen = 999; // determines current header level
 
         bool inCodeBlock = false;

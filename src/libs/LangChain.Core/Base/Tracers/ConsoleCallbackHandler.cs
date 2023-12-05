@@ -118,7 +118,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering Tool run with input:", ConsoleFormats.Bold)}\n" +
-            $"{run.Inputs["input"].ToString().Trim()}"
+            $"{run.Inputs["input"].ToString()?.Trim()}"
         );
     }
 
@@ -143,7 +143,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         if (run.Outputs.Count != 0)
             Print(
                 $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting Tool run with output:", ConsoleFormats.Bold)}\n" +
-                $"{run.Outputs["output"].ToString().Trim()}"
+                $"{run.Outputs["output"].ToString()?.Trim()}"
             );
     }
 

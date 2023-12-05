@@ -162,23 +162,28 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             case "llm_chain":
                 {
                     var llmChainType = Type.GetType("Namespace.LLMChain"); // Replace with the actual namespace and class name
-                    var deserializeMethod = llmChainType?.GetMethod("Deserialize");
+                    var deserializeMethod = llmChainType?.GetMethod("Deserialize") ??
+                                            throw new InvalidOperationException("Could not find deserialize method");
 
+#pragma warning disable
                     return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
                 }
             case "sequential_chain":
                 {
                     var sequentialChainType = Type.GetType("Namespace.SequentialChain"); // Replace with the actual namespace and class name
-                    var deserializeMethod = sequentialChainType.GetMethod("Deserialize");
+                    var deserializeMethod = sequentialChainType?.GetMethod("Deserialize") ??
+                                            throw new InvalidOperationException("Could not find deserialize method");
 
                     return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
                 }
             case "simple_sequential_chain":
                 {
                     var simpleSequentialChainType = Type.GetType("Namespace.SimpleSequentialChain"); // Replace with the actual namespace and class name
-                    var deserializeMethod = simpleSequentialChainType.GetMethod("Deserialize");
+                    var deserializeMethod = simpleSequentialChainType?.GetMethod("Deserialize") ??
+                                            throw new InvalidOperationException("Could not find deserialize method");
 
                     return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
+#pragma warning restore
                 }
             default:
                 throw new InvalidOperationException($"Invalid prompt type in config: {data.Type}");

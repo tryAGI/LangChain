@@ -99,9 +99,10 @@ public class PromptTemplate : BaseStringPromptTemplate
         ParseTemplate(template, options?.TemplateFormat ?? TemplateFormatOptions.FString)
             .ForEach(node =>
             {
-                if (node.Type == "variable")
+                if (node.Type == "variable" &&
+                    node is VariableNode variableNode)
                 {
-                    names.Add((node as VariableNode).Name);
+                    names.Add(variableNode.Name);
                 }
             });
 
@@ -213,17 +214,16 @@ public class PromptTemplate : BaseStringPromptTemplate
         {
             if (node.Type == "variable")
             {
-                var parsedNode = node as VariableNode;
-
-                if (values.TryGetValue(parsedNode.Name, out var value))
+                if (node is VariableNode variableNode &&
+                    values.TryGetValue(variableNode.Name, out var value))
                 {
                     return res + value;
                 }
 
-                throw new ArgumentException($"Missing value for input {parsedNode.Name}");
+                throw new ArgumentException("Missing value for input.");
             }
 
-            return res + (node as LiteralNode).Text;
+            return res + (node as LiteralNode)?.Text;
         });
     }
     /// <summary>
@@ -234,19 +234,18 @@ public class PromptTemplate : BaseStringPromptTemplate
         List<ParsedFStringNode> nodes = ParseFString(template);
         return nodes.Aggregate("", (res, node) =>
         {
-            if (node.Type == "variable")
+            if (node.Type == "variable" &&
+                node is VariableNode variableNode)
             {
-                var parsedNode = node as VariableNode;
-
-                if (values.TryGetValue(parsedNode.Name, out var value))
+                if (values.TryGetValue(variableNode.Name, out var value))
                 {
                     return res + value;
                 }
 
-                return res + "{" + parsedNode.Name + "}";
+                return res + "{" + variableNode.Name + "}";
             }
 
-            return res + (node as LiteralNode).Text;
+            return res + (node as LiteralNode)?.Text;
         });
     }
     

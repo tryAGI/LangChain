@@ -118,7 +118,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             {
                 var generation = output.Generations[i][j];
 
-                var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>>)[i];
+                var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>> ?? new List<Dictionary<string, string>>())[i];
                 if (outputGeneration.ContainsKey("message"))
                 {
                     outputGeneration["message"] = (generation as ChatGeneration)?.Message ?? string.Empty;
