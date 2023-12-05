@@ -60,6 +60,7 @@ SQL Query: ";
     /// <inheritdoc />
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
 
         var inputText = $"{values.Value[_fields.InputKey]}\nSQLQuery:";

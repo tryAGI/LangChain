@@ -215,7 +215,7 @@ public abstract class SqlDatabase : IDisposable
     /// </summary>
     public async Task<string> RunAsync(string command, SqlRunFetchType fetch = SqlRunFetchType.All)
     {
-        await CheckPrivilegesIfNeededAsync();
+        await CheckPrivilegesIfNeededAsync().ConfigureAwait(false);
 
         var result = await ExecuteAsync(command, fetch).ConfigureAwait(false);
 
@@ -273,8 +273,22 @@ public abstract class SqlDatabase : IDisposable
         }
     }
 
-    /// <inheritdoc />
-    public virtual void Dispose()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="disposing"></param>
+    protected virtual void Dispose(bool disposing)
     {
+        if (disposing)
+        {
+            // Release managed resources here
+        }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

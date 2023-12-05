@@ -60,7 +60,11 @@ public sealed class PostgresDatabase : SqlDatabase
         return tables;
     }
 
-    protected override async Task HasOnlyReadPrivilegesAsync()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    protected override Task HasOnlyReadPrivilegesAsync()
     {
         // e.g. for postres
         // SELECT DISTINCT privilege_type
@@ -68,6 +72,8 @@ public sealed class PostgresDatabase : SqlDatabase
         // WHERE  grantee = CURRENT_USER
         // possible values https://www.postgresql.org/docs/current/ddl-priv.html
         // throw if not SELECT only or some flag passed to constructor?
+        
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
@@ -152,7 +158,7 @@ public sealed class PostgresDatabase : SqlDatabase
                         $"column {column.ColumnName} in {table} has null {nameof(column.ColumnOrdinal)}");
                 }
 
-                var sample = reader.GetValue(column.ColumnOrdinal.Value).ToString();
+                var sample = reader.GetValue(column.ColumnOrdinal.Value).ToString() ?? string.Empty;
                 samples.Add(sample.Length > 100 ? sample.Substring(0, 100) : sample);
             }
 
@@ -167,14 +173,14 @@ public sealed class PostgresDatabase : SqlDatabase
         return $"{SampleRowsInTableInfo} rows from {table} table:\n{headers}\n{sampleRows}";
     }
 
-    private record PgColumn(string Name, string DataType, bool IsNullable, string? Comment);
+    private sealed record PgColumn(string Name, string DataType, bool IsNullable, string? Comment);
 
     private async Task<List<PgColumn>> GetColumnsAsync(string table)
     {
         using var connection = await _dataSource.OpenConnectionAsync().ConfigureAwait(false);
 
         var tableWithSchema = String.IsNullOrEmpty(Schema) ? table : Schema + "." + table;
-        var command = new NpgsqlCommand($"SELECT * FROM {tableWithSchema}", connection);
+        using var command = new NpgsqlCommand($"SELECT * FROM {tableWithSchema}", connection);
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
 
         var columnsSchema = await reader.GetColumnSchemaAsync().ConfigureAwait(false);
@@ -196,7 +202,7 @@ public sealed class PostgresDatabase : SqlDatabase
         return columns;
     }
 
-    private record PgConstraint(string Name, string Definition);
+    private sealed record PgConstraint(string Name, string Definition);
 
     private async Task<List<PgConstraint>> GetTableConstraintAndKeysAsync(string table)
     {
@@ -228,8 +234,9 @@ WHERE @schema IS NOT NULL AND conrelid = (@schema || '.'  || @table)::regclass
     }
 
     /// <inheritdoc />
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
+        base.Dispose(disposing);
         _dataSource.Dispose();
     }
 }

@@ -33,6 +33,9 @@ public class LLamaSharpConfiguration
     /// </summary>
     public int MaxTokens { get; set; } = 600;
 
-    public List<string> AntiPrompts { get; set; } = new() { ">", "Human: "};
+    /// <summary>
+    /// 
+    /// </summary>
+    public IReadOnlyList<string> AntiPrompts { get; set; } = new[] { ">", "Human: "};
 
 }

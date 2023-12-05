@@ -86,7 +86,7 @@ public abstract class BaseStackableChain : IChain
         return res;
     }
 
-    public async Task<string> Run(string resultKey)
+    public async Task<string?> Run(string resultKey)
     {
         var res = await CallAsync(new ChainValues());
         return res.Value[resultKey].ToString();

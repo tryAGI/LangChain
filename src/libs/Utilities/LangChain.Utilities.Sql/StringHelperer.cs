@@ -1,6 +1,6 @@
 namespace LangChain.Utilities.Sql;
 
-internal class StringHelperer
+internal static class StringHelperer
 {
     /// <summary>
     /// Truncate a string to a certain number of words, based on the max string length.

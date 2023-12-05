@@ -22,7 +22,7 @@ public class ConversationalRetrievalChainTests
         var combineDocsChainMock = new Mock<BaseCombineDocumentsChain>(combineDocumentsChainInput);
         combineDocsChainMock.Setup(x => x
                 .Run(It.IsAny<Dictionary<string, object>>(), It.IsAny<ICallbacks?>()))
-            .Returns<Dictionary<string, object>, ICallbacks>((input, _) => Task.FromResult("Alice"));
+            .Returns<Dictionary<string, object>, ICallbacks>((_, _) => Task.FromResult("Alice"));
 
         var retrieverMock = new Mock<BaseRetriever>();
         retrieverMock
@@ -34,13 +34,13 @@ public class ConversationalRetrievalChainTests
                     It.IsAny<bool>(),
                     It.IsAny<List<string>>(),
                     It.IsAny<Dictionary<string, object>>()))
-            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>>((query, _, _, _, _, _) =>
+            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>>((_, _, _, _, _, _) =>
             {
                 var docs = new List<Document>
                 {
-                    new Document("first"),
-                    new Document("second"),
-                    new Document("third")
+                    new("first"),
+                    new("second"),
+                    new("third")
                 }.AsEnumerable();
 
                 return Task.FromResult(docs);
@@ -55,7 +55,7 @@ public class ConversationalRetrievalChainTests
         var questionGeneratorLlmMock = new Mock<IChatModel>();
         questionGeneratorLlmMock
             .Setup(v => v.GenerateAsync(It.IsAny<ChatRequest>(), It.IsAny<CancellationToken>()))
-            .Returns<ChatRequest, CancellationToken>((request, _) =>
+            .Returns<ChatRequest, CancellationToken>((_, _) =>
             {
                 var chatResponse = new ChatResponse(new[] { Message.Ai("Bob's asking what is hist name") }, Usage.Empty);
                 return Task.FromResult(chatResponse);
@@ -92,7 +92,7 @@ public class ConversationalRetrievalChainTests
         var resultSourceDocuments = result.Value["source_documents"] as List<Document>;
         resultSourceDocuments.Should().NotBeNull();
         resultSourceDocuments.Should().HaveCount(3);
-        resultSourceDocuments[0].PageContent.Should().BeEquivalentTo("first");
+        resultSourceDocuments![0].PageContent.Should().BeEquivalentTo("first");
 
         result.Value.Should().ContainKey("generated_question");
         result.Value["generated_question"].Should().BeEquivalentTo("Bob's asking what is hist name");
@@ -104,7 +104,7 @@ public class ConversationalRetrievalChainTests
     }
 
     [Test]
-    public async Task ReduceTokensBelowLimit_Ok()
+    public void ReduceTokensBelowLimit_Ok()
     {
         var supportsCountTokensMock = new Mock<ISupportsCountTokens>();
         supportsCountTokensMock
