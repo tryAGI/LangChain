@@ -41,7 +41,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleRetrieverEnd: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleRetrieverEnd: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -62,7 +62,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleRetrieverError: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleRetrieverError: {ex}").ConfigureAwait(false);
                 }
             }
         }

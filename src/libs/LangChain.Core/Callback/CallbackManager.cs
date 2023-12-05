@@ -129,7 +129,7 @@ public class CallbackManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleLLMStart: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleLLMStart: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -156,7 +156,7 @@ public class CallbackManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleLLMStart: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleLLMStart: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -182,7 +182,7 @@ public class CallbackManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainStart: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleChainStart: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -210,7 +210,7 @@ public class CallbackManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleRetrieverStart: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleRetrieverStart: {ex}").ConfigureAwait(false);
                 }
             }
         }

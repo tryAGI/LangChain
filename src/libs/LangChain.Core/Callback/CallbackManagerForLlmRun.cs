@@ -23,7 +23,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleLLMNewToken: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleLLMNewToken: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -41,7 +41,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleLLMError: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleLLMError: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -59,7 +59,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleLLMEnd: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleLLMEnd: {ex}").ConfigureAwait(false);
                 }
             }
         }

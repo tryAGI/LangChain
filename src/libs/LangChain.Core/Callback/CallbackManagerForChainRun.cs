@@ -38,7 +38,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainEnd: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleChainEnd: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -58,7 +58,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainError: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleChainError: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -76,7 +76,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleText: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleText: {ex}").ConfigureAwait(false);
                 }
             }
         }

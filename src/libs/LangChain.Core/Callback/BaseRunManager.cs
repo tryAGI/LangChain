@@ -84,7 +84,7 @@ public abstract class BaseRunManager
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleText: {ex}");
+                await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleText: {ex}").ConfigureAwait(false);
             }
         }
     }
