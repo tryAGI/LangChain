@@ -14,10 +14,6 @@
     <None Remove="Chains\QuestionAnswering\**" />
   </ItemGroup>
 
-  <ItemGroup Label="Usings">
-    <Using Remove="System.Net.Http" />
-  </ItemGroup>
-
   <PropertyGroup Label="NuGet">
     <Description>LangChain core classes.</Description>
     <PackageTags>$(PackageTags);core</PackageTags>
@@ -32,6 +28,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)'=='net4.6.2'">
     <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="System.Net.Http" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
