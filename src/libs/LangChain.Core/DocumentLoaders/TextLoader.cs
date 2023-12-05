@@ -59,12 +59,12 @@ public class TextLoader : BaseLoader
             }
             else
             {
-                throw new Exception($"Error loading {filePath}");
+                throw new InvalidOperationException($"Error loading {filePath}");
             }
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error loading {filePath}", ex);
+            throw new InvalidOperationException($"Error loading {filePath}", ex);
         }
 
         var metadata = new Dictionary<string, object>

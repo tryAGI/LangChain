@@ -120,7 +120,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         data = data ?? throw new ArgumentNullException(nameof(data));
         if (string.IsNullOrEmpty(data.Template))
         {
-            throw new Exception("Template template must have a template");
+            throw new ArgumentException("Template template must have a template");
         }
 
         return new PromptTemplate(new PromptTemplateInput(data.Template, data.InputVariables)
@@ -212,7 +212,7 @@ public class PromptTemplate : BaseStringPromptTemplate
                 var j = GetNextBracketPosition(ref chars, "}", i);
                 if (j < 0)
                 {
-                    throw new Exception("Unclosed '{' in template.");
+                    throw new InvalidOperationException("Unclosed '{' in template.");
                 }
 
                 nodes.Add(new VariableNode(chars.Slice(i + 1, j - (i + 1)).ToString()));
@@ -220,7 +220,7 @@ public class PromptTemplate : BaseStringPromptTemplate
             }
             else if (chars[i] == '}')
             {
-                throw new Exception("Single '}' in template.");
+                throw new InvalidOperationException("Single '}' in template.");
             }
             else
             {
@@ -261,7 +261,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         if (!DefaultFormatterMapping.ContainsKey(templateFormatOptions))
         {
             var validFormats = DefaultFormatterMapping.Keys;
-            throw new Exception($"Invalid template format. Got `{templateFormatOptions}`; should be one of {string.Join(",", validFormats)}");
+            throw new InvalidOperationException($"Invalid template format. Got `{templateFormatOptions}`; should be one of {string.Join(",", validFormats)}");
         }
 
         try
@@ -271,7 +271,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         }
         catch
         {
-            throw new Exception("Invalid prompt schema.");
+            throw new InvalidOperationException("Invalid prompt schema.");
         }
     }
 

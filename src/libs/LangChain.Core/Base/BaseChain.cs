@@ -56,7 +56,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             return returnValue?.ToString();
         }
 
-        throw new Exception("Return values have multiple keys, 'run' only supported when one key currently");
+        throw new InvalidOperationException("Return values have multiple keys, 'run' only supported when one key currently");
     }
 
     /// <summary>
@@ -181,7 +181,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
                     return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
                 }
             default:
-                throw new Exception($"Invalid prompt type in config: {data.Type}");
+                throw new InvalidOperationException($"Invalid prompt type in config: {data.Type}");
         }
     }
 }

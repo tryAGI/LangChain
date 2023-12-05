@@ -109,7 +109,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
             {
                 if (subResultDocs.Count == 1)
                 {
-                    throw new Exception(
+                    throw new InvalidOperationException(
                         "A single document was longer than the context length, we cannot handle this.");
                 }
 

@@ -42,7 +42,7 @@ public class PromptChain : BaseStackableChain
         var missing = InputKeys.Except(valueKeys);
         if (missing.Any())
         {
-            throw new Exception($"Input keys must contain all variables in template. Missing: {string.Join(",", missing)}");
+            throw new InvalidOperationException($"Input keys must contain all variables in template. Missing: {string.Join(",", missing)}");
         }
 
         var formattedPrompt = PromptTemplate.InterpolateFString(_template, values.Value);

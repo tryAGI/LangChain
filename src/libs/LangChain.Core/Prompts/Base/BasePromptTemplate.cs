@@ -28,7 +28,7 @@ public abstract class BasePromptTemplate
         
         if (input.InputVariables.Contains("stop"))
         {
-            throw new Exception("Cannot have an input variable named 'stop', as it is used internally, please rename.");
+            throw new ArgumentException("Cannot have an input variable named 'stop', as it is used internally, please rename.");
         }
 
         InputVariables = input.InputVariables;
@@ -121,7 +121,7 @@ public abstract class BasePromptTemplate
                     return promptTemplate;
                 }
             default:
-                throw new Exception($"Invalid prompt type in config: {data.Type}");
+                throw new InvalidOperationException($"Invalid prompt type in config: {data.Type}");
         }
     }
 }
