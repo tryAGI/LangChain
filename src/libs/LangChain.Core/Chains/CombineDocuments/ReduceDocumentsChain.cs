@@ -160,7 +160,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
                 }
                 else
                 {
-                    combinedMetadata[kv.Key] = kv.Value.ToString();
+                    combinedMetadata[kv.Key] = kv.Value.ToString() ?? string.Empty;
                 }
             }
         }

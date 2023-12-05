@@ -55,7 +55,7 @@ public abstract class BaseRunManager
         RunId = runId;
         Handlers = handlers;
         InheritableHandlers = inheritableHandlers;
-        Tags = tags;
+        Tags = tags ?? new();
         InheritableTags = inheritableTags ?? new();
         Metadata = metadata ?? new();
         InheritableMetadata = inheritableMetadata ?? new();

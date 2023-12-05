@@ -37,7 +37,9 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         }
     }
 
-    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
+    protected override async Task<IChainValues> CallAsync(
+        IChainValues values,
+        CallbackManagerForChainRun? runManager)
     {
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
 
@@ -53,7 +55,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
             newQuestion = await _fields.QuestionGenerator.Run(
                 new Dictionary<string, object>
                 {
-                    ["question"] = question,
+                    ["question"] = question ?? string.Empty,
                     ["chat_history"] = chatHistoryStr
                 },
                 callbacks: new ManagerCallbacks(callbacks));
@@ -66,7 +68,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         var docs = await GetDocsAsync(newQuestion, values.Value);
         var newInputs = new Dictionary<string, object>
         {
-            ["chat_history"] = chatHistoryStr,
+            ["chat_history"] = chatHistoryStr ?? string.Empty,
             ["input_documents"] = docs
         };
 

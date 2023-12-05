@@ -18,7 +18,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     public string OutputKey { get; set; } = fields.OutputKey;
     public bool ReturnFinalOnly { get; set; } = fields.ReturnFinalOnly;
 
-    public BaseLlmOutputParser<string> _outputParser { get; set; } = new StrOutputParser();
+    public BaseLlmOutputParser<string> OutputParser { get; set; } = new StrOutputParser();
 
     public override string ChainType() => "llm_chain";
 
@@ -193,7 +193,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             {
                 var dictionary = new Dictionary<string, object>
                 {
-                    [OutputKey] = _outputParser.ParseResult(generation)
+                    [OutputKey] = OutputParser.ParseResult(generation)
                 };
 
                 if (!ReturnFinalOnly)

@@ -63,7 +63,7 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// <returns></returns>
     public virtual string GetFormatInstructions() => throw new NotImplementedException();
 
-    protected virtual string _type() => throw new NotImplementedException("_type not implemented");
+    protected virtual string Type() => throw new NotImplementedException("_type not implemented");
 }
 
 public class StrOutputParser : BaseOutputParser<string>

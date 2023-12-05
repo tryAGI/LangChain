@@ -6,7 +6,7 @@ public class OutputParserException : Exception
 
     public OutputParserException(string message, string? output = null) : base(message)
     {
-        Output = output;
+        Output = output ?? string.Empty;
     }
 
     public OutputParserException()

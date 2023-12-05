@@ -18,7 +18,7 @@ public abstract class BaseMessagePromptTemplate
             // You need to serialize 'this' to a JSON string, then deserialize it back to a dictionary
             // to mimic the JavaScript `JSON.parse(JSON.stringify(this))` behavior.
             AdditionalProperties = JsonSerializer.Deserialize<Dictionary<string, object>>(
-                JsonSerializer.Serialize(this))
+                JsonSerializer.Serialize(this)) ?? new Dictionary<string, object>(),
         };
         return serialized;
     }

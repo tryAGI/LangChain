@@ -15,8 +15,8 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
     private string[] _headersToSplitOn;
     private const string _codeBlockseparator = "```";
-    private static readonly string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
-    private static readonly string[] separator = {"\n"};
+    private readonly static string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
+    private readonly static string[] separator = {"\n"};
 
     public MarkdownHeaderTextSplitter(string[]? headersToSplitOn = null, bool includeHeaders = true,
         bool groupByHeaders = false)
@@ -59,7 +59,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 content.Add(new LineType()
                 {
                     Content = strippedLine,
-                    Header = currentHeader
+                    Header = currentHeader ?? string.Empty,
                 });
                 continue;
             }
@@ -76,7 +76,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
             content.Add(new LineType()
             {
                 Content = strippedLine.TrimStart('#'), // to avoid marking subheaders
-                Header = currentHeader
+                Header = currentHeader ?? string.Empty,
             });
         }
 

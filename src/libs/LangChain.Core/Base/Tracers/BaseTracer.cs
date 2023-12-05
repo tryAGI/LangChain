@@ -57,7 +57,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ChildExecutionOrder = executionOrder,
             RunType = "llm",
             Tags = tags?.ToList() ?? new List<string>(),
-            Name = name
+            Name = name ?? string.Empty,
         };
 
         StartTrace(run);
@@ -106,7 +106,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
                 var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>>)[i];
                 if (outputGeneration.ContainsKey("message"))
                 {
-                    outputGeneration["message"] = (generation as ChatGeneration)?.Message;
+                    outputGeneration["message"] = (generation as ChatGeneration)?.Message ?? string.Empty;
                 }
             }
         }
@@ -176,14 +176,14 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ParentRunId = parentRunId,
             // serialized=serialized,
             Inputs = inputs,
-            ExtraData = extraParams,
+            ExtraData = extraParams ?? new(),
             Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
             StartTime = startTime,
             ExecutionOrder = executionOrder,
             ChildExecutionOrder = executionOrder,
             ChildRuns = new(),
             RunType = runType ?? "chain",
-            Name = name,
+            Name = name ?? string.Empty,
             Tags = tags ?? new()
         };
 
@@ -214,7 +214,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
 
-        run.Inputs = inputs;
+        run.Inputs = inputs ?? new();
         EndTrace(run);
         await HandleChainErrorAsync(run);
     }
@@ -242,7 +242,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.EndTime });
 
-        run.Inputs = inputs;
+        run.Inputs = inputs ?? new();
 
         EndTrace(run);
         await HandleChainEndAsync(run);
@@ -271,7 +271,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ParentRunId = parentRunId,
             Serialized = tool,
             Inputs = new Dictionary<string, object> { ["input"] = input },
-            ExtraData = extraParams,
+            ExtraData = extraParams ?? new(),
             Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
             StartTime = startTime,
             ExecutionOrder = executionOrder,
@@ -279,7 +279,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ChildRuns = new(),
             RunType = "tool",
             Tags = tags ?? new(),
-            Name = name,
+            Name = name ?? string.Empty,
         };
 
         StartTrace(run);
@@ -367,12 +367,12 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             // TODO: pass retriever or dumpd(retriever)?
             // serialized=serialized,
             Inputs = new Dictionary<string, object> { ["query"] = query },
-            ExtraData = extraParams,
+            ExtraData = extraParams ?? new(),
             Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
             StartTime = startTime,
             ExecutionOrder = executionOrder,
             ChildExecutionOrder = executionOrder,
-            Tags = tags,
+            Tags = tags ?? new(),
             ChildRuns = new(),
             RunType = "retriever",
         };
