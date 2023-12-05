@@ -6,7 +6,12 @@ public interface ICallbacks;
 
 public static class ManagerCallbacksExtensions
 {
-    public static ManagerCallbacks ToCallbacks(this ParentRunManager source) => new ManagerCallbacks(source.GetChild());
+    public static ManagerCallbacks ToCallbacks(this ParentRunManager source)
+    {
+        source = source ?? throw new ArgumentNullException(nameof(source));
+        
+        return new ManagerCallbacks(source.GetChild());
+    }
 }
 
 public record ManagerCallbacks(CallbackManager Value) : ICallbacks;

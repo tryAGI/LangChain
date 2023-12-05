@@ -25,6 +25,8 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
 
     public StuffDocumentsChain(StuffDocumentsChainInput input) : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         LlmChain = input.LlmChain;
         _documentPrompt = input.DocumentPrompt;
         _documentSeparator = input.DocumentSeparator;
@@ -58,6 +60,8 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
     {
+        otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
+        
         var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
         var predict = await LlmChain.Predict(new ChainValues(inputs.Value)).ConfigureAwait(false);
 
@@ -66,6 +70,8 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
 
     public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
+        otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
+        
         if (LlmChain.Llm is ISupportsCountTokens supportsCountTokens)
         {
             var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);

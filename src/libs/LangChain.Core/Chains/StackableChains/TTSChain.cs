@@ -34,6 +34,8 @@ public class TTSChain<T>:BaseStackableChain
 
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var text = (string)values.Value[_inputKey];
 
         if (_useCache)

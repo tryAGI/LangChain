@@ -12,6 +12,8 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
 
     public ChatPromptTemplate(ChatPromptTemplateInput input) : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         this.PromptMessages = input.PromptMessages;
         this.ValidateTemplate = input.ValidateTemplate;
 
@@ -66,6 +68,8 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
 
     public static ChatPromptTemplate FromPromptMessages(List<BaseMessagePromptTemplate> promptMessages)
     {
+        promptMessages = promptMessages ?? throw new ArgumentNullException(nameof(promptMessages));
+        
         var flattenedMessages = new List<BaseMessagePromptTemplate>();
 
         foreach (var promptMessage in promptMessages)

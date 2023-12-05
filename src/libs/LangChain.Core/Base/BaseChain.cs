@@ -71,6 +71,8 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <returns>A text value containing the result of the chain.</returns>
     public virtual async Task<string> Run(Dictionary<string, object> input, ICallbacks? callbacks = null)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         var keysLengthDifferent = InputKeys.Length != input.Count;
 
         if (keysLengthDifferent)
@@ -151,8 +153,10 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <param name="values"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static async Task<BaseChain> Deserialize(SerializedBaseChain data, LoadValues? values = null)
+    public async static Task<BaseChain> Deserialize(SerializedBaseChain data, LoadValues? values = null)
     {
+        data = data ?? throw new ArgumentNullException(nameof(data));
+        
         switch (data.Type)
         {
             case "llm_chain":

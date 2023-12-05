@@ -39,6 +39,8 @@ public class StackChain : BaseStackableChain
 
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         // since it is reference type, the values would be changed anyhow
         var originalValues = values;
 

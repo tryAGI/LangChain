@@ -15,6 +15,8 @@ public class SetLambdaChain: BaseStackableChain
 
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         values.Value[OutputKeys[0]] = QueryGetter();
         return Task.FromResult(values);
     }

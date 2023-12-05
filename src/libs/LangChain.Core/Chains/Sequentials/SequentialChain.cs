@@ -33,6 +33,8 @@ public class SequentialChain : BaseChain
     /// <param name="input"></param>
     public SequentialChain(SequentialChainInput input) : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         Chains = input.Chains;
         InputKeys = input.InputVariables;
         OutputKeys = input.OutputVariables ?? Array.Empty<string>();
@@ -50,6 +52,8 @@ public class SequentialChain : BaseChain
 
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var allChainValues = new ChainValues(new Dictionary<string, object>(_allOutputKeys.Count));
         foreach (var input in InputKeys)
         {

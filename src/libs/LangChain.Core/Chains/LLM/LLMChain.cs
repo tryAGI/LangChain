@@ -37,6 +37,8 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         BasePromptValue promptValue,
         CallbackManagerForChainRun? runManager = null)
     {
+        generations = generations ?? throw new ArgumentNullException(nameof(generations));
+        
         return generations[0].Text;
     }
 
@@ -48,6 +50,8 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// <returns>The resulting output <see cref="ChainValues"/>.</returns>
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         List<string> stop;
         if (values.Value.TryGetValue("stop", out var value) && value is IEnumerable<string> stopList)
         {

@@ -55,7 +55,12 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// </param>
     /// <param name="partial"></param>
     /// <returns>Structured output.</returns>
-    public override Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false) => Parse(result[0].Text);
+    public override Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false)
+    {
+        result = result ?? throw new ArgumentNullException(nameof(result));
+        
+        return Parse(result[0].Text);
+    }
 
     /// <summary>
     /// Instructions on how the LLM output should be formatted.

@@ -53,6 +53,8 @@ public class Document
     /// </summary>
     public string Lookup(string searchString)
     {
+        searchString = searchString ?? throw new ArgumentNullException(nameof(searchString));
+        
         // if there is a new search string, reset the index
         if (!searchString.Equals(LookupStr, StringComparison.OrdinalIgnoreCase))
         {

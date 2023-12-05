@@ -35,6 +35,8 @@ public class PromptChain : BaseStackableChain
 
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         // validate that input keys containing all variables
         var valueKeys = values.Value.Keys;
         var missing = InputKeys.Except(valueKeys);

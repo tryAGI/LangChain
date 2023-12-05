@@ -24,6 +24,8 @@ public abstract class BasePromptTemplate
     /// <exception cref="Exception"></exception>
     public BasePromptTemplate(IBasePromptTemplateInput input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         if (input.InputVariables.Contains("stop"))
         {
             throw new Exception("Cannot have an input variable named 'stop', as it is used internally, please rename.");
@@ -47,6 +49,8 @@ public abstract class BasePromptTemplate
     /// <returns></returns>
     public async Task<InputValues> MergePartialAndUserVariables(InputValues userVariables)
     {
+        userVariables = userVariables ?? throw new ArgumentNullException(nameof(userVariables));
+        
         InputValues partialValues = new InputValues(new Dictionary<string, object>());
 
         foreach (KeyValuePair<string, object> entry in PartialVariables.Value)
@@ -100,8 +104,10 @@ public abstract class BasePromptTemplate
     /// <param name="data"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static async Task<BasePromptTemplate> Deserialize(SerializedBasePromptTemplate data)
+    public async static Task<BasePromptTemplate> Deserialize(SerializedBasePromptTemplate data)
     {
+        data = data ?? throw new ArgumentNullException(nameof(data));
+        
         switch (data.Type)
         {
             case "prompt":

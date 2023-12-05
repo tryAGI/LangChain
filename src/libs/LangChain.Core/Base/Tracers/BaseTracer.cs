@@ -66,6 +66,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
     public override async Task HandleLlmErrorAsync(Exception err, string runId, string? parentRunId = null)
     {
+        err = err ?? throw new ArgumentNullException(nameof(err));
+
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_llm_error callback.");
@@ -86,6 +88,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
     public override async Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null)
     {
+        output = output ?? throw new ArgumentNullException(nameof(output));
+        
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_llm_end callback.");
@@ -165,6 +169,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new();
         if (metadata != null)
         {
             extraParams.Add("metadata", metadata);
@@ -176,7 +181,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ParentRunId = parentRunId,
             // serialized=serialized,
             Inputs = inputs,
-            ExtraData = extraParams ?? new(),
+            ExtraData = extraParams,
             Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
             StartTime = startTime,
             ExecutionOrder = executionOrder,
@@ -200,6 +205,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         Dictionary<string, object>? inputs = null,
         string? parentRunId = null)
     {
+        err = err ?? throw new ArgumentNullException(nameof(err));
+        
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_chain_error callback.");
@@ -262,8 +269,11 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new Dictionary<string, object>();
         if (metadata != null)
-        { extraParams.Add("metadata", metadata); }
+        {
+            extraParams.Add("metadata", metadata);
+        }
 
         var run = new Run
         {
@@ -271,7 +281,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ParentRunId = parentRunId,
             Serialized = tool,
             Inputs = new Dictionary<string, object> { ["input"] = input },
-            ExtraData = extraParams ?? new(),
+            ExtraData = extraParams,
             Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
             StartTime = startTime,
             ExecutionOrder = executionOrder,
@@ -291,6 +301,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// </summary>
     public override async Task HandleToolErrorAsync(Exception err, string runId, string? parentRunId = null)
     {
+        err = err ?? throw new ArgumentNullException(nameof(err));
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_tool_error callback.");
@@ -354,6 +365,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new Dictionary<string, object>();
         if (metadata != null)
         {
             extraParams.Add("metadata", metadata);
@@ -367,7 +379,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             // TODO: pass retriever or dumpd(retriever)?
             // serialized=serialized,
             Inputs = new Dictionary<string, object> { ["query"] = query },
-            ExtraData = extraParams ?? new(),
+            ExtraData = extraParams,
             Events = new List<Dictionary<string, object>> { new() { ["name"] = "start", ["time"] = startTime } },
             StartTime = startTime,
             ExecutionOrder = executionOrder,
@@ -415,6 +427,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     public override async Task HandleRetrieverErrorAsync(Exception error, string query, string runId,
         string? parentRunId)
     {
+        error = error ?? throw new ArgumentNullException(nameof(error));
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_retriever_end callback.");

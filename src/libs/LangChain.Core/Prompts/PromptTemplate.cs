@@ -19,6 +19,8 @@ public class PromptTemplate : BaseStringPromptTemplate
     public PromptTemplate(IPromptTemplateInput input)
         : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         Template = input.Template;
         TemplateFormat = input.TemplateFormat ?? TemplateFormatOptions.FString;
         ValidateTemplate = input.ValidateTemplate ?? true;
@@ -78,6 +80,8 @@ public class PromptTemplate : BaseStringPromptTemplate
 
     public override async Task<BasePromptTemplate> Partial(PartialValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         PromptTemplateInput promptDict = new PromptTemplateInput(Template, InputVariables
             .Where(iv => !values.Value.ContainsKey(iv))
             .ToList(), PartialVariables)
@@ -111,8 +115,9 @@ public class PromptTemplate : BaseStringPromptTemplate
         };
     }
 
-    public static async Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
+    public async static Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
     {
+        data = data ?? throw new ArgumentNullException(nameof(data));
         if (string.IsNullOrEmpty(data.Template))
         {
             throw new Exception("Template template must have a template");

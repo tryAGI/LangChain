@@ -16,6 +16,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleLlmStartAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         object inputs = run.Inputs.TryGetValue("prompts", out var input)
             ? new Dictionary<string, List<string>> { { "prompts", (input as List<string>)?.Select(p => p.Trim()).ToList() } }
@@ -31,6 +33,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleLlmErrorAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
 
         Print($"{GetColoredText("[llm/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] LLM run errored with error:", ConsoleFormats.Bold)}\n" +
@@ -40,6 +44,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleLlmEndAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
 
         Print($"{GetColoredText("[llm/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting LLM run with output:", ConsoleFormats.Bold)}\n" +
@@ -51,6 +57,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleChainStartAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var input = JsonSerializeOrDefault(run.Inputs, "[inputs]");
@@ -64,6 +72,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleChainErrorAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var error = JsonSerializeOrDefault(run.Error, "[error]");
@@ -75,6 +85,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleChainEndAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var outputs = JsonSerializeOrDefault(run.Outputs, "[outputs]");
@@ -87,6 +99,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleToolStartAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering Tool run with input:", ConsoleFormats.Bold)}\n" +
@@ -96,6 +110,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleToolErrorAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Tool run errored with error:", ConsoleFormats.Bold)}\n" +
@@ -105,6 +121,8 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     protected override async Task HandleToolEndAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         if (run.Outputs.Count != 0)
             Print(

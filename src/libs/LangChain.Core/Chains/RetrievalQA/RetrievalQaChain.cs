@@ -16,6 +16,8 @@ public class RetrievalQaChain(RetrievalQaChainInput fields) : BaseRetrievalQaCha
 
     public override async Task<IEnumerable<Document>> GetDocsAsync(string question, CallbackManagerForChainRun runManager)
     {
+        runManager = runManager ?? throw new ArgumentNullException(nameof(runManager));
+        
         return await _retriever.GetRelevantDocumentsAsync(
             question,
             callbacks: new ManagerCallbacks(runManager.GetChild())).ConfigureAwait(false);

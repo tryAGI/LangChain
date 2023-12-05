@@ -50,6 +50,8 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
     {
+        otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
+        
         var tokenMax = otherKeys.TryGetValue("token_max", out var key) ? (int?)key : null;
         var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax).ConfigureAwait(false);
 

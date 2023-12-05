@@ -71,6 +71,8 @@ public class CallbackManager
 
     public void RemoveTags(IReadOnlyList<string> tags)
     {
+        tags = tags ?? throw new ArgumentNullException(nameof(tags));
+        
         foreach (var tag in tags)
         {
             Tags.Remove(tag);
@@ -80,6 +82,8 @@ public class CallbackManager
 
     public void AddMetadata(IReadOnlyDictionary<string, object> metadata, bool inherit = true)
     {
+        metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+        
         foreach (var kv in metadata)
         {
             Metadata[kv.Key] = kv.Value;
@@ -92,6 +96,8 @@ public class CallbackManager
 
     public void RemoveMetadata(IReadOnlyList<string> keys)
     {
+        keys = keys ?? throw new ArgumentNullException(nameof(keys));
+        
         foreach (var key in keys)
         {
             Metadata.Remove(key);
@@ -163,6 +169,7 @@ public class CallbackManager
         IChainValues inputs,
         string? runId = null)
     {
+        inputs = inputs ?? throw new ArgumentNullException(nameof(inputs));
         runId ??= Guid.NewGuid().ToString();
 
         foreach (var handler in Handlers)
@@ -243,6 +250,8 @@ public class CallbackManager
 
     public void SetHandlers(List<BaseCallbackHandler> handlers, bool inherit = true)
     {
+        handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
+        
         Handlers.Clear();
         InheritableHandlers.Clear();
         foreach (var handler in handlers)
@@ -276,6 +285,8 @@ public class CallbackManager
 
     public static CallbackManager FromHandlers(List<Handler> handlers)
     {
+        handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
+        
         var manager = new CallbackManager();
 
         foreach (var handler in handlers)

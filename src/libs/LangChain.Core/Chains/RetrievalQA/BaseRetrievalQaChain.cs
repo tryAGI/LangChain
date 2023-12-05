@@ -42,6 +42,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
         IChainValues values,
         CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
 
         var question = values.Value[_inputKey].ToString();

@@ -42,6 +42,8 @@ public class LLMChain : BaseStackableChain
 
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var prompt = values.Value[InputKeys[0]].ToString();
         string responseContent;
 

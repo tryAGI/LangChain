@@ -11,6 +11,8 @@ public static class DocumentExtensions
 
     public static List<Document> ToDocuments(this IEnumerable<string> self)
     {
+        self = self ?? throw new ArgumentNullException(nameof(self));
+        
         List<Document> documents = new();
         foreach (var item in self)
         {

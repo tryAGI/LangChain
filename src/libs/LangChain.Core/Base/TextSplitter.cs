@@ -43,6 +43,8 @@ public abstract class TextSplitter
     /// </exception>
     public List<Document> CreateDocuments(List<string> texts, List<Dictionary<string, object>>? metadatas = null)
     {
+        texts = texts ?? throw new ArgumentNullException(nameof(texts));
+        
         var documents = new List<Document>();
 
         // if no metadata is provided, create a list of empty dictionaries
@@ -91,6 +93,8 @@ public abstract class TextSplitter
     /// </summary>
     protected List<string> MergeSplits(IEnumerable<string> splits, string separator)
     {
+        splits = splits ?? throw new ArgumentNullException(nameof(splits));
+        
         var separatorLen = _lengthFunction(separator);
         var docs = new List<string>(); // result of chunks
         var currentDoc = new List<string>(); // documents of current chunk

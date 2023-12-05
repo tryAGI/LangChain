@@ -12,6 +12,8 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <inheritdoc />
     protected BaseLlm(IBaseLlmParams parameters) : base(parameters)
     {
+        parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
+        
         _cache = parameters.Cache;
     }
 

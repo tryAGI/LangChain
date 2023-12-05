@@ -20,6 +20,8 @@ public class RetreiveDocumentsChain : BaseStackableChain
 
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var retreiver = _index.Store.AsRetreiver();
         retreiver.K = _amount;
 

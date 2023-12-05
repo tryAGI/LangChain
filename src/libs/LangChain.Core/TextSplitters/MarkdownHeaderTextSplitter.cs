@@ -6,7 +6,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 {
     private readonly bool _includeHeaders;
 
-    private class LineType
+    private sealed class LineType
     {
         public string Content { get; set; } = string.Empty;
         public string Header { get; set; } = string.Empty;
@@ -28,6 +28,8 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
     public override List<string> SplitText(string text)
     {
+        text = text ?? throw new ArgumentNullException(nameof(text));
+        
         // Split the input text by newline character ("\n").
         var lines = text
             .Replace("\r", "") // some people are using windows

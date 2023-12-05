@@ -13,6 +13,8 @@ public class UpdateMemoryChain(
 {
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         await memory.SaveContext(new InputValues(
             new Dictionary<string, object>
             {

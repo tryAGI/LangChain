@@ -34,6 +34,8 @@ public class StuffDocumentsChain : BaseStackableChain
 
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var documentsObject = values.Value[InputKeys[0]];
         if (documentsObject is not List<Document> docs)
         {

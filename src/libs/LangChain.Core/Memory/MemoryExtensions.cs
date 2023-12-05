@@ -8,6 +8,8 @@ public static class MemoryExtensions
         this IReadOnlyCollection<Message> messages,
         BaseMemory? memory)
     {
+        messages = messages ?? throw new ArgumentNullException(nameof(messages));
+        
         if (memory == null)
         {
             return messages;

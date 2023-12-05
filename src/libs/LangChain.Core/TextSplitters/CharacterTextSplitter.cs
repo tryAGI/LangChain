@@ -16,6 +16,8 @@ public class CharacterTextSplitter : TextSplitter
 
     public override List<string> SplitText(string text)
     {
+        text = text ?? throw new ArgumentNullException(nameof(text));
+        
         List<string> splits;
         if (_separator != null)
         {

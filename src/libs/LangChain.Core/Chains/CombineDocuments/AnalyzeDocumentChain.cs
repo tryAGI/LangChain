@@ -23,6 +23,8 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
 
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var documents = values.Value[_inputKey];
         var docs = _textSplitter.SplitDocuments(documents as List<Document>);
 

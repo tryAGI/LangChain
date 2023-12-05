@@ -41,6 +41,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         IChainValues values,
         CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
 
         var question = values.Value["question"].ToString();

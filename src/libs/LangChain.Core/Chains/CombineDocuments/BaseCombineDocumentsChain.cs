@@ -35,6 +35,8 @@ public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput f
     /// <returns></returns>
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var docs = values.Value["input_documents"];
 
         //Other keys are assumed to be needed for LLM prediction

@@ -17,6 +17,9 @@ public static class PromptHelpers
     /// <returns> string of the document formatted.</returns>
     public static Task<string> FormatDocumentAsync(Document doc, BasePromptTemplate prompt)
     {
+        doc = doc ?? throw new ArgumentNullException(nameof(doc));
+        prompt = prompt ?? throw new ArgumentNullException(nameof(prompt));
+        
         var data = new Dictionary<string, object>();
 
         var missing = new List<string>();

@@ -25,6 +25,8 @@ public class VectorStoreIndexCreator
     /// </summary>
     public async Task<VectorStoreIndexWrapper> FromLoaders(List<BaseLoader> loaders)
     {
+        loaders = loaders ?? throw new ArgumentNullException(nameof(loaders));
+        
         List<Document> documents = new();
         foreach (var loader in loaders)
         {

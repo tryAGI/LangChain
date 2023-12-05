@@ -45,6 +45,8 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
 
     public MapReduceDocumentsChain(MapReduceDocumentsChainInput input) : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         LlmChain = input.LlmChain;
         ReduceDocumentsChain = input.ReduceDocumentsChain;
         ReturnIntermediateSteps = input.ReturnIntermediateSteps;
