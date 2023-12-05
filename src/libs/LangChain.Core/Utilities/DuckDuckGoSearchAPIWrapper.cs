@@ -19,7 +19,7 @@ public sealed class DuckDuckGoSearchApiWrapper(
     /// </summary>
     public async Task<string> RunAsync(string query)
     {
-        var snippets = await GetSnippetsAsync(query);
+        var snippets = await GetSnippetsAsync(query).ConfigureAwait(false);
 
         return String.Join(" ", snippets);
     }
@@ -82,7 +82,10 @@ public sealed class DuckDuckGoSearchApiWrapper(
         var formattedResults = new List<WebSearchResult>();
         await foreach (var result in results)
         {
-            var formattedResult = new WebSearchResult(result["title"], result["body"], result["href"]);
+            var formattedResult = new WebSearchResult(
+                Title: result["title"],
+                Body: result["body"],
+                Link: result["href"]);
             formattedResults.Add(formattedResult);
 
             if (formattedResults.Count == numResults)
@@ -94,6 +97,7 @@ public sealed class DuckDuckGoSearchApiWrapper(
         return formattedResults;
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _search.Dispose();

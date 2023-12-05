@@ -15,29 +15,29 @@ public sealed class DuckDuckGoSearch : IDisposable
         new HttpClientHandler
         {
             AllowAutoRedirect = true,
-            MaxAutomaticRedirections = 2
+            MaxAutomaticRedirections = 2,
+            CheckCertificateRevocationList = true,
         });
 
-    private readonly Regex _stringTagsRegex = new Regex("<.*?>", RegexOptions.Compiled);
-    private readonly Regex _regex500InUrl = new Regex("(?:\\d{3}-\\d{2}\\.js)", RegexOptions.Compiled);
+    private readonly Regex _stringTagsRegex = new("<.*?>", RegexOptions.Compiled);
+    private readonly Regex _regex500InUrl = new(@"(?:\d{3}-\d{2}\.js)", RegexOptions.Compiled);
 
     /// <summary>
     /// DuckDuckGo text search generator. Query params: https://duckduckgo.com/params
-    ///
-    /// <see cref="https://github.com/deedy5/duckduckgo_search/blob/main/duckduckgo_search/duckduckgo_search_async.py"/>
+    /// https://github.com/deedy5/duckduckgo_search/blob/main/duckduckgo_search/duckduckgo_search_async.py"
     /// </summary>
     /// <param name="keywords">keywords for query</param>
-    /// <param name="region"><see cref="https://serpapi.com/duckduckgo-regions"/></param>
+    /// <param name="region">https://serpapi.com/duckduckgo-regions</param>
     /// <param name="safeSearch"><see cref="SafeSearchType"/></param>
     /// <param name="timeLimit"><see cref="TimeLimit"/></param>
-    /// <param name="backend">
-    /// api, html, lite. Defaults to api.
-    ///     api - collect data from https://duckduckgo.com,
-    ///     html - collect data from https://html.duckduckgo.com,
-    ///     lite - collect data from https://lite.duckduckgo.com.
-    /// </param>
     /// <param name="maxResults">max number of results. If null, returns results only from the first response</param>
     /// <returns></returns>
+    /// // /// &lt;param name="backend"&gt;
+    /// // /// api, html, lite. Defaults to api.
+    /// // ///     api - collect data from https://duckduckgo.com,
+    /// // ///     html - collect data from https://html.duckduckgo.com,
+    /// // ///     lite - collect data from https://lite.duckduckgo.com.
+    /// // /// &lt;/param&gt;
     public async IAsyncEnumerable<Dictionary<string, string>> TextSearchAsync(
         string keywords,
         string region = "wt-wt",
@@ -65,13 +65,13 @@ public sealed class DuckDuckGoSearch : IDisposable
         TimeLimit? timeLimit,
         int? maxResults)
     {
-        var payload = await GetPayloadAsync(keywords, region, safeSearch, timeLimit);
+        var payload = await GetPayloadAsync(keywords, region, safeSearch, timeLimit).ConfigureAwait(false);
 
         var i = 0;
         var cache = new HashSet<string>();
         while (i++ <= 10)
         {
-            var response = await HttpGetAsync("https://links.duckduckgo.com/d.js", payload);
+            var response = await HttpGetAsync("https://links.duckduckgo.com/d.js", payload).ConfigureAwait(false);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 yield break;
@@ -80,7 +80,7 @@ public sealed class DuckDuckGoSearch : IDisposable
             LinksResponse.LinksResponseItem[]? pageData;
             try
             {
-                var contentRaw = await response.Content.ReadAsStringAsync();
+                var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var content = JsonSerializer.Deserialize<LinksResponse>(contentRaw);
 
                 pageData = content?.Results;
@@ -94,7 +94,7 @@ public sealed class DuckDuckGoSearch : IDisposable
                 yield break;
             }
 
-            string? nextPageUrl = null;
+            string nextPageUrl = string.Empty;
             var resultExists = false;
             foreach (var row in pageData)
             {
@@ -104,13 +104,13 @@ public sealed class DuckDuckGoSearch : IDisposable
                     href != $"http://www.google.com/search?q={keywords}")
                 {
                     cache.Add(href);
-                    var body = NormalizeHtml(row.Body);
+                    var body = NormalizeHtml(row.Body ?? string.Empty);
                     if (!String.IsNullOrEmpty(body))
                     {
                         resultExists = true;
                         yield return new Dictionary<string, string>
                         {
-                            ["title"] = NormalizeHtml(row.Title),
+                            ["title"] = NormalizeHtml(row.Title ?? string.Empty),
                             ["href"] = NormalizeUrl(href),
                             ["body"] = body,
                         };
@@ -118,7 +118,7 @@ public sealed class DuckDuckGoSearch : IDisposable
                 }
                 else
                 {
-                    nextPageUrl = row.NextPageUrl;
+                    nextPageUrl = row.NextPageUrl ?? string.Empty;
                 }
             }
 
@@ -130,7 +130,7 @@ public sealed class DuckDuckGoSearch : IDisposable
             var separator = new[] { "s=" };
             payload["s"] = nextPageUrl.Split(separator, StringSplitOptions.RemoveEmptyEntries)[1].Split('&')[0];
 
-            await Sleep();
+            await Sleep().ConfigureAwait(false);
         }
     }
 
@@ -139,7 +139,7 @@ public sealed class DuckDuckGoSearch : IDisposable
         string region,
         SafeSearchType safeSearch, TimeLimit? timeLimit)
     {
-        var vqd = await GetVqdAsync(keywords);
+        var vqd = await GetVqdAsync(keywords).ConfigureAwait(false);
 
         var timeLimitString = timeLimit switch
         {
@@ -209,13 +209,13 @@ public sealed class DuckDuckGoSearch : IDisposable
         return WebUtility.HtmlDecode(html);
     }
 
-    private class LinksResponse
+    private sealed class LinksResponse
     {
         [JsonInclude]
         [JsonPropertyName("results")]
         public LinksResponseItem[]? Results { get; private set; }
 
-        public class LinksResponseItem
+        public sealed class LinksResponseItem
         {
             [JsonInclude]
             [JsonPropertyName("u")]
@@ -241,7 +241,7 @@ public sealed class DuckDuckGoSearch : IDisposable
     private async Task Sleep()
     {
         // TODO: if (proxies == null)
-        await Task.Delay(750);
+        await Task.Delay(750).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -256,11 +256,11 @@ public sealed class DuckDuckGoSearch : IDisposable
             new Dictionary<string, string>
             {
                 ["q"] = keywords
-            });
+            }).ConfigureAwait(false);
 
         if (resp.StatusCode == HttpStatusCode.OK)
         {
-            var content = await resp.Content.ReadAsStringAsync();
+            var content = await resp.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var vqdIndex = content.IndexOf("vqd=", StringComparison.Ordinal);
             if (vqdIndex > 0)
@@ -290,7 +290,7 @@ public sealed class DuckDuckGoSearch : IDisposable
             }
         }
 
-        throw new VqdExtractionException($"Could not extract vqd. {keywords}");
+        throw new InvalidOperationException($"Could not extract vqd. {keywords}");
     }
 
     private static string AddQueryParamsToUrl(string baseUrl, Dictionary<string, string> queryParameters)
@@ -316,7 +316,7 @@ public sealed class DuckDuckGoSearch : IDisposable
         HttpResponseMessage responseMessage;
         try
         {
-            responseMessage = await _client.GetAsync(urlWithQuery);
+            responseMessage = await _client.GetAsync(new Uri(urlWithQuery)).ConfigureAwait(false);
         }
         catch (TaskCanceledException e)
         {
@@ -324,18 +324,18 @@ public sealed class DuckDuckGoSearch : IDisposable
         }
         catch (Exception e)
         {
-            throw new DuckDuckGoSearchException($"HttpGetAsync {urlWithQuery}. {e.GetType()}: {e}", e);
+            throw new InvalidOperationException($"DuckDuckGoSearch exception {urlWithQuery}. {e.GetType()}: {e}", e);
         }
 
         var lastUrl = responseMessage.RequestMessage?.RequestUri?.ToString();
         if (lastUrl != null && Is500InUrl(lastUrl))
         {
-            throw new ApiException($"HttpGetAsync {urlWithQuery}");
+            throw new InvalidOperationException($"Api Exception: {urlWithQuery}");
         }
 
         if (responseMessage.StatusCode == HttpStatusCode.Accepted)
         {
-            throw new RateLimitException($"HttpGetAsync {urlWithQuery}");
+            throw new InvalidOperationException($"RateLimit Exception {urlWithQuery}");
         }
 
         if (responseMessage.StatusCode == HttpStatusCode.OK)
@@ -354,41 +354,54 @@ public sealed class DuckDuckGoSearch : IDisposable
         return _regex500InUrl.IsMatch(url);
     }
 
-    /// <inheritdoc />
-    public class VqdExtractionException(string? message)
-        : Exception(message);
-
-    /// <inheritdoc />
-    public class DuckDuckGoSearchException(string? message, Exception innerException)
-        : Exception(message, innerException);
-
-    /// <inheritdoc />
-    public class ApiException(string? message)
-        : Exception(message);
-
-    /// <inheritdoc />
-    public class TimeoutException(string? message, Exception innerException)
-        : Exception(message, innerException);
-
-    /// <inheritdoc />
-    public class RateLimitException(string? message)
-        : Exception(message);
-
+    /// <summary>
+    /// 
+    /// </summary>
     public enum TimeLimit
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Day,
+        
+        /// <summary>
+        /// 
+        /// </summary>
         Week,
+        
+        /// <summary>
+        /// 
+        /// </summary>
         Month,
+        
+        /// <summary>
+        /// 
+        /// </summary>
         Year,
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public enum SafeSearchType
     {
+        /// <summary>
+        /// 
+        /// </summary>
         On,
+        
+        /// <summary>
+        /// 
+        /// </summary>
         Moderate,
+        
+        /// <summary>
+        /// 
+        /// </summary>
         Off
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         _client.Dispose();
