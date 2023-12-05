@@ -12,9 +12,9 @@ public abstract class BaseLlmOutputParser<T>
     ///     A list of Generations to be parsed. The Generations are assumed
     ///     to be different candidate outputs for a single model input.
     /// </param>
-    /// <param name="partial"></param>
+    /// <param name="isPartial"></param>
     /// <returns>Structured output.</returns>
-    public abstract Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false);
+    public abstract Task<T> ParseResult(IReadOnlyList<Generation> result, bool isPartial = false);
 }
 
 /// <summary>

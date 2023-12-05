@@ -128,7 +128,7 @@ public interface IBaseCallbackHandler
         string? parentRunId);
 
     public Task HandleRetrieverErrorAsync(
-        Exception error,
+        Exception exception,
         string query,
         string runId,
         string? parentRunId);

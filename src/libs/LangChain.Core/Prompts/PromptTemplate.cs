@@ -78,11 +78,11 @@ public class PromptTemplate : BaseStringPromptTemplate
         });
     }
 
-    public override async Task<BasePromptTemplate> Partial(PartialValues values)
+    public override async Task<BasePromptTemplate> AddPartial(PartialValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
-        PromptTemplateInput promptDict = new PromptTemplateInput(Template, InputVariables
+        var promptDict = new PromptTemplateInput(Template, InputVariables
             .Where(iv => !values.Value.ContainsKey(iv))
             .ToList(), PartialVariables)
         {

@@ -40,7 +40,7 @@ public abstract class BasePromptTemplate
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
-    public abstract Task<BasePromptTemplate> Partial(PartialValues values);
+    public abstract Task<BasePromptTemplate> AddPartial(PartialValues values);
 
     /// <summary>
     /// 

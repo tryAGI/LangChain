@@ -23,7 +23,7 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
         }
     }
 
-    public override Task<BasePromptTemplate> Partial(PartialValues values)
+    public override Task<BasePromptTemplate> AddPartial(PartialValues values)
     {
         throw new NotImplementedException();
     }

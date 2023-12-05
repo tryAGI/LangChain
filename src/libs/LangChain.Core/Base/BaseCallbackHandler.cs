@@ -126,5 +126,5 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
         string? parentRunId);
 
     /// <inheritdoc />
-    public abstract Task HandleRetrieverErrorAsync(Exception error, string query, string runId, string? parentRunId);
+    public abstract Task HandleRetrieverErrorAsync(Exception exception, string query, string runId, string? parentRunId);
 }

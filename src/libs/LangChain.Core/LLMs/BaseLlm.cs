@@ -32,9 +32,9 @@ public abstract class BaseLlm : BaseLanguageModel
     /// 
     /// </summary>
     /// <param name="prompts"></param>
-    /// <param name="stop"></param>
+    /// <param name="stopSequences"></param>
     /// <returns></returns>
-    public abstract Task<LlmResult> Generate(string[] prompts, IReadOnlyCollection<string>? stop);
+    public abstract Task<LlmResult> Generate(string[] prompts, IReadOnlyCollection<string>? stopSequences);
 
     /// <summary>
     /// Call the LLM using the provided prompt.

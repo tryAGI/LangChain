@@ -27,7 +27,7 @@ public abstract class BaseLanguageModel : BaseLangChain
     /// 
     /// </summary>
     /// <param name="promptValues"></param>
-    /// <param name="stop"></param>
+    /// <param name="stopSequences"></param>
     /// <returns></returns>
-    public abstract Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, IReadOnlyCollection<string>? stop = null);
+    public abstract Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, IReadOnlyCollection<string>? stopSequences = null);
 }
