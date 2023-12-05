@@ -6,7 +6,7 @@ namespace LangChain.VectorStores;
 
 /// <summary>
 /// Base Retriever class for VectorStore.
-/// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html" />
+/// https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html
 /// </summary>
 public class VectorStoreRetriever : BaseRetriever
 {

@@ -4,8 +4,7 @@ using LangChain.Docstore;
 namespace LangChain.VectorStores;
 
 /// <summary>
-/// VectorStore
-/// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html"/>
+/// VectorStore. Check https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html
 /// </summary>
 public abstract class VectorStore
 {

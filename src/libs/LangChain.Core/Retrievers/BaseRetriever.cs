@@ -8,7 +8,7 @@ namespace LangChain.Retrievers;
 /// 
 /// A retrieval system is defined as something that can take string queries and return
 /// the most 'relevant' Documents from some source.
-/// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/schema/retriever.html" />
+/// https://api.python.langchain.com/en/latest/_modules/langchain/schema/retriever.html
 /// </summary>
 public abstract class BaseRetriever
 {

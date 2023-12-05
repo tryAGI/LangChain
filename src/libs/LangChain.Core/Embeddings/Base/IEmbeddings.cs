@@ -2,8 +2,8 @@ namespace LangChain.Abstractions.Embeddings.Base;
 
 /// <summary>
 /// Interface for embedding models.
+/// https://api.python.langchain.com/en/latest/embeddings/langchain.embeddings.base.Embeddings.html
 /// </summary>
-/// <see cref="https://api.python.langchain.com/en/latest/embeddings/langchain.embeddings.base.Embeddings.html"/>
 public interface IEmbeddings
 {
     Task<float[][]> EmbedDocumentsAsync(
