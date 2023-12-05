@@ -8,8 +8,8 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
     private class LineType
     {
-        public string Content { get; set; }
-        public string Header { get; set; }
+        public string Content { get; set; } = string.Empty;
+        public string Header { get; set; } = string.Empty;
     }
 
 

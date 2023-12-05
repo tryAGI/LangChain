@@ -25,7 +25,7 @@ public class SequentialChain : BaseChain
     /// </summary>
     public bool ReturnAll { get; }
 
-    private HashSet<string> _allOutputKeys;
+    private HashSet<string> _allOutputKeys = new();
 
     /// <summary>
     /// 

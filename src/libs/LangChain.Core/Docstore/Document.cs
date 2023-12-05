@@ -11,18 +11,13 @@ namespace LangChain.Docstore;
 /// </summary>
 public class Document
 {
-    private readonly string _content;
-    private readonly Dictionary<string, object>? _metadata;
-
     public Document()
     {
     }
 
     public Document(string content, Dictionary<string, object>? metadata = null)
     {
-        _content = content;
-        _metadata = metadata;
-        PageContent=content;
+        PageContent = content;
         Metadata = metadata ?? new Dictionary<string, object>();
     }
 
@@ -30,12 +25,12 @@ public class Document
         content: string.Empty,
         metadata: new Dictionary<string, object>());
 
-    public string PageContent { get; set; }
+    public string PageContent { get; set; } = string.Empty;
     public int LookupIndex { get; set; }
-    public string LookupStr { get; set; }
-    public Dictionary<string, object> Metadata { get; set; }
+    public string LookupStr { get; set; } = string.Empty;
+    public Dictionary<string, object> Metadata { get; set; } = new();
 
-    private static readonly string[] separator = { "\n\n" };
+    private readonly static string[] separator = { "\n\n" };
 
     /// <summary>
     /// Paragraphs of the page.
@@ -44,6 +39,7 @@ public class Document
     {
         return PageContent.Split(separator, StringSplitOptions.None).ToList();
     }
+    
     /// <summary>
     /// Summary of the page (the first paragraph)
     /// </summary>

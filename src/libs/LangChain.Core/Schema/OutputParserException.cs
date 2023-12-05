@@ -2,7 +2,7 @@ namespace LangChain.Schema;
 
 public class OutputParserException : Exception
 {
-    public string Output { get; }
+    public string Output { get; } = string.Empty;
 
     public OutputParserException(string message, string? output = null) : base(message)
     {

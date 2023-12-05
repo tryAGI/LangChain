@@ -8,9 +8,9 @@ namespace LangChain.Chains.HelperChains;
 
 public abstract class BaseStackableChain : IChain
 {
-    public string Name { get; set; }
-    public virtual string[] InputKeys { get; protected set; }
-    public virtual string[] OutputKeys { get; protected set; }
+    public string Name { get; set; } = string.Empty;
+    public virtual string[] InputKeys { get; protected set; } = Array.Empty<string>();
+    public virtual string[] OutputKeys { get; protected set; } = Array.Empty<string>();
 
     protected string GenerateName()
     {

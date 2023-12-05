@@ -9,7 +9,7 @@ public class StringPromptValue : BasePromptValue
     /// <summary>
     /// 
     /// </summary>
-    public string Value { get; set; }
+    public string Value { get; set; } = string.Empty;
 
 
     public override IReadOnlyCollection<Message> ToChatMessages()

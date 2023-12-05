@@ -19,7 +19,7 @@ public abstract class BaseRetriever
     /// You can use these to eg identify a specific instance of a retriever with its 
     /// use case.
     /// </summary>
-    public List<string> Tags { get; set; }
+    public List<string> Tags { get; set; } = new List<string>();
 
     /// <summary>
     /// Optional metadata associated with the retriever. Defaults to None
@@ -28,7 +28,7 @@ public abstract class BaseRetriever
     /// You can use these to eg identify a specific instance of a retriever with its 
     /// use case.
     /// </summary>
-    public Dictionary<string, object> Metadata { get; set; }
+    public Dictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
 
     protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,

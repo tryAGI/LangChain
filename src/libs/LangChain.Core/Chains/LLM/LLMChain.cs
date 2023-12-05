@@ -26,8 +26,8 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 
     public bool Verbose { get; set; }
     public ICallbacks? Callbacks { get; set; }
-    public List<string> Tags { get; set; }
-    public Dictionary<string, object> Metadata { get; set; }
+    public List<string> Tags { get; set; } = new();
+    public Dictionary<string, object> Metadata { get; set; } = new();
 
     public override string[] InputKeys => Prompt.InputVariables.ToArray();
     public override string[] OutputKeys => new[] { OutputKey };
