@@ -19,7 +19,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     /// <summary>
     /// 
     /// </summary>
-    public TemplateFormatOptions? TemplateFormat { get; set; } = TemplateFormatOptions.FString;
+    public TemplateFormatOptions TemplateFormat { get; set; } = TemplateFormatOptions.FString;
     
     /// <summary>
     /// 
@@ -50,7 +50,7 @@ public class PromptTemplate : BaseStringPromptTemplate
                 totalInputVariables.AddRange(PartialVariables.Keys);
             }
 
-            CheckValidTemplate(Template, TemplateFormat.Value, totalInputVariables);
+            CheckValidTemplate(Template, TemplateFormat, totalInputVariables);
         }
     }
 
@@ -64,7 +64,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     public override async Task<string> Format(InputValues values)
     {
         InputValues allValues = await MergePartialAndUserVariables(values).ConfigureAwait(false);
-        return RenderTemplate(Template, TemplateFormat.Value, allValues.Value);
+        return RenderTemplate(Template, TemplateFormat, allValues.Value);
     }
 
     /// <summary>

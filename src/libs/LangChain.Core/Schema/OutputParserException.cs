@@ -1,6 +1,7 @@
 namespace LangChain.Schema;
 
 /// <inheritdoc/>
+[Serializable]
 public class OutputParserException : Exception
 {
     /// <summary>

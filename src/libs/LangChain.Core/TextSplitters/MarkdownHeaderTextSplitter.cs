@@ -71,8 +71,6 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 continue;
             }
 
-            bool headerFound = false;
-
             if (IsHeader(strippedLine, out int hLen) && hLen < currentHeaderLen)
             {
                 currentHeader = strippedLine.TrimStart('#').Trim();

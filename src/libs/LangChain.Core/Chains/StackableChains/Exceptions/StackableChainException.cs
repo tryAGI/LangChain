@@ -1,6 +1,7 @@
 ﻿namespace LangChain.Chains.HelperChains.Exceptions;
 
 /// <inheritdoc/>
+[Serializable]
 public class StackableChainException : Exception
 {
     /// <inheritdoc/>

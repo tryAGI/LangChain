@@ -3,6 +3,7 @@ namespace LangChain.Base.Tracers;
 /// <summary>
 /// Base class for exceptions in tracers module.
 /// </summary>
+[Serializable]
 public class TracerException : Exception
 {
     /// <inheritdoc/>
