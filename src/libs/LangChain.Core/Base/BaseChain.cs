@@ -84,7 +84,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
 
         var returnValue = returnValues.Value.FirstOrDefault(kv => kv.Key == OutputKeys[0]).Value;
 
-        return returnValue?.ToString();
+        return returnValue?.ToString() ?? string.Empty;
     }
 
     /// <summary>

@@ -10,13 +10,10 @@ public static class StringExtensions
     /// </summary>
     /// <param name="word"></param>
     /// <returns></returns>
-    public static string Capitalize(this string? word)
+    public static string Capitalize(this string word)
     {
-        if (word == null)
-        {
-            return word;
-        }
-
+        word = word ?? throw new ArgumentNullException(nameof(word));
+        
         if (word.Length == 1)
         {
             return word.ToUpper(System.Globalization.CultureInfo.CurrentCulture);

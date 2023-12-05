@@ -152,6 +152,6 @@ public abstract class BaseStackableChain : IChain
     {
         var res = await CallAsync(new ChainValues(input)).ConfigureAwait(false);
 
-        return res.Value[OutputKeys[0]].ToString();
+        return res.Value[OutputKeys[0]].ToString() ?? string.Empty;
     }
 }
