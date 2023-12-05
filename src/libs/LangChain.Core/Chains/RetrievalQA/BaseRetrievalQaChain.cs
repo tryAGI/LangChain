@@ -51,7 +51,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
         values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
 
-        var question = values.Value[_inputKey].ToString();
+        var question = values.Value[_inputKey].ToString() ?? string.Empty;
 
         var docs = (await GetDocsAsync(question, runManager).ConfigureAwait(false)).ToList();
 

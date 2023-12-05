@@ -50,9 +50,9 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         var question = values.Value["question"].ToString();
 
         var getChatHistory = _fields.GetChatHistory;
-        var chatHistoryStr = getChatHistory(values.Value["chat_history"] as List<Message>);
+        var chatHistoryStr = getChatHistory(values.Value["chat_history"] as List<Message> ?? new List<Message>());
 
-        string? newQuestion;
+        string newQuestion;
         if (chatHistoryStr != null)
         {
             var callbacks = runManager.GetChild();
@@ -66,7 +66,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         }
         else
         {
-            newQuestion = question;
+            newQuestion = question ?? string.Empty;
         }
 
         var docs = await GetDocsAsync(newQuestion, values.Value).ConfigureAwait(false);

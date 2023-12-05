@@ -27,7 +27,10 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         
         var crumbs = GetBreadcrumbs(run);
         object inputs = run.Inputs.TryGetValue("prompts", out var input)
-            ? new Dictionary<string, List<string>> { { "prompts", (input as List<string>)?.Select(p => p.Trim()).ToList() } }
+            ? new Dictionary<string, List<string>>
+            {
+                ["prompts"] = (input as List<string>)?.Select(p => p.Trim()).ToList() ?? new List<string>(),
+            }
             : run.Inputs;
 
         Print(

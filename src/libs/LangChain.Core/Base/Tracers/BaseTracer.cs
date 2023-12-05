@@ -38,6 +38,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new Dictionary<string, object>();
         var extraParamsCopy = new Dictionary<string, object>();
         extraParamsCopy.TryAddKeyValues(extraParams);
         if (metadata != null)

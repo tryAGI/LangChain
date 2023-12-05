@@ -34,8 +34,17 @@ public abstract class BaseChatMemory(
         inputValues = inputValues ?? throw new ArgumentNullException(nameof(inputValues));
         outputValues = outputValues ?? throw new ArgumentNullException(nameof(outputValues));
         
-        await ChatHistory.AddUserMessage(inputValues.Value[inputValues.Value.Keys.FirstOrDefault()].ToString()).ConfigureAwait(false);
-        await ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault()].ToString()).ConfigureAwait(false);
+        var inputKey = inputValues.Value.Keys.FirstOrDefault();
+        if (inputKey != null)
+        {
+            await ChatHistory.AddUserMessage(inputValues.Value[inputKey].ToString() ?? string.Empty).ConfigureAwait(false);
+        }
+        
+        var outputKey = outputValues.Value.Keys.FirstOrDefault();
+        if (outputKey != null)
+        {
+            await ChatHistory.AddAiMessage(outputValues.Value[outputKey].ToString() ?? string.Empty).ConfigureAwait(false);
+        }
     }
 
     /// <inheritdoc/>

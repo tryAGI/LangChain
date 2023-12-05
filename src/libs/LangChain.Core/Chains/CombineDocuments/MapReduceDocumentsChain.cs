@@ -142,7 +142,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
         // this uses metadata from the docs, and the textual results from `results`
         var resultDocs =
             mapResults
-                .Select((r, i) => new Document(r.Value[questionResultKey] as string, docs[i].Metadata))
+                .Select((r, i) => new Document(r.Value[questionResultKey] as string ?? string.Empty, docs[i].Metadata))
                 .ToList();
 
         var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);

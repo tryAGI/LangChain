@@ -28,7 +28,7 @@ public class RetrieveDocumentsChain : BaseStackableChain
         var retriever = _index.Store.AsRetriever();
         retriever.K = _amount;
 
-        var query = values.Value[InputKeys[0]].ToString();
+        var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;
         var results = await retriever.GetRelevantDocumentsAsync(query).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = results.ToList();
         return values;

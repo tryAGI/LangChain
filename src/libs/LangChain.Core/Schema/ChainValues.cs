@@ -11,9 +11,9 @@ public class ChainValues : IChainValues
     /// <param name="getFinalOutput"></param>
     public ChainValues(object? getFinalOutput)
     {
-        Value = new Dictionary<string, object>()
+        Value = new Dictionary<string, object>
         {
-            {"text", getFinalOutput}
+            ["text"] = getFinalOutput!,
         };
     }
 

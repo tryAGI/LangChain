@@ -105,9 +105,11 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         int? tokenMax = null,
         IReadOnlyDictionary<string, object>? otherKeys = null)
     {
+        otherKeys ??= new Dictionary<string, object>();
+        
         var newResultDocList = new List<List<Document>>();
         var subResultDocs = new List<Document>();
-
+        
         foreach (var doc in docs)
         {
             subResultDocs.Add(doc);
@@ -147,10 +149,10 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     {
         var dictionary = new Dictionary<string, object>
         {
-            ["input_documents"] = docs
+            ["input_documents"] = docs,
         };
 
-        dictionary.TryAddKeyValues(otherKeys);
+        dictionary.TryAddKeyValues(otherKeys ?? new Dictionary<string, object>());
 
         var collapseChain = _input.CollapseDocumentsChain ?? _input.CombineDocumentsChain;
         var result = await collapseChain.Run(dictionary).ConfigureAwait(false);

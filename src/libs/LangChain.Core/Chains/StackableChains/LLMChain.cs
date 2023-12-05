@@ -47,7 +47,7 @@ public class LLMChain : BaseStackableChain
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
-        var prompt = values.Value[InputKeys[0]].ToString();
+        var prompt = values.Value[InputKeys[0]].ToString() ?? string.Empty;
         string responseContent;
 
         if (_useCache)
@@ -61,8 +61,10 @@ public class LLMChain : BaseStackableChain
             }
         }
         
-        
-        var response = await _llm.GenerateAsync(new ChatRequest(new List<Message>() { prompt.AsSystemMessage() })).ConfigureAwait(false);
+        var response = await _llm.GenerateAsync(new ChatRequest(new List<Message>
+        {
+            prompt.AsSystemMessage(),
+        })).ConfigureAwait(false);
         responseContent = response.Messages.Last().Content;
         if (_useCache)
             SaveCachedAnswer(prompt, responseContent);

@@ -26,6 +26,7 @@ public class CharacterTextSplitter(
         {
             splits = new List<string> { text };
         }
-        return this.MergeSplits(splits, separator);
+        
+        return this.MergeSplits(splits, separator ?? string.Empty);
     }
 }

@@ -35,7 +35,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
         values = values ?? throw new ArgumentNullException(nameof(values));
         
         var documents = values.Value[_inputKey];
-        var docs = _textSplitter.SplitDocuments(documents as List<Document>);
+        var docs = _textSplitter.SplitDocuments(documents as List<Document> ?? new List<Document>()).ToList();
 
         var otherKeys = values.Value
             .Where(kv => kv.Key != _inputKey)

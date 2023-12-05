@@ -5,7 +5,7 @@ namespace LangChain.Providers;
 /// </summary>
 public static class SpeechToTextModelExtensions
 {
-    /// <inheritdoc cref="ISpeechToTextModel.TranscribeAsync"/>
+    /// <inheritdoc cref="ISpeechToTextModel{TSettings}.TranscribeAsync"/>
     public static Task<string> TranscribeAsync<TSettings>(
         this ISpeechToTextModel<TSettings> model,
         byte[] bytes,
@@ -23,7 +23,7 @@ public static class SpeechToTextModelExtensions
             cancellationToken: cancellationToken);
     }
     
-    /// <inheritdoc cref="ISpeechToTextModel.TranscribeAsync"/>
+    /// <inheritdoc cref="ISpeechToTextModel{TSettings}.TranscribeAsync"/>
     public static Task<string> TranscribeAsync<TSettings>(
         this ISpeechToTextModel<TSettings> model,
         string path,
