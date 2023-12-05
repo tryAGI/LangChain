@@ -42,7 +42,7 @@ public abstract class BaseRunManager
     /// <param name="inheritableTags"></param>
     /// <param name="metadata"></param>
     /// <param name="inheritableMetadata"></param>
-    public BaseRunManager(
+    protected BaseRunManager(
         string runId,
         List<BaseCallbackHandler> handlers,
         List<BaseCallbackHandler> inheritableHandlers,

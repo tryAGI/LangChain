@@ -159,9 +159,9 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             return (new List<BasePromptValue>(), stop);
         }
 
-        if (inputList[0].Value.ContainsKey("stop"))
+        if (inputList[0].Value.TryGetValue("stop", out var value))
         {
-            stop = inputList[0].Value["stop"] as List<string>;
+            stop = value as List<string>;
         }
 
         var prompts = new List<BasePromptValue>();
@@ -177,7 +177,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
                 await runManager.HandleTextAsync(text).ConfigureAwait(false);
             }
 
-            if (inputs.Value.ContainsKey("stop") && inputs.Value["stop"] != stop)
+            if (inputs.Value.TryGetValue("stop", out var result) && result != stop)
             {
                 throw new ArgumentException("If `stop` is present in any inputs, should be present in all.");
             }

@@ -21,8 +21,8 @@ namespace LangChain.Chains.CombineDocuments;
 /// </summary>
 public abstract class BaseCombineDocumentsChain(BaseCombineDocumentsChainInput fields) : BaseChain(fields), IChain
 {
-    public readonly string InputKey = fields.InputKey;
-    public readonly string OutputKey = fields.OutputKey;
+    public string InputKey { get; } = fields.InputKey;
+    public string OutputKey { get; }  = fields.OutputKey;
 
     public override IReadOnlyList<string> InputKeys => new[] { InputKey };
     public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };

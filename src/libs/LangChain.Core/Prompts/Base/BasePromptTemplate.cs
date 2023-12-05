@@ -22,7 +22,7 @@ public abstract class BasePromptTemplate
     /// </summary>
     /// <param name="input"></param>
     /// <exception cref="Exception"></exception>
-    public BasePromptTemplate(IBasePromptTemplateInput input)
+    protected BasePromptTemplate(IBasePromptTemplateInput input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
         

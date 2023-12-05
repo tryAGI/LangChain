@@ -18,7 +18,8 @@ namespace LangChain.Chains.CombineDocuments;
 /// </summary>
 public class StuffDocumentsChain : BaseCombineDocumentsChain
 {
-    public readonly ILlmChain LlmChain;
+    public ILlmChain LlmChain { get; }
+    
     private readonly BasePromptTemplate _documentPrompt;
     private readonly string _documentVariableName;
     private readonly string _documentSeparator;

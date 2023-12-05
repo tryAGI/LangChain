@@ -22,7 +22,11 @@ public class CallbackManager
     /// </summary>
     public List<BaseCallbackHandler> InheritableHandlers { get; private set; }
     public string Name { get; } = "callback_manager";
-    public readonly string? ParentRunId;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? ParentRunId { get; } 
 
     protected List<string> Tags { get; }
     protected List<string> InheritableTags { get; }

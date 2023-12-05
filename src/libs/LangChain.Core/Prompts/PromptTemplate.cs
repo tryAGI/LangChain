@@ -153,9 +153,9 @@ public class PromptTemplate : BaseStringPromptTemplate
             {
                 var parsedNode = node as VariableNode;
 
-                if (values.ContainsKey(parsedNode.Name))
+                if (values.TryGetValue(parsedNode.Name, out var value))
                 {
-                    return res + values[parsedNode.Name];
+                    return res + value;
                 }
 
                 throw new ArgumentException($"Missing value for input {parsedNode.Name}");
@@ -176,9 +176,9 @@ public class PromptTemplate : BaseStringPromptTemplate
             {
                 var parsedNode = node as VariableNode;
 
-                if (values.ContainsKey(parsedNode.Name))
+                if (values.TryGetValue(parsedNode.Name, out var value))
                 {
-                    return res + values[parsedNode.Name];
+                    return res + value;
                 }
 
                 return res + "{" + parsedNode.Name + "}";
