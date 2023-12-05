@@ -60,7 +60,7 @@ public abstract class BasePromptTemplate
             }
             else if (value is Func<Task<string>> asyncFunc)
             {
-                partialValues.Value[key] = await asyncFunc();
+                partialValues.Value[key] = await asyncFunc().ConfigureAwait(false);
             }
         }
 
@@ -106,12 +106,12 @@ public abstract class BasePromptTemplate
         {
             case "prompt":
                 {
-                    var promptTemplate = await Deserialize(data);
+                    var promptTemplate = await Deserialize(data).ConfigureAwait(false);
                     return promptTemplate;
                 }
             case null:
                 {
-                    var promptTemplate = await Deserialize(new SerializedBasePromptTemplate { Type = "prompt" });
+                    var promptTemplate = await Deserialize(new SerializedBasePromptTemplate { Type = "prompt" }).ConfigureAwait(false);
                     return promptTemplate;
                 }
             default:

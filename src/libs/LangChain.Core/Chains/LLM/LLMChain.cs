@@ -58,7 +58,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             stop = new List<string>();
         }
 
-        var promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value));
+        var promptValue = await Prompt.FormatPromptValue(new InputValues(values.Value)).ConfigureAwait(false);
         var chatMessages = promptValue.ToChatMessages().WithHistory(Memory);
         if (Verbose == true)
         {
@@ -66,7 +66,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
         }
 
-        var response = await Llm.GenerateAsync(new ChatRequest(chatMessages, stop));
+        var response = await Llm.GenerateAsync(new ChatRequest(chatMessages, stop)).ConfigureAwait(false);
         if (Verbose == true)
         {
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
@@ -88,29 +88,29 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// </summary>
     public override async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs)
     {
-        var callbackManager = await CallbackManager.Configure(inheritableCallbacks: null, localCallbacks: Callbacks, verbose: Verbose);
-        var runManager = await callbackManager.HandleChainStart(this, new ChainValues("input_list", inputs));
+        var callbackManager = await CallbackManager.Configure(inheritableCallbacks: null, localCallbacks: Callbacks, verbose: Verbose).ConfigureAwait(false);
+        var runManager = await callbackManager.HandleChainStart(this, new ChainValues("input_list", inputs)).ConfigureAwait(false);
 
         LlmResult response;
         try
         {
-            response = await GenerateAsync(inputs, runManager);
+            response = await GenerateAsync(inputs, runManager).ConfigureAwait(false);
         }
         catch (Exception exception)
         {
-            await runManager.HandleChainErrorAsync(exception, new ChainValues("inputs", inputs));
+            await runManager.HandleChainErrorAsync(exception, new ChainValues("inputs", inputs)).ConfigureAwait(false);
             throw;
         }
 
         var outputs = CreateOutputs(response);
-        await runManager.HandleChainEndAsync(new ChainValues("inputs", inputs), new ChainValues("outputs", outputs));
+        await runManager.HandleChainEndAsync(new ChainValues("inputs", inputs), new ChainValues("outputs", outputs)).ConfigureAwait(false);
 
         return outputs;
     }
 
     private async Task<LlmResult> GenerateAsync(IReadOnlyList<ChainValues> inputs, CallbackManagerForChainRun runManager)
     {
-        var (prompts, stop) = await PreparePromptsAsync(inputs, runManager);
+        var (prompts, stop) = await PreparePromptsAsync(inputs, runManager).ConfigureAwait(false);
 
         var responseTasks = new List<Task<ChatResponse>>();
         foreach (var prompt in prompts)
@@ -119,7 +119,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             responseTasks.Add(Llm.GenerateAsync(request));
         }
 
-        var responses = await Task.WhenAll(responseTasks);
+        var responses = await Task.WhenAll(responseTasks).ConfigureAwait(false);
 
         var generations = responses.Select(response =>
                 new Generation[]
@@ -165,12 +165,12 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         foreach (var inputs in inputList)
         {
             var selectedInputs = Prompt.InputVariables.ToDictionary(v => v, v => inputs.Value[v]);
-            var prompt = await Prompt.FormatPromptValue(new InputValues(selectedInputs));
+            var prompt = await Prompt.FormatPromptValue(new InputValues(selectedInputs)).ConfigureAwait(false);
 
             if (runManager != null)
             {
                 var text = "Prompt after formatting:\n" + prompt;
-                await runManager.HandleTextAsync(text);
+                await runManager.HandleTextAsync(text).ConfigureAwait(false);
             }
 
             if (inputs.Value.ContainsKey("stop") && inputs.Value["stop"] != stop)
@@ -211,7 +211,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 
     public async Task<object> Predict(ChainValues values)
     {
-        var output = await CallAsync(values);
+        var output = await CallAsync(values).ConfigureAwait(false);
         return output.Value[OutputKey];
     }
 }

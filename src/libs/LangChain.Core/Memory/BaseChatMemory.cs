@@ -22,8 +22,8 @@ public abstract class BaseChatMemory : BaseMemory
     /// <param name="outputValues"></param>
     public override async Task SaveContext(InputValues inputValues, OutputValues outputValues)
     {
-        await ChatHistory.AddUserMessage(inputValues.Value[inputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
-        await ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault().ToString()].ToString());
+        await ChatHistory.AddUserMessage(inputValues.Value[inputValues.Value.Keys.FirstOrDefault().ToString()].ToString()).ConfigureAwait(false);
+        await ChatHistory.AddAiMessage(outputValues.Value[outputValues.Value.Keys.FirstOrDefault().ToString()].ToString()).ConfigureAwait(false);
     }
 
     public override Task Clear()

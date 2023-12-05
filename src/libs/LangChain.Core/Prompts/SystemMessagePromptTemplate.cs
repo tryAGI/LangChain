@@ -10,7 +10,7 @@ public class SystemMessagePromptTemplate : BaseMessageStringPromptTemplate
 
     public override async Task<Message> Format(InputValues values)
     {
-        return (await this.Prompt.Format(values)).AsSystemMessage();
+        return (await this.Prompt.Format(values).ConfigureAwait(false)).AsSystemMessage();
     }
 
     public static SystemMessagePromptTemplate FromTemplate(string template)

@@ -32,7 +32,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
 
         otherKeys[_combineDocumentsChain.InputKey] = docs;
 
-        var combined = await _combineDocumentsChain.CallAsync(new ChainValues(otherKeys));
+        var combined = await _combineDocumentsChain.CallAsync(new ChainValues(otherKeys)).ConfigureAwait(false);
 
         return combined;
     }

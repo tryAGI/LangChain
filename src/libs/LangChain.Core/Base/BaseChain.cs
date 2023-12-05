@@ -46,7 +46,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
         }
 
         var values = InputKeys.Length > 0 ? new ChainValues(InputKeys[0], input) : new ChainValues();
-        var returnValues = await CallAsync(values);
+        var returnValues = await CallAsync(values).ConfigureAwait(false);
         var keys = returnValues.Value.Keys;
 
         if (keys.Count(p => p != RunKey) == 1)
@@ -78,7 +78,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Length} but, received {input.Count}");
         }
 
-        var returnValues = await CallAsync(new ChainValues(input), callbacks);
+        var returnValues = await CallAsync(new ChainValues(input), callbacks).ConfigureAwait(false);
 
         var returnValue = returnValues.Value.FirstOrDefault(kv => kv.Key == OutputKeys[0]).Value;
 
@@ -106,21 +106,21 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             tags,
             fields.Tags,
             metadata,
-            fields.Metadata);
+            fields.Metadata).ConfigureAwait(false);
 
-        var runManager = await callbackManager.HandleChainStart(this, values);
+        var runManager = await callbackManager.HandleChainStart(this, values).ConfigureAwait(false);
 
         try
         {
-            var result = await CallAsync(values, runManager);
+            var result = await CallAsync(values, runManager).ConfigureAwait(false);
 
-            await runManager.HandleChainEndAsync(values, result);
+            await runManager.HandleChainEndAsync(values, result).ConfigureAwait(false);
 
             return result;
         }
         catch (Exception e)
         {
-            await runManager.HandleChainErrorAsync(e, values);
+            await runManager.HandleChainErrorAsync(e, values).ConfigureAwait(false);
             throw;
         }
     }
@@ -139,7 +139,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     public virtual async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs)
     {
         var tasks = inputs.Select(input=> CallAsync(input));
-        var results = await Task.WhenAll(tasks);
+        var results = await Task.WhenAll(tasks).ConfigureAwait(false);
 
         return results.ToList();
     }
@@ -160,21 +160,21 @@ public abstract class BaseChain(IChainInputs fields) : IChain
                     var llmChainType = Type.GetType("Namespace.LLMChain"); // Replace with the actual namespace and class name
                     var deserializeMethod = llmChainType?.GetMethod("Deserialize");
 
-                    return await (Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data });
+                    return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
                 }
             case "sequential_chain":
                 {
                     var sequentialChainType = Type.GetType("Namespace.SequentialChain"); // Replace with the actual namespace and class name
                     var deserializeMethod = sequentialChainType.GetMethod("Deserialize");
 
-                    return await (Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data });
+                    return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
                 }
             case "simple_sequential_chain":
                 {
                     var simpleSequentialChainType = Type.GetType("Namespace.SimpleSequentialChain"); // Replace with the actual namespace and class name
                     var deserializeMethod = simpleSequentialChainType.GetMethod("Deserialize");
 
-                    return await (Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data });
+                    return await ((Task<BaseChain>)deserializeMethod.Invoke(null, new object[] { data })).ConfigureAwait(false);
                 }
             default:
                 throw new Exception($"Invalid prompt type in config: {data.Type}");

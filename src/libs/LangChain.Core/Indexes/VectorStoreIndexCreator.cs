@@ -31,7 +31,7 @@ public class VectorStoreIndexCreator
             documents.AddRange(loader.Load());
         }
 
-        return await FromDocumentsAsync(documents);
+        return await FromDocumentsAsync(documents).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class VectorStoreIndexCreator
     public async Task<VectorStoreIndexWrapper> FromDocumentsAsync(IReadOnlyCollection<Document> documents)
     {
         var subDocs = TextSplitter.SplitDocuments(documents);
-        await VectorStore.AddDocumentsAsync(subDocs);
+        await VectorStore.AddDocumentsAsync(subDocs).ConfigureAwait(false);
         return new VectorStoreIndexWrapper(VectorStore);
     }
 }

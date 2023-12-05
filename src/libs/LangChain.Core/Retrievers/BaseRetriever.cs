@@ -59,14 +59,14 @@ public abstract class BaseRetriever
             localTags: Tags,
             inheritableTags: tags,
             localMetadata: Metadata,
-            inheritableMetadata: metadata);
+            inheritableMetadata: metadata).ConfigureAwait(false);
 
-        var runManager = await callbackManager.HandleRetrieverStart(this, query, runId);
+        var runManager = await callbackManager.HandleRetrieverStart(this, query, runId).ConfigureAwait(false);
         try
         {
-            var docs = await GetRelevantDocumentsCoreAsync(query, runManager);
+            var docs = await GetRelevantDocumentsCoreAsync(query, runManager).ConfigureAwait(false);
             var docsList = docs.ToList();
-            await runManager.HandleRetrieverEndAsync(query, docsList);
+            await runManager.HandleRetrieverEndAsync(query, docsList).ConfigureAwait(false);
 
             return docsList;
         }
@@ -74,7 +74,7 @@ public abstract class BaseRetriever
         {
             if (runManager != null)
             {
-                await runManager.HandleRetrieverErrorAsync(exception, query);
+                await runManager.HandleRetrieverErrorAsync(exception, query).ConfigureAwait(false);
             }
 
             throw;

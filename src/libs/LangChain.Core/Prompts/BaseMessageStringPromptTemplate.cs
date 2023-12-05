@@ -19,6 +19,6 @@ public abstract class BaseMessageStringPromptTemplate : BaseMessagePromptTemplat
 
     public override async Task<List<Message>> FormatMessages(InputValues values)
     {
-        return new List<Message> { await this.Format(values) };
+        return new List<Message> { await this.Format(values).ConfigureAwait(false) };
     }
 }

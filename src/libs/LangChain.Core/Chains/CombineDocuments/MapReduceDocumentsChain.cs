@@ -128,7 +128,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
             })
             .ToList();
 
-        var mapResults = await LlmChain.ApplyAsync(inputs);
+        var mapResults = await LlmChain.ApplyAsync(inputs).ConfigureAwait(false);
         var questionResultKey = LlmChain.OutputKey;
 
         // this uses metadata from the docs, and the textual results from `results`
@@ -137,7 +137,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
                 .Select((r, i) => new Document(r.Value[questionResultKey] as string, docs[i].Metadata))
                 .ToList();
 
-        var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys);
+        var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);
 
         if (ReturnIntermediateSteps)
         {

@@ -80,7 +80,7 @@ public abstract class BaseRunManager
         {
             try
             {
-                await handler.HandleTextAsync(text, RunId, ParentRunId);
+                await handler.HandleTextAsync(text, RunId, ParentRunId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

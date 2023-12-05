@@ -37,7 +37,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
             {
                 try
                 {
-                    await handler.HandleRetrieverEndAsync(query, docs.ToList(), RunId, ParentRunId);
+                    await handler.HandleRetrieverEndAsync(query, docs.ToList(), RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -58,7 +58,7 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
             {
                 try
                 {
-                    await handler.HandleRetrieverErrorAsync(error, query, RunId, ParentRunId);
+                    await handler.HandleRetrieverErrorAsync(error, query, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

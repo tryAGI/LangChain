@@ -46,7 +46,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
 
         var question = values.Value[_inputKey].ToString();
 
-        var docs = (await GetDocsAsync(question, runManager)).ToList();
+        var docs = (await GetDocsAsync(question, runManager).ConfigureAwait(false)).ToList();
 
         var input = new Dictionary<string, object>
         {
@@ -54,7 +54,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
             [_inputKey] = question
         };
 
-        var answer = await _combineDocumentsChain.Run(input);
+        var answer = await _combineDocumentsChain.Run(input).ConfigureAwait(false);
 
         var output = new Dictionary<string, object>
         {

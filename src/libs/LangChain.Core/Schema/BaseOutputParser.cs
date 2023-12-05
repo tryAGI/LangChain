@@ -40,7 +40,7 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// <param name="text">String output of a language model.</param>
     /// <param name="prompt">Input PromptValue.</param>
     /// <returns></returns>
-    public virtual async Task<T> ParseWithPrompt(string? text, BasePromptValue prompt) => await Parse(text);
+    public virtual async Task<T> ParseWithPrompt(string? text, BasePromptValue prompt) => await Parse(text).ConfigureAwait(false);
 
     /// <summary>
     /// Parse a list of candidate model Generations into a specific format.

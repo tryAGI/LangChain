@@ -6,12 +6,12 @@ public abstract class BaseChatMessageHistory
 {
     public async Task AddUserMessage(string message)
     {
-        await AddMessage(message.AsHumanMessage());
+        await AddMessage(message.AsHumanMessage()).ConfigureAwait(false);
     }
 
     public async Task AddAiMessage(string message)
     {
-        await AddMessage(message.AsAiMessage());
+        await AddMessage(message.AsAiMessage()).ConfigureAwait(false);
     }
 
     public abstract IReadOnlyList<Message> Messages { get; }

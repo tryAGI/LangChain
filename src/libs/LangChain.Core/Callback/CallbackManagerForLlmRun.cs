@@ -19,7 +19,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
             {
                 try
                 {
-                    await handler.HandleLlmNewTokenAsync(token, RunId, ParentRunId);
+                    await handler.HandleLlmNewTokenAsync(token, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -37,7 +37,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
             {
                 try
                 {
-                    await handler.HandleLlmErrorAsync(error, RunId, ParentRunId);
+                    await handler.HandleLlmErrorAsync(error, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -55,7 +55,7 @@ public class CallbackManagerForLlmRun : BaseRunManager
             {
                 try
                 {
-                    await handler.HandleLlmEndAsync(output, RunId, ParentRunId);
+                    await handler.HandleLlmEndAsync(output, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

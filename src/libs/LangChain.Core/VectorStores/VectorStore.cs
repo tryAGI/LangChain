@@ -99,7 +99,7 @@ public abstract class VectorStore
         CancellationToken cancellationToken = default)
     {
         var relevanceScoreFn = SelectRelevanceScoreFn();
-        var docsAndScores = await SimilaritySearchWithScoreAsync(query, k, cancellationToken);
+        var docsAndScores = await SimilaritySearchWithScoreAsync(query, k, cancellationToken).ConfigureAwait(false);
 
         return docsAndScores.Select(x => (x.Item1, relevanceScoreFn(x.Item2))).ToList();
     }
@@ -119,7 +119,7 @@ public abstract class VectorStore
         float? scoreThreshold = null,
         CancellationToken cancellationToken = default)
     {
-        var docsAndSimilarities = await SimilaritySearchWithRelevanceScoresCore(query, k, cancellationToken);
+        var docsAndSimilarities = await SimilaritySearchWithRelevanceScoresCore(query, k, cancellationToken).ConfigureAwait(false);
         var docsAndSimilaritiesArray = docsAndSimilarities as (Document, float)[] ?? docsAndSimilarities.ToArray();
         if (docsAndSimilaritiesArray.Any(x => x.Item2 < 0.0 || x.Item2 > 1.0))
         {

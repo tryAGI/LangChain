@@ -63,7 +63,7 @@ public class STTChain<T> : BaseStackableChain
             }
         }
 
-        var text=await _model.TranscribeAsync(audio, _settings);
+        var text=await _model.TranscribeAsync(audio, _settings).ConfigureAwait(false);
         
         if(_useCache)
             SaveCachedAnswer(audio, text);

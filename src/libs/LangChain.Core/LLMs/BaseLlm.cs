@@ -23,7 +23,7 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <returns></returns>
     public override async Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, IReadOnlyCollection<string>? stop)
     {
-        return await Generate(promptValues.Select(p => p.ToString()).ToArray(), stop);
+        return await Generate(promptValues.Select(p => p.ToString()).ToArray(), stop).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <returns>A string value containing the LLM response.</returns>
     public async Task<string?> Call(string prompt, List<string>? stop = null)
     {
-        var generations = await Generate(new[] { prompt }, stop);
+        var generations = await Generate(new[] { prompt }, stop).ConfigureAwait(false);
 
         return generations.Generations[0][0].Text;
     }

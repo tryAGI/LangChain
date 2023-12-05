@@ -12,12 +12,12 @@ public abstract class BaseChatPromptTemplate : BasePromptTemplate
 
     public override async Task<string> Format(InputValues values)
     {
-        return (await this.FormatPromptValue(values)).ToString();
+        return (await this.FormatPromptValue(values).ConfigureAwait(false)).ToString();
     }
 
     public override async Task<BasePromptValue> FormatPromptValue(InputValues values)
     {
-        var resultMessages = await this.FormatMessages(values);
+        var resultMessages = await this.FormatMessages(values).ConfigureAwait(false);
         return new ChatPromptValue(resultMessages);
     }
 }

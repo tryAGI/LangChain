@@ -43,7 +43,7 @@ public class PromptTemplate : BaseStringPromptTemplate
 
     public override async Task<string> Format(InputValues values)
     {
-        InputValues allValues = await MergePartialAndUserVariables(values);
+        InputValues allValues = await MergePartialAndUserVariables(values).ConfigureAwait(false);
         return RenderTemplate(Template, TemplateFormat.Value, allValues.Value);
     }
 

@@ -39,7 +39,7 @@ public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fiel
     {
         var docs = await _fields.Retriever.GetRelevantDocumentsAsync(
             question,
-            callbacks: runManager?.ToCallbacks());
+            callbacks: runManager?.ToCallbacks()).ConfigureAwait(false);
 
         return ReduceTokensBelowLimit(docs);
     }

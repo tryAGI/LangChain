@@ -38,7 +38,7 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
 
     public override async Task<IReadOnlyCollection<Message>> FormatMessages(InputValues values)
     {
-        var allValues = await this.MergePartialAndUserVariables(values);
+        var allValues = await this.MergePartialAndUserVariables(values).ConfigureAwait(false);
 
         var resultMessages = new List<Message>();
 
@@ -56,7 +56,7 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
                 inputValues.Value.Add(inputVariable, allValues.Value[inputVariable]);
             }
 
-            var message = await promptMessage.FormatMessages(inputValues);
+            var message = await promptMessage.FormatMessages(inputValues).ConfigureAwait(false);
             resultMessages.AddRange(message);
         }
 

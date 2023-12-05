@@ -39,14 +39,14 @@ public class VectorStoreRetriever : BaseRetriever
         switch (SearchType)
         {
             case ESearchType.Similarity:
-                return await Vectorstore.SimilaritySearchAsync(query, K);
+                return await Vectorstore.SimilaritySearchAsync(query, K).ConfigureAwait(false);
 
             case ESearchType.SimilarityScoreThreshold:
-                var docsAndSimilarities = await Vectorstore.SimilaritySearchWithRelevanceScores(query, K);
+                var docsAndSimilarities = await Vectorstore.SimilaritySearchWithRelevanceScores(query, K).ConfigureAwait(false);
                 return docsAndSimilarities.Select(dws => dws.Item1);
 
             case ESearchType.MMR:
-                return await Vectorstore.MaxMarginalRelevanceSearch(query, K);
+                return await Vectorstore.MaxMarginalRelevanceSearch(query, K).ConfigureAwait(false);
 
             default:
                 throw new ArgumentException($"{SearchType} not supported");

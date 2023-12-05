@@ -51,8 +51,8 @@ public class StackChain : BaseStackableChain
             }
             values = res;
         }
-        await _a.CallAsync(values);
-        await _b.CallAsync(values);
+        await _a.CallAsync(values).ConfigureAwait(false);
+        await _b.CallAsync(values).ConfigureAwait(false);
         if (IsolatedOutputKeys.Length > 0)
         {
             foreach (var key in IsolatedOutputKeys)

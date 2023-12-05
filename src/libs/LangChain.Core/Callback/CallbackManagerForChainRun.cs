@@ -27,7 +27,11 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
             {
                 try
                 {
-                    await handler.HandleChainEndAsync(input.Value, output.Value, RunId, ParentRunId);
+                    await handler.HandleChainEndAsync(
+                        input.Value,
+                        output.Value,
+                        RunId,
+                        ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -45,7 +49,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
             {
                 try
                 {
-                    await handler.HandleChainErrorAsync(error, RunId, input.Value, ParentRunId);
+                    await handler.HandleChainErrorAsync(error, RunId, input.Value, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -63,7 +67,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
             {
                 try
                 {
-                    await handler.HandleTextAsync(text, RunId, ParentRunId);
+                    await handler.HandleTextAsync(text, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

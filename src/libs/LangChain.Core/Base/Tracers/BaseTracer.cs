@@ -61,7 +61,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         };
 
         StartTrace(run);
-        await HandleLlmStartAsync(run);
+        await HandleLlmStartAsync(run).ConfigureAwait(false);
     }
 
     public override async Task HandleLlmErrorAsync(Exception err, string runId, string? parentRunId = null)
@@ -81,7 +81,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
 
         EndTrace(run);
-        await HandleLlmErrorAsync(run);
+        await HandleLlmErrorAsync(run).ConfigureAwait(false);
     }
 
     public override async Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null)
@@ -115,7 +115,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.Events.Add(new Dictionary<string, object> { { "name", "end" }, { "time", run.EndTime } });
 
         EndTrace(run);
-        await HandleLlmEndAsync(run);
+        await HandleLlmEndAsync(run).ConfigureAwait(false);
     }
 
     public override async Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null)
@@ -140,7 +140,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
                 ["kwargs"] = eventData,
             });
 
-        await HandleLlmNewTokenAsync(run, token);
+        await HandleLlmNewTokenAsync(run, token).ConfigureAwait(false);
     }
 
     public override async Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
@@ -188,7 +188,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         };
 
         StartTrace(chainRun);
-        await HandleChainStartAsync(chainRun);
+        await HandleChainStartAsync(chainRun).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
 
         run.Inputs = inputs ?? new();
         EndTrace(run);
-        await HandleChainErrorAsync(run);
+        await HandleChainErrorAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -245,7 +245,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.Inputs = inputs ?? new();
 
         EndTrace(run);
-        await HandleChainEndAsync(run);
+        await HandleChainEndAsync(run).ConfigureAwait(false);
     }
 
     public override async Task HandleToolStartAsync(
@@ -283,7 +283,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         };
 
         StartTrace(run);
-        await HandleToolStartAsync(run);
+        await HandleToolStartAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -305,7 +305,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
         EndTrace(run);
-        await HandleToolErrorAsync(run);
+        await HandleToolErrorAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -334,7 +334,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.EndTime });
         EndTrace(run);
-        await HandleToolEndAsync(run);
+        await HandleToolEndAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -378,7 +378,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         };
 
         StartTrace(run);
-        await HandleRetrieverStartAsync(run);
+        await HandleRetrieverStartAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -406,7 +406,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         { ["name"] = "end", ["time"] = run.EndTime });
 
         EndTrace(run);
-        await HandleRetrieverEndAsync(run);
+        await HandleRetrieverEndAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -434,7 +434,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         });
 
         EndTrace(run);
-        await HandleRetrieverErrorAsync(run);
+        await HandleRetrieverErrorAsync(run).ConfigureAwait(false);
     }
 
     public override async Task HandleTextAsync(string text, string runId, string? parentRunId = null)

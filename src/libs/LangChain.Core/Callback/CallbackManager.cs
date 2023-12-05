@@ -114,7 +114,12 @@ public class CallbackManager
             {
                 try
                 {
-                    await handler.HandleLlmStartAsync(llm, prompts.ToArray(), runId, ParentRunId, extraParams: extraParams);
+                    await handler.HandleLlmStartAsync(
+                        llm,
+                        prompts.ToArray(),
+                        runId,
+                        ParentRunId,
+                        extraParams: extraParams).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -141,7 +146,7 @@ public class CallbackManager
             {
                 try
                 {
-                    await handler.HandleChatModelStartAsync(llm, messages, runId, ParentRunId, extraParams);
+                    await handler.HandleChatModelStartAsync(llm, messages, runId, ParentRunId, extraParams).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +171,7 @@ public class CallbackManager
             {
                 try
                 {
-                    await handler.HandleChainStartAsync(chain, inputs.Value, runId, ParentRunId);
+                    await handler.HandleChainStartAsync(chain, inputs.Value, runId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -194,7 +199,7 @@ public class CallbackManager
                 try
                 {
                     // TODO: pass extraParams ?
-                    await handler.HandleRetrieverStartAsync(retriever, query, runId, ParentRunId, extraParams: extraParams);
+                    await handler.HandleRetrieverStartAsync(retriever, query, runId, ParentRunId, extraParams: extraParams).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

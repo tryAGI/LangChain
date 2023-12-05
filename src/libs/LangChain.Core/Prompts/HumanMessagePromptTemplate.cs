@@ -10,7 +10,7 @@ public class HumanMessagePromptTemplate : BaseMessageStringPromptTemplate
 
     public override async Task<Message> Format(InputValues values)
     {
-        return (await this.Prompt.Format(values)).AsHumanMessage();
+        return (await this.Prompt.Format(values).ConfigureAwait(false)).AsHumanMessage();
     }
 
     public static HumanMessagePromptTemplate FromTemplate(string template)

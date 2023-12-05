@@ -24,7 +24,7 @@ public class RetreiveDocumentsChain : BaseStackableChain
         retreiver.K = _amount;
 
         var query = values.Value[InputKeys[0]].ToString();
-        var results = await retreiver.GetRelevantDocumentsAsync(query);
+        var results = await retreiver.GetRelevantDocumentsAsync(query).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = results.ToList();
         return values;
     }

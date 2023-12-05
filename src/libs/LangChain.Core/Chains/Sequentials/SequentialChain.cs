@@ -58,7 +58,7 @@ public class SequentialChain : BaseChain
 
         foreach (var chain in Chains)
         {
-            var input = await chain.CallAsync(allChainValues);
+            var input = await chain.CallAsync(allChainValues).ConfigureAwait(false);
 
             foreach (var inputValue in input.Value)
             {

@@ -15,7 +15,7 @@ public class ChatMessagePromptTemplate : BaseMessageStringPromptTemplate
 
     public override async Task<Message> Format(InputValues values)
     {
-        return (await this.Prompt.Format(values)).AsChatMessage();
+        return (await this.Prompt.Format(values).ConfigureAwait(false)).AsChatMessage();
     }
 
     public static ChatMessagePromptTemplate FromTemplate(string template, string role)

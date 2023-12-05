@@ -58,8 +58,8 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
     {
-        var inputs = await GetInputs(docs, otherKeys);
-        var predict = await LlmChain.Predict(new ChainValues(inputs.Value));
+        var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
+        var predict = await LlmChain.Predict(new ChainValues(inputs.Value)).ConfigureAwait(false);
 
         return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
@@ -68,8 +68,8 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
     {
         if (LlmChain.Llm is ISupportsCountTokens supportsCountTokens)
         {
-            var inputs = await GetInputs(docs, otherKeys);
-            var prompt = await LlmChain.Prompt.FormatPromptValue(inputs);
+            var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
+            var prompt = await LlmChain.Prompt.FormatPromptValue(inputs).ConfigureAwait(false);
 
             return supportsCountTokens.CountTokens(prompt.ToString());
         }
@@ -79,7 +79,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
 
     private async Task<InputValues> GetInputs(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
-        var docsString = await GetDocsString(docs);
+        var docsString = await GetDocsString(docs).ConfigureAwait(false);
 
         var inputs = new Dictionary<string, object>();
         foreach (var kv in otherKeys)
@@ -100,7 +100,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         var docStrings = new List<string>();
         foreach (var doc in docs)
         {
-            var docString = await PromptHelpers.FormatDocumentAsync(doc, _documentPrompt);
+            var docString = await PromptHelpers.FormatDocumentAsync(doc, _documentPrompt).ConfigureAwait(false);
             docStrings.Add(docString);
         }
 

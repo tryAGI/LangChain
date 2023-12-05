@@ -58,14 +58,14 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
                     ["question"] = question ?? string.Empty,
                     ["chat_history"] = chatHistoryStr
                 },
-                callbacks: new ManagerCallbacks(callbacks));
+                callbacks: new ManagerCallbacks(callbacks)).ConfigureAwait(false);
         }
         else
         {
             newQuestion = question;
         }
 
-        var docs = await GetDocsAsync(newQuestion, values.Value);
+        var docs = await GetDocsAsync(newQuestion, values.Value).ConfigureAwait(false);
         var newInputs = new Dictionary<string, object>
         {
             ["chat_history"] = chatHistoryStr ?? string.Empty,
@@ -81,7 +81,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
 
         var answer = await _fields.CombineDocsChain.Run(
             input: newInputs,
-            callbacks: new ManagerCallbacks(runManager.GetChild()));
+            callbacks: new ManagerCallbacks(runManager.GetChild())).ConfigureAwait(false);
 
         var output = new Dictionary<string, object>
         {

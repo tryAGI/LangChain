@@ -82,13 +82,13 @@ public abstract class BaseStackableChain : IChain
 
     public async Task<IChainValues> Run()
     {
-        var res = await CallAsync(new ChainValues());
+        var res = await CallAsync(new ChainValues()).ConfigureAwait(false);
         return res;
     }
 
     public async Task<string?> Run(string resultKey)
     {
-        var res = await CallAsync(new ChainValues());
+        var res = await CallAsync(new ChainValues()).ConfigureAwait(false);
         return res.Value[resultKey].ToString();
     }
 
@@ -96,7 +96,7 @@ public abstract class BaseStackableChain : IChain
         Dictionary<string, object> input,
         ICallbacks? callbacks = null)
     {
-        var res = await CallAsync(new ChainValues(input));
+        var res = await CallAsync(new ChainValues(input)).ConfigureAwait(false);
 
         return res.Value[OutputKeys[0]].ToString();
     }

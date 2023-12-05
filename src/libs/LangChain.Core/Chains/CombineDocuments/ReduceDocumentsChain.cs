@@ -51,9 +51,9 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyDictionary<string, object> otherKeys)
     {
         var tokenMax = otherKeys.TryGetValue("token_max", out var key) ? (int?)key : null;
-        var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax);
+        var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax).ConfigureAwait(false);
 
-        var result = await _input.CombineDocumentsChain.CombineDocsAsync(resultDocs, otherKeys);
+        var result = await _input.CombineDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);
 
         return result;
     }
@@ -64,21 +64,21 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         int? tokenMax = null)
     {
         var resultDocs = docs.ToList();
-        var numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys);
+        var numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys).ConfigureAwait(false);
 
         tokenMax ??= _input.TokenMax;
 
         while (numTokens != null && numTokens > tokenMax)
         {
-            var newResultDocList = await SplitListOfDocsAsync(resultDocs, tokenMax, otherKeys);
+            var newResultDocList = await SplitListOfDocsAsync(resultDocs, tokenMax, otherKeys).ConfigureAwait(false);
             resultDocs = new List<Document>();
             foreach (var list in newResultDocList)
             {
-                var newDoc = await CollapseDocsAsync(list, otherKeys);
+                var newDoc = await CollapseDocsAsync(list, otherKeys).ConfigureAwait(false);
                 resultDocs.Add(newDoc);
             }
 
-            numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys);
+            numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys).ConfigureAwait(false);
         }
 
         return (resultDocs, new Dictionary<string, object>());
@@ -102,7 +102,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         foreach (var doc in docs)
         {
             subResultDocs.Add(doc);
-            var numTokens = await _input.CombineDocumentsChain.PromptLength(subResultDocs, otherKeys);
+            var numTokens = await _input.CombineDocumentsChain.PromptLength(subResultDocs, otherKeys).ConfigureAwait(false);
             if (numTokens > tokenMax)
             {
                 if (subResultDocs.Count == 1)
@@ -144,7 +144,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         dictionary.TryAddKeyValues(otherKeys);
 
         var collapseChain = _input.CollapseDocumentsChain ?? _input.CombineDocumentsChain;
-        var result = await collapseChain.Run(dictionary);
+        var result = await collapseChain.Run(dictionary).ConfigureAwait(false);
 
         var combinedMetadata = docs[0].Metadata.ToDictionary(
             kv => kv.Key,

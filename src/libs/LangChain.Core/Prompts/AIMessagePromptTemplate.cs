@@ -10,7 +10,7 @@ public class AiMessagePromptTemplate : BaseMessageStringPromptTemplate
 
     public override async Task<Message> Format(InputValues values)
     {
-        return (await this.Prompt.Format(values)).AsAiMessage();
+        return (await this.Prompt.Format(values).ConfigureAwait(false)).AsAiMessage();
     }
 
     public static AiMessagePromptTemplate FromTemplate(string template)

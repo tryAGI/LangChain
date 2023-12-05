@@ -18,6 +18,6 @@ public class RetrievalQaChain(RetrievalQaChainInput fields) : BaseRetrievalQaCha
     {
         return await _retriever.GetRelevantDocumentsAsync(
             question,
-            callbacks: new ManagerCallbacks(runManager.GetChild()));
+            callbacks: new ManagerCallbacks(runManager.GetChild())).ConfigureAwait(false);
     }
 }

@@ -46,7 +46,7 @@ public class TTSChain<T>:BaseStackableChain
             }
         }
 
-        var data = await _model.GenerateSpeechAsync(text, _settings);
+        var data = await _model.GenerateSpeechAsync(text, _settings).ConfigureAwait(false);
 
         if (_useCache)
         {
