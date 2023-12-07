@@ -17,10 +17,10 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
                 return new global::OpenAI.Chat.Message(
                     role: message.Role switch
                     {
-                        MessageRole.System => global::OpenAI.Chat.Role.System,
-                        MessageRole.Ai => global::OpenAI.Chat.Role.Assistant,
-                        MessageRole.Human => global::OpenAI.Chat.Role.User,
-                        _ => global::OpenAI.Chat.Role.User,
+                        MessageRole.System => global::OpenAI.Role.System,
+                        MessageRole.Ai => global::OpenAI.Role.Assistant,
+                        MessageRole.Human => global::OpenAI.Role.User,
+                        _ => global::OpenAI.Role.User,
                         
                     },
                     content: message.Content);
@@ -37,10 +37,10 @@ public partial class OpenAiModel : IChatModelWithTokenCounting
     {
         var role = message.Role switch
         {
-            global::OpenAI.Chat.Role.System => MessageRole.System,
-            global::OpenAI.Chat.Role.User => MessageRole.Human,
+            global::OpenAI.Role.System => MessageRole.System,
+            global::OpenAI.Role.User => MessageRole.Human,
             //global::OpenAI.Chat.Role.Assistant when message.Function_call != null => MessageRole.FunctionCall,
-            global::OpenAI.Chat.Role.Assistant => MessageRole.Ai,
+            global::OpenAI.Role.Assistant => MessageRole.Ai,
             //global::OpenAI.Chat.Role.Function => MessageRole.FunctionResult,
             _ => MessageRole.Human,
         };
