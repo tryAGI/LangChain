@@ -224,8 +224,8 @@ WHERE @schema IS NOT NULL AND conrelid = (@schema || '.'  || @table)::regclass
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
         while (await reader.ReadAsync().ConfigureAwait(false))
         {
-            var name = (string)reader["conname"];
-            var definition = (string)reader["condef"];
+            var name = reader.GetString(reader.GetOrdinal("conname"));
+            var definition = reader.GetString(reader.GetOrdinal("condef"));
 
             constraints.Add(new PgConstraint(name, definition));
         }

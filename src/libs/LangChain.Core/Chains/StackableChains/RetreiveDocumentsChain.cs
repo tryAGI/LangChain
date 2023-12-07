@@ -1,7 +1,6 @@
 ﻿using LangChain.Abstractions.Schema;
-using LangChain.Callback;
-using System.Numerics;
 using LangChain.Indexes;
+using LangChain.VectorStores;
 
 namespace LangChain.Chains.HelperChains;
 

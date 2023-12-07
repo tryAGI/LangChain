@@ -59,10 +59,15 @@ public abstract class VectorStore(
     /// <param name="k"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<IEnumerable<Document>> SimilaritySearchAsync(
+    public virtual async Task<IEnumerable<Document>> SimilaritySearchAsync(
         string query,
         int k = 4,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default)
+    {
+        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
+
+        return await SimilaritySearchByVectorAsync(embedding, k, cancellationToken).ConfigureAwait(false);
+    }
 
     /// <summary>
     /// Return docs most similar to embedding vector.
@@ -256,14 +261,5 @@ public abstract class VectorStore(
     /// <exception cref="NotImplementedException"></exception>
     protected abstract Func<float, float> SelectRelevanceScoreFn();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="searchType"></param>
-    /// <param name="scoreThreshold"></param>
-    /// <returns></returns>
-    public VectorStoreRetriever AsRetriever(ESearchType searchType = ESearchType.Similarity, float? scoreThreshold = null)
-    {
-        return new VectorStoreRetriever(this, searchType, scoreThreshold);
-    }
+
 }
