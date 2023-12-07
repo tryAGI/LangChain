@@ -4,16 +4,10 @@ using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
 using LangChain.Chains.RetrievalQA;
 using LangChain.Chains.Sequentials;
-using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Docstore;
-using LangChain.Indexes;
 using LangChain.Prompts;
-using LangChain.Providers;
 using LangChain.Providers.Downloader;
-using LangChain.Providers.LLamaSharp;
-using LangChain.TextSplitters;
-using Microsoft.SemanticKernel.AI.Embeddings;
+using LangChain.VectorStores;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
