@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-        <NoWarn>$(NoWarn);CA2100;CA1305</NoWarn>
+        <NoWarn>$(NoWarn);CA1720;CA1510</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -11,7 +11,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Postgres" />
+        <PackageReference Include="Npgsql" />
+        <PackageReference Include="Pgvector" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
     </ItemGroup>
 
 </Project>

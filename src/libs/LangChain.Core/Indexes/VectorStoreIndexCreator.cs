@@ -1,5 +1,4 @@
-﻿using LangChain.Abstractions.Embeddings.Base;
-using LangChain.Base;
+﻿using LangChain.Base;
 using LangChain.Docstore;
 using LangChain.VectorStores;
 

@@ -1,6 +1,7 @@
 ﻿using LangChain.Databases;
 using LangChain.Docstore;
 using LangChain.Providers.Downloader;
+using LangChain.VectorStores;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 

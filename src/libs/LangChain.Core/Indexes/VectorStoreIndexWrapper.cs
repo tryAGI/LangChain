@@ -1,8 +1,5 @@
-﻿using LangChain.Abstractions.Chains.Base;
-using LangChain.Abstractions.Schema;
-using LangChain.Chains.CombineDocuments;
+﻿using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.RetrievalQA;
-using LangChain.Providers;
 using LangChain.VectorStores;
 
 namespace LangChain.Indexes;
