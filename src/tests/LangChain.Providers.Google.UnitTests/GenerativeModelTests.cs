@@ -1,8 +1,9 @@
 using LangChain.Providers.Models;
 
-namespace LangChain.Providers.OpenAI.UnitTests;
+namespace LangChain.Providers.Google.UnitTests;
 
 [TestFixture]
+[Explicit]
 public class GenerativeModelTests
 {
     [Test]

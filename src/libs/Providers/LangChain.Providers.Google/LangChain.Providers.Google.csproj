@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>HuggingFace API LLM and Chat model provider.</Description>
-        <PackageTags>$(PackageTags);huggingface;api</PackageTags>
+        <Description>Google Gemini Chat model provider.</Description>
+        <PackageTags>$(PackageTags);google;generativeAI:gemini;api</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
