@@ -12,6 +12,7 @@
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
+    <PackageVersion Include="Google_GenerativeAI" Version="0.1.12" />
     <PackageVersion Include="H.Resources.Generator" Version="1.5.1" />
     <PackageVersion Include="HuggingFace" Version="0.2.4" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
