@@ -2,8 +2,7 @@ using LangChain.Providers.Models;
 
 namespace LangChain.Providers.Google.UnitTests;
 
-[TestFixture]
-[Explicit]
+[TestFixture, Explicit]
 public class GenerativeModelTests
 {
     [Test]
