@@ -48,6 +48,17 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "gunpal5",
+      "name": "gunpal5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10114874?v=4",
+      "profile": "https://github.com/gunpal5",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
