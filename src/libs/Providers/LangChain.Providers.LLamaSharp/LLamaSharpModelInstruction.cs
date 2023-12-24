@@ -72,7 +72,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
             Temperature = Configuration.Temperature,
             AntiPrompts = Configuration.AntiPrompts,
             MaxTokens = Configuration.MaxTokens,
-
+            RepeatPenalty = Configuration.RepeatPenalty
         };
 
 
@@ -81,8 +81,19 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
                            inferenceParams, cancellationToken))
         {
             buf += text;
+            foreach (string antiPrompt in Configuration.AntiPrompts)
+            {
+                if (buf.EndsWith(antiPrompt))
+                {
+                    buf = buf.Substring(0, buf.Length - antiPrompt.Length);
+                    break;
+                }
+            }
+            
             TokenGenerated(text);
         }
+
+        
 
         buf = LLamaSharpModelInstruction.SanitizeOutput(buf);
         var result = request.Messages.ToList();

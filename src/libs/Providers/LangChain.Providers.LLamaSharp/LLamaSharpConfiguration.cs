@@ -33,6 +33,8 @@ public class LLamaSharpConfiguration
     /// </summary>
     public int MaxTokens { get; set; } = 600;
 
+    public float RepeatPenalty { get; set; } = 1;
+
     public List<string> AntiPrompts { get; set; } = new() { ">", "Human: "};
 
 }
