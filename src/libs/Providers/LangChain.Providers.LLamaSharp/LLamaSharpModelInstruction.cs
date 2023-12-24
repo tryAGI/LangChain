@@ -49,7 +49,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
     /// <summary>
     /// Occurs when token generated.
     /// </summary>
-    public event Action<string> TokenGenerated=delegate { };
+    public event Action<string> TokenGenerated = delegate { };
 
     /// <summary>
     /// 

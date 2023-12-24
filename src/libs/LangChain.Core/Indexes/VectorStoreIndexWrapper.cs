@@ -1,32 +1,45 @@
-﻿using LangChain.Abstractions.Chains.Base;
-using LangChain.Abstractions.Schema;
-using LangChain.Chains.CombineDocuments;
+﻿using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.RetrievalQA;
-using LangChain.Providers;
 using LangChain.VectorStores;
 
 namespace LangChain.Indexes;
 
-public class VectorStoreIndexWrapper
+/// <summary>
+/// 
+/// </summary>
+/// <param name="vectorStore"></param>
+public class VectorStoreIndexWrapper(
+    VectorStore vectorStore)
 {
-    public VectorStore Store { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public VectorStore Store { get; } = vectorStore;
 
-    public VectorStoreIndexWrapper(VectorStore vectorStore)
-    {
-        Store = vectorStore;
-    }
-
-    public Task<string?> QueryAsync(string question, BaseCombineDocumentsChain llm, string inputKey = "question", string outputKey = "output_text")
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="question"></param>
+    /// <param name="llm"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
+    public Task<string?> QueryAsync(
+        string question,
+        BaseCombineDocumentsChain llm,
+        string inputKey = "question",
+        string outputKey = "output_text")
     {
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 llm,
-                Store.AsRetreiver())
+                Store.AsRetriever())
             {
                 InputKey = inputKey,
                 OutputKey = outputKey,
             }
         );
+        
         return chain.Run(question);
     }
 }

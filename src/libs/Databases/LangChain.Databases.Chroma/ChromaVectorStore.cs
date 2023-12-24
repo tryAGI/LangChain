@@ -1,5 +1,6 @@
 using System.Text.Json;
 using LangChain.Abstractions.Embeddings.Base;
+using LangChain.Common.Converters;
 using LangChain.Docstore;
 using LangChain.VectorStores;
 using Microsoft.SemanticKernel.AI.Embeddings;
@@ -31,7 +32,8 @@ public class ChromaVectorStore : VectorStore
         HttpClient httpClient,
         string endpoint,
         IEmbeddings embeddings,
-        string collectionName = LangchainDefaultCollectionName) : base(embeddings)
+        string collectionName = LangchainDefaultCollectionName)
+        : base(embeddings)
     {
         _client = new ChromaClient(httpClient, endpoint);
 
@@ -147,28 +149,12 @@ public class ChromaVectorStore : VectorStore
     }
 
     /// <inheritdoc />
-    public override async Task<IEnumerable<Document>> SimilaritySearchAsync(
-        string query,
-        int k = 4,
-        CancellationToken cancellationToken = default)
-    {
-        var embeddings = await Embeddings
-            .EmbedQueryAsync(query, cancellationToken)
-            .ConfigureAwait(false);
-
-        var documentsWithScores = await SimilaritySearchWithVectorCoreAsync(embeddings, k, cancellationToken).ConfigureAwait(false);
-        var documents = documentsWithScores.Select(dws => dws.Item1);
-
-        return documents;
-    }
-
-    /// <inheritdoc />
     public override async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
         IEnumerable<float> embedding,
         int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var documentsWithScores = await SimilaritySearchWithVectorCoreAsync(embedding.ToArray(), k, cancellationToken).ConfigureAwait(false);
+        var documentsWithScores = await SimilaritySearchByVectorWithAsync(embedding.ToArray(), k, cancellationToken).ConfigureAwait(false);
         var documents = documentsWithScores.Select(dws => dws.Item1);
 
         return documents;
@@ -184,7 +170,7 @@ public class ChromaVectorStore : VectorStore
             .EmbedQueryAsync(query, cancellationToken)
             .ConfigureAwait(false);
 
-        var documentsWithScores = await SimilaritySearchWithVectorCoreAsync(embeddings, k, cancellationToken).ConfigureAwait(false);
+        var documentsWithScores = await SimilaritySearchByVectorWithAsync(embeddings, k, cancellationToken).ConfigureAwait(false);
 
         return documentsWithScores;
     }
@@ -299,7 +285,7 @@ public class ChromaVectorStore : VectorStore
         return resultIds;
     }
 
-    private async Task<IEnumerable<(Document, float)>> SimilaritySearchWithVectorCoreAsync(
+    private async Task<IEnumerable<(Document, float)>> SimilaritySearchByVectorWithAsync(
         float[] embeddings,
         int k,
         CancellationToken cancellationToken)

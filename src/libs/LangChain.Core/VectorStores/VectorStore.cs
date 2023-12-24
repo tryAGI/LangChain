@@ -4,20 +4,21 @@ using LangChain.Docstore;
 namespace LangChain.VectorStores;
 
 /// <summary>
-/// VectorStore
-/// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html"/>
+/// VectorStore. Check https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html
 /// </summary>
-public abstract class VectorStore
+public abstract class VectorStore(
+    IEmbeddings embeddings,
+    Func<float, float>? overrideRelevanceScoreFn = null)
 {
-    protected IEmbeddings Embeddings { get; }
-    protected Func<float, float>? OverrideRelevanceScoreFn { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    protected IEmbeddings Embeddings { get; } = embeddings;
 
-    protected VectorStore(IEmbeddings embeddings, Func<float, float>? overrideRelevanceScoreFn = null)
-    {
-        Embeddings = embeddings;
-        OverrideRelevanceScoreFn = overrideRelevanceScoreFn;
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    protected Func<float, float>? OverrideRelevanceScoreFn { get; } = overrideRelevanceScoreFn;
 
     /// <summary>
     /// Run more documents through the embeddings and add to the vectorstore.
@@ -58,10 +59,15 @@ public abstract class VectorStore
     /// <param name="k"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<IEnumerable<Document>> SimilaritySearchAsync(
+    public virtual async Task<IEnumerable<Document>> SimilaritySearchAsync(
         string query,
         int k = 4,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default)
+    {
+        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
+
+        return await SimilaritySearchByVectorAsync(embedding, k, cancellationToken).ConfigureAwait(false);
+    }
 
     /// <summary>
     /// Return docs most similar to embedding vector.
@@ -100,7 +106,7 @@ public abstract class VectorStore
         CancellationToken cancellationToken = default)
     {
         var relevanceScoreFn = SelectRelevanceScoreFn();
-        var docsAndScores = await SimilaritySearchWithScoreAsync(query, k, cancellationToken);
+        var docsAndScores = await SimilaritySearchWithScoreAsync(query, k, cancellationToken).ConfigureAwait(false);
 
         return docsAndScores.Select(x => (x.Item1, relevanceScoreFn(x.Item2))).ToList();
     }
@@ -120,7 +126,7 @@ public abstract class VectorStore
         float? scoreThreshold = null,
         CancellationToken cancellationToken = default)
     {
-        var docsAndSimilarities = await SimilaritySearchWithRelevanceScoresCore(query, k, cancellationToken);
+        var docsAndSimilarities = await SimilaritySearchWithRelevanceScoresCore(query, k, cancellationToken).ConfigureAwait(false);
         var docsAndSimilaritiesArray = docsAndSimilarities as (Document, float)[] ?? docsAndSimilarities.ToArray();
         if (docsAndSimilaritiesArray.Any(x => x.Item2 < 0.0 || x.Item2 > 1.0))
         {
@@ -226,8 +232,18 @@ public abstract class VectorStore
         return 1.0f - distance / (float)Math.Sqrt(2);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
     protected static float CosineRelevanceScoreFn(float distance) => 1.0f - distance;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
     protected static float MaxInnerProductRelevanceScoreFn(float distance)
         => distance > 0
             ? 1.0f - distance
@@ -245,8 +261,5 @@ public abstract class VectorStore
     /// <exception cref="NotImplementedException"></exception>
     protected abstract Func<float, float> SelectRelevanceScoreFn();
 
-    public VectorStoreRetriever AsRetreiver(ESearchType searchType = ESearchType.Similarity, float? scoreThreshold = null)
-    {
-        return new VectorStoreRetriever(this, searchType, scoreThreshold);
-    }
+
 }

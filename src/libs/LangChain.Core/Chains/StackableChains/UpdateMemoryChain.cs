@@ -5,27 +5,32 @@ using LangChain.Schema;
 
 namespace LangChain.Chains.StackableChains;
 
-public class UpdateMemoryChain : BaseStackableChain
+/// <summary>
+/// 
+/// </summary>
+/// <param name="memory"></param>
+/// <param name="requestKey"></param>
+/// <param name="responseKey"></param>
+public class UpdateMemoryChain(
+    BaseChatMemory memory,
+    string requestKey = "query",
+    string responseKey = "text")
+    : BaseStackableChain
 {
-    private readonly BaseChatMemory _memory;
-    private readonly string _requestKey;
-    private readonly string _responseKey;
-
-    public UpdateMemoryChain(BaseChatMemory memory, string requestKey = "query", string responseKey = "text")
-    {
-        _memory = memory;
-        _requestKey = requestKey;
-        _responseKey = responseKey;
-    }
-
+    /// <inheritdoc />
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
-        await _memory.SaveContext(new InputValues(
-                new Dictionary<string, object>() { { _requestKey, values.Value[_requestKey] } }),
-            new OutputValues(
-                new Dictionary<string, object>() { { _responseKey, values.Value[_responseKey] } }
-            ));
-
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
+        await memory.SaveContext(new InputValues(
+            new Dictionary<string, object>
+            {
+                [requestKey] = values.Value[requestKey],
+            }),
+            new OutputValues(new Dictionary<string, object>
+            {
+                [responseKey] = values.Value[responseKey],
+            })).ConfigureAwait(false);
      
         return values;
     }

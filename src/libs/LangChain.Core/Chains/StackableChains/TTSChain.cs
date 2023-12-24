@@ -19,6 +19,7 @@ public class TTSChain<T>:BaseStackableChain
 
     private const string CACHE_DIR = "cache";
 
+    /// <inheritdoc/>
     public TTSChain(ITextToSpeechModel<T> model, 
         T settings,
         string inputKey = "text", string outputKey = "audio")
@@ -32,8 +33,11 @@ public class TTSChain<T>:BaseStackableChain
 
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var text = (string)values.Value[_inputKey];
 
         if (_useCache)
@@ -46,7 +50,7 @@ public class TTSChain<T>:BaseStackableChain
             }
         }
 
-        var data = await _model.GenerateSpeechAsync(text, _settings);
+        var data = await _model.GenerateSpeechAsync(text, _settings).ConfigureAwait(false);
 
         if (_useCache)
         {
@@ -67,6 +71,11 @@ public class TTSChain<T>:BaseStackableChain
         return null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enabled"></param>
+    /// <returns></returns>
     public TTSChain<T> UseCache(bool enabled=true)
     {
         _useCache = enabled;

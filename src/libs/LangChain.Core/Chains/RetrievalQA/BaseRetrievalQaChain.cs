@@ -21,10 +21,16 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
 
     private const string SourceDocuments = "source_documents";
 
+    /// <summary>
+    /// 
+    /// </summary>
     public CallbackManager? CallbackManager { get; set; }
 
-    public override string[] InputKeys => new[] { _inputKey };
-    public override string[] OutputKeys => fields.ReturnSourceDocuments
+    /// <inheritdoc/>
+    public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
+    
+    /// <inheritdoc/>
+    public override IReadOnlyList<string> OutputKeys => fields.ReturnSourceDocuments
         ? new[] { _outputKey, SourceDocuments }
         : new[] { _outputKey };
 
@@ -42,11 +48,12 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
         IChainValues values,
         CallbackManagerForChainRun? runManager)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
 
-        var question = values.Value[_inputKey].ToString();
+        var question = values.Value[_inputKey].ToString() ?? string.Empty;
 
-        var docs = (await GetDocsAsync(question, runManager)).ToList();
+        var docs = (await GetDocsAsync(question, runManager).ConfigureAwait(false)).ToList();
 
         var input = new Dictionary<string, object>
         {
@@ -54,7 +61,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
             [_inputKey] = question
         };
 
-        var answer = await _combineDocumentsChain.Run(input);
+        var answer = await _combineDocumentsChain.Run(input).ConfigureAwait(false);
 
         var output = new Dictionary<string, object>
         {

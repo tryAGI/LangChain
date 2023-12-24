@@ -2,8 +2,18 @@ using LangChain.Base;
 
 namespace LangChain.Chains.CombineDocuments;
 
-public class AnalyzeDocumentsChainInput(BaseCombineDocumentsChain combineDocumentsChain) : BaseCombineDocumentsChainInput
+/// <inheritdoc/>
+public class AnalyzeDocumentsChainInput(
+    BaseCombineDocumentsChain combineDocumentsChain)
+    : BaseCombineDocumentsChainInput
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public BaseCombineDocumentsChain CombineDocumentsChain { get; set; } = combineDocumentsChain;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public TextSplitter? Splitter { get; set; }
 }

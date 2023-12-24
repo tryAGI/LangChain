@@ -1,7 +1,15 @@
 namespace LangChain.Memory;
 
+/// <inheritdoc />
 public sealed class BufferMemoryInput : BaseChatMemoryInput
 {
-    public string AiPrefix { get; set; }
-    public string HumanPrefix { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string AiPrefix { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string HumanPrefix { get; set; } = string.Empty;
 }

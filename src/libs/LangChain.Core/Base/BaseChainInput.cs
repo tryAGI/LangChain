@@ -2,6 +2,9 @@ using LangChain.Callback;
 
 namespace LangChain.Base;
 
+/// <summary>
+/// 
+/// </summary>
 public interface IBaseChainInput
 {
     /// <summary>

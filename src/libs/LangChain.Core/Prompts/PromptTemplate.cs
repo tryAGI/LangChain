@@ -8,17 +8,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/// <inheritdoc/>
 public class PromptTemplate : BaseStringPromptTemplate
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public string Template { get; set; }
-    public TemplateFormatOptions? TemplateFormat { get; set; } = TemplateFormatOptions.FString;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public TemplateFormatOptions TemplateFormat { get; set; } = TemplateFormatOptions.FString;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public bool? ValidateTemplate { get; set; } = true;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public new Dictionary<string, object> PartialVariables { get; set; } = new();
 
+    /// <inheritdoc/>
     public PromptTemplate(IPromptTemplateInput input)
         : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         Template = input.Template;
         TemplateFormat = input.TemplateFormat ?? TemplateFormatOptions.FString;
         ValidateTemplate = input.ValidateTemplate ?? true;
@@ -32,21 +50,32 @@ public class PromptTemplate : BaseStringPromptTemplate
                 totalInputVariables.AddRange(PartialVariables.Keys);
             }
 
-            CheckValidTemplate(Template, TemplateFormat.Value, totalInputVariables);
+            CheckValidTemplate(Template, TemplateFormat, totalInputVariables);
         }
     }
 
+    /// <inheritdoc/>
     protected override string GetPromptType()
     {
         return "prompt";
     }
 
+    /// <inheritdoc/>
     public override async Task<string> Format(InputValues values)
     {
-        InputValues allValues = await MergePartialAndUserVariables(values);
-        return RenderTemplate(Template, TemplateFormat.Value, allValues.Value);
+        InputValues allValues = await MergePartialAndUserVariables(values).ConfigureAwait(false);
+        return RenderTemplate(Template, TemplateFormat, allValues.Value);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="examples"></param>
+    /// <param name="suffix"></param>
+    /// <param name="inputVariables"></param>
+    /// <param name="exampleSeparator"></param>
+    /// <param name="prefix"></param>
+    /// <returns></returns>
     public static PromptTemplate FromExamples(
         IEnumerable<string> examples,
         string suffix,
@@ -58,15 +87,22 @@ public class PromptTemplate : BaseStringPromptTemplate
         return new PromptTemplate(new PromptTemplateInput(template, inputVariables.ToList()));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static PromptTemplate FromTemplate(string template, PromptTemplateInput? options = null)
     {
         var names = new HashSet<string>();
         ParseTemplate(template, options?.TemplateFormat ?? TemplateFormatOptions.FString)
             .ForEach(node =>
             {
-                if (node.Type == "variable")
+                if (node.Type == "variable" &&
+                    node is VariableNode variableNode)
                 {
-                    names.Add((node as VariableNode).Name);
+                    names.Add(variableNode.Name);
                 }
             });
 
@@ -76,9 +112,12 @@ public class PromptTemplate : BaseStringPromptTemplate
         });
     }
 
-    public override async Task<BasePromptTemplate> Partial(PartialValues values)
+    /// <inheritdoc/>
+    public override Task<BasePromptTemplate> AddPartial(PartialValues values)
     {
-        PromptTemplateInput promptDict = new PromptTemplateInput(Template, InputVariables
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
+        var promptDict = new PromptTemplateInput(Template, InputVariables
             .Where(iv => !values.Value.ContainsKey(iv))
             .ToList(), PartialVariables)
         {
@@ -99,9 +138,10 @@ public class PromptTemplate : BaseStringPromptTemplate
             promptDict.PartialVariables[kvp.Key] = kvp.Value;
         }
 
-        return new PromptTemplate(promptDict);
+        return Task.FromResult<BasePromptTemplate>(new PromptTemplate(promptDict));
     }
 
+    /// <inheritdoc/>
     public override SerializedBasePromptTemplate Serialize()
     {
         return new SerializedPromptTemplate
@@ -111,34 +151,63 @@ public class PromptTemplate : BaseStringPromptTemplate
         };
     }
 
-    public static async Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ArgumentException"></exception>
+    public static Task<PromptTemplate> Deserialize(SerializedPromptTemplate data)
     {
+        data = data ?? throw new ArgumentNullException(nameof(data));
         if (string.IsNullOrEmpty(data.Template))
         {
-            throw new Exception("Template template must have a template");
+            throw new ArgumentException("Template template must have a template");
         }
 
-        return new PromptTemplate(new PromptTemplateInput(data.Template, data.InputVariables)
-        {
-            // TemplateFormat = data.template_format
-        });
+        return Task.FromResult<PromptTemplate>(new PromptTemplate(
+            new PromptTemplateInput(data.Template, data.InputVariables)
+            {
+                // TemplateFormat = data.template_format
+            }));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate string Interpolator(string template, Dictionary<string, object> inputValues);
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate List<ParsedFStringNode> Parser(string template);
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static Dictionary<TemplateFormatOptions, Interpolator> DefaultFormatterMapping { get; } = new Dictionary<TemplateFormatOptions, Interpolator>
     {
         { TemplateFormatOptions.FString, InterpolateFString },
         { TemplateFormatOptions.Jinja2, (_, __) => "" }
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static Dictionary<TemplateFormatOptions, Parser> DefaultParserMapping { get; } = new Dictionary<TemplateFormatOptions, Parser>
     {
         { TemplateFormatOptions.FString, ParseFString },
         { TemplateFormatOptions.Jinja2, _ => new List<ParsedFStringNode>() }
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static string InterpolateFString(string template, Dictionary<string, object> values)
     {
         List<ParsedFStringNode> nodes = ParseFString(template);
@@ -146,17 +215,16 @@ public class PromptTemplate : BaseStringPromptTemplate
         {
             if (node.Type == "variable")
             {
-                var parsedNode = node as VariableNode;
-
-                if (values.ContainsKey(parsedNode.Name))
+                if (node is VariableNode variableNode &&
+                    values.TryGetValue(variableNode.Name, out var value))
                 {
-                    return res + values[parsedNode.Name];
+                    return res + value;
                 }
 
-                throw new ArgumentException($"Missing value for input {parsedNode.Name}");
+                throw new ArgumentException("Missing value for input.");
             }
 
-            return res + (node as LiteralNode).Text;
+            return res + (node as LiteralNode)?.Text;
         });
     }
     /// <summary>
@@ -167,92 +235,115 @@ public class PromptTemplate : BaseStringPromptTemplate
         List<ParsedFStringNode> nodes = ParseFString(template);
         return nodes.Aggregate("", (res, node) =>
         {
-            if (node.Type == "variable")
+            if (node.Type == "variable" &&
+                node is VariableNode variableNode)
             {
-                var parsedNode = node as VariableNode;
-
-                if (values.ContainsKey(parsedNode.Name))
+                if (values.TryGetValue(variableNode.Name, out var value))
                 {
-                    return res + values[parsedNode.Name];
+                    return res + value;
                 }
 
-                return res + "{" + parsedNode.Name + "}";
+                return res + "{" + variableNode.Name + "}";
             }
 
-            return res + (node as LiteralNode).Text;
+            return res + (node as LiteralNode)?.Text;
         });
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public static List<ParsedFStringNode> ParseFString(string template)
     {
         // Core logic replicated from internals of pythons built in Formatter class.
         // https://github.com/python/cpython/blob/135ec7cefbaffd516b77362ad2b2ad1025af462e/Objects/stringlib/unicode_format.h#L700-L706
-        List<char> chars = template.ToList();
-        List<ParsedFStringNode> nodes = new List<ParsedFStringNode>();
-
-        Func<string, int, int> nextBracket = (bracket, start) =>
-        {
-            for (int i = start; i < chars.Count; i++)
-            {
-                if (bracket.Contains(chars[i]))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        };
+        var chars = template.AsSpan();
+        var nodes = new List<ParsedFStringNode>();
 
         int i = 0;
-        while (i < chars.Count)
+        while (i < chars.Length)
         {
-            if (chars[i] == '{' && i + 1 < chars.Count && chars[i + 1] == '{')
+            if (chars[i] == '{' && i + 1 < chars.Length && chars[i + 1] == '{')
             {
                 nodes.Add(new LiteralNode("{"));
                 i += 2;
             }
-            else if (chars[i] == '}' && i + 1 < chars.Count && chars[i + 1] == '}')
+            else if (chars[i] == '}' && i + 1 < chars.Length && chars[i + 1] == '}')
             {
                 nodes.Add(new LiteralNode("}"));
                 i += 2;
             }
             else if (chars[i] == '{')
             {
-                int j = nextBracket("}", i);
+                var j = GetNextBracketPosition(ref chars, "}", i);
                 if (j < 0)
                 {
-                    throw new Exception("Unclosed '{' in template.");
+                    throw new InvalidOperationException("Unclosed '{' in template.");
                 }
 
-                nodes.Add(new VariableNode(new string(chars.GetRange(i + 1, j - (i + 1)).ToArray())));
+                nodes.Add(new VariableNode(chars.Slice(i + 1, j - (i + 1)).ToString()));
                 i = j + 1;
             }
             else if (chars[i] == '}')
             {
-                throw new Exception("Single '}' in template.");
+                throw new InvalidOperationException("Single '}' in template.");
             }
             else
             {
-                int next = nextBracket("{}", i);
-                string text = next < 0 ? new string(chars.GetRange(i, chars.Count - i).ToArray()) : new string(chars.GetRange(i, next - i).ToArray());
+                var next = GetNextBracketPosition(ref chars, "{}", i);
+                var text = next < 0
+                    ? chars.Slice(i, chars.Length - i).ToString()
+                    : chars.Slice(i, next - i).ToString();
+
                 nodes.Add(new LiteralNode(text));
-                i = next < 0 ? chars.Count : next;
+                i = next < 0 ? chars.Length : next;
             }
         }
+
         return nodes;
+
+        int GetNextBracketPosition(ref ReadOnlySpan<char> source, string bracket, int start)
+        {
+            for (var idx = start; idx < source.Length; idx++)
+            {
+                if (bracket.Contains(source[idx]))
+                {
+                    return idx;
+                }
+            }
+
+            return -1;
+        }
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="templateFormat"></param>
+    /// <param name="inputValues"></param>
+    /// <returns></returns>
     public static string RenderTemplate(string template, TemplateFormatOptions templateFormat, Dictionary<string, object> inputValues)
     {
         return DefaultFormatterMapping[templateFormat](template, inputValues);
     }
-
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="templateFormatOptions"></param>
+    /// <param name="inputVariables"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     public void CheckValidTemplate(string template, TemplateFormatOptions templateFormatOptions, List<string> inputVariables)
     {
         if (!DefaultFormatterMapping.ContainsKey(templateFormatOptions))
         {
             var validFormats = DefaultFormatterMapping.Keys;
-            throw new Exception($"Invalid template format. Got `{templateFormatOptions}`; should be one of {string.Join(",", validFormats)}");
+            throw new InvalidOperationException($"Invalid template format. Got `{templateFormatOptions}`; should be one of {string.Join(",", validFormats)}");
         }
 
         try
@@ -262,10 +353,16 @@ public class PromptTemplate : BaseStringPromptTemplate
         }
         catch
         {
-            throw new Exception("Invalid prompt schema.");
+            throw new InvalidOperationException("Invalid prompt schema.");
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="templateFormat"></param>
+    /// <returns></returns>
     public static List<ParsedFStringNode> ParseTemplate(string template, TemplateFormatOptions templateFormat)
     {
         return DefaultParserMapping[templateFormat](template);

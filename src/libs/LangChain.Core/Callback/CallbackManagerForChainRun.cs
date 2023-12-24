@@ -3,13 +3,18 @@ using LangChain.Base;
 
 namespace LangChain.Callback;
 
+/// <summary>
+/// 
+/// </summary>
 public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForChainRun>
 {
+    /// <inheritdoc />
     public CallbackManagerForChainRun()
     {
 
     }
 
+    /// <inheritdoc/>
     public CallbackManagerForChainRun(
         string runId,
         List<BaseCallbackHandler> handlers,
@@ -19,42 +24,67 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="output"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task HandleChainEndAsync(IChainValues input, IChainValues output)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        output = output ?? throw new ArgumentNullException(nameof(output));
+        
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreChain)
             {
                 try
                 {
-                    await handler.HandleChainEndAsync(input.Value, output.Value, RunId, ParentRunId);
+                    await handler.HandleChainEndAsync(
+                        input.Value,
+                        output.Value,
+                        RunId,
+                        ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainEnd: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleChainEnd: {ex}").ConfigureAwait(false);
                 }
             }
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="error"></param>
+    /// <param name="input"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task HandleChainErrorAsync(Exception error, IChainValues input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreLlm)
             {
                 try
                 {
-                    await handler.HandleChainErrorAsync(error, RunId, input.Value, ParentRunId);
+                    await handler.HandleChainErrorAsync(error, RunId, input.Value, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleChainError: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleChainError: {ex}").ConfigureAwait(false);
                 }
             }
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="text"></param>
     public async Task HandleTextAsync(string text)
     {
         foreach (var handler in Handlers)
@@ -63,11 +93,11 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
             {
                 try
                 {
-                    await handler.HandleTextAsync(text, RunId, ParentRunId);
+                    await handler.HandleTextAsync(text, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleText: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleText: {ex}").ConfigureAwait(false);
                 }
             }
         }

@@ -18,18 +18,25 @@ namespace LangChain.Chains.CombineDocuments;
 /// </summary>
 public class StuffDocumentsChain : BaseCombineDocumentsChain
 {
-    private readonly ILlmChain _llmChain;
+    /// <summary>
+    /// 
+    /// </summary>
+    public ILlmChain LlmChain { get; }
+    
     private readonly BasePromptTemplate _documentPrompt;
     private readonly string _documentVariableName;
-    private readonly string _documentSeparator = "\n\n";
+    private readonly string _documentSeparator;
 
+    /// <inheritdoc/>
     public StuffDocumentsChain(StuffDocumentsChainInput input) : base(input)
     {
-        _llmChain = input.LlmChain;
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
+        LlmChain = input.LlmChain;
         _documentPrompt = input.DocumentPrompt;
         _documentSeparator = input.DocumentSeparator;
 
-        var llmChainVariables = _llmChain.Prompt.InputVariables;
+        var llmChainVariables = LlmChain.Prompt.InputVariables;
 
         if (input.DocumentVariableName == null)
         {
@@ -49,27 +56,35 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         }
     }
 
-    public override string[] InputKeys =>
-        base.InputKeys.Concat(_llmChain.InputKeys.Where(k => k != _documentVariableName)).ToArray();
+    /// <inheritdoc/>
+    public override IReadOnlyList<string> InputKeys =>
+        base.InputKeys.Concat(LlmChain.InputKeys.Where(k => k != _documentVariableName)).ToArray();
 
+    /// <inheritdoc/>
     public override string ChainType() => "stuff_documents_chain";
 
+    /// <inheritdoc/>
     public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
     {
-        var inputs = await GetInputs(docs, otherKeys);
-        var predict = await _llmChain.Predict(new ChainValues(inputs.Value));
+        otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
+        
+        var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
+        var predict = await LlmChain.Predict(new ChainValues(inputs.Value)).ConfigureAwait(false);
 
         return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
 
+    /// <inheritdoc/>
     public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
-        if (_llmChain.Llm is ISupportsCountTokens supportsCountTokens)
+        otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
+        
+        if (LlmChain.Llm is ISupportsCountTokens supportsCountTokens)
         {
-            var inputs = await GetInputs(docs, otherKeys);
-            var prompt = await _llmChain.Prompt.FormatPromptValue(inputs);
+            var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
+            var prompt = await LlmChain.Prompt.FormatPromptValue(inputs).ConfigureAwait(false);
 
             return supportsCountTokens.CountTokens(prompt.ToString());
         }
@@ -79,12 +94,12 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
 
     private async Task<InputValues> GetInputs(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
     {
-        var docsString = await GetDocsString(docs);
+        var docsString = await GetDocsString(docs).ConfigureAwait(false);
 
         var inputs = new Dictionary<string, object>();
         foreach (var kv in otherKeys)
         {
-            if (_llmChain.Prompt.InputVariables.Contains(kv.Key))
+            if (LlmChain.Prompt.InputVariables.Contains(kv.Key))
             {
                 inputs[kv.Key] = kv.Value;
             }
@@ -100,7 +115,7 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         var docStrings = new List<string>();
         foreach (var doc in docs)
         {
-            var docString = await PromptHelpers.FormatDocumentAsync(doc, _documentPrompt);
+            var docString = await PromptHelpers.FormatDocumentAsync(doc, _documentPrompt).ConfigureAwait(false);
             docStrings.Add(docString);
         }
 

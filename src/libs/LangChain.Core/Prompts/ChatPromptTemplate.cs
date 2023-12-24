@@ -4,14 +4,24 @@ using LangChain.Schema;
 
 namespace LangChain.Prompts;
 
+/// <inheritdoc/>
 public class ChatPromptTemplate : BaseChatPromptTemplate
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public List<BaseMessagePromptTemplate> PromptMessages { get; private set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public bool ValidateTemplate { get; private set; }
 
+    /// <inheritdoc/>
     public ChatPromptTemplate(ChatPromptTemplateInput input) : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         this.PromptMessages = input.PromptMessages;
         this.ValidateTemplate = input.ValidateTemplate;
 
@@ -21,24 +31,28 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
         }
     }
 
-    public override Task<BasePromptTemplate> Partial(PartialValues values)
+    /// <inheritdoc/>
+    public override Task<BasePromptTemplate> AddPartial(PartialValues values)
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc/>
     protected override string GetPromptType()
     {
         return "chat";
     }
 
+    /// <inheritdoc/>
     public override SerializedBasePromptTemplate Serialize()
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc/>
     public override async Task<IReadOnlyCollection<Message>> FormatMessages(InputValues values)
     {
-        var allValues = await this.MergePartialAndUserVariables(values);
+        var allValues = await this.MergePartialAndUserVariables(values).ConfigureAwait(false);
 
         var resultMessages = new List<Message>();
 
@@ -56,16 +70,23 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
                 inputValues.Value.Add(inputVariable, allValues.Value[inputVariable]);
             }
 
-            var message = await promptMessage.FormatMessages(inputValues);
+            var message = await promptMessage.FormatMessages(inputValues).ConfigureAwait(false);
             resultMessages.AddRange(message);
         }
 
         return resultMessages.ToArray();
     }
-
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="promptMessages"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public static ChatPromptTemplate FromPromptMessages(List<BaseMessagePromptTemplate> promptMessages)
     {
+        promptMessages = promptMessages ?? throw new ArgumentNullException(nameof(promptMessages));
+        
         var flattenedMessages = new List<BaseMessagePromptTemplate>();
 
         foreach (var promptMessage in promptMessages)

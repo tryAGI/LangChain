@@ -7,17 +7,20 @@ namespace LangChain.TextSplitters;
 /// Recursively tries to split by different characters to find one
 /// that works.
 /// </summary>
-public class RecursiveCharacterTextSplitter : TextSplitter
+public class RecursiveCharacterTextSplitter(
+    List<string>? separators = null,
+    int chunkSize = 4000,
+    int chunkOverlap = 200,
+    Func<string, int>? lengthFunction = null)
+    : TextSplitter(chunkSize, chunkOverlap, lengthFunction)
 {
-    private readonly List<string> _separators;
+    private readonly List<string> _separators = separators ?? new List<string> { "\n\n", "\n", " ", "" };
 
-    public RecursiveCharacterTextSplitter(List<string>? separators = null, int chunkSize = 4000, int chunkOverlap = 200, Func<string, int>? lengthFunction = null) : base(chunkSize, chunkOverlap, lengthFunction)
-    {
-        _separators = separators ?? new List<string> { "\n\n", "\n", " ", "" };
-    }
-
+    /// <inheritdoc/>
     public override List<string> SplitText(string text)
     {
+        text = text ?? throw new ArgumentNullException(nameof(text));
+        
         List<string> finalChunks = new List<string>();
         string separator = _separators.Last();
 
@@ -39,7 +42,7 @@ public class RecursiveCharacterTextSplitter : TextSplitter
         List<string> splits;
         if (separator.Length != 0)
         {
-            splits = text.Split(new string[] { separator }, StringSplitOptions.None).ToList();
+            splits = text.Split(new[] { separator }, StringSplitOptions.None).ToList();
         }
         else
         {
@@ -49,9 +52,9 @@ public class RecursiveCharacterTextSplitter : TextSplitter
 
         List<string> goodSplits = new List<string>();
 
-        foreach (string s in splits)
+        foreach (var s in splits)
         {
-            if (s.Length < base.ChunkSize)
+            if (s.Length < ChunkSize)
             {
                 goodSplits.Add(s);
             }

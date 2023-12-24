@@ -4,12 +4,27 @@ using LangChain.Schema;
 
 namespace LangChain.Prompts;
 
+/// <summary>
+/// 
+/// </summary>
 public abstract class BaseMessagePromptTemplate
 {
-    public abstract List<string> InputVariables { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract IReadOnlyList<string> InputVariables { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public abstract Task<List<Message>> FormatMessages(InputValues values);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public SerializedMessagePromptTemplate Serialize()
     {
         var serialized = new SerializedMessagePromptTemplate
@@ -18,7 +33,7 @@ public abstract class BaseMessagePromptTemplate
             // You need to serialize 'this' to a JSON string, then deserialize it back to a dictionary
             // to mimic the JavaScript `JSON.parse(JSON.stringify(this))` behavior.
             AdditionalProperties = JsonSerializer.Deserialize<Dictionary<string, object>>(
-                JsonSerializer.Serialize(this))
+                JsonSerializer.Serialize(this)) ?? new Dictionary<string, object>(),
         };
         return serialized;
     }

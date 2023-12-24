@@ -12,7 +12,7 @@ public interface IBasePromptTemplateInput
     /// <summary>
     /// 
     /// </summary>
-    List<string> InputVariables { get; }
+    IReadOnlyList<string> InputVariables { get; }
 
     /// <summary>
     /// 

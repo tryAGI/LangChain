@@ -12,9 +12,9 @@ public abstract class BaseLlmOutputParser<T>
     ///     A list of Generations to be parsed. The Generations are assumed
     ///     to be different candidate outputs for a single model input.
     /// </param>
-    /// <param name="partial"></param>
+    /// <param name="isPartial"></param>
     /// <returns>Structured output.</returns>
-    public abstract Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false);
+    public abstract Task<T> ParseResult(IReadOnlyList<Generation> result, bool isPartial = false);
 }
 
 /// <summary>
@@ -40,7 +40,7 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// <param name="text">String output of a language model.</param>
     /// <param name="prompt">Input PromptValue.</param>
     /// <returns></returns>
-    public virtual async Task<T> ParseWithPrompt(string? text, BasePromptValue prompt) => await Parse(text);
+    public virtual async Task<T> ParseWithPrompt(string? text, BasePromptValue prompt) => await Parse(text).ConfigureAwait(false);
 
     /// <summary>
     /// Parse a list of candidate model Generations into a specific format.
@@ -55,7 +55,12 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// </param>
     /// <param name="partial"></param>
     /// <returns>Structured output.</returns>
-    public override Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false) => Parse(result[0].Text);
+    public override Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false)
+    {
+        result = result ?? throw new ArgumentNullException(nameof(result));
+        
+        return Parse(result[0].Text);
+    }
 
     /// <summary>
     /// Instructions on how the LLM output should be formatted.
@@ -63,10 +68,20 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     /// <returns></returns>
     public virtual string GetFormatInstructions() => throw new NotImplementedException();
 
-    protected virtual string _type() => throw new NotImplementedException("_type not implemented");
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    protected virtual string Type() => throw new NotImplementedException("_type not implemented");
 }
 
+/// <inheritdoc/>
 public class StrOutputParser : BaseOutputParser<string>
 {
-    public override async Task<string> Parse(string? text) => text;
+    /// <inheritdoc/>
+    public override Task<string> Parse(string? text)
+    {
+        return Task.FromResult(text ?? string.Empty);
+    }
 }

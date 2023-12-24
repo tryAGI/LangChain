@@ -1,11 +1,14 @@
 namespace LangChain.Prompts;
 
-public class VariableNode : ParsedFStringNode
+/// <summary>
+/// 
+/// </summary>
+public class VariableNode(
+    string name)
+    : ParsedFStringNode("variable")
 {
-    public string Name { get; }
-
-    public VariableNode(string name) : base("variable")
-    {
-        Name = name;
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Name { get; } = name;
 }

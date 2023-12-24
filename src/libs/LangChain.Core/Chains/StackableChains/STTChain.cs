@@ -19,6 +19,7 @@ public class STTChain<T> : BaseStackableChain
 
     private const string CACHE_DIR = "cache";
 
+    /// <inheritdoc />
     public STTChain(ISpeechToTextModel<T> model, T settings,
         string inputKey = "audio", string outputKey = "text")
     {
@@ -48,8 +49,11 @@ public class STTChain<T> : BaseStackableChain
         File.WriteAllText(file, answer);
     }
 
+    /// <inheritdoc />
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var audio = (byte[])values.Value[_inputKey];
 
         if (_useCache)
@@ -63,7 +67,7 @@ public class STTChain<T> : BaseStackableChain
             }
         }
 
-        var text=await _model.TranscribeAsync(audio, _settings);
+        var text=await _model.TranscribeAsync(audio, _settings).ConfigureAwait(false);
         
         if(_useCache)
             SaveCachedAnswer(audio, text);
@@ -72,6 +76,11 @@ public class STTChain<T> : BaseStackableChain
         return values;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enabled"></param>
+    /// <returns></returns>
     public STTChain<T> UseCache(bool enabled=true)
     {
         _useCache = enabled;

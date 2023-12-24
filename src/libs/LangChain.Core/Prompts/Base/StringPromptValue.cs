@@ -9,13 +9,14 @@ public class StringPromptValue : BasePromptValue
     /// <summary>
     /// 
     /// </summary>
-    public string Value { get; set; }
+    public string Value { get; set; } = string.Empty;
 
-
+    /// <inheritdoc/>
     public override IReadOnlyCollection<Message> ToChatMessages()
     {
         return new[] { Value.AsSystemMessage() };
     }
 
+    /// <inheritdoc/>
     public override string ToString() => Value;
 }

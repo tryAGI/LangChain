@@ -1,19 +1,20 @@
 namespace LangChain.Chains.CombineDocuments;
 
+/// <inheritdoc/>
 public class ReduceDocumentsChainInput : BaseCombineDocumentsChainInput
 {
     /// <summary>
     /// Final chain to call to combine documents.
     /// This is typically a StuffDocumentsChain.
     /// </summary>
-    public BaseCombineDocumentsChain CombineDocumentsChain { get; set; }
+    public required BaseCombineDocumentsChain CombineDocumentsChain { get; set; }
     
     /// <summary>
     /// Chain to use to collapse documents if needed until they can all fit.
     /// If null, will use the combine_documents_chain.
     /// This is typically a StuffDocumentsChain.
     /// </summary>
-    public BaseCombineDocumentsChain? CollapseDocumentsChain { get; set; }
+    public required BaseCombineDocumentsChain CollapseDocumentsChain { get; set; }
     
     /// <summary>
     /// The maximum number of tokens to group documents into. For example, if

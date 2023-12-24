@@ -13,22 +13,32 @@ namespace LangChain.Base.Tracers;
 /// </summary>
 public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallbackHandler(input)
 {
+    /// <summary>
+    /// 
+    /// </summary>
     protected Dictionary<string, Run> RunMap { get; } = new();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task PersistRun(Run run);
 
+    /// <inheritdoc />
     public override async Task HandleLlmStartAsync(BaseLlm llm,
         string[] prompts,
         string runId,
         string? parentRunId = null,
         IReadOnlyList<string>? tags = null,
         IReadOnlyDictionary<string, object>? metadata = null,
-        string name = null,
+        string? name = null,
         IReadOnlyDictionary<string, object>? extraParams = null)
     {
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new Dictionary<string, object>();
         var extraParamsCopy = new Dictionary<string, object>();
         extraParamsCopy.TryAddKeyValues(extraParams);
         if (metadata != null)
@@ -57,15 +67,18 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ChildExecutionOrder = executionOrder,
             RunType = "llm",
             Tags = tags?.ToList() ?? new List<string>(),
-            Name = name
+            Name = name ?? string.Empty,
         };
 
         StartTrace(run);
-        await HandleLlmStartAsync(run);
+        await HandleLlmStartAsync(run).ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public override async Task HandleLlmErrorAsync(Exception err, string runId, string? parentRunId = null)
     {
+        err = err ?? throw new ArgumentNullException(nameof(err));
+
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_llm_error callback.");
@@ -81,11 +94,14 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
 
         EndTrace(run);
-        await HandleLlmErrorAsync(run);
+        await HandleLlmErrorAsync(run).ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public override async Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null)
     {
+        output = output ?? throw new ArgumentNullException(nameof(output));
+        
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_llm_end callback.");
@@ -97,16 +113,16 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         }
 
         run.Outputs = output.LlmOutput;
-        for (var i = 0; i < output.Generations.Length; i++)
+        for (var i = 0; i < output.Generations.Count; i++)
         {
             for (var j = 0; j < output.Generations[i].Length; j++)
             {
                 var generation = output.Generations[i][j];
 
-                var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>>)[i];
+                var outputGeneration = (run.Outputs["generations"] as List<Dictionary<string, string>> ?? new List<Dictionary<string, string>>())[i];
                 if (outputGeneration.ContainsKey("message"))
                 {
-                    outputGeneration["message"] = (generation as ChatGeneration)?.Message;
+                    outputGeneration["message"] = (generation as ChatGeneration)?.Message ?? string.Empty;
                 }
             }
         }
@@ -115,9 +131,10 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.Events.Add(new Dictionary<string, object> { { "name", "end" }, { "time", run.EndTime } });
 
         EndTrace(run);
-        await HandleLlmEndAsync(run);
+        await HandleLlmEndAsync(run).ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public override async Task HandleLlmNewTokenAsync(string token, string runId, string? parentRunId = null)
     {
         if (runId == null)
@@ -140,17 +157,19 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
                 ["kwargs"] = eventData,
             });
 
-        await HandleLlmNewTokenAsync(run, token);
+        await HandleLlmNewTokenAsync(run, token).ConfigureAwait(false);
     }
 
-    public override async Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
+    /// <inheritdoc/>
+    public override Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
         string runId,
         string? parentRunId = null,
         IReadOnlyDictionary<string, object>? extraParams = null)
     {
-        throw new NotImplementedException();
+        return Task.FromException(new NotImplementedException());
     }
 
+    /// <inheritdoc/>
     public override async Task HandleChainStartAsync(
         IChain chain,
         Dictionary<string, object> inputs,
@@ -165,6 +184,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new();
         if (metadata != null)
         {
             extraParams.Add("metadata", metadata);
@@ -183,12 +203,12 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ChildExecutionOrder = executionOrder,
             ChildRuns = new(),
             RunType = runType ?? "chain",
-            Name = name,
+            Name = name ?? string.Empty,
             Tags = tags ?? new()
         };
 
         StartTrace(chainRun);
-        await HandleChainStartAsync(chainRun);
+        await HandleChainStartAsync(chainRun).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -200,6 +220,8 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         Dictionary<string, object>? inputs = null,
         string? parentRunId = null)
     {
+        err = err ?? throw new ArgumentNullException(nameof(err));
+        
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_chain_error callback.");
@@ -214,9 +236,9 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
 
-        run.Inputs = inputs;
+        run.Inputs = inputs ?? new();
         EndTrace(run);
-        await HandleChainErrorAsync(run);
+        await HandleChainErrorAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -242,12 +264,13 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.EndTime });
 
-        run.Inputs = inputs;
+        run.Inputs = inputs ?? new();
 
         EndTrace(run);
-        await HandleChainEndAsync(run);
+        await HandleChainEndAsync(run).ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public override async Task HandleToolStartAsync(
         Dictionary<string, object> tool,
         string input,
@@ -255,15 +278,18 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         string? parentRunId = null,
         List<string>? tags = null,
         Dictionary<string, object>? metadata = null,
-        string runType = null,
-        string name = null,
+        string? runType = null,
+        string? name = null,
         Dictionary<string, object>? extraParams = null)
     {
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new Dictionary<string, object>();
         if (metadata != null)
-        { extraParams.Add("metadata", metadata); }
+        {
+            extraParams.Add("metadata", metadata);
+        }
 
         var run = new Run
         {
@@ -279,11 +305,11 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             ChildRuns = new(),
             RunType = "tool",
             Tags = tags ?? new(),
-            Name = name,
+            Name = name ?? string.Empty,
         };
 
         StartTrace(run);
-        await HandleToolStartAsync(run);
+        await HandleToolStartAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -291,6 +317,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// </summary>
     public override async Task HandleToolErrorAsync(Exception err, string runId, string? parentRunId = null)
     {
+        err = err ?? throw new ArgumentNullException(nameof(err));
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_tool_error callback.");
@@ -305,7 +332,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "error", ["time"] = run.EndTime });
         EndTrace(run);
-        await HandleToolErrorAsync(run);
+        await HandleToolErrorAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -334,7 +361,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         run.EndTime = DateTime.UtcNow;
         run.Events.Add(new Dictionary<string, object> { ["name"] = "end", ["time"] = run.EndTime });
         EndTrace(run);
-        await HandleToolEndAsync(run);
+        await HandleToolEndAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -354,6 +381,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         var executionOrder = GetExecutionOrder(parentRunId);
         var startTime = DateTime.UtcNow;
 
+        extraParams ??= new Dictionary<string, object>();
         if (metadata != null)
         {
             extraParams.Add("metadata", metadata);
@@ -372,13 +400,13 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
             StartTime = startTime,
             ExecutionOrder = executionOrder,
             ChildExecutionOrder = executionOrder,
-            Tags = tags,
+            Tags = tags ?? new(),
             ChildRuns = new(),
             RunType = "retriever",
         };
 
         StartTrace(run);
-        await HandleRetrieverStartAsync(run);
+        await HandleRetrieverStartAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -406,7 +434,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         { ["name"] = "end", ["time"] = run.EndTime });
 
         EndTrace(run);
-        await HandleRetrieverEndAsync(run);
+        await HandleRetrieverEndAsync(run).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -415,6 +443,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     public override async Task HandleRetrieverErrorAsync(Exception error, string query, string runId,
         string? parentRunId)
     {
+        error = error ?? throw new ArgumentNullException(nameof(error));
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_retriever_end callback.");
@@ -434,19 +463,25 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         });
 
         EndTrace(run);
-        await HandleRetrieverErrorAsync(run);
+        await HandleRetrieverErrorAsync(run).ConfigureAwait(false);
     }
 
-    public override async Task HandleTextAsync(string text, string runId, string? parentRunId = null)
+    /// <inheritdoc/>
+    public override Task HandleTextAsync(string text, string runId, string? parentRunId = null)
     {
+        return Task.CompletedTask;
     }
 
-    public override async Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
+    /// <inheritdoc/>
+    public override Task HandleAgentActionAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
     {
+        return Task.CompletedTask;
     }
 
-    public override async Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
+    /// <inheritdoc/>
+    public override Task HandleAgentEndAsync(Dictionary<string, object> action, string runId, string? parentRunId = null)
     {
+        return Task.CompletedTask;
     }
 
     /*public Run OnRetry(RetryCallState retryState, string runId)
@@ -504,22 +539,124 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// </summary>
     protected abstract void OnRunUpdate(Run run);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleLlmStartAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     protected abstract Task HandleLlmNewTokenAsync(Run run, string token);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleLlmErrorAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleLlmEndAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleChatModelStartAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleChainStartAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleChainErrorAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleChainEndAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleToolStartAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleToolErrorAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleToolEndAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleTextAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleAgentActionAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleAgentEndAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleRetrieverStartAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleRetrieverEndAsync(Run run);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="run"></param>
+    /// <returns></returns>
     protected abstract Task HandleRetrieverErrorAsync(Run run);
 
     /// <summary>

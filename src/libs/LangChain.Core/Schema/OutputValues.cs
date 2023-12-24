@@ -1,11 +1,14 @@
 namespace LangChain.Schema;
 
-public class OutputValues
+/// <summary>
+/// 
+/// </summary>
+/// <param name="value"></param>
+public class OutputValues(
+    Dictionary<string, object> value)
 {
-    public OutputValues(Dictionary<string, object> value)
-    {
-        this.Value = value;
-    }
-
-    public Dictionary<string, object> Value { get; set; } = new();
+    /// <summary>
+    /// 
+    /// </summary>
+    public Dictionary<string, object> Value { get; set; } = value;
 }

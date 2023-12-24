@@ -1,6 +1,10 @@
 namespace LangChain.Schema;
 
+/// <inheritdoc/>
 public class ChatGeneration : Generation
 {
-    public string Message { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Message { get; set; } = string.Empty;
 }

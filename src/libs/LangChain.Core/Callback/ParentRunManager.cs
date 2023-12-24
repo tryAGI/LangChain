@@ -7,11 +7,13 @@ namespace LangChain.Callback;
 /// </summary>
 public class ParentRunManager : BaseRunManager
 {
+    /// <inheritdoc/>
     public ParentRunManager()
     {
 
     }
 
+    /// <inheritdoc/>
     public ParentRunManager(
         string runId,
         List<BaseCallbackHandler> handlers,

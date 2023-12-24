@@ -36,6 +36,11 @@ public partial class OpenAiModel :
     /// <inheritdoc/>
     public string User { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Sampling temperature
+    /// </summary>
+    public double Temperature { get; set; } = 1.0;
+
     /// <inheritdoc/>
     public int ContextLength => ContextLengths.Get(Id);
 
@@ -61,6 +66,7 @@ public partial class OpenAiModel :
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
         EmbeddingModelId = configuration.EmbeddingModelId ?? throw new ArgumentException("EmbeddingModelId is not defined", nameof(configuration));
 
+        Temperature = configuration.Temperature;
         Encoding = Tiktoken.Encoding.TryForModel(Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
         Api = new OpenAIClient(ApiKey);
         if (configuration.Endpoint != null &&

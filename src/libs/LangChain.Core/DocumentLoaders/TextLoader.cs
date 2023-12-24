@@ -4,6 +4,7 @@ using LangChain.Docstore;
 
 namespace LangChain.DocumentLoaders;
 
+/// <inheritdoc />
 public class TextLoader : BaseLoader
 {
     private string filePath;
@@ -16,13 +17,14 @@ public class TextLoader : BaseLoader
     /// <param name="encoding">File encoding to use. Null for default</param>
     /// <param name="autoDetectEncoding">Whether to try to autodetect the file encoding
     /// if the specified encoding fails.</param>
-    public TextLoader(string filePath, Encoding encoding = null, bool autoDetectEncoding = false)
+    public TextLoader(string filePath, Encoding? encoding = null, bool autoDetectEncoding = false)
     {
         this.filePath = filePath;
         this.fileEncoding = encoding ?? Encoding.Default;
         this.autoDetectEncoding = autoDetectEncoding;
     }
 
+    /// <inheritdoc />
     public override List<Document> Load()
     {
         var text = "";
@@ -59,12 +61,12 @@ public class TextLoader : BaseLoader
             }
             else
             {
-                throw new Exception($"Error loading {filePath}");
+                throw new InvalidOperationException($"Error loading {filePath}");
             }
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error loading {filePath}", ex);
+            throw new InvalidOperationException($"Error loading {filePath}", ex);
         }
 
         var metadata = new Dictionary<string, object>

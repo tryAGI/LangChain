@@ -1,5 +1,8 @@
 namespace LangChain.Schema;
 
+/// <summary>
+/// 
+/// </summary>
 public class Generation
 {
     /// <summary>
@@ -9,7 +12,7 @@ public class Generation
 
     /// <summary>
     /// Raw generation info response from the provider.
-    /// May include things like reason for finishing (e.g. in <see cref="OpenAi"/>)
+    /// May include things like reason for finishing (e.g. in OpenAi)
     /// </summary>
-    public Dictionary<string, object> GenerationInfo { get; set; }
+    public Dictionary<string, object> GenerationInfo { get; set; } = new Dictionary<string, object>();
 }

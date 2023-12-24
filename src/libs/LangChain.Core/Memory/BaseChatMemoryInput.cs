@@ -1,9 +1,27 @@
 namespace LangChain.Memory;
 
+/// <summary>
+/// 
+/// </summary>
 public class BaseChatMemoryInput
 {
-    public BaseChatMessageHistory ChatHistory { get; set; }
-    public string InputKey { get; set; }
-    public string MemoryKey { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public BaseChatMessageHistory ChatHistory { get; set; } = new ChatMessageHistory();
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string InputKey { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string MemoryKey { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public bool ReturnMessages { get; set; }
 }

@@ -12,6 +12,8 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <inheritdoc />
     protected BaseLlm(IBaseLlmParams parameters) : base(parameters)
     {
+        parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
+        
         _cache = parameters.Cache;
     }
 
@@ -23,16 +25,16 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <returns></returns>
     public override async Task<LlmResult> GeneratePrompt(BasePromptValue[] promptValues, IReadOnlyCollection<string>? stop)
     {
-        return await Generate(promptValues.Select(p => p.ToString()).ToArray(), stop);
+        return await Generate(promptValues.Select(p => p.ToString()).ToArray(), stop).ConfigureAwait(false);
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="prompts"></param>
-    /// <param name="stop"></param>
+    /// <param name="stopSequences"></param>
     /// <returns></returns>
-    public abstract Task<LlmResult> Generate(string[] prompts, IReadOnlyCollection<string>? stop);
+    public abstract Task<LlmResult> Generate(string[] prompts, IReadOnlyCollection<string>? stopSequences);
 
     /// <summary>
     /// Call the LLM using the provided prompt.
@@ -42,7 +44,7 @@ public abstract class BaseLlm : BaseLanguageModel
     /// <returns>A string value containing the LLM response.</returns>
     public async Task<string?> Call(string prompt, List<string>? stop = null)
     {
-        var generations = await Generate(new[] { prompt }, stop);
+        var generations = await Generate(new[] { prompt }, stop).ConfigureAwait(false);
 
         return generations.Generations[0][0].Text;
     }

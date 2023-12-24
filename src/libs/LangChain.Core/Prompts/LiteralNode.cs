@@ -1,11 +1,12 @@
 namespace LangChain.Prompts;
 
-public class LiteralNode : ParsedFStringNode
+/// <inheritdoc/>
+public class LiteralNode(
+    string text)
+    : ParsedFStringNode("literal")
 {
-    public string Text { get; }
-
-    public LiteralNode(string text) : base("literal")
-    {
-        Text = text;
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Text { get; } = text;
 }

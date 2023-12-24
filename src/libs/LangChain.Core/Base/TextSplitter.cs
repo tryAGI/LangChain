@@ -15,9 +15,17 @@ public abstract class TextSplitter
     private readonly int _chunkOverlap;
     private readonly Func<string, int> _lengthFunction;
 
-
-
-    protected TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, Func<string, int>? lengthFunction = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="chunkSize"></param>
+    /// <param name="chunkOverlap"></param>
+    /// <param name="lengthFunction"></param>
+    /// <exception cref="ArgumentException"></exception>
+    protected TextSplitter(
+        int chunkSize = 4000,
+        int chunkOverlap = 200,
+        Func<string, int>? lengthFunction = null)
     {
         if (chunkOverlap > chunkSize)
         {
@@ -29,10 +37,21 @@ public abstract class TextSplitter
         _lengthFunction = lengthFunction ?? new Func<string, int>((str) => str.Length);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected int ChunkSize => _chunkSize;
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected int ChunkOverlap => _chunkOverlap;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
     public abstract List<string> SplitText(string text);
 
     /// <summary>
@@ -43,6 +62,8 @@ public abstract class TextSplitter
     /// </exception>
     public List<Document> CreateDocuments(List<string> texts, List<Dictionary<string, object>>? metadatas = null)
     {
+        texts = texts ?? throw new ArgumentNullException(nameof(texts));
+        
         var documents = new List<Document>();
 
         // if no metadata is provided, create a list of empty dictionaries
@@ -69,6 +90,11 @@ public abstract class TextSplitter
         return documents;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="documents"></param>
+    /// <returns></returns>
     public List<Document> SplitDocuments(IReadOnlyCollection<Document> documents)
     {
         var texts = documents.Select(doc => doc.PageContent).ToList();
@@ -91,6 +117,8 @@ public abstract class TextSplitter
     /// </summary>
     protected List<string> MergeSplits(IEnumerable<string> splits, string separator)
     {
+        splits = splits ?? throw new ArgumentNullException(nameof(splits));
+        
         var separatorLen = _lengthFunction(separator);
         var docs = new List<string>(); // result of chunks
         var currentDoc = new List<string>(); // documents of current chunk

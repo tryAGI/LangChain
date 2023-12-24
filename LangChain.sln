@@ -146,6 +146,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Extensions.Docker", "src\libs\Extensions\LangChain.Extensions.Docker\LangChain.Extensions.Docker.csproj", "{12186ED0-49FE-47E8-BCD6-81424575D603}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Utilities.Sql", "src\libs\Utilities\LangChain.Utilities.Sql\LangChain.Utilities.Sql.csproj", "{7D47EC2D-2F03-4284-A07D-E56486B885C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{788567AF-444A-488F-BCED-C3B9F03CC38D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Utilities.Postgres", "src\libs\Utilities\LangChain.Utilities.Postgres\LangChain.Utilities.Postgres.csproj", "{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Utilities.Postgres.IntegrationTests", "src\tests\LangChain.Utilities.Postgres.IntegrationTests\LangChain.Utilities.Postgres.IntegrationTests.csproj", "{A652E4C6-6988-40BD-A726-2F5A3783C129}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Redis.IntegrationTests", "src\tests\LangChain.Databases.Redis.IntegrationTests\LangChain.Databases.Redis.IntegrationTests.csproj", "{E19562A0-9AAA-4C75-BE78-648E7148A4CD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Postgres.IntegrationTests", "src\tests\LangChain.Databases.Postgres.IntegrationTests\LangChain.Databases.Postgres.IntegrationTests.csproj", "{B953ABEC-50DD-4A63-A12A-E82F124C7D5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Google", "src\libs\Providers\LangChain.Providers.Google\LangChain.Providers.Google.csproj", "{32FC123E-F269-4352-848C-0161B53093CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Google.UnitTests", "src\tests\LangChain.Providers.Google.UnitTests\LangChain.Providers.Google.UnitTests.csproj", "{DEAFA0CB-462D-4D74-B16F-68FD83FE3858}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -328,6 +344,34 @@ Global
 		{12186ED0-49FE-47E8-BCD6-81424575D603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12186ED0-49FE-47E8-BCD6-81424575D603}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12186ED0-49FE-47E8-BCD6-81424575D603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D47EC2D-2F03-4284-A07D-E56486B885C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D47EC2D-2F03-4284-A07D-E56486B885C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D47EC2D-2F03-4284-A07D-E56486B885C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D47EC2D-2F03-4284-A07D-E56486B885C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A652E4C6-6988-40BD-A726-2F5A3783C129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E19562A0-9AAA-4C75-BE78-648E7148A4CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E19562A0-9AAA-4C75-BE78-648E7148A4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E19562A0-9AAA-4C75-BE78-648E7148A4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E19562A0-9AAA-4C75-BE78-648E7148A4CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B953ABEC-50DD-4A63-A12A-E82F124C7D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B953ABEC-50DD-4A63-A12A-E82F124C7D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B953ABEC-50DD-4A63-A12A-E82F124C7D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B953ABEC-50DD-4A63-A12A-E82F124C7D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32FC123E-F269-4352-848C-0161B53093CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32FC123E-F269-4352-848C-0161B53093CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32FC123E-F269-4352-848C-0161B53093CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32FC123E-F269-4352-848C-0161B53093CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEAFA0CB-462D-4D74-B16F-68FD83FE3858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEAFA0CB-462D-4D74-B16F-68FD83FE3858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEAFA0CB-462D-4D74-B16F-68FD83FE3858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEAFA0CB-462D-4D74-B16F-68FD83FE3858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -383,6 +427,14 @@ Global
 		{A71579D1-CCAF-4F4C-B2E7-01968F11484F} = {C58D122C-808F-43F9-BB23-4E517046F533}
 		{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B} = {23506EB8-1B27-4FD0-B570-2F5EF2C33034}
 		{12186ED0-49FE-47E8-BCD6-81424575D603} = {238D18D4-CBEF-46BF-B08C-F1E593DAB398}
+		{7D47EC2D-2F03-4284-A07D-E56486B885C6} = {788567AF-444A-488F-BCED-C3B9F03CC38D}
+		{788567AF-444A-488F-BCED-C3B9F03CC38D} = {EB6F52EE-7E7E-4624-A99E-79D3F190F386}
+		{2A01AC56-7850-48FD-B32F-A7AAF0E86F84} = {788567AF-444A-488F-BCED-C3B9F03CC38D}
+		{A652E4C6-6988-40BD-A726-2F5A3783C129} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{E19562A0-9AAA-4C75-BE78-648E7148A4CD} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{B953ABEC-50DD-4A63-A12A-E82F124C7D5B} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
+		{32FC123E-F269-4352-848C-0161B53093CC} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{DEAFA0CB-462D-4D74-B16F-68FD83FE3858} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

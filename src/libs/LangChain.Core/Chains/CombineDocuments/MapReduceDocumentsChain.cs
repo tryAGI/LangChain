@@ -39,12 +39,17 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     /// </summary>
     public bool ReturnIntermediateSteps { get; init; }
 
-    public override string[] OutputKeys { get; }
+    /// <inheritdoc/>
+    public override IReadOnlyList<string> OutputKeys { get; }
 
+    /// <inheritdoc/>
     public override string ChainType() => "map_reduce_documents_chain";
 
+    /// <inheritdoc/>
     public MapReduceDocumentsChain(MapReduceDocumentsChainInput input) : base(input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         LlmChain = input.LlmChain;
         ReduceDocumentsChain = input.ReduceDocumentsChain;
         ReturnIntermediateSteps = input.ReturnIntermediateSteps;
@@ -70,7 +75,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
             if (String.IsNullOrEmpty(inputVariable))
             {
                 var llmChainVariables = input.LlmChain.InputKeys;
-                if (llmChainVariables.Length == 1)
+                if (llmChainVariables.Count == 1)
                 {
                     documentKey = llmChainVariables[0];
                 }
@@ -96,10 +101,13 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
         }
     }
 
-    public override async Task<int?> PromptLength(
+    /// <inheritdoc/>
+    public override Task<int?> PromptLength(
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
-        => throw new NotImplementedException();
+    {
+        return Task.FromException<int?>(new NotImplementedException());
+    }
 
     /// <summary>
     /// Combine documents in a map reduce manner.
@@ -128,16 +136,16 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
             })
             .ToList();
 
-        var mapResults = await LlmChain.ApplyAsync(inputs);
+        var mapResults = await LlmChain.ApplyAsync(inputs).ConfigureAwait(false);
         var questionResultKey = LlmChain.OutputKey;
 
         // this uses metadata from the docs, and the textual results from `results`
         var resultDocs =
             mapResults
-                .Select((r, i) => new Document(r.Value[questionResultKey] as string, docs[i].Metadata))
+                .Select((r, i) => new Document(r.Value[questionResultKey] as string ?? string.Empty, docs[i].Metadata))
                 .ToList();
 
-        var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys);
+        var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);
 
         if (ReturnIntermediateSteps)
         {

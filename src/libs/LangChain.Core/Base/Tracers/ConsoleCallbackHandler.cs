@@ -1,56 +1,91 @@
 namespace LangChain.Base.Tracers;
 
+/// <inheritdoc />
 public class ConsoleCallbackHandlerInput : BaseCallbackHandlerInput
 {
 }
 
+/// <inheritdoc />
 public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTracer(fields)
 {
+    /// <inheritdoc />
     public ConsoleCallbackHandler() : this(new ConsoleCallbackHandlerInput())
     {
 
     }
 
+    /// <inheritdoc />
     public override string Name => "console_callback_handler";
+    
+    /// <inheritdoc />
     protected override Task PersistRun(Run run) => Task.CompletedTask;
 
-    protected override async Task HandleLlmStartAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleLlmStartAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         object inputs = run.Inputs.TryGetValue("prompts", out var input)
-            ? new Dictionary<string, List<string>> { { "prompts", (input as List<string>)?.Select(p => p.Trim()).ToList() } }
+            ? new Dictionary<string, List<string>>
+            {
+                ["prompts"] = (input as List<string>)?.Select(p => p.Trim()).ToList() ?? new List<string>(),
+            }
             : run.Inputs;
 
         Print(
             $"{GetColoredText("[llm/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering LLM run with input:", ConsoleFormats.Bold)}\n" +
             $"{JsonSerializeOrDefault(inputs, "[inputs]")}"
         );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleLlmNewTokenAsync(Run run, string token) { }
+    /// <inheritdoc />
+    protected override Task HandleLlmNewTokenAsync(Run run, string token)
+    { 
+        return Task.CompletedTask;
+    }
 
-    protected override async Task HandleLlmErrorAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleLlmErrorAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
 
         Print($"{GetColoredText("[llm/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] LLM run errored with error:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Error, "[error]")}"
         );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleLlmEndAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleLlmEndAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
 
         Print($"{GetColoredText("[llm/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting LLM run with output:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Outputs, "[response]")}"
             );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleChatModelStartAsync(Run run) { }
-
-    protected override async Task HandleChainStartAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleChatModelStartAsync(Run run)
     {
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    protected override Task HandleChainStartAsync(Run run)
+    {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var input = JsonSerializeOrDefault(run.Inputs, "[inputs]");
@@ -59,11 +94,15 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering {runType} run with input:", ConsoleFormats.Bold)}\n" +
             $"{input}"
         );
+        
+        return Task.CompletedTask;
     }
 
-
-    protected override async Task HandleChainErrorAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleChainErrorAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var error = JsonSerializeOrDefault(run.Error, "[error]");
@@ -71,10 +110,15 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] {runType} run errored with error:", ConsoleFormats.Bold)}\n" +
             $"{error}"
         );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleChainEndAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleChainEndAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var outputs = JsonSerializeOrDefault(run.Outputs, "[outputs]");
@@ -83,64 +127,95 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting {runType} run with output:", ConsoleFormats.Bold)}\n" +
             $"{outputs}"
         );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleToolStartAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleToolStartAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering Tool run with input:", ConsoleFormats.Bold)}\n" +
-            $"{run.Inputs["input"].ToString().Trim()}"
+            $"{run.Inputs["input"].ToString()?.Trim()}"
         );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleToolErrorAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleToolErrorAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Tool run errored with error:", ConsoleFormats.Bold)}\n" +
             $"{run.Error}"
         );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleToolEndAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleToolEndAsync(Run run)
     {
+        run = run ?? throw new ArgumentNullException(nameof(run));
+        
         var crumbs = GetBreadcrumbs(run);
         if (run.Outputs.Count != 0)
             Print(
                 $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting Tool run with output:", ConsoleFormats.Bold)}\n" +
-                $"{run.Outputs["output"].ToString().Trim()}"
+                $"{run.Outputs["output"].ToString()?.Trim()}"
             );
+        
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleTextAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleTextAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleAgentActionAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleAgentActionAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleAgentEndAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleAgentEndAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleRetrieverStartAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleRetrieverStartAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleRetrieverEndAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleRetrieverEndAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
-    protected override async Task HandleRetrieverErrorAsync(Run run)
+    /// <inheritdoc />
+    protected override Task HandleRetrieverErrorAsync(Run run)
     {
+        return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     protected override void OnRunCreate(Run run)
     {
     }
 
+    /// <inheritdoc />
     protected override void OnRunUpdate(Run run)
     {
     }
@@ -174,7 +249,10 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
         return result;
     }
 
-    private void Print(string text) => Console.WriteLine(text);
+    private void Print(string text)
+    {
+        Console.WriteLine(text);
+    }
 
     private string GetColoredText(string text, string format)
     {

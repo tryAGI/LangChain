@@ -1,43 +1,64 @@
 ﻿using LangChain.Abstractions.Schema;
-using LangChain.Callback;
 using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
-public class StackChain : BaseStackableChain
+/// <inheritdoc/>
+public class StackChain(
+    BaseStackableChain a,
+    BaseStackableChain b)
+    : BaseStackableChain
 {
-    private readonly BaseStackableChain _a;
-    private readonly BaseStackableChain _b;
+    /// <summary>
+    /// 
+    /// </summary>
+    public IReadOnlyList<string> IsolatedInputKeys { get; set; } = Array.Empty<string>();
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public IReadOnlyList<string> IsolatedOutputKeys { get; set; } = Array.Empty<string>();
 
-    public string[] IsolatedInputKeys { get; set; } = Array.Empty<string>();
-    public string[] IsolatedOutputKeys { get; set; } = Array.Empty<string>();
-
-    public StackChain(BaseStackableChain a, BaseStackableChain b)
-    {
-        _a = a;
-        _b = b;
-    }
-
-    public StackChain AsIsolated(string[] inputKeys = null, string[] outputKeys = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputKeys"></param>
+    /// <param name="outputKeys"></param>
+    /// <returns></returns>
+    public StackChain AsIsolated(
+        string[]? inputKeys = null,
+        string[]? outputKeys = null)
     {
         IsolatedInputKeys = inputKeys ?? IsolatedInputKeys;
         IsolatedOutputKeys = outputKeys ?? IsolatedOutputKeys;
         return this;
     }
 
-    public StackChain AsIsolated(string inputKey = null, string outputKey = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
+    public StackChain AsIsolated(
+        string? inputKey = null,
+        string? outputKey = null)
     {
         if (inputKey != null) IsolatedInputKeys = new[] { inputKey };
         if (outputKey != null) IsolatedOutputKeys = new[] { outputKey };
+        
         return this;
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         // since it is reference type, the values would be changed anyhow
         var originalValues = values;
 
-        if (IsolatedInputKeys.Length > 0)
+        if (IsolatedInputKeys.Count > 0)
         {
             var res = new ChainValues();
             foreach (var key in IsolatedInputKeys)
@@ -46,9 +67,9 @@ public class StackChain : BaseStackableChain
             }
             values = res;
         }
-        await _a.CallAsync(values);
-        await _b.CallAsync(values);
-        if (IsolatedOutputKeys.Length > 0)
+        await a.CallAsync(values).ConfigureAwait(false);
+        await b.CallAsync(values).ConfigureAwait(false);
+        if (IsolatedOutputKeys.Count > 0)
         {
             foreach (var key in IsolatedOutputKeys)
             {

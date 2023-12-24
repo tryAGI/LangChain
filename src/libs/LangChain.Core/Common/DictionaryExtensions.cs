@@ -1,5 +1,8 @@
 namespace LangChain.Common;
 
+/// <summary>
+/// 
+/// </summary>
 public static class DictionaryExtensions
 {
     /// <summary>
@@ -11,6 +14,9 @@ public static class DictionaryExtensions
         IReadOnlyDictionary<TKey, TValue> additional)
         where TKey : notnull
     {
+        target = target ?? throw new ArgumentNullException(nameof(target));
+        additional = additional ?? throw new ArgumentNullException(nameof(additional));
+
         foreach (var kv in additional)
         {
             if (!target.ContainsKey(kv.Key))

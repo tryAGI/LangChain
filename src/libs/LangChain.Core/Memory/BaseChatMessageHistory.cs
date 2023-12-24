@@ -2,22 +2,44 @@
 
 namespace LangChain.Memory;
 
+/// <summary>
+/// 
+/// </summary>
 public abstract class BaseChatMessageHistory
 {
-    public IList<Message> Messages { get; set; } = new List<Message>();
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
     public async Task AddUserMessage(string message)
     {
-        await AddMessage(message.AsHumanMessage());
-        
+        await AddMessage(message.AsHumanMessage()).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
     public async Task AddAiMessage(string message)
     {
-        await AddMessage(message.AsAiMessage());
+        await AddMessage(message.AsAiMessage()).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract IReadOnlyList<Message> Messages { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
     public abstract Task AddMessage(Message message);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public abstract Task Clear();
 }

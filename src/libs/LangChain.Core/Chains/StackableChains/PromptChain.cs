@@ -7,10 +7,12 @@ using LangChain.Prompts;
 
 namespace LangChain.Chains.HelperChains;
 
+/// <inheritdoc/>
 public class PromptChain : BaseStackableChain
 {
     private readonly string _template;
 
+    /// <inheritdoc/>
     public PromptChain(string template, string outputKey = "prompt")
     {
         OutputKeys = new[] { outputKey };
@@ -30,17 +32,17 @@ public class PromptChain : BaseStackableChain
         return variables;
     }
 
-
-
-
+    /// <inheritdoc/>
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         // validate that input keys containing all variables
         var valueKeys = values.Value.Keys;
         var missing = InputKeys.Except(valueKeys);
         if (missing.Any())
         {
-            throw new Exception($"Input keys must contain all variables in template. Missing: {string.Join(",", missing)}");
+            throw new InvalidOperationException($"Input keys must contain all variables in template. Missing: {string.Join(",", missing)}");
         }
 
         var formattedPrompt = PromptTemplate.InterpolateFString(_template, values.Value);

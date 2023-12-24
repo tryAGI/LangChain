@@ -14,6 +14,20 @@ public readonly record struct Message(
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="content"></param>
+    /// <returns></returns>
+    public static Message Human(string content) => new(content, MessageRole.Human);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="content"></param>
+    /// <returns></returns>
+    public static Message Ai(string content) => new(content, MessageRole.Ai);
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public static Message Empty { get; } = new(
         Content: string.Empty,
         Role: MessageRole.Human,

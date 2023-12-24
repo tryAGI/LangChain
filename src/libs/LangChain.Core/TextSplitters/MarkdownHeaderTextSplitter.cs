@@ -2,23 +2,27 @@
 
 namespace LangChain.TextSplitters;
 
+/// <inheritdoc/>
 public class MarkdownHeaderTextSplitter : TextSplitter
 {
     private readonly bool _includeHeaders;
 
-    private class LineType
+    private sealed class LineType
     {
-        public string Content { get; set; }
-        public string Header { get; set; }
+        public string Content { get; set; } = string.Empty;
+        public string Header { get; set; } = string.Empty;
     }
 
 
     private string[] _headersToSplitOn;
     private const string _codeBlockseparator = "```";
-    private static readonly string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
-    private static readonly string[] separator = {"\n"};
+    private readonly static string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
+    private readonly static string[] separator = {"\n"};
 
-    public MarkdownHeaderTextSplitter(string[]? headersToSplitOn = null, bool includeHeaders = true,
+    /// <inheritdoc/>
+    public MarkdownHeaderTextSplitter(
+        string[]? headersToSplitOn = null,
+        bool includeHeaders = true,
         bool groupByHeaders = false)
     {
         _includeHeaders = includeHeaders;
@@ -26,8 +30,11 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         _headersToSplitOn = headersToSplitOn ?? _defauldHeaders;
     }
 
+    /// <inheritdoc/>
     public override List<string> SplitText(string text)
     {
+        text = text ?? throw new ArgumentNullException(nameof(text));
+        
         // Split the input text by newline character ("\n").
         var lines = text
             .Replace("\r", "") // some people are using windows
@@ -35,7 +42,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
 
         var content = new List<LineType>();
-        string currentHeader = null;
+        string? currentHeader = null;
         int currentHeaderLen = 999; // determines current header level
 
         bool inCodeBlock = false;
@@ -59,12 +66,10 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 content.Add(new LineType()
                 {
                     Content = strippedLine,
-                    Header = currentHeader
+                    Header = currentHeader ?? string.Empty,
                 });
                 continue;
             }
-
-            bool headerFound = false;
 
             if (IsHeader(strippedLine, out int hLen) && hLen < currentHeaderLen)
             {
@@ -76,7 +81,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
             content.Add(new LineType()
             {
                 Content = strippedLine.TrimStart('#'), // to avoid marking subheaders
-                Header = currentHeader
+                Header = currentHeader ?? string.Empty,
             });
         }
 

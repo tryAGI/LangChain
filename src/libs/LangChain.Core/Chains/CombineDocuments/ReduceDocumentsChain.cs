@@ -33,9 +33,16 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         _input = input;
     }
     
+    /// <inheritdoc/>
     public override string ChainType() => "reduce_documents_chain";
 
-    public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys) => null;
+    /// <inheritdoc/>
+    public override Task<int?> PromptLength(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys)
+    {
+        return Task.FromResult<int?>(null);
+    }
 
     /// <summary>
     /// Combine multiple documents recursively.
@@ -50,10 +57,12 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys)
     {
+        otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
+        
         var tokenMax = otherKeys.TryGetValue("token_max", out var key) ? (int?)key : null;
-        var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax);
+        var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax).ConfigureAwait(false);
 
-        var result = await _input.CombineDocumentsChain.CombineDocsAsync(resultDocs, otherKeys);
+        var result = await _input.CombineDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);
 
         return result;
     }
@@ -64,21 +73,21 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         int? tokenMax = null)
     {
         var resultDocs = docs.ToList();
-        var numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys);
+        var numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys).ConfigureAwait(false);
 
         tokenMax ??= _input.TokenMax;
 
         while (numTokens != null && numTokens > tokenMax)
         {
-            var newResultDocList = await SplitListOfDocsAsync(resultDocs, tokenMax, otherKeys);
+            var newResultDocList = await SplitListOfDocsAsync(resultDocs, tokenMax, otherKeys).ConfigureAwait(false);
             resultDocs = new List<Document>();
             foreach (var list in newResultDocList)
             {
-                var newDoc = await CollapseDocsAsync(list, otherKeys);
+                var newDoc = await CollapseDocsAsync(list, otherKeys).ConfigureAwait(false);
                 resultDocs.Add(newDoc);
             }
 
-            numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys);
+            numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys).ConfigureAwait(false);
         }
 
         return (resultDocs, new Dictionary<string, object>());
@@ -94,20 +103,22 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     private async Task<List<List<Document>>> SplitListOfDocsAsync(
         IReadOnlyList<Document> docs,
         int? tokenMax = null,
-        IReadOnlyDictionary<string, object> otherKeys = null)
+        IReadOnlyDictionary<string, object>? otherKeys = null)
     {
+        otherKeys ??= new Dictionary<string, object>();
+        
         var newResultDocList = new List<List<Document>>();
         var subResultDocs = new List<Document>();
-
+        
         foreach (var doc in docs)
         {
             subResultDocs.Add(doc);
-            var numTokens = await _input.CombineDocumentsChain.PromptLength(subResultDocs, otherKeys);
+            var numTokens = await _input.CombineDocumentsChain.PromptLength(subResultDocs, otherKeys).ConfigureAwait(false);
             if (numTokens > tokenMax)
             {
                 if (subResultDocs.Count == 1)
                 {
-                    throw new Exception(
+                    throw new InvalidOperationException(
                         "A single document was longer than the context length, we cannot handle this.");
                 }
 
@@ -132,17 +143,19 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     /// are strings, and where there are overlapping keys across documents the
     /// values are joined by ", "
     /// </returns>
-    private async Task<Document> CollapseDocsAsync(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys = null)
+    private async Task<Document> CollapseDocsAsync(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object>? otherKeys = null)
     {
         var dictionary = new Dictionary<string, object>
         {
-            ["input_documents"] = docs
+            ["input_documents"] = docs,
         };
 
-        dictionary.TryAddKeyValues(otherKeys);
+        dictionary.TryAddKeyValues(otherKeys ?? new Dictionary<string, object>());
 
         var collapseChain = _input.CollapseDocumentsChain ?? _input.CombineDocumentsChain;
-        var result = await collapseChain.Run(dictionary);
+        var result = await collapseChain.Run(dictionary).ConfigureAwait(false);
 
         var combinedMetadata = docs[0].Metadata.ToDictionary(
             kv => kv.Key,
@@ -158,7 +171,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
                 }
                 else
                 {
-                    combinedMetadata[kv.Key] = kv.Value.ToString();
+                    combinedMetadata[kv.Key] = kv.Value.ToString() ?? string.Empty;
                 }
             }
         }

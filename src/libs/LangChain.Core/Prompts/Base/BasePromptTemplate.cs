@@ -10,7 +10,7 @@ public abstract class BasePromptTemplate
     /// <summary>
     /// 
     /// </summary>
-    public List<string> InputVariables { get; private set; }
+    public IReadOnlyList<string> InputVariables { get; private set; }
 
     /// <summary>
     /// 
@@ -22,11 +22,13 @@ public abstract class BasePromptTemplate
     /// </summary>
     /// <param name="input"></param>
     /// <exception cref="Exception"></exception>
-    public BasePromptTemplate(IBasePromptTemplateInput input)
+    protected BasePromptTemplate(IBasePromptTemplateInput input)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         if (input.InputVariables.Contains("stop"))
         {
-            throw new Exception("Cannot have an input variable named 'stop', as it is used internally, please rename.");
+            throw new ArgumentException("Cannot have an input variable named 'stop', as it is used internally, please rename.");
         }
 
         InputVariables = input.InputVariables;
@@ -38,7 +40,7 @@ public abstract class BasePromptTemplate
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
-    public abstract Task<BasePromptTemplate> Partial(PartialValues values);
+    public abstract Task<BasePromptTemplate> AddPartial(PartialValues values);
 
     /// <summary>
     /// 
@@ -47,6 +49,8 @@ public abstract class BasePromptTemplate
     /// <returns></returns>
     public async Task<InputValues> MergePartialAndUserVariables(InputValues userVariables)
     {
+        userVariables = userVariables ?? throw new ArgumentNullException(nameof(userVariables));
+        
         InputValues partialValues = new InputValues(new Dictionary<string, object>());
 
         foreach (KeyValuePair<string, object> entry in PartialVariables.Value)
@@ -60,7 +64,7 @@ public abstract class BasePromptTemplate
             }
             else if (value is Func<Task<string>> asyncFunc)
             {
-                partialValues.Value[key] = await asyncFunc();
+                partialValues.Value[key] = await asyncFunc().ConfigureAwait(false);
             }
         }
 
@@ -100,22 +104,24 @@ public abstract class BasePromptTemplate
     /// <param name="data"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static async Task<BasePromptTemplate> Deserialize(SerializedBasePromptTemplate data)
+    public async static Task<BasePromptTemplate> Deserialize(SerializedBasePromptTemplate data)
     {
+        data = data ?? throw new ArgumentNullException(nameof(data));
+        
         switch (data.Type)
         {
             case "prompt":
                 {
-                    var promptTemplate = await Deserialize(data);
+                    var promptTemplate = await Deserialize(data).ConfigureAwait(false);
                     return promptTemplate;
                 }
             case null:
                 {
-                    var promptTemplate = await Deserialize(new SerializedBasePromptTemplate { Type = "prompt" });
+                    var promptTemplate = await Deserialize(new SerializedBasePromptTemplate { Type = "prompt" }).ConfigureAwait(false);
                     return promptTemplate;
                 }
             default:
-                throw new Exception($"Invalid prompt type in config: {data.Type}");
+                throw new InvalidOperationException($"Invalid prompt type in config: {data.Type}");
         }
     }
 }

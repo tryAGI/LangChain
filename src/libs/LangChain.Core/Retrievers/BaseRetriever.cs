@@ -8,7 +8,7 @@ namespace LangChain.Retrievers;
 /// 
 /// A retrieval system is defined as something that can take string queries and return
 /// the most 'relevant' Documents from some source.
-/// <see cref="https://api.python.langchain.com/en/latest/_modules/langchain/schema/retriever.html" />
+/// https://api.python.langchain.com/en/latest/_modules/langchain/schema/retriever.html
 /// </summary>
 public abstract class BaseRetriever
 {
@@ -19,7 +19,7 @@ public abstract class BaseRetriever
     /// You can use these to eg identify a specific instance of a retriever with its 
     /// use case.
     /// </summary>
-    public List<string> Tags { get; set; }
+    public List<string> Tags { get; set; } = new List<string>();
 
     /// <summary>
     /// Optional metadata associated with the retriever. Defaults to None
@@ -28,9 +28,17 @@ public abstract class BaseRetriever
     /// You can use these to eg identify a specific instance of a retriever with its 
     /// use case.
     /// </summary>
-    public Dictionary<string, object> Metadata { get; set; }
+    public Dictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
 
-    protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(string query, CallbackManagerForRetrieverRun runManager = null);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    /// <param name="runManager"></param>
+    /// <returns></returns>
+    protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
+        string query,
+        CallbackManagerForRetrieverRun? runManager = null);
 
     /// <summary>
     /// Retrieve documents relevant to a query.
@@ -57,20 +65,24 @@ public abstract class BaseRetriever
             localTags: Tags,
             inheritableTags: tags,
             localMetadata: Metadata,
-            inheritableMetadata: metadata);
+            inheritableMetadata: metadata).ConfigureAwait(false);
 
-        var runManager = await callbackManager.HandleRetrieverStart(this, query, runId);
+        var runManager = await callbackManager.HandleRetrieverStart(this, query, runId).ConfigureAwait(false);
         try
         {
-            var docs = await GetRelevantDocumentsCoreAsync(query, runManager);
-            await runManager.HandleRetrieverEndAsync(query, docs.ToList());
+            var docs = await GetRelevantDocumentsCoreAsync(query, runManager).ConfigureAwait(false);
+            var docsList = docs.ToList();
+            await runManager.HandleRetrieverEndAsync(query, docsList).ConfigureAwait(false);
 
-            return docs;
+            return docsList;
         }
         catch (Exception exception)
         {
             if (runManager != null)
-                await runManager.HandleRetrieverErrorAsync(exception, query);
+            {
+                await runManager.HandleRetrieverErrorAsync(exception, query).ConfigureAwait(false);
+            }
+
             throw;
         }
     }

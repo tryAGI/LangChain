@@ -1,11 +1,14 @@
 namespace LangChain.Prompts;
 
-public abstract class ParsedFStringNode
+/// <summary>
+/// 
+/// </summary>
+/// <param name="type"></param>
+public abstract class ParsedFStringNode(
+    string type)
 {
-    public string Type { get; }
-
-    protected ParsedFStringNode(string type)
-    {
-        Type = type;
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Type { get; } = type;
 }

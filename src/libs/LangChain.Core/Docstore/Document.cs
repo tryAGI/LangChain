@@ -11,31 +11,52 @@ namespace LangChain.Docstore;
 /// </summary>
 public class Document
 {
-    private readonly string _content;
-    private readonly Dictionary<string, object>? _metadata;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public Document()
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="content"></param>
+    /// <param name="metadata"></param>
     public Document(string content, Dictionary<string, object>? metadata = null)
     {
-        _content = content;
-        _metadata = metadata;
-        PageContent=content;
+        PageContent = content;
         Metadata = metadata ?? new Dictionary<string, object>();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static Document Empty { get; } = new(
         content: string.Empty,
         metadata: new Dictionary<string, object>());
 
-    public string PageContent { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string PageContent { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int LookupIndex { get; set; }
-    public string LookupStr { get; set; }
-    public Dictionary<string, object> Metadata { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string LookupStr { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public Dictionary<string, object> Metadata { get; set; } = new();
 
-    private static readonly string[] separator = { "\n\n" };
+    private readonly static string[] separator = { "\n\n" };
 
     /// <summary>
     /// Paragraphs of the page.
@@ -44,6 +65,7 @@ public class Document
     {
         return PageContent.Split(separator, StringSplitOptions.None).ToList();
     }
+    
     /// <summary>
     /// Summary of the page (the first paragraph)
     /// </summary>
@@ -57,6 +79,8 @@ public class Document
     /// </summary>
     public string Lookup(string searchString)
     {
+        searchString = searchString ?? throw new ArgumentNullException(nameof(searchString));
+        
         // if there is a new search string, reset the index
         if (!searchString.Equals(LookupStr, StringComparison.OrdinalIgnoreCase))
         {
@@ -88,6 +112,7 @@ public class Document
         }
     }
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         var serializedMetadata = string.Join(", ", Metadata.Select(x => $"{{{x.Key}:{x.Value}}}"));

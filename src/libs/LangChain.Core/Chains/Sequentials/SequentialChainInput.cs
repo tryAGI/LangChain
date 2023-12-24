@@ -12,27 +12,34 @@ public class SequentialChainInput : IChainInputs
     /// <summary>
     /// 
     /// </summary>
-    public IChain[] Chains { get; }
+    public IReadOnlyList<IChain> Chains { get; }
 
     /// <summary>
     /// 
     /// </summary>
-    public string[] InputVariables { get; }
+    public IReadOnlyList<string> InputVariables { get; }
 
     /// <summary>
     /// 
     /// </summary>
-    public string[]? OutputVariables { get; }
+    public IReadOnlyList<string>? OutputVariables { get; }
 
     /// <summary>
     /// 
     /// </summary>
     public bool ReturnAll { get; }
 
+    /// <inheritdoc/>
     public bool Verbose { get; set; }
+    
+    /// <inheritdoc/>
     public ICallbacks? Callbacks { get; set; }
-    public List<string> Tags { get; set; }
-    public Dictionary<string, object> Metadata { get; set; }
+    
+    /// <inheritdoc/>
+    public List<string> Tags { get; set; } = new();
+    
+    /// <inheritdoc/>
+    public Dictionary<string, object> Metadata { get; set; } = new();
 
     /// <summary>
     /// 

@@ -8,11 +8,13 @@ namespace LangChain.Callback;
 /// </summary>
 public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImplementation<CallbackManagerForRetrieverRun>
 {
+    /// <inheritdoc/>
     public CallbackManagerForRetrieverRun()
     {
 
     }
 
+    /// <inheritdoc/>
     public CallbackManagerForRetrieverRun(
         string runId,
         List<BaseCallbackHandler> handlers,
@@ -37,11 +39,11 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
             {
                 try
                 {
-                    await handler.HandleRetrieverEndAsync(query, docs.ToList(), RunId, ParentRunId);
+                    await handler.HandleRetrieverEndAsync(query, docs.ToList(), RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleRetrieverEnd: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleRetrieverEnd: {ex}").ConfigureAwait(false);
                 }
             }
         }
@@ -58,11 +60,11 @@ public class CallbackManagerForRetrieverRun : ParentRunManager, IRunManagerImple
             {
                 try
                 {
-                    await handler.HandleRetrieverErrorAsync(error, query, RunId, ParentRunId);
+                    await handler.HandleRetrieverErrorAsync(error, query, RunId, ParentRunId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleRetrieverError: {ex}");
+                    await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleRetrieverError: {ex}").ConfigureAwait(false);
                 }
             }
         }

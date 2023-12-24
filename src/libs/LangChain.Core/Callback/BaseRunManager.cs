@@ -42,7 +42,7 @@ public abstract class BaseRunManager
     /// <param name="inheritableTags"></param>
     /// <param name="metadata"></param>
     /// <param name="inheritableMetadata"></param>
-    public BaseRunManager(
+    protected BaseRunManager(
         string runId,
         List<BaseCallbackHandler> handlers,
         List<BaseCallbackHandler> inheritableHandlers,
@@ -55,13 +55,14 @@ public abstract class BaseRunManager
         RunId = runId;
         Handlers = handlers;
         InheritableHandlers = inheritableHandlers;
-        Tags = tags;
+        Tags = tags ?? new();
         InheritableTags = inheritableTags ?? new();
         Metadata = metadata ?? new();
         InheritableMetadata = inheritableMetadata ?? new();
         ParentRunId = parentRunId;
     }
 
+    /// <inheritdoc/>
     protected BaseRunManager()
         : this(
             runId: Guid.NewGuid().ToString("N"),
@@ -80,11 +81,11 @@ public abstract class BaseRunManager
         {
             try
             {
-                await handler.HandleTextAsync(text, RunId, ParentRunId);
+                await handler.HandleTextAsync(text, RunId, ParentRunId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Error in handler {handler.GetType().Name}, HandleText: {ex}");
+                await Console.Error.WriteLineAsync($"Error in handler {handler.GetType().Name}, HandleText: {ex}").ConfigureAwait(false);
             }
         }
     }
@@ -99,4 +100,8 @@ public abstract class BaseRunManager
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TThis"></typeparam>
 public interface IRunManagerImplementation<TThis> where TThis : IRunManagerImplementation<TThis>, new();
