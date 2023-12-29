@@ -140,6 +140,12 @@ public abstract class BaseStackableChain : IChain
         return res.Value[resultKey].ToString();
     }
 
+    public async Task<T> Run<T>(string resultKey)
+    {
+        var res = await CallAsync(new ChainValues()).ConfigureAwait(false);
+        return (T)res.Value[resultKey];
+    }
+
     /// <summary>
     /// 
     /// </summary>

@@ -36,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Chains\StackableChains\Exceptions\" />
     <Folder Include="Docstore\" />
   </ItemGroup>
 

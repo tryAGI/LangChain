@@ -10,6 +10,8 @@ namespace LangChain.Providers.LLamaSharp;
 [CLSCompliant(false)]
 public class LLamaSharpModelInstruction : LLamaSharpModelBase
 {
+
+    
     /// <summary>
     /// 
     /// </summary>
@@ -52,6 +54,11 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
     public event Action<string> TokenGenerated = delegate { };
 
     /// <summary>
+    /// Occurs before prompt is sent to the model.
+    /// </summary>
+    public event Action<string> PromptSent = delegate { };
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="request"></param>
@@ -59,7 +66,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
     /// <returns></returns>
     public override async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        var prompt = ToPrompt(request.Messages) + "\n";
+        var prompt = ToPrompt(request.Messages);
 
         var watch = Stopwatch.StartNew();
 
@@ -75,7 +82,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
             RepeatPenalty = Configuration.RepeatPenalty
         };
 
-
+        PromptSent(prompt);
         var buf = "";
         await foreach (var text in ex.InferAsync(prompt,
                            inferenceParams, cancellationToken))

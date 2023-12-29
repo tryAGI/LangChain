@@ -9,17 +9,24 @@ public class ConversationBufferMemory : BaseChatMemory
     /// <summary>
     /// 
     /// </summary>
-    public string HumanPrefix { get; set; } = "Human";
+    public string HumanPrefix { get; set; } = "Human: ";
     
     /// <summary>
     /// 
     /// </summary>
-    public string AiPrefix { get; set; } = "AI";
+    public string AiPrefix { get; set; } = "AI: ";
+
+    public string SystemPrefix { get; set; } = "System: ";
 
     /// <summary>
     /// 
     /// </summary>
     public string MemoryKey { get; set; } = "history";
+
+    public bool SaveHumanMessages { get; set; } = true;
+
+
+
 
     /// <inheritdoc />
     public ConversationBufferMemory(BaseChatMessageHistory chatHistory) : base(chatHistory)
@@ -48,16 +55,22 @@ public class ConversationBufferMemory : BaseChatMemory
 
         foreach (var m in messages)
         {
+
+            if (m.Role==MessageRole.Human&&!SaveHumanMessages)
+            {
+                continue;
+            }
+
             string role = m.Role switch
             {
                 MessageRole.Human => HumanPrefix,
                 MessageRole.Ai => AiPrefix,
-                MessageRole.System => "System",
+                MessageRole.System => SystemPrefix,
                 MessageRole.FunctionCall => "Function",
                 _ => throw new ArgumentException($"Unsupported message type: {m.GetType().Name}")
             };
 
-            string message = $"{role}: {m.Content}";
+            string message = $"{role}{m.Content}";
             // TODO: Add special case for a function call
 
             stringMessages.Add(message);

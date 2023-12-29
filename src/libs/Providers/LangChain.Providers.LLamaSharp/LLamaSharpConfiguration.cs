@@ -37,4 +37,6 @@ public class LLamaSharpConfiguration
 
     public List<string> AntiPrompts { get; set; } = new() { ">", "Human: "};
 
+    
+
 }
