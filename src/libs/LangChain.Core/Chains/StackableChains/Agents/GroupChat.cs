@@ -1,5 +1,6 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
+using LangChain.Chains.HelperChains.Exceptions;
 using LangChain.Memory;
 using LangChain.Providers;
 
@@ -75,7 +76,7 @@ public class GroupChat:BaseStackableChain
         messagesCount = _conversationBufferMemory.ChatHistory.Messages.Count;
         if (ThrowOnLimit && messagesCount >= _messagesLimit)
         {
-            throw new Exception("Messages limit reached");
+            throw new MessagesLimitReachedException(_messagesLimit);
         }
         values.Value.Add(_outputKey, result);
         return values;
