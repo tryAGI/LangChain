@@ -10,6 +10,8 @@ namespace LangChain.Providers.LLamaSharp;
 [CLSCompliant(false)]
 public class LLamaSharpModelInstruction : LLamaSharpModelBase
 {
+
+    
     /// <summary>
     /// 
     /// </summary>
@@ -52,6 +54,11 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
     public event Action<string> TokenGenerated = delegate { };
 
     /// <summary>
+    /// Occurs before prompt is sent to the model.
+    /// </summary>
+    public event Action<string> PromptSent = delegate { };
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="request"></param>
@@ -59,7 +66,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
     /// <returns></returns>
     public override async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        var prompt = ToPrompt(request.Messages) + "\n";
+        var prompt = ToPrompt(request.Messages);
 
         var watch = Stopwatch.StartNew();
 
@@ -72,17 +79,28 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
             Temperature = Configuration.Temperature,
             AntiPrompts = Configuration.AntiPrompts,
             MaxTokens = Configuration.MaxTokens,
-
+            RepeatPenalty = Configuration.RepeatPenalty
         };
 
-
+        PromptSent(prompt);
         var buf = "";
         await foreach (var text in ex.InferAsync(prompt,
                            inferenceParams, cancellationToken))
         {
             buf += text;
+            foreach (string antiPrompt in Configuration.AntiPrompts)
+            {
+                if (buf.EndsWith(antiPrompt))
+                {
+                    buf = buf.Substring(0, buf.Length - antiPrompt.Length);
+                    break;
+                }
+            }
+            
             TokenGenerated(text);
         }
+
+        
 
         buf = LLamaSharpModelInstruction.SanitizeOutput(buf);
         var result = request.Messages.ToList();

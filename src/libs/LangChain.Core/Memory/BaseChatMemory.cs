@@ -10,7 +10,7 @@ public abstract class BaseChatMemory(
     /// <summary>
     /// 
     /// </summary>
-    protected BaseChatMessageHistory ChatHistory { get; set; } = chatHistory;
+    public BaseChatMessageHistory ChatHistory { get; set; } = chatHistory;
 
     /// <summary>
     /// 

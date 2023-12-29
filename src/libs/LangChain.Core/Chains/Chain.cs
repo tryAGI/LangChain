@@ -1,6 +1,8 @@
 ﻿using LangChain.Abstractions.Chains.Base;
 using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains;
+using LangChain.Chains.StackableChains.Agents;
+using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Indexes;
 using LangChain.Memory;
 using LangChain.Providers;
@@ -129,5 +131,24 @@ public static class Chain
         string inputKey = "audio", string outputKey = "text")
     {
         return new STTChain<T>(model, settings, inputKey, outputKey);
+    }
+
+    public static ReActAgentExecutorChain ReActAgentExecutor(IChatModel model, string reActPrompt = null,
+        int maxActions = 5, string inputKey = "input",
+        string outputKey = "final_answer")
+    {
+        return new ReActAgentExecutorChain(model, reActPrompt, maxActions, inputKey, outputKey);
+    }
+
+    public static ReActParserChain ReActParser(
+        string inputKey = "text", string outputKey = "answer")
+    {
+        return new ReActParserChain(inputKey, outputKey);
+    }
+
+    public static GroupChat GroupChat(
+        IList<AgentExecutorChain> agents, string? stopPhrase = null, int messagesLimit = 10, string inputKey = "input", string outputKey = "output")
+    {
+        return new GroupChat(agents, stopPhrase, messagesLimit, inputKey, outputKey);
     }
 }

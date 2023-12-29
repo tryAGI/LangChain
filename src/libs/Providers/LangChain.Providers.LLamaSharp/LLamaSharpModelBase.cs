@@ -37,7 +37,7 @@ public abstract class LLamaSharpModelBase : IChatModel
     /// <summary>
     /// 
     /// </summary>
-    protected ModelParams Parameters { get; }
+    public ModelParams Parameters { get; }
 
     /// <summary>
     /// 
