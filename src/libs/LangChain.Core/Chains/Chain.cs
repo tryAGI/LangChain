@@ -145,4 +145,10 @@ public static class Chain
     {
         return new ReActParserChain(inputKey, outputKey);
     }
+
+    public static GroupChat GroupChat(
+        IList<AgentExecutorChain> agents, string? stopPhrase = null, int messagesLimit = 10, string inputKey = "input", string outputKey = "output")
+    {
+        return new GroupChat(agents, stopPhrase, messagesLimit, inputKey, outputKey);
+    }
 }

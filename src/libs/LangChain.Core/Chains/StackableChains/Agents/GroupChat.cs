@@ -76,7 +76,7 @@ public class GroupChat:BaseStackableChain
         messagesCount = _conversationBufferMemory.ChatHistory.Messages.Count;
         if (ThrowOnLimit && messagesCount >= _messagesLimit)
         {
-            throw new MessagesLimitReachedException(_messagesLimit);
+            throw new InvalidOperationException($"Message limit reached:{_messagesLimit}");
         }
         values.Value.Add(_outputKey, result);
         return values;
