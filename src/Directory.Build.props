@@ -6,5 +6,11 @@
         <Nullable>enable</Nullable>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
-
+    
+    <!-- https://github.com/dotnet/project-system/blob/main/docs/build-acceleration.md -->
+    <PropertyGroup Label="Build Acceleration">
+        <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+        <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    </PropertyGroup>
+    
 </Project>
