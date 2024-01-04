@@ -1,50 +1,63 @@
-﻿using LangChain.Abstractions.Chains.Base;
-using LangChain.Abstractions.Schema;
+﻿using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
-using LangChain.Memory;
-using LangChain.Providers;
-using LangChain.Schema;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
-public class AgentExecutorChain: BaseStackableChain
+/// <summary>
+/// 
+/// </summary>
+public class AgentExecutorChain : BaseStackableChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public string HistoryKey { get; }
+    
     private readonly BaseStackableChain _originalChain;
     
-    private BaseStackableChain _chainWithHistory;
-
-    public string Name { get; private set; }
+    private BaseStackableChain? _chainWithHistory;
 
     /// <summary>
     /// Messages of this agent will not be added to the history
     /// </summary>
-    public bool IsObserver { get; set; } = false;
+    public bool IsObserver { get; set; }
 
-    public AgentExecutorChain(BaseStackableChain originalChain, string name, string historyKey="history", 
+    /// <inheritdoc/>
+    public AgentExecutorChain(
+        BaseStackableChain originalChain,
+        string name,
+        string historyKey = "history", 
         string outputKey = "final_answer")
     {
         Name = name;
         HistoryKey = historyKey;
         _originalChain = originalChain;
         
-        InputKeys = new[] { historyKey};
+        InputKeys = new[] { historyKey };
         OutputKeys = new[] { outputKey };
 
         SetHistory("");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="history"></param>
     public void SetHistory(string history)
     {
-
-        _chainWithHistory = 
-            Chain.Set(history, HistoryKey)
-            |_originalChain;
+        _chainWithHistory =
+            Chain.Set(history, HistoryKey) |
+            _originalChain;
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
-        var res=await _chainWithHistory.CallAsync(values);
-        return res;
+        if (_chainWithHistory == null)
+        {
+            throw new InvalidOperationException("History is not set");
+        }
+        
+        return await _chainWithHistory.CallAsync(values).ConfigureAwait(false);
     }
 }

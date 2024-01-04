@@ -3,8 +3,14 @@ using LangChain.Providers;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
-public class PromptedAgent: AgentExecutorChain
+/// <summary>
+/// 
+/// </summary>
+public class PromptedAgent : AgentExecutorChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public const string Template =
         @"{system}
 {history}";
@@ -16,8 +22,19 @@ public class PromptedAgent: AgentExecutorChain
                | Chain.LLM(model,outputKey: outputKey);
     }
 
-
-    public PromptedAgent(string name, string prompt, IChatModel model, string outputKey = "final_answer") : base(MakeChain(name,prompt,model, outputKey),name, "history", outputKey)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="prompt"></param>
+    /// <param name="model"></param>
+    /// <param name="outputKey"></param>
+    public PromptedAgent(
+        string name,
+        string prompt,
+        IChatModel model,
+        string outputKey = "final_answer")
+        : base(MakeChain(name,prompt,model, outputKey), name, "history", outputKey)
     {
         
     }

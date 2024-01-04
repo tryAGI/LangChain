@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GenerativeAI.Models;
+﻿using GenerativeAI.Models;
 
-namespace LangChain.Providers.Models
+namespace LangChain.Providers.Models;
+
+/// <summary>
+/// Google Gemini Pro Model
+/// </summary>
+public class GeminiProModel : GenerativeModel
 {
+        
     /// <summary>
-    /// Google Gemini Pro Model
+    /// 
     /// </summary>
-    public class GeminiProModel : GenerativeModel
+    /// <param name="apiKey"></param>
+    /// <param name="httpClient"></param>
+    public GeminiProModel(string apiKey, HttpClient httpClient) : base(apiKey, httpClient, GoogleAIModels.GeminiPro)
     {
-        public GeminiProModel(string apiKey, HttpClient httpClient) : base(apiKey, httpClient, GoogleAIModels.GeminiPro)
-        {
             
-        }
     }
 }

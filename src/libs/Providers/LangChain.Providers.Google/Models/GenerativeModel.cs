@@ -21,13 +21,19 @@ public class GenerativeModel
     /// </summary>
     public string ApiKey { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// 
+    /// </summary>
     public Usage TotalUsage { get; private set; }
 
     private HttpClient HttpClient { get; set; }
 
     private GenerativeAiConfiguration? Configuration { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
     public GenerativeAI.Models.GenerativeModel Api { get; private set; }
 
     #endregion
@@ -47,7 +53,7 @@ public class GenerativeModel
         Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Configuration = configuration;
-        InitClient();
+        Api = new GenerativeAI.Models.GenerativeModel(this.ApiKey, Id, HttpClient);
     }
 
     /// <summary>
@@ -62,19 +68,12 @@ public class GenerativeModel
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         Id = id ?? throw new ArgumentNullException(nameof(id));
-        InitClient();
+        Api = new GenerativeAI.Models.GenerativeModel(this.ApiKey, Id, HttpClient);
     }
 
     #endregion
 
     #region Methods
-    /// <summary>
-    /// Initialize API Client
-    /// </summary>
-    protected void InitClient()
-    {
-        this.Api = new GenerativeAI.Models.GenerativeModel(this.ApiKey, Id, HttpClient);
-    }
 
     private static Content ToRequestMessage(Message message)
     {
@@ -93,7 +92,7 @@ public class GenerativeModel
     private static Message ToMessage(EnhancedGenerateContentResponse message)
     {
         return new Message(
-            Content: message.Text(),
+            Content: message.Text() ?? string.Empty,
             Role: MessageRole.Ai);
     }
 
@@ -118,7 +117,12 @@ public class GenerativeModel
         return await Api.GenerateContentAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         CancellationToken cancellationToken = default)

@@ -16,6 +16,9 @@ public class ConversationBufferMemory : BaseChatMemory
     /// </summary>
     public string AiPrefix { get; set; } = "AI: ";
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string SystemPrefix { get; set; } = "System: ";
 
     /// <summary>
@@ -23,10 +26,10 @@ public class ConversationBufferMemory : BaseChatMemory
     /// </summary>
     public string MemoryKey { get; set; } = "history";
 
+    /// <summary>
+    /// 
+    /// </summary>
     public bool SaveHumanMessages { get; set; } = true;
-
-
-
 
     /// <inheritdoc />
     public ConversationBufferMemory(BaseChatMessageHistory chatHistory) : base(chatHistory)

@@ -90,7 +90,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase
             buf += text;
             foreach (string antiPrompt in Configuration.AntiPrompts)
             {
-                if (buf.EndsWith(antiPrompt))
+                if (buf.EndsWith(antiPrompt, StringComparison.Ordinal))
                 {
                     buf = buf.Substring(0, buf.Length - antiPrompt.Length);
                     break;

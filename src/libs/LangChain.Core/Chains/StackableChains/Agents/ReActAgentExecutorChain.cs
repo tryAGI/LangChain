@@ -10,8 +10,14 @@ using static LangChain.Chains.Chain;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
+/// <summary>
+/// 
+/// </summary>
 public class ReActAgentExecutorChain : BaseStackableChain
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public const string DefaultPrompt =
         @"Answer the following questions as best you can. You have access to the following tools:
 
@@ -34,7 +40,7 @@ Begin!
 Question: {input}
 Thought:{history}";
 
-    private IChain? _chain = null;
+    private StackChain? _chain;
     private bool _useCache;
     Dictionary<string, ReActAgentTool> _tools = new();
     private readonly IChatModel _model;
@@ -42,8 +48,19 @@ Thought:{history}";
     private readonly int _maxActions;
     private readonly ConversationBufferMemory _conversationBufferMemory;
 
-
-    public ReActAgentExecutorChain(IChatModel model, string reActPrompt = null, int maxActions = 5, string inputKey = "answer",
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <param name="reActPrompt"></param>
+    /// <param name="maxActions"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    public ReActAgentExecutorChain(
+        IChatModel model,
+        string? reActPrompt = null,
+        int maxActions = 5,
+        string inputKey = "answer",
         string outputKey = "final_answer")
     {
         reActPrompt ??= DefaultPrompt;
@@ -58,17 +75,17 @@ Thought:{history}";
 
     }
 
-    private string? _userInput = null;
+    private string _userInput = string.Empty;
     private const string ReActAnswer = "answer";
     private void InitializeChain()
     {
-        string tool_names = string.Join(",", _tools.Select(x => x.Key));
-        string tools = string.Join("\n", _tools.Select(x => $"{x.Value.Name}, {x.Value.Description}"));
+        var toolNames = string.Join(",", _tools.Select(x => x.Key));
+        var tools = string.Join("\n", _tools.Select(x => $"{x.Value.Name}, {x.Value.Description}"));
 
         var chain =
             Set(() => _userInput, "input")
             | Set(tools, "tools")
-            | Set(tool_names, "tool_names")
+            | Set(toolNames, "tool_names")
             | Set(() => _conversationBufferMemory.BufferAsString, "history")
             | Template(_reActPrompt)
             | Chain.LLM(_model).UseCache(_useCache)
@@ -78,14 +95,15 @@ Thought:{history}";
         _chain = chain;
     }
 
+    /// <inheritdoc/>
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
-
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         var input = (string)values.Value[InputKeys[0]];
-        var values_chain = new ChainValues();
+        var valuesChain = new ChainValues();
 
         _userInput = input;
-
 
         if (_chain == null)
         {
@@ -94,13 +112,13 @@ Thought:{history}";
 
         for (int i = 0; i < _maxActions; i++)
         {
-            var res = await _chain.CallAsync(values_chain);
+            var res = await _chain!.CallAsync(valuesChain).ConfigureAwait(false);
             if (res.Value[ReActAnswer] is AgentAction)
             {
                 var action = (AgentAction)res.Value[ReActAnswer];
                 var tool = _tools[action.Action];
-                var tool_res = tool.ToolCall(action.ActionInput);
-                await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + tool_res, MessageRole.System))
+                var toolRes = tool.ToolCall(action.ActionInput);
+                await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + toolRes, MessageRole.System))
                     .ConfigureAwait(false);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Thought:", MessageRole.System))
                     .ConfigureAwait(false);
@@ -119,15 +137,26 @@ Thought:{history}";
         return values;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enabled"></param>
+    /// <returns></returns>
     public ReActAgentExecutorChain UseCache(bool enabled = true)
     {
         _useCache = enabled;
         return this;
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tool"></param>
+    /// <returns></returns>
     public ReActAgentExecutorChain UseTool(ReActAgentTool tool)
     {
+        tool = tool ?? throw new ArgumentNullException(nameof(tool));
+        
         _tools.Add(tool.Name, tool);
         return this;
     }

@@ -158,6 +158,7 @@ DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timest
     /// <summary>
     /// Get record by id
     /// </summary>
+    [CLSCompliant(false)]
     public async Task<EmbeddingTableRecord?> GetRecordByIdAsync(
         string tableName,
         string id,
@@ -209,6 +210,7 @@ WHERE id = @id";
     /// <param name="withEmbeddings">include or not embeddings in the result</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <returns></returns>
+    [CLSCompliant(false)]
     public async Task<IEnumerable<(EmbeddingTableRecord, float)>> GetWithDistanceAsync(
         string tableName, float[] embedding, DistanceStrategy strategy,
         int limit, double minRelevanceScore = 0, bool withEmbeddings = false,
@@ -273,6 +275,7 @@ LIMIT @limit";
     /// <param name="withEmbeddings">include or not embeddings in the result</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <returns></returns>
+    [CLSCompliant(false)]
     public async Task<EmbeddingTableRecord?> ReadAsync(
         string tableName, string id,
         bool withEmbeddings = false,
@@ -312,10 +315,15 @@ LIMIT @limit";
     /// <param name="withEmbeddings">include or not embeddings in the result</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    [CLSCompliant(false)]
     public async IAsyncEnumerable<EmbeddingTableRecord> ReadBatchAsync(
-        string tableName, IReadOnlyList<string> ids, bool withEmbeddings = false,
+        string tableName,
+        IReadOnlyList<string> ids,
+        bool withEmbeddings = false,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+        ids = ids ?? throw new ArgumentNullException(nameof(ids));
+        
         if (ids.Count == 0)
         {
             yield break;
@@ -372,9 +380,13 @@ WHERE id = ANY(@ids)";
     /// <param name="tableName">embeddings table</param>
     /// <param name="ids">list of record ids to delete</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-    public async Task DeleteBatchAsync(string tableName, IReadOnlyList<string> ids,
+    public async Task DeleteBatchAsync(
+        string tableName,
+        IReadOnlyList<string> ids,
         CancellationToken cancellationToken = default)
     {
+        ids = ids ?? throw new ArgumentNullException(nameof(ids));
+        
         if (ids.Count == 0)
         {
             return;
@@ -465,6 +477,7 @@ public enum DistanceStrategy
 /// <summary>
 /// Document with embedding db record
 /// </summary>
+[CLSCompliant(false)] 
 public record EmbeddingTableRecord(
     string Id,
     string Content,

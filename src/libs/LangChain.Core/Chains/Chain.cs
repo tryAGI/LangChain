@@ -133,19 +133,46 @@ public static class Chain
         return new STTChain<T>(model, settings, inputKey, outputKey);
     }
 
-    public static ReActAgentExecutorChain ReActAgentExecutor(IChatModel model, string reActPrompt = null,
-        int maxActions = 5, string inputKey = "input",
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <param name="reActPrompt"></param>
+    /// <param name="maxActions"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
+    public static ReActAgentExecutorChain ReActAgentExecutor(
+        IChatModel model,
+        string? reActPrompt = null,
+        int maxActions = 5,
+        string inputKey = "input",
         string outputKey = "final_answer")
     {
         return new ReActAgentExecutorChain(model, reActPrompt, maxActions, inputKey, outputKey);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
     public static ReActParserChain ReActParser(
         string inputKey = "text", string outputKey = "answer")
     {
         return new ReActParserChain(inputKey, outputKey);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="agents"></param>
+    /// <param name="stopPhrase"></param>
+    /// <param name="messagesLimit"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
     public static GroupChat GroupChat(
         IList<AgentExecutorChain> agents, string? stopPhrase = null, int messagesLimit = 10, string inputKey = "input", string outputKey = "output")
     {

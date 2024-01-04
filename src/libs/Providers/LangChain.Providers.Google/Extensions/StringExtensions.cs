@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GenerativeAI.Types;
+﻿using GenerativeAI.Types;
 
 namespace LangChain.Providers.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class StringExtensions
     {
         /// <summary>
@@ -14,6 +12,7 @@ namespace LangChain.Providers.Extensions
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
+        [CLSCompliant(false)]
         public static Content AsModelContent(this string message)
         {
             var content = new Content(new[]
@@ -31,15 +30,15 @@ namespace LangChain.Providers.Extensions
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
+        [CLSCompliant(false)]
         public static Content AsUserContent(this string message)
         {
-            var content = new Content(new[]
-            {
-                new Part()
+            var content = new Content([
+                new Part
                 {
                     Text = message
                 }
-            }, Roles.User);
+            ], Roles.User);
             return content;
         }
     }

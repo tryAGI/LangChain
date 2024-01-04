@@ -1,12 +1,14 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
-using LangChain.Chains.HelperChains.Exceptions;
 using LangChain.Memory;
 using LangChain.Providers;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
-public class GroupChat:BaseStackableChain
+/// <summary>
+/// 
+/// </summary>
+public class GroupChat : BaseStackableChain
 {
     private readonly IList<AgentExecutorChain> _agents;
     
@@ -15,34 +17,50 @@ public class GroupChat:BaseStackableChain
     private readonly string _inputKey;
     private readonly string _outputKey;
     
-
-    int _currentAgentId=0;
+    int _currentAgentId;
     private readonly ConversationBufferMemory _conversationBufferMemory;
 
-
-    public bool ThrowOnLimit { get; set; } = false;
-    public GroupChat(IList<AgentExecutorChain> agents, string? stopPhrase=null, int messagesLimit=10, string inputKey="input", string outputKey="output")
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool ThrowOnLimit { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="agents"></param>
+    /// <param name="stopPhrase"></param>
+    /// <param name="messagesLimit"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    public GroupChat(
+        IList<AgentExecutorChain> agents,
+        string? stopPhrase = null,
+        int messagesLimit = 10,
+        string inputKey = "input",
+        string outputKey = "output")
     {
         _agents = agents;
         
-        _stopPhrase = stopPhrase;
+        _stopPhrase = stopPhrase ?? string.Empty;
         _messagesLimit = messagesLimit;
         _inputKey = inputKey;
         _outputKey = outputKey;
         _conversationBufferMemory = new ConversationBufferMemory(new ChatMessageHistory()) { AiPrefix = "", HumanPrefix = "", SystemPrefix = "", SaveHumanMessages = false };
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
-
     }
 
-    public IReadOnlyList<Message> GetHistory()
-    {
-        return _conversationBufferMemory.ChatHistory.Messages;
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public IReadOnlyList<Message> History => _conversationBufferMemory.ChatHistory.Messages;
 
-
+    /// <inheritdoc />
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
         
         await _conversationBufferMemory.Clear().ConfigureAwait(false);
         foreach (var agent in _agents)
@@ -72,7 +90,7 @@ public class GroupChat:BaseStackableChain
             }
         }
 
-        var result = _conversationBufferMemory.ChatHistory.Messages.Last();
+        var result = _conversationBufferMemory.ChatHistory.Messages[^1];
         messagesCount = _conversationBufferMemory.ChatHistory.Messages.Count;
         if (ThrowOnLimit && messagesCount >= _messagesLimit)
         {

@@ -9,10 +9,7 @@ public class GenerativeAiConfiguration
     /// <summary>
     /// Default configuration according to the official API documentation. <br/>
     /// </summary>
-    public static GenerativeAiConfiguration Default { get; } = new()
-    {
-
-    };
+    public static GenerativeAiConfiguration Default { get; } = new();
 
     /// <summary>
     /// 
@@ -24,13 +21,19 @@ public class GenerativeAiConfiguration
     /// </summary>
     public string? ModelId { get; set; } = "gemini-pro";
 
-    /// <inheritdoc cref="GenerateTextRequestParameters.Top_k"/>
+    /// <summary>
+    /// 
+    /// </summary>
     public int? TopK { get; set; } = default!;
 
-    /// <inheritdoc cref="GenerateTextRequestParameters.Top_p"/>
+    /// <summary>
+    /// 
+    /// </summary>
     public double? TopP { get; set; } = default!;
 
-    /// <inheritdoc cref="GenerateTextRequestParameters.Temperature"/>
+    /// <summary>
+    /// 
+    /// </summary>
     public double? Temperature { get; set; } = 1D;
 
     /// <summary>
