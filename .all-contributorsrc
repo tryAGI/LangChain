@@ -59,6 +59,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "kharedev247",
+      "name": "Ketan Khare",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72281217?v=4",
+      "profile": "https://github.com/kharedev247",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
