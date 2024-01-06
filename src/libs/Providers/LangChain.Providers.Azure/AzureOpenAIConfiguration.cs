@@ -39,11 +39,11 @@
         /// <summary>
         /// Deployment name
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Azure OpenAI Resource URI
         /// </summary>
-        public string Endpoint { get; set; }
+        public string Endpoint { get; set; } = string.Empty;
     }
 }
