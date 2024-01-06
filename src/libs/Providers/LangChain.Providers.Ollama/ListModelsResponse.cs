@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace OllamaTest;
+namespace LangChain.Providers;
 
 public class ListModelsResponse
 {

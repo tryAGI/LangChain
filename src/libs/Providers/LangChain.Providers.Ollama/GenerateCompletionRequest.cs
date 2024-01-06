@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OllamaTest;
+namespace LangChain.Providers;
 
 public class GenerateCompletionRequest
 {

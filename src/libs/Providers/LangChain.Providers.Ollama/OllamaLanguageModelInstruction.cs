@@ -1,7 +1,6 @@
-﻿using LangChain.Providers;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace OllamaTest;
+namespace LangChain.Providers;
 
 public class OllamaLanguageModelInstruction : IChatModel
 {

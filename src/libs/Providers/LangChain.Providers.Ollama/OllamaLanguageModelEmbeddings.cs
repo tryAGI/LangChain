@@ -1,8 +1,6 @@
-﻿using LangChain.Providers;
-using System.Diagnostics;
-using LangChain.Abstractions.Embeddings.Base;
+﻿using LangChain.Abstractions.Embeddings.Base;
 
-namespace OllamaTest;
+namespace LangChain.Providers;
 
 public class OllamaLanguageModelEmbeddings : IEmbeddings
 {
