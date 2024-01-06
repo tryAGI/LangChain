@@ -12560,10 +12560,10 @@ namespace StableDiffusion
         public bool Do_not_save_grid { get; set; } = false;
 
         [Newtonsoft.Json.JsonProperty("eta", Required = Newtonsoft.Json.Required.AllowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double Eta { get; set; }
+        public double? Eta { get; set; }=null;
 
         [Newtonsoft.Json.JsonProperty("denoising_strength", Required = Newtonsoft.Json.Required.AllowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double Denoising_strength { get; set; } = 0D;
+        public double? Denoising_strength { get; set; } = null;
 
         [Newtonsoft.Json.JsonProperty("s_min_uncond", Required = Newtonsoft.Json.Required.AllowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double S_min_uncond { get; set; }

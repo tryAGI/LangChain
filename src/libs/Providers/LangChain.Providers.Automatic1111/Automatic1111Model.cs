@@ -14,6 +14,7 @@ public class Automatic1111Model: IGenerateImageModel
         _client = new StableDiffusionClient(url, httpClient);
     }
 
+    public event Action<string> PromptSent = delegate { };
 
     public async Task<Uri> GenerateImageAsUrlAsync(string prompt, CancellationToken cancellationToken = default)
     {
@@ -22,12 +23,17 @@ public class Automatic1111Model: IGenerateImageModel
 
     public async Task<Stream> GenerateImageAsStreamAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        
         var bytes = await GenerateImageAsBytesAsync(prompt, cancellationToken);
         return new MemoryStream(bytes);
     }
 
     public async Task<byte[]> GenerateImageAsBytesAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        PromptSent(prompt);
+
+        var samplers = await _client.Get_samplers_sdapi_v1_samplers_getAsync();
+
         var response = await _client.Text2imgapi_sdapi_v1_txt2img_postAsync(new StableDiffusionProcessingTxt2Img()
         {
             Prompt = prompt,
@@ -36,7 +42,10 @@ public class Automatic1111Model: IGenerateImageModel
             Width = Options.Width,
             Steps = Options.Steps,
             Seed = Options.Seed,
-            Cfg_scale = Options.CFGScale
+            Cfg_scale = Options.CFGScale,
+            Sampler_index = Options.Sampler,
+            Sampler_name = Options.Sampler,
+            
 
         });
 
