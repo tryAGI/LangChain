@@ -22,7 +22,7 @@ I want to note:
 - I also respond quite quickly on Discord for any questions related to the project
 
 ## Usage
-You can use our wiki to get started: https://github.com/tryAGI/LangChain/wiki
+You can use our wiki to get started: https://github.com/tryAGI/LangChain/wiki  
 Also see [examples](./examples) for example usage.
 
 ## Contributors
