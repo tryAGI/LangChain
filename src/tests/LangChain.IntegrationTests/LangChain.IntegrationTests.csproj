@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\libs\Databases\LangChain.Databases.InMemory\LangChain.Databases.InMemory.csproj" />
         <ProjectReference Include="..\..\libs\LangChain\LangChain.csproj" />
     </ItemGroup>
 
