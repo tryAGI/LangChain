@@ -1,13 +1,42 @@
-﻿namespace StableDiffusion;
+namespace StableDiffusion;
 
+/// <summary>
+/// 
+/// </summary>
 public class Automatic1111ModelOptions
 {
-    public string NegativePrompt { get; set; }="";
+    /// <summary>
+    /// 
+    /// </summary>
+    public string NegativePrompt { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int Seed { get; set; } = -1;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int Steps { get; set; } = 20;
-    public float CFGScale { get; set; } = 6.0f;
-    public int Width { get; set; }= 512;
-    public int Height { get; set; }= 512;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public float CfgScale { get; set; } = 6.0F;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int Width { get; set; } = 512;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int Height { get; set; } = 512;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public string Sampler { get; set; } = "Euler a";
-
 }
