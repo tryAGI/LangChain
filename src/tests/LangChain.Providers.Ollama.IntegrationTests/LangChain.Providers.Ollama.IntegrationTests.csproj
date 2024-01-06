@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<NoWarn>$(NoWarn);NETSDK1206</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LLamaSharp.Backend.Cpu" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.Ollama\LangChain.Providers.Ollama.csproj" />
+	</ItemGroup>
+
+
+</Project>
