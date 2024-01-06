@@ -2,6 +2,8 @@
 using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains;
 using LangChain.Chains.StackableChains.Agents;
+using LangChain.Chains.StackableChains.Files;
+using LangChain.Chains.StackableChains.ImageGeneration;
 using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Indexes;
 using LangChain.Memory;
@@ -177,5 +179,16 @@ public static class Chain
         IList<AgentExecutorChain> agents, string? stopPhrase = null, int messagesLimit = 10, string inputKey = "input", string outputKey = "output")
     {
         return new GroupChat(agents, stopPhrase, messagesLimit, inputKey, outputKey);
+    }
+
+    public static ImageGenerationChain GenerateImage(IGenerateImageModel model,
+        string inputKey = "prompt", string outputKey = "image")
+    {
+        return new ImageGenerationChain(model, inputKey, outputKey);
+    }
+
+    public static SaveIntoFileChain SaveIntoFile(string path, string inputKey = "data")
+    {
+        return new SaveIntoFileChain(path, inputKey);
     }
 }

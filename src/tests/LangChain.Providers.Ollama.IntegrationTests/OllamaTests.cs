@@ -1,5 +1,3 @@
-using OllamaTest;
-
 namespace LangChain.Providers.Ollama.IntegrationTests
 {
     [TestFixture]
