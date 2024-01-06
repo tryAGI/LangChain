@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -137,6 +137,4 @@ public class OllamaApiClient
         var streamedResponse = JsonSerializer.Deserialize<GenerateEmbeddingResponse>(line) ?? throw new InvalidOperationException("Response body was null");
         return streamedResponse;
     }
-
-
 }

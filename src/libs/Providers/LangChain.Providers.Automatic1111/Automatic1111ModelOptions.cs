@@ -1,4 +1,4 @@
-﻿namespace StableDiffusion;
+namespace StableDiffusion;
 
 /// <summary>
 /// 
@@ -23,7 +23,7 @@ public class Automatic1111ModelOptions
     /// <summary>
     /// 
     /// </summary>
-    public double CfgScale { get; set; } = 7;
+    public float CfgScale { get; set; } = 6.0F;
     
     /// <summary>
     /// 
@@ -34,6 +34,9 @@ public class Automatic1111ModelOptions
     /// 
     /// </summary>
     public int Height { get; set; } = 512;
-
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Sampler { get; set; } = "Euler a";
 }

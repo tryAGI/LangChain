@@ -1,4 +1,4 @@
-﻿using LangChain.Abstractions.Schema;
+using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
 
 namespace LangChain.Chains.StackableChains.Files;

@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="LLamaSharp" />
-		<PackageReference Include="Newtonsoft.Json" OverrideVersion="13.0.3" />
+		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="System.Net.Http" />
 	</ItemGroup>
 

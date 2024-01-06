@@ -1,4 +1,4 @@
-﻿using LangChain.Chains.HelperChains;
+using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains;
 using LangChain.Chains.StackableChains.Agents;
 using LangChain.Chains.StackableChains.Files;

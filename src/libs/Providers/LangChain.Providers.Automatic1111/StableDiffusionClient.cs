@@ -5,7 +5,7 @@
 //----------------------
 
 #pragma warning disable CS3008 // Identifier is not CLS-compliant
-
+    
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
 #pragma warning disable 472 // Disable "CS0472 The result of the expression is always 'false' since a value of type 'Int32' is never equal to 'null' of type 'Int32?'
@@ -12562,10 +12562,10 @@ namespace StableDiffusion
         public bool Do_not_save_grid { get; set; } = false;
 
         [Newtonsoft.Json.JsonProperty("eta", Required = Newtonsoft.Json.Required.AllowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double Eta { get; set; }
+        public double? Eta { get; set; }=null;
 
         [Newtonsoft.Json.JsonProperty("denoising_strength", Required = Newtonsoft.Json.Required.AllowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double Denoising_strength { get; set; } = 0D;
+        public double? Denoising_strength { get; set; } = null;
 
         [Newtonsoft.Json.JsonProperty("s_min_uncond", Required = Newtonsoft.Json.Required.AllowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double S_min_uncond { get; set; }

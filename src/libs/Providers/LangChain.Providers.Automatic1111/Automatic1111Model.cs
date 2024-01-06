@@ -1,4 +1,4 @@
-﻿using LangChain.Providers;
+using LangChain.Providers;
 
 namespace StableDiffusion;
 
@@ -28,6 +28,8 @@ public class Automatic1111Model : IGenerateImageModel
         _client = new StableDiffusionClient(url, httpClient);
     }
 
+    public event Action<string> PromptSent = delegate { };
+
     /// <inheritdoc />
     public Task<Uri> GenerateImageAsUrlAsync(string prompt, CancellationToken cancellationToken = default)
     {
@@ -44,6 +46,9 @@ public class Automatic1111Model : IGenerateImageModel
     /// <inheritdoc />
     public async Task<byte[]> GenerateImageAsBytesAsync(string prompt, CancellationToken cancellationToken = default)
     {
+        PromptSent(prompt);
+
+        var samplers = await _client.Get_samplers_sdapi_v1_samplers_getAsync();
         var response = await _client.Text2imgapi_sdapi_v1_txt2img_postAsync(
             new StableDiffusionProcessingTxt2Img
             {
@@ -54,6 +59,8 @@ public class Automatic1111Model : IGenerateImageModel
                 Steps = Options.Steps,
                 Seed = Options.Seed,
                 Cfg_scale = Options.CfgScale,
+                Sampler_index = Options.Sampler,
+                Sampler_name = Options.Sampler,
             }, cancellationToken).ConfigureAwait(false);
 
         var encoded = response.Images.First();
