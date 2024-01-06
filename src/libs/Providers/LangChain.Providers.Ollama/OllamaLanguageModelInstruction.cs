@@ -2,24 +2,42 @@
 
 namespace LangChain.Providers;
 
+/// <summary>
+/// 
+/// </summary>
 public class OllamaLanguageModelInstruction : IChatModel
 {
     private readonly string _modelName;
-    public OllamaLanguageModelOptions Options { get; }
     private readonly OllamaApiClient _api;
-    public string Id { get; }="ollama";
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public OllamaLanguageModelOptions Options { get; }
+    
+    /// <inheritdoc />
+    public string Id => "ollama";
+    
+    /// <inheritdoc />
     public Usage TotalUsage { get; set; }
+    
+    /// <inheritdoc />
     public int ContextLength { get; }
 
-    public OllamaLanguageModelInstruction(string modelName, string? url= "http://localhost:11434",  OllamaLanguageModelOptions options=null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="modelName"></param>
+    /// <param name="url"></param>
+    /// <param name="options"></param>
+    public OllamaLanguageModelInstruction(
+        string modelName,
+        string? url = null,
+        OllamaLanguageModelOptions? options = null)
     {
         _modelName = modelName;
-        Options = options;
-        
-        
-        options ??= new OllamaLanguageModelOptions();
-        Options = options;
-        _api = new OllamaApiClient(url);
+        Options = options ?? new OllamaLanguageModelOptions();
+        _api = new OllamaApiClient(url ?? "http://localhost:11434");
         
     }
     /// <summary>
@@ -32,13 +50,14 @@ public class OllamaLanguageModelInstruction : IChatModel
     /// </summary>
     public event Action<string> PromptSent = delegate { };
 
+    /// <inheritdoc />
     public async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        var models = await _api.ListLocalModels();
+        var models = await _api.ListLocalModels().ConfigureAwait(false);
         
         if (models.All(x => x.Name != _modelName))
         {
-            await _api.PullModel(_modelName);
+            await _api.PullModel(_modelName).ConfigureAwait(false);
         }
         var prompt = ToPrompt(request.Messages);
 
@@ -76,6 +95,12 @@ public class OllamaLanguageModelInstruction : IChatModel
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
     protected static string ConvertRole(MessageRole role)
     {
         return role switch

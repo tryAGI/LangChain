@@ -1,5 +1,4 @@
-﻿using LangChain.Abstractions.Chains.Base;
-using LangChain.Chains.HelperChains;
+﻿using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains;
 using LangChain.Chains.StackableChains.Agents;
 using LangChain.Chains.StackableChains.Files;
@@ -8,6 +7,8 @@ using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Indexes;
 using LangChain.Memory;
 using LangChain.Providers;
+
+// ReSharper disable InconsistentNaming
 
 namespace LangChain.Chains;
 
@@ -22,7 +23,8 @@ public static class Chain
     /// <param name="template"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
-    public static PromptChain Template(string template,
+    public static PromptChain Template(
+        string template,
         string outputKey = "prompt")
     {
         return new PromptChain(template, outputKey);
@@ -34,7 +36,9 @@ public static class Chain
     /// <param name="value"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
-    public static SetChain Set(object value, string outputKey = "value")
+    public static SetChain Set(
+        object value,
+        string outputKey = "value")
     {
         return new SetChain(value, outputKey);
     }
@@ -45,7 +49,9 @@ public static class Chain
     /// <param name="valueGetter"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
-    public static SetLambdaChain Set(Func<string> valueGetter, string outputKey = "value")
+    public static SetLambdaChain Set(
+        Func<string> valueGetter,
+        string outputKey = "value")
     {
         return new SetLambdaChain(valueGetter, outputKey);
     }
@@ -57,8 +63,10 @@ public static class Chain
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
-    public static LLMChain LLM(IChatModel llm,
-        string inputKey = "prompt", string outputKey = "text")
+    public static LLMChain LLM(
+        IChatModel llm,
+        string inputKey = "prompt",
+        string outputKey = "text")
     {
         return new LLMChain(llm, inputKey, outputKey);
     }
@@ -85,7 +93,8 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static StuffDocumentsChain StuffDocuments(
-        string inputKey = "documents", string outputKey = "combined")
+        string inputKey = "documents",
+        string outputKey = "combined")
     {
         return new StuffDocumentsChain(inputKey, outputKey);
     }
@@ -97,8 +106,10 @@ public static class Chain
     /// <param name="requestKey"></param>
     /// <param name="responseKey"></param>
     /// <returns></returns>
-    public static UpdateMemoryChain UpdateMemory(BaseChatMemory memory,
-        string requestKey = "query", string responseKey = "text")
+    public static UpdateMemoryChain UpdateMemory(
+        BaseChatMemory memory,
+        string requestKey = "query",
+        string responseKey = "text")
     {
         return new UpdateMemoryChain(memory, requestKey, responseKey);
     }
@@ -112,9 +123,11 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static TTSChain<T> TTS<T>(ITextToSpeechModel<T> model,
+    public static TTSChain<T> TTS<T>(
+        ITextToSpeechModel<T> model,
         T settings,
-        string inputKey = "text", string outputKey = "audio")
+        string inputKey = "text",
+        string outputKey = "audio")
     {
         return new TTSChain<T>(model, settings, inputKey, outputKey);
     }
@@ -128,9 +141,11 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static STTChain<T> STT<T>(ISpeechToTextModel<T> model,
+    public static STTChain<T> STT<T>(
+        ISpeechToTextModel<T> model,
         T settings,
-        string inputKey = "audio", string outputKey = "text")
+        string inputKey = "audio",
+        string outputKey = "text")
     {
         return new STTChain<T>(model, settings, inputKey, outputKey);
     }
@@ -161,7 +176,8 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static ReActParserChain ReActParser(
-        string inputKey = "text", string outputKey = "answer")
+        string inputKey = "text",
+        string outputKey = "answer")
     {
         return new ReActParserChain(inputKey, outputKey);
     }
@@ -176,18 +192,39 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static GroupChat GroupChat(
-        IList<AgentExecutorChain> agents, string? stopPhrase = null, int messagesLimit = 10, string inputKey = "input", string outputKey = "output")
+        IList<AgentExecutorChain> agents,
+        string? stopPhrase = null,
+        int messagesLimit = 10,
+        string inputKey = "input",
+        string outputKey = "output")
     {
         return new GroupChat(agents, stopPhrase, messagesLimit, inputKey, outputKey);
     }
 
-    public static ImageGenerationChain GenerateImage(IGenerateImageModel model,
-        string inputKey = "prompt", string outputKey = "image")
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
+    public static ImageGenerationChain GenerateImage(
+        IGenerateImageModel model,
+        string inputKey = "prompt",
+        string outputKey = "image")
     {
         return new ImageGenerationChain(model, inputKey, outputKey);
     }
 
-    public static SaveIntoFileChain SaveIntoFile(string path, string inputKey = "data")
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="inputKey"></param>
+    /// <returns></returns>
+    public static SaveIntoFileChain SaveIntoFile(
+        string path,
+        string inputKey = "data")
     {
         return new SaveIntoFileChain(path, inputKey);
     }
