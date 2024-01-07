@@ -23,7 +23,7 @@ public class ReadmeTests
             "It is cold in space"
         }.ToDocuments());
 
-        var chainQuestion =
+        var chain = (
             Set("What is the good name for a pet?", outputKey: "question") |
             RetrieveDocuments(index, inputKey: "question", outputKey: "documents") |
             StuffDocuments(inputKey: "documents", outputKey: "context") |
@@ -35,11 +35,7 @@ public class ReadmeTests
                 Question: {question}
                 Helpful Answer:
                 """, outputKey: "prompt") |
-            LLM(gpt4, inputKey: "prompt", outputKey: "pet_sentence");
-
-        var chainFilter =
-            // do not move the entire dictionary from the other chain
-            chainQuestion.AsIsolated(outputKey: "pet_sentence") |
+            LLM(gpt4, inputKey: "prompt", outputKey: "pet_sentence")) >>
             Template("""
                 Human will provide you with sentence about pet. You need to answer with pet name.
 
@@ -52,7 +48,7 @@ public class ReadmeTests
                 """, outputKey: "prompt") |
             LLM(gpt4, inputKey: "prompt", outputKey: "text");
 
-        var result = await chainFilter.Run(resultKey: "text");
+        var result = await chain.Run(resultKey: "text");
         result.Should().Be("Bob");
     }
 }

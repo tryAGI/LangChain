@@ -28,6 +28,9 @@ public class Automatic1111Model : IGenerateImageModel
         _client = new StableDiffusionClient(url, httpClient);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public event Action<string> PromptSent = delegate { };
 
     /// <inheritdoc />
@@ -48,7 +51,7 @@ public class Automatic1111Model : IGenerateImageModel
     {
         PromptSent(prompt);
 
-        var samplers = await _client.Get_samplers_sdapi_v1_samplers_getAsync();
+        var samplers = await _client.Get_samplers_sdapi_v1_samplers_getAsync(cancellationToken).ConfigureAwait(false);
         var response = await _client.Text2imgapi_sdapi_v1_txt2img_postAsync(
             new StableDiffusionProcessingTxt2Img
             {

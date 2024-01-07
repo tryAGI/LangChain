@@ -22,6 +22,26 @@ public abstract class BaseStackableChain : IChain
     /// <summary>
     /// 
     /// </summary>
+    protected BaseStackableChain()
+    {
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="lastChild"></param>
+    protected BaseStackableChain(BaseStackableChain lastChild)
+    {
+        lastChild = lastChild ?? throw new ArgumentNullException(nameof(lastChild));
+        
+        Name = lastChild.Name;
+        InputKeys = lastChild.InputKeys;
+        OutputKeys = lastChild.OutputKeys;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     /// <returns></returns>
     protected string GenerateName()
     {

@@ -7,7 +7,7 @@ namespace LangChain.Chains.HelperChains;
 public class StackChain(
     BaseStackableChain a,
     BaseStackableChain b)
-    : BaseStackableChain
+    : BaseStackableChain(b)
 {
     /// <summary>
     /// 
@@ -80,7 +80,24 @@ public class StackChain(
         return originalValues;
     }
 
+    /// <summary>
+    /// Represents a stack chain.
+    /// </summary>
+    public static StackChain operator >> (StackChain a, BaseStackableChain b)
+    {
+        a = a ?? throw new ArgumentNullException(nameof(a));
+        
+        return a.AsIsolated(outputKey: a.OutputKeys[^1]) | b;
+    }
 
-
-    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    public static StackChain RightShift(StackChain left, BaseStackableChain right)
+    {
+        return left >> right;
+    }
 }
