@@ -1,4 +1,5 @@
 ﻿using LangChain.Abstractions.Schema;
+using LangChain.Chains.StackableChains.Context;
 using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
@@ -60,15 +61,25 @@ public class StackChain(
 
         if (IsolatedInputKeys.Count > 0)
         {
-            var res = new ChainValues();
+            var res = new StackableChainValues(){Hook = (values as StackableChainValues)?.Hook};
             foreach (var key in IsolatedInputKeys)
             {
                 res.Value[key] = values.Value[key];
             }
             values = res;
         }
+        if(a is not StackChain)
+            (values as StackableChainValues)?.Hook?.LinkEnter(a, (values as StackableChainValues));
         await a.CallAsync(values).ConfigureAwait(false);
+        if (a is not StackChain)
+            (values as StackableChainValues)?.Hook?.LinkExit(a, (values as StackableChainValues));
+        
+        if (b is not StackChain)
+            (values as StackableChainValues)?.Hook?.LinkEnter(b, (values as StackableChainValues));
         await b.CallAsync(values).ConfigureAwait(false);
+        if (b is not StackChain)
+            (values as StackableChainValues)?.Hook?.LinkExit(b, (values as StackableChainValues));
+
         if (IsolatedOutputKeys.Count > 0)
         {
             foreach (var key in IsolatedOutputKeys)

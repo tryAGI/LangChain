@@ -2,6 +2,7 @@
 using LangChain.Abstractions.Schema;
 using LangChain.Callback;
 using LangChain.Chains.HelperChains.Exceptions;
+using LangChain.Chains.StackableChains.Context;
 using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
@@ -86,10 +87,13 @@ public abstract class BaseStackableChain : IChain
     public Task<IChainValues> CallAsync(IChainValues values, ICallbacks? callbacks = null,
         IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null)
     {
+        
+            
         if (values == null)
         {
             throw new ArgumentNullException(nameof(values));
         }
+
         try
         {
             return InternalCall(values);
@@ -108,8 +112,9 @@ public abstract class BaseStackableChain : IChain
 
             throw new StackableChainException(message, ex);
         }
+        
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -143,9 +148,11 @@ public abstract class BaseStackableChain : IChain
     /// 
     /// </summary>
     /// <returns></returns>
-    public async Task<IChainValues> Run()
+    public async Task<IChainValues> Run(StackableChainHook? hook=null)
     {
-        var res = await CallAsync(new ChainValues()).ConfigureAwait(false);
+        var values = new StackableChainValues() {Hook = hook};
+        hook?.ChainStart(values);
+        var res = await CallAsync(values).ConfigureAwait(false);
         return res;
     }
 
@@ -154,9 +161,9 @@ public abstract class BaseStackableChain : IChain
     /// </summary>
     /// <param name="resultKey"></param>
     /// <returns></returns>
-    public async Task<string?> Run(string resultKey)
+    public async Task<string?> Run(string resultKey, StackableChainHook? hook = null)
     {
-        var res = await CallAsync(new ChainValues()).ConfigureAwait(false);
+        var res = await CallAsync(new StackableChainValues() { Hook = hook }).ConfigureAwait(false);
         return res.Value[resultKey].ToString();
     }
 
@@ -166,10 +173,15 @@ public abstract class BaseStackableChain : IChain
     /// <param name="resultKey"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public async Task<T> Run<T>(string resultKey)
+    public async Task<T> Run<T>(string resultKey, StackableChainHook? hook = null)
     {
-        var res = await CallAsync(new ChainValues()).ConfigureAwait(false);
+        var res = await CallAsync(new StackableChainValues() { Hook = hook }).ConfigureAwait(false);
         return (T)res.Value[resultKey];
+    }
+
+    public Task<string?> Run(string resultKey)
+    {
+        return Run(resultKey, null);
     }
 
     /// <summary>
