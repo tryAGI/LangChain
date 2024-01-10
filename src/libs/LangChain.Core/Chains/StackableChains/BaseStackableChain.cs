@@ -160,25 +160,44 @@ public abstract class BaseStackableChain : IChain
     /// 
     /// </summary>
     /// <param name="resultKey"></param>
+    /// <param name="hook"></param>
     /// <returns></returns>
-    public async Task<string?> Run(string resultKey, StackableChainHook? hook = null)
+    public async Task<string?> Run(
+        string resultKey,
+        StackableChainHook? hook = null)
     {
-        var res = await CallAsync(new StackableChainValues() { Hook = hook }).ConfigureAwait(false);
-        return res.Value[resultKey].ToString();
+        var values = await CallAsync(new StackableChainValues
+        {
+            Hook = hook,
+        }).ConfigureAwait(false);
+        
+        return values.Value[resultKey].ToString();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="resultKey"></param>
+    /// <param name="hook"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public async Task<T> Run<T>(string resultKey, StackableChainHook? hook = null)
+    public async Task<T> Run<T>(
+        string resultKey,
+        StackableChainHook? hook = null)
     {
-        var res = await CallAsync(new StackableChainValues() { Hook = hook }).ConfigureAwait(false);
-        return (T)res.Value[resultKey];
+        var values = await CallAsync(new StackableChainValues
+        {
+            Hook = hook,
+        }).ConfigureAwait(false);
+        
+        return (T)values.Value[resultKey];
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="resultKey"></param>
+    /// <returns></returns>
     public Task<string?> Run(string resultKey)
     {
         return Run(resultKey, null);

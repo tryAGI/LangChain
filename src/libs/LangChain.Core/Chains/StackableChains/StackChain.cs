@@ -1,6 +1,5 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Chains.StackableChains.Context;
-using LangChain.Schema;
 
 namespace LangChain.Chains.HelperChains;
 
@@ -55,30 +54,51 @@ public class StackChain(
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
+        var stackableChainValues = values as StackableChainValues;
+        var hook = stackableChainValues?.Hook;
         // since it is reference type, the values would be changed anyhow
         var originalValues = values;
 
         if (IsolatedInputKeys.Count > 0)
         {
-            var res = new StackableChainValues(){Hook = (values as StackableChainValues)?.Hook};
+            var res = new StackableChainValues
+            {
+                Hook = hook,
+            };
             foreach (var key in IsolatedInputKeys)
             {
                 res.Value[key] = values.Value[key];
             }
             values = res;
         }
-        if(a is not StackChain)
-            (values as StackableChainValues)?.Hook?.LinkEnter(a, (values as StackableChainValues));
-        await a.CallAsync(values).ConfigureAwait(false);
-        if (a is not StackChain)
-            (values as StackableChainValues)?.Hook?.LinkExit(a, (values as StackableChainValues));
+
+        if (a is not StackChain &&
+            stackableChainValues != null)
+        {
+            hook?.LinkEnter(a, stackableChainValues);
+        }
         
-        if (b is not StackChain)
-            (values as StackableChainValues)?.Hook?.LinkEnter(b, (values as StackableChainValues));
+        await a.CallAsync(values).ConfigureAwait(false);
+
+        if (a is not StackChain &&
+            stackableChainValues != null)
+        {
+            hook?.LinkExit(a, stackableChainValues);
+        }
+        if (b is not StackChain &&
+            stackableChainValues != null)
+        {
+            hook?.LinkEnter(b, stackableChainValues);
+        }
+        
         await b.CallAsync(values).ConfigureAwait(false);
-        if (b is not StackChain)
-            (values as StackableChainValues)?.Hook?.LinkExit(b, (values as StackableChainValues));
+
+        if (b is not StackChain &&
+            stackableChainValues != null)
+        {
+            hook?.LinkExit(b, stackableChainValues);
+        }
 
         if (IsolatedOutputKeys.Count > 0)
         {
@@ -86,8 +106,8 @@ public class StackChain(
             {
                 originalValues.Value[key] = values.Value[key];
             }
-
         }
+        
         return originalValues;
     }
 
