@@ -67,7 +67,8 @@ public class OllamaLanguageModelInstruction : IChatModel
             Prompt = prompt,
             Model = _modelName,
             Options = Options,
-            Stream = true
+            Stream = true,
+            Raw = true
         });
         PromptSent(prompt);
         var buf = "";
