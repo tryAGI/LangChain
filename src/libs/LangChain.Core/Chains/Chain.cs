@@ -25,7 +25,7 @@ public static class Chain
     /// <returns></returns>
     public static PromptChain Template(
         string template,
-        string outputKey = "prompt")
+        string outputKey = "text")
     {
         return new PromptChain(template, outputKey);
     }
@@ -38,7 +38,7 @@ public static class Chain
     /// <returns></returns>
     public static SetChain Set(
         object value,
-        string outputKey = "value")
+        string outputKey = "text")
     {
         return new SetChain(value, outputKey);
     }
@@ -51,10 +51,18 @@ public static class Chain
     /// <returns></returns>
     public static SetLambdaChain Set(
         Func<string> valueGetter,
-        string outputKey = "value")
+        string outputKey = "text")
     {
         return new SetLambdaChain(valueGetter, outputKey);
     }
+
+    public static DoChain Do(
+        Action<Dictionary<string, object>> func)
+    {
+        return new DoChain(func);
+    }
+
+
 
     /// <summary>
     /// 
@@ -65,7 +73,7 @@ public static class Chain
     /// <returns></returns>
     public static LLMChain LLM(
         IChatModel llm,
-        string inputKey = "prompt",
+        string inputKey = "text",
         string outputKey = "text")
     {
         return new LLMChain(llm, inputKey, outputKey);
@@ -80,8 +88,8 @@ public static class Chain
     /// <returns></returns>
     public static RetrieveDocumentsChain RetrieveDocuments(
         VectorStoreIndexWrapper index,
-        string inputKey = "query",
-        string outputKey = "documents")
+        string inputKey = "text",
+        string outputKey = "text")
     {
         return new RetrieveDocumentsChain(index, inputKey, outputKey);
     }
@@ -93,8 +101,8 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static StuffDocumentsChain StuffDocuments(
-        string inputKey = "documents",
-        string outputKey = "combined")
+        string inputKey = "docs",
+        string outputKey = "c")
     {
         return new StuffDocumentsChain(inputKey, outputKey);
     }
@@ -108,7 +116,7 @@ public static class Chain
     /// <returns></returns>
     public static UpdateMemoryChain UpdateMemory(
         BaseChatMemory memory,
-        string requestKey = "query",
+        string requestKey = "text",
         string responseKey = "text")
     {
         return new UpdateMemoryChain(memory, requestKey, responseKey);
@@ -163,8 +171,8 @@ public static class Chain
         IChatModel model,
         string? reActPrompt = null,
         int maxActions = 5,
-        string inputKey = "input",
-        string outputKey = "final_answer")
+        string inputKey = "text",
+        string outputKey = "text")
     {
         return new ReActAgentExecutorChain(model, reActPrompt, maxActions, inputKey, outputKey);
     }
@@ -177,7 +185,7 @@ public static class Chain
     /// <returns></returns>
     public static ReActParserChain ReActParser(
         string inputKey = "text",
-        string outputKey = "answer")
+        string outputKey = "text")
     {
         return new ReActParserChain(inputKey, outputKey);
     }
@@ -195,8 +203,8 @@ public static class Chain
         IList<AgentExecutorChain> agents,
         string? stopPhrase = null,
         int messagesLimit = 10,
-        string inputKey = "input",
-        string outputKey = "output")
+        string inputKey = "text",
+        string outputKey = "text")
     {
         return new GroupChat(agents, stopPhrase, messagesLimit, inputKey, outputKey);
     }
@@ -210,7 +218,7 @@ public static class Chain
     /// <returns></returns>
     public static ImageGenerationChain GenerateImage(
         IGenerateImageModel model,
-        string inputKey = "prompt",
+        string inputKey = "text",
         string outputKey = "image")
     {
         return new ImageGenerationChain(model, inputKey, outputKey);
