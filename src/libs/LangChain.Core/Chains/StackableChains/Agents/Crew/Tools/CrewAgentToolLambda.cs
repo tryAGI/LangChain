@@ -1,15 +1,25 @@
 ﻿namespace LangChain.Chains.StackableChains.Agents.Crew.Tools;
 
+/// <summary>
+/// 
+/// </summary>
 public class CrewAgentToolLambda : CrewAgentTool
 {
-    private readonly Func<string, string> _func;
+    private readonly Func<string, Task<string>> _func;
 
-    public CrewAgentToolLambda(string name, string description, Func<string, string> func) : base(name, description)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    /// <param name="func"></param>
+    public CrewAgentToolLambda(string name, string description, Func<string, Task<string>> func) : base(name, description)
     {
         _func = func;
     }
 
-    public override string ToolAction(string input)
+    /// <inheritdoc />
+    public override Task<string> ToolTask(string input, CancellationToken cancellationToken = default)
     {
         return _func(input);
     }

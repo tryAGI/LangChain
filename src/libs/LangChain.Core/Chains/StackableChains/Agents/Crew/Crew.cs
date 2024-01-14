@@ -2,10 +2,21 @@
 
 namespace LangChain.Chains.StackableChains.Agents.Crew;
 
-public class Crew(IEnumerable<CrewAgent> agents, IEnumerable<AgentTask> tasks)
+/// <summary>
+/// 
+/// </summary>
+/// <param name="agents"></param>
+/// <param name="tasks"></param>
+public class Crew(
+    IEnumerable<CrewAgent> agents,
+    IEnumerable<AgentTask> tasks)
 {
-    
-    public string Run()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<string> RunAsync(CancellationToken cancellationToken = default)
     {
         string? context = null;
         
@@ -13,14 +24,10 @@ public class Crew(IEnumerable<CrewAgent> agents, IEnumerable<AgentTask> tasks)
         {
             task.Tools.Add(new AskQuestionTool(agents.Except(new []{task.Agent})));
             task.Tools.Add(new DelegateWorkTool(agents.Except(new[] { task.Agent })));
-            var res = task.Execute(context);
+            var res = await task.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
             context = res;
         }
 
-        return context;
-
+        return context ?? string.Empty;
     }
-
-
-
 }

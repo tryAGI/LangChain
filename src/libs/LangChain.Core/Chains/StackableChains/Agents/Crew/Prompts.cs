@@ -1,25 +1,36 @@
 ﻿namespace LangChain.Chains.StackableChains.Agents.Crew;
 
+/// <summary>
+/// 
+/// </summary>
 public static class Prompts
 {
-    public static string Task = @"
+    /// <summary>
+    /// 
+    /// </summary>
+    public const string Task = @"
 Begin! This is VERY important to you, your job depends on it!
 
 Current Task: {task}";
 
-
-    public static string Memory = @"This is the summary of your work so far:
+    /// <summary>
+    /// 
+    /// </summary>
+    public const string Memory = @"This is the summary of your work so far:
 {memory}";
 
-
-
-    public static string Role = @"You are {role}.
+    /// <summary>
+    /// 
+    /// </summary>
+    public const string Role = @"You are {role}.
 {backstory}
 
 Your personal goal is: {goal}";
 
-
-    public static string Tools = @"
+    /// <summary>
+    /// 
+    /// </summary>
+    public const string Tools = @"
 You have access to the following tools:
 
 {tools}
@@ -36,25 +47,26 @@ When you have a response for your task, or if you do not need to use a tool, you
 Thought: Do I need to use a tool? No
 Final Answer: [your response here. should be a simple sentence without explanations.]";
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public const string Scratchpad = "Thought:{actions_history}";
 
 
-    public static string Scratchpad = "Thought:{actions_history}";
-
-
-//    public static string Memory = @"Це підсумок твоєї роботи на даний момент:
+//    public const string Memory = @"Це підсумок твоєї роботи на даний момент:
 //    {memory}";
 
-//    public static string Task = @"
+//    public const string Task = @"
 //Починай!
 
 //Поточна задача: {task}";
 
-//    public static string Role = @"Ти {role}.
+//    public const string Role = @"Ти {role}.
 //{backstory}
 
 //Твоя персональна ціль: {goal}";
 
-//    public static string Tools = @"
+//    public const string Tools = @"
 //Ти маєш доступ до наведених нижче інструментів:
 
 //{tools}
@@ -71,6 +83,14 @@ Final Answer: [your response here. should be a simple sentence without explanati
 //Thought: Чи мені потрібно використати інструмент? Ні
 //Final Answer: [твоя відповідь тут]
 //";
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static string TaskExecutionWithMemory => string.Join("\n", Role, Tools, Memory, Task, Scratchpad);
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public static string TaskExecutionWithoutMemory => string.Join("\n", Role, Tools, Task, Scratchpad);
 }

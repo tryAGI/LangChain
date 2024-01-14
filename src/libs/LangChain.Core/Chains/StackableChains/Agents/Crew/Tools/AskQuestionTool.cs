@@ -1,12 +1,20 @@
 ﻿namespace LangChain.Chains.StackableChains.Agents.Crew.Tools;
 
+/// <summary>
+/// 
+/// </summary>
 public class AskQuestionTool: CrewAgentTool
 {
     private readonly IEnumerable<CrewAgent> _coworkers;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="coworkers"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public AskQuestionTool(IEnumerable<CrewAgent> coworkers) : base("question")
     {
-        _coworkers = coworkers;
+        _coworkers = coworkers ?? throw new ArgumentNullException(nameof(coworkers));
         Description = 
             $@"Useful to ask a question, opinion or take from on
 of the following co-workers: [{string.Join(", ", coworkers.Select(x => $"'{x.Role}'"))}].
@@ -16,8 +24,11 @@ the question and all actual context you have for the question.
 For example, `coworker|question|context`.";
     }
 
-    public override string ToolAction(string input)
+    /// <inheritdoc />
+    public override async Task<string> ToolTask(string input, CancellationToken token = default)
     {
+        input = input ?? throw new ArgumentNullException(nameof(input));
+        
         var split = input.Split('|');
         var agent = split[0];
         var task = split[1];
@@ -27,7 +38,7 @@ For example, `coworker|question|context`.";
         coworker.Context = context;
         var chain = Chain.Set(task, "task")
                     | coworker;
-        var res = chain.Run("result").Result;
+        var res = await chain.Run("result").ConfigureAwait(false) ?? string.Empty;
         
         return res;
 

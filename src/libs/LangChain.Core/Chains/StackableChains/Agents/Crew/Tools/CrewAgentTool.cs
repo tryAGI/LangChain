@@ -1,18 +1,38 @@
 ﻿namespace LangChain.Chains.StackableChains.Agents.Crew.Tools;
 
+/// <summary>
+/// 
+/// </summary>
 public abstract class CrewAgentTool
 {
-    public CrewAgentTool(string name, string description=null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    protected CrewAgentTool(
+        string name,
+        string? description = null)
     {
         Name = name;
-        Description = description;
+        Description = description ?? string.Empty;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string Name { get; set; }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public string Description { get; set; }
 
-
-    public abstract string ToolAction(string input);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public abstract Task<string> ToolTask(string input, CancellationToken token = default);
 }

@@ -57,13 +57,16 @@ public static class Chain
         return new SetLambdaChain(valueGetter, outputKey);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="func"></param>
+    /// <returns></returns>
     public static DoChain Do(
         Action<Dictionary<string, object>> func)
     {
         return new DoChain(func);
     }
-
-
 
     /// <summary>
     /// 
@@ -238,7 +241,14 @@ public static class Chain
         return new SaveIntoFileChain(path, inputKey);
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="allAgents"></param>
+    /// <param name="manager"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
     public static CrewChain Crew(
         IEnumerable<CrewAgent> allAgents, CrewAgent manager,
         string inputKey = "text",
