@@ -1,6 +1,7 @@
 using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains;
 using LangChain.Chains.StackableChains.Agents;
+using LangChain.Chains.StackableChains.Agents.Crew;
 using LangChain.Chains.StackableChains.Files;
 using LangChain.Chains.StackableChains.ImageGeneration;
 using LangChain.Chains.StackableChains.ReAct;
@@ -235,5 +236,14 @@ public static class Chain
         string inputKey = "data")
     {
         return new SaveIntoFileChain(path, inputKey);
+    }
+
+
+    public static CrewChain Crew(
+        IEnumerable<CrewAgent> allAgents, CrewAgent manager,
+        string inputKey = "text",
+        string outputKey = "text")
+    {
+        return new CrewChain(allAgents, manager, inputKey, outputKey);
     }
 }

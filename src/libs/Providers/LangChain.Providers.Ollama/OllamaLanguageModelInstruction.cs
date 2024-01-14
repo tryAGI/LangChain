@@ -68,7 +68,8 @@ public class OllamaLanguageModelInstruction : IChatModel
             Model = _modelName,
             Options = Options,
             Stream = true,
-            Raw = true
+            Raw = true,
+            Format = "json",
         });
         PromptSent(prompt);
         var buf = "";
