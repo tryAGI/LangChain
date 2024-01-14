@@ -29,7 +29,7 @@ public class GenerateCompletionRequest
     /// Base64-encoded images (for multimodal models such as llava)
     /// </summary>
     [JsonPropertyName("images")]
-    public string[] Images { get; set; } = [];
+    public string[] Images { get; set; }
 
     /// <summary>
     /// System prompt to (overrides what is defined in the Modelfile)
@@ -47,7 +47,7 @@ public class GenerateCompletionRequest
     /// The context parameter returned from a previous request to /generate, this can be used to keep a short conversational memory
     /// </summary>
     [JsonPropertyName("context")]
-    public long[] Context { get; set; } = [];
+    public long[] Context { get; set; } 
 
     /// <summary>
     /// If false the response will be returned as a single response object, rather than a stream of objects
@@ -60,6 +60,9 @@ public class GenerateCompletionRequest
     /// </summary>
     [JsonPropertyName("raw")]
     public bool Raw { get; set; }
+
+    [JsonPropertyName("format")]
+    public string Format { get; set; }
 }
 
 /// <summary>
@@ -101,7 +104,7 @@ public class GenerateCompletionDoneResponseStream : GenerateCompletionResponseSt
     /// 
     /// </summary>
     [JsonPropertyName("context")]
-    public long[] Context { get; set; } = [];
+    public long[] Context { get; set; }
 
     /// <summary>
     /// 
