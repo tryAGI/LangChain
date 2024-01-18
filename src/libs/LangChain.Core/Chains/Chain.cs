@@ -95,7 +95,7 @@ public static class Chain
         VectorStoreIndexWrapper index,
         int amount = 4,
         string inputKey = "text",
-        string outputKey = "text")
+        string outputKey = "docs")
     {
         return new RetrieveDocumentsChain(index, inputKey, outputKey, amount);
     }
