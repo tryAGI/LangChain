@@ -87,15 +87,17 @@ public static class Chain
     /// 
     /// </summary>
     /// <param name="index"></param>
+    /// <param name="amount"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static RetrieveDocumentsChain RetrieveDocuments(
         VectorStoreIndexWrapper index,
+        int amount = 4,
         string inputKey = "text",
         string outputKey = "text")
     {
-        return new RetrieveDocumentsChain(index, inputKey, outputKey);
+        return new RetrieveDocumentsChain(index, inputKey, outputKey, amount);
     }
 
     /// <summary>

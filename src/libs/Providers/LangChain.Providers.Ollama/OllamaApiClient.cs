@@ -123,7 +123,7 @@ public class OllamaApiClient
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         var content = JsonSerializer.Serialize(generateRequest, _jsonSerializerOptions);
-        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/generate");
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/embeddings");
         request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
         var completion = HttpCompletionOption.ResponseContentRead;

@@ -23,6 +23,11 @@ public class OllamaLanguageModelInstruction : IChatModel
     
     /// <inheritdoc />
     public int ContextLength { get; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool UseJson { get; set; }
 
     /// <summary>
     /// 
@@ -69,7 +74,7 @@ public class OllamaLanguageModelInstruction : IChatModel
             Options = Options,
             Stream = true,
             Raw = true,
-            Format = "json",
+            Format = UseJson ? "json" : string.Empty,
         });
         PromptSent(prompt);
         var buf = "";

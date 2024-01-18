@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using LangChain.Abstractions.Embeddings.Base;
+using LangChain.Base;
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.TextSplitters;
@@ -24,14 +25,17 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="documents"></param>
     /// <param name="filename"></param>
     /// <param name="tableName"></param>
+    /// <param name="textSplitter"></param>
     /// <returns></returns>
     public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(
         IEmbeddings embeddings,
-        IReadOnlyCollection<Document> documents, string filename="vectorstore.db",
-        string tableName="vectors")
+        IReadOnlyCollection<Document> documents,
+        string filename = "vectorstore.db",
+        string tableName = "vectors",
+        TextSplitter? textSplitter = null)
     {
         using var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
-        var textSplitter = new CharacterTextSplitter();
+        textSplitter ??= new CharacterTextSplitter();
         VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
         var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);
         return index;
@@ -44,7 +48,12 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="tableName"></param>
     /// <param name="embeddings"></param>
     /// <param name="distanceMetrics"></param>
-    public SQLiteVectorStore(string filename, string tableName,IEmbeddings embeddings, EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean) : base(embeddings)
+    public SQLiteVectorStore(
+        string filename,
+        string tableName,
+        IEmbeddings embeddings,
+        EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
+        : base(embeddings)
     {
         _tableName = tableName;
         if (distanceMetrics == EDistanceMetrics.Euclidean)
