@@ -37,12 +37,12 @@ public class OllamaLanguageModelInstruction : IChatModel
     /// <param name="options"></param>
     public OllamaLanguageModelInstruction(
         string modelName,
-        string? url = null,
+        string url = "http://localhost:11434",
         OllamaLanguageModelOptions? options = null)
     {
         _modelName = modelName;
         Options = options ?? new OllamaLanguageModelOptions();
-        _api = new OllamaApiClient(url ?? "http://localhost:11434");
+        _api = new OllamaApiClient(url);
         
     }
     /// <summary>
