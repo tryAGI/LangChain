@@ -27,6 +27,11 @@ public partial class OpenAiModel : IEmbeddingModel
 
     private Usage GetUsage(EmbeddingsResponse response)
     {
+        if (response.Usage == null!)
+        {
+            return Usage.Empty;
+        }
+        
         var tokens = response.Usage.PromptTokens ?? 0;
         var priceInUsd = EmbeddingPrices.TryGet(
             model: new EmbeddingModel(EmbeddingModelId),

@@ -1,6 +1,7 @@
 using LangChain.Base;
 using UglyToad.PdfPig;
 using Document = LangChain.Docstore.Document;
+
 namespace LangChain.Sources;
 
 /// <summary>
@@ -11,7 +12,25 @@ public class PdfPigPdfSource : ISource
     /// <summary>
     /// 
     /// </summary>
-    public string Path { get; }
+    /// <param name="stream"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IReadOnlyCollection<Document>> FromStreamAsync(
+        Stream stream,
+        CancellationToken cancellationToken = default)
+    {
+        return await new PdfPigPdfSource(stream).LoadAsync(cancellationToken).ConfigureAwait(false);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Path { get; } = string.Empty;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public Stream? Stream { get; }
 
     /// <summary>
     /// 
@@ -22,22 +41,31 @@ public class PdfPigPdfSource : ISource
         Path = path;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="stream"></param>
+    public PdfPigPdfSource(Stream stream)
+    {
+        Stream = stream;
+    }
+    
     /// <inheritdoc/>
     public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            using PdfDocument document = PdfDocument.Open(Path, new ParsingOptions());
+            using var document = Stream != null
+                ? PdfDocument.Open(Stream, new ParsingOptions())
+                : PdfDocument.Open(Path, new ParsingOptions());
             var pages = document.GetPages();
-
-
-            var documents = pages.Select(page => new Document(page.Text, new Dictionary<string, object>
-            {
-                {"path",Path},
-                {"page",page.Number}
-
-
-            })).ToArray();
+            var documents = pages
+                .Select(page => new Document(page.Text, new Dictionary<string, object>
+                {
+                    {"path",Path},
+                    {"page",page.Number},
+                }))
+                .ToArray();
 
             return Task.FromResult<IReadOnlyCollection<Document>>(documents);
         }

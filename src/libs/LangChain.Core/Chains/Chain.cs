@@ -19,7 +19,7 @@ namespace LangChain.Chains;
 public static class Chain
 {
     /// <summary>
-    /// 
+    /// Replaces context and question in the prompt with their values.
     /// </summary>
     /// <param name="template"></param>
     /// <param name="outputKey"></param>
@@ -32,7 +32,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Sets the value to the context.
     /// </summary>
     /// <param name="value"></param>
     /// <param name="outputKey"></param>
@@ -69,7 +69,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Sends the result to the language model.
     /// </summary>
     /// <param name="llm"></param>
     /// <param name="inputKey"></param>
@@ -83,14 +83,16 @@ public static class Chain
         return new LLMChain(llm, inputKey, outputKey);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="amount"></param>
-    /// <param name="inputKey"></param>
-    /// <param name="outputKey"></param>
-    /// <returns></returns>
+    /// <inheritdoc cref="LLM"/>
+    public static LLMChain LargeLanguageModel(
+        IChatModel llm,
+        string inputKey = "text",
+        string outputKey = "text")
+    {
+        return new LLMChain(llm, inputKey, outputKey);
+    }
+
+    /// <inheritdoc cref="RetrieveSimilarDocuments"/>
     public static RetrieveDocumentsChain RetrieveDocuments(
         VectorStoreIndexWrapper index,
         int amount = 4,
@@ -100,13 +102,39 @@ public static class Chain
         return new RetrieveDocumentsChain(index, inputKey, outputKey, amount);
     }
 
+
     /// <summary>
-    /// 
+    /// Takes most similar documents.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="amount"></param>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
+    public static RetrieveDocumentsChain RetrieveSimilarDocuments(
+        VectorStoreIndexWrapper index,
+        int amount = 4,
+        string inputKey = "text",
+        string outputKey = "docs")
+    {
+        return new RetrieveDocumentsChain(index, inputKey, outputKey, amount);
+    }
+    
+    /// <inheritdoc cref="CombineDocuments"/>
+    public static StuffDocumentsChain StuffDocuments(
+        string inputKey = "docs",
+        string outputKey = "c")
+    {
+        return new StuffDocumentsChain(inputKey, outputKey);
+    }
+
+    /// <summary>
+    /// Combines documents together and put them into context
     /// </summary>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
-    public static StuffDocumentsChain StuffDocuments(
+    public static StuffDocumentsChain CombineDocuments(
         string inputKey = "docs",
         string outputKey = "c")
     {

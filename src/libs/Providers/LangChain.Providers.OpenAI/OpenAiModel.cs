@@ -72,10 +72,10 @@ public partial class OpenAiModel :
         if (configuration.Endpoint != null &&
             !string.IsNullOrWhiteSpace(configuration.Endpoint))
         {
-            //Api.BaseUrl = configuration.Endpoint;
+            Api = new OpenAIClient(ApiKey, new OpenAIClientSettings(domain: configuration.Endpoint));
         }
     }
-
+    
     /// <summary>
     /// Wrapper around OpenAI large language models.
     /// </summary>
