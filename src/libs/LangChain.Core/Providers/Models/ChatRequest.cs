@@ -15,4 +15,16 @@ public readonly record struct ChatRequest(
     public static ChatRequest Empty { get; } = new(
         Messages: Array.Empty<Message>(),
         StopSequences: null);
+    
+    public static implicit operator ChatRequest(string message)
+    {
+        return ToChatRequest(message);
+    }
+
+    public static ChatRequest ToChatRequest(string message)
+    {
+        return new ChatRequest(
+            Messages: new[] { message.AsSystemMessage() },
+            StopSequences: null);
+    }
 }

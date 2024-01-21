@@ -1,3 +1,4 @@
+using System.Net.Http;
 using LangChain.Base;
 using UglyToad.PdfPig;
 using Document = LangChain.Docstore.Document;
@@ -20,6 +21,28 @@ public class PdfPigPdfSource : ISource
         CancellationToken cancellationToken = default)
     {
         return await new PdfPigPdfSource(stream).LoadAsync(cancellationToken).ConfigureAwait(false);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="uri"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IReadOnlyCollection<Document>> FromUriAsync(
+        Uri uri,
+        CancellationToken cancellationToken = default)
+    {
+        using var memoryStream = new MemoryStream();
+        {
+            using var client = new HttpClient();
+            using var stream = await client.GetStreamAsync(uri).ConfigureAwait(false);
+        
+            await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+            memoryStream.Position = 0;
+        }
+        
+        return await new PdfPigPdfSource(memoryStream).LoadAsync(cancellationToken).ConfigureAwait(false);
     }
     
     /// <summary>

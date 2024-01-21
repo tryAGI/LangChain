@@ -50,7 +50,7 @@ public abstract class BaseRetriever
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
     /// <returns>Relevant documents</returns>
-    public virtual async Task<IEnumerable<Document>> GetRelevantDocumentsAsync(
+    public virtual async Task<IReadOnlyCollection<Document>> GetRelevantDocumentsAsync(
         string query,
         string? runId = null,
         ICallbacks? callbacks = null,

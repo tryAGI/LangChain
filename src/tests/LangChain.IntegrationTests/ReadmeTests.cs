@@ -5,6 +5,7 @@ using LangChain.Indexes;
 using LangChain.Providers.OpenAI;
 using LangChain.Sources;
 using LangChain.TextSplitters;
+using LangChain.VectorStores;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -118,5 +119,94 @@ Helpful Answer:") |
         
         Console.WriteLine($"LLM answer: {result}");
         Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
+    }
+    
+    /// <summary>
+    /// Price to run from zero(create embeddings and request to LLM): 0,015$
+    /// Price to re-run if database is exists: 0,0004$
+    /// </summary>
+    /// <exception cref="InconclusiveException"></exception>
+    [Explicit]
+    [Test]
+    public async Task RagWithOpenAiUsingAsyncMethods()
+    {
+        var gpt35 = new Gpt35TurboModel(
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        
+        if (!File.Exists("vectors.db"))
+        {
+            var documents = await PdfPigPdfSource.FromUriAsync(
+                new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
+            
+            await SQLiteVectorStore.CreateIndexFromDocuments(
+                embeddings: gpt35,
+                documents: documents,
+                filename: "vectors.db",
+                tableName: "vectors",
+                textSplitter: new RecursiveCharacterTextSplitter(
+                    chunkSize: 200,
+                    chunkOverlap: 50));
+        }
+
+        var database = new SQLiteVectorStore(
+            filename: "vectors.db",
+            tableName: "vectors",
+            embeddings: gpt35);
+        const string question = "Who was drinking a unicorn blood?";
+        var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
+        
+        var answer = await gpt35.GenerateAsync(
+            $"""
+             Use the following pieces of context to answer the question at the end.
+             If the answer is not in context then just say that you don't know, don't try to make up an answer.
+             Keep the answer as short as possible.
+
+             {similarDocuments.AsString()}
+
+             Question: {question}
+             Helpful Answer:
+             """, CancellationToken.None).ConfigureAwait(false);
+        
+        Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
+        Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
+    }
+
+    [Explicit]
+    [Test]
+    public async Task SimpleDocuments()
+    {
+        var gpt35 = new Gpt35TurboModel(
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        
+        var database = await InMemoryVectorStore.CreateIndexFromDocuments(gpt35, new[]
+        {
+            "I spent entire day watching TV",
+            "My dog name is Bob",
+            "This ice cream is delicious",
+            "It is cold in space"
+        }.ToDocuments());
+
+        const string question = "What is the good name for a pet?";
+        var similarDocuments = await database.Store.GetSimilarDocuments(question, amount: 1);
+        
+        var petNameResponse = await gpt35.GenerateAsync(
+            $"""
+
+             Human will provide you with sentence about pet. You need to answer with pet name.
+
+             Human: My dog name is Jack
+             Answer: Jack
+             Human: I think the best name for a pet is "Jerry"
+             Answer: Jerry
+             Human: {similarDocuments.AsString()}
+             Answer:
+             """, CancellationToken.None).ConfigureAwait(false);
+        
+        Console.WriteLine($"LLM answer: {petNameResponse}");
+        Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
+        
+        petNameResponse.ToString().Should().Be("Bob");
     }
 }

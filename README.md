@@ -13,7 +13,6 @@ C# implementation of LangChain. We try to be as close to the original as possibl
 
 While the [SemanticKernel](https://github.com/microsoft/semantic-kernel/) is good and we will use it wherever possible, we believe that it has many limitations and based on Microsoft technologies.
 We proceed from the position of the maximum choice of available options and are open to using third-party libraries within individual implementations.  
-❤️ Our project includes https://github.com/jeastham1993/langchain-dotnet and tries to be updated with the latest changes there ❤️  
 
 I want to note:
 - I’m unlikely to be able to make serious progress alone, so my goal is to unite the efforts of C# developers to create a C# version of LangChain and control the quality of the final project
@@ -23,48 +22,49 @@ I want to note:
 
 ## Usage
 You can use our wiki to get started: https://github.com/tryAGI/LangChain/wiki  
-Also see [examples](./examples) for example usage.
+Also see [examples](./examples) for example usage or [tests](./src/tests/LangChain.IntegrationTests/ReadmeTests.cs).
 ```csharp
-var gpt4 = new Gpt4Model("OPENAI_API_KEY");
-var index = await InMemoryVectorStore.CreateIndexFromDocuments(gpt4, new[]
+// Price to run from zero(create embeddings and request to LLM): 0,015$
+// Price to re-run if database is exists: 0,0004$
+// Dependencies: LangChain, LangChain.Databases.Sqlite, LangChain.Sources.Pdf
+var gpt35 = new Gpt35TurboModel("OPENAI_API_KEY");
+
+if (!File.Exists("vectors.db"))
 {
-    "I spent entire day watching TV",
-    "My dog name is Bob",
-    "This ice cream is delicious",
-    "It is cold in space"
-}.ToDocuments());
+    var documents = await PdfPigPdfSource.FromUriAsync(
+        new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
+    
+    await SQLiteVectorStore.CreateIndexFromDocuments(
+        embeddings: gpt35,
+        documents: documents,
+        filename: "vectors.db",
+        tableName: "vectors",
+        textSplitter: new RecursiveCharacterTextSplitter(
+            chunkSize: 200,
+            chunkOverlap: 50));
+}
 
-var chainQuestion =
-    Set("What is the good name for a pet?", outputKey: "question") |
-    RetrieveDocuments(index, inputKey: "question", outputKey: "documents") |
-    StuffDocuments(inputKey: "documents", outputKey: "context") |
-    Template("""
-        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+var database = new SQLiteVectorStore(
+    filename: "vectors.db",
+    tableName: "vectors",
+    embeddings: gpt35);
+const string question = "Who was drinking a unicorn blood?";
+var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
 
-        {context}
+var answer = await gpt35.GenerateAsync(
+    $"""
+     Use the following pieces of context to answer the question at the end.
+     If the answer is not in context then just say that you don't know, don't try to make up an answer.
+     Keep the answer as short as possible.
 
-        Question: {question}
-        Helpful Answer:
-        """, outputKey: "prompt") |
-    LLM(gpt4, inputKey: "prompt", outputKey: "pet_sentence");
+     {similarDocuments.AsString()}
 
-var chainFilter =
-    // do not move the entire dictionary from the other chain
-    chainQuestion.AsIsolated(outputKey: "pet_sentence") |
-    Template("""
-        Human will provide you with sentence about pet. You need to answer with pet name.
+     Question: {question}
+     Helpful Answer:
+     """, CancellationToken.None).ConfigureAwait(false);
 
-        Human: My dog name is Jack
-        Answer: Jack
-        Human: I think the best name for a pet is "Jerry"
-        Answer: Jerry
-        Human: {pet_sentence}
-        Answer:
-        """, outputKey: "prompt") |
-    LLM(gpt4, inputKey: "prompt", outputKey: "text");
-
-var result = await chainFilter.Run(resultKey: "text");
-// Bob
+Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
+Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
 ```
 
 ## Contributors

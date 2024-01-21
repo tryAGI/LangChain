@@ -15,4 +15,10 @@ public readonly record struct ChatResponse(
     public static ChatResponse Empty { get; } = new(
         Messages: Array.Empty<Message>(),
         Usage: Usage.Empty);
+    
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return Messages.LastOrDefault().Content ?? string.Empty;
+    }
 }
