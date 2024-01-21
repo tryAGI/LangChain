@@ -1,4 +1,3 @@
-using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +21,8 @@ public class OpenAiSampleController : ControllerBase
     [HttpGet(Name = "GetOpenAiResponse")]
     public async Task<string> Get()
     {
-        return await _openAi.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        var response = await _openAi.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        
+        return response.LastMessageContent;
     }
 }

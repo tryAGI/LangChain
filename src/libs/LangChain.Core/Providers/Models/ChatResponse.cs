@@ -16,9 +16,14 @@ public readonly record struct ChatResponse(
         Messages: Array.Empty<Message>(),
         Usage: Usage.Empty);
     
+    /// <summary>
+    /// Returns the last message content.
+    /// </summary>
+    public string LastMessageContent => Messages.LastOrDefault().Content ?? string.Empty;
+    
     /// <inheritdoc />
     public override string ToString()
     {
-        return Messages.LastOrDefault().Content ?? string.Empty;
+        return LastMessageContent;
     }
 }

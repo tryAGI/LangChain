@@ -41,9 +41,9 @@ public class ConversationalRetrievalChainTests
                     new("first"),
                     new("second"),
                     new("third")
-                }.AsEnumerable();
+                };
 
-                return Task.FromResult(docs);
+                return Task.FromResult<IReadOnlyCollection<Document>>(docs);
             });
 
         // # This controls how the standalone question is generated.

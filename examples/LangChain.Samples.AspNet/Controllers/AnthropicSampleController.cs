@@ -22,6 +22,8 @@ public class AnthropicSampleController : ControllerBase
     [HttpGet(Name = "GetAnthropicResponse")]
     public async Task<string> Get()
     {
-        return await _anthropicModel.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        var response = await _anthropicModel.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        
+        return response.LastMessageContent;
     }
 }

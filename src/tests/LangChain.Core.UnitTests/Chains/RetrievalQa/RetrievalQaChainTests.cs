@@ -64,9 +64,9 @@ public class RetrievalQaChainTests
                     CreateDocument("first"),
                     CreateDocument("second"),
                     CreateDocument("third")
-                }.AsEnumerable();
+                };
 
-                return Task.FromResult(docs);
+                return Task.FromResult<IReadOnlyCollection<Document>>(docs);
             });
 
         return mock;
