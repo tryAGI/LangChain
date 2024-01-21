@@ -66,14 +66,6 @@ public class ReadmeTests
     [Test]
     public async Task RagWithOpenAiUsingChains()
     {
-        // var together = new OpenAiModel(new OpenAiConfiguration
-        // {
-        //     ApiKey = Environment.GetEnvironmentVariable("TOGETHER_API_KEY") ??
-        //              throw new InconclusiveException("TOGETHER_API_KEY is not set"),
-        //     Endpoint = "api.together.xyz",
-        //     ModelId = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-        //     EmbeddingModelId = "togethercomputer/m2-bert-80M-32k-retrieval",
-        // });
         var gpt35 = new Gpt35TurboModel(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
@@ -176,6 +168,15 @@ Helpful Answer:") |
     [Test]
     public async Task SimpleDocuments()
     {
+        // https://www.together.ai/blog/embeddings-endpoint-release
+        // var together = new OpenAiModel(new OpenAiConfiguration
+        // {
+        //     ApiKey = Environment.GetEnvironmentVariable("TOGETHER_API_KEY") ??
+        //              throw new InconclusiveException("TOGETHER_API_KEY is not set"),
+        //     Endpoint = "api.together.xyz",
+        //     ModelId = "togethercomputer/Qwen-7B",
+        //     EmbeddingModelId = "togethercomputer/m2-bert-80M-32k-retrieval",
+        // });
         var gpt35 = new Gpt35TurboModel(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
