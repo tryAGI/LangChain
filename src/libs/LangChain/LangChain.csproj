@@ -10,13 +10,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LangChain.Core\LangChain.Core.csproj" />
-      <ProjectReference Include="..\Extensions\LangChain.Extensions.DependencyInjection\LangChain.Extensions.DependencyInjection.csproj" />
-      <ProjectReference Include="..\Providers\LangChain.Providers.Anthropic\LangChain.Providers.Anthropic.csproj" />
-      <ProjectReference Include="..\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj" />
-      <ProjectReference Include="..\Providers\LangChain.Providers.LLamaSharp\LangChain.Providers.LLamaSharp.csproj" />
-      <ProjectReference Include="..\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
-      <ProjectReference Include="..\Splitters\LangChain.Splitters.Abstractions\LangChain.Splitters.Abstractions.csproj" />
+        <ProjectReference Include="..\LangChain.Core\LangChain.Core.csproj"/>
+        <ProjectReference Include="..\Splitters\LangChain.Splitters.Abstractions\LangChain.Splitters.Abstractions.csproj"/>
+        <ProjectReference Include="..\Extensions\LangChain.Extensions.DependencyInjection\LangChain.Extensions.DependencyInjection.csproj"/>
+        <ProjectReference Include="..\Providers\LangChain.Providers.Anthropic\LangChain.Providers.Anthropic.csproj"/>
+        <ProjectReference Include="..\Providers\LangChain.Providers.HuggingFace\LangChain.Providers.HuggingFace.csproj"/>
+        <ProjectReference Include="..\Providers\LangChain.Providers.LLamaSharp\LangChain.Providers.LLamaSharp.csproj"/>
+        <ProjectReference Include="..\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj"/>
+        <ProjectReference Include="..\Databases\LangChain.Databases.InMemory\LangChain.Databases.InMemory.csproj"/>
     </ItemGroup>
 
 </Project>

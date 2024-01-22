@@ -3,7 +3,6 @@
     <Import Project="..\Directory.Build.props" />
 
     <PropertyGroup>
-        <RootNamespace>LangChain.Databases</RootNamespace>
         <NoWarn>$(NoWarn);NU5104</NoWarn>
     </PropertyGroup>
 
