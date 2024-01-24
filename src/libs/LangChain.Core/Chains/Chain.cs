@@ -121,11 +121,18 @@ public static class Chain
     /// <param name="responseKey"></param>
     /// <returns></returns>
     public static UpdateMemoryChain UpdateMemory(
-        BaseChatMemory memory,
+        ConversationBufferMemory memory,
         string requestKey = "text",
         string responseKey = "text")
     {
         return new UpdateMemoryChain(memory, requestKey, responseKey);
+    }
+
+    public static LoadMemoryChain LoadMemory(
+        ConversationBufferMemory memory,
+        string outputKey = "text")
+    {
+        return new LoadMemoryChain(memory, outputKey);
     }
 
     /// <summary>
