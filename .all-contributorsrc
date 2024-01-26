@@ -70,6 +70,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "IRooc",
+      "name": "Roderic Bos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5981147?v=4",
+      "profile": "http://rooc.nl",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
