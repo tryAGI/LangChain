@@ -7,8 +7,9 @@ namespace LangChain.Providers.Azure;
 /// <summary>
 /// Wrapper around Azure OpenAI large language models
 /// </summary>
-public class AzureOpenAIModel : IChatModel
+public partial class AzureOpenAIModel : IChatModel
 {
+    private readonly object _usageLock = new();
     /// <summary>
     /// Azure OpenAI API Key
     /// </summary>
@@ -29,7 +30,7 @@ public class AzureOpenAIModel : IChatModel
     /// Azure OpenAI Resource URI
     /// </summary>
     public string Endpoint { get; set; }
-
+    public OpenAIClient Client { get; set; }
     private AzureOpenAIConfiguration Configurations { get; }
 
     #region Constructors
@@ -46,6 +47,7 @@ public class AzureOpenAIModel : IChatModel
         Id = id ?? throw new ArgumentNullException(nameof(id));
         ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+        Client = new OpenAIClient(new Uri(Endpoint), new AzureKeyCredential(ApiKey));
     }
 
     /// <summary>
@@ -60,6 +62,7 @@ public class AzureOpenAIModel : IChatModel
         ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
         Id = configuration.Id ?? throw new ArgumentException("Deployment model Id is not defined", nameof(configuration));
         Endpoint = configuration.Endpoint ?? throw new ArgumentException("Endpoint is not defined", nameof(configuration));
+        Client = new OpenAIClient(new Uri(Endpoint), new AzureKeyCredential(ApiKey));
     }
     #endregion
 
@@ -94,9 +97,8 @@ public class AzureOpenAIModel : IChatModel
             ChoiceCount = Configurations.ChoiceCount,
             Temperature = Configurations.Temperature,
         };
-
-        var client = new OpenAIClient(new Uri(Endpoint), new AzureKeyCredential(ApiKey));
-        return await client.GetChatCompletionsAsync(chatCompletionOptions, cancellationToken).ConfigureAwait(false);
+              
+        return await Client.GetChatCompletionsAsync(chatCompletionOptions, cancellationToken).ConfigureAwait(false);
     }
 
     private static ChatRequestMessage ToRequestMessage(Message message)
