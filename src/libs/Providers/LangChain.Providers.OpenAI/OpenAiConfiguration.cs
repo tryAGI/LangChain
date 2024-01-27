@@ -43,12 +43,12 @@ public class OpenAiConfiguration
     /// <summary>
     /// ID of the embedding model to use. <br/>
     /// </summary>
-    public string EmbeddingModelId { get; set; } = EmbeddingModel.Ada002;
+    public string EmbeddingModelId { get; set; } = EmbeddingModels.Ada002;
 
     /// <summary>
     /// ID of the moderation model to use. <br/>
     /// </summary>
-    public string ModerationModelId { get; set; } = ModerationModel.Latest;
+    public string ModerationModelId { get; set; } = ModerationModels.Latest;
 
     /// <summary>
     /// What sampling temperature to use, between 0 and 2. <br/>

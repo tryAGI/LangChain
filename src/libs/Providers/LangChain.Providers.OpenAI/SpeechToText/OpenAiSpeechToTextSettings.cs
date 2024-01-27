@@ -9,7 +9,7 @@ namespace LangChain.Providers.OpenAI;
 /// </summary>
 [CLSCompliant(false)]
 public readonly record struct OpenAiSpeechToTextSettings(
-    SpeechToTextModel Model,
+    SpeechToTextModels Model,
     string AudioName,
     string Prompt,
     AudioResponseFormat ResponseFormat,
@@ -18,7 +18,7 @@ public readonly record struct OpenAiSpeechToTextSettings(
 {
     /// <inheritdoc cref="OpenAiSpeechToTextSettings"/>
     public static OpenAiSpeechToTextSettings Default { get; } = new(
-        Model: SpeechToTextModel.Whisper1,
+        Model: SpeechToTextModels.Whisper1,
         AudioName: string.Empty,
         Prompt: string.Empty,
         ResponseFormat: AudioResponseFormat.Json,

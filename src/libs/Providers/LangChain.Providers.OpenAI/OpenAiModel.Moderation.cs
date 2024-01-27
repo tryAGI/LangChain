@@ -10,7 +10,7 @@ public partial class OpenAiModel : ISupportsModeration
     #region Properties
 
     /// <inheritdoc cref="OpenAiConfiguration.ModerationModelId"/>
-    public string ModerationModelId { get; init; } = ModerationModel.Latest;
+    public string ModerationModelId { get; init; } = ModerationModels.Latest;
 
     /// <inheritdoc/>
     public int RecommendedModerationChunkSize => 2_000;

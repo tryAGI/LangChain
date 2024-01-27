@@ -18,18 +18,17 @@ public partial class OpenAiModel : IGenerateImageModel
                 prompt: prompt,
                 model: Model.DallE_3,
                 numberOfResults: 1,
-                quality: ImageQuality.Standard,
+                quality: ImageQualities.Standard,
                 responseFormat: ResponseFormat.Url,
-                size: ImageResolution._256x256,
+                size: ImageResolutions._256x256,
                 user: User),
             cancellationToken).ConfigureAwait(false);
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = ImagePrices.TryGet(
-                model: ImageModel.DallE3,
-                resolution: ImageResolution._256x256,
-                quality: ImageQuality.Standard) ?? 0.0,
+            PriceInUsd = ImageModels.DallE3.GetPriceInUsd(
+                resolution: ImageResolutions._256x256,
+                quality: ImageQualities.Standard),
         };
         lock (_usageLock)
         {
@@ -63,18 +62,17 @@ public partial class OpenAiModel : IGenerateImageModel
                 prompt: prompt,
                 model: Model.DallE_3,
                 numberOfResults: 1,
-                quality: ImageQuality.Standard,
+                quality: ImageQualities.Standard,
                 responseFormat: ResponseFormat.B64_Json,
-                size: ImageResolution._256x256,
+                size: ImageResolutions._256x256,
                 user: User),
             cancellationToken).ConfigureAwait(false);
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = ImagePrices.TryGet(
-                model: ImageModel.DallE3,
-                resolution: ImageResolution._256x256,
-                quality: ImageQuality.Standard) ?? 0.0,
+            PriceInUsd = ImageModels.DallE3.GetPriceInUsd(
+                resolution: ImageResolutions._256x256,
+                quality: ImageQualities.Standard),
         };
         lock (_usageLock)
         {

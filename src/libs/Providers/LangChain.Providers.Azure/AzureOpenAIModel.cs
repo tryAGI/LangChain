@@ -30,10 +30,17 @@ public partial class AzureOpenAIModel : IChatModel
     /// Azure OpenAI Resource URI
     /// </summary>
     public string Endpoint { get; set; }
+    
+    /// <summary>
+    /// Azure OpenAI Client
+    /// </summary>
+    [CLSCompliant(false)]
     public OpenAIClient Client { get; set; }
+    
     private AzureOpenAIConfiguration Configurations { get; }
 
     #region Constructors
+    
     /// <summary>
     /// Wrapper around Azure OpenAI
     /// </summary>
@@ -67,6 +74,7 @@ public partial class AzureOpenAIModel : IChatModel
     #endregion
 
     #region Methods
+    
     /// <inheritdoc/>
     public async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
@@ -129,5 +137,6 @@ public partial class AzureOpenAIModel : IChatModel
             OutputTokens = usage.CompletionTokens
         };
     }
+    
     #endregion
 }

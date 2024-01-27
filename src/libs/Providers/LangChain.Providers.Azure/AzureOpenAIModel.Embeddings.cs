@@ -1,16 +1,8 @@
 ﻿using Azure;
 using Azure.AI.OpenAI;
-using OpenAI;
 using OpenAI.Constants;
-using OpenAI.Embeddings;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using OpenAIClient = Azure.AI.OpenAI.OpenAIClient;
+using LangChain.Providers.OpenAI;
 
 namespace LangChain.Providers.Azure;
 
@@ -19,7 +11,7 @@ public partial class AzureOpenAIModel : IEmbeddingModel
     #region Properties
 
     /// <inheritdoc cref="OpenAiConfiguration.EmbeddingModelId"/>
-    public string EmbeddingModelId { get; init; } = EmbeddingModel.Ada002;
+    public string EmbeddingModelId { get; init; } = EmbeddingModels.Ada002;
 
     /// <summary>
     /// API has limit of 2048 elements in array per request
@@ -29,7 +21,7 @@ public partial class AzureOpenAIModel : IEmbeddingModel
     public int EmbeddingBatchSize { get; init; } = 2048;
 
     /// <inheritdoc/>
-    public int MaximumInputLength => ContextLengths.Get(EmbeddingModelId);
+    public int MaximumInputLength => EmbeddingModels.ById(EmbeddingModelId)?.MaxInputTokens ?? 0;
 
     #endregion
 
@@ -111,9 +103,9 @@ public partial class AzureOpenAIModel : IEmbeddingModel
             return Usage.Empty;
         }
         var tokens = response.Value?.Usage.PromptTokens ?? 0;
-        var priceInUsd = EmbeddingPrices.TryGet(
-            model: new EmbeddingModel(EmbeddingModelId),
-            tokens: tokens) ?? 0.0D;
+        var priceInUsd = EmbeddingModels
+            .ById(EmbeddingModelId)?
+            .GetPriceInUsd(tokens: tokens) ?? 0.0D;
 
         return Usage.Empty with
         {

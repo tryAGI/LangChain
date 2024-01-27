@@ -29,9 +29,7 @@ public partial class OpenAiModel : ITextToSpeechModel<OpenAiTextToSpeechSettings
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = TextToSpeechPrices.TryGet(
-                model: settings.Value.Model,
-                characters: input.Length) ?? 0.0,
+            PriceInUsd = settings.Value.Model.GetPriceInUsd(characters: input.Length),
         };
         lock (_usageLock)
         {

@@ -30,16 +30,14 @@ public partial class OpenAiModel : ISpeechToTextModel<OpenAiSpeechToTextSettings
 #pragma warning restore CA2000
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        // var usage = Usage.Empty with
-        // {
-        //     PriceInUsd = AudioPrices.TryGet(
-        //         model: settings.Value.Model,
-        //         seconds: response) ?? 0.0,
-        // };
-        // lock (_usageLock)
-        // {
-        //     TotalUsage += usage;
-        // }
+        var usage = Usage.Empty with
+        {
+            //PriceInUsd = settings.Value.Model.GetPriceInUsd(seconds: response.Seconds),
+        };
+        lock (_usageLock)
+        {
+            TotalUsage += usage;
+        }
 
         return response;
     }

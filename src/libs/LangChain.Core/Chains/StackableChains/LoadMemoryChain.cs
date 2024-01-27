@@ -21,6 +21,8 @@ public class LoadMemoryChain: BaseStackableChain
 
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
+        values = values ?? throw new ArgumentNullException(nameof(values));
+        
         values.Value[_outputKey] = _chatMemory.BufferAsString;
         return Task.FromResult(values);
     }

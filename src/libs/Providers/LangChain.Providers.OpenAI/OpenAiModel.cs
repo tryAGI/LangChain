@@ -42,7 +42,7 @@ public partial class OpenAiModel :
     public double Temperature { get; set; } = 1.0;
 
     /// <inheritdoc/>
-    public int ContextLength => ContextLengths.Get(Id);
+    public int ContextLength => ChatModels.ById(Id)?.ContextLength ?? 0;
 
     /// <summary>
     /// 
@@ -98,10 +98,11 @@ public partial class OpenAiModel :
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int inputTokens, int outputTokens)
     {
-        return ChatPrices.TryGet(
-            model: new ChatModel(Id),
-            outputTokens: outputTokens,
-            inputTokens: inputTokens) ?? 0.0;
+        return ChatModels
+            .ById(Id)?
+            .GetPriceInUsd(
+                outputTokens: outputTokens,
+                inputTokens: inputTokens) ?? 0.0;
     }
 
     #endregion

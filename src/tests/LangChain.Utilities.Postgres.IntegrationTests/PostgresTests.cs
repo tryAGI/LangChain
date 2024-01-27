@@ -225,7 +225,7 @@ id	name	age
             new OpenAiConfiguration
             {
                 ApiKey = key,
-                ModelId = ChatModel.Gpt35Turbo,
+                ModelId = ChatModels.Gpt35Turbo,
                 Temperature = 0.1
             });
 

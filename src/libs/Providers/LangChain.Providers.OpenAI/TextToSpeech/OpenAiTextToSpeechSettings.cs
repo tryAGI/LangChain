@@ -8,14 +8,14 @@ namespace LangChain.Providers.OpenAI;
 /// </summary>
 [CLSCompliant(false)]
 public readonly record struct OpenAiTextToSpeechSettings(
-    TextToSpeechModel Model,
+    TextToSpeechModels Model,
     SpeechVoice Voice,
     SpeechResponseFormat ResponseFormat,
     float Speed)
 {
     /// <inheritdoc cref="OpenAiTextToSpeechSettings"/>
     public static OpenAiTextToSpeechSettings Default { get; } = new(
-        Model: TextToSpeechModel.Tts1,
+        Model: TextToSpeechModels.Tts1,
         Voice: SpeechVoice.Alloy,
         ResponseFormat: SpeechResponseFormat.MP3,
         Speed: 1.0F);
