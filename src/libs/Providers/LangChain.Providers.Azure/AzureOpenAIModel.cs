@@ -23,6 +23,10 @@ public partial class AzureOpenAIModel : IChatModel
     /// </summary>
     public string Id { get; init; }
 
+
+    /// <inheritdoc/>
+    public string User { get; set; } = string.Empty;
+
     /// <inheritdoc/>
     public int ContextLength => Configurations.ContextSize;
 
