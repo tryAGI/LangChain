@@ -118,7 +118,14 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
         }
 
-        var response = await Llm.GenerateAsync(new ChatRequest(chatMessages, stop)).ConfigureAwait(false);
+        var response = await Llm.GenerateAsync(
+            new ChatRequest
+            {
+                Messages = chatMessages,
+            }, new ChatSettings
+        {
+            StopSequences = stop,
+        }).ConfigureAwait(false);
         if (Verbose)
         {
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
@@ -160,16 +167,23 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         return outputs;
     }
 
-    private async Task<LlmResult> GenerateAsync(IReadOnlyList<ChainValues> inputs, CallbackManagerForChainRun runManager)
+    private async Task<LlmResult> GenerateAsync(
+        IReadOnlyList<ChainValues> inputs,
+        CallbackManagerForChainRun runManager)
     {
         var (prompts, stop) = await PreparePromptsAsync(inputs, runManager).ConfigureAwait(false);
 
-        var responseTasks = new List<Task<ChatResponse>>();
-        foreach (var prompt in prompts)
-        {
-            var request = new ChatRequest(prompt.ToChatMessages(), stop);
-            responseTasks.Add(Llm.GenerateAsync(request));
-        }
+        var responseTasks = prompts
+            .Select(prompt => Llm.GenerateAsync(
+                request: new ChatRequest
+                {
+                    Messages = prompt.ToChatMessages(),
+                },
+                settings: new ChatSettings
+                {
+                    StopSequences = stop ?? [],
+                }))
+            .ToList();
 
         var responses = await Task.WhenAll(responseTasks).ConfigureAwait(false);
 

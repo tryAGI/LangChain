@@ -61,10 +61,7 @@ public class LLMChain : BaseStackableChain
             }
         }
         
-        var response = await _llm.GenerateAsync(new ChatRequest(new List<Message>
-        {
-            prompt.AsSystemMessage(),
-        })).ConfigureAwait(false);
+        var response = await _llm.GenerateAsync(prompt).ConfigureAwait(false);
         responseContent = response.Messages.Last().Content;
         if (_useCache)
             SaveCachedAnswer(prompt, responseContent);

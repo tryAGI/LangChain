@@ -46,6 +46,7 @@
     <PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Text.Json" Version="8.0.0" />
+    <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Tiktoken" Version="1.1.3" />
     <PackageVersion Include="tryAGI.OpenAI" Version="2.0.0-alpha.9" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />

@@ -1,5 +1,5 @@
-using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Docstore;
+using LangChain.Providers;
 
 namespace LangChain.VectorStores;
 
@@ -7,13 +7,13 @@ namespace LangChain.VectorStores;
 /// VectorStore. Check https://api.python.langchain.com/en/latest/_modules/langchain/schema/vectorstore.html
 /// </summary>
 public abstract class VectorStore(
-    IEmbeddings embeddings,
+    IEmbeddingModel embeddingModel,
     Func<float, float>? overrideRelevanceScoreFn = null)
 {
     /// <summary>
     /// 
     /// </summary>
-    protected IEmbeddings Embeddings { get; } = embeddings;
+    protected IEmbeddingModel EmbeddingModel { get; } = embeddingModel;
 
     /// <summary>
     /// 
@@ -64,7 +64,10 @@ public abstract class VectorStore(
         int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
+        var (embedding, _) = await EmbeddingModel.CreateEmbeddingsAsync(
+            request: query,
+            settings: null,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return await SimilaritySearchByVectorAsync(embedding, k, cancellationToken).ConfigureAwait(false);
     }
@@ -100,7 +103,7 @@ public abstract class VectorStore(
     /// <param name="k">The number of results to return.</param>
     /// <param name="cancellationToken"></param>
     /// <returns>A list of tuples containing the document and its relevance score.</returns>
-    public async Task<IEnumerable<(Document, float)>> SimilaritySearchWithRelevanceScoresCore(
+    public async Task<IReadOnlyCollection<(Document, float)>> SimilaritySearchWithRelevanceScoresCore(
         string query,
         int k = 4,
         CancellationToken cancellationToken = default)

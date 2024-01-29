@@ -9,10 +9,9 @@ namespace LangChain.Chains.StackableChains;
 /// <summary>
 /// Text to speech chain
 /// </summary>
-public class TTSChain<T>:BaseStackableChain
+public class TTSChain : BaseStackableChain
 {
-    private readonly ITextToSpeechModel<T> _model;
-    private readonly T _settings;
+    private readonly ITextToSpeechModel _model;
     private readonly string _inputKey;
     private readonly string _outputKey;
     private bool _useCache;
@@ -20,14 +19,14 @@ public class TTSChain<T>:BaseStackableChain
     private const string CACHE_DIR = "cache";
 
     /// <inheritdoc/>
-    public TTSChain(ITextToSpeechModel<T> model, 
-        T settings,
-        string inputKey = "text", string outputKey = "audio")
+    public TTSChain(
+        ITextToSpeechModel model, 
+        string inputKey = "text",
+        string outputKey = "audio")
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
         _model = model;
-        _settings = settings;
         _inputKey = inputKey;
         _outputKey = outputKey;
 
@@ -50,7 +49,7 @@ public class TTSChain<T>:BaseStackableChain
             }
         }
 
-        var data = await _model.GenerateSpeechAsync(text, _settings).ConfigureAwait(false);
+        var data = await _model.GenerateSpeechAsync(text).ConfigureAwait(false);
 
         if (_useCache)
         {
@@ -76,7 +75,7 @@ public class TTSChain<T>:BaseStackableChain
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
-    public TTSChain<T> UseCache(bool enabled=true)
+    public TTSChain UseCache(bool enabled=true)
     {
         _useCache = enabled;
         return this;

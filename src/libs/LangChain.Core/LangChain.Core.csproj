@@ -39,4 +39,8 @@
     <Folder Include="Docstore\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
