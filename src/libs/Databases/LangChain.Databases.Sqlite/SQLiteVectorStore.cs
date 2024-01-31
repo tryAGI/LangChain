@@ -41,6 +41,36 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         return index;
     }
 
+    public static SQLIteVectorStoreOptions DefaultOptions = new SQLIteVectorStoreOptions();
+
+    /// <summary>
+    ///  If database does not exists, it loads documents from the documentsSource, creates an index from these documents and returns the created index.
+    ///  If database exists, it loads the index from the database.
+    ///  documentsSource is used only if the database does not exist. If the database exists, documentsSource is ignored.
+    /// </summary>
+    /// <param name="embeddings">An object implementing the <see cref="IEmbeddings"/> interface. This object is used to generate embeddings for the documents.</param>
+    /// <param name="documentsSource">An optional object implementing the <see cref="ISource"/> interface. This object is used to load documents if the vector store database file does not exist.</param>
+    /// <param name="options">An optional <see cref="SQLIteVectorStoreOptions"/> object. This object provides configuration options for the SQLite vector store</param>
+    public static async Task<VectorStoreIndexWrapper> GetIndex(
+        IEmbeddings embeddings, ISource? documentsSource=null, SQLIteVectorStoreOptions? options=null)
+    {
+        options ??= DefaultOptions;
+        
+
+        TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: options.ChunkSize, chunkOverlap: options.ChunkOverlap);
+
+        if (!System.IO.File.Exists("vectors.db"))
+        {
+            var documents = await documentsSource.LoadAsync();
+            return await SQLiteVectorStore.CreateIndexFromDocuments(embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter);
+        }
+            
+
+        var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
+        var index = new VectorStoreIndexWrapper(vectorStore);
+        return index;
+    }
+
     /// <summary>
     /// 
     /// </summary>

@@ -8,7 +8,7 @@ namespace LangChain.Providers.LLamaSharp;
 /// 
 /// </summary>
 [CLSCompliant(false)]
-public class LLamaSharpModelInstruction : LLamaSharpModelBase
+public class LLamaSharpModelInstruction : LLamaSharpModelBase, IWithDebug
 {
 
     

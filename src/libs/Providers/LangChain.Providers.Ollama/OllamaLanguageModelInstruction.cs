@@ -5,7 +5,7 @@ namespace LangChain.Providers;
 /// <summary>
 /// 
 /// </summary>
-public class OllamaLanguageModelInstruction : IChatModel
+public class OllamaLanguageModelInstruction : IChatModel, IWithDebug
 {
     private readonly string _modelName;
     private readonly OllamaApiClient _api;
