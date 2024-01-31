@@ -81,6 +81,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "hiptopjones",
+      "name": "Peter James",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3208743?v=4",
+      "profile": "https://github.com/hiptopjones",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
