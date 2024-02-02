@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/github/license/tryAGI/LangChain)](https://github.com/tryAGI/LangChain/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/1115206893015662663?label=Discord&logo=discord&logoColor=white&color=d82679)](https://discord.gg/Ca2xhfBf3v)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ⚡ Building applications with LLMs through composability ⚡  
@@ -85,6 +85,7 @@ Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/hiptopjones"><img src="https://avatars.githubusercontent.com/u/3208743?v=4?s=100" width="100px;" alt="Peter James"/><br /><sub><b>Peter James</b></sub></a><br /><a href="#infra-hiptopjones" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=hiptopjones" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=hiptopjones" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/curlyfro"><img src="https://avatars.githubusercontent.com/u/127311?v=4?s=100" width="100px;" alt="Ty Augustine"/><br /><sub><b>Ty Augustine</b></sub></a><br /><a href="#infra-curlyfro" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=curlyfro" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=curlyfro" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
