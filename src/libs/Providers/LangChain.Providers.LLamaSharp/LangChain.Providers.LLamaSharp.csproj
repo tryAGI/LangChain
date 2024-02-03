@@ -21,7 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+		<ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

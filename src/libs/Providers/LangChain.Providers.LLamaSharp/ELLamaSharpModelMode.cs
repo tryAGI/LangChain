@@ -13,5 +13,5 @@ public enum ELLamaSharpModelMode
     /// <summary>
     /// 
     /// </summary>
-    Chat
+    Chat,
 }
