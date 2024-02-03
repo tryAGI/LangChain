@@ -56,6 +56,6 @@ public class MessageFormatter
             formattedMessages.Add(Format(message));
         }
 
-        return string.Join("\n", messages);
+        return string.Join("\n", formattedMessages);
     }
 }

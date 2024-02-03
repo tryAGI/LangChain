@@ -23,7 +23,7 @@ END OF EXAMPLE
 Current summary:
 {summary}
 
- New lines of conversation:
+New lines of conversation:
 {new_lines}
 
 New summary:";
