@@ -46,6 +46,8 @@ Thought:{history}";
     private readonly IChatModel _model;
     private readonly string _reActPrompt;
     private readonly int _maxActions;
+    private readonly MessageFormatter _messageFormatter;
+    private readonly ChatMessageHistory _chatMessageHistory;
     private readonly ConversationBufferMemory _conversationBufferMemory;
 
     /// <summary>
@@ -71,8 +73,23 @@ Thought:{history}";
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
 
-        _conversationBufferMemory = new ConversationBufferMemory(new ChatMessageHistory()) { AiPrefix = "", HumanPrefix = "", SystemPrefix = "", SaveHumanMessages = false };
+        _messageFormatter = new MessageFormatter
+        {
+            AiPrefix = "",
+            HumanPrefix = "",
+            SystemPrefix = ""
+        };
 
+        _chatMessageHistory = new ChatMessageHistory()
+        {
+            // Do not save human messages
+            IsMessageAccepted = x => (x.Role != MessageRole.Human)
+        };
+
+        _conversationBufferMemory = new ConversationBufferMemory(_chatMessageHistory)
+        {
+            Formatter = _messageFormatter
+        };
     }
 
     private string _userInput = string.Empty;
@@ -86,7 +103,7 @@ Thought:{history}";
             Set(() => _userInput, "input")
             | Set(tools, "tools")
             | Set(toolNames, "tool_names")
-            | Set(() => _conversationBufferMemory.BufferAsString, "history")
+            | LoadMemory(_conversationBufferMemory, outputKey: "history")
             | Template(_reActPrompt)
             | Chain.LLM(_model).UseCache(_useCache)
             | UpdateMemory(_conversationBufferMemory, requestKey: "input", responseKey: "text")

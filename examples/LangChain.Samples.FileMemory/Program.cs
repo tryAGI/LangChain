@@ -1,4 +1,5 @@
 ﻿using LangChain.Memory;
+using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using static LangChain.Chains.Chain;
 
@@ -17,21 +18,24 @@ AI:";
 
 // To have a conversation thar remembers previous messages we need to use memory.
 // For memory to work properly we need to specify AI and Human prefixes.
-// Since in our template we have "AI:" and "Human:" we need to specify them here. Pay attention to spaces after prefixes.
-var conversationBufferMemory = new ConversationBufferMemory(new FileChatMessageHistory("messages.json"))
+// Since in our template we have "AI:" and "Human:" we need to specify those prefixes here.
+var memory = new ConversationBufferMemory(new FileChatMessageHistory("messages.json"))
 {
-    AiPrefix = "AI: ",
-    HumanPrefix = "Human: "
+    Formatter = new MessageFormatter
+    {
+        AiPrefix = "AI",
+        HumanPrefix = "Human"
+    }
 };
 
 // build chain. Notice that we don't set input key here. It will be set in the loop
 var chain =
     // load history. at first it will be empty, but UpdateMemory will update it every iteration
-    LoadMemory(conversationBufferMemory, outputKey: "history")
+    LoadMemory(memory, outputKey: "history")
     | Template(template)
     | LLM(model)
     // update memory with new request from Human and response from AI
-    | UpdateMemory(conversationBufferMemory, requestKey: "input", responseKey: "text");
+    | UpdateMemory(memory, requestKey: "input", responseKey: "text");
 
 // run an endless loop of conversation
 while (true)
@@ -47,7 +51,6 @@ while (true)
 
     // get response from AI
     var res = await chatChain.Run("text");
-
 
     Console.Write("AI: ");
     Console.WriteLine(res);

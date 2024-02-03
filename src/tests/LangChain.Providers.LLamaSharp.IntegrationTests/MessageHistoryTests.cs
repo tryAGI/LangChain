@@ -21,13 +21,14 @@ public class MessageHistoryTests
 Human: {message}
 AI: ";
 
-        var memory = new ConversationBufferMemory(new ChatMessageHistory());
+        var history = new ChatMessageHistory();
+        var memory = new ConversationBufferMemory(history);
 
         var message = Set("hi, i am Jimmy", "message");
 
         var chain =
             message
-            | Set(() => memory.BufferAsString, outputKey: "chat_history") // get lates messages from buffer every time
+            | LoadMemory(memory, outputKey: "chat_history") // get lates messages from buffer every time
             | Template(promptText, outputKey: "prompt")
             | LLM(model, inputKey: "prompt", outputKey: "text")
             | UpdateMemory(memory, requestKey: "message", responseKey: "text"); // save the messages to the buffer
@@ -41,7 +42,7 @@ AI: ";
         var res=chain.Run().Result;  // call the chain for the second time.
                                                 // prompt will contain previous messages and a question about the name.
 
-        Assert.AreEqual(4,memory.BufferAsMessages.Count);
+        Assert.AreEqual(4, history.Messages.Count);
         res.Value["text"].ToString()?.ToLower().Trim().Contains("jimmy").Should().BeTrue();
     }
 
