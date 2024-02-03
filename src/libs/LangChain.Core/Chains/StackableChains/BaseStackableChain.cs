@@ -96,7 +96,12 @@ public abstract class BaseStackableChain : IChain
 
         try
         {
-            return InternalCall(values);
+            var res= InternalCall(values);
+            if (_hook!=null)
+            {
+                _hook(values);
+            }
+            return res;
         }
         catch (StackableChainException)
         {
@@ -216,5 +221,11 @@ public abstract class BaseStackableChain : IChain
         var res = await CallAsync(new ChainValues(input)).ConfigureAwait(false);
 
         return res.Value[OutputKeys[0]].ToString() ?? string.Empty;
+    }
+
+    private Action<IChainValues>? _hook;
+    public void SetHook(Action<IChainValues> hook)
+    {
+        _hook = hook;
     }
 }
