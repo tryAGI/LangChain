@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LangChain.Providers;
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 
 /// </summary>
-public class OllamaLanguageModelOptions
+public class OllamaOptions
 {
     /// <summary>
     /// 

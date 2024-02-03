@@ -1,19 +1,7 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace LangChain.Providers;
-
-/// <summary>
-/// 
-/// </summary>
-public class ListModelsResponse
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("models")]
-    public Model[] Models { get; set; } = [];
-}
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 

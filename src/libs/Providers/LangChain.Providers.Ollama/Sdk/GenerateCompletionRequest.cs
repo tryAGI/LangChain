@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LangChain.Providers;
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 
@@ -23,7 +23,7 @@ public class GenerateCompletionRequest
     /// Additional model parameters listed in the documentation for the Modelfile such as temperature
     /// </summary>
     [JsonPropertyName("options")]
-    public OllamaLanguageModelOptions Options { get; set; } = new();
+    public OllamaOptions Options { get; set; } = new();
 
     /// <summary>
     /// Base64-encoded images (for multimodal models such as llava)
@@ -66,82 +66,4 @@ public class GenerateCompletionRequest
     /// </summary>
     [JsonPropertyName("format")]
     public string Format { get; set; } = "json";
-}
-
-/// <summary>
-/// 
-/// </summary>
-public class GenerateCompletionResponseStream
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("model")]
-    public string Model { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("created_at")]
-    public string CreatedAt { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("response")]
-    public string Response { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("done")]
-    public bool Done { get; set; }
-}
-
-/// <summary>
-/// 
-/// </summary>
-public class GenerateCompletionDoneResponseStream : GenerateCompletionResponseStream
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("context")]
-    public long[] Context { get; set; } = Array.Empty<long>();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("total_duration")]
-    public long TotalDuration { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("load_duration")]
-    public long LoadDuration { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("prompt_eval_count")]
-    public int PromptEvalCount { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("prompt_eval_duration")]
-    public long PromptEvalDuration { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("eval_count")]
-    public int EvalCount { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("eval_duration")]
-    public long EvalDuration { get; set; }
 }

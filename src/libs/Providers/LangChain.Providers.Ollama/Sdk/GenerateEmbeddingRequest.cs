@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LangChain.Providers;
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 
@@ -23,17 +23,5 @@ public class GenerateEmbeddingRequest
     /// 
     /// </summary>
     [JsonPropertyName("options")]
-    public OllamaLanguageModelOptions Options { get; set; } = new();
-}
-
-/// <summary>
-/// 
-/// </summary>
-public class GenerateEmbeddingResponse
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    [JsonPropertyName("embedding")]
-    public double[] Embedding { get; set; } = [];
+    public OllamaOptions Options { get; set; } = new();
 }

@@ -1,89 +1,65 @@
 ﻿using System.Diagnostics;
 
-namespace LangChain.Providers;
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 
 /// </summary>
-public class OllamaLanguageModelInstruction : IChatModel
+public class OllamaChatModel(
+    OllamaProvider provider,
+    string id = "ollama")
+    : ChatModel(id), IChatModel
 {
-    private readonly string _modelName;
-    private readonly OllamaApiClient _api;
-    
     /// <summary>
-    /// 
+    /// Provider of the model.
     /// </summary>
-    public OllamaLanguageModelOptions Options { get; }
-    
+    public OllamaProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
+
     /// <inheritdoc />
-    public string Id => "ollama";
-    
-    /// <inheritdoc />
-    public Usage TotalUsage { get; set; }
-    
-    /// <inheritdoc />
-    public int ContextLength { get; }
+    public override int ContextLength => 0;
     
     /// <summary>
     /// 
     /// </summary>
     public bool UseJson { get; set; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="modelName"></param>
-    /// <param name="url"></param>
-    /// <param name="options"></param>
-    public OllamaLanguageModelInstruction(
-        string modelName,
-        string url = "http://localhost:11434",
-        OllamaLanguageModelOptions? options = null)
-    {
-        _modelName = modelName;
-        Options = options ?? new OllamaLanguageModelOptions();
-        _api = new OllamaApiClient(url);
-        
-    }
-    /// <summary>
-    /// Occurs when token generated.
-    /// </summary>
-    public event Action<string> TokenGenerated = delegate { };
-
-    /// <summary>
-    /// Occurs before prompt is sent to the model.
-    /// </summary>
-    public event Action<string> PromptSent = delegate { };
-
     /// <inheritdoc />
-    public async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
+    public override async Task<ChatResponse> GenerateAsync(
+        ChatRequest request,
+        ChatSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
-        var models = await _api.ListLocalModels().ConfigureAwait(false);
+        request = request ?? throw new ArgumentNullException(nameof(request));
         
-        if (models.All(x => x.Name != _modelName))
+        var models = await Provider.Api.ListLocalModels().ConfigureAwait(false);
+        if (models.All(x => x.Name != Id))
         {
-            await _api.PullModel(_modelName).ConfigureAwait(false);
+            await Provider.Api.PullModel(Id).ConfigureAwait(false);
         }
+        
         var prompt = ToPrompt(request.Messages);
-
         var watch = Stopwatch.StartNew();
-        var response = _api.GenerateCompletion(new GenerateCompletionRequest()
+        var response = Provider.Api.GenerateCompletion(new GenerateCompletionRequest()
         {
             Prompt = prompt,
-            Model = _modelName,
-            Options = Options,
+            Model = Id,
+            Options = Provider.Options,
             Stream = true,
             Raw = true,
             Format = UseJson ? "json" : string.Empty,
         });
-        PromptSent(prompt);
+        
+        OnPromptSent(prompt);
+        
         var buf = "";
         await foreach (var completion in response)
         {
             buf += completion.Response;
-            TokenGenerated(completion.Response);
+            OnPartialResponseGenerated(completion.Response);
         }
 
+        OnCompletedResponseGenerated(buf);
+        
         var result = request.Messages.ToList();
         result.Add(buf.AsAiMessage());
 
@@ -94,12 +70,15 @@ public class OllamaLanguageModelInstruction : IChatModel
         {
             Time = watch.Elapsed,
         };
-        TotalUsage += usage;
+        AddUsage(usage);
+        provider.AddUsage(usage);
 
-        return new ChatResponse(
-            Messages: result,
-            Usage: usage);
-
+        return new ChatResponse
+        {
+            Messages = result,
+            Usage = usage,
+            UsedSettings = ChatSettings.Default,
+        };
     }
 
     /// <summary>
@@ -138,5 +117,4 @@ public class OllamaLanguageModelInstruction : IChatModel
     {
         return string.Join("\n", messages.Select(ConvertMessage).ToArray());
     }
-
 }
