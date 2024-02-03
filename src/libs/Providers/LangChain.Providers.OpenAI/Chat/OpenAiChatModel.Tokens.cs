@@ -1,15 +1,17 @@
+// ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-public partial class OpenAiModel : ISupportsCountTokens
+public partial class OpenAiChatModel
 {
     #region Properties
 
     /// <summary>
     /// 
     /// </summary>
-    public Tiktoken.Encoding Encoding { get; private set; }
+    public Tiktoken.Encoding Encoding { get; } =
+        Tiktoken.Encoding.TryForModel(chatModel.Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
 
     #endregion
 
@@ -32,6 +34,8 @@ public partial class OpenAiModel : ISupportsCountTokens
     /// <inheritdoc/>
     public int CountTokens(ChatRequest request)
     {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
         return CountTokens(request.Messages);
     }
 

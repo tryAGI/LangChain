@@ -1,6 +1,7 @@
+// ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
-public partial class OpenAiModel
+public partial class OpenAiChatModel
 {
     #region Properties
 
@@ -15,7 +16,7 @@ public partial class OpenAiModel
     public bool ReplyToFunctionCallsAutomatically { get; set; } = true;
 
     //private List<ChatCompletionFunctions> GlobalFunctions { get; set; } = new();
-    private Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = new();
+    private Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = [];
 
     #endregion
 
