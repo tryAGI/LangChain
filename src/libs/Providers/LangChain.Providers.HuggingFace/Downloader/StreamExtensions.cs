@@ -1,4 +1,4 @@
-﻿namespace LangChain.Providers.Downloader;
+﻿namespace LangChain.Providers.HuggingFace.Downloader;
 
 internal static class StreamExtensions
 {

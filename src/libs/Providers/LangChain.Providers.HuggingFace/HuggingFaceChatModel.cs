@@ -5,59 +5,15 @@ namespace LangChain.Providers.HuggingFace;
 /// <summary>
 /// 
 /// </summary>
-public class HuggingFaceModel : IChatModel
+public class HuggingFaceChatModel(
+    HuggingFaceProvider provider,
+    string id)
+    : ChatModel(id), IChatModel
 {
     #region Properties
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Id { get; init; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string ApiKey { get; init; }
-
     /// <inheritdoc/>
-    public Usage TotalUsage { get; private set; }
-
-    /// <inheritdoc/>
-    public int ContextLength => ApiHelpers.CalculateContextLength(Id);
-
-    private HttpClient HttpClient { get; set; }
-
-    #endregion
-
-    #region Constructors
-
-    /// <summary>
-    /// Wrapper around OpenAI large language models.
-    /// </summary>
-    /// <param name="configuration"></param>
-    /// <param name="httpClient"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public HuggingFaceModel(HuggingFaceConfiguration configuration, HttpClient httpClient)
-    {
-        configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
-        Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
-        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    }
-
-    /// <summary>
-    /// Wrapper around OpenAI large language models.
-    /// </summary>
-    /// <param name="apiKey"></param>
-    /// <param name="id"></param>
-    /// <param name="httpClient"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public HuggingFaceModel(string apiKey, HttpClient httpClient, string id)
-    {
-        ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
-        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        Id = id ?? throw new ArgumentNullException(nameof(id));
-    }
+    public override int ContextLength => ApiHelpers.CalculateContextLength(Id);
 
     #endregion
 
@@ -87,9 +43,7 @@ public class HuggingFaceModel : IChatModel
         IReadOnlyCollection<Message> messages,
         CancellationToken cancellationToken = default)
     {
-        var api = new HuggingFaceApi(apiKey: ApiKey, HttpClient);
-
-        return await api.GenerateTextAsync(modelId: Id, body: new GenerateTextRequest
+        return await provider.Api.GenerateTextAsync(modelId: Id, body: new GenerateTextRequest
         {
             Inputs = messages
                 .Select(ToRequestMessage)
@@ -107,10 +61,13 @@ public class HuggingFaceModel : IChatModel
     }
 
     /// <inheritdoc/>
-    public async Task<ChatResponse> GenerateAsync(
+    public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
+        ChatSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
@@ -122,11 +79,15 @@ public class HuggingFaceModel : IChatModel
         {
             Time = watch.Elapsed,
         };
-        TotalUsage += usage;
+        AddUsage(usage);
+        provider.AddUsage(usage);
 
-        return new ChatResponse(
-            Messages: messages,
-            Usage: usage);
+        return new ChatResponse
+        {
+            Messages = messages,
+            Usage = usage,
+            UsedSettings = ChatSettings.Default,
+        };
     }
 
     #endregion
