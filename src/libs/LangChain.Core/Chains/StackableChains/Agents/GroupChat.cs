@@ -20,7 +20,6 @@ public class GroupChat : BaseStackableChain
     int _currentAgentId;
     private readonly MessageFormatter _messageFormatter;
     private readonly ChatMessageHistory _chatMessageHistory;
-    private readonly ConversationBufferMemory _conversationBufferMemory;
 
     /// <summary>
     /// 
