@@ -287,4 +287,11 @@ public static class Chain
     {
         return new CrewChain(allAgents, manager, inputKey, outputKey);
     }
+
+    public static ExtractCodeChain ExtractCode(
+        string inputKey = "text",
+        string outputKey = "code")
+    {
+        return new ExtractCodeChain(inputKey, outputKey);
+    }
 }

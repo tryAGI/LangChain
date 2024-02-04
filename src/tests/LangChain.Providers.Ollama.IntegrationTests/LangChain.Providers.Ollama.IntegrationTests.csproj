@@ -10,6 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\libs\Extensions\LangChain.Extensions.Docker\LangChain.Extensions.Docker.csproj" />
 	  <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.Ollama\LangChain.Providers.Ollama.csproj" />
 	</ItemGroup>
 

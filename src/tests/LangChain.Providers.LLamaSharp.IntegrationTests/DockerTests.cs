@@ -15,18 +15,21 @@ public class DockerTests
     public void SimpleHelloWorldTest()
     {
         var model = LLamaSharpModelInstruction.FromPath(ModelPath);
+        model.Configuration.AntiPrompts = new[] { "[END]" };
 
         var promptText =
-            @"Generate a python program that prints ""Hello world"" do not explain or comment the code. I expect only generated code from you.
+            @"Generate a python program that prints ""Hello world"" do not explain or comment the code. I expect only generated code from you. Print [END] after you are done.
 
 Generated code:";
 
         var chain = Template(promptText, outputKey:"prompt")
                     | LLM(model, inputKey:"prompt", outputKey:"code")
-                    | RunCodeInDocker(inputKey:"code", outputKey:"result");
+                    | ExtractCode("code","data")
+                    | SaveIntoFile("main.py")
+                    | RunCodeInDocker(attachVolume:"./", outputKey:"result");
         var res = chain.Run().Result;
 
         Assert.AreEqual("Hello world", res.Value["result"].ToString()?.Trim());
     }
-    
+
 }

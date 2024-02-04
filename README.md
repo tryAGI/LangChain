@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/github/license/tryAGI/LangChain)](https://github.com/tryAGI/LangChain/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/1115206893015662663?label=Discord&logo=discord&logoColor=white&color=d82679)](https://discord.gg/Ca2xhfBf3v)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ⚡ Building applications with LLMs through composability ⚡  
@@ -82,6 +82,10 @@ Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/gunpal5"><img src="https://avatars.githubusercontent.com/u/10114874?v=4?s=100" width="100px;" alt="gunpal5"/><br /><sub><b>gunpal5</b></sub></a><br /><a href="#infra-gunpal5" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=gunpal5" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=gunpal5" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kharedev247"><img src="https://avatars.githubusercontent.com/u/72281217?v=4?s=100" width="100px;" alt="Ketan Khare"/><br /><sub><b>Ketan Khare</b></sub></a><br /><a href="#infra-kharedev247" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=kharedev247" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=kharedev247" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://rooc.nl"><img src="https://avatars.githubusercontent.com/u/5981147?v=4?s=100" width="100px;" alt="Roderic Bos"/><br /><sub><b>Roderic Bos</b></sub></a><br /><a href="#infra-IRooc" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=IRooc" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=IRooc" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hiptopjones"><img src="https://avatars.githubusercontent.com/u/3208743?v=4?s=100" width="100px;" alt="Peter James"/><br /><sub><b>Peter James</b></sub></a><br /><a href="#infra-hiptopjones" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=hiptopjones" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=hiptopjones" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/curlyfro"><img src="https://avatars.githubusercontent.com/u/127311?v=4?s=100" width="100px;" alt="Ty Augustine"/><br /><sub><b>Ty Augustine</b></sub></a><br /><a href="#infra-curlyfro" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=curlyfro" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=curlyfro" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
