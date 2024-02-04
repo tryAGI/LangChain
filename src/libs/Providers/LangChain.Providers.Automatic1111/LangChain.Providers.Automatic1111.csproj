@@ -9,7 +9,6 @@
 	<ItemGroup>
 		<PackageReference Include="LLamaSharp" />
 		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="System.Net.Http" />
 	</ItemGroup>
 
 	<ItemGroup Label="Usings">
@@ -22,7 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+		<ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>
