@@ -57,22 +57,17 @@ public class OpenAiEmbeddingModel(
             index += EmbeddingBatchSize;
         }
         
-        var usedSettings = new OpenAiEmbeddingSettings
-        {
-            User =
-                (settings as OpenAiEmbeddingSettings)?.User ??
-                (Settings as OpenAiEmbeddingSettings)?.User ??
-                (provider.EmbeddingSettings as OpenAiEmbeddingSettings)?.User ??
-                OpenAiEmbeddingSettings.Default.User ??
-                string.Empty,
-        };
+        var usedSettings = OpenAiEmbeddingSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.EmbeddingSettings);
         var results = await Task.WhenAll(batches.Select(async batch =>
         {
             var response = await provider.Api.EmbeddingsEndpoint.CreateEmbeddingAsync(
                 request: new EmbeddingsRequest(
                     input: batch,
                     model: Id,
-                    user: usedSettings.User),
+                    user: usedSettings.User!),
                 cancellationToken).ConfigureAwait(false);
 
             var usage = GetUsage(response) with

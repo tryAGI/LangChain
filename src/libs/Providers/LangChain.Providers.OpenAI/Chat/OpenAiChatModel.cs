@@ -121,26 +121,10 @@ public partial class OpenAiChatModel(
         
         OnPromptSent(request.Messages.AsHistory());
 
-        var usedSettings = new OpenAiChatSettings
-        {
-            StopSequences =
-                settings?.StopSequences ??
-                Settings?.StopSequences ??
-                provider.ChatSettings?.StopSequences ??
-                OpenAiChatSettings.Default.StopSequences ??
-                Array.Empty<string>(),
-            User =
-                (settings as OpenAiChatSettings)?.User ??
-                (Settings as OpenAiChatSettings)?.User ??
-                (provider.ChatSettings as OpenAiChatSettings)?.User ??
-                OpenAiChatSettings.Default.User ??
-                string.Empty,
-            Temperature =
-                (settings as OpenAiChatSettings)?.Temperature ??
-                (Settings as OpenAiChatSettings)?.Temperature ??
-                (provider.ChatSettings as OpenAiChatSettings)?.Temperature ??
-                OpenAiChatSettings.Default.Temperature,
-        };
+        var usedSettings = OpenAiChatSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.ChatSettings);
         // Functions = GlobalFunctions.Count == 0
         //     ? null
         //     : GlobalFunctions,
@@ -153,8 +137,8 @@ public partial class OpenAiChatModel(
                     .Select(ToRequestMessage)
                     .ToArray(),
                 model: Id,
-                stops: usedSettings.StopSequences.ToArray(),
-                user: usedSettings.User,
+                stops: usedSettings.StopSequences!.ToArray(),
+                user: usedSettings.User!,
                 temperature: usedSettings.Temperature),
             cancellationToken).ConfigureAwait(false);
         

@@ -1,6 +1,5 @@
 using OpenAI.Audio;
 using OpenAI.Constants;
-using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
@@ -22,28 +21,69 @@ public class OpenAiTextToSpeechSettings : TextToSpeechSettings
     /// <summary>
     /// 
     /// </summary>
-    [MemberNotNull(nameof(Model))]
     [CLSCompliant(false)]
     public TextToSpeechModels? Model { get; init; }
     
     /// <summary>
     /// 
     /// </summary>
-    [MemberNotNull(nameof(Voice))]
     [CLSCompliant(false)]
     public SpeechVoice? Voice { get; init; }
     
     /// <summary>
     /// 
     /// </summary>
-    [MemberNotNull(nameof(ResponseFormat))]
     [CLSCompliant(false)]
     public SpeechResponseFormat? ResponseFormat { get; init; }
     
     /// <summary>
     /// 
     /// </summary>
-    [MemberNotNull(nameof(Speed))]
     public float? Speed { get; init; }
-    
+
+    /// <summary>
+    /// Calculate the settings to use for the request.
+    /// </summary>
+    /// <param name="requestSettings"></param>
+    /// <param name="modelSettings"></param>
+    /// <param name="providerSettings"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public static OpenAiTextToSpeechSettings Calculate(
+        TextToSpeechSettings? requestSettings,
+        TextToSpeechSettings? modelSettings,
+        TextToSpeechSettings? providerSettings)
+    {
+        var requestSettingsCasted = requestSettings as OpenAiTextToSpeechSettings;
+        var modelSettingsCasted = modelSettings as OpenAiTextToSpeechSettings;
+        var providerSettingsCasted = providerSettings as OpenAiTextToSpeechSettings;
+
+        return new OpenAiTextToSpeechSettings
+        {
+            Model =
+                requestSettingsCasted?.Model ??
+                modelSettingsCasted?.Model ??
+                providerSettingsCasted?.Model ??
+                Default.Model ??
+                throw new InvalidOperationException("Default Model is not set."),
+            Voice =
+                requestSettingsCasted?.Voice ??
+                modelSettingsCasted?.Voice ??
+                providerSettingsCasted?.Voice ??
+                Default.Voice ??
+                throw new InvalidOperationException("Default Voice is not set."),
+            ResponseFormat =
+                requestSettingsCasted?.ResponseFormat ??
+                modelSettingsCasted?.ResponseFormat ??
+                providerSettingsCasted?.ResponseFormat ??
+                Default.ResponseFormat ??
+                throw new InvalidOperationException("Default ResponseFormat is not set."),
+            Speed =
+                requestSettingsCasted?.Speed ??
+                modelSettingsCasted?.Speed ??
+                providerSettingsCasted?.Speed ??
+                Default.Speed ??
+                throw new InvalidOperationException("Default Speed is not set."),
+        };
+    }
 }
