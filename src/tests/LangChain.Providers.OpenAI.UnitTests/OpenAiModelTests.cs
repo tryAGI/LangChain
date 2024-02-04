@@ -1,3 +1,5 @@
+using LangChain.Providers.OpenAI.Predefined;
+
 namespace LangChain.Providers.OpenAI.UnitTests;
 
 [TestFixture]

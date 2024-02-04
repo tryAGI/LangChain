@@ -1,35 +1,33 @@
-﻿using LangChain.Extensions.Docker;
-using LangChain.Providers.Downloader;
-using LangChain.Schema;
+﻿using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
 using static LangChain.Extensions.Docker.Chain;
+
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 [TestFixture]
 public class DockerTests
 {
-    string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-
     [Test]
     [Explicit]
-    public void SimpleHelloWorldTest()
+    public async Task SimpleHelloWorldTest()
     {
-        var model = LLamaSharpModelInstruction.FromPath(ModelPath);
+        var path = await HuggingFaceModelDownloader.Instance.GetModel(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
+        var model = LLamaSharpModelInstruction.FromPath(path);
         model.Configuration.AntiPrompts = new[] { "[END]" };
 
-        var promptText =
-            @"Generate a python program that prints ""Hello world"" do not explain or comment the code. I expect only generated code from you. Print [END] after you are done.
+        var chain = Template(@"Generate a python program that prints ""Hello world"" do not explain or comment the code. I expect only generated code from you. Print [END] after you are done.
 
-Generated code:";
-
-        var chain = Template(promptText, outputKey:"prompt")
+Generated code:", outputKey:"prompt")
                     | LLM(model, inputKey:"prompt", outputKey:"code")
                     | ExtractCode("code","data")
                     | SaveIntoFile("main.py")
                     | RunCodeInDocker(attachVolume:"./", outputKey:"result");
-        var res = chain.Run().Result;
+        var result = await chain.Run();
 
-        Assert.AreEqual("Hello world", res.Value["result"].ToString()?.Trim());
+        result.Value["result"].ToString()?.Trim().Should().Be("Hello world");
     }
 
 }

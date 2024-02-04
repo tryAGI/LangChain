@@ -10,6 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\libs\LangChain.Core\LangChain.Core.csproj" />
 	  <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.Automatic1111\LangChain.Providers.Automatic1111.csproj" />
 	</ItemGroup>
 

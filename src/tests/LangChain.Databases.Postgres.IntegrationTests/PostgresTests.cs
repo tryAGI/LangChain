@@ -1,5 +1,5 @@
-﻿using LangChain.Abstractions.Embeddings.Base;
-using LangChain.Docstore;
+﻿using LangChain.Docstore;
+using LangChain.Providers;
 using Moq;
 using Newtonsoft.Json;
 using Npgsql;
@@ -277,28 +277,35 @@ public class PostgresTests
         }
     }
 
-    private Mock<IEmbeddings> CreateFakeEmbeddings()
+    private Mock<IEmbeddingModel> CreateFakeEmbeddings()
     {
-        var mock = new Mock<IEmbeddings>();
+        var mock = new Mock<IEmbeddingModel>();
 
-        mock.Setup(x => x.EmbedQueryAsync(
+        mock.Setup(x => x.CreateEmbeddingsAsync(
                 It.IsAny<string>(),
+                It.IsAny<EmbeddingSettings>(),
                 It.IsAny<CancellationToken>()))
-            .Returns<string, CancellationToken>(
-                (query, _) =>
+            .Returns<string, EmbeddingSettings, CancellationToken>(
+                (query, _, _) =>
                 {
                     var embedding = EmbeddingsDict.TryGetValue(query, out var value)
                         ? value
                         : throw new ArgumentException("not in dict");
 
-                    return Task.FromResult(embedding);
+                    return Task.FromResult(new EmbeddingResponse
+                    {
+                        Values = [embedding],
+                        Usage = Usage.Empty,
+                        UsedSettings = EmbeddingSettings.Default,
+                    });
                 });
 
-        mock.Setup(x => x.EmbedDocumentsAsync(
+        mock.Setup(x => x.CreateEmbeddingsAsync(
             It.IsAny<string[]>(),
+            It.IsAny<EmbeddingSettings>(),
             It.IsAny<CancellationToken>()))
-            .Returns<string[], CancellationToken>(
-                (texts, _) =>
+            .Returns<string[], EmbeddingSettings, CancellationToken>(
+                (texts, _, _) =>
                 {
                     var embeddings = new float[texts.Length][];
 
@@ -310,7 +317,12 @@ public class PostgresTests
                             : throw new ArgumentException("not in dict");
                     }
 
-                    return Task.FromResult(embeddings);
+                    return Task.FromResult(new EmbeddingResponse
+                    {
+                        Values = embeddings,
+                        Usage = Usage.Empty,
+                        UsedSettings = EmbeddingSettings.Default,
+                    });
                 });
 
         return mock;

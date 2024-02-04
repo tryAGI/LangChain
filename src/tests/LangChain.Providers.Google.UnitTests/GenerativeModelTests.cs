@@ -1,4 +1,4 @@
-using LangChain.Providers.Models;
+using LangChain.Providers.Google.Predefined;
 
 namespace LangChain.Providers.Google.UnitTests;
 
@@ -14,7 +14,7 @@ public class GenerativeModelTests
         var httpClient = new HttpClient();
         var model = new GeminiProModel(apiKey, httpClient);
 
-        var result = await model.GenerateAsync(new ChatRequest(Messages: new[] { "Write a Poem".AsChatMessage() }));
+        var result = await model.GenerateAsync("Write a Poem".AsChatMessage());
 
         Assert.Greater(result.Messages.Count, 0,"Result Messages are zero");
         var last = result.Messages.Last();
