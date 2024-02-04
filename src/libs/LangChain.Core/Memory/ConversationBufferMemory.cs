@@ -3,88 +3,41 @@ using LangChain.Schema;
 
 namespace LangChain.Memory;
 
-/// <inheritdoc />
+/// <summary>
+/// Buffer for storing conversation memory.
+/// 
+/// NOTE: LangChain's buffer property is not implemented here
+/// </summary>
 public class ConversationBufferMemory : BaseChatMemory
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public string HumanPrefix { get; set; } = "Human: ";
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    public string AiPrefix { get; set; } = "AI: ";
+    public MessageFormatter Formatter { get; set; } = new MessageFormatter();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public string SystemPrefix { get; set; } = "System: ";
-
-    /// <summary>
-    /// 
-    /// </summary>
     public string MemoryKey { get; set; } = "history";
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool SaveHumanMessages { get; set; } = true;
-
-    /// <inheritdoc />
-    public ConversationBufferMemory(BaseChatMessageHistory chatHistory) : base(chatHistory)
-    {
-        ChatHistory = chatHistory;
-    }
-
-    // note: buffer property can't be implemented because of Any type as return type
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string BufferAsString => GetBufferString(BufferAsMessages);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public IReadOnlyList<Message> BufferAsMessages => ChatHistory.Messages;
 
     /// <inheritdoc />
     public override List<string> MemoryVariables => new List<string> { MemoryKey };
 
-    private string GetBufferString(IEnumerable<Message> messages)
+    /// <summary>
+    /// Initializes new buffered memory instance
+    /// </summary>
+    public ConversationBufferMemory()
+        : base()
     {
-        var stringMessages = new List<string>();
+    }
 
-        foreach (var m in messages)
-        {
-
-            if (m.Role==MessageRole.Human&&!SaveHumanMessages)
-            {
-                continue;
-            }
-
-            string role = m.Role switch
-            {
-                MessageRole.Human => HumanPrefix,
-                MessageRole.Ai => AiPrefix,
-                MessageRole.System => SystemPrefix,
-                MessageRole.FunctionCall => "Function",
-                _ => throw new ArgumentException($"Unsupported message type: {m.GetType().Name}")
-            };
-
-            string message = $"{role}{m.Content}";
-            // TODO: Add special case for a function call
-
-            stringMessages.Add(message);
-        }
-
-        return string.Join("\n", stringMessages);
+    /// <summary>
+    /// Initializes new buffered memory instance with provided history store
+    /// </summary>
+    /// <param name="chatHistory">History backing store</param>
+    public ConversationBufferMemory(BaseChatMessageHistory chatHistory)
+        : base(chatHistory)
+    {
     }
 
     /// <inheritdoc />
     public override OutputValues LoadMemoryVariables(InputValues? inputValues)
     {
-        return new OutputValues(new Dictionary<string, object> { { MemoryKey, BufferAsString } });
+        string bufferText = Formatter.Format(ChatHistory.Messages);
+        return new OutputValues(new Dictionary<string, object> { { MemoryKey, bufferText } });
     }
 }
