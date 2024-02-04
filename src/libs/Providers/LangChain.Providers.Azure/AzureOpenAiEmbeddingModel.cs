@@ -6,7 +6,10 @@ using LangChain.Providers.OpenAI;
 
 namespace LangChain.Providers.Azure;
 
-public partial class AzureOpenAIModel : IEmbeddingModel
+public class AzureOpenAiEmbeddingModel(
+    AzureOpenAiProvider provider,
+    string id)
+    : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
     #region Properties
 
@@ -28,42 +31,18 @@ public partial class AzureOpenAIModel : IEmbeddingModel
     #region Methods
 
     /// <inheritdoc/>
-    public async Task<float[]> EmbedQueryAsync(
-        string text,
+    public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
+        EmbeddingRequest request,
+        EmbeddingSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
-        var watch = Stopwatch.StartNew();
-
-        var embeddingOptions = new EmbeddingsOptions(Id, new[] { text });
-
-        var response = await Client.GetEmbeddingsAsync(embeddingOptions, cancellationToken).ConfigureAwait(false);
-
-        var usage = GetUsage(response) with
-        {
-            Time = watch.Elapsed,
-        };
-        lock (_usageLock)
-        {
-            TotalUsage += usage;
-        }
-
-        return response.Value.Data[0].Embedding.ToArray();
-    }
-
-    /// <inheritdoc/>
-    public async Task<float[][]> EmbedDocumentsAsync(
-        string[] texts,
-        CancellationToken cancellationToken = default)
-    {
-        texts = texts ?? throw new ArgumentNullException(nameof(texts));
-
-        var watch = Stopwatch.StartNew();
+        request = request ?? throw new ArgumentNullException(nameof(request));
 
         var index = 0;
         var batches = new List<string[]>();
-        while (index < texts.Length)
+        while (index < request.Strings.Count)
         {
-            batches.Add(texts.Skip(index).Take(EmbeddingBatchSize).ToArray());
+            batches.Add(request.Strings.Skip(index).Take(EmbeddingBatchSize).ToArray());
             index += EmbeddingBatchSize;
         }
 
@@ -72,16 +51,14 @@ public partial class AzureOpenAIModel : IEmbeddingModel
             var watch = Stopwatch.StartNew();
             var embeddingOptions = new EmbeddingsOptions(Id, batch);
 
-            var response = await Client.GetEmbeddingsAsync(embeddingOptions, cancellationToken).ConfigureAwait(false);
+            var response = await provider.Client.GetEmbeddingsAsync(embeddingOptions, cancellationToken).ConfigureAwait(false);
 
             var usage = GetUsage(response) with
             {
                 Time = watch.Elapsed,
             };
-            lock (_usageLock)
-            {
-                TotalUsage += usage;
-            }
+            AddUsage(usage);
+            //provider.AddUsage(usage);
 
             return response.Value.Data
                 .Select(x => x.Embedding.ToArray())
@@ -91,17 +68,22 @@ public partial class AzureOpenAIModel : IEmbeddingModel
         var rr = results
             .SelectMany(x => x.ToArray())
             .ToArray();
-        return rr;
+        
+        return new EmbeddingResponse
+        {
+            Values = rr,
+            Usage = Usage.Empty,
+            UsedSettings = EmbeddingSettings.Default,
+        };
     }
-
-
-
+    
     private Usage GetUsage(Response<Embeddings>? response)
     {
         if (response?.Value?.Usage == null!)
         {
             return Usage.Empty;
         }
+        
         var tokens = response.Value?.Usage.PromptTokens ?? 0;
         var priceInUsd = EmbeddingModels
             .ById(EmbeddingModelId)?
@@ -113,5 +95,6 @@ public partial class AzureOpenAIModel : IEmbeddingModel
             PriceInUsd = priceInUsd,
         };
     }
+    
     #endregion
 }
