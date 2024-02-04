@@ -25,7 +25,7 @@ public class LoadMemoryChain : BaseStackableChain
         string memoryVariableName = _chatMemory.MemoryVariables.FirstOrDefault();
         if (memoryVariableName == null)
         {
-            throw new Exception("Missing memory variable name");
+            throw new InvalidOperationException("Missing memory variable name");
         }
 
         OutputValues outputValues = _chatMemory.LoadMemoryVariables(null);

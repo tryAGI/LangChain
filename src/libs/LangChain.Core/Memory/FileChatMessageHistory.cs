@@ -20,26 +20,36 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     /// </summary>
     /// <param name="messagesFilePath">path of the local file to store the messages</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public FileChatMessageHistory(string messagesFilePath)
+    private FileChatMessageHistory(string messagesFilePath)
     {
         MessagesFilePath = messagesFilePath ?? throw new ArgumentNullException(nameof(messagesFilePath));
-
-        // Blocking call in the constructor creates a simpler implementation
-        LoadMessages().Wait();
     }
-        
+
+    /// <summary>
+    /// Create new history instance with provided file path
+    /// </summary>
+    /// <param name="path">path of the local file to store the messages</param>
+    /// <param name="cancellationToken"></param>
+    public static async Task<FileChatMessageHistory> CreateAsync(string path, CancellationToken cancellationToken = default)
+    {
+        FileChatMessageHistory chatHistory = new FileChatMessageHistory(path);
+        await chatHistory.LoadMessages().ConfigureAwait(false);
+
+        return chatHistory;
+    }
+
     /// <inheritdoc/>
     public override async Task AddMessage(Message message)
     {
         _messages.Add(message);
-        await SaveMessages();
+        await SaveMessages().ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
     public override async Task Clear()
     {
         _messages.Clear();
-        await SaveMessages();
+        await SaveMessages().ConfigureAwait(false);
     }
 
     private async Task SaveMessages()
@@ -56,5 +66,4 @@ public class FileChatMessageHistory : BaseChatMessageHistory
             _messages = JsonSerializer.Deserialize<List<Message>>(json);
         }
     }
-
 }

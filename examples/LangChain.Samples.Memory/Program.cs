@@ -100,7 +100,7 @@ AI: ";
                 return GetConversationSummaryBufferMemory(chatHistory, messageFormatter, (IChatModelWithTokenCounting)model);
 
             default:
-                throw new Exception($"Unexpected memory class name: '{memoryClassName}'");
+                throw new InvalidOperationException($"Unexpected memory class name: '{memoryClassName}'");
         }
     }
 
