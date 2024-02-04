@@ -42,6 +42,11 @@ public class EmbeddingResponse
         return response?.ToSingleArray() ?? [];
     }
 
+    public static implicit operator float[][](EmbeddingResponse response)
+    {
+        return response?.Values ?? [];
+    }
+    
     public float[] ToSingleArray()
     {
         return Values.FirstOrDefault() ?? [];

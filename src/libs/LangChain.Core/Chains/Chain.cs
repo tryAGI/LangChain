@@ -167,30 +167,34 @@ public static class Chain
     /// 
     /// </summary>
     /// <param name="model"></param>
+    /// <param name="settings"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static TTSChain TTS(
         ITextToSpeechModel model,
+        TextToSpeechSettings? settings = null,
         string inputKey = "text",
         string outputKey = "audio")
     {
-        return new TTSChain(model, inputKey, outputKey);
+        return new TTSChain(model, settings, inputKey, outputKey);
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="model"></param>
+    /// <param name="settings"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static STTChain STT(
         ISpeechToTextModel model,
+        SpeechToTextSettings? settings = null,
         string inputKey = "audio",
         string outputKey = "text")
     {
-        return new STTChain(model, inputKey, outputKey);
+        return new STTChain(model, settings, inputKey, outputKey);
     }
 
     /// <summary>

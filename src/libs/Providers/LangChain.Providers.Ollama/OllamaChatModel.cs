@@ -7,7 +7,7 @@ namespace LangChain.Providers.Ollama;
 /// </summary>
 public class OllamaChatModel(
     OllamaProvider provider,
-    string id = "ollama")
+    string id)
     : ChatModel(id), IChatModel
 {
     /// <summary>

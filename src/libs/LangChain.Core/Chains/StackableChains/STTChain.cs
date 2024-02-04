@@ -12,6 +12,7 @@ namespace LangChain.Chains.StackableChains;
 public class STTChain : BaseStackableChain
 {
     private readonly ISpeechToTextModel _model;
+    private readonly SpeechToTextSettings? _settings;
     private readonly string _inputKey;
     private readonly string _outputKey;
     private bool _useCache;
@@ -21,10 +22,12 @@ public class STTChain : BaseStackableChain
     /// <inheritdoc />
     public STTChain(
         ISpeechToTextModel model,
+        SpeechToTextSettings? settings = null,
         string inputKey = "audio",
         string outputKey = "text")
     {
         _model = model;
+        _settings = settings;
         _inputKey = inputKey;
         _outputKey = outputKey;
         InputKeys = new[] { inputKey };
@@ -67,7 +70,7 @@ public class STTChain : BaseStackableChain
             }
         }
 
-        var text=await _model.TranscribeAsync(audio).ConfigureAwait(false);
+        string text = await _model.TranscribeAsync(audio, _settings).ConfigureAwait(false);
         
         if(_useCache)
             SaveCachedAnswer(audio, text);

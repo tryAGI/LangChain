@@ -17,6 +17,12 @@ public class ChatRequest
         return ToChatRequest(message);
     }
     
+    /// <inheritdoc cref="ToChatRequest(Message)"/>
+    public static implicit operator ChatRequest(Message message)
+    {
+        return ToChatRequest(message);
+    }
+    
     /// <inheritdoc cref="ToChatRequest(string)"/>
     public static implicit operator ChatRequest(Message[] messages)
     {
@@ -36,6 +42,19 @@ public class ChatRequest
         return new ChatRequest
         {
             Messages = new[] { message.AsSystemMessage() },
+        };
+    }
+    
+    /// <summary>
+    /// Explicitly converts a string to a <see cref="ChatRequest"/>.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public static ChatRequest ToChatRequest(Message message)
+    {
+        return new ChatRequest
+        {
+            Messages = [message],
         };
     }
     

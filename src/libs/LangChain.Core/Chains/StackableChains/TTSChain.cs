@@ -12,6 +12,7 @@ namespace LangChain.Chains.StackableChains;
 public class TTSChain : BaseStackableChain
 {
     private readonly ITextToSpeechModel _model;
+    private readonly TextToSpeechSettings? _settings;
     private readonly string _inputKey;
     private readonly string _outputKey;
     private bool _useCache;
@@ -20,13 +21,15 @@ public class TTSChain : BaseStackableChain
 
     /// <inheritdoc/>
     public TTSChain(
-        ITextToSpeechModel model, 
+        ITextToSpeechModel model,
+        TextToSpeechSettings? settings = null,
         string inputKey = "text",
         string outputKey = "audio")
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
         _model = model;
+        _settings = settings;
         _inputKey = inputKey;
         _outputKey = outputKey;
 
@@ -49,7 +52,7 @@ public class TTSChain : BaseStackableChain
             }
         }
 
-        var data = await _model.GenerateSpeechAsync(text).ConfigureAwait(false);
+        var data = await _model.GenerateSpeechAsync(text, _settings).ConfigureAwait(false);
 
         if (_useCache)
         {

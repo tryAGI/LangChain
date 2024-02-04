@@ -13,6 +13,12 @@ public class EmbeddingRequest
     {
         return ToEmbeddingRequest(message);
     }
+    
+    /// <inheritdoc cref="ToEmbeddingRequest(string)"/>
+    public static implicit operator EmbeddingRequest(string[] messages)
+    {
+        return ToEmbeddingRequest(messages);
+    }
 
     /// <summary>
     /// Explicitly converts a string to a <see cref="EmbeddingRequest"/>. <br/>
@@ -26,6 +32,19 @@ public class EmbeddingRequest
         return new EmbeddingRequest
         {
             Strings = new[] { message },
+        };
+    }
+
+    /// <summary>
+    /// Explicitly converts a string to a <see cref="EmbeddingRequest"/>. <br/>
+    /// </summary>
+    /// <param name="messages"></param>
+    /// <returns></returns>
+    public static EmbeddingRequest ToEmbeddingRequest(string[] messages)
+    {
+        return new EmbeddingRequest
+        {
+            Strings = messages,
         };
     }
 }
