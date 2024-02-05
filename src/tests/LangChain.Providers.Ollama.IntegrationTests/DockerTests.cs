@@ -15,7 +15,7 @@ public class DockerTests
         {
             Settings = new ChatSettings
             {
-                Temperature = 0.0,
+                //Temperature = 0.0,
                 StopSequences = ["[END]"],
             }
         };

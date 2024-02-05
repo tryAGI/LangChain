@@ -1,5 +1,4 @@
-﻿using LangChain.Abstractions.Embeddings.Base;
-using LangChain.Databases.InMemory;
+﻿using LangChain.Databases.InMemory;
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Prompts;
@@ -9,8 +8,7 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 public partial class LLamaSharpTests
 {
-
-    IEmbeddings CreateEmbeddings()
+    IEmbeddingModel CreateEmbeddings()
     {
         var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
         {
@@ -18,7 +16,6 @@ public partial class LLamaSharpTests
             Temperature = 0
         });
         return embeddings;
-
     }
 
     IChatModel CreateInstructionModel()
@@ -41,7 +38,7 @@ public partial class LLamaSharpTests
         return model;
 
     }
-    VectorStoreIndexWrapper CreateVectorStoreIndex(IEmbeddings embeddings, string[] texts)
+    VectorStoreIndexWrapper CreateVectorStoreIndex(IEmbeddingModel embeddings, string[] texts)
     {
         InMemoryVectorStore vectorStore = new InMemoryVectorStore(embeddings);
         var textSplitter = new CharacterTextSplitter();

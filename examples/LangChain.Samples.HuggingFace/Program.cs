@@ -1,5 +1,4 @@
-﻿using LangChain.Providers;
-using LangChain.Providers.HuggingFace;
+﻿using LangChain.Providers.HuggingFace.Predefined;
 
 using var client = new HttpClient();
 var gpt2Model = new Gpt2Model(apiKey: string.Empty, client);

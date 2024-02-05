@@ -8,12 +8,6 @@
     <NoWarn>$(NoWarn);CA1308;CA1862;CA1510;CA1850;CA1305;CA1725</NoWarn>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Chains\QuestionAnswering\**" />
-    <EmbeddedResource Remove="Chains\QuestionAnswering\**" />
-    <None Remove="Chains\QuestionAnswering\**" />
-  </ItemGroup>
-
   <PropertyGroup Label="NuGet">
     <Description>LangChain core classes.</Description>
     <PackageTags>$(PackageTags);core</PackageTags>
@@ -33,10 +27,6 @@
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="System.Text.Json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Docstore\" />
   </ItemGroup>
 
   <ItemGroup>

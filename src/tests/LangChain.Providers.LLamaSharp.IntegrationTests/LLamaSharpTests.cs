@@ -1,12 +1,11 @@
 ﻿using LangChain.Abstractions.Chains.Base;
-using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
 using LangChain.Chains.RetrievalQA;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases.InMemory;
 using LangChain.Prompts;
-using LangChain.Providers.Downloader;
+using LangChain.Providers.HuggingFace.Downloader;
 using LangChain.VectorStores;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
@@ -18,22 +17,21 @@ public partial class LLamaSharpTests
     
     [Test]
     [Explicit]
-    public void PrepromptTest()
+    public async Task PrepromptTest()
     {
         var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
         {
             PathToModelFile = ModelPath,
         });
 
-        var response = model.GenerateAsync(new ChatRequest(new List<Message>
-        {
+        var response = await model.GenerateAsync(new[] {
             "You are simple assistant. If human say 'Bob' then you will respond with 'Jack'.".AsSystemMessage(),
             "Bob".AsHumanMessage(),
             "Jack".AsAiMessage(),
             "Bob".AsHumanMessage(),
             "Jack".AsAiMessage(),
             "Bob".AsHumanMessage(),
-        })).Result;
+        });
 
         Assert.AreEqual("Jack", response.Messages.Last().Content);
 
@@ -41,7 +39,7 @@ public partial class LLamaSharpTests
 
     [Test]
     [Explicit]
-    public void InstructionTest()
+    public async Task InstructionTest()
     {
         var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
         {
@@ -49,11 +47,11 @@ public partial class LLamaSharpTests
             Temperature = 0
         });
 
-        var response = model.GenerateAsync(new ChatRequest(new List<Message>
+        var response = await model.GenerateAsync(new[]
         {
             "You are a calculator. Print the result of this expression: 2 + 2.".AsSystemMessage(),
             "Result:".AsSystemMessage(),
-        })).Result;
+        });
 
         Assert.AreEqual("4", response.Messages.Last().Content.Trim());
 
@@ -137,7 +135,7 @@ public partial class LLamaSharpTests
         Assert.IsTrue(answer.Contains("Bob"));
     }
 
-    private IChain CreateChain1(IChatModel model, IEmbeddings embeddings)
+    private IChain CreateChain1(IChatModel model, IEmbeddingModel embeddings)
     {
         string[] texts = {
             "I spent entire day watching TV",
