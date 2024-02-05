@@ -1,14 +1,17 @@
-﻿using LangChain.Chains.LLM;
+﻿using System.Diagnostics;
+using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases.InMemory;
 using LangChain.Docstore;
 using LangChain.Prompts;
-using LangChain.Providers.Bedrock.Embeddings;
-using LangChain.Providers.Bedrock.Models;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using static LangChain.Chains.Chain;
 
-namespace LangChain.Providers.Bedrock.IntegrationTests;
+namespace LangChain.Providers.Amazon.Bedrock.IntegrationTests;
 
 [TestFixture, Explicit]
 public class BedrockTests
@@ -16,16 +19,14 @@ public class BedrockTests
     [Test]
     public async Task Chains()
     {
-        //var modelId = "ai21.j2-mid-v1";
-        //  var modelId = "anthropic.claude-v2:1";
-        var modelId = "meta.llama2-13b-chat-v1";
-
-        var model = new BedrockModel(modelId);
+        //var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        var llm = new Llama2With13BModel();
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
 
-        var chain = new LlmChain(new LlmChainInput(model, prompt));
+        var chain = new LlmChain(new LlmChainInput(llm, prompt));
 
         var result = await chain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
         {
@@ -38,15 +39,14 @@ public class BedrockTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var modelId = "ai21.j2-mid-v1";
-        //  var modelId = "anthropic.claude-v2:1";
-        // var modelId = "meta.llama2-13b-chat-v1";
-        var model = new BedrockModel(modelId);
+        var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        //var llm = new Llama2With13BModel();
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
         var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));
 
-        var chainOne = new LlmChain(new LlmChainInput(model, firstPrompt)
+        var chainOne = new LlmChain(new LlmChainInput(llm, firstPrompt)
         {
             Verbose = true,
             OutputKey = "company_name"
@@ -56,16 +56,15 @@ public class BedrockTests
         var secondPrompt =
             new PromptTemplate(new PromptTemplateInput(secondTemplate, new List<string>(1) { "company_name" }));
 
-        var chainTwo = new LlmChain(new LlmChainInput(model, secondPrompt));
+        var chainTwo = new LlmChain(new LlmChainInput(llm, secondPrompt));
 
         var overallChain = new SequentialChain(new SequentialChainInput(
-            new[]
-            {
+            [
                 chainOne,
                 chainTwo
-            },
-            new[] { "product" },
-            new[] { "company_name", "text" }
+            ],
+            ["product"],
+            ["company_name", "text"]
         ));
 
         var result = await overallChain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
@@ -77,12 +76,11 @@ public class BedrockTests
     }
 
     [Test]
-    public void LLMChainTest()
+    public void LlmChainTest()
     {
-        var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        //var modelId = "meta.llama2-13b-chat-v1";
-        var llm = new BedrockModel(modelId);
+        var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        //var llm = new Llama2With13BModel();
 
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
@@ -104,23 +102,20 @@ The pet name is
 
 
     [Test]
-    public void RetreivalChainTest()
+    public void RetrievalChainTest()
     {
-        //var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        var modelId = "meta.llama2-13b-chat-v1";
-        var llm = new BedrockModel(modelId);
-        var embeddings = new BedrockEmbeddings("amazon.titan-embed-text-v1");
-
-        var documents = new string[]
-        {
-            "I spent entire day watching TV",
-            "My dog's name is Bob",
-            "This icecream is delicious",
-            "It is cold in space"
-        }.ToDocuments();
+        //var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        var llm = new Llama2With13BModel();
+        var embeddings = new TitanEmbedTextV1Model();
         var index = InMemoryVectorStore
-            .CreateIndexFromDocuments(embeddings, documents).Result;
+            .CreateIndexFromDocuments(embeddings, new[]
+            {
+                "I spent entire day watching TV",
+                "My dog's name is Bob",
+                "This icecream is delicious",
+                "It is cold in space"
+            }.ToDocuments()).Result;
 
         string prompt1Text =
             @"Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -162,12 +157,14 @@ Answer: ";
     [Test]
     public async Task CanGetImage()
     {
-        var model = new BedrockModel("stability.stable-diffusion-xl-v0");
+        var model = new StableDiffusionExtraLargeV0Model();
+        var response = await model.GenerateImageAsync(
+            "create a picture of the solar system");
 
-        var prompt = "create a picture of the solar system";
-
-        var response = model.GenerateAsync(new ChatRequest(new[] { prompt.AsHumanMessage() })).Result;
-
-        Console.WriteLine(response);
+        var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
+        
+        await File.WriteAllBytesAsync(path, response.Bytes);
+        
+        Process.Start(path);
     }
 }

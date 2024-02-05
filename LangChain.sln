@@ -176,9 +176,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Abstrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.FileMemory", "examples\LangChain.Samples.FileMemory\LangChain.Samples.FileMemory.csproj", "{BA701280-0BEB-4DA4-92B3-9C777082C2AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Bedrock.IntegrationTests", "src\tests\LangChain.Providers.Bedrock.IntegrationTests\LangChain.Providers.Bedrock.IntegrationTests.csproj", "{73C76E80-95C5-4C96-A319-4F32043C903E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.Bedrock.IntegrationTests", "src\tests\LangChain.Providers.Amazon.Bedrock.IntegrationTests\LangChain.Providers.Amazon.Bedrock.IntegrationTests.csproj", "{73C76E80-95C5-4C96-A319-4F32043C903E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Bedrock", "src\libs\Providers\LangChain.Providers.Bedrock\LangChain.Providers.Bedrock.csproj", "{67985CCB-F606-41F8-9D36-513459F58882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.Bedrock", "src\libs\Providers\LangChain.Providers.Amazon.Bedrock\LangChain.Providers.Amazon.Bedrock.csproj", "{67985CCB-F606-41F8-9D36-513459F58882}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
