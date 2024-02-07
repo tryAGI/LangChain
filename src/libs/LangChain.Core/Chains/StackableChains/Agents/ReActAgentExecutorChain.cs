@@ -145,7 +145,7 @@ Thought:{history}";
             else if (res.Value[ReActAnswer] is AgentFinish)
             {
                 var finish = (AgentFinish)res.Value[ReActAnswer];
-                values.Value.Add(OutputKeys[0], finish.Output);
+                values.Value[OutputKeys[0]]= finish.Output;
                 return values;
             }
         }
