@@ -6,6 +6,7 @@ using LangChain.Memory;
 using LangChain.Providers;
 using LangChain.Schema;
 using System.Reflection;
+using LangChain.Chains.StackableChains.Agents.Tools;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Chains.StackableChains.Agents;
@@ -27,9 +28,9 @@ Use the following format:
 
 Question: the input question you must answer
 Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
+Action: the tool name, should be one of [{tool_names}]
+Action Input: the input to the tool
+Observation: the result of the tool
 (this Thought/Action/Action Input/Observation can repeat multiple times)
 Thought: I now know the final answer
 Final Answer: the final answer to the original input question
@@ -42,7 +43,7 @@ Thought:{history}";
 
     private StackChain? _chain;
     private bool _useCache;
-    Dictionary<string, ReActAgentTool> _tools = new();
+    Dictionary<string, AgentTool> _tools = new();
     private readonly IChatModel _model;
     private readonly string _reActPrompt;
     private readonly int _maxActions;
@@ -133,8 +134,8 @@ Thought:{history}";
             if (res.Value[ReActAnswer] is AgentAction)
             {
                 var action = (AgentAction)res.Value[ReActAnswer];
-                var tool = _tools[action.Action];
-                var toolRes = tool.ToolCall(action.ActionInput);
+                var tool = _tools[action.Action.ToLower()];
+                var toolRes = await tool.ToolTask(action.ActionInput);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + toolRes, MessageRole.System))
                     .ConfigureAwait(false);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Thought:", MessageRole.System))
@@ -170,7 +171,7 @@ Thought:{history}";
     /// </summary>
     /// <param name="tool"></param>
     /// <returns></returns>
-    public ReActAgentExecutorChain UseTool(ReActAgentTool tool)
+    public ReActAgentExecutorChain UseTool(AgentTool tool)
     {
         tool = tool ?? throw new ArgumentNullException(nameof(tool));
         
