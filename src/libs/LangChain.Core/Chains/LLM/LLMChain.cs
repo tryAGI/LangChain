@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
@@ -154,7 +155,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             throw;
         }
 
-        var outputs = CreateOutputs(response);
+        var outputs = await CreateOutputs(response).ConfigureAwait(false);
         await runManager.HandleChainEndAsync(new ChainValues("inputs", inputs), new ChainValues("outputs", outputs)).ConfigureAwait(false);
 
         return outputs;
@@ -237,29 +238,28 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     }
 
     /// <summary> Create outputs from response. </summary>
-    private List<IChainValues> CreateOutputs(LlmResult llmResult)
+    private async Task<List<IChainValues>> CreateOutputs(LlmResult llmResult)
     {
+        var chainValues = new List<IChainValues>();
         // Get the text of the top generated string.
-        var result = llmResult.Generations
-            .Select(generation =>
+        foreach (var generation in llmResult.Generations)
+        {
+            var dictionary = new Dictionary<string, object>
             {
-                var dictionary = new Dictionary<string, object>
-                {
-                    [OutputKey] = OutputParser.ParseResult(generation)
-                };
+                [OutputKey] = await OutputParser.ParseResult(generation).ConfigureAwait(false)
+            };
 
-                if (!ReturnFinalOnly)
-                {
-                    dictionary["full_generation"] = generation;
-                }
+            if (!ReturnFinalOnly)
+            {
+                dictionary["full_generation"] = generation;
+            }
 
-                return new ChainValues(dictionary);
-            })
-            .Cast<IChainValues>()
-            .ToList();
+            chainValues.Add(new ChainValues(dictionary));
+        }
 
-        return result;
+        return chainValues;
     }
+
 
     /// <summary>
     /// 
