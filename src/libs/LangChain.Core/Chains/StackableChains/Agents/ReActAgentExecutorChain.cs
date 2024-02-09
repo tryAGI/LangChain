@@ -33,6 +33,7 @@ Action Input: the input to the tool
 Observation: the result of the tool
 (this Thought/Action/Action Input/Observation can repeat multiple times)
 Thought: I now know the final answer
+(no actions before final answer)
 Final Answer: the final answer to the original input question
 Always add [END] after final answer
 
