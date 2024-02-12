@@ -1,24 +1,34 @@
-﻿using Amazon.BedrockRuntime;
+﻿using System.Text;
+using System.Text.Json.Nodes;
+using Amazon.BedrockRuntime;
 using Amazon.BedrockRuntime.Model;
 using Amazon.Util;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 
-namespace LangChain.Providers.Bedrock.Models;
+namespace LangChain.Providers.Amazon.Bedrock.Models;
 
-public class StableDiffusionRequest : IBedrockModelRequest
+public class AmazonTitanImageRequest : IBedrockModelRequest
 {
     public async Task<string> GenerateAsync(AmazonBedrockRuntimeClient client, ChatRequest request, BedrockConfiguration configuration)
     {
         var prompt = ToPrompt(request.Messages);
 
-        var payload = Encoding.UTF8.GetBytes(
-            JsonSerializer.Serialize(new
+        string payload = new JsonObject()
+        {
+            ["taskType"] = "TEXT_IMAGE",
+            ["textToImageParams"] = new JsonObject
             {
-                text_prompts = prompt.Select(x => new { text = prompt }).ToArray()
-            })
-        );
+                ["text"] = prompt,
+                ["imageGenerationConfig"] = new JsonObject
+                {
+                    ["quality"] = "standard",
+                    ["width"] = 1024,
+                    ["height"] = 1024,
+                    ["cfgScale"] = 8.0,
+                    ["seed"] = 0,
+                    ["numberOfImages"] = 3,
+                }
+            }
+        }.ToJsonString();
 
         string generatedText = "";
         try
@@ -26,15 +36,15 @@ public class StableDiffusionRequest : IBedrockModelRequest
             InvokeModelResponse response = await client.InvokeModelAsync(new InvokeModelRequest()
             {
                 ModelId = configuration.ModelId,
-                Body = new MemoryStream(payload),
+                Body = AWSSDKUtils.GenerateMemoryStreamFromString(payload),
                 ContentType = "application/json",
                 Accept = "application/json"
             });
 
             if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
             {
-                var body = JsonNode.Parse(response.Body)?["artifacts"][0]["base64"];
-                generatedText = $"data:image/jpeg;base64,{body}";
+                var body = JsonNode.Parse(response.Body);
+                generatedText = body?["results"]?[0]?["outputText"]?.GetValue<string>() ?? "";
             }
             else
             {

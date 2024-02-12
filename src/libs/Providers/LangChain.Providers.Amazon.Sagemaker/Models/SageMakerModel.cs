@@ -1,15 +1,17 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
-namespace LangChain.Providers.Bedrock.Models
+namespace LangChain.Providers.Amazon.SageMaker.Models
 {
-    public class BedrockModel : BedrockModelBase
+    public class SageMakerModel : SageMakerModelBase
     {
-        private readonly BedrockConfiguration _configuration;
+        private readonly SageMakerConfiguration _configuration;
 
-        public BedrockModel(string modelId)
+        public SageMakerModel(string apiGatewayEndpoint, string sageMakerEndpointName)
         {
-            Id = modelId ?? throw new ArgumentException("ModelId is not defined", nameof(modelId));
-            _configuration = new BedrockConfiguration { ModelId = modelId };
+            Url = apiGatewayEndpoint ?? throw new ArgumentException("API Gateway Endpoint is not defined", nameof(apiGatewayEndpoint));
+            Id = sageMakerEndpointName ?? throw new ArgumentException("SageMaker Endpoint Name is not defined", nameof(sageMakerEndpointName));
+            _configuration = new SageMakerConfiguration { ModelId = Id, Url = Url };
         }
 
         public override async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = new CancellationToken())

@@ -1,25 +1,19 @@
 ﻿using Amazon.BedrockRuntime;
 using LangChain.Abstractions.Embeddings.Base;
-using LangChain.Providers.Bedrock.Models;
 
-namespace LangChain.Providers.Bedrock.Embeddings;
+namespace LangChain.Providers.Amazon.Bedrock.Embeddings;
 
 public abstract class BedrockEmbeddingsBase : IEmbeddings
 {
-    protected readonly Dictionary<string, Func<IBedrockEmbeddingsRequest>> _requestTypes;
-    private protected readonly object _usageLock = new();
-
-    public BedrockEmbeddingsBase()
+    protected readonly Dictionary<string, Func<IBedrockEmbeddingsRequest>> _requestTypes = new()
     {
-        _requestTypes = new Dictionary<string, Func<IBedrockEmbeddingsRequest>>
-        {
-            { "amazon.titan-embed-text-v1", () => new AmazonTitanEmbeddingsRequest() },
-            // { "amazon.titan-embed-image-v1", () => new AmazonTitanEmbeddingsRequest() },     // TODO
+        { AmazonModelIds.AmazonTitanEmbeddingsG1TextV1, () => new AmazonTitanEmbeddingsRequest() },
+        { AmazonModelIds.AmazonTitanMultiModalEmbeddingsG1V1, () => new AmazonTitanMultiModalEmbeddingsRequest() },
 
-            // { "cohere.embed-english-v3", () => new CohereEmbeddingsRequest() },              // TODO
-            // { "cohere.embed-multilingual-v3", () => new CohereEmbeddingsRequest() },         // TODO
-        };
-    }
+        { AmazonModelIds.CohereEmbedEnglish, () => new CohereEmbeddingsRequest() },
+        { AmazonModelIds.CohereEmbedMultilingual, () => new CohereEmbeddingsRequest() },
+    };
+    private protected readonly object _usageLock = new();
 
     public abstract Task<float[][]> EmbedDocumentsAsync(string[] texts, CancellationToken cancellationToken = default);
     public abstract Task<float[]> EmbedQueryAsync(string text, CancellationToken cancellationToken = default);

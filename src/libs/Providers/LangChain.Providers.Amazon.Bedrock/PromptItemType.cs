@@ -1,4 +1,4 @@
-﻿namespace LangChain.Providers.Bedrock;
+﻿namespace LangChain.Providers.Amazon.Bedrock;
 
 public enum PromptItemType
 {

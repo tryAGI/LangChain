@@ -1,6 +1,6 @@
 ﻿using Amazon.BedrockRuntime;
 
-namespace LangChain.Providers.Bedrock.Models;
+namespace LangChain.Providers.Amazon.Bedrock.Models;
 
 public interface IBedrockModelRequest
 {

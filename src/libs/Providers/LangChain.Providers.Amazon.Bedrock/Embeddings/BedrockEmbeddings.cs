@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace LangChain.Providers.Bedrock.Embeddings;
+namespace LangChain.Providers.Amazon.Bedrock.Embeddings;
 
 public class BedrockEmbeddings : BedrockEmbeddingsBase
 {
@@ -10,6 +10,11 @@ public class BedrockEmbeddings : BedrockEmbeddingsBase
     {
         Id = modelId ?? throw new ArgumentException("ModelId is not defined", nameof(modelId));
         _configuration = new BedrockEmbeddingsConfiguration { ModelId = modelId };
+    }
+
+    public BedrockEmbeddings(string modelId, BedrockEmbeddingsConfiguration configuration) : this(modelId)
+    {
+        _configuration.Base64Image = configuration.Base64Image;
     }
 
     public override async Task<float[][]> EmbedDocumentsAsync(string[] texts, CancellationToken cancellationToken = default)

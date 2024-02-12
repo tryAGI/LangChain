@@ -9,6 +9,7 @@ using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Embeddings;
 using LangChain.Providers.Amazon.Bedrock.Models;
+using LangChain.Providers.Amazon.SageMaker.Models;
 using LangChain.Schema;
 using LangChain.Sources;
 using LangChain.TextSplitters;
@@ -17,18 +18,30 @@ using static LangChain.Chains.Chain;
 namespace LangChain.Providers.Amazon.IntegrationTests;
 
 [TestFixture, Explicit]
-public class BedrockTests
+public class SageMakerTests
 {
+    [Test]
+    public async Task SimpleChain()
+    {
+        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com/model";
+        var sageMakerEndpointName = "openchat";
+        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
+
+        var prompt = @"what's supermans parents names?";
+
+        var chain =
+            Set(prompt)
+            | LLM(model);
+
+        Console.WriteLine(await chain.Run("text"));
+    }
+
     [Test]
     public async Task Chains()
     {
-        // var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        var modelId = "amazon.titan-text-express-v1";
-        // var modelId = "cohere.command-light-text-v14";
-        // var modelId = "meta.llama2-13b-chat-v1";
-
-        var model = new BedrockModel(modelId);
+        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com/model";
+        var sageMakerEndpointName = "openchat";
+        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -46,10 +59,9 @@ public class BedrockTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var modelId = "ai21.j2-mid-v1";
-        //  var modelId = "anthropic.claude-v2:1";
-        // var modelId = "meta.llama2-13b-chat-v1";
-        var model = new BedrockModel(modelId);
+        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com/model";
+        var sageMakerEndpointName = "openchat";
+        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
         var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));
@@ -74,7 +86,7 @@ public class BedrockTests
             },
             new[] { "product" },
             new[] { "company_name", "text" }
-        ));https://voyager.postman.com/screen/postman-product-screen-05-2023.svg
+        ));
 
         var result = await overallChain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
         {
@@ -87,10 +99,9 @@ public class BedrockTests
     [Test]
     public void LLMChainTest()
     {
-        var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        //var modelId = "meta.llama2-13b-chat-v1";
-        var llm = new BedrockModel(modelId);
+        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com";
+        var sageMakerEndpointName = "openchat";
+        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
 
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
@@ -104,7 +115,7 @@ The pet name is
         var chain =
             Set("My dog name is Bob", outputKey: "information")
             | Template(promptText, outputKey: "prompt")
-            | LLM(llm, inputKey: "prompt", outputKey: "text");
+            | LLM(model, inputKey: "prompt", outputKey: "text");
 
         var res = chain.Run(resultKey: "text").Result;
         Console.WriteLine(res);
@@ -216,9 +227,9 @@ Helpful Answer:";
     [Test]
     public async Task CanGetImage()
     {
-        var model = new BedrockModel(AmazonModelIds.StabilityAISDXL1_0);
+        var model = new BedrockModel(AmazonModelIds.AmazonTitanImageGeneratorG1V1);
 
-        var prompt = "i'm going to prepare a recipe.  show me an image of realistic food ingredients";
+        var prompt = "create a picture of the solar system";
 
         var response = model.GenerateAsync(new ChatRequest(new[] { prompt.AsHumanMessage() })).Result;
 

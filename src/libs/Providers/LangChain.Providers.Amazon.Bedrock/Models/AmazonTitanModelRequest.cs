@@ -4,20 +4,23 @@ using Amazon.BedrockRuntime;
 using Amazon.BedrockRuntime.Model;
 using Amazon.Util;
 
-namespace LangChain.Providers.Bedrock.Models;
+namespace LangChain.Providers.Amazon.Bedrock.Models;
 
-public class AnthropicClaudeModelRequest : IBedrockModelRequest
+public class AmazonTitanModelRequest : IBedrockModelRequest
 {
     public async Task<string> GenerateAsync(AmazonBedrockRuntimeClient client, ChatRequest request, BedrockConfiguration configuration)
     {
         var prompt = ToPrompt(request.Messages);
 
-        var payload = new JsonObject()
+        string payload = new JsonObject()
         {
-            { "prompt", prompt },
-            { "max_tokens_to_sample", configuration.MaxTokens },
-            { "temperature", configuration.Temperature },
-            { "stop_sequences", new JsonArray("\n\nHuman:") }
+            ["inputText"] = prompt,
+            ["textGenerationConfig"] = new JsonObject
+            {
+                ["maxTokenCount"] = configuration.MaxTokens,
+                ["temperature"] = configuration.Temperature,
+                ["topP"] = 0.9
+            }
         }.ToJsonString();
 
         string generatedText = "";
@@ -33,8 +36,8 @@ public class AnthropicClaudeModelRequest : IBedrockModelRequest
 
             if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
             {
-                generatedText = JsonNode.Parse(response.Body)?["completion"]?
-                    .GetValue<string>() ?? "";
+                var body = JsonNode.Parse(response.Body);
+                generatedText = body?["results"]?[0]?["outputText"]?.GetValue<string>() ?? "";
             }
             else
             {
@@ -54,26 +57,8 @@ public class AnthropicClaudeModelRequest : IBedrockModelRequest
 
         foreach (var item in messages)
         {
-            switch (item.Role)
-            {
-                case MessageRole.Human:
-                case MessageRole.System:
-                case MessageRole.Chat:
-                case MessageRole.FunctionCall:
-                case MessageRole.FunctionResult:
-                    sb.Append("Human: " + item.Content);
-                    break;
-
-                case MessageRole.Ai:
-                    sb.Append("Assistant: " + item.Content);
-                    break;
-
-                default:
-                    sb.Append("\n\nAssistant: ");
-                    break;
-            }
+            sb.Append(item.Content);
         }
-        sb.Append("\n\nAssistant: ");
         return sb.ToString();
     }
 }

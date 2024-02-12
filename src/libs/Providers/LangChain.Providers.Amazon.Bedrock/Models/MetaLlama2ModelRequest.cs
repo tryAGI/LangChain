@@ -4,9 +4,9 @@ using Amazon.BedrockRuntime;
 using Amazon.BedrockRuntime.Model;
 using Amazon.Util;
 
-namespace LangChain.Providers.Bedrock.Models;
+namespace LangChain.Providers.Amazon.Bedrock.Models;
 
-public class Ai21LabsJurassic2ModelRequest : IBedrockModelRequest
+public class MetaLlama2ModelRequest : IBedrockModelRequest
 {
     public async Task<string> GenerateAsync(AmazonBedrockRuntimeClient client, ChatRequest request, BedrockConfiguration configuration)
     {
@@ -15,8 +15,9 @@ public class Ai21LabsJurassic2ModelRequest : IBedrockModelRequest
         string payload = new JsonObject()
         {
             { "prompt", prompt },
-            { "maxTokens", configuration.MaxTokens },
-            { "temperature", configuration.Temperature }
+            { "max_gen_len", 512 },
+            { "temperature", 0.5 },
+            { "top_p", 0.9 }
         }.ToJsonString();
 
         string generatedText = "";
@@ -32,9 +33,8 @@ public class Ai21LabsJurassic2ModelRequest : IBedrockModelRequest
 
             if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
             {
-                generatedText = JsonNode.Parse(response.Body)?["completions"]?
-                    .AsArray()[0]?["data"]?
-                    .AsObject()["text"]?.GetValue<string>() ?? "";
+                generatedText = JsonNode.Parse(response.Body)?["generation"]?
+                    .GetValue<string>() ?? "";
             }
             else
             {

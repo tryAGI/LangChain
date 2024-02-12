@@ -2,10 +2,9 @@
 using Amazon.BedrockRuntime;
 using Amazon.BedrockRuntime.Model;
 using Amazon.Util;
-using LangChain.Providers.Bedrock.Embeddings;
 using LangChain.TextSplitters;
 
-namespace LangChain.Providers.Bedrock.Models;
+namespace LangChain.Providers.Amazon.Bedrock.Embeddings;
 
 public class AmazonTitanEmbeddingsRequest : IBedrockEmbeddingsRequest
 {
@@ -25,7 +24,7 @@ public class AmazonTitanEmbeddingsRequest : IBedrockEmbeddingsRequest
         {
             try
             {
-                string payload = new JsonObject()
+                string payload = new JsonObject
                 {
                     { "inputText", text },
                 }.ToJsonString();
@@ -40,7 +39,8 @@ public class AmazonTitanEmbeddingsRequest : IBedrockEmbeddingsRequest
 
                 if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    var embeddings = JsonNode.Parse(response.Body)?["embedding"]
+                    var body = JsonNode.Parse(response.Body);
+                    var embeddings = body?["embedding"]
                         .AsArray()
                         .Select(x => (float)x.AsValue())
                         .ToArray();

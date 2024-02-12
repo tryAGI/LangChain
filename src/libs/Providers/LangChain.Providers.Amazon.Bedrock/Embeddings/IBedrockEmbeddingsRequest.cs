@@ -1,6 +1,6 @@
 ﻿using Amazon.BedrockRuntime;
 
-namespace LangChain.Providers.Bedrock.Embeddings;
+namespace LangChain.Providers.Amazon.Bedrock.Embeddings;
 
 public interface IBedrockEmbeddingsRequest
 {
