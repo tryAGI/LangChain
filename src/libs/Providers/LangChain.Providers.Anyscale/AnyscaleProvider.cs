@@ -4,7 +4,7 @@ namespace LangChain.Providers.Anyscale;
 
 public class AnyscaleProvider : OpenAiProvider
 {
-    public AnyscaleProvider(OpenAiConfiguration configuration) : base(configuration)
+    public AnyscaleProvider(AnyscaleConfiguration configuration) : base(configuration)
     {
     }
     

@@ -1,11 +1,10 @@
 ﻿using LangChain.Memory;
-using LangChain.Providers.OpenAI;
+using LangChain.Providers.OpenAI.Predefined;
 using static LangChain.Chains.Chain;
 
 var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
     throw new InvalidOperationException("OPENAI_API_KEY environment variable is not found.");
-
-var model = new OpenAiModel(apiKey, "gpt-3.5-turbo");
+var model = new Gpt35TurboModel(apiKey);
 
 
 // create simple template for conversation for AI to know what piece of text it is looking at
@@ -37,7 +36,7 @@ var chain =
 while (true)
 {
     Console.Write("Human: ");
-    var input = Console.ReadLine();
+    var input = Console.ReadLine() ?? string.Empty;
     if (input == "exit")
         break;
 
