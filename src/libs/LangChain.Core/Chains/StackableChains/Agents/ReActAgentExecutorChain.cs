@@ -1,4 +1,5 @@
-﻿using LangChain.Abstractions.Chains.Base;
+﻿using System.Globalization;
+using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains.ReAct;
@@ -134,8 +135,8 @@ Thought:{history}";
             if (res.Value[ReActAnswer] is AgentAction)
             {
                 var action = (AgentAction)res.Value[ReActAnswer];
-                var tool = _tools[action.Action.ToLower()];
-                var toolRes = await tool.ToolTask(action.ActionInput);
+                var tool = _tools[action.Action.ToLower(CultureInfo.InvariantCulture)];
+                var toolRes = await tool.ToolTask(action.ActionInput).ConfigureAwait(false);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + toolRes, MessageRole.System))
                     .ConfigureAwait(false);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Thought:", MessageRole.System))

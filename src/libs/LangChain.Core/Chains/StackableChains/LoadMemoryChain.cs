@@ -22,7 +22,7 @@ public class LoadMemoryChain : BaseStackableChain
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
 
-        string memoryVariableName = _chatMemory.MemoryVariables.FirstOrDefault();
+        var memoryVariableName = _chatMemory.MemoryVariables.FirstOrDefault();
         if (memoryVariableName == null)
         {
             throw new InvalidOperationException("Missing memory variable name");

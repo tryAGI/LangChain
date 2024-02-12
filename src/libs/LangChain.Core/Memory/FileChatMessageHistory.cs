@@ -58,12 +58,21 @@ public class FileChatMessageHistory : BaseChatMessageHistory
         await Task.Run(() => File.WriteAllText(MessagesFilePath, json)).ConfigureAwait(false);
     }
 
-    private async Task LoadMessages()
+    private Task LoadMessages()
     {
-        if (File.Exists(MessagesFilePath))
+        try
         {
-            string json = await Task.Run(() => File.ReadAllText(MessagesFilePath)).ConfigureAwait(false);
-            _messages = JsonSerializer.Deserialize<List<Message>>(json);
+            if (File.Exists(MessagesFilePath))
+            {
+                string json = File.ReadAllText(MessagesFilePath);
+                _messages = JsonSerializer.Deserialize<List<Message>>(json) ?? new List<Message>();
+            }
+            
+            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            return Task.FromException(ex);
         }
     }
 }

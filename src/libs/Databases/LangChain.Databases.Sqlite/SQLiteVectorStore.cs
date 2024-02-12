@@ -41,7 +41,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         return index;
     }
 
-    public static SQLIteVectorStoreOptions DefaultOptions = new SQLIteVectorStoreOptions();
+    public static SQLIteVectorStoreOptions DefaultOptions { get; } = new();
 
     /// <summary>
     ///  If database does not exists, it loads documents from the documentsSource, creates an index from these documents and returns the created index.
@@ -59,14 +59,16 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
 
         TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: options.ChunkSize, chunkOverlap: options.ChunkOverlap);
 
-        if (!System.IO.File.Exists("vectors.db"))
+        if (!System.IO.File.Exists("vectors.db") && documentsSource != null)
         {
-            var documents = await documentsSource.LoadAsync();
-            return await SQLiteVectorStore.CreateIndexFromDocuments(embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter);
+            var documents = await documentsSource.LoadAsync().ConfigureAwait(false);
+            return await CreateIndexFromDocuments(embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter).ConfigureAwait(false);
         }
             
 
+#pragma warning disable CA2000
         var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
+#pragma warning restore CA2000
         var index = new VectorStoreIndexWrapper(vectorStore);
         return index;
     }
