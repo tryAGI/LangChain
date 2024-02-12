@@ -74,7 +74,7 @@ public class BedrockTests
             },
             new[] { "product" },
             new[] { "company_name", "text" }
-        ));https://voyager.postman.com/screen/postman-product-screen-05-2023.svg
+        )); // https://voyager.postman.com/screen/postman-product-screen-05-2023.svg
 
         var result = await overallChain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
         {
@@ -219,7 +219,6 @@ Helpful Answer:";
         var model = new BedrockModel(AmazonModelIds.StabilityAISDXL1_0);
 
         var prompt = "i'm going to prepare a recipe.  show me an image of realistic food ingredients";
-
         var response = model.GenerateAsync(new ChatRequest(new[] { prompt.AsHumanMessage() })).Result;
 
         Console.WriteLine(response);

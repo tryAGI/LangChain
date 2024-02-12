@@ -18,7 +18,8 @@ public class GroupChat : BaseStackableChain
     private readonly string _outputKey;
     
     int _currentAgentId;
-    private readonly ConversationBufferMemory _conversationBufferMemory;
+    private readonly MessageFormatter _messageFormatter;
+    private readonly ChatMessageHistory _chatMessageHistory;
 
     /// <summary>
     /// 
@@ -46,7 +47,20 @@ public class GroupChat : BaseStackableChain
         _messagesLimit = messagesLimit;
         _inputKey = inputKey;
         _outputKey = outputKey;
-        _conversationBufferMemory = new ConversationBufferMemory(new ChatMessageHistory()) { AiPrefix = "", HumanPrefix = "", SystemPrefix = "", SaveHumanMessages = false };
+
+        _messageFormatter = new MessageFormatter
+        {
+            AiPrefix = "",
+            HumanPrefix = "",
+            SystemPrefix = ""
+        };
+
+        _chatMessageHistory = new ChatMessageHistory()
+        {
+            // Do not save human messages
+            IsMessageAccepted = x => (x.Role != MessageRole.Human)
+        };
+
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
     }
@@ -55,27 +69,28 @@ public class GroupChat : BaseStackableChain
     /// 
     /// </summary>
     /// <returns></returns>
-    public IReadOnlyList<Message> History => _conversationBufferMemory.ChatHistory.Messages;
+    public IReadOnlyList<Message> History => _chatMessageHistory.Messages;
 
     /// <inheritdoc />
     protected override async Task<IChainValues> InternalCall(IChainValues values)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
-        await _conversationBufferMemory.Clear().ConfigureAwait(false);
+        await _chatMessageHistory.Clear().ConfigureAwait(false);
         foreach (var agent in _agents)
         {
             agent.SetHistory("");
         }
         var firstAgent = _agents[0];
         var firstAgentMessage = (string)values.Value[_inputKey];
-        await _conversationBufferMemory.ChatHistory.AddMessage(new Message($"{firstAgent.Name}: {firstAgentMessage}",
+        await _chatMessageHistory.AddMessage(new Message($"{firstAgent.Name}: {firstAgentMessage}",
             MessageRole.System)).ConfigureAwait(false);
         int messagesCount = 1;
         while (messagesCount<_messagesLimit)
         {
             var agent = GetNextAgent();
-            agent.SetHistory(_conversationBufferMemory.BufferAsString+"\n"+$"{agent.Name}:");
+            string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages);
+            agent.SetHistory(bufferText + "\n" + $"{agent.Name}:");
             var res = await agent.CallAsync(values).ConfigureAwait(false);
             var message = (string)res.Value[agent.OutputKeys[0]];
             if (message.Contains(_stopPhrase))
@@ -85,13 +100,13 @@ public class GroupChat : BaseStackableChain
 
             if (!agent.IsObserver)
             {
-                await _conversationBufferMemory.ChatHistory.AddMessage(new Message($"{agent.Name}: {message}",
+                await _chatMessageHistory.AddMessage(new Message($"{agent.Name}: {message}",
                                        MessageRole.System)).ConfigureAwait(false);
             }
         }
 
-        var result = _conversationBufferMemory.ChatHistory.Messages[^1];
-        messagesCount = _conversationBufferMemory.ChatHistory.Messages.Count;
+        var result = _chatMessageHistory.Messages[^1];
+        messagesCount = _chatMessageHistory.Messages.Count;
         if (ThrowOnLimit && messagesCount >= _messagesLimit)
         {
             throw new InvalidOperationException($"Message limit reached:{_messagesLimit}");
