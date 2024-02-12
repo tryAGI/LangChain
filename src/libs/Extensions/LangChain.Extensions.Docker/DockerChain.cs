@@ -44,8 +44,14 @@ namespace LangChain.Extensions.Docker
         /// <param name="image"></param>
         /// <param name="arguments"></param>
         /// <param name="command"></param>
+        /// <param name="attachVolume"></param>
         /// <param name="outputKey"></param>
-        public DockerChain(string image= "python:3", string arguments="main.py", string command="python", string? attachVolume=null, string outputKey="result")
+        public DockerChain(
+            string image= "python:3",
+            string arguments="main.py",
+            string command="python",
+            string? attachVolume=null,
+            string outputKey="result")
         {
             Image = image;
             Arguments = arguments;
@@ -77,7 +83,9 @@ namespace LangChain.Extensions.Docker
             
             if (AttachVolume != null)
             {
-                var absolutePath = Path.GetFullPath(AttachVolume).Replace("\\","/").Replace(":","");
+                var absolutePath = Path.GetFullPath(AttachVolume)
+                    .Replace("\\","/", StringComparison.Ordinal)
+                    .Replace(":","", StringComparison.Ordinal);
                 binds.Add($"/{absolutePath}:/app");
             }
 

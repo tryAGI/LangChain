@@ -47,7 +47,7 @@ AI: ";
             Console.WriteLine();
 
             Console.Write("Human: ");
-            var input = Console.ReadLine();
+            var input = Console.ReadLine() ?? string.Empty;
             if (input == "exit")
             {
                 break;
@@ -122,7 +122,7 @@ AI: ";
             Console.WriteLine();
             Console.Write("Enter choice: ");
 
-            string choiceEntry = Console.ReadLine();
+            string choiceEntry = Console.ReadLine() ?? string.Empty;
             if (int.TryParse(choiceEntry, out int choiceIndex))
             {
                 string choiceText = choiceTexts[choiceIndex];

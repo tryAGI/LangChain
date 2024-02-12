@@ -53,6 +53,6 @@ New summary:";
             | Template(SummaryPrompt)
             | LLM(Model);
 
-        return await chain.Run("text").ConfigureAwait(false);
+        return await chain.Run("text").ConfigureAwait(false) ?? string.Empty;
     }
 }
