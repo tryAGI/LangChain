@@ -174,8 +174,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Automat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{628DDC9D-28A1-4C2F-BA13-171BD8CF711C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.FileMemory", "examples\LangChain.Samples.FileMemory\LangChain.Samples.FileMemory.csproj", "{BA701280-0BEB-4DA4-92B3-9C777082C2AF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.Bedrock.IntegrationTests", "src\tests\LangChain.Providers.Amazon.Bedrock.IntegrationTests\LangChain.Providers.Amazon.Bedrock.IntegrationTests.csproj", "{73C76E80-95C5-4C96-A319-4F32043C903E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.Bedrock", "src\libs\Providers\LangChain.Providers.Amazon.Bedrock\LangChain.Providers.Amazon.Bedrock.csproj", "{67985CCB-F606-41F8-9D36-513459F58882}"
@@ -414,10 +412,6 @@ Global
 		{628DDC9D-28A1-4C2F-BA13-171BD8CF711C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{628DDC9D-28A1-4C2F-BA13-171BD8CF711C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{628DDC9D-28A1-4C2F-BA13-171BD8CF711C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA701280-0BEB-4DA4-92B3-9C777082C2AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA701280-0BEB-4DA4-92B3-9C777082C2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA701280-0BEB-4DA4-92B3-9C777082C2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA701280-0BEB-4DA4-92B3-9C777082C2AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73C76E80-95C5-4C96-A319-4F32043C903E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{73C76E80-95C5-4C96-A319-4F32043C903E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73C76E80-95C5-4C96-A319-4F32043C903E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -495,7 +489,6 @@ Global
 		{BF4C7B87-0997-4208-84EF-D368DF7B9861} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{A6CF79BC-8365-46E8-9230-1A4AD615D40B} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{628DDC9D-28A1-4C2F-BA13-171BD8CF711C} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
-		{BA701280-0BEB-4DA4-92B3-9C777082C2AF} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 		{73C76E80-95C5-4C96-A319-4F32043C903E} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{67985CCB-F606-41F8-9D36-513459F58882} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 	EndGlobalSection

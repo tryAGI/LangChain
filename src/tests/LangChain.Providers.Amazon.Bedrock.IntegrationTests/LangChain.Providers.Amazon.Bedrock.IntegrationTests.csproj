@@ -12,8 +12,6 @@
     <ProjectReference Include="..\..\libs\Databases\LangChain.Databases.Sqlite\LangChain.Databases.Sqlite.csproj" />
     <ProjectReference Include="..\..\libs\LangChain.Core\LangChain.Core.csproj" />
     <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.Amazon.Bedrock\LangChain.Providers.Amazon.Bedrock.csproj" />
-    <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.Amazon.Sagemaker\LangChain.Providers.Amazon.SageMaker.csproj" />
-    <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.Bedrock\LangChain.Providers.Bedrock.csproj" />
     <ProjectReference Include="..\..\libs\Sources\LangChain.Sources.Pdf\LangChain.Sources.Pdf.csproj" />
   </ItemGroup>
 
