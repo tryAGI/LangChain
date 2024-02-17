@@ -1,14 +1,22 @@
-﻿using System.Diagnostics;
+using LangChain.Base;
+using System.Diagnostics;
 using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
+using LangChain.Databases;
 using LangChain.Databases.InMemory;
 using LangChain.Docstore;
+using LangChain.Indexes;
 using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
+using LangChain.Providers.Amazon.Bedrock;
+using LangChain.Providers.Bedrock.Embeddings;
+using LangChain.Providers.Bedrock.Models;
 using LangChain.Schema;
+using LangChain.Sources;
+using LangChain.TextSplitters;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Providers.Amazon.Bedrock.IntegrationTests;
@@ -22,6 +30,8 @@ public class BedrockTests
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
         var llm = new Llama2With13BModel();
+        //var modelId = "amazon.titan-text-express-v1";
+        // var modelId = "cohere.command-light-text-v14";
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -155,6 +165,52 @@ Answer: ";
     }
 
     [Test]
+    public async Task SimpleRag()
+    {
+        // var modelId = "ai21.j2-mid-v1";
+        // var modelId = "anthropic.claude-v2:1";
+        var modelId = AmazonModelIds.AmazonTitanTextG1ExpressV1;
+        var llm = new BedrockModel(modelId);
+        var embeddings = new BedrockEmbeddings(AmazonModelIds.AmazonTitanEmbeddingsG1TextV1);
+
+        PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
+        var documents = await pdfSource.LoadAsync();
+
+        TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
+
+        if (File.Exists("vectors.db"))
+            File.Delete("vectors.db");
+
+        if (!File.Exists("vectors.db"))
+            await SQLiteVectorStore.CreateIndexFromDocuments(embeddings, documents, "vectors.db", "vectors", textSplitter: textSplitter);
+
+        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors", embeddings);
+        var index = new VectorStoreIndexWrapper(vectorStore);
+
+        string promptText =
+            @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
+
+{context}
+
+Question: {question}
+Helpful Answer:";
+
+
+        var chain =
+            Set("what color is the car?", outputKey: "question")                     // set the question
+            //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
+           // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
+           // Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
+            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
+            | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
+            | Template(promptText)                                                              // replace context and question in the prompt with their values
+            | LLM(llm);                                                                       // send the result to the language model
+
+        var res = await chain.Run("text");
+        Console.WriteLine(res);
+    }
+
+    [Test]
     public async Task CanGetImage()
     {
         var model = new StableDiffusionExtraLargeV0Model();
@@ -166,5 +222,16 @@ Answer: ";
         await File.WriteAllBytesAsync(path, response.Bytes);
         
         Process.Start(path);
+    }
+    
+    [Test]
+    public async Task CanGetImage2()
+    {
+        var model = new BedrockModel(AmazonModelIds.StabilityAISDXL1_0);
+
+        var prompt = "i'm going to prepare a recipe.  show me an image of realistic food ingredients";
+        var response = model.GenerateAsync(new ChatRequest(new[] { prompt.AsHumanMessage() })).Result;
+
+        Console.WriteLine(response);
     }
 }

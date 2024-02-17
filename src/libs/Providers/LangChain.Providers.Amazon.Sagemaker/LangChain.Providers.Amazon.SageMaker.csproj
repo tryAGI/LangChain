@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+		<SignAssembly>false</SignAssembly>
+		<NoWarn>$(NoWarn);CA1003;CA1307;CA1054;CA1711;CA1819;CA2234</NoWarn>
+		<RootNamespace>LangChain.Providers.Amazon.SageMaker</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Net.Http" />
+	</ItemGroup>
+
+	<ItemGroup Label="Usings">
+		<Using Include="System.Net.Http" />
+	</ItemGroup>
+
+	<PropertyGroup Label="NuGet">
+		<Description>AWS Bedrock model provider.</Description>
+		<PackageTags>$(PackageTags);AWS Bedrock;api</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+	</ItemGroup>
+
+</Project>

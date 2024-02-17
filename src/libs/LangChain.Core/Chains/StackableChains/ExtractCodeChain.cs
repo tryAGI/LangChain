@@ -19,7 +19,7 @@ public class ExtractCodeChain: BaseStackableChain
         var inCode = false;
         foreach (var line in lines)
         {
-            if (line.StartsWith("```"))
+            if (line.StartsWith("```", StringComparison.OrdinalIgnoreCase))
             {
                 inCode = !inCode;
                 continue;
@@ -43,7 +43,7 @@ public class ExtractCodeChain: BaseStackableChain
 
     protected override Task<IChainValues> InternalCall(IChainValues values)
     {
-        
+        values = values ?? throw new ArgumentNullException(nameof(values));
 
         if (values.Value[InputKeys[0]] is string text)
         {

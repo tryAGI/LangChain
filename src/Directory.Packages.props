@@ -9,6 +9,7 @@
     <PackageVersion Include="Aspose.PDF" Version="23.11.0" />
     <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.301.33" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.300.5" />
+    <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
     <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.12" />
     <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />

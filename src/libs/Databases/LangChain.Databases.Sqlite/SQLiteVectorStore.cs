@@ -61,7 +61,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
 
         TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: options.ChunkSize, chunkOverlap: options.ChunkOverlap);
 
-        if (!System.IO.File.Exists("vectors.db"))
+        if (!System.IO.File.Exists("vectors.db") && documentsSource != null)
         {
             var documents = await documentsSource.LoadAsync().ConfigureAwait(false);
             
@@ -69,7 +69,9 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
                 embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter).ConfigureAwait(false);
         }
 
+#pragma warning disable CA2000
         var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
+#pragma warning restore CA2000
         var index = new VectorStoreIndexWrapper(vectorStore);
         return index;
     }
