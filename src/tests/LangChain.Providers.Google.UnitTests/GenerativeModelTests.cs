@@ -12,7 +12,8 @@ public class GenerativeModelTests
             Environment.GetEnvironmentVariable("Gemini_API_Key", EnvironmentVariableTarget.User) ??
             throw new InvalidOperationException("Gemini_API_Key is not set");
         var httpClient = new HttpClient();
-        var model = new GeminiProModel(apiKey, httpClient);
+        var provider = new GoogleProvider(apiKey, httpClient);
+        var model = new GeminiProModel(provider);
 
         var result = await model.GenerateAsync("Write a Poem".AsChatMessage());
 

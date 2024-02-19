@@ -6,6 +6,7 @@ using LangChain.Databases.InMemory;
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Prompts;
+using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
@@ -121,10 +122,11 @@ The pet name is
     [Test]
     public void RetrievalChainTest()
     {
+        var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new Llama2With13BModel();
-        var embeddings = new EmbedEnglishV3Model();
+        var llm = new Llama2With13BModel(provider);
+        var embeddings = new EmbedEnglishV3Model(provider);
 
         var documents = new string[]
         {
@@ -176,10 +178,11 @@ Answer: ";
     [Test]
     public async Task SimpleRag()
     {
+        var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new TitanTextExpressV1Model();
-        var embeddings = new TitanEmbedTextV1Model();
+        var llm = new TitanTextExpressV1Model(provider);
+        var embeddings = new TitanEmbedTextV1Model(provider);
         
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();

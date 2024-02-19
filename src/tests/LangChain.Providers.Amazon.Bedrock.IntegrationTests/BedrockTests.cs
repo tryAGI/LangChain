@@ -24,9 +24,10 @@ public class BedrockTests
     [Test]
     public async Task Chains()
     {
-        //var llm = new Jurassic2MidModel();
-        //var llm = new ClaudeV21Model();
-        var llm = new Llama2With13BModel();
+        var provider = new BedrockProvider();
+        //var llm = new Jurassic2MidModel(provider);
+        //var llm = new ClaudeV21Model(provider);
+        var llm = new Llama2With13BModel(provider);
         //var modelId = "amazon.titan-text-express-v1";
         // var modelId = "cohere.command-light-text-v14";
 
@@ -46,9 +47,10 @@ public class BedrockTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var llm = new Jurassic2MidModel();
-        //var llm = new ClaudeV21Model();
-        //var llm = new Llama2With13BModel();
+        var provider = new BedrockProvider();
+        var llm = new Jurassic2MidModel(provider);
+        //var llm = new ClaudeV21Model(provider);
+        //var llm = new Llama2With13BModel(provider);
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
         var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));
@@ -85,9 +87,10 @@ public class BedrockTests
     [Test]
     public void LlmChainTest()
     {
-        var llm = new Jurassic2MidModel();
-        //var llm = new ClaudeV21Model();
-        //var llm = new Llama2With13BModel();
+        var provider = new BedrockProvider();
+        var llm = new Jurassic2MidModel(provider);
+        //var llm = new ClaudeV21Model(provider);
+        //var llm = new Llama2With13BModel(provider);
 
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
@@ -111,10 +114,11 @@ The pet name is
     [Test]
     public void RetrievalChainTest()
     {
+        var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new Llama2With13BModel();
-        var embeddings = new TitanEmbedTextV1Model();
+        var llm = new Llama2With13BModel(provider);
+        var embeddings = new TitanEmbedTextV1Model(provider);
         var index = InMemoryVectorStore
             .CreateIndexFromDocuments(embeddings, new[]
             {
@@ -164,10 +168,11 @@ Answer: ";
     [Test]
     public async Task SimpleRag()
     {
+        var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new TitanTextExpressV1Model();
-        var embeddings = new TitanEmbedTextV1Model();
+        var llm = new TitanTextExpressV1Model(provider);
+        var embeddings = new TitanEmbedTextV1Model(provider);
 
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
@@ -209,7 +214,8 @@ Helpful Answer:";
     [Test]
     public async Task CanGetImage()
     {
-        var model = new StableDiffusionExtraLargeV0Model();
+        var provider = new BedrockProvider();
+        var model = new StableDiffusionExtraLargeV0Model(provider);
         var response = await model.GenerateImageAsync(
             "create a picture of the solar system");
 
@@ -223,7 +229,8 @@ Helpful Answer:";
     [Test]
     public async Task CanGetImage2()
     {
-        var model = new StableDiffusionExtraLargeV1Model();
+        var provider = new BedrockProvider();
+        var model = new StableDiffusionExtraLargeV1Model(provider);
         var response = await model.GenerateImageAsync(
             "i'm going to prepare a recipe.  show me an image of realistic food ingredients");
 

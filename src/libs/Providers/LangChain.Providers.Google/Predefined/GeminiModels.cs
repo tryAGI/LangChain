@@ -3,13 +3,13 @@
 namespace LangChain.Providers.Google.Predefined;
 
 /// <inheritdoc cref="GoogleAIModels.GeminiPro" />
-public class GeminiProModel(string apiKey, HttpClient httpClient)
+public class GeminiProModel(GoogleProvider provider)
     : GoogleChatModel(
-        provider: new GoogleProvider(apiKey, httpClient),
+        provider: provider,
         id: GoogleAIModels.GeminiPro);
 
 /// <inheritdoc cref="GoogleAIModels.GeminiProVision" />
-public class GeminiProVisionModel(string apiKey, HttpClient httpClient)
+public class GeminiProVisionModel(GoogleProvider provider)
     : GoogleChatModel(
-        provider: new GoogleProvider(apiKey, httpClient),
+        provider: provider,
         id: GoogleAIModels.GeminiProVision);
