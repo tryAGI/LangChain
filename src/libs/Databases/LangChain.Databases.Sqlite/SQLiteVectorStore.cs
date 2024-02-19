@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Base;
 using LangChain.Docstore;
 using LangChain.Indexes;
+using LangChain.Providers;
 using LangChain.TextSplitters;
 using LangChain.VectorStores;
 using Microsoft.Data.Sqlite;
@@ -28,7 +28,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="textSplitter"></param>
     /// <returns></returns>
     public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(
-        IEmbeddings embeddings,
+        IEmbeddingModel embeddings,
         IReadOnlyCollection<Document> documents,
         string filename = "vectorstore.db",
         string tableName = "vectors",
@@ -48,11 +48,13 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     ///  If database exists, it loads the index from the database.
     ///  documentsSource is used only if the database does not exist. If the database exists, documentsSource is ignored.
     /// </summary>
-    /// <param name="embeddings">An object implementing the <see cref="IEmbeddings"/> interface. This object is used to generate embeddings for the documents.</param>
+    /// <param name="embeddings">An object implementing the <see cref="IEmbeddingModel"/> interface. This object is used to generate embeddings for the documents.</param>
     /// <param name="documentsSource">An optional object implementing the <see cref="ISource"/> interface. This object is used to load documents if the vector store database file does not exist.</param>
     /// <param name="options">An optional <see cref="SQLIteVectorStoreOptions"/> object. This object provides configuration options for the SQLite vector store</param>
     public static async Task<VectorStoreIndexWrapper> GetIndex(
-        IEmbeddings embeddings, ISource? documentsSource=null, SQLIteVectorStoreOptions? options=null)
+        IEmbeddingModel embeddings,
+        ISource? documentsSource = null,
+        SQLIteVectorStoreOptions? options = null)
     {
         options ??= DefaultOptions;
         
@@ -62,9 +64,10 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         if (!System.IO.File.Exists("vectors.db") && documentsSource != null)
         {
             var documents = await documentsSource.LoadAsync().ConfigureAwait(false);
-            return await CreateIndexFromDocuments(embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter).ConfigureAwait(false);
-        }
             
+            return await CreateIndexFromDocuments(
+                embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter).ConfigureAwait(false);
+        }
 
 #pragma warning disable CA2000
         var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
@@ -83,7 +86,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     public SQLiteVectorStore(
         string filename,
         string tableName,
-        IEmbeddings embeddings,
+        IEmbeddingModel embeddings,
         EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
         : base(embeddings)
     {
@@ -203,7 +206,11 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
 
         var docs = documents.ToArray();
 
-        var embeddings = await Embeddings.EmbedDocumentsAsync(docs.Select(x => x.PageContent).ToArray(), cancellationToken).ConfigureAwait(false);
+        float[][] embeddings = await EmbeddingModel.CreateEmbeddingsAsync(
+            docs
+                .Select(x => x.PageContent)
+                .ToArray(),
+            cancellationToken: cancellationToken).ConfigureAwait(false);
         List<string> ids = new List<string>();
         for (int i = 0; i < docs.Length; i++)
         {
@@ -260,10 +267,19 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="k"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public override async Task<IEnumerable<Document>> SimilaritySearchAsync(string query, int k = 4, CancellationToken cancellationToken = default)
+    public override async Task<IEnumerable<Document>> SimilaritySearchAsync(
+        string query,
+        int k = 4,
+        CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
-        return await SimilaritySearchByVectorAsync(embedding, k, cancellationToken).ConfigureAwait(false);
+        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
+            query,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        
+        return await SimilaritySearchByVectorAsync(
+            embedding,
+            k,
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -291,9 +307,13 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     public override async Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(string query,
         int k = 4, CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
-        var arr = embedding.ToArray();
-        var documents = await SearchByVector(arr, k).ConfigureAwait(false);
+        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
+            query,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        var documents = await SearchByVector(
+            embedding,
+            k).ConfigureAwait(false);
+        
         return documents;
     }
 

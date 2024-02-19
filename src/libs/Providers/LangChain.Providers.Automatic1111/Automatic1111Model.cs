@@ -1,75 +1,53 @@
-using LangChain.Providers;
+using StableDiffusion;
 
-namespace StableDiffusion;
+namespace LangChain.Providers.Automatic1111;
 
 /// <summary>
 /// 
 /// </summary>
-public class Automatic1111Model : IGenerateImageModel
+public class Automatic1111Model(
+    string url = "http://localhost:7860/",
+    HttpClient? httpClient = null)
+    : ImageGenerationModel(id: "Automatic1111"), IImageGenerationModel
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public Automatic1111ModelOptions Options { get; }
-    
-    private readonly StableDiffusionClient _client;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="url"></param>
-    /// <param name="options"></param>
-    public Automatic1111Model(
-        string url = "http://localhost:7860/",
-        Automatic1111ModelOptions? options = null)
-    {
-        Options = options?? new Automatic1111ModelOptions();
-        HttpClient httpClient = new HttpClient();
-        _client = new StableDiffusionClient(url, httpClient);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public event Action<string> PromptSent = delegate { };
+    private readonly StableDiffusionClient _client = new(url, httpClient ?? new HttpClient());
 
     /// <inheritdoc />
-    public Task<Uri> GenerateImageAsUrlAsync(string prompt, CancellationToken cancellationToken = default)
+    public async Task<ImageGenerationResponse> GenerateImageAsync(
+        ImageGenerationRequest request,
+        ImageGenerationSettings? settings = default,
+        CancellationToken cancellationToken = default)
     {
-        return Task.FromException<Uri>(new NotSupportedException());
-    }
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
+        OnPromptSent(request.Prompt);
 
-    /// <inheritdoc />
-    public async Task<Stream> GenerateImageAsStreamAsync(string prompt, CancellationToken cancellationToken = default)
-    {
-        var bytes = await GenerateImageAsBytesAsync(prompt, cancellationToken).ConfigureAwait(false);
-        return new MemoryStream(bytes);
-    }
-
-    /// <inheritdoc />
-    public async Task<byte[]> GenerateImageAsBytesAsync(string prompt, CancellationToken cancellationToken = default)
-    {
-        PromptSent(prompt);
-
-        var samplers = await _client.Get_samplers_sdapi_v1_samplers_getAsync(cancellationToken).ConfigureAwait(false);
+        var usedSettings = Automatic1111ModelSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: null);
+        var samplers = await _client.Get_samplers_sdapi_v1_samplers_getAsync(
+            cancellationToken).ConfigureAwait(false);
         var response = await _client.Text2imgapi_sdapi_v1_txt2img_postAsync(
             new StableDiffusionProcessingTxt2Img
             {
-                Prompt = prompt,
-                Negative_prompt = Options.NegativePrompt,
-                Height = Options.Height,
-                Width = Options.Width,
-                Steps = Options.Steps,
-                Seed = Options.Seed,
-                Cfg_scale = Options.CfgScale,
-                Sampler_index = Options.Sampler,
-                Sampler_name = Options.Sampler,
+                Prompt = request.Prompt,
+                Negative_prompt = usedSettings.NegativePrompt,
+                Height = usedSettings.Height!.Value,
+                Width = usedSettings.Width!.Value,
+                Steps = usedSettings.Steps!.Value,
+                Seed = usedSettings.Seed!.Value,
+                Cfg_scale = usedSettings.CfgScale!.Value,
+                Sampler_index = usedSettings.Sampler,
+                Sampler_name = usedSettings.Sampler,
             }, cancellationToken).ConfigureAwait(false);
 
-        var encoded = response.Images.First();
-        // base64 to png
-
-        var bytes = Convert.FromBase64String(encoded);
-        return bytes;
+        return new ImageGenerationResponse
+        {
+            // base64 to png
+            Bytes = Convert.FromBase64String(response.Images.First()),
+            Usage = Usage.Empty,
+            UsedSettings = usedSettings,
+        };
     }
 }

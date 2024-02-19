@@ -2,13 +2,20 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-		<SignAssembly>false</SignAssembly>
-		<NoWarn>$(NoWarn);CA1003;CA1307;CA1054;CA1711;CA1819;CA2234</NoWarn>
+		<NoWarn>$(NoWarn);CA2016</NoWarn>
 		<RootNamespace>LangChain.Providers.Amazon.SageMaker</RootNamespace>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="System.Net.Http" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net4.6.2'">
+		<Reference Include="System.Net.Http" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net4.6.2'">
+		<PackageReference Include="System.Text.Json" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Text.Json" />
 	</ItemGroup>
 
 	<ItemGroup Label="Usings">
@@ -17,11 +24,11 @@
 
 	<PropertyGroup Label="NuGet">
 		<Description>AWS Bedrock model provider.</Description>
-		<PackageTags>$(PackageTags);AWS Bedrock;api</PackageTags>
+		<PackageTags>$(PackageTags);aws;amazon;sagemaker;api</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+	  <ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

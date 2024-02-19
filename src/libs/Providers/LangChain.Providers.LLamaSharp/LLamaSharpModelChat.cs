@@ -31,15 +31,13 @@ public class LLamaSharpModelChat : LLamaSharpModelBase
             .Trim();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<ChatResponse> GenerateAsync(ChatRequest request,
+    public override async Task<ChatResponse> GenerateAsync(
+        ChatRequest request,
+        ChatSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
         var prompt = ToPrompt(request.Messages);
 
         var watch = Stopwatch.StartNew();
@@ -77,8 +75,11 @@ public class LLamaSharpModelChat : LLamaSharpModelBase
         };
         TotalUsage += usage;
 
-        return new ChatResponse(
-            Messages: result,
-            Usage: usage);
+        return new ChatResponse
+        {
+            Messages = result,
+            Usage = usage,
+            UsedSettings = ChatSettings.Default,
+        };
     }
 }

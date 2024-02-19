@@ -5,60 +5,14 @@ namespace LangChain.Providers.Anthropic;
 /// <summary>
 /// 
 /// </summary>
-public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageModel
+public partial class AnthropicModel(
+    AnthropicProvider provider,
+    string id) : ChatModel(id), IPaidLargeLanguageModel
 {
     #region Properties
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Id { get; init; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string ApiKey { get; init; }
-
+    
     /// <inheritdoc/>
-    public Usage TotalUsage { get; private set; }
-
-    /// <inheritdoc/>
-    public int ContextLength => ApiHelpers.CalculateContextLength(Id);
-
-    private HttpClient HttpClient { get; set; }
-    private Tiktoken.Encoding Encoding { get; } = Tiktoken.Encoding.Get("cl100k_base");
-
-    #endregion
-
-    #region Constructors
-
-    /// <summary>
-    /// Wrapper around Anthropic large language models.
-    /// </summary>
-    /// <param name="configuration"></param>
-    /// <param name="httpClient"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public AnthropicModel(AnthropicConfiguration configuration, HttpClient httpClient)
-    {
-        configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
-        Id = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
-        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    }
-
-    /// <summary>
-    /// Wrapper around Anthropic large language models.
-    /// </summary>
-    /// <param name="apiKey"></param>
-    /// <param name="id"></param>
-    /// <param name="httpClient"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public AnthropicModel(string apiKey, HttpClient httpClient, string id)
-    {
-        ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
-        HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        Id = id ?? throw new ArgumentNullException(nameof(id));
-    }
+    public override int ContextLength => ApiHelpers.CalculateContextLength(Id);
 
     #endregion
 
@@ -84,22 +38,6 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
             Role: MessageRole.Ai);
     }
 
-    private async Task<CreateCompletionResponse> CreateChatCompletionAsync(
-        IReadOnlyCollection<Message> messages,
-        CancellationToken cancellationToken = default)
-    {
-        var api = new AnthropicApi(apiKey: ApiKey, HttpClient);
-
-        return await api.CompleteAsync(new CreateCompletionRequest
-        {
-            Prompt = messages
-                .Select(ToRequestMessage)
-                .ToArray().AsPrompt(),
-            Max_tokens_to_sample = 100_000,
-            Model = Id,
-        }, cancellationToken).ConfigureAwait(false);
-    }
-
     private Usage GetUsage(IReadOnlyCollection<Message> messages)
     {
         var completionTokens = CountTokens(messages.Last().Content);
@@ -122,13 +60,23 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
     }
 
     /// <inheritdoc/>
-    public async Task<ChatResponse> GenerateAsync(
+    public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
+        ChatSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
-        var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
+        var response = await provider.Api.CompleteAsync(new CreateCompletionRequest
+        {
+            Prompt = messages
+                .Select(ToRequestMessage)
+                .ToArray().AsPrompt(),
+            Max_tokens_to_sample = 100_000,
+            Model = Id,
+        }, cancellationToken).ConfigureAwait(false);
 
         messages.Add(ToMessage(response));
 
@@ -136,31 +84,14 @@ public class AnthropicModel : IChatModelWithTokenCounting, IPaidLargeLanguageMod
         {
             Time = watch.Elapsed,
         };
-        TotalUsage += usage;
+        AddUsage(usage);
 
-        return new ChatResponse(
-            Messages: messages,
-            Usage: usage);
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(string text)
-    {
-        return Encoding.CountTokens(text);
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(IReadOnlyCollection<Message> messages)
-    {
-        return CountTokens(string.Join(
-            Environment.NewLine,
-            messages.Select(static x => x.Content)));
-    }
-
-    /// <inheritdoc/>
-    public int CountTokens(ChatRequest request)
-    {
-        return CountTokens(request.Messages);
+        return new ChatResponse
+        {
+            Messages = messages,
+            Usage = usage,
+            UsedSettings = ChatSettings.Default,
+        };
     }
 
     /// <inheritdoc/>

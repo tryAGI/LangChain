@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace LangChain.Providers.Downloader;
+namespace LangChain.Providers.HuggingFace.Downloader;
 
 /// <summary>
 /// An ASCII progress bar

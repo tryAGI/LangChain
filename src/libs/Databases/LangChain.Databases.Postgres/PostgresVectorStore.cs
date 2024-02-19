@@ -1,6 +1,6 @@
-using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Databases.Postgres;
 using LangChain.Docstore;
+using LangChain.Providers;
 using LangChain.VectorStores;
 
 namespace LangChain.Databases;
@@ -25,12 +25,12 @@ public class PostgresVectorStore : VectorStore
     public PostgresVectorStore(
         string connectionString,
         int vectorSize,
-        IEmbeddings embeddings,
+        IEmbeddingModel embeddingModel,
         string schema = DefaultSchema,
         string collectionName = DefaultCollectionName,
         DistanceStrategy distanceStrategy = DistanceStrategy.Cosine,
         Func<float, float>? overrideRelevanceScoreFn = null)
-        : base(embeddings, overrideRelevanceScoreFn)
+        : base(embeddingModel, overrideRelevanceScoreFn)
     {
         _distanceStrategy = distanceStrategy;
         _collectionName = collectionName;
@@ -44,8 +44,10 @@ public class PostgresVectorStore : VectorStore
         CancellationToken cancellationToken = default)
     {
         var documentsArray = documents.ToArray();
-        var embeddings = await Embeddings
-            .EmbedDocumentsAsync(documentsArray.Select(d => d.PageContent).ToArray(), cancellationToken)
+        float[][] embeddings = await EmbeddingModel
+            .CreateEmbeddingsAsync(documentsArray
+                .Select(d => d.PageContent)
+                .ToArray(), null, cancellationToken)
             .ConfigureAwait(false);
 
         var ids = new string[documentsArray.Length];
@@ -75,8 +77,8 @@ public class PostgresVectorStore : VectorStore
         var textsArray = texts.ToArray();
         var metadatasArray = metadatas?.ToArray() ?? new Dictionary<string, object>?[textsArray.Length];
         
-        var embeddings = await Embeddings
-            .EmbedDocumentsAsync(textsArray, cancellationToken)
+        float[][] embeddings = await EmbeddingModel
+            .CreateEmbeddingsAsync(textsArray, null, cancellationToken)
             .ConfigureAwait(false);
 
         var ids = new string[textsArray.Length];
@@ -137,9 +139,11 @@ public class PostgresVectorStore : VectorStore
         string query, int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
+        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
+            query, null, cancellationToken).ConfigureAwait(false);
 
-        return await SimilaritySearchByVectorWithScoreAsync(embedding, k, cancellationToken)
+        return await SimilaritySearchByVectorWithScoreAsync(
+                embedding, k, cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -183,7 +187,7 @@ public class PostgresVectorStore : VectorStore
         int fetchK = 20, float lambdaMult = 0.5f,
         CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(query, cancellationToken).ConfigureAwait(false);
+        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(query, null, cancellationToken).ConfigureAwait(false);
 
         return await MaxMarginalRelevanceSearchByVector(embedding, k, fetchK, lambdaMult, cancellationToken)
             .ConfigureAwait(false);

@@ -170,15 +170,14 @@ public static class Chain
     /// <param name="settings"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
-    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static TTSChain<T> TTS<T>(
-        ITextToSpeechModel<T> model,
-        T settings,
+    public static TTSChain TTS(
+        ITextToSpeechModel model,
+        TextToSpeechSettings? settings = null,
         string inputKey = "text",
         string outputKey = "audio")
     {
-        return new TTSChain<T>(model, settings, inputKey, outputKey);
+        return new TTSChain(model, settings, inputKey, outputKey);
     }
 
     /// <summary>
@@ -188,15 +187,14 @@ public static class Chain
     /// <param name="settings"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
-    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static STTChain<T> STT<T>(
-        ISpeechToTextModel<T> model,
-        T settings,
+    public static STTChain STT(
+        ISpeechToTextModel model,
+        SpeechToTextSettings? settings = null,
         string inputKey = "audio",
         string outputKey = "text")
     {
-        return new STTChain<T>(model, settings, inputKey, outputKey);
+        return new STTChain(model, settings, inputKey, outputKey);
     }
 
     /// <summary>
@@ -258,7 +256,7 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static ImageGenerationChain GenerateImage(
-        IGenerateImageModel model,
+        IImageGenerationModel model,
         string inputKey = "text",
         string outputKey = "image")
     {

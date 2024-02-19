@@ -1,7 +1,8 @@
-﻿using LangChain.Chains.LLM;
+﻿using LangChain.Abstractions.Chains.Base;
+using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Prompts;
-using LangChain.Providers.OpenAI;
+using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Schema;
 
 using var httpClient = new HttpClient();
@@ -22,7 +23,7 @@ var secondPrompt = new PromptTemplate(new PromptTemplateInput(secondTemplate, ne
 var chainTwo = new LlmChain(new LlmChainInput(llm, secondPrompt));
 
 var overallChain = new SequentialChain(new SequentialChainInput(
-    new[]
+    new IChain[]
     {
         chainOne,
         chainTwo

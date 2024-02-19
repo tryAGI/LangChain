@@ -1,6 +1,6 @@
-﻿using LangChain.Abstractions.Embeddings.Base;
-using LangChain.Docstore;
+﻿using LangChain.Docstore;
 using LangChain.Indexes;
+using LangChain.Providers;
 using LangChain.TextSplitters;
 using LangChain.VectorStores;
 
@@ -15,7 +15,7 @@ namespace LangChain.Databases.InMemory;
 /// <param name="embeddings"></param>
 /// <param name="distanceMetrics"></param>
 public class InMemoryVectorStore(
-    IEmbeddings embeddings,
+    IEmbeddingModel embeddings,
     EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
     : VectorStore(embeddings)
 {
@@ -33,7 +33,7 @@ public class InMemoryVectorStore(
     /// <param name="documents"></param>
     /// <returns></returns>
     public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(
-        IEmbeddings embeddings,
+        IEmbeddingModel embeddings,
         IReadOnlyCollection<Document> documents)
     {
         var vectorStore = new InMemoryVectorStore(embeddings);
@@ -51,9 +51,9 @@ public class InMemoryVectorStore(
     {
         var docs = documents.ToArray();
 
-        var embeddings = await Embeddings.EmbedDocumentsAsync(docs
+        float[][] embeddings = await EmbeddingModel.CreateEmbeddingsAsync(docs
             .Select(x => x.PageContent)
-            .ToArray(), cancellationToken).ConfigureAwait(false);
+            .ToArray(), cancellationToken: cancellationToken).ConfigureAwait(false);
         var ids = new List<string>();
         for (var i = 0; i < docs.Length; i++)
         {
@@ -98,9 +98,9 @@ public class InMemoryVectorStore(
         int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(
+        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
             query,
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken: cancellationToken).ConfigureAwait(false);
         
         return await SimilaritySearchByVectorAsync(
             embedding,
@@ -129,15 +129,14 @@ public class InMemoryVectorStore(
         int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var embedding = await Embeddings.EmbedQueryAsync(
+        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
             query,
-            cancellationToken).ConfigureAwait(false);
-        var arr = embedding.ToArray();
+            cancellationToken: cancellationToken).ConfigureAwait(false);
         var distances = _storage.Select(s =>
             new
             {
                 doc = s.doc,
-                distance = _distanceFunction(s.vec, arr)
+                distance = _distanceFunction(s.vec, embedding)
             }).Take(k);
         
         return distances.Select(d => new ValueTuple<Document, float>(d.doc, d.distance));

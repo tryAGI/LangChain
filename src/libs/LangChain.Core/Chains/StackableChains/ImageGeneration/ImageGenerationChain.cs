@@ -9,7 +9,7 @@ namespace LangChain.Chains.StackableChains.ImageGeneration;
 /// </summary>
 public class ImageGenerationChain : BaseStackableChain
 {
-    private readonly IGenerateImageModel _model;
+    private readonly IImageGenerationModel _model;
 
     /// <summary>
     /// 
@@ -18,7 +18,7 @@ public class ImageGenerationChain : BaseStackableChain
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     public ImageGenerationChain(
-        IGenerateImageModel model,
+        IImageGenerationModel model,
         string inputKey = "prompt",
         string outputKey = "image")
     {
@@ -35,7 +35,7 @@ public class ImageGenerationChain : BaseStackableChain
         var prompt =
             values.Value[InputKeys[0]].ToString() ??
             throw new InvalidOperationException("Input key is null");
-        var image = await _model.GenerateImageAsBytesAsync(prompt).ConfigureAwait(false);
+        byte[] image = await _model.GenerateImageAsync(prompt).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = image;
         return values;
     }

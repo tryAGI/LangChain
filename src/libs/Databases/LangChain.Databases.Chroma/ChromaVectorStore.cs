@@ -1,7 +1,7 @@
 using System.Text.Json;
-using LangChain.Abstractions.Embeddings.Base;
 using LangChain.Common.Converters;
 using LangChain.Docstore;
+using LangChain.Providers;
 using LangChain.VectorStores;
 using Microsoft.SemanticKernel.AI.Embeddings;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
@@ -31,7 +31,7 @@ public class ChromaVectorStore : VectorStore
     public ChromaVectorStore(
         HttpClient httpClient,
         string endpoint,
-        IEmbeddings embeddings,
+        IEmbeddingModel embeddings,
         string collectionName = LangchainDefaultCollectionName)
         : base(embeddings)
     {
@@ -166,8 +166,8 @@ public class ChromaVectorStore : VectorStore
         int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var embeddings = await Embeddings
-            .EmbedQueryAsync(query, cancellationToken)
+        var embeddings = await EmbeddingModel
+            .CreateEmbeddingsAsync(query, null, cancellationToken)
             .ConfigureAwait(false);
 
         var documentsWithScores = await SimilaritySearchByVectorWithAsync(embeddings, k, cancellationToken).ConfigureAwait(false);
@@ -192,8 +192,8 @@ public class ChromaVectorStore : VectorStore
         float lambdaMult = 0.5f,
         CancellationToken cancellationToken = default)
     {
-        var embeddings = await Embeddings
-            .EmbedQueryAsync(query, cancellationToken)
+        float[] embeddings = await EmbeddingModel
+            .CreateEmbeddingsAsync(query, null, cancellationToken)
             .ConfigureAwait(false);
 
         var documents = await MaxMarginalRelevanceSearchByVector(
@@ -251,8 +251,8 @@ public class ChromaVectorStore : VectorStore
         string[] ids,
         CancellationToken cancellationToken)
     {
-        var embeddings = await Embeddings
-            .EmbedDocumentsAsync(texts, cancellationToken)
+        float[][] embeddings = await EmbeddingModel
+            .CreateEmbeddingsAsync(texts, null, cancellationToken)
             .ConfigureAwait(false);
 
         var records = new MemoryRecord[texts.Length];

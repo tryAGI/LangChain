@@ -2,6 +2,7 @@
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using System.Runtime.Serialization;
+using LangChain.Providers.OpenAI.Predefined;
 using static LangChain.Chains.Chain;
 
 internal class Program
@@ -13,7 +14,7 @@ internal class Program
             throw new InvalidOperationException("OPENAI_API_KEY environment variable is not found.");
 
         // Use a common, general-purpose LLM
-        var model = new OpenAiModel(apiKey, "gpt-3.5-turbo");
+        var model = new Gpt35TurboModel(apiKey);
 
         // Create a simple prompt template for the conversation to help the AI
         var template = @"

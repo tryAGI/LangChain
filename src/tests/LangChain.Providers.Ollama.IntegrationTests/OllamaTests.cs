@@ -1,22 +1,26 @@
-namespace LangChain.Providers.Ollama.IntegrationTests
-{
-    [TestFixture]
-    public class OllamaTests
-    {
-        [Test]
-        [Explicit]
-        public void InstructionTest ()
-        {
-            OllamaLanguageModelInstruction model = new OllamaLanguageModelInstruction("mistral",options:new OllamaLanguageModelOptions(){Temperature = 0f,Stop = new []{"\n"} });
-            var response = model.GenerateAsync(new ChatRequest(new List<Message>
-            {
-                @"You are a calculator. You print only numbers.
-User: Print the result of this expression: 2 + 2.
-Calculator:".AsSystemMessage(),
-                
-            })).Result;
+namespace LangChain.Providers.Ollama.IntegrationTests;
 
-            Assert.AreEqual("4", response.Messages.Last().Content.Trim());
-        }
+[TestFixture]
+public class OllamaTests
+{
+    [Test]
+    [Explicit]
+    public async Task InstructionTest()
+    {
+        var model = new OllamaChatModel(new OllamaProvider(), id: "mistral")
+        {
+            Settings = new ChatSettings
+            {
+                //Temperature = 0.0,
+                StopSequences = ["\n"],
+            }
+        };
+        var response = await model.GenerateAsync("""
+                                                 You are a calculator. You print only numbers.
+                                                 User: Print the result of this expression: 2 + 2.
+                                                 Calculator:
+                                                 """);
+
+        Assert.AreEqual("4", response.Messages.Last().Content.Trim());
     }
 }

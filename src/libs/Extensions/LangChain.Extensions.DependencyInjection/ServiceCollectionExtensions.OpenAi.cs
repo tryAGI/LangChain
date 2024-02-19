@@ -24,9 +24,9 @@ public static partial class ServiceCollectionExtensions
             .AddOptions<OpenAiConfiguration>()
             .BindConfiguration(configSectionPath: OpenAiConfiguration.SectionName);
         _ = services
-            .AddHttpClient<OpenAiModel>();
+            .AddHttpClient<OpenAiProvider>();
         _ = services
-            .AddScoped<OpenAiModel>(static services => new OpenAiModel(
+            .AddScoped<OpenAiProvider>(static services => new OpenAiProvider(
                 services.GetRequiredService<IOptions<OpenAiConfiguration>>().Value));
 
         return services;

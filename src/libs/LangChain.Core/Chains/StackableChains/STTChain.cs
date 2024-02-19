@@ -9,10 +9,10 @@ namespace LangChain.Chains.StackableChains;
 /// <summary>
 /// Speech to text chain
 /// </summary>
-public class STTChain<T> : BaseStackableChain
+public class STTChain : BaseStackableChain
 {
-    private readonly ISpeechToTextModel<T> _model;
-    private readonly T _settings;
+    private readonly ISpeechToTextModel _model;
+    private readonly SpeechToTextSettings? _settings;
     private readonly string _inputKey;
     private readonly string _outputKey;
     private bool _useCache;
@@ -20,8 +20,11 @@ public class STTChain<T> : BaseStackableChain
     private const string CACHE_DIR = "cache";
 
     /// <inheritdoc />
-    public STTChain(ISpeechToTextModel<T> model, T settings,
-        string inputKey = "audio", string outputKey = "text")
+    public STTChain(
+        ISpeechToTextModel model,
+        SpeechToTextSettings? settings = null,
+        string inputKey = "audio",
+        string outputKey = "text")
     {
         _model = model;
         _settings = settings;
@@ -67,7 +70,7 @@ public class STTChain<T> : BaseStackableChain
             }
         }
 
-        var text=await _model.TranscribeAsync(audio, _settings).ConfigureAwait(false);
+        string text = await _model.TranscribeAsync(audio, _settings).ConfigureAwait(false);
         
         if(_useCache)
             SaveCachedAnswer(audio, text);
@@ -81,7 +84,7 @@ public class STTChain<T> : BaseStackableChain
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
-    public STTChain<T> UseCache(bool enabled=true)
+    public STTChain UseCache(bool enabled=true)
     {
         _useCache = enabled;
         return this;

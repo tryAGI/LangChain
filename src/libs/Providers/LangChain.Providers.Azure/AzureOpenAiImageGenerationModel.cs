@@ -1,0 +1,73 @@
+﻿using Azure.AI.OpenAI;
+using OpenAI.Constants;
+
+namespace LangChain.Providers.Azure;
+
+public class AzureOpenAiImageGenerationModel(
+    string id, 
+    AzureOpenAiProvider provider)
+    : ImageGenerationModel(id), IImageGenerationModel
+{
+    /// <summary>
+    /// Azure responds with a revised prompt if it changed it during generation, this property contains that prompt. Only relevant when Dall-E-3 model is used.
+    /// </summary>
+    public string RevisedPromptResult { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional Image Generation Options, if null the default settings will be used
+    /// NOTE: Currently only an ImageCount of 1 is supported, DALL-E-3 supports only 3 sizes 1024x1024, 1792X1024 or 1024x1792
+    /// </summary>
+    [CLSCompliant(false)]
+    public ImageGenerationOptions? GenerationOptions { get; set; } = null;
+
+    public async Task<ImageGenerationResponse> GenerateImageAsync(
+        ImageGenerationRequest request,
+        ImageGenerationSettings? settings = default,
+        CancellationToken cancellationToken = default)
+    {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
+        if (GenerationOptions != null && GenerationOptions.ImageCount != 1)
+        {
+            throw new NotSupportedException("Currently only 1 image is supported");
+        }
+        
+        var usedSettings = OpenAiImageGenerationSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.ImageGenerationSettings);
+        var response = await provider.Client.GetImageGenerationsAsync(GenerationOptions ?? new ImageGenerationOptions
+        {
+            DeploymentName = Id,
+            ImageCount = 1, //currently hardcoded to 1
+            Prompt = request.Prompt,
+            Quality = new ImageGenerationQuality(usedSettings.Quality!.Value),
+            Size = new ImageSize(usedSettings.Resolution!.Value), //DALL-E-3 supports only 3 sizes 1024x1024, 1792X1024 or 1024x1792
+            Style = ImageGenerationStyle.Natural,
+            User = usedSettings.User,
+        }, cancellationToken).ConfigureAwait(false);
+
+        var usage = Usage.Empty with
+        {
+            //Todo: Usage might be off when setting different parameters in GenerationOptions
+            PriceInUsd = ImageModels.DallE3.GetPriceInUsd(
+                resolution: usedSettings.Resolution!.Value,
+                quality: usedSettings.Quality!.Value),
+        };
+        AddUsage(usage);
+
+        var firstImage = response.Value.Data[0];
+        RevisedPromptResult = firstImage.RevisedPrompt;
+        
+        var bytes = Convert.FromBase64String(
+            firstImage.Base64Data ??
+            throw new InvalidOperationException("B64_json is null"));
+        
+        return new ImageGenerationResponse
+        {
+            Bytes = bytes,
+            Usage = usage,
+            UsedSettings = usedSettings,
+        };
+    }
+}

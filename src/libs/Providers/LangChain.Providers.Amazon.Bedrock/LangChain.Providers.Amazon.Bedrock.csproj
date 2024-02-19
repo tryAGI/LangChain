@@ -2,14 +2,16 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-		<SignAssembly>false</SignAssembly>
 		<NoWarn>$(NoWarn);CA1003;CA1307;CA1054;CA1711;CA1819;CA2234</NoWarn>
 		<RootNamespace>LangChain.Providers.Amazon.Bedrock</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.BedrockRuntime" />
-		<PackageReference Include="System.Net.Http" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net4.6.2'">
+		<Reference Include="System.Net.Http" />
 	</ItemGroup>
 
 	<ItemGroup Label="Usings">
@@ -18,11 +20,12 @@
 
 	<PropertyGroup Label="NuGet">
 		<Description>AWS Bedrock model provider.</Description>
-		<PackageTags>$(PackageTags);AWS Bedrock;api</PackageTags>
+		<PackageTags>$(PackageTags);aws;amazon;bedrock;api</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+		<ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

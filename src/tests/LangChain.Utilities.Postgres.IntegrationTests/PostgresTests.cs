@@ -1,5 +1,6 @@
 ﻿using LangChain.Chains.LLM;
 using LangChain.Providers.OpenAI;
+using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Utilities.Sql;
 using Npgsql;
 using OpenAI.Constants;
@@ -221,13 +222,13 @@ id	name	age
     public async Task SqlDatabaseChain_Run_Ok()
     {
         var key = Environment.GetEnvironmentVariable("OPENAI_KEY") ?? throw new ArgumentException("OPENAI_KEY");
-        var llm = new OpenAiModel(
-            new OpenAiConfiguration
+        var llm = new Gpt35TurboModel(key)
+        {
+            Settings = new OpenAiChatSettings
             {
-                ApiKey = key,
-                ModelId = ChatModels.Gpt35Turbo,
-                Temperature = 0.1
-            });
+                Temperature = 0.1,
+            }
+        };
 
         var llmInput = new LlmChainInput(llm, SqlDatabaseChainPrompts.PostgresPrompt);
         var llmChain = new LlmChain(llmInput);

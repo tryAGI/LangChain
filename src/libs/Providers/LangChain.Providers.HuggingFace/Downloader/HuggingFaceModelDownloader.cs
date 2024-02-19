@@ -1,4 +1,4 @@
-﻿namespace LangChain.Providers.Downloader;
+﻿namespace LangChain.Providers.HuggingFace.Downloader;
 
 /// <summary>
 /// A downloader for HuggingFace models

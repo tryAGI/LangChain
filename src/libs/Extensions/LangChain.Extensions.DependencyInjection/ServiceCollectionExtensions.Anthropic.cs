@@ -26,7 +26,7 @@ public static partial class ServiceCollectionExtensions
         _ = services
             .AddHttpClient<AnthropicModel>();
         _ = services
-            .AddScoped<AnthropicModel>(static services => new AnthropicModel(
+            .AddScoped<AnthropicProvider>(static services => AnthropicProvider.FromConfiguration(
                 configuration: services.GetRequiredService<IOptions<AnthropicConfiguration>>().Value,
                 httpClient: services.GetRequiredService<HttpClient>()));
 

@@ -8,10 +8,8 @@ namespace LangChain.Providers.LLamaSharp;
 /// 
 /// </summary>
 [CLSCompliant(false)]
-public class LLamaSharpModelInstruction : LLamaSharpModelBase, IWithDebug
+public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
 {
-
-    
     /// <summary>
     /// 
     /// </summary>
@@ -48,24 +46,14 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IWithDebug
             .Trim();
     }
     
-    /// <summary>
-    /// Occurs when token generated.
-    /// </summary>
-    public event Action<string> TokenGenerated = delegate { };
-
-    /// <summary>
-    /// Occurs before prompt is sent to the model.
-    /// </summary>
-    public event Action<string> PromptSent = delegate { };
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<ChatResponse> GenerateAsync(ChatRequest request, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public override async Task<ChatResponse> GenerateAsync(
+        ChatRequest request,
+        ChatSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
         var prompt = ToPrompt(request.Messages);
 
         var watch = Stopwatch.StartNew();
@@ -82,7 +70,8 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IWithDebug
             RepeatPenalty = Configuration.RepeatPenalty
         };
 
-        PromptSent(prompt);
+        OnPromptSent(prompt);
+        
         var buf = "";
         await foreach (var text in ex.InferAsync(prompt,
                            inferenceParams, cancellationToken))
@@ -97,12 +86,12 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IWithDebug
                 }
             }
             
-            TokenGenerated(text);
+            OnPartialResponseGenerated(text);
         }
 
+        buf = SanitizeOutput(buf);
+        OnCompletedResponseGenerated(buf);
         
-
-        buf = LLamaSharpModelInstruction.SanitizeOutput(buf);
         var result = request.Messages.ToList();
         result.Add(buf.AsAiMessage());
 
@@ -115,8 +104,11 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IWithDebug
         };
         TotalUsage += usage;
 
-        return new ChatResponse(
-            Messages: result,
-            Usage: usage);
+        return new ChatResponse
+        {
+            Messages = result,
+            Usage = usage,
+            UsedSettings = ChatSettings.Default,
+        };
     }
 }

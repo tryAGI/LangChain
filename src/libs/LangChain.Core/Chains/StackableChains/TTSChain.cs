@@ -9,10 +9,10 @@ namespace LangChain.Chains.StackableChains;
 /// <summary>
 /// Text to speech chain
 /// </summary>
-public class TTSChain<T>:BaseStackableChain
+public class TTSChain : BaseStackableChain
 {
-    private readonly ITextToSpeechModel<T> _model;
-    private readonly T _settings;
+    private readonly ITextToSpeechModel _model;
+    private readonly TextToSpeechSettings? _settings;
     private readonly string _inputKey;
     private readonly string _outputKey;
     private bool _useCache;
@@ -20,9 +20,11 @@ public class TTSChain<T>:BaseStackableChain
     private const string CACHE_DIR = "cache";
 
     /// <inheritdoc/>
-    public TTSChain(ITextToSpeechModel<T> model, 
-        T settings,
-        string inputKey = "text", string outputKey = "audio")
+    public TTSChain(
+        ITextToSpeechModel model,
+        TextToSpeechSettings? settings = null,
+        string inputKey = "text",
+        string outputKey = "audio")
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
@@ -76,7 +78,7 @@ public class TTSChain<T>:BaseStackableChain
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
-    public TTSChain<T> UseCache(bool enabled=true)
+    public TTSChain UseCache(bool enabled=true)
     {
         _useCache = enabled;
         return this;
