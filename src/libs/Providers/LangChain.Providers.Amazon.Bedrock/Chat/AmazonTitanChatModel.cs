@@ -5,13 +5,13 @@ using LangChain.Providers.Amazon.Bedrock.Internal;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public class AnthropicClaudeChatModel(
+public abstract class AmazonTitanChatModel(
     BedrockProvider provider,
     string id)
     : ChatModel(id)
 {
     public override int ContextLength => 4096;
-    
+
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
@@ -20,7 +20,7 @@ public class AnthropicClaudeChatModel(
         request = request ?? throw new ArgumentNullException(nameof(request));
         
         var watch = Stopwatch.StartNew();
-        var prompt = request.Messages.ToRolePrompt();
+        var prompt = request.Messages.ToSimplePrompt();
 
         var usedSettings = BedrockChatSettings.Calculate(
             requestSettings: settings,
@@ -30,16 +30,18 @@ public class AnthropicClaudeChatModel(
             Id,
             new JsonObject
             {
-                { "prompt", prompt },
-                { "max_tokens_to_sample", usedSettings.MaxTokens!.Value },
-                { "temperature", usedSettings.Temperature!.Value },
-                { "stop_sequences", new JsonArray("\n\nHuman:") }
+                ["inputText"] = prompt,
+                ["textGenerationConfig"] = new JsonObject
+                {
+                    ["maxTokenCount"] = usedSettings.MaxTokens!.Value,
+                    ["temperature"] = usedSettings.Temperature!.Value,
+                    ["topP"] = 0.9
+                }
             },
             cancellationToken).ConfigureAwait(false);
 
-        var generatedText = response?["completion"]?
-            .GetValue<string>() ?? "";
-
+        var generatedText = response?["results"]?[0]?["outputText"]?.GetValue<string>() ?? string.Empty;
+        
         var result = request.Messages.ToList();
         result.Add(generatedText.AsAiMessage());
 

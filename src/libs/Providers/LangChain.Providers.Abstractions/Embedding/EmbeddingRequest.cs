@@ -7,6 +7,7 @@ namespace LangChain.Providers;
 public class EmbeddingRequest
 {
     public required IList<string> Strings { get; init; } = Array.Empty<string>();
+    public IList<ImageData> Images { get; init; } = Array.Empty<ImageData>();
     
     /// <inheritdoc cref="ToEmbeddingRequest(string)"/>
     public static implicit operator EmbeddingRequest(string message)

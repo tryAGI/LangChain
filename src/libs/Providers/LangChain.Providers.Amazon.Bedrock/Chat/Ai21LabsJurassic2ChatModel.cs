@@ -31,7 +31,7 @@ public class Ai21LabsJurassic2ChatModel(
             new JsonObject
             {
                 { "prompt", prompt },
-                { "maxTokens", ContextLength },
+                { "maxTokens", usedSettings.MaxTokens!.Value },
                 { "temperature", usedSettings.Temperature!.Value }
             },
             cancellationToken).ConfigureAwait(false);

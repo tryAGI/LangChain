@@ -8,12 +8,18 @@ public class BedrockChatSettings : ChatSettings
         StopSequences = ChatSettings.Default.StopSequences,
         User = ChatSettings.Default.User,
         Temperature = 0.7,
+        MaxTokens = 4096,
     };
 
     /// <summary>
     /// Sampling temperature
     /// </summary>
     public double? Temperature { get; init; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int? MaxTokens { get; init; }
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -52,6 +58,12 @@ public class BedrockChatSettings : ChatSettings
                 providerSettingsCasted?.Temperature ??
                 Default.Temperature ??
                 throw new InvalidOperationException("Default Temperature is not set."),
+            MaxTokens = 
+                requestSettingsCasted?.MaxTokens ??
+                modelSettingsCasted?.MaxTokens ??
+                providerSettingsCasted?.MaxTokens ??
+                Default.MaxTokens ??
+                throw new InvalidOperationException("Default MaxTokens is not set."),
         };
     }
 }

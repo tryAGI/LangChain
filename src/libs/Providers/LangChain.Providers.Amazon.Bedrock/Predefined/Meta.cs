@@ -10,3 +10,6 @@ public class Llama2With13BModel(RegionEndpoint? region = null)
 /// <inheritdoc />
 public class Llama2With70BModel(RegionEndpoint? region = null)
     : MetaLlama2ChatModel(new BedrockProvider(region), id: "meta.llama2-70b-chat-v1");
+
+//public static string MetaLlama213B = "meta.llama2-13b-v1";  //TODO i'm guessing the model id
+//public static string MetaLlama270B = "meta.llama2-70b-v1";  //TODO i'm guessing the model id
