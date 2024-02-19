@@ -11,9 +11,6 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
-using LangChain.Providers.Amazon.Bedrock;
-using LangChain.Providers.Bedrock.Embeddings;
-using LangChain.Providers.Bedrock.Models;
 using LangChain.Schema;
 using LangChain.Sources;
 using LangChain.TextSplitters;
@@ -167,11 +164,10 @@ Answer: ";
     [Test]
     public async Task SimpleRag()
     {
-        // var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        var modelId = AmazonModelIds.AmazonTitanTextG1ExpressV1;
-        var llm = new BedrockModel(modelId);
-        var embeddings = new BedrockEmbeddings(AmazonModelIds.AmazonTitanEmbeddingsG1TextV1);
+        //var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        var llm = new TitanTextExpressV1Model();
+        var embeddings = new TitanEmbedTextV1Model();
 
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
@@ -227,11 +223,14 @@ Helpful Answer:";
     [Test]
     public async Task CanGetImage2()
     {
-        var model = new BedrockModel(AmazonModelIds.StabilityAISDXL1_0);
+        var model = new StableDiffusionExtraLargeV1Model();
+        var response = await model.GenerateImageAsync(
+            "i'm going to prepare a recipe.  show me an image of realistic food ingredients");
 
-        var prompt = "i'm going to prepare a recipe.  show me an image of realistic food ingredients";
-        var response = model.GenerateAsync(new ChatRequest(new[] { prompt.AsHumanMessage() })).Result;
-
-        Console.WriteLine(response);
+        var path = Path.Combine(Path.GetTempPath(), "food.png");
+        
+        await File.WriteAllBytesAsync(path, response.Bytes);
+        
+        Process.Start(path);
     }
 }

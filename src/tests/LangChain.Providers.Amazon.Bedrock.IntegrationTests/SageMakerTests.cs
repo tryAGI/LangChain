@@ -6,10 +6,10 @@ using LangChain.Databases.InMemory;
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Prompts;
-using LangChain.Providers.Amazon.Bedrock;
-using LangChain.Providers.Amazon.Bedrock.Embeddings;
-using LangChain.Providers.Amazon.Bedrock.Models;
-using LangChain.Providers.Amazon.SageMaker.Models;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
+using LangChain.Providers.Amazon.SageMaker;
 using LangChain.Schema;
 using LangChain.Sources;
 using LangChain.TextSplitters;
@@ -23,9 +23,8 @@ public class SageMakerTests
     [Test]
     public async Task SimpleChain()
     {
-        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com/model";
-        var sageMakerEndpointName = "openchat";
-        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
+        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
 
         var prompt = @"what's supermans parents names?";
 
@@ -39,9 +38,8 @@ public class SageMakerTests
     [Test]
     public async Task Chains()
     {
-        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com/model";
-        var sageMakerEndpointName = "openchat";
-        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
+        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -59,9 +57,8 @@ public class SageMakerTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com/model";
-        var sageMakerEndpointName = "openchat";
-        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
+        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
         var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));
@@ -99,9 +96,8 @@ public class SageMakerTests
     [Test]
     public void LLMChainTest()
     {
-        var apiGatewayEndpoint = "https://your-url.execute-api.us-east-1.amazonaws.com";
-        var sageMakerEndpointName = "openchat";
-        var model = new SageMakerModel(apiGatewayEndpoint, sageMakerEndpointName);
+        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
 
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
@@ -123,13 +119,12 @@ The pet name is
 
 
     [Test]
-    public void RetreivalChainTest()
+    public void RetrievalChainTest()
     {
-        //var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        var modelId = AmazonModelIds.MetaLlama2Chat13B;
-        var llm = new BedrockModel(modelId);
-        var embeddings = new BedrockEmbeddings(AmazonModelIds.CohereEmbedEnglish);
+        //var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        var llm = new Llama2With13BModel();
+        var embeddings = new EmbedEnglishV3Model();
 
         var documents = new string[]
         {
@@ -181,12 +176,11 @@ Answer: ";
     [Test]
     public async Task SimpleRag()
     {
-        // var modelId = "ai21.j2-mid-v1";
-        // var modelId = "anthropic.claude-v2:1";
-        var modelId = AmazonModelIds.AmazonTitanTextG1ExpressV1;
-        var llm = new BedrockModel(modelId);
-        var embeddings = new BedrockEmbeddings(AmazonModelIds.AmazonTitanEmbeddingsG1TextV1);
-
+        //var llm = new Jurassic2MidModel();
+        //var llm = new ClaudeV21Model();
+        var llm = new TitanTextExpressV1Model();
+        var embeddings = new TitanEmbedTextV1Model();
+        
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
 
@@ -222,17 +216,5 @@ Helpful Answer:";
 
         var res = await chain.Run("text");
         Console.WriteLine(res);
-    }
-
-    [Test]
-    public async Task CanGetImage()
-    {
-        var model = new BedrockModel(AmazonModelIds.AmazonTitanImageGeneratorG1V1);
-
-        var prompt = "create a picture of the solar system";
-
-        var response = model.GenerateAsync(new ChatRequest(new[] { prompt.AsHumanMessage() })).Result;
-
-        Console.WriteLine(response);
     }
 }
