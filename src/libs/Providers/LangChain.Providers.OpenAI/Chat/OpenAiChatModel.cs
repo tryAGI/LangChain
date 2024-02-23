@@ -143,10 +143,11 @@ public partial class OpenAiChatModel(
             cancellationToken).ConfigureAwait(false);
         
         var message = response.GetFirstChoiceMessage();
-        messages.Add(ToMessage(message));
+        var newMessage = ToMessage(message);
+        messages.Add(newMessage);
 
-        OnPartialResponseGenerated(message.Content);
-        OnCompletedResponseGenerated(message.Content);
+        OnPartialResponseGenerated(newMessage.Content);
+        OnCompletedResponseGenerated(newMessage.Content);
         
         var usage = GetUsage(response) with
         {
