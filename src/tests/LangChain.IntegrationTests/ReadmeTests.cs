@@ -129,12 +129,11 @@ Helpful Answer:") |
     [Test]
     public async Task RagWithOpenAiUsingAsyncMethods()
     {
-        var gpt35 = new Gpt35TurboModel(
+        var provider = new OpenAiProvider(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
-        var embeddings = new TextEmbeddingV3SmallModel(
-            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
-            throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        var llm = new Gpt35TurboModel(provider);
+        var embeddings = new TextEmbeddingV3SmallModel(provider);
         
         if (!File.Exists("vectors.db"))
         {
@@ -158,7 +157,7 @@ Helpful Answer:") |
         const string question = "Who was drinking a unicorn blood?";
         var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
         
-        var answer = await gpt35.GenerateAsync(
+        var answer = await llm.GenerateAsync(
             $"""
              Use the following pieces of context to answer the question at the end.
              If the answer is not in context then just say that you don't know, don't try to make up an answer.
@@ -171,7 +170,8 @@ Helpful Answer:") |
              """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
         
         Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
-        Console.WriteLine($"Total usage: {gpt35.Usage}");
+        Console.WriteLine($"LLM usage: {llm.Usage}");
+        Console.WriteLine($"Embeddings usage: {embeddings.Usage}");
     }
 
     [Explicit]
