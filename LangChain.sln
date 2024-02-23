@@ -172,13 +172,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Automat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Automatic1111.IntegrationTests", "src\tests\LangChain.Providers.Automatic1111.IntegrationTests\LangChain.Providers.Automatic1111.IntegrationTests.csproj", "{A6CF79BC-8365-46E8-9230-1A4AD615D40B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{628DDC9D-28A1-4C2F-BA13-171BD8CF711C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Abstractions", "src\libs\Providers\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj", "{628DDC9D-28A1-4C2F-BA13-171BD8CF711C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.Bedrock.IntegrationTests", "src\tests\LangChain.Providers.Amazon.Bedrock.IntegrationTests\LangChain.Providers.Amazon.Bedrock.IntegrationTests.csproj", "{73C76E80-95C5-4C96-A319-4F32043C903E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.Bedrock", "src\libs\Providers\LangChain.Providers.Amazon.Bedrock\LangChain.Providers.Amazon.Bedrock.csproj", "{67985CCB-F606-41F8-9D36-513459F58882}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Amazon.SageMaker", "src\libs\Providers\LangChain.Providers.Amazon.Sagemaker\LangChain.Providers.Amazon.SageMaker.csproj", "{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.SageMaker", "src\libs\Providers\LangChain.Providers.Amazon.Sagemaker\LangChain.Providers.Amazon.SageMaker.csproj", "{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Serve", "src\libs\Utilities\LangChain.Serve\LangChain.Serve.csproj", "{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -426,6 +428,10 @@ Global
 		{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -498,6 +504,7 @@ Global
 		{73C76E80-95C5-4C96-A319-4F32043C903E} = {FDEE2E22-C239-4921-83B2-9797F765FD6A}
 		{67985CCB-F606-41F8-9D36-513459F58882} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
+		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB} = {788567AF-444A-488F-BCED-C3B9F03CC38D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
