@@ -182,6 +182,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Amazon.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Serve", "src\libs\Utilities\LangChain.Serve\LangChain.Serve.csproj", "{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Serve", "examples\LangChain.Samples.Serve\LangChain.Samples.Serve.csproj", "{F901EF9C-1B68-48B1-9FAD-3D82E5EAA282}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -432,6 +434,10 @@ Global
 		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F901EF9C-1B68-48B1-9FAD-3D82E5EAA282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F901EF9C-1B68-48B1-9FAD-3D82E5EAA282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F901EF9C-1B68-48B1-9FAD-3D82E5EAA282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F901EF9C-1B68-48B1-9FAD-3D82E5EAA282}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -505,6 +511,7 @@ Global
 		{67985CCB-F606-41F8-9D36-513459F58882} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{534CEFB8-AA11-43A2-9A38-4F6D3A6633AB} = {E55391DE-F8F3-4CC2-A0E3-2406C76E9C68}
 		{80B74D0C-6D25-4549-81DD-E72DF0DD90BB} = {788567AF-444A-488F-BCED-C3B9F03CC38D}
+		{F901EF9C-1B68-48B1-9FAD-3D82E5EAA282} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
