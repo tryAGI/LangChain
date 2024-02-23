@@ -1,5 +1,4 @@
-﻿using LangChain.Abstractions.Embeddings.Base;
-using LLama.Common;
+﻿using LLama.Common;
 using LLama;
 
 namespace LangChain.Providers.LLamaSharp;
@@ -7,9 +6,12 @@ namespace LangChain.Providers.LLamaSharp;
 /// <summary>
 /// 
 /// </summary>
-[CLSCompliant(false)]
-public sealed class LLamaSharpEmbeddings : IEmbeddings, IDisposable
+public sealed class LLamaSharpEmbeddings
+    : Model<EmbeddingSettings>, IEmbeddingModel, IDisposable
 {
+    /// <inheritdoc />
+    public int MaximumInputLength { get; }
+    
     /// <summary>
     /// 
     /// </summary>
@@ -33,7 +35,7 @@ public sealed class LLamaSharpEmbeddings : IEmbeddings, IDisposable
     /// 
     /// </summary>
     /// <param name="configuration"></param>
-    public LLamaSharpEmbeddings(LLamaSharpConfiguration configuration)
+    public LLamaSharpEmbeddings(LLamaSharpConfiguration configuration) : base(id: "LLamaSharp")
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         
@@ -41,40 +43,28 @@ public sealed class LLamaSharpEmbeddings : IEmbeddings, IDisposable
         {
             ContextSize = (uint)configuration.ContextSize,
             Seed = (uint)configuration.Seed,
-
         };
         _model = LLamaWeights.LoadFromFile(parameters);
         _configuration = configuration;
         _embedder = new LLamaEmbedder(_model, parameters);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="texts"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public Task<float[][]> EmbedDocumentsAsync(string[] texts, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public Task<EmbeddingResponse> CreateEmbeddingsAsync(
+        EmbeddingRequest request,
+        EmbeddingSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
-        texts = texts ?? throw new ArgumentNullException(nameof(texts));
-        
-        float[][] result = new float[texts.Length][];
-        for (int i = 0; i < texts.Length; i++)
-        {
-            result[i] = _embedder.GetEmbeddings(texts[i]);
-        }
-        return Task.FromResult(result);
-    }
+        request = request ?? throw new ArgumentNullException(nameof(request));
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public Task<float[]> EmbedQueryAsync(string text, CancellationToken cancellationToken = default)
-    {
-        return Task.FromResult(_embedder.GetEmbeddings(text));
+        return Task.FromResult(new EmbeddingResponse
+        {
+            Values = request.Strings
+                .Select(prompt => _embedder.GetEmbeddings(prompt))
+                .ToArray(),
+            Usage = Usage.Empty,
+            UsedSettings = EmbeddingSettings.Default,
+        });
     }
 
     /// <summary>

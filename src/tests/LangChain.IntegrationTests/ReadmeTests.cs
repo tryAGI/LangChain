@@ -3,6 +3,7 @@ using LangChain.Databases.InMemory;
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Providers.OpenAI;
+using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Sources;
 using LangChain.TextSplitters;
 using LangChain.VectorStores;
@@ -20,7 +21,10 @@ public class ReadmeTests
         var gpt4 = new Gpt4Model(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
-        var index = await InMemoryVectorStore.CreateIndexFromDocuments(gpt4, new[]
+        var embeddings = new TextEmbeddingV3SmallModel(
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        var index = await InMemoryVectorStore.CreateIndexFromDocuments(embeddings, new[]
         {
             "I spent entire day watching TV",
             "My dog name is Bob",
@@ -69,6 +73,9 @@ public class ReadmeTests
         var gpt35 = new Gpt35TurboModel(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        var embeddings = new TextEmbeddingV3SmallModel(
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY is not set"));
         
         // Create database with embeddings from Harry Potter book pdf
         if (!File.Exists("vectors.db"))
@@ -77,7 +84,7 @@ public class ReadmeTests
             var documents = await PdfPigPdfSource.FromStreamAsync(stream);
             
             await SQLiteVectorStore.CreateIndexFromDocuments(
-                embeddings: gpt35,
+                embeddings: embeddings,
                 documents: documents,
                 filename: "vectors.db",
                 tableName: "vectors",
@@ -86,7 +93,7 @@ public class ReadmeTests
                     chunkOverlap: 50));
         }
 
-        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors", gpt35);
+        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors", embeddings);
         var index = new VectorStoreIndexWrapper(vectorStore);
         var chain =
             // set the question
@@ -110,7 +117,7 @@ Helpful Answer:") |
         var result = await chain.Run("text");
         
         Console.WriteLine($"LLM answer: {result}");
-        Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
+        Console.WriteLine($"Total usage: {gpt35.Usage}");
     }
     
     /// <summary>
@@ -125,6 +132,9 @@ Helpful Answer:") |
         var gpt35 = new Gpt35TurboModel(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        var embeddings = new TextEmbeddingV3SmallModel(
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY is not set"));
         
         if (!File.Exists("vectors.db"))
         {
@@ -132,7 +142,7 @@ Helpful Answer:") |
                 new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
             
             await SQLiteVectorStore.CreateIndexFromDocuments(
-                embeddings: gpt35,
+                embeddings: embeddings,
                 documents: documents,
                 filename: "vectors.db",
                 tableName: "vectors",
@@ -144,7 +154,7 @@ Helpful Answer:") |
         var database = new SQLiteVectorStore(
             filename: "vectors.db",
             tableName: "vectors",
-            embeddings: gpt35);
+            embeddings: embeddings);
         const string question = "Who was drinking a unicorn blood?";
         var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
         
@@ -158,10 +168,10 @@ Helpful Answer:") |
 
              Question: {question}
              Helpful Answer:
-             """, CancellationToken.None).ConfigureAwait(false);
+             """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
         
         Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
-        Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
+        Console.WriteLine($"Total usage: {gpt35.Usage}");
     }
 
     [Explicit]
@@ -180,8 +190,11 @@ Helpful Answer:") |
         var gpt35 = new Gpt35TurboModel(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
+        var embeddings = new TextEmbeddingV3SmallModel(
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY is not set"));
         
-        var database = await InMemoryVectorStore.CreateIndexFromDocuments(gpt35, new[]
+        var database = await InMemoryVectorStore.CreateIndexFromDocuments(embeddings, new[]
         {
             "I spent entire day watching TV",
             "My dog name is Bob",
@@ -203,10 +216,10 @@ Helpful Answer:") |
              Answer: Jerry
              Human: {similarDocuments.AsString()}
              Answer:
-             """, CancellationToken.None).ConfigureAwait(false);
+             """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
         
         Console.WriteLine($"LLM answer: {petNameResponse}");
-        Console.WriteLine($"Total usage: {gpt35.TotalUsage}");
+        Console.WriteLine($"Total usage: {gpt35.Usage}");
         
         petNameResponse.ToString().Should().Be("Bob");
     }

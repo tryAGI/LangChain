@@ -40,17 +40,17 @@ public class GoogleCustomSearchTool(string key, string cx, bool useCache = true,
         File.WriteAllText(file, answer);
     }
 
-    public override async Task<string> ToolTask(string input, CancellationToken token = default)
+    public override async Task<string> ToolTask(string input, CancellationToken cancellationToken = default)
     {
-        string responseString;
+        string? responseString;
         if (!useCache||(responseString = GetCachedAnswer(input))==null)
         {
             using var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://www.googleapis.com");
             var response = await httpClient.GetAsync(
-                $"/customsearch/v1?key={key}&cx={cx}&q={input}", token).ConfigureAwait(false);
+                new Uri($"/customsearch/v1?key={key}&cx={cx}&q={input}"), cancellationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
-            responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
 
         

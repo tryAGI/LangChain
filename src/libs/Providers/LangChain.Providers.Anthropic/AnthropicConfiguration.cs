@@ -11,24 +11,16 @@ public class AnthropicConfiguration
     public const string SectionName = "Anthropic";
 
     /// <summary>
-    /// Default configuration according to the official API documentation. <br/>
-    /// </summary>
-    public static AnthropicConfiguration Default { get; } = new()
-    {
-
-    };
-
-    /// <summary>
     /// 
     /// </summary>
-    public string? ApiKey { get; set; }
+    public string ApiKey { get; set; } = string.Empty;
 
     /// <summary>
     /// ID of the model to use. <br/>
     /// See the model endpoint compatibility table for details on which models work with the Chat API. <br/>
     /// https://platform.openai.com/docs/models/model-endpoint-compatibility <br/>
     /// </summary>
-    public string? ModelId { get; set; }
+    public string ModelId { get; set; } = string.Empty;
 
     /// <summary>
     /// What sampling temperature to use, between 0 and 2. <br/>

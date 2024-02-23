@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\LangChain.Core\LangChain.Core.csproj" />
+        <ProjectReference Include="..\LangChain.Providers.Abstractions\LangChain.Providers.Abstractions.csproj" />
+        <ProjectReference Include="..\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\LangChain.Core\LangChain.Core.csproj" />
     <ProjectReference Include="..\..\libs\Providers\LangChain.Providers.OpenAI\LangChain.Providers.OpenAI.csproj" />
   </ItemGroup>
 

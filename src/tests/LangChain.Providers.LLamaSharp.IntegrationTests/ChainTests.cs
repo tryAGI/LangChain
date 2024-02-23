@@ -1,9 +1,8 @@
-﻿using LangChain.Chains;
-using LangChain.Databases;
-using LangChain.Databases.InMemory;
+﻿using LangChain.Databases.InMemory;
 using LangChain.Docstore;
-using LangChain.Providers.Downloader;
+using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
+
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 [TestFixture]
@@ -26,7 +25,7 @@ public class ChainTests
 
     [Test]
     [Explicit]
-    public void LLMChainTest()
+    public void LlmChainTest()
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var promptText =
@@ -50,19 +49,18 @@ The pet name is
 
     [Test]
     [Explicit]
-    public void RetreivalChainTest()
+    public void RetrievalChainTest()
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        var documents = new string[]
-        {
-            "I spent entire day watching TV",
-            "My dog name is Bob",
-            "This icecream is delicious",
-            "It is cold in space"
-        }.ToDocuments();
         var index = InMemoryVectorStore
-            .CreateIndexFromDocuments(embeddings, documents).Result;
+            .CreateIndexFromDocuments(embeddings, new[]
+            {
+                "I spent entire day watching TV",
+                "My dog name is Bob",
+                "This icecream is delicious",
+                "It is cold in space"
+            }.ToDocuments()).Result;
 
         string prompt1Text =
             @"Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.

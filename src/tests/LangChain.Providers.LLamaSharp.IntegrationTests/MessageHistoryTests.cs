@@ -1,6 +1,7 @@
 ﻿using LangChain.Memory;
-using LangChain.Providers.Downloader;
+using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
+
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 [TestFixture]

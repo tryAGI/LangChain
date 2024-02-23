@@ -11,17 +11,6 @@ public class LeonardoAiConfiguration
     public const string SectionName = "LeonardoAi";
 
     /// <summary>
-    /// Default configuration according to the official API documentation. <br/>
-    /// </summary>
-    public static LeonardoAiConfiguration Default { get; } = new()
-    {
-
-    };
-
-    /// <inheritdoc cref="IModelWithUniqueUserIdentifier.User"/>
-    public string? User { get; set; }
-
-    /// <summary>
     /// 
     /// </summary>
     public string? ApiKey { get; set; }

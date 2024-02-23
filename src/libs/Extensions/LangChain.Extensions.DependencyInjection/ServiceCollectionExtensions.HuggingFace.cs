@@ -24,9 +24,9 @@ public static partial class ServiceCollectionExtensions
             .AddOptions<HuggingFaceConfiguration>()
             .BindConfiguration(configSectionPath: HuggingFaceConfiguration.SectionName);
         _ = services
-            .AddHttpClient<HuggingFaceModel>();
+            .AddHttpClient<HuggingFaceProvider>();
         _ = services
-            .AddScoped<HuggingFaceModel>(static services => new HuggingFaceModel(
+            .AddScoped<HuggingFaceProvider>(static services => new HuggingFaceProvider(
                 configuration: services.GetRequiredService<IOptions<HuggingFaceConfiguration>>().Value,
                 httpClient: services.GetRequiredService<HttpClient>()));
 

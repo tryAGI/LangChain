@@ -24,11 +24,10 @@ public static partial class ServiceCollectionExtensions
             .AddOptions<AnyscaleConfiguration>()
             .BindConfiguration(configSectionPath: AnyscaleConfiguration.SectionName);
         _ = services
-            .AddHttpClient<AnyscaleModel>();
+            .AddHttpClient<AnyscaleProvider>();
         _ = services
-            .AddScoped<AnyscaleModel>(static services => new AnyscaleModel(
-                configuration: services.GetRequiredService<IOptions<AnyscaleConfiguration>>().Value,
-                httpClient: services.GetRequiredService<HttpClient>()));
+            .AddScoped<AnyscaleProvider>(static services => new AnyscaleProvider(
+                configuration: services.GetRequiredService<IOptions<AnyscaleConfiguration>>().Value));
 
         return services;
     }

@@ -11,14 +11,6 @@ public class HuggingFaceConfiguration
     public const string SectionName = "HuggingFace";
 
     /// <summary>
-    /// Default configuration according to the official API documentation. <br/>
-    /// </summary>
-    public static HuggingFaceConfiguration Default { get; } = new()
-    {
-
-    };
-
-    /// <summary>
     /// 
     /// </summary>
     public string? ApiKey { get; set; }

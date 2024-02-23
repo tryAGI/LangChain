@@ -1,45 +1,44 @@
 ﻿using GenerativeAI.Types;
 
-namespace LangChain.Providers.Extensions
+namespace LangChain.Providers.Google.Extensions;
+
+/// <summary>
+/// 
+/// </summary>
+public static class StringExtensions
 {
     /// <summary>
-    /// 
+    /// To Model/Assistant Content
     /// </summary>
-    public static class StringExtensions
+    /// <param name="message"></param>
+    /// <returns></returns>
+    [CLSCompliant(false)]
+    public static Content AsModelContent(this string message)
     {
-        /// <summary>
-        /// To Model/Assistant Content
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        [CLSCompliant(false)]
-        public static Content AsModelContent(this string message)
+        var content = new Content(new[]
         {
-            var content = new Content(new[]
+            new Part()
             {
-                new Part()
-                {
-                    Text = message
-                }
-            }, Roles.Model);
-            return content;
-        }
+                Text = message
+            }
+        }, Roles.Model);
+        return content;
+    }
 
-        /// <summary>
-        /// To Model/Assistant Content
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        [CLSCompliant(false)]
-        public static Content AsUserContent(this string message)
-        {
-            var content = new Content([
-                new Part
-                {
-                    Text = message
-                }
-            ], Roles.User);
-            return content;
-        }
+    /// <summary>
+    /// To Model/Assistant Content
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    [CLSCompliant(false)]
+    public static Content AsUserContent(this string message)
+    {
+        var content = new Content([
+            new Part
+            {
+                Text = message
+            }
+        ], Roles.User);
+        return content;
     }
 }
