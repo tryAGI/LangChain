@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using OpenAI.Constants;
 
@@ -131,30 +132,79 @@ public partial class OpenAiChatModel(
         // Function_call = GlobalFunctions.Count == 0
         //     ? Function_call4.None
         //     : Function_call4.Auto,
-        var response = await provider.Api.ChatEndpoint.GetCompletionAsync(
-            new global::OpenAI.Chat.ChatRequest(
-                messages: request.Messages
-                    .Select(ToRequestMessage)
-                    .ToArray(),
-                model: Id,
-                stops: usedSettings.StopSequences!.ToArray(),
-                user: usedSettings.User!,
-                temperature: usedSettings.Temperature),
-            cancellationToken).ConfigureAwait(false);
-        
-        var message = response.GetFirstChoiceMessage();
-        var newMessage = ToMessage(message);
-        messages.Add(newMessage);
-
-        OnPartialResponseGenerated(newMessage.Content);
-        OnCompletedResponseGenerated(newMessage.Content);
-        
-        var usage = GetUsage(response) with
+        var chatRequest = new global::OpenAI.Chat.ChatRequest(
+            messages: request.Messages
+                .Select(ToRequestMessage)
+                .ToArray(),
+            model: Id,
+            stops: usedSettings.StopSequences!.ToArray(),
+            user: usedSettings.User!,
+            temperature: usedSettings.Temperature);
+        if (usedSettings.UseStreaming == true)
         {
-            Time = watch.Elapsed,
-        };
-        AddUsage(usage);
-        provider.AddUsage(usage);
+            var enumerable = provider.Api.ChatEndpoint.StreamCompletionEnumerableAsync(
+                chatRequest,
+                cancellationToken).ConfigureAwait(false);
+
+            var stringBuilder = new StringBuilder(capacity: 1024);
+            await foreach (var response in enumerable)
+            {
+                var delta = response.Choices.ElementAt(0).Delta.Content;
+                
+                OnPartialResponseGenerated(delta);
+                stringBuilder.Append(delta);
+            }
+            OnPartialResponseGenerated(Environment.NewLine);
+            stringBuilder.Append(Environment.NewLine);
+            
+            var newMessage = new Message(
+                Content: stringBuilder.ToString(),
+                Role: MessageRole.Ai);
+            messages.Add(newMessage);
+
+            OnCompletedResponseGenerated(newMessage.Content);
+        
+            var usage = Usage.Empty with
+            {
+                Time = watch.Elapsed,
+            };
+            AddUsage(usage);
+            provider.AddUsage(usage);
+
+            return new ChatResponse
+            {
+                Messages = messages,
+                UsedSettings = usedSettings,
+                Usage = usage,
+            };
+        }
+        else
+        {
+            var response = await provider.Api.ChatEndpoint.GetCompletionAsync(
+                chatRequest,
+                cancellationToken).ConfigureAwait(false);
+            var message = response.GetFirstChoiceMessage();
+            var newMessage = ToMessage(message);
+            messages.Add(newMessage);
+
+            OnPartialResponseGenerated(newMessage.Content);
+            OnPartialResponseGenerated(Environment.NewLine);
+            OnCompletedResponseGenerated(newMessage.Content);
+        
+            var usage = GetUsage(response) with
+            {
+                Time = watch.Elapsed,
+            };
+            AddUsage(usage);
+            provider.AddUsage(usage);
+
+            return new ChatResponse
+            {
+                Messages = messages,
+                UsedSettings = usedSettings,
+                Usage = usage,
+            };
+        }
 
         // while (CallFunctionsAutomatically && message.Function_call != null)
         // {
@@ -175,13 +225,6 @@ public partial class OpenAiChatModel(
         //         }
         //     }
         // }
-
-        return new ChatResponse
-        {
-            Messages = messages,
-            UsedSettings = usedSettings,
-            Usage = usage,
-        };
     }
 
     public Task<ChatResponse> GenerateAsync(

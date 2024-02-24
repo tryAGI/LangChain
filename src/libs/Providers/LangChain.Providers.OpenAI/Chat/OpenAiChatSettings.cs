@@ -7,6 +7,7 @@ public class OpenAiChatSettings : ChatSettings
     {
         StopSequences = ChatSettings.Default.StopSequences,
         User = ChatSettings.Default.User,
+        UseStreaming = ChatSettings.Default.UseStreaming,
         Temperature = 1.0,
     };
 
@@ -35,17 +36,23 @@ public class OpenAiChatSettings : ChatSettings
         return new OpenAiChatSettings
         {
             StopSequences = 
-                requestSettingsCasted?.StopSequences ??
-                modelSettingsCasted?.StopSequences ??
-                providerSettingsCasted?.StopSequences ??
+                requestSettings?.StopSequences ??
+                modelSettings?.StopSequences ??
+                providerSettings?.StopSequences ??
                 Default.StopSequences ??
                 throw new InvalidOperationException("Default StopSequences is not set."),
             User = 
-                requestSettingsCasted?.User ??
-                modelSettingsCasted?.User ??
-                providerSettingsCasted?.User ??
+                requestSettings?.User ??
+                modelSettings?.User ??
+                providerSettings?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
+            UseStreaming = 
+                requestSettings?.UseStreaming ??
+                modelSettings?.UseStreaming ??
+                providerSettings?.UseStreaming ??
+                Default.UseStreaming ??
+                throw new InvalidOperationException("Default UseStreaming is not set."),
             Temperature = 
                 requestSettingsCasted?.Temperature ??
                 modelSettingsCasted?.Temperature ??

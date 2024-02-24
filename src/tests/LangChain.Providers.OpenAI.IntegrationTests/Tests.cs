@@ -38,10 +38,35 @@ public class GeneralTests
             throw new InconclusiveException("OPENAI_API_KEY environment variable is not found.");
 
         var model = new Gpt35TurboModel(apiKey);
+        model.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
+        model.PartialResponseGenerated += (_, delta) => Console.Write(delta);
+        model.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
+        
         var response = await model.GenerateAsync("This is a test");
 
         response.LastMessageContent.Should().NotBeNull();
+    }
+    
+    [Test]
+    public async Task StreamingTest()
+    {
+        var apiKey =
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            throw new InconclusiveException("OPENAI_API_KEY environment variable is not found.");
+
+        var model = new Gpt35TurboModel(apiKey)
+        {
+            Settings = new OpenAiChatSettings
+            {
+                UseStreaming = true,
+            }
+        };
+        model.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
+        model.PartialResponseGenerated += (_, delta) => Console.WriteLine(delta);
+        model.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
         
-        Console.WriteLine(response.LastMessageContent);
+        var response = await model.GenerateAsync("This is a test");
+
+        response.LastMessageContent.Should().NotBeNull();
     }
 }

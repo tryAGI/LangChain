@@ -10,6 +10,7 @@ public class ChatSettings
     {
         StopSequences = Array.Empty<string>(),
         User = string.Empty,
+        UseStreaming = false,
     };
     
     /// <summary>
@@ -21,6 +22,11 @@ public class ChatSettings
     /// Defines the stop sequences for the model.
     /// </summary>
     public IReadOnlyList<string>? StopSequences { get; init; }
+
+    /// <summary>
+    /// Sampling temperature
+    /// </summary>
+    public bool? UseStreaming { get; init; }
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -49,6 +55,12 @@ public class ChatSettings
                 providerSettings?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
+            UseStreaming = 
+                requestSettings?.UseStreaming ??
+                modelSettings?.UseStreaming ??
+                providerSettings?.UseStreaming ??
+                Default.UseStreaming ??
+                throw new InvalidOperationException("Default UseStreaming is not set."),
         };
     }
 }

@@ -2,12 +2,8 @@ using OpenAI.Constants;
 
 namespace LangChain.Providers.OpenAI.Predefined;
 
-// Now we only predefine the models with alias, not the models with fixed id.
+// Now we only predefine the models with alias.
 
-/// <inheritdoc cref="ChatModels.Gpt35Turbo_16k" />
-public class Gpt35Turbo16KModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt35Turbo_16k);
-        
 /// <inheritdoc cref="ChatModels.Gpt35Turbo" />
 public class Gpt35TurboModel(OpenAiProvider provider)
     : OpenAiChatModel(provider, id: ChatModels.Gpt35Turbo);
@@ -31,7 +27,3 @@ public class Gpt4TurboPreviewModel(OpenAiProvider provider)
 /// <inheritdoc cref="ChatModels.Gpt4VisionPreview" />
 public class Gpt4VisionPreviewModel(OpenAiProvider provider)
     : OpenAiChatModel(provider, id: ChatModels.Gpt4VisionPreview);
-
-/// <inheritdoc cref="ChatModels.Gpt35Turbo_16k" />
-public class Gpt35TurboWith16KModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt35Turbo_16k);
