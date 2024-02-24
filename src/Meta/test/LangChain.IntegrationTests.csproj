@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="H.Resources.Generator">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+        <ProjectReference Include="..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+        <ProjectReference Include="..\src\LangChain.csproj" />
+    </ItemGroup>
+
+</Project>

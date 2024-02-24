@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <NoWarn>$(NoWarn);NETSDK1206</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+    <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
+    <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+    <ProjectReference Include="..\..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+    <ProjectReference Include="..\src\LangChain.Providers.Amazon.Bedrock.csproj" />
+  </ItemGroup>
+
+</Project>

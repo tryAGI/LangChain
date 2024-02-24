@@ -6,6 +6,14 @@
         <Nullable>enable</Nullable>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <IsTestProject Condition="$(MSBuildProjectFile.Contains('Tests'))">true</IsTestProject>
+        <IsLibraryProject Condition="'$(IsTestProject)' != 'true'">true</IsLibraryProject>
+    </PropertyGroup>
+    
+    <Import Project="Packaging.props" Condition="'$(IsLibraryProject)' == 'true'" />
+    <Import Project="Testing.props" Condition="'$(IsTestProject)' == 'true'" />
     
     <!-- https://github.com/dotnet/project-system/blob/main/docs/build-acceleration.md -->
     <PropertyGroup Label="Build Acceleration">
