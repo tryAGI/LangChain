@@ -20,7 +20,7 @@ public class ChainTests
 
         var res = chain.Run(resultKey: "prompt").Result;
 
-        Assert.AreEqual("Hello, World", res);
+        res.Should().Be("Hello, World");
     }
 
     [Test]
@@ -44,7 +44,7 @@ The pet name is
 
         var res = chain.Run(resultKey: "text").Result;
 
-        Assert.AreEqual("Bob", res);
+        res.Should().Be("Bob");
     }
 
     [Test]
@@ -97,6 +97,6 @@ Answer: ";
 
 
         var res = chainFilter.Run(resultKey: "text").Result;
-        Assert.AreEqual("Bob", res);
+        res.Should().Be("Bob");
     }
 }

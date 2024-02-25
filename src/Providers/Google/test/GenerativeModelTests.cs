@@ -17,9 +17,7 @@ public class GenerativeModelTests
 
         var result = await model.GenerateAsync("Write a Poem".AsChatMessage());
 
-        Assert.Greater(result.Messages.Count, 0,"Result Messages are zero");
-        var last = result.Messages.Last();
-        Assert.IsNotNull(last.Content,"Content is Null");
-        Assert.IsNotEmpty(last.Content,"Content is empty");
+        result.Messages.Count.Should().BeGreaterThan(0);
+        result.Messages.Last().Content.Should().NotBeNullOrEmpty();
     }
 }

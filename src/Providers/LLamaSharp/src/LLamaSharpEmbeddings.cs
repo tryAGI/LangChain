@@ -50,21 +50,23 @@ public sealed class LLamaSharpEmbeddings
     }
 
     /// <inheritdoc />
-    public Task<EmbeddingResponse> CreateEmbeddingsAsync(
+    public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
         EmbeddingRequest request,
         EmbeddingSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        return Task.FromResult(new EmbeddingResponse
+        var values = await Task.WhenAll(request.Strings
+            .Select(prompt => _embedder.GetEmbeddings(prompt, cancellationToken))
+            .ToArray()).ConfigureAwait(false);
+        
+        return new EmbeddingResponse
         {
-            Values = request.Strings
-                .Select(prompt => _embedder.GetEmbeddings(prompt))
-                .ToArray(),
+            Values = values,
             Usage = Usage.Empty,
             UsedSettings = EmbeddingSettings.Default,
-        });
+        };
     }
 
     /// <summary>

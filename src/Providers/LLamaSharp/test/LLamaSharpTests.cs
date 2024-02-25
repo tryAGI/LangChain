@@ -33,8 +33,7 @@ public partial class LLamaSharpTests
             "Bob".AsHumanMessage(),
         });
 
-        Assert.AreEqual("Jack", response.Messages.Last().Content);
-
+        response.Messages.Last().Content.Should().Be("Jack");
     }
 
     [Test]
@@ -53,8 +52,7 @@ public partial class LLamaSharpTests
             "Result:".AsSystemMessage(),
         });
 
-        Assert.AreEqual("4", response.Messages.Last().Content.Trim());
-
+        response.Messages.Last().Content.Trim().Should().Be("4");
     }
 
     float VectorDistance(float[] a, float[] b)
@@ -93,7 +91,7 @@ public partial class LLamaSharpTests
         var query = "How do you call your pet?";
         var closest = vectorStore.SimilaritySearchAsync(query, k: 1).Result.First();
 
-        Assert.AreEqual("My dog name is Bob", closest.PageContent);
+        closest.PageContent.Should().Be("My dog name is Bob");
     }
 
     [Test]
@@ -131,8 +129,7 @@ public partial class LLamaSharpTests
                                  // it would be passed by to stuffDocumentsChain
             ).Result ?? string.Empty;
 
-
-        Assert.IsTrue(answer.Contains("Bob"));
+        answer.Contains("Bob").Should().BeTrue();
     }
 
     private IChain CreateChain1(IChatModel model, IEmbeddingModel embeddings)
@@ -199,6 +196,6 @@ Answer:";
 
         var answer = sequence.Run("What is the good name for a pet?").Result;
 
-        Assert.AreEqual("Bob", answer);
+        answer.Should().Be("Bob");
     }
 }

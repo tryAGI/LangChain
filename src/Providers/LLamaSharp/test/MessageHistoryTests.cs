@@ -43,7 +43,7 @@ AI: ";
         var res=chain.Run().Result;  // call the chain for the second time.
                                                 // prompt will contain previous messages and a question about the name.
 
-        Assert.AreEqual(4, history.Messages.Count);
+        history.Messages.Count.Should().Be(4);
         res.Value["text"].ToString()?.ToLower().Trim().Contains("jimmy").Should().BeTrue();
     }
 

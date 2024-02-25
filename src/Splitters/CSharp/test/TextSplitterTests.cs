@@ -21,8 +21,7 @@ public class TextSplitterTests
         var actual = texts[0].PageContent;
 
         Console.WriteLine(texts[0]);
-        Assert.AreEqual(expected, actual);
-
+        actual.Should().Be(expected);
     }
 
     [Test]
@@ -45,8 +44,7 @@ public class TextSplitterTests
         var actual = (int)documents[0].Metadata["document"];
 
         Console.WriteLine(documents[0]);
-        Assert.AreEqual(expected, actual);
-
+        actual.Should().Be(expected);
     }
 
     [Test]
@@ -64,13 +62,10 @@ public class TextSplitterTests
         var expected1 =
             "Madam Speaker, Madam Vice President, our First Lady and Second Gentleman. Members of Congress and";
         var actual1 = texts[0].PageContent;
-        Assert.AreEqual(expected1, actual1);
+        actual1.Should().Be(expected1);
 
         var expected2 = "of Congress and the Cabinet. Justices of the Supreme Court. My fellow Americans.";
         var actual2 = texts[1].PageContent;
-        Assert.AreEqual(expected2, actual2);
-
-
+        actual2.Should().Be(expected2);
     }
-
 }

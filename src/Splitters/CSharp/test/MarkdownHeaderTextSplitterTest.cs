@@ -18,9 +18,9 @@ some text
 ";
         var splitter = new MarkdownHeaderTextSplitter();
         var res = splitter.SplitText(md);
-        Assert.AreEqual(2,res.Count);
-        Assert.AreEqual("Header 1", res[0].Split("\n")[0]);
-        Assert.AreEqual("Header 2", res[1].Split("\n")[0]);
+        res.Count.Should().Be(2);
+        res[0].Split("\n")[0].Should().Be("Header 1");
+        res[1].Split("\n")[0].Should().Be("Header 2");
     }
 
     [Test]
@@ -36,8 +36,7 @@ some text
 ";
         var splitter = new MarkdownHeaderTextSplitter();
         var res = splitter.SplitText(md);
-        Assert.AreEqual(1, res.Count);
-        Assert.AreEqual("Header 1", res[0].Split("\n")[0]);
-        
+        res.Count.Should().Be(1);
+        res[0].Split("\n")[0].Should().Be("Header 1");
     }
 }

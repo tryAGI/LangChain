@@ -34,6 +34,6 @@ public class SQLiteVectorStoreTest
 
         var results = store.AsRetriever().GetRelevantDocumentsAsync("What is my dog name?").Result.ToList();
 
-        Assert.AreEqual(results[0].PageContent, "My dog name is Bob");
+        results[0].PageContent.Should().Be("My dog name is Bob");
     }
 }

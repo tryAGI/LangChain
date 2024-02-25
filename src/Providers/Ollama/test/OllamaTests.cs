@@ -21,6 +21,6 @@ public class OllamaTests
                                                  Calculator:
                                                  """);
 
-        Assert.AreEqual("4", response.Messages.Last().Content.Trim());
+        response.Messages.Last().Content.Trim().Should().Be("4");
     }
 }

@@ -54,10 +54,11 @@ public class LLamaSharpModelChat : LLamaSharpModelBase
 
         };
 
-
         var buf = "";
-        await foreach (var text in session.ChatAsync(prompt,
-                           inferenceParams, cancellationToken))
+        await foreach (var text in session.ChatAsync(
+           message: new ChatHistory.Message(AuthorRole.User, prompt),
+           inferenceParams: inferenceParams,
+           cancellationToken: cancellationToken))
         {
             buf += text;
         }
