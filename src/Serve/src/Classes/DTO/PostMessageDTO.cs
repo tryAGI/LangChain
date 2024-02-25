@@ -4,7 +4,7 @@ namespace LangChain.Serve.Classes.DTO;
 
 public class PostMessageDTO
 {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 
     public StoredMessage ToStoredMessage(Guid conversationId)
     {
