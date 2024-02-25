@@ -9,10 +9,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Moq" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="embeddings\apple.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Moq" />
         <PackageReference Include="Npgsql" />
     </ItemGroup>
 

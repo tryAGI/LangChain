@@ -6,7 +6,7 @@ public class PdfSourceTests
     [Test]
     public async Task PdfPig_CheckText()
     {
-        var loader = new PdfPigPdfSource("sample.pdf");
+        var loader = new PdfPigPdfSource(H.Resources.sample_pdf.AsStream());
 
         var documents = await loader.LoadAsync();
 

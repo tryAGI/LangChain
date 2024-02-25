@@ -5,13 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="H.Resources.Generator">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\src\LangChain.Providers.Google.csproj"/>
     </ItemGroup>
 

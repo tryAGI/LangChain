@@ -1,0 +1,7 @@
+<Project>
+
+    <ItemGroup Label="Usings">
+        <Compile Remove="Resources\**\*.*" />
+    </ItemGroup>
+
+</Project>

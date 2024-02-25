@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{23506EB8-1
 		README.md = README.md
 		src\Packaging.props = src\Packaging.props
 		src\Testing.props = src\Testing.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+		src\Testing.targets = src\Testing.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}"

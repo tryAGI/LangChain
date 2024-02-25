@@ -4,17 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup Label="Usings">
-        <Compile Remove="Resources\**\*.*" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="H.Resources.Generator">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
         <ProjectReference Include="..\src\LangChain.Splitters.CSharp.csproj" />
