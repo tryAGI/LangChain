@@ -1,0 +1,32 @@
+﻿{
+  "solution": {
+    "path": "LangChain.sln",
+    "projects": [
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Databases\\InMemory\\src\\LangChain.Databases.InMemory.csproj",
+      "src\\Databases\\Sqlite\\src\\LangChain.Databases.Sqlite.csproj",
+      "src\\Extensions\\Docker\\src\\LangChain.Extensions.Docker.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj",
+      "src\\Providers\\Amazon.Bedrock\\src\\LangChain.Providers.Amazon.Bedrock.csproj",
+      "src\\Providers\\Amazon.Bedrock\\test\\LangChain.Providers.Amazon.Bedrock.Tests.csproj",
+      "src\\Providers\\Amazon.Sagemaker\\src\\LangChain.Providers.Amazon.SageMaker.csproj",
+      "src\\Providers\\Amazon.Sagemaker\\test\\LangChain.Providers.Amazon.SageMaker.Tests.csproj",
+      "src\\Providers\\Anthropic\\src\\LangChain.Providers.Anthropic.csproj",
+      "src\\Providers\\Anyscale\\src\\LangChain.Providers.Anyscale.csproj",
+      "src\\Providers\\Automatic1111\\src\\LangChain.Providers.Automatic1111.csproj",
+      "src\\Providers\\Automatic1111\\test\\LangChain.Providers.Automatic1111.Tests.csproj",
+      "src\\Providers\\Azure\\src\\LangChain.Providers.Azure.csproj",
+      "src\\Providers\\Google\\src\\LangChain.Providers.Google.csproj",
+      "src\\Providers\\Google\\test\\LangChain.Providers.Google.Tests.csproj",
+      "src\\Providers\\HuggingFace\\src\\LangChain.Providers.HuggingFace.csproj",
+      "src\\Providers\\LeonardoAI\\src\\LangChain.Providers.LeonardoAI.csproj",
+      "src\\Providers\\LLamaSharp\\src\\LangChain.Providers.LLamaSharp.csproj",
+      "src\\Providers\\LLamaSharp\\test\\LangChain.Providers.LLamaSharp.Tests.csproj",
+      "src\\Providers\\Ollama\\src\\LangChain.Providers.Ollama.csproj",
+      "src\\Providers\\Ollama\\test\\LangChain.Providers.Ollama.Tests.csproj",
+      "src\\Providers\\OpenAI\\src\\LangChain.Providers.OpenAI.csproj",
+      "src\\Providers\\OpenAI\\test\\LangChain.Providers.OpenAI.Tests.csproj",
+      "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj"
+    ]
+  }
+}

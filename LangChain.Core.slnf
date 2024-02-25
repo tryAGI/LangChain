@@ -1,0 +1,10 @@
+﻿{
+  "solution": {
+    "path": "LangChain.sln",
+    "projects": [
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Core\\test\\UnitTests\\LangChain.Core.UnitTests.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+﻿{
+  "solution": {
+    "path": "LangChain.sln",
+    "projects": [
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj",
+      "src\\Splitters\\Abstractions\\src\\LangChain.Splitters.Abstractions.csproj",
+      "src\\Splitters\\CSharp\\src\\LangChain.Splitters.CSharp.csproj",
+      "src\\Splitters\\CSharp\\test\\LangChain.Splitters.CSharp.Tests.csproj"
+    ]
+  }
+}

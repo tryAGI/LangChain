@@ -1,0 +1,22 @@
+﻿{
+  "solution": {
+    "path": "LangChain.sln",
+    "projects": [
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Databases\\InMemory\\src\\LangChain.Databases.InMemory.csproj",
+      "src\\Databases\\Sqlite\\src\\LangChain.Databases.Sqlite.csproj",
+      "src\\Extensions\\DependencyInjection\\src\\LangChain.Extensions.DependencyInjection.csproj",
+      "src\\Meta\\src\\LangChain.csproj",
+      "src\\Meta\\test\\LangChain.IntegrationTests.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj",
+      "src\\Providers\\Anthropic\\src\\LangChain.Providers.Anthropic.csproj",
+      "src\\Providers\\Anyscale\\src\\LangChain.Providers.Anyscale.csproj",
+      "src\\Providers\\Azure\\src\\LangChain.Providers.Azure.csproj",
+      "src\\Providers\\Google\\src\\LangChain.Providers.Google.csproj",
+      "src\\Providers\\HuggingFace\\src\\LangChain.Providers.HuggingFace.csproj",
+      "src\\Providers\\OpenAI\\src\\LangChain.Providers.OpenAI.csproj",
+      "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj",
+      "src\\Splitters\\Abstractions\\src\\LangChain.Splitters.Abstractions.csproj"
+    ]
+  }
+}
