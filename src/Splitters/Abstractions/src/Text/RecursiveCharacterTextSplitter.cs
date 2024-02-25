@@ -1,6 +1,4 @@
-﻿using LangChain.Base;
-
-namespace LangChain.TextSplitters;
+﻿namespace LangChain.Splitters.Text;
 
 /// <summary>
 /// Implementation of splitting text that looks at characters.
@@ -17,7 +15,7 @@ public class RecursiveCharacterTextSplitter(
     private readonly List<string> _separators = separators ?? new List<string> { "\n\n", "\n", " ", "" };
 
     /// <inheritdoc/>
-    public override List<string> SplitText(string text)
+    public override IReadOnlyList<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
         
@@ -67,7 +65,7 @@ public class RecursiveCharacterTextSplitter(
                     goodSplits.Clear();
                 }
 
-                List<string> otherInfo = SplitText(s);
+                IReadOnlyList<string> otherInfo = SplitText(s);
                 finalChunks.AddRange(otherInfo);
             }
         }

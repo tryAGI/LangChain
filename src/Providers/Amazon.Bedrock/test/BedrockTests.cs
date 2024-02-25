@@ -13,7 +13,8 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using LangChain.Sources;
-using LangChain.TextSplitters;
+using LangChain.Splitters;
+using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Providers.Amazon.Bedrock.IntegrationTests;

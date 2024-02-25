@@ -23,8 +23,16 @@
 		<PackageTags>$(PackageTags);aws;amazon;bedrock;api</PackageTags>
 	</PropertyGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net4.6.2'">
+		<PackageReference Include="System.Text.Json" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Text.Json" />
+	</ItemGroup>
+
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+		<ProjectReference Include="..\..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
 		<ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
 	</ItemGroup>
 

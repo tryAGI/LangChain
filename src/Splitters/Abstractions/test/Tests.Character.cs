@@ -1,10 +1,9 @@
-﻿
-using LangChain.TextSplitters;
+﻿using LangChain.Base;
+using LangChain.Splitters.Text;
 
-namespace LangChain.Splitters.CSharp.UnitTests;
+namespace LangChain.Splitters;
 
-[TestFixture]
-public class TextSplitterTests
+public partial class Tests
 {
     [Test]
     public void CharacterSplitterTest()
@@ -12,9 +11,9 @@ public class TextSplitterTests
         // based on https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter
 
         var textSplitter = new CharacterTextSplitter(separator: "\n\n", chunkSize: 1000, chunkOverlap: 200);
-        var state_of_the_union_txt = H.Resources.state_of_the_union_txt.AsString();
+        var text = H.Resources.state_of_the_union_txt.AsString();
 
-        var texts = textSplitter.CreateDocuments(new List<string>() { state_of_the_union_txt });
+        var texts = textSplitter.CreateDocuments(new List<string>() { text });
 
         var expected =
             "Madam Speaker, Madam Vice President, our First Lady and Second Gentleman. Members of Congress and the Cabinet. Justices of the Supreme Court. My fellow Americans.  \n\nLast year COVID-19 kept us apart. This year we are finally together again. \n\nTonight, we meet as Democrats Republicans and Independents. But most importantly as Americans. \n\nWith a duty to one another to the American people to the Constitution. \n\nAnd with an unwavering resolve that freedom will always triumph over tyranny. \n\nSix days ago, Russia’s Vladimir Putin sought to shake the foundations of the free world thinking he could make it bend to his menacing ways. But he badly miscalculated. \n\nHe thought he could roll into Ukraine and the world would roll over. Instead he met a wall of strength he never imagined. \n\nHe met the Ukrainian people. \n\nFrom President Zelenskyy to every Ukrainian, their fearlessness, their courage, their determination, inspires the world.";
@@ -30,7 +29,7 @@ public class TextSplitterTests
         // based on https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter
 
         var textSplitter = new CharacterTextSplitter(separator: "\n\n", chunkSize: 1000, chunkOverlap: 200);
-        var state_of_the_union_txt = H.Resources.state_of_the_union_txt.AsString();
+        var text = H.Resources.state_of_the_union_txt.AsString();
         var metadatas = new List<Dictionary<string, object>>()
         {
             new (){{"document", 1}},
@@ -38,34 +37,12 @@ public class TextSplitterTests
         };
 
         var documents =
-            textSplitter.CreateDocuments(new List<string>() { state_of_the_union_txt, state_of_the_union_txt }, metadatas);
+            textSplitter.CreateDocuments(new List<string>() { text, text }, metadatas);
 
         var expected = 1;
         var actual = (int)documents[0].Metadata["document"];
 
         Console.WriteLine(documents[0]);
         actual.Should().Be(expected);
-    }
-
-    [Test]
-    public void RecursiveCharacterTextSplitterTest()
-    {
-        // based on https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/recursive_text_splitter
-
-        var state_of_the_union_txt = H.Resources.state_of_the_union_txt.AsString();
-        var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 100, chunkOverlap: 20);
-
-
-        var texts = textSplitter.CreateDocuments(new List<string>() { state_of_the_union_txt });
-
-
-        var expected1 =
-            "Madam Speaker, Madam Vice President, our First Lady and Second Gentleman. Members of Congress and";
-        var actual1 = texts[0].PageContent;
-        actual1.Should().Be(expected1);
-
-        var expected2 = "of Congress and the Cabinet. Justices of the Supreme Court. My fellow Americans.";
-        var actual2 = texts[1].PageContent;
-        actual2.Should().Be(expected2);
     }
 }

@@ -1,3 +1,4 @@
+using LangChain.Splitters.Code;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,7 +9,7 @@ namespace LangChain.Splitters;
 /// <summary>
 /// 
 /// </summary>
-public class CSharpSplitter : ISplitter
+public class CSharpSplitter : ICodeSplitter, ICodeCutter
 {
     /// <summary>
     /// 
@@ -16,33 +17,33 @@ public class CSharpSplitter : ISplitter
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<IReadOnlyCollection<DocumentPart>> SplitAsync(
+    public async Task<IReadOnlyCollection<CodePart>> SplitAsync(
         string content,
         CancellationToken cancellationToken = default)
     {
-        var components = new List<DocumentPart>();
+        var components = new List<CodePart>();
 
         var tree = CSharpSyntaxTree.ParseText(content, cancellationToken: cancellationToken);
         var root = await tree.GetRootAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var constructor in root.DescendantNodes().OfType<ConstructorDeclarationSyntax>())
         {
-            components.Add(new DocumentPart(
+            components.Add(new CodePart(
                 Name: constructor.Identifier.ToFullString(),
                 Content: constructor.ToFullString(),
-                Type: DocumentPartType.Constructor));
+                Type: CodePartType.Constructor));
         }
         foreach (var method in root.DescendantNodes().OfType<MethodDeclarationSyntax>())
         {
-            components.Add(new DocumentPart(
+            components.Add(new CodePart(
                 Name: method.Identifier.ToFullString(),
                 Content: method.ToFullString(),
-                Type: DocumentPartType.Method));
+                Type: CodePartType.Method));
         }
 
         return components
             .GroupBy(static x => x.Name)
-            .Select(static x => new DocumentPart(
+            .Select(static x => new CodePart(
                 Name: x.Key,
                 Content: string.Join(Environment.NewLine, x),
                 Type: x.First().Type))

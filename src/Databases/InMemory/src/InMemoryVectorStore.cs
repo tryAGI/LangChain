@@ -1,7 +1,7 @@
 ﻿using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Providers;
-using LangChain.TextSplitters;
+using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 
 namespace LangChain.Databases.InMemory;

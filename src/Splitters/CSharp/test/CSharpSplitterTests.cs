@@ -1,4 +1,4 @@
-namespace LangChain.Splitters.CSharp.UnitTests;
+namespace LangChain.Splitters;
 
 [TestFixture]
 public class CSharpSplitterTests

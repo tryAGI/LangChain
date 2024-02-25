@@ -1,5 +1,5 @@
 ﻿using LangChain.Docstore;
-using LangChain.TextSplitters;
+using LangChain.Splitters.Text;
 
 namespace LangChain.Base;
 

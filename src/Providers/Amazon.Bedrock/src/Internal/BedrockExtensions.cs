@@ -3,14 +3,14 @@ using System.Text.Json.Nodes;
 using Amazon.BedrockRuntime;
 using Amazon.BedrockRuntime.Model;
 using Amazon.Util;
-using LangChain.TextSplitters;
+using LangChain.Splitters.Text;
 
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock.Internal;
 
 internal static class BedrockExtensions
 {
-    public static IList<string> Split(
+    public static IReadOnlyList<string> Split(
         this IList<string> strings,
         int chunkSize)
     {

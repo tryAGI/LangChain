@@ -1,6 +1,4 @@
-﻿using LangChain.Base;
-
-namespace LangChain.TextSplitters;
+﻿namespace LangChain.Splitters.Text;
 
 /// <inheritdoc/>
 public class MarkdownHeaderTextSplitter : TextSplitter
@@ -31,7 +29,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
     }
 
     /// <inheritdoc/>
-    public override List<string> SplitText(string text)
+    public override IReadOnlyList<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
         

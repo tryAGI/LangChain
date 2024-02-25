@@ -1,9 +1,8 @@
-﻿using LangChain.TextSplitters;
+﻿using LangChain.Splitters.Text;
 
-namespace LangChain.Splitters.CSharp.UnitTests;
+namespace LangChain.Splitters;
 
-[TestFixture]
-public class MarkdownHeaderTextSplitterTest
+public partial class Tests
 {
     [Test]
     public void TestMarkdown1()

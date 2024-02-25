@@ -244,6 +244,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pdf", "Pdf", "{B68ACE72-324
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebBase", "WebBase", "{ED2684D8-5229-4397-A2FB-06AF1E5A6CBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.Abstractions.Tests", "src\Splitters\Abstractions\test\LangChain.Splitters.Abstractions.Tests.csproj", "{1F76A632-BC80-4225-ABA3-2D87BBA064E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -490,6 +492,10 @@ Global
 		{0E05162C-D9C8-4314-B035-26E200937374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E05162C-D9C8-4314-B035-26E200937374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E05162C-D9C8-4314-B035-26E200937374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -587,6 +593,7 @@ Global
 		{ED2684D8-5229-4397-A2FB-06AF1E5A6CBC} = {AD076803-F723-4C2E-8599-75C418A4A07F}
 		{7D97D652-AFF5-465C-8688-FC3066423707} = {ED2684D8-5229-4397-A2FB-06AF1E5A6CBC}
 		{16D0189E-2B4A-4B7C-B60C-CD74EF83D119} = {ED2684D8-5229-4397-A2FB-06AF1E5A6CBC}
+		{1F76A632-BC80-4225-ABA3-2D87BBA064E9} = {FBF5D827-0D5B-4A71-BBBF-3EAA5A5AA1C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

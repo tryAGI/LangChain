@@ -1,6 +1,4 @@
-﻿using LangChain.Base;
-
-namespace LangChain.TextSplitters;
+﻿namespace LangChain.Splitters.Text;
 
 /// <summary>
 /// Implementation of splitting text that looks at characters
@@ -13,7 +11,7 @@ public class CharacterTextSplitter(
     : TextSplitter(chunkSize, chunkOverlap, lengthFunction)
 {
     /// <inheritdoc/>
-    public override List<string> SplitText(string text)
+    public override IReadOnlyList<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
         

@@ -1,4 +1,4 @@
-namespace LangChain.Splitters;
+namespace LangChain.Splitters.Code;
 
 /// <summary>
 /// Represents a part of a document.
@@ -6,16 +6,16 @@ namespace LangChain.Splitters;
 /// <param name="Name"></param>
 /// <param name="Content"></param>
 /// <param name="Type"></param>
-public readonly record struct DocumentPart(
+public readonly record struct CodePart(
     string Name,
     string Content,
-    DocumentPartType Type = DocumentPartType.Unknown)
+    CodePartType Type = CodePartType.Unknown)
 {
     /// <summary>
     /// Represents an empty document part.
     /// </summary>
-    public static DocumentPart Empty { get; } = new(
+    public static CodePart Empty { get; } = new(
         Name: string.Empty,
         Content: string.Empty,
-        Type: DocumentPartType.Unknown);
+        Type: CodePartType.Unknown);
 }

@@ -1,5 +1,6 @@
 ﻿using LangChain.Base;
 using LangChain.Docstore;
+using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 
 namespace LangChain.Indexes;

@@ -2,7 +2,7 @@
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Prompts;
-using LangChain.TextSplitters;
+using LangChain.Splitters.Text;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 

@@ -1,9 +1,9 @@
-namespace LangChain.Splitters;
+namespace LangChain.Splitters.Code;
 
 /// <summary>
 /// 
 /// </summary>
-public enum DocumentPartType
+public enum CodePartType
 {
     /// <summary>
     /// 

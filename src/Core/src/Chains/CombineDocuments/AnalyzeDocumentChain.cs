@@ -4,7 +4,7 @@ using LangChain.Base;
 using LangChain.Callback;
 using LangChain.Docstore;
 using LangChain.Schema;
-using LangChain.TextSplitters;
+using LangChain.Splitters.Text;
 
 namespace LangChain.Chains.CombineDocuments;
 

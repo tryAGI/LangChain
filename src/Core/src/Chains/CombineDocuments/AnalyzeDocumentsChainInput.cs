@@ -1,4 +1,5 @@
 using LangChain.Base;
+using LangChain.Splitters.Text;
 
 namespace LangChain.Chains.CombineDocuments;
 

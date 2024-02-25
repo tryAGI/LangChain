@@ -5,7 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\LangChain.Splitters.CSharp.csproj" />
+      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+      <ProjectReference Include="..\src\LangChain.Splitters.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>
