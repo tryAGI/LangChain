@@ -15,7 +15,8 @@ public class BedrockTextModelTests
         var predefinedDir = Path.Combine(srcDir, predefined); 
         
         var assembly = Assembly.GetAssembly(typeof(BedrockProvider));
-        var allTypes = assembly?.GetTypes().ToList();
+        var allTypes = assembly?.GetTypes().ToList() ??
+                       throw new InvalidOperationException("Assembly not found");
 
         var derivedTypeNames = FindDerivedTypes(predefinedDir);
 
@@ -29,12 +30,12 @@ public class BedrockTextModelTests
             foreach (var t in derivedTypeNames)
             {
                 var className = t;
-                var type = allTypes.Where(x => x.Name == className)
-                    .FirstOrDefault();
+                var type = allTypes.FirstOrDefault(x => x.Name == className) ??
+                           throw new InvalidOperationException($"Type {className} not found");
 
-                if (type.FullName.ToLower().Contains("embed") ||
-                    type.FullName.ToLower().Contains("image") ||
-                    type.FullName.ToLower().Contains("stablediffusion")
+                if (type.FullName?.ToLower().Contains("embed") == true ||
+                    type.FullName?.ToLower().Contains("image") == true ||
+                    type.FullName?.ToLower().Contains("stablediffusion") == true
                    )
                 {
                     failedTypes.Add(className);

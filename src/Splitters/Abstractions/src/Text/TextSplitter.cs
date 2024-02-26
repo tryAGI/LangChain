@@ -55,7 +55,7 @@ public abstract class TextSplitter : ITextSplitter
     /// <summary>
     /// Joins a list of strings with a separator and returns null if the resulting string is empty
     /// </summary>
-    protected string? JoinDocs(List<string> docs, string separator)
+    protected string? JoinDocs(IReadOnlyList<string> docs, string separator)
     {
         var text = string.Join(separator, docs).Trim();
         return string.IsNullOrEmpty(text) ? null : text;
@@ -64,7 +64,7 @@ public abstract class TextSplitter : ITextSplitter
     /// <summary>
     /// Merges a list of texts into chunks of size chunk_size with overlap
     /// </summary>
-    protected List<string> MergeSplits(IEnumerable<string> splits, string separator)
+    protected IReadOnlyList<string> MergeSplits(IEnumerable<string> splits, string separator)
     {
         splits = splits ?? throw new ArgumentNullException(nameof(splits));
         

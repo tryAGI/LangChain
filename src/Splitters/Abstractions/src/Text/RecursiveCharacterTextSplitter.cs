@@ -6,13 +6,13 @@
 /// that works.
 /// </summary>
 public class RecursiveCharacterTextSplitter(
-    List<string>? separators = null,
+    IReadOnlyList<string>? separators = null,
     int chunkSize = 4000,
     int chunkOverlap = 200,
     Func<string, int>? lengthFunction = null)
     : TextSplitter(chunkSize, chunkOverlap, lengthFunction)
 {
-    private readonly List<string> _separators = separators ?? new List<string> { "\n\n", "\n", " ", "" };
+    private readonly IReadOnlyList<string> _separators = separators ?? new List<string> { "\n\n", "\n", " ", "" };
 
     /// <inheritdoc/>
     public override IReadOnlyList<string> SplitText(string text)
@@ -20,7 +20,7 @@ public class RecursiveCharacterTextSplitter(
         text = text ?? throw new ArgumentNullException(nameof(text));
         
         List<string> finalChunks = new List<string>();
-        string separator = _separators.Last();
+        string separator = _separators[_separators.Count - 1];
 
         foreach (string _s in _separators)
         {
@@ -60,7 +60,7 @@ public class RecursiveCharacterTextSplitter(
             {
                 if (goodSplits.Count != 0)
                 {
-                    List<string> mergedText = MergeSplits(goodSplits, separator);
+                    var mergedText = MergeSplits(goodSplits, separator);
                     finalChunks.AddRange(mergedText);
                     goodSplits.Clear();
                 }
@@ -72,7 +72,7 @@ public class RecursiveCharacterTextSplitter(
 
         if (goodSplits.Count != 0)
         {
-            List<string> mergedText = MergeSplits(goodSplits, separator);
+            var mergedText = MergeSplits(goodSplits, separator);
             finalChunks.AddRange(mergedText);
         }
 
