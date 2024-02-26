@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
     <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
     <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />

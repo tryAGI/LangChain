@@ -1,4 +1,3 @@
-using LangChain.Base;
 using System.Diagnostics;
 using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
@@ -9,26 +8,25 @@ using LangChain.Indexes;
 using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using LangChain.Sources;
-using LangChain.Splitters;
-using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
 
-namespace LangChain.Providers.Amazon.Bedrock.IntegrationTests;
+namespace LangChain.Providers.Amazon.Bedrock.Tests;
 
 [TestFixture, Explicit]
 public class BedrockTests
 {
+
     [Test]
     public async Task Chains()
     {
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel(provider);
-        //var llm = new ClaudeV21Model(provider);
-        var llm = new Llama2With13BModel(provider);
+        var llm = new ClaudeV21Model(provider);
         //var modelId = "amazon.titan-text-express-v1";
         // var modelId = "cohere.command-light-text-v14";
 
