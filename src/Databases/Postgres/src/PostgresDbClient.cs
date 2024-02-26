@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using LangChain.Common.Converters;
@@ -10,6 +11,8 @@ namespace LangChain.Databases.Postgres;
 /// <summary>
 /// 
 /// </summary>
+[RequiresDynamicCode("Requires dynamic code.")]
+[RequiresUnreferencedCode("Requires unreferenced code.")]
 public class PostgresDbClient
 {
     private readonly NpgsqlDataSource _dataSource;

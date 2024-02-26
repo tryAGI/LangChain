@@ -52,6 +52,18 @@
         <NoWarn>$(NoWarn);CS1591</NoWarn>
     </PropertyGroup>
 
+    <PropertyGroup Label="Trimmable" Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">
+        <IsAotCompatible>true</IsAotCompatible>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <IsTrimmable>true</IsTrimmable>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Label="Polyfills">
+        <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
+    </PropertyGroup>
+    
     <ItemGroup Label="Polyfills">
         <PackageReference Include="PolySharp">
             <PrivateAssets>all</PrivateAssets>

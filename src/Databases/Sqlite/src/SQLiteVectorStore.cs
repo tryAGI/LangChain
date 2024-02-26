@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using LangChain.Base;
 using LangChain.Docstore;
 using LangChain.Indexes;
@@ -12,6 +13,8 @@ namespace LangChain.Databases;
 /// <summary>
 /// 
 /// </summary>
+[RequiresDynamicCode("Requires dynamic code.")]
+[RequiresUnreferencedCode("Requires unreferenced code.")]
 public sealed class SQLiteVectorStore : VectorStore, IDisposable
 {
     private readonly string _tableName;

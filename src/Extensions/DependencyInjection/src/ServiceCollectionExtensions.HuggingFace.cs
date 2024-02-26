@@ -1,4 +1,5 @@
-﻿using LangChain.Providers.HuggingFace;
+﻿using System.Diagnostics.CodeAnalysis;
+using LangChain.Providers.HuggingFace;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -15,6 +16,8 @@ public static partial class ServiceCollectionExtensions
     /// <param name="services"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
+    [RequiresDynamicCode("Requires dynamic code.")]
+    [RequiresUnreferencedCode("Requires unreferenced code.")]
     public static IServiceCollection AddHuggingFace(
         this IServiceCollection services)
     {

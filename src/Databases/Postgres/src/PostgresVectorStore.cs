@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LangChain.Databases.Postgres;
 using LangChain.Docstore;
 using LangChain.Providers;
@@ -12,6 +13,8 @@ namespace LangChain.Databases;
 /// required: CREATE EXTENSION IF NOT EXISTS vector
 /// </remarks>
 /// </summary>
+[RequiresDynamicCode("Requires dynamic code.")]
+[RequiresUnreferencedCode("Requires unreferenced code.")]
 public class PostgresVectorStore : VectorStore
 {
     private readonly DistanceStrategy _distanceStrategy;

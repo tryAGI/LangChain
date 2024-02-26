@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using LangChain.Memory;
 using LangChain.Providers;
@@ -8,6 +9,8 @@ namespace LangChain.Databases;
 /// <summary>
 /// Chat message history stored in a Redis database.
 /// </summary>
+[RequiresDynamicCode("Requires dynamic code.")]
+[RequiresUnreferencedCode("Requires unreferenced code.")]
 public class RedisChatMessageHistory : BaseChatMessageHistory
 {
     private readonly string _sessionId;

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using LangChain.Common.Converters;
 using LangChain.Docstore;
@@ -14,6 +15,8 @@ namespace LangChain.Databases;
 /// ChromaDB vector store.
 /// According: https://api.python.langchain.com/en/latest/_modules/langchain/vectorstores/chroma.html
 /// </summary>
+[RequiresDynamicCode("Requires dynamic code.")]
+[RequiresUnreferencedCode("Requires unreferenced code.")]
 public class ChromaVectorStore : VectorStore
 {
     private const string LangchainDefaultCollectionName = "langchain";

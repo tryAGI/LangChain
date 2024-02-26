@@ -246,6 +246,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebBase", "WebBase", "{ED26
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Splitters.Abstractions.Tests", "src\Splitters\Abstractions\test\LangChain.Splitters.Abstractions.Tests.csproj", "{1F76A632-BC80-4225-ABA3-2D87BBA064E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{1325D29E-D42F-423F-A6AC-5E880BE2AB68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrimmingHelper", "src\Helpers\TrimmingHelper\TrimmingHelper.csproj", "{BEE04F82-38FB-4BB2-AB48-A73AD0104142}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -496,6 +500,10 @@ Global
 		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F76A632-BC80-4225-ABA3-2D87BBA064E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE04F82-38FB-4BB2-AB48-A73AD0104142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE04F82-38FB-4BB2-AB48-A73AD0104142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE04F82-38FB-4BB2-AB48-A73AD0104142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE04F82-38FB-4BB2-AB48-A73AD0104142}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -594,6 +602,7 @@ Global
 		{7D97D652-AFF5-465C-8688-FC3066423707} = {ED2684D8-5229-4397-A2FB-06AF1E5A6CBC}
 		{16D0189E-2B4A-4B7C-B60C-CD74EF83D119} = {ED2684D8-5229-4397-A2FB-06AF1E5A6CBC}
 		{1F76A632-BC80-4225-ABA3-2D87BBA064E9} = {FBF5D827-0D5B-4A71-BBBF-3EAA5A5AA1C2}
+		{BEE04F82-38FB-4BB2-AB48-A73AD0104142} = {1325D29E-D42F-423F-A6AC-5E880BE2AB68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

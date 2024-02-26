@@ -9,7 +9,7 @@
 
     <PropertyGroup>
         <IsTestProject Condition="$(MSBuildProjectFile.Contains('Tests'))">true</IsTestProject>
-        <IsLibraryProject Condition="'$(IsTestProject)' != 'true'">true</IsLibraryProject>
+        <IsLibraryProject Condition="$(MSBuildProjectFile.Contains('LangChain')) AND !$(MSBuildProjectFile.Contains('Tests')) AND !$(MSBuildProjectFile.Contains('Samples'))">true</IsLibraryProject>
     </PropertyGroup>
     
     <Import Project="Packaging.props" Condition="'$(IsLibraryProject)' == 'true'" />
