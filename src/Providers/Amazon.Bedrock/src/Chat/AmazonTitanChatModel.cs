@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Text.Json.Nodes;
 using LangChain.Providers.Amazon.Bedrock.Internal;
 
@@ -18,7 +19,7 @@ public abstract class AmazonTitanChatModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
         var prompt = request.Messages.ToSimplePrompt();
 
@@ -35,13 +36,14 @@ public abstract class AmazonTitanChatModel(
                 {
                     ["maxTokenCount"] = usedSettings.MaxTokens!.Value,
                     ["temperature"] = usedSettings.Temperature!.Value,
-                    ["topP"] = 0.9
+                    ["topP"] = usedSettings.TopP!.Value,
+                    ["stopSequences"] = usedSettings.StopSequences!.AsArray()
                 }
             },
             cancellationToken).ConfigureAwait(false);
 
         var generatedText = response?["results"]?[0]?["outputText"]?.GetValue<string>() ?? string.Empty;
-        
+
         var result = request.Messages.ToList();
         result.Add(generatedText.AsAiMessage());
 

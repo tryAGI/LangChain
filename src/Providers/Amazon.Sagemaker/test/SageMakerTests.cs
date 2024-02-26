@@ -1,11 +1,10 @@
 ﻿using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Prompts;
-using LangChain.Providers.Amazon.SageMaker;
 using LangChain.Schema;
 using static LangChain.Chains.Chain;
 
-namespace LangChain.Providers.Amazon.IntegrationTests;
+namespace LangChain.Providers.Amazon.SageMaker.Tests;
 
 [TestFixture, Explicit]
 public class SageMakerTests

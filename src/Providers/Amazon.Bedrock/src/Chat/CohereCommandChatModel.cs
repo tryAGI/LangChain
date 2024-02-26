@@ -10,15 +10,13 @@ public abstract class CohereCommandChatModel(
     string id)
     : ChatModel(id)
 {
-    public override int ContextLength => 4096;
-
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
         var prompt = request.Messages.ToSimplePrompt();
 
@@ -30,20 +28,19 @@ public abstract class CohereCommandChatModel(
             Id,
             new JsonObject
             {
-                { "prompt", prompt },
-                { "max_tokens", usedSettings.MaxTokens!.Value },
-                { "temperature", usedSettings.Temperature!.Value },
-                { "p",1  },
-                { "k",0  },
+                ["prompt"] = prompt,
+                ["max_tokens"] = usedSettings.MaxTokens!.Value,
+                ["temperature"] = usedSettings.Temperature!.Value,
+                ["p"] = usedSettings.TopP!.Value,
+                ["k"] = usedSettings.TopK!.Value,
             },
             cancellationToken).ConfigureAwait(false);
 
         var generatedText = response?["generations"]?[0]?["text"]?.GetValue<string>() ?? string.Empty;
-        
+
         var result = request.Messages.ToList();
         result.Add(generatedText.AsAiMessage());
 
-        // Unsupported
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
