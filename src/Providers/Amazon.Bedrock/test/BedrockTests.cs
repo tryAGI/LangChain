@@ -9,6 +9,7 @@ using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
@@ -199,9 +200,9 @@ Helpful Answer:";
 
         var chain =
             Set("what color is the car?", outputKey: "question")                     // set the question
-            //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
-           // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
-           // Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
+                                                                                     //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
+                                                                                     // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
+                                                                                     // Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
             | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
@@ -215,17 +216,17 @@ Helpful Answer:";
     public async Task CanGetImage()
     {
         var provider = new BedrockProvider();
-        var model = new StableDiffusionExtraLargeV0Model(provider);
+        var model = new TitanImageGeneratorV1Model(provider);
         var response = await model.GenerateImageAsync(
             "create a picture of the solar system");
 
         var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
-        
+
         await File.WriteAllBytesAsync(path, response.Bytes);
-        
+
         Process.Start(path);
     }
-    
+
     [Test]
     public async Task CanGetImage2()
     {
@@ -235,9 +236,38 @@ Helpful Answer:";
             "i'm going to prepare a recipe.  show me an image of realistic food ingredients");
 
         var path = Path.Combine(Path.GetTempPath(), "food.png");
-        
+
         await File.WriteAllBytesAsync(path, response.Bytes);
-        
+
         Process.Start(path);
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, false)]
+    [TestCase(true, true)]
+    [TestCase(false, true)]
+    public async Task SimpleTest(bool useStreaming, bool useChatSettings)
+    {
+        var provider = new BedrockProvider();
+        var llm = new CommandLightTextV14Model(provider);
+
+        llm.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
+        llm.PartialResponseGenerated += (_, delta) => Console.Write(delta);
+        llm.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
+
+        var prompt = @"
+you are a comic book writer.  you will be given a question and you will answer it. 
+question: who are 10 of the most popular superheros and what are their powers?";
+
+        if (useChatSettings)
+        {
+            var response = await llm.GenerateAsync(prompt, new BedrockChatSettings { UseStreaming = useStreaming});
+            response.LastMessageContent.Should().NotBeNull();
+        }
+        else
+        {
+            var response = await llm.GenerateAsync(prompt);
+            response.LastMessageContent.Should().NotBeNull();
+        }
     }
 }

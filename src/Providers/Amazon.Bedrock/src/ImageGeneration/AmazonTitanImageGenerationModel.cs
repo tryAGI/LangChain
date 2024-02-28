@@ -16,8 +16,13 @@ public class AmazonTitanImageGenerationModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
+
+        var usedSettings = BedrockImageSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.ImageGenerationSettings);
         var response = await provider.Api.InvokeModelAsync(
             Id,
             new JsonObject
@@ -25,23 +30,22 @@ public class AmazonTitanImageGenerationModel(
                 ["taskType"] = "TEXT_IMAGE",
                 ["textToImageParams"] = new JsonObject
                 {
-                    ["text"] = request.Prompt,
-                    ["imageGenerationConfig"] = new JsonObject
-                    {
-                        ["quality"] = "standard",
-                        ["width"] = 1024,
-                        ["height"] = 1024,
-                        ["cfgScale"] = 8.0,
-                        ["seed"] = 0,
-                        ["numberOfImages"] = 3,
-                    }
+                    ["text"] = request.Prompt
+                },
+                ["imageGenerationConfig"] = new JsonObject
+                {
+                    ["quality"] = "standard",
+                    ["width"] = usedSettings.Width!.Value,
+                    ["height"] = usedSettings.Height!.Value,
+                    ["cfgScale"] = 8.0,
+                    ["seed"] = usedSettings.Seed!.Value,
+                    ["numberOfImages"] = usedSettings.NumOfImages!.Value,
                 }
             },
             cancellationToken).ConfigureAwait(false);
 
-        var generatedText = response?["results"]?[0]?["outputText"]?.GetValue<string>() ?? "";
-        
-        // Unsupported
+        var generatedText = response?["images"]?[0]?.GetValue<string>() ?? "";
+
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
