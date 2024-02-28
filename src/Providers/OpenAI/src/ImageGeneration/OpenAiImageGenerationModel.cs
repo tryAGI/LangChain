@@ -5,16 +5,24 @@ using NotImplementedException = System.NotImplementedException;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="provider"></param>
-/// <param name="id"></param>
-public class OpenAiImageGenerationModel(
-    OpenAiProvider provider,
-    string id)
-    : ImageGenerationModel(id), IImageGenerationModel
+
+public class OpenAiImageGenerationModel : ImageGenerationModel, IImageGenerationModel
 {
+    private readonly OpenAiProvider _provider;
+    private readonly ImageModels _model;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="provider"></param>
+    /// <param name="id"></param>
+    public OpenAiImageGenerationModel(OpenAiProvider provider, string id)
+        : base(id)
+    {
+        _provider = provider;
+        _model = new(id);
+    }
+
     /// <inheritdoc/>
     public async Task<ImageGenerationResponse> GenerateImageAsync(
         ImageGenerationRequest request,
@@ -22,14 +30,16 @@ public class OpenAiImageGenerationModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         OnPromptSent(request.Prompt);
 
         var usedSettings = OpenAiImageGenerationSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
-            providerSettings: provider.ImageGenerationSettings);
-        var response = await provider.Api.ImagesEndPoint.GenerateImageAsync(
+            providerSettings: _provider.ImageGenerationSettings,
+            defaultSettings: OpenAiImageGenerationSettings.GetDefault(_model));
+
+        var response = await _provider.Api.ImagesEndPoint.GenerateImageAsync(
             request: new global::OpenAI.Images.ImageGenerationRequest(
                 prompt: request.Prompt,
                 model: new global::OpenAI.Models.Model(Id, "openai"),
@@ -42,32 +52,32 @@ public class OpenAiImageGenerationModel(
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = ImageModels.DallE3.GetPriceInUsd(
+            PriceInUsd = _model.GetPriceInUsd(
                 resolution: usedSettings.Resolution!.Value,
                 quality: usedSettings.Quality),
         };
         AddUsage(usage);
-        provider.AddUsage(usage);
+        _provider.AddUsage(usage);
 
         switch (usedSettings.ResponseFormat)
         {
             case ResponseFormat.Url:
-            {
-                using var client = new HttpClient();
-#if NET6_0_OR_GREATER
-                var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url), cancellationToken).ConfigureAwait(false);
-#else
-                var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url)).ConfigureAwait(false);
-#endif
-                
-                return new ImageGenerationResponse
                 {
-                    Bytes = bytes,
-                    Usage = usage,
-                    UsedSettings = usedSettings,
-                };
-            }
-            
+                    using var client = new HttpClient();
+#if NET6_0_OR_GREATER
+                    var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url), cancellationToken).ConfigureAwait(false);
+#else
+                    var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url)).ConfigureAwait(false);
+#endif
+
+                    return new ImageGenerationResponse
+                    {
+                        Bytes = bytes,
+                        Usage = usage,
+                        UsedSettings = usedSettings,
+                    };
+                }
+
             case ResponseFormat.B64_Json:
                 return new ImageGenerationResponse
                 {
@@ -77,7 +87,7 @@ public class OpenAiImageGenerationModel(
                     Usage = usage,
                     UsedSettings = usedSettings,
                 };
-            
+
             default:
                 throw new NotImplementedException("ResponseFormat not implemented.");
         }
