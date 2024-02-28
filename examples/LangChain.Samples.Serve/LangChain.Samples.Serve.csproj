@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\libs\LangChain.Core\LangChain.Core.csproj" />
-    <ProjectReference Include="..\..\src\libs\Providers\LangChain.Providers.Ollama\LangChain.Providers.Ollama.csproj" />
-    <ProjectReference Include="..\..\src\libs\Utilities\LangChain.Serve\LangChain.Serve.csproj" />
+    <ProjectReference Include="..\..\src\Core\src\LangChain.Core.csproj" />
+    <ProjectReference Include="..\..\src\Providers\Ollama\src\LangChain.Providers.Ollama.csproj" />
+    <ProjectReference Include="..\..\src\Serve\src\LangChain.Serve.csproj" />
   </ItemGroup>
 
 </Project>
