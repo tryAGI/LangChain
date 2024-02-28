@@ -11,7 +11,7 @@ public abstract class Provider(string id) : Model(id), IProvider
     public EmbeddingSettings? EmbeddingSettings { get; init; }
     
     /// <inheritdoc />
-    public ImageGenerationSettings? ImageGenerationSettings { get; init; }
+    public TextToImageSettings? TextToImageSettings { get; init; }
     
     /// <inheritdoc />
     public ModerationSettings? ModerationSettings { get; init; }

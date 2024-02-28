@@ -6,7 +6,7 @@ using NotImplementedException = System.NotImplementedException;
 namespace LangChain.Providers.OpenAI;
 
 
-public class OpenAiImageGenerationModel : ImageGenerationModel, IImageGenerationModel
+public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
 {
     private readonly OpenAiProvider _provider;
     private readonly ImageModels _model;
@@ -16,7 +16,7 @@ public class OpenAiImageGenerationModel : ImageGenerationModel, IImageGeneration
     /// </summary>
     /// <param name="provider"></param>
     /// <param name="id"></param>
-    public OpenAiImageGenerationModel(OpenAiProvider provider, string id)
+    public OpenAiTextToImageModel(OpenAiProvider provider, string id)
         : base(id)
     {
         _provider = provider;
@@ -24,23 +24,23 @@ public class OpenAiImageGenerationModel : ImageGenerationModel, IImageGeneration
     }
 
     /// <inheritdoc/>
-    public async Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = null,
+    public async Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
         OnPromptSent(request.Prompt);
 
-        var usedSettings = OpenAiImageGenerationSettings.Calculate(
+        var usedSettings = OpenAiTextToImageSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
-            providerSettings: _provider.ImageGenerationSettings,
-            defaultSettings: OpenAiImageGenerationSettings.GetDefault(_model));
+            providerSettings: _provider.TextToImageSettings,
+            defaultSettings: OpenAiTextToImageSettings.GetDefault(_model));
 
         var response = await _provider.Api.ImagesEndPoint.GenerateImageAsync(
-            request: new global::OpenAI.Images.ImageGenerationRequest(
+            request: new ImageGenerationRequest(
                 prompt: request.Prompt,
                 model: new global::OpenAI.Models.Model(Id, "openai"),
                 numberOfResults: usedSettings.NumberOfResults!.Value,
@@ -70,7 +70,7 @@ public class OpenAiImageGenerationModel : ImageGenerationModel, IImageGeneration
                     var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url)).ConfigureAwait(false);
 #endif
 
-                    return new ImageGenerationResponse
+                    return new TextToImageResponse
                     {
                         Bytes = bytes,
                         Usage = usage,
@@ -79,7 +79,7 @@ public class OpenAiImageGenerationModel : ImageGenerationModel, IImageGeneration
                 }
 
             case ResponseFormat.B64_Json:
-                return new ImageGenerationResponse
+                return new TextToImageResponse
                 {
                     Bytes = Convert.FromBase64String(
                         response[0].B64_Json ??

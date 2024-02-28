@@ -5,14 +5,14 @@ using LangChain.Providers.Amazon.Bedrock.Internal;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public class AmazonTitanImageGenerationModel(
+public class AmazonTitanTextToImageModel(
     BedrockProvider provider,
     string id)
-    : ImageGenerationModel(id), IImageGenerationModel
+    : TextToImageModel(id), ITextToImageModel
 {
-    public async Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = null,
+    public async Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
@@ -22,7 +22,7 @@ public class AmazonTitanImageGenerationModel(
         var usedSettings = BedrockImageSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
-            providerSettings: provider.ImageGenerationSettings);
+            providerSettings: provider.TextToImageSettings);
         var response = await provider.Api.InvokeModelAsync(
             Id,
             new JsonObject
@@ -53,10 +53,10 @@ public class AmazonTitanImageGenerationModel(
         AddUsage(usage);
         provider.AddUsage(usage);
 
-        return new ImageGenerationResponse
+        return new TextToImageResponse
         {
             Bytes = Convert.FromBase64String(generatedText),
-            UsedSettings = ImageGenerationSettings.Default,
+            UsedSettings = TextToImageSettings.Default,
             Usage = usage,
         };
     }

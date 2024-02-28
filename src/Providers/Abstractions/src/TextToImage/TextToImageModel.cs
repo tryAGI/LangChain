@@ -1,6 +1,6 @@
 namespace LangChain.Providers;
 
-public abstract class ImageGenerationModel(string id) : Model<ImageGenerationSettings>(id)
+public abstract class TextToImageModel(string id) : Model<TextToImageSettings>(id)
 {
     #region Events
 

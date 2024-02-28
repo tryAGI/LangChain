@@ -3,14 +3,14 @@ namespace LangChain.Providers.LeonardoAi;
 public class LeonardoAiModel(
     LeonardoAiProvider provider,
     string id)
-    : ImageGenerationModel(id), IImageGenerationModel
+    : TextToImageModel(id), ITextToImageModel
 {
     #region Methods
 
     /// <inheritdoc/>
-    public async Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = null,
+    public async Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
@@ -37,11 +37,11 @@ public class LeonardoAiModel(
         var bytes = await provider.HttpClient.GetByteArrayAsync(new Uri(url)).ConfigureAwait(false);
 #endif
         
-        return new ImageGenerationResponse
+        return new TextToImageResponse
         {
             Bytes = bytes,
             Usage = Usage.Empty,
-            UsedSettings = settings ?? ImageGenerationSettings.Default,
+            UsedSettings = settings ?? TextToImageSettings.Default,
         };
     }
     

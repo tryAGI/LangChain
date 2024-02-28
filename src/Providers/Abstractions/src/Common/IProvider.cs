@@ -29,7 +29,7 @@ public interface IProvider : IModel
     /// but you can override them in the model or request. <br/>
     /// If not set, the model will use default settings for specific provider. <br/>
     /// </summary>
-    public ImageGenerationSettings? ImageGenerationSettings { get; init; }
+    public TextToImageSettings? TextToImageSettings { get; init; }
     
     /// <summary>
     /// Defines the settings for the provider. <br/>

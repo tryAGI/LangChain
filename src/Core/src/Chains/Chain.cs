@@ -256,7 +256,7 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static ImageGenerationChain GenerateImage(
-        IImageGenerationModel model,
+        ITextToImageModel model,
         string inputKey = "text",
         string outputKey = "image")
     {

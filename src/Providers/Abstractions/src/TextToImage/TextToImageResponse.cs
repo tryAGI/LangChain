@@ -4,7 +4,7 @@ namespace LangChain.Providers;
 /// <summary>
 /// 
 /// </summary>
-public class ImageGenerationResponse
+public class TextToImageResponse
 {
     public required byte[] Bytes { get; init; }
     
@@ -18,7 +18,7 @@ public class ImageGenerationResponse
     /// <summary>
     /// 
     /// </summary>
-    public required ImageGenerationSettings UsedSettings { get; init; }
+    public required TextToImageSettings UsedSettings { get; init; }
     
     public void Deconstruct(
         out byte[] values,
@@ -31,14 +31,14 @@ public class ImageGenerationResponse
     public void Deconstruct(
         out byte[] values,
         out Usage usage,
-        out ImageGenerationSettings usedSettings)
+        out TextToImageSettings usedSettings)
     {
         values = Bytes;
         usage = Usage;
         usedSettings = UsedSettings;
     }
     
-    public static implicit operator byte[](ImageGenerationResponse response)
+    public static implicit operator byte[](TextToImageResponse response)
     {
         return response?.ToByteArray() ?? [];
     }

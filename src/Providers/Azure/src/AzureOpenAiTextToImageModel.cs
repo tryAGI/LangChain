@@ -3,7 +3,7 @@ using OpenAI.Constants;
 
 namespace LangChain.Providers.Azure;
 
-public class AzureOpenAiImageGenerationModel : ImageGenerationModel, IImageGenerationModel
+public class AzureOpenAiTextToImageModel : TextToImageModel, ITextToImageModel
 {
     private readonly AzureOpenAiProvider _provider;
     private readonly ImageModels _model;
@@ -13,7 +13,7 @@ public class AzureOpenAiImageGenerationModel : ImageGenerationModel, IImageGener
     /// </summary>
     /// <param name="provider"></param>
     /// <param name="id"></param>
-    public AzureOpenAiImageGenerationModel(AzureOpenAiProvider provider, string id)
+    public AzureOpenAiTextToImageModel(AzureOpenAiProvider provider, string id)
         : base(id)
     {
         _provider = provider;
@@ -32,9 +32,9 @@ public class AzureOpenAiImageGenerationModel : ImageGenerationModel, IImageGener
     [CLSCompliant(false)]
     public ImageGenerationOptions? GenerationOptions { get; set; } = null;
 
-    public async Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = default,
+    public async Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = default,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
@@ -44,11 +44,11 @@ public class AzureOpenAiImageGenerationModel : ImageGenerationModel, IImageGener
             throw new NotSupportedException("Currently only 1 image is supported");
         }
 
-        var usedSettings = OpenAiImageGenerationSettings.Calculate(
+        var usedSettings = OpenAiTextToImageSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
-            providerSettings: _provider.ImageGenerationSettings,
-            defaultSettings: OpenAiImageGenerationSettings.GetDefault(_model));
+            providerSettings: _provider.TextToImageSettings,
+            defaultSettings: OpenAiTextToImageSettings.GetDefault(_model));
 
         var response = await _provider.Client.GetImageGenerationsAsync(GenerationOptions ?? new ImageGenerationOptions
         {
@@ -77,7 +77,7 @@ public class AzureOpenAiImageGenerationModel : ImageGenerationModel, IImageGener
             firstImage.Base64Data ??
             throw new InvalidOperationException("B64_json is null"));
 
-        return new ImageGenerationResponse
+        return new TextToImageResponse
         {
             Bytes = bytes,
             Usage = usage,

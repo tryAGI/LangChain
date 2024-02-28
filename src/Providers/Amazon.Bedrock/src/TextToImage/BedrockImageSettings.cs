@@ -1,7 +1,7 @@
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public class BedrockImageSettings : ImageGenerationSettings
+public class BedrockImageSettings : TextToImageSettings
 {
     public new static BedrockImageSettings Default { get; } = new()
     {
@@ -39,9 +39,9 @@ public class BedrockImageSettings : ImageGenerationSettings
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
     public new static BedrockImageSettings Calculate(
-        ImageGenerationSettings? requestSettings,
-        ImageGenerationSettings? modelSettings,
-        ImageGenerationSettings? providerSettings)
+        TextToImageSettings? requestSettings,
+        TextToImageSettings? modelSettings,
+        TextToImageSettings? providerSettings)
     {
         var requestSettingsCasted = requestSettings as BedrockImageSettings;
         var modelSettingsCasted = modelSettings as BedrockImageSettings;

@@ -6,14 +6,14 @@ using LangChain.Providers.Amazon.Bedrock.Internal;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public class StableDiffusionImageGenerationModel(
+public class StableDiffusionTextToImageModel(
     BedrockProvider provider,
     string id)
-    : ImageGenerationModel(id), IImageGenerationModel
+    : TextToImageModel(id), ITextToImageModel
 {
-    public async Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = null,
+    public async Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
@@ -41,10 +41,10 @@ public class StableDiffusionImageGenerationModel(
         AddUsage(usage);
         provider.AddUsage(usage);
 
-        return new ImageGenerationResponse
+        return new TextToImageResponse
         {
             Bytes = Convert.FromBase64String(base64),
-            UsedSettings = ImageGenerationSettings.Default,
+            UsedSettings = TextToImageSettings.Default,
             Usage = usage,
         };
     }

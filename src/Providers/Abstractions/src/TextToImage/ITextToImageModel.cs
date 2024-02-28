@@ -4,7 +4,7 @@ namespace LangChain.Providers;
 /// <summary>
 /// 
 /// </summary>
-public interface IImageGenerationModel : IModel<ImageGenerationSettings>
+public interface ITextToImageModel : IModel<TextToImageSettings>
 {
     /// <summary>
     /// Occurs before prompt is sent to the model.
@@ -18,8 +18,8 @@ public interface IImageGenerationModel : IModel<ImageGenerationSettings>
     /// <param name="settings"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = default,
+    public Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = default,
         CancellationToken cancellationToken = default);
 }

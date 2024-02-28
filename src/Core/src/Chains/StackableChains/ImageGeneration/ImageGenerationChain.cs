@@ -9,7 +9,7 @@ namespace LangChain.Chains.StackableChains.ImageGeneration;
 /// </summary>
 public class ImageGenerationChain : BaseStackableChain
 {
-    private readonly IImageGenerationModel _model;
+    private readonly ITextToImageModel _model;
 
     /// <summary>
     /// 
@@ -18,7 +18,7 @@ public class ImageGenerationChain : BaseStackableChain
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     public ImageGenerationChain(
-        IImageGenerationModel model,
+        ITextToImageModel model,
         string inputKey = "prompt",
         string outputKey = "image")
     {

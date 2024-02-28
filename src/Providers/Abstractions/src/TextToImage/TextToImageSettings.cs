@@ -6,7 +6,7 @@ namespace LangChain.Providers;
 /// <summary>
 /// Base class for image generation request settings.
 /// </summary>
-public class ImageGenerationSettings
+public class TextToImageSettings
 {
-    public static ImageGenerationSettings Default { get; } = new();
+    public static TextToImageSettings Default { get; } = new();
 }

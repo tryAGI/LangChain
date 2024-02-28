@@ -8,14 +8,14 @@ namespace LangChain.Providers.Automatic1111;
 public class Automatic1111Model(
     string url = "http://localhost:7860/",
     HttpClient? httpClient = null)
-    : ImageGenerationModel(id: "Automatic1111"), IImageGenerationModel
+    : TextToImageModel(id: "Automatic1111"), ITextToImageModel
 {
     private readonly StableDiffusionClient _client = new(url, httpClient ?? new HttpClient());
 
     /// <inheritdoc />
-    public async Task<ImageGenerationResponse> GenerateImageAsync(
-        ImageGenerationRequest request,
-        ImageGenerationSettings? settings = default,
+    public async Task<TextToImageResponse> GenerateImageAsync(
+        TextToImageRequest request,
+        TextToImageSettings? settings = default,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
@@ -42,7 +42,7 @@ public class Automatic1111Model(
                 Sampler_name = usedSettings.Sampler,
             }, cancellationToken).ConfigureAwait(false);
 
-        return new ImageGenerationResponse
+        return new TextToImageResponse
         {
             // base64 to png
             Bytes = Convert.FromBase64String(response.Images.First()),

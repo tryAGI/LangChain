@@ -5,7 +5,7 @@ namespace LangChain.Providers.Automatic1111;
 /// <summary>
 /// 
 /// </summary>
-public class Automatic1111ModelSettings : ImageGenerationSettings
+public class Automatic1111ModelSettings : TextToImageSettings
 {
     public new static Automatic1111ModelSettings Default { get; } = new()
     {
@@ -69,9 +69,9 @@ public class Automatic1111ModelSettings : ImageGenerationSettings
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
     public static Automatic1111ModelSettings Calculate(
-        ImageGenerationSettings? requestSettings,
-        ImageGenerationSettings? modelSettings,
-        ImageGenerationSettings? providerSettings)
+        TextToImageSettings? requestSettings,
+        TextToImageSettings? modelSettings,
+        TextToImageSettings? providerSettings)
     {
         var requestSettingsCasted = requestSettings as Automatic1111ModelSettings;
         var modelSettingsCasted = modelSettings as Automatic1111ModelSettings;

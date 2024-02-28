@@ -19,4 +19,4 @@ public class TitanEmbedImageV1Model(BedrockProvider provider)
 
 /// <inheritdoc />
 public class TitanImageGeneratorV1Model(BedrockProvider provider)
-    : AmazonTitanImageGenerationModel(provider, id: "amazon.titan-image-generator-v1");
+    : AmazonTitanTextToImageModel(provider, id: "amazon.titan-image-generator-v1");

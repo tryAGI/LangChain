@@ -7,12 +7,12 @@ namespace LangChain.Providers;
 /// <summary>
 /// 
 /// </summary>
-public class OpenAiImageGenerationSettings : ImageGenerationSettings
+public class OpenAiTextToImageSettings : TextToImageSettings
 {
     /// <summary>
     /// 
     /// </summary>
-    public static OpenAiImageGenerationSettings GetDefault(string id)
+    public static OpenAiTextToImageSettings GetDefault(string id)
     {
         if (id == ImageModels.DallE2)
         {
@@ -80,18 +80,18 @@ public class OpenAiImageGenerationSettings : ImageGenerationSettings
     /// <param name="defaultSettings"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static OpenAiImageGenerationSettings Calculate(
-        ImageGenerationSettings? requestSettings,
-        ImageGenerationSettings? modelSettings,
-        ImageGenerationSettings? providerSettings,
-        ImageGenerationSettings? defaultSettings)
+    public static OpenAiTextToImageSettings Calculate(
+        TextToImageSettings? requestSettings,
+        TextToImageSettings? modelSettings,
+        TextToImageSettings? providerSettings,
+        TextToImageSettings? defaultSettings)
     {
-        var requestSettingsCasted = requestSettings as OpenAiImageGenerationSettings;
-        var modelSettingsCasted = modelSettings as OpenAiImageGenerationSettings;
-        var providerSettingsCasted = providerSettings as OpenAiImageGenerationSettings;
-        var defaultSettingsCasted = defaultSettings as OpenAiImageGenerationSettings;
+        var requestSettingsCasted = requestSettings as OpenAiTextToImageSettings;
+        var modelSettingsCasted = modelSettings as OpenAiTextToImageSettings;
+        var providerSettingsCasted = providerSettings as OpenAiTextToImageSettings;
+        var defaultSettingsCasted = defaultSettings as OpenAiTextToImageSettings;
 
-        return new OpenAiImageGenerationSettings
+        return new OpenAiTextToImageSettings
         {
             NumberOfResults =
                 requestSettingsCasted?.NumberOfResults ??
