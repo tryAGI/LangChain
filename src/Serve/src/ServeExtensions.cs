@@ -37,42 +37,42 @@ public static class ServeExtensions
         var controller = new ServeController(serveMiddlewareOptions, repository, conversationNameProvider);
 
         app.MapGet("/serve/models", () => Results.Ok(controller.ListModels()));
-        app.MapGet("/serve/conversations/list", async () => Results.Ok(await controller.ListConversations().ConfigureAwait(false)));
-        app.MapPost("/serve/conversations/new", async (ConversationCreationDTO conversationCreation) =>
+        app.MapGet("/serve/conversations", async () => Results.Ok(await controller.ListConversations().ConfigureAwait(false)));
+        app.MapPost("/serve/conversations", async (ConversationCreationDTO conversationCreation) =>
         {
             var conversation = await controller.CreateConversation(conversationCreation.ModelName).ConfigureAwait(false);
             if (conversation == null)
             {
-                throw new InvalidOperationException("Model not found");
+                return Results.NotFound("Model not found");
             }
-            return conversation;
+            return Results.Ok(conversation);
         });
         app.MapPost("/serve/conversations/{conversationId}/messages", async ( PostMessageDTO message, Guid conversationId) =>
         {
             var response = await controller.ProcessMessage(message, conversationId).ConfigureAwait(false);
             if (response == null)
             {
-                throw new InvalidOperationException("Conversation not found");
+                return Results.NotFound("Conversation not found");
             }
-            return response;
+            return Results.Ok(response);
         });
         app.MapGet("/serve/conversations/{conversationId}", async (Guid conversationId) =>
         {
             var conversation = await controller.GetConversation(conversationId).ConfigureAwait(false);
             if (conversation == null)
             {
-                throw new InvalidOperationException("Conversation not found");
+                return Results.NotFound("Conversation not found");
             }
-            return conversation;
+            return Results.Ok(conversation);
         });
         app.MapGet("/serve/conversations/{conversationId}/messages", async (Guid conversationId) =>
         {
             var messages = await controller.ListMessages(conversationId).ConfigureAwait(false);
             if (messages == null)
             {
-                throw new InvalidOperationException("Conversation not found");
+                return Results.NotFound("Conversation not found");
             }
-            return messages;
+            return Results.Ok(messages);
         });
         app.MapDelete("/serve/conversations/{conversationId}", async (Guid conversationId) =>
         {
