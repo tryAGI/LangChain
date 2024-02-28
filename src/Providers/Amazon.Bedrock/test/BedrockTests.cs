@@ -216,7 +216,7 @@ Helpful Answer:";
     public async Task CanGetImage()
     {
         var provider = new BedrockProvider();
-        var model = new StableDiffusionExtraLargeV0Model(provider);
+        var model = new TitanImageGeneratorV1Model(provider);
         var response = await model.GenerateImageAsync(
             "create a picture of the solar system");
 

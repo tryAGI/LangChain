@@ -33,9 +33,7 @@ public class StableDiffusionImageGenerationModel(
 
         var base64 = response?["artifacts"]?[0]?["base64"]?
             .GetValue<string>() ?? string.Empty;
-        //var generatedText = $"data:image/jpeg;base64,{body}";
         
-        // Unsupported
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
