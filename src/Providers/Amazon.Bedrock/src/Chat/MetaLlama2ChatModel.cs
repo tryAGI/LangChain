@@ -89,6 +89,7 @@ public class MetaLlama2ChatModel(
             ["prompt"] = prompt,
             ["max_gen_len"] = usedSettings.MaxTokens!.Value,
             ["temperature"] = usedSettings.Temperature!.Value,
+            ["top_p"] = usedSettings.TopP!.Value,
         };
         return bodyJson;
     }
