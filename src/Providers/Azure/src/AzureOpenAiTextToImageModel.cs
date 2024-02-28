@@ -48,7 +48,7 @@ public class AzureOpenAiTextToImageModel : TextToImageModel, ITextToImageModel
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: _provider.TextToImageSettings,
-            defaultSettings: OpenAiTextToImageSettings.GetDefault(_model));
+            defaultSettings: OpenAiTextToImageSettings.GetDefaultSettings(_model));
 
         var response = await _provider.Client.GetImageGenerationsAsync(GenerationOptions ?? new ImageGenerationOptions
         {
