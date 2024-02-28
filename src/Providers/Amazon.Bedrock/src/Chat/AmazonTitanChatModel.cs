@@ -36,7 +36,7 @@ public abstract class AmazonTitanChatModel(
         if (usedSettings.UseStreaming == true)
         {
             var streamRequest = BedrockModelStreamRequest.Create(Id, bodyJson);
-            var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken);
+            var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken).ConfigureAwait(false);
 
             foreach (var payloadPart in response.Body)
             {
@@ -49,7 +49,7 @@ public abstract class AmazonTitanChatModel(
                 stringBuilder.Append(delta);
 
                 var finished = chunk?["completionReason"]?.GetValue<string>();
-                if (finished?.ToLower() == "finish")
+                if (finished?.ToUpperInvariant() == "FINISH")
                 {
                     OnCompletedResponseGenerated(stringBuilder.ToString());
                 }

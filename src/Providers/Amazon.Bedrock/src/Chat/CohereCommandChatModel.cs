@@ -36,7 +36,7 @@ public abstract class CohereCommandChatModel(
         if (usedSettings.UseStreaming == true)
         {
             var streamRequest = BedrockModelStreamRequest.Create(Id, bodyJson);
-            var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken);
+            var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken).ConfigureAwait(false);
 
             foreach (var payloadPart in response.Body)
             {
@@ -45,11 +45,11 @@ public abstract class CohereCommandChatModel(
                     .ConfigureAwait(false);
                 var delta = chunk?["generations"]?[0]?["text"]?.GetValue<string>() ?? string.Empty;
 
-                OnPartialResponseGenerated(delta!);
+                OnPartialResponseGenerated(delta);
                 stringBuilder.Append(delta);
 
                 var finished = chunk?["generations"]?[0]?["finish_reason"]?.GetValue<string>() ?? string.Empty;
-                if (string.Equals(finished?.ToLower(), "complete", StringComparison.Ordinal))
+                if (string.Equals(finished.ToUpperInvariant(), "COMPLETE", StringComparison.Ordinal))
                 {
                     OnCompletedResponseGenerated(stringBuilder.ToString());
                 }

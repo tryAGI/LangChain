@@ -12,11 +12,11 @@ public class OpenAiTextToImageSettings : TextToImageSettings
     /// <summary>
     /// 
     /// </summary>
-    public static OpenAiTextToImageSettings GetDefault(string id)
+    public static OpenAiTextToImageSettings GetDefaultSettings(string id)
     {
         if (id == ImageModels.DallE2)
         {
-            return new()
+            return new OpenAiTextToImageSettings()
             {
                 NumberOfResults = 1,
                 Quality = ImageQualities.Standard,
@@ -25,9 +25,9 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 User = string.Empty,
             };
         }
-        else if (id == ImageModels.DallE3)
+        if (id == ImageModels.DallE3)
         {
-            return new()
+            return new OpenAiTextToImageSettings()
             {
                 NumberOfResults = 1,
                 Quality = ImageQualities.Standard,
@@ -36,10 +36,8 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 User = string.Empty,
             };
         }
-        else
-        {
-            throw new NotSupportedException($"OpenAI model {id} is not supported");
-        }
+        
+        throw new NotSupportedException($"OpenAI model {id} is not supported");
     }
 
 

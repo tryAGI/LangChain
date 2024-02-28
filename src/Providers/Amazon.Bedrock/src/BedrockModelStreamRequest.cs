@@ -4,7 +4,7 @@ using Amazon.BedrockRuntime.Model;
 
 namespace LangChain.Providers.Amazon.Bedrock;
 
-internal record BedrockModelStreamRequest
+internal static class BedrockModelStreamRequest
 {
     public static InvokeModelWithResponseStreamRequest Create(string modelId, JsonObject bodyJson)
     {

@@ -36,7 +36,7 @@ public class MetaLlama2ChatModel(
         if (usedSettings.UseStreaming == true)
         {
             var streamRequest = BedrockModelStreamRequest.Create(Id, bodyJson);
-            var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken);
+            var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken).ConfigureAwait(false);
 
             foreach (var payloadPart in response.Body)
             {
@@ -49,7 +49,7 @@ public class MetaLlama2ChatModel(
                 stringBuilder.Append(delta);
 
                 var finished = chunk?["stop_reason"]?.GetValue<string>() ?? string.Empty;
-                if (string.Equals(finished?.ToLower(), "stop", StringComparison.Ordinal))
+                if (string.Equals(finished.ToUpperInvariant(), "STOP", StringComparison.Ordinal))
                 {
                     OnCompletedResponseGenerated(stringBuilder.ToString());
                 }

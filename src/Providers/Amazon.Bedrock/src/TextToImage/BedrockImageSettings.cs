@@ -38,7 +38,7 @@ public class BedrockImageSettings : TextToImageSettings
     /// <param name="providerSettings"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public new static BedrockImageSettings Calculate(
+    public static BedrockImageSettings Calculate(
         TextToImageSettings? requestSettings,
         TextToImageSettings? modelSettings,
         TextToImageSettings? providerSettings)

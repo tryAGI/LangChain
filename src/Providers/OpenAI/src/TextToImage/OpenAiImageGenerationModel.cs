@@ -37,7 +37,7 @@ public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: _provider.TextToImageSettings,
-            defaultSettings: OpenAiTextToImageSettings.GetDefault(_model));
+            defaultSettings: OpenAiTextToImageSettings.GetDefaultSettings(_model));
 
         var response = await _provider.Api.ImagesEndPoint.GenerateImageAsync(
             request: new ImageGenerationRequest(

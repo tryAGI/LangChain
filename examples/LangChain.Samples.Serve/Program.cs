@@ -36,8 +36,8 @@ Your name: ";
     var chain = LoadMemory(conversationBufferMemory, "chat_history")
                 | Template(template)
                 | LLM(model);
-    return await chain.Run("text");
-
+    
+    return await chain.Run("text") ?? string.Empty;
 });
 
 // 4. Optional. Add swagger to be able to test the API
@@ -67,7 +67,7 @@ Assistant:";
         return new StoredMessage()
         {
             Author = MessageAuthor.AI,
-            Content = response
+            Content = response ?? string.Empty,
         };
     });
 });
