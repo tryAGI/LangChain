@@ -249,7 +249,7 @@ Helpful Answer:";
     public async Task SimpleTest(bool useStreaming, bool useChatSettings)
     {
         var provider = new BedrockProvider();
-        var llm = new Llama2With13BModel(provider);
+        var llm = new CommandLightTextV14Model(provider);
 
         llm.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         llm.PartialResponseGenerated += (_, delta) => Console.Write(delta);

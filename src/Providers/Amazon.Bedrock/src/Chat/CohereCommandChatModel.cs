@@ -48,8 +48,8 @@ public abstract class CohereCommandChatModel(
                 OnPartialResponseGenerated(delta!);
                 stringBuilder.Append(delta);
 
-                var finished = chunk?["finish_reason"]?[0]?["text"]?.GetValue<string>() ?? string.Empty;
-                if (string.Equals(finished?.ToLower(), "finish", StringComparison.Ordinal))
+                var finished = chunk?["generations"]?[0]?["finish_reason"]?.GetValue<string>() ?? string.Empty;
+                if (string.Equals(finished?.ToLower(), "complete", StringComparison.Ordinal))
                 {
                     OnCompletedResponseGenerated(stringBuilder.ToString());
                 }
