@@ -7,8 +7,9 @@ public class BedrockChatSettings : ChatSettings
     {
         StopSequences = ChatSettings.Default.StopSequences,
         User = ChatSettings.Default.User,
+        UseStreaming = false,
         Temperature = 0.7,
-        MaxTokens = 4096,
+        MaxTokens = 2048,
         TopP = 0.9,
         TopK = 0.0
     };
@@ -66,6 +67,12 @@ public class BedrockChatSettings : ChatSettings
                 providerSettingsCasted?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
+            UseStreaming =
+                requestSettings?.UseStreaming ??
+                modelSettings?.UseStreaming ??
+                providerSettings?.UseStreaming ??
+                Default.UseStreaming ??
+                throw new InvalidOperationException("Default UseStreaming is not set."),
             Temperature =
                 requestSettingsCasted?.Temperature ??
                 modelSettingsCasted?.Temperature ??
