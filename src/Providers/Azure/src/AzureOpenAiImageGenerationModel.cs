@@ -3,11 +3,23 @@ using OpenAI.Constants;
 
 namespace LangChain.Providers.Azure;
 
-public class AzureOpenAiImageGenerationModel(
-    string id, 
-    AzureOpenAiProvider provider)
-    : ImageGenerationModel(id), IImageGenerationModel
+public class AzureOpenAiImageGenerationModel : ImageGenerationModel, IImageGenerationModel
 {
+    private readonly AzureOpenAiProvider _provider;
+    private readonly ImageModels _model;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="provider"></param>
+    /// <param name="id"></param>
+    public AzureOpenAiImageGenerationModel(AzureOpenAiProvider provider, string id)
+        : base(id)
+    {
+        _provider = provider;
+        _model = new(id);
+    }
+
     /// <summary>
     /// Azure responds with a revised prompt if it changed it during generation, this property contains that prompt. Only relevant when Dall-E-3 model is used.
     /// </summary>
@@ -26,17 +38,19 @@ public class AzureOpenAiImageGenerationModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         if (GenerationOptions != null && GenerationOptions.ImageCount != 1)
         {
             throw new NotSupportedException("Currently only 1 image is supported");
         }
-        
+
         var usedSettings = OpenAiImageGenerationSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
-            providerSettings: provider.ImageGenerationSettings);
-        var response = await provider.Client.GetImageGenerationsAsync(GenerationOptions ?? new ImageGenerationOptions
+            providerSettings: _provider.ImageGenerationSettings,
+            defaultSettings: OpenAiImageGenerationSettings.GetDefault(_model));
+
+        var response = await _provider.Client.GetImageGenerationsAsync(GenerationOptions ?? new ImageGenerationOptions
         {
             DeploymentName = Id,
             ImageCount = 1, //currently hardcoded to 1
@@ -50,7 +64,7 @@ public class AzureOpenAiImageGenerationModel(
         var usage = Usage.Empty with
         {
             //Todo: Usage might be off when setting different parameters in GenerationOptions
-            PriceInUsd = ImageModels.DallE3.GetPriceInUsd(
+            PriceInUsd = _model.GetPriceInUsd(
                 resolution: usedSettings.Resolution!.Value,
                 quality: usedSettings.Quality!.Value),
         };
@@ -58,11 +72,11 @@ public class AzureOpenAiImageGenerationModel(
 
         var firstImage = response.Value.Data[0];
         RevisedPromptResult = firstImage.RevisedPrompt;
-        
+
         var bytes = Convert.FromBase64String(
             firstImage.Base64Data ??
             throw new InvalidOperationException("B64_json is null"));
-        
+
         return new ImageGenerationResponse
         {
             Bytes = bytes,

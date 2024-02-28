@@ -12,14 +12,36 @@ public class OpenAiImageGenerationSettings : ImageGenerationSettings
     /// <summary>
     /// 
     /// </summary>
-    public new static OpenAiImageGenerationSettings Default { get; } = new()
+    public static OpenAiImageGenerationSettings GetDefault(string id)
     {
-        NumberOfResults = 1,
-        Quality = ImageQualities.Standard,
-        ResponseFormat = global::OpenAI.Images.ResponseFormat.B64_Json,
-        Resolution = ImageResolutions._256x256,
-        User = string.Empty,
-    };
+        if (id == ImageModels.DallE2)
+        {
+            return new()
+            {
+                NumberOfResults = 1,
+                Quality = ImageQualities.Standard,
+                ResponseFormat = global::OpenAI.Images.ResponseFormat.B64_Json,
+                Resolution = ImageResolutions._256x256,
+                User = string.Empty,
+            };
+        }
+        else if (id == ImageModels.DallE3)
+        {
+            return new()
+            {
+                NumberOfResults = 1,
+                Quality = ImageQualities.Standard,
+                ResponseFormat = global::OpenAI.Images.ResponseFormat.B64_Json,
+                Resolution = ImageResolutions._1024x1024,
+                User = string.Empty,
+            };
+        }
+        else
+        {
+            throw new NotSupportedException($"OpenAI model {id} is not supported");
+        }
+    }
+
 
     /// <summary>
     /// 
@@ -43,7 +65,7 @@ public class OpenAiImageGenerationSettings : ImageGenerationSettings
     /// </summary>
     [CLSCompliant(false)]
     public ImageResolutions? Resolution { get; init; }
-        
+
     /// <summary>
     /// 
     /// </summary>
@@ -55,16 +77,19 @@ public class OpenAiImageGenerationSettings : ImageGenerationSettings
     /// <param name="requestSettings"></param>
     /// <param name="modelSettings"></param>
     /// <param name="providerSettings"></param>
+    /// <param name="defaultSettings"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
     public static OpenAiImageGenerationSettings Calculate(
         ImageGenerationSettings? requestSettings,
         ImageGenerationSettings? modelSettings,
-        ImageGenerationSettings? providerSettings)
+        ImageGenerationSettings? providerSettings,
+        ImageGenerationSettings? defaultSettings)
     {
         var requestSettingsCasted = requestSettings as OpenAiImageGenerationSettings;
         var modelSettingsCasted = modelSettings as OpenAiImageGenerationSettings;
         var providerSettingsCasted = providerSettings as OpenAiImageGenerationSettings;
+        var defaultSettingsCasted = defaultSettings as OpenAiImageGenerationSettings;
 
         return new OpenAiImageGenerationSettings
         {
@@ -72,31 +97,31 @@ public class OpenAiImageGenerationSettings : ImageGenerationSettings
                 requestSettingsCasted?.NumberOfResults ??
                 modelSettingsCasted?.NumberOfResults ??
                 providerSettingsCasted?.NumberOfResults ??
-                Default.NumberOfResults ??
+                defaultSettingsCasted?.NumberOfResults ??
                 throw new InvalidOperationException("Default NumberOfResults is not set."),
             Quality =
                 requestSettingsCasted?.Quality ??
                 modelSettingsCasted?.Quality ??
                 providerSettingsCasted?.Quality ??
-                Default.Quality ??
+                defaultSettingsCasted?.Quality ??
                 throw new InvalidOperationException("Default Quality is not set."),
             ResponseFormat =
                 requestSettingsCasted?.ResponseFormat ??
                 modelSettingsCasted?.ResponseFormat ??
                 providerSettingsCasted?.ResponseFormat ??
-                Default.ResponseFormat ??
+                defaultSettingsCasted?.ResponseFormat ??
                 throw new InvalidOperationException("Default ResponseFormat is not set."),
             Resolution =
                 requestSettingsCasted?.Resolution ??
                 modelSettingsCasted?.Resolution ??
                 providerSettingsCasted?.Resolution ??
-                Default.Resolution ??
+                defaultSettingsCasted?.Resolution ??
                 throw new InvalidOperationException("Default Resolution is not set."),
             User =
                 requestSettingsCasted?.User ??
                 modelSettingsCasted?.User ??
                 providerSettingsCasted?.User ??
-                Default.User ??
+                defaultSettingsCasted?.User ??
                 throw new InvalidOperationException("Default User is not set."),
         };
     }
