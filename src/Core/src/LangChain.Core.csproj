@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
     <ProjectReference Include="..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
   </ItemGroup>
 
 </Project>

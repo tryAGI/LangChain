@@ -252,6 +252,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimmingHelper", "src\Helpe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Serve", "examples\LangChain.Samples.Serve\LangChain.Samples.Serve.csproj", "{67FE43AE-8B99-4744-BB61-2511BADB5265}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Polyfills", "src\Utilities\Pollyfils\src\LangChain.Polyfills.csproj", "{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -510,6 +512,10 @@ Global
 		{67FE43AE-8B99-4744-BB61-2511BADB5265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67FE43AE-8B99-4744-BB61-2511BADB5265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67FE43AE-8B99-4744-BB61-2511BADB5265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -610,6 +616,7 @@ Global
 		{1F76A632-BC80-4225-ABA3-2D87BBA064E9} = {FBF5D827-0D5B-4A71-BBBF-3EAA5A5AA1C2}
 		{BEE04F82-38FB-4BB2-AB48-A73AD0104142} = {1325D29E-D42F-423F-A6AC-5E880BE2AB68}
 		{67FE43AE-8B99-4744-BB61-2511BADB5265} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
+		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732} = {FBE21CD4-E77F-46AC-AD8C-5D360E259F7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

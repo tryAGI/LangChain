@@ -49,7 +49,7 @@ if (!File.Exists("vectors.db"))
 var database = new SQLiteVectorStore(
     filename: "vectors.db",
     tableName: "vectors",
-    embeddings: gpt35);
+    embeddings: embeddings);
 const string question = "Who was drinking a unicorn blood?";
 var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
 

@@ -26,7 +26,8 @@
       "src\\Providers\\Ollama\\test\\LangChain.Providers.Ollama.Tests.csproj",
       "src\\Providers\\OpenAI\\src\\LangChain.Providers.OpenAI.csproj",
       "src\\Providers\\OpenAI\\test\\LangChain.Providers.OpenAI.Tests.csproj",
-      "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj"
+      "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj",
+      "src\\Utilities\\Pollyfils\\src\\LangChain.Polyfills.csproj"
     ]
   }
 }
