@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net.Mime;
 using System.Text.Json.Nodes;
 using LangChain.Providers.Amazon.Bedrock.Internal;
 
@@ -23,7 +24,7 @@ public class AmazonTitanTextToImageModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.TextToImageSettings);
-        var response = await provider.Api.InvokeModelAsync(
+        var response = await provider.Api.InvokeModelAsync<AmazonTitanTextToImageResponse>(
             Id,
             new JsonObject
             {
@@ -44,7 +45,7 @@ public class AmazonTitanTextToImageModel(
             },
             cancellationToken).ConfigureAwait(false);
 
-        var generatedText = response?["images"]?[0]?.GetValue<string>() ?? "";
+        var images = response.Images.Select(image => Data.FromBase64(image)).ToList();
 
         var usage = Usage.Empty with
         {
@@ -55,7 +56,7 @@ public class AmazonTitanTextToImageModel(
 
         return new TextToImageResponse
         {
-            Images = [Data.FromBase64(generatedText)],
+            Images = images,
             UsedSettings = TextToImageSettings.Default,
             Usage = usage,
         };
