@@ -27,7 +27,7 @@ public abstract class AmazonTitanImageEmbeddingModel(
             JsonSerializer.Serialize(new
             {
                 inputText = string.Join(" ", splitText),
-                inputImage = request.Images.FirstOrDefault()?.Base64 ?? string.Empty,
+                inputImage = request.Images.FirstOrDefault()?.ToBase64() ?? string.Empty,
             })
         ), cancellationToken).ConfigureAwait(false);
 

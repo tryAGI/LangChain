@@ -6,14 +6,9 @@ namespace LangChain.Providers;
 /// </summary>
 public class TextToImageResponse
 {
-    public required byte[] Bytes { get; init; }
+    public IReadOnlyList<Data> Images { get; init; } = new List<Data>();
     
     public Usage Usage { get; init; } = Usage.Empty;
-    
-    public MemoryStream AsStream()
-    {
-        return new MemoryStream(Bytes);
-    }
     
     /// <summary>
     /// 
@@ -24,7 +19,7 @@ public class TextToImageResponse
         out byte[] values,
         out Usage usage)
     {
-        values = Bytes;
+        values = ToByteArray();
         usage = Usage;
     }
     
@@ -33,7 +28,7 @@ public class TextToImageResponse
         out Usage usage,
         out TextToImageSettings usedSettings)
     {
-        values = Bytes;
+        values = ToByteArray();
         usage = Usage;
         usedSettings = UsedSettings;
     }
@@ -42,9 +37,9 @@ public class TextToImageResponse
     {
         return response?.ToByteArray() ?? [];
     }
-
+    
     public byte[] ToByteArray()
     {
-        return Bytes;
+        return Images.ElementAtOrDefault(0)?.ToByteArray() ?? Array.Empty<byte>();
     }
 }

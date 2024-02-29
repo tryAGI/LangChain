@@ -45,7 +45,9 @@ public class Automatic1111Model(
         return new TextToImageResponse
         {
             // base64 to png
-            Bytes = Convert.FromBase64String(response.Images.First()),
+            Images = response.Images
+                .Select(Data.FromBase64)
+                .ToArray(),
             Usage = Usage.Empty,
             UsedSettings = usedSettings,
         };

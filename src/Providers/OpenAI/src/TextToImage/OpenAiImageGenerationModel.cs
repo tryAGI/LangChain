@@ -64,15 +64,17 @@ public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
             case ResponseFormat.Url:
                 {
                     using var client = new HttpClient();
-#if NET6_0_OR_GREATER
-                    var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url), cancellationToken).ConfigureAwait(false);
-#else
-                    var bytes = await client.GetByteArrayAsync(new Uri(response[0].Url)).ConfigureAwait(false);
-#endif
+                    var images = await Task.WhenAll(response.Select(async x =>
+                    {
+                        // ReSharper disable once AccessToDisposedClosure
+                        var bytes = await client.GetByteArrayAsync(new Uri(x.Url), cancellationToken).ConfigureAwait(false);
+                        
+                        return Data.FromBytes(bytes);
+                    })).ConfigureAwait(false);
 
                     return new TextToImageResponse
                     {
-                        Bytes = bytes,
+                        Images = images,
                         Usage = usage,
                         UsedSettings = usedSettings,
                     };
@@ -81,9 +83,11 @@ public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
             case ResponseFormat.B64_Json:
                 return new TextToImageResponse
                 {
-                    Bytes = Convert.FromBase64String(
-                        response[0].B64_Json ??
-                        throw new InvalidOperationException("B64_json is null")),
+                    Images = response
+                        .Select(static x =>
+                            Data.FromBase64(x.B64_Json ??
+                                            throw new InvalidOperationException("B64_json is null")))
+                        .ToArray(),
                     Usage = usage,
                     UsedSettings = usedSettings,
                 };

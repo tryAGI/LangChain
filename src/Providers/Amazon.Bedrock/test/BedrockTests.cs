@@ -222,7 +222,7 @@ Helpful Answer:";
 
         var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
 
-        await File.WriteAllBytesAsync(path, response.Bytes);
+        await File.WriteAllBytesAsync(path, response.Images[0].ToByteArray());
 
         Process.Start(path);
     }
@@ -237,7 +237,7 @@ Helpful Answer:";
 
         var path = Path.Combine(Path.GetTempPath(), "food.png");
 
-        await File.WriteAllBytesAsync(path, response.Bytes);
+        await File.WriteAllBytesAsync(path, response.Images[0].ToByteArray());
 
         Process.Start(path);
     }

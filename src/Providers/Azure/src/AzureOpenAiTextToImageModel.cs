@@ -70,16 +70,13 @@ public class AzureOpenAiTextToImageModel : TextToImageModel, ITextToImageModel
         };
         AddUsage(usage);
 
-        var firstImage = response.Value.Data[0];
-        RevisedPromptResult = firstImage.RevisedPrompt;
-
-        var bytes = Convert.FromBase64String(
-            firstImage.Base64Data ??
-            throw new InvalidOperationException("B64_json is null"));
+        RevisedPromptResult = response.Value.Data[0].RevisedPrompt;
 
         return new TextToImageResponse
         {
-            Bytes = bytes,
+            Images = response.Value.Data
+                .Select(x => Data.FromBase64(x.Base64Data))
+                .ToArray(),
             Usage = usage,
             UsedSettings = usedSettings,
         };

@@ -55,7 +55,7 @@ public class AmazonTitanTextToImageModel(
 
         return new TextToImageResponse
         {
-            Bytes = Convert.FromBase64String(generatedText),
+            Images = [Data.FromBase64(generatedText)],
             UsedSettings = TextToImageSettings.Default,
             Usage = usage,
         };

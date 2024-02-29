@@ -43,7 +43,7 @@ public class StableDiffusionTextToImageModel(
 
         return new TextToImageResponse
         {
-            Bytes = Convert.FromBase64String(base64),
+            Images = [Data.FromBase64(base64)],
             UsedSettings = TextToImageSettings.Default,
             Usage = usage,
         };
