@@ -6,15 +6,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <AdditionalFiles Remove="Resources\test_image.jpg" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\test_image.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="System.Memory.Data" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Databases\Postgres\src\LangChain.Databases.Postgres.csproj" />
     <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
     <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
     <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
     <ProjectReference Include="..\..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+    <ProjectReference Include="..\..\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
     <ProjectReference Include="..\src\LangChain.Providers.Amazon.Bedrock.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\test_image.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

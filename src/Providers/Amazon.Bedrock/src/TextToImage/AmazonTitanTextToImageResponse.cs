@@ -5,5 +5,5 @@ namespace LangChain.Providers.Amazon.Bedrock;
 public class AmazonTitanTextToImageResponse
 {
     [JsonPropertyName("images")]
-    public IList<string> Images{ get; set; }
+    public IList<string> Images { get; set; }
 }
