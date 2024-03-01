@@ -6,14 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Remove="Resources\test_image.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\test_image.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="System.Memory.Data" />
@@ -27,12 +19,6 @@
     <ProjectReference Include="..\..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
     <ProjectReference Include="..\..\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
     <ProjectReference Include="..\src\LangChain.Providers.Amazon.Bedrock.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\test_image.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

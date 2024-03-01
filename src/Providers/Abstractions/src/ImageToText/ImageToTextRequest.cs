@@ -2,13 +2,12 @@
 namespace LangChain.Providers;
 
 /// <summary>
-/// Base class for chat requests.
+/// Base class for image to text requests.
 /// </summary>
 public class ImageToTextRequest
 {
     /// <summary>
-    /// Defines the messages for the request.
+    /// Image to upload.
     /// </summary>
     public required BinaryData Image { get; init; }
-    
 }

@@ -2,31 +2,26 @@
 namespace LangChain.Providers;
 
 /// <summary>
-/// Base class for chat request settings.
+/// Base class for image to text request settings.
 /// </summary>
 public class ImageToTextSettings
 {
     public static ImageToTextSettings Default { get; } = new()
     {
-        StopSequences = Array.Empty<string>(),
         User = string.Empty,
-        UseStreaming = false,
+        Endpoint = "https://api-inference.huggingface.co/models/"
     };
     
     /// <summary>
     /// Unique user identifier.
     /// </summary>
     public string? User { get; init; }
-    
-    /// <summary>
-    /// Defines the stop sequences for the model.
-    /// </summary>
-    public IReadOnlyList<string>? StopSequences { get; init; }
 
     /// <summary>
-    /// Sampling temperature
+    /// Endpoint url for api.
     /// </summary>
-    public bool? UseStreaming { get; init; }
+    public string Endpoint { get; set; }
+
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -43,24 +38,18 @@ public class ImageToTextSettings
     {
         return new ImageToTextSettings
         {
-            StopSequences = 
-                requestSettings?.StopSequences ??
-                modelSettings?.StopSequences ??
-                providerSettings?.StopSequences ??
-                Default.StopSequences ??
-                throw new InvalidOperationException("Default StopSequences is not set."),
             User = 
                 requestSettings?.User ??
                 modelSettings?.User ??
                 providerSettings?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
-            UseStreaming = 
-                requestSettings?.UseStreaming ??
-                modelSettings?.UseStreaming ??
-                providerSettings?.UseStreaming ??
-                Default.UseStreaming ??
-                throw new InvalidOperationException("Default UseStreaming is not set."),
+            Endpoint =
+                requestSettings?.Endpoint ??
+                modelSettings?.Endpoint ??
+                providerSettings?.Endpoint ??
+                Default.Endpoint ??
+                throw new InvalidOperationException("Default Endpoint is not set."),
         };
     }
 }

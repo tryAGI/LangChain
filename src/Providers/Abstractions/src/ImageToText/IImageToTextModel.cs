@@ -1,12 +1,12 @@
 namespace LangChain.Providers;
 
 /// <summary>
-/// Defines a large language model that can be used for chat.
+/// Defines a large language model that can be used for image to text generation.
 /// </summary>
 public interface IImageToTextModel : IModel<ImageToTextSettings>
 {
     /// <summary>
-    /// Run the LLM on the given prompt and input.
+    /// Run the LLM on the given image.
     /// </summary>
     /// <param name="request"></param>
     /// <param name="settings"></param>

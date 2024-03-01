@@ -1,9 +1,5 @@
 using System.Diagnostics;
-using System.Net;
 using System.Text.Json;
-using static LangChain.Providers.HuggingFace.ImageToTextGenerationResponse;
-using System.Text.Json.Serialization;
-using static System.Net.WebRequestMethods;
 
 namespace LangChain.Providers.HuggingFace;
 
@@ -15,61 +11,55 @@ public class HuggingFaceImageToTextModel(
     string id)
     : ImageToTextModel(id), IImageToTextModel
 {
-    public Usage Usage { get; }
-    public void AddUsage(Usage usage)
-    {
-        throw new NotImplementedException();
-    }
-
-    public string Endpoint { get; set; } = "https://api-inference.huggingface.co/models/";
-
-    public ImageToTextSettings? Settings { get; init; }
-
     public override async Task<ImageToTextResponse> GenerateTextFromImageAsync(ImageToTextRequest request, ImageToTextSettings? settings = default,
         CancellationToken cancellationToken = default)
     {
-        var imageContent = new ByteArrayContent(request.Image.ToArray());
-        imageContent.Headers.ContentType = new(request.Image.MediaType);
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        
+        var watch = Stopwatch.StartNew();
 
-        var request2 = new HttpRequestMessage(HttpMethod.Post, Endpoint + id)
+        var usedSettings = ImageToTextSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.ImageToTextSettings);
+
+        var imageContent = new ByteArrayContent(request.Image.ToArray());
+        if (request.Image.MediaType != null) imageContent.Headers.ContentType = new(request.Image.MediaType);
+
+        var httpRequest = new HttpRequestMessage(HttpMethod.Post, usedSettings.Endpoint + id)
         {
             Content = imageContent
         };
 
-        var response = await provider.HttpClient.SendAsync(request2, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+        var response = await provider.HttpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        ImageToTextGenerationResponse response2 = DeserializeResponse<ImageToTextGenerationResponse>(body);
-        Console.WriteLine(response2[0].GeneratedText);
-        return null;
+        var deserializeResponse = DeserializeResponse<ImageToTextGenerationResponse>(body);
+
+        var usage = Usage.Empty with
+        {
+            Time = watch.Elapsed,
+        };
+        AddUsage(usage);
+        provider.AddUsage(usage);
+
+        return new ImageToTextResponse
+        {
+            Text = deserializeResponse.SingleOrDefault()?.GeneratedText,
+            UsedSettings = usedSettings,
+            Usage = usage,
+        };
     }
 
     private static T DeserializeResponse<T>(string body)
     {
-        try
-        {
-            T? deserializedResponse = JsonSerializer.Deserialize<T>(body);
-            if (deserializedResponse is null)
-            {
-                throw new JsonException("Response is null");
-            }
+        body = body ?? throw new ArgumentNullException(nameof(body));
 
-            return deserializedResponse;
-        }
-        catch (JsonException exc)
+        T? deserializedResponse = JsonSerializer.Deserialize<T>(body);
+        if (deserializedResponse is null)
         {
-            throw;
+            throw new JsonException("Response is null");
         }
-    }
-}
 
-internal sealed class ImageToTextGenerationResponse : List<GeneratedTextItem>
-{
-    internal sealed class GeneratedTextItem
-    {
-        /// <summary>
-        /// The continuated string
-        /// </summary>
-        [JsonPropertyName("generated_text")]
-        public string? GeneratedText { get; set; }
+        return deserializedResponse;
     }
 }

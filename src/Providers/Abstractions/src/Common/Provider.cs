@@ -21,4 +21,7 @@ public abstract class Provider(string id) : Model(id), IProvider
     
     /// <inheritdoc />
     public TextToSpeechSettings? TextToSpeechSettings { get; init; }
+
+    /// <inheritdoc />
+    public ImageToTextSettings? ImageToTextSettings { get; init; }
 }
