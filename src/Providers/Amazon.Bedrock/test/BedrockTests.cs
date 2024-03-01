@@ -3,7 +3,6 @@ using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Databases.Postgres;
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Prompts;
@@ -13,14 +12,9 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
-using LangChain.Providers.HuggingFace;
 using LangChain.Schema;
 using LangChain.Sources;
 using LangChain.Splitters.Text;
-using Moq;
-using Newtonsoft.Json;
-using Npgsql;
-using Resources;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Providers.Amazon.Bedrock.Tests;
@@ -28,42 +22,6 @@ namespace LangChain.Providers.Amazon.Bedrock.Tests;
 [TestFixture, Explicit]
 public class BedrockTests
 {
-    private Dictionary<string, float[]> EmbeddingsDict { get; } = new();
-    private static string GenerateCollectionName() => "test-" + Guid.NewGuid().ToString("N");
-    private string _connectionString;
-
-    [Test]
-    public void matrix_test()
-    {
-        int[,] matrix = new int[7, 15];
-     Console.WriteLine(matrix.Length);
-    }
-
-    [Test]
-    public async Task HF_Image_to_text()
-    {
-     const string ImageToTextModel = "Salesforce/blip-image-captioning-base";
-     const string ImageFilePath = "test_image.jpg";
-
-        using var client = new HttpClient();
-        var provider = new HuggingFaceProvider(apiKey: string.Empty, client);
-        var model = new HuggingFaceImageToTextModel(provider, ImageToTextModel);
-
-      // ReadOnlyMemory<byte> imageData = await EmbeddedResource.ReadAllAsync(ImageFilePath);
-        var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
-        var imageData = await File.ReadAllBytesAsync(path);
-        var binaryData = new BinaryData(imageData, "image/png");
-
-        var response = await model.GenerateTextFromImageAsync(new ImageToTextRequest
-        {
-            Image = binaryData
-        });
-
-
-
-        Console.WriteLine(response);
-    }
-
     [Test]
     public async Task Chains()
     {
@@ -311,126 +269,5 @@ question: who are 10 of the most popular superheros and what are their powers?";
             var response = await llm.GenerateAsync(prompt);
             response.LastMessageContent.Should().NotBeNull();
         }
-    }
-
-    [Test]
-    public async Task AttachToPostgres()
-    {
-        var provider = new BedrockProvider();
-        var llm = new TitanTextExpressV1Model(provider);
-        var embeddings = new TitanEmbedTextV1Model(provider);
-
-        // PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
-        //var documents = await pdfSource.LoadAsync();
-
-        TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
-
-        const string host = "database-dev-1.cwrf01ytdgxr.us-east-1.rds.amazonaws.com";
-        const int port = 5432;
-
-        _connectionString = $"Host={host};Port={port};Database=test;User ID=postgres;Password=Kathmandu!123;";
-
-        PopulateEmbedding();
-        EnsureVectorExtensionAsync();
-
-        using var httpClient = new HttpClient();
-        var collectionName = GenerateCollectionName();
-        // var embeddingsMock = CreateFakeEmbeddings();
-
-        var db = new PostgresDbClient(_connectionString, "public", 1536);
-        await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddings, collectionName: collectionName);
-
-        //var documents = new[]
-        //{
-        //    new Document("apple", new Dictionary<string, object>
-        //    {
-        //        ["color"] = "red"
-        //    }),
-        //    new Document("orange", new Dictionary<string, object>
-        //    {
-        //        ["color"] = "orange"
-        //    })
-        //};
-
-        var texts = new[] { "hello world", "what's going on?" };
-        var ids = await store.AddTextsAsync(texts);
-    }
-
-    private void EnsureVectorExtensionAsync()
-    {
-        var dataSource = new NpgsqlDataSourceBuilder(_connectionString).Build();
-        var connection = dataSource.OpenConnection();
-        using (connection)
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = "CREATE EXTENSION IF NOT EXISTS vector";
-
-            command.ExecuteNonQuery();
-        }
-    }
-
-    private void PopulateEmbedding()
-    {
-        foreach (var embeddingFile in Directory.EnumerateFiles("embeddings"))
-        {
-            var jsonRaw = File.ReadAllText(embeddingFile);
-            var json =
-                JsonConvert.DeserializeObject<Dictionary<string, float[]>>(jsonRaw) ??
-                throw new InvalidOperationException("json is null");
-            var kv = json.First();
-            EmbeddingsDict.Add(kv.Key, kv.Value);
-        }
-    }
-
-    private Mock<IEmbeddingModel> CreateFakeEmbeddings()
-    {
-        var mock = new Mock<IEmbeddingModel>();
-
-        mock.Setup(x => x.CreateEmbeddingsAsync(
-                It.IsAny<string>(),
-                It.IsAny<EmbeddingSettings>(),
-                It.IsAny<CancellationToken>()))
-            .Returns<string, EmbeddingSettings, CancellationToken>(
-                (query, _, _) =>
-                {
-                    var embedding = EmbeddingsDict.TryGetValue(query, out var value)
-                        ? value
-                        : throw new ArgumentException("not in dict");
-
-                    return Task.FromResult(new EmbeddingResponse
-                    {
-                        Values = [embedding],
-                        Usage = Usage.Empty,
-                        UsedSettings = EmbeddingSettings.Default,
-                    });
-                });
-
-        mock.Setup(x => x.CreateEmbeddingsAsync(
-                It.IsAny<string[]>(),
-                It.IsAny<EmbeddingSettings>(),
-                It.IsAny<CancellationToken>()))
-            .Returns<string[], EmbeddingSettings, CancellationToken>(
-                (texts, _, _) =>
-                {
-                    var embeddings = new float[texts.Length][];
-
-                    for (int index = 0; index < texts.Length; index++)
-                    {
-                        var text = texts[index];
-                        embeddings[index] = EmbeddingsDict.TryGetValue(text, out var value)
-                            ? value
-                            : throw new ArgumentException("not in dict");
-                    }
-
-                    return Task.FromResult(new EmbeddingResponse
-                    {
-                        Values = embeddings,
-                        Usage = Usage.Empty,
-                        UsedSettings = EmbeddingSettings.Default,
-                    });
-                });
-
-        return mock;
     }
 }
