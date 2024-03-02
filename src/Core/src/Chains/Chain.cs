@@ -4,6 +4,7 @@ using LangChain.Chains.StackableChains.Agents;
 using LangChain.Chains.StackableChains.Agents.Crew;
 using LangChain.Chains.StackableChains.Files;
 using LangChain.Chains.StackableChains.ImageGeneration;
+using LangChain.Chains.StackableChains.ImageToTextGeneration;
 using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Indexes;
 using LangChain.Memory;
@@ -297,5 +298,20 @@ public static class Chain
         string outputKey = "code")
     {
         return new ExtractCodeChain(inputKey, outputKey);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <param name="image"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
+    public static ImageToTextGenerationChain GenerateImageToText(
+        IImageToTextModel model,
+        BinaryData image,
+        string outputKey = "text")
+    {
+        return new ImageToTextGenerationChain(model, image, outputKey);
     }
 }
