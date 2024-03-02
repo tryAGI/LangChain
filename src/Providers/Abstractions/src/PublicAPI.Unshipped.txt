@@ -1,4 +1,5 @@
 abstract LangChain.Providers.ChatModel.GenerateAsync(LangChain.Providers.ChatRequest! request, LangChain.Providers.ChatSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.ChatResponse!>!
+abstract LangChain.Providers.ImageToTextModel.GenerateTextFromImageAsync(LangChain.Providers.ImageToTextRequest! request, LangChain.Providers.ImageToTextSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.ImageToTextResponse!>!
 LangChain.Providers.ChatModel
 LangChain.Providers.ChatModel.ChatModel(string! id) -> void
 LangChain.Providers.ChatModel.CompletedResponseGenerated -> System.EventHandler<string!>?
@@ -67,6 +68,28 @@ LangChain.Providers.IChatModelWithTokenCounting
 LangChain.Providers.IEmbeddingModel
 LangChain.Providers.IEmbeddingModel.CreateEmbeddingsAsync(LangChain.Providers.EmbeddingRequest! request, LangChain.Providers.EmbeddingSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.EmbeddingResponse!>!
 LangChain.Providers.IEmbeddingModel.MaximumInputLength.get -> int
+LangChain.Providers.IImageToTextModel
+LangChain.Providers.IImageToTextModel.GenerateTextFromImageAsync(LangChain.Providers.ImageToTextRequest! request, LangChain.Providers.ImageToTextSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.ImageToTextResponse!>!
+LangChain.Providers.IImageToTextModel<TRequest, TResponse, TSettings>
+LangChain.Providers.IImageToTextModel<TRequest, TResponse, TSettings>.GenerateTextFromImageAsync(TRequest request, TSettings? settings = default(TSettings?), System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<TResponse>!
+LangChain.Providers.ImageToTextModel
+LangChain.Providers.ImageToTextModel.ImageToTextModel(string! id) -> void
+LangChain.Providers.ImageToTextRequest
+LangChain.Providers.ImageToTextRequest.Image.get -> System.BinaryData!
+LangChain.Providers.ImageToTextRequest.Image.init -> void
+LangChain.Providers.ImageToTextRequest.ImageToTextRequest() -> void
+LangChain.Providers.ImageToTextResponse
+LangChain.Providers.ImageToTextResponse.ImageToTextResponse() -> void
+LangChain.Providers.ImageToTextResponse.Text.get -> string?
+LangChain.Providers.ImageToTextResponse.Text.set -> void
+LangChain.Providers.ImageToTextResponse.Usage.get -> LangChain.Providers.Usage
+LangChain.Providers.ImageToTextResponse.Usage.init -> void
+LangChain.Providers.ImageToTextResponse.UsedSettings.get -> LangChain.Providers.ImageToTextSettings!
+LangChain.Providers.ImageToTextResponse.UsedSettings.init -> void
+LangChain.Providers.ImageToTextSettings
+LangChain.Providers.ImageToTextSettings.ImageToTextSettings() -> void
+LangChain.Providers.ImageToTextSettings.User.get -> string?
+LangChain.Providers.ImageToTextSettings.User.init -> void
 LangChain.Providers.IMaximumInputTokens
 LangChain.Providers.IMaximumInputTokens.MaximumInputTokens.get -> int
 LangChain.Providers.IModel
@@ -151,6 +174,8 @@ LangChain.Providers.Provider.ChatSettings.get -> LangChain.Providers.ChatSetting
 LangChain.Providers.Provider.ChatSettings.init -> void
 LangChain.Providers.Provider.EmbeddingSettings.get -> LangChain.Providers.EmbeddingSettings?
 LangChain.Providers.Provider.EmbeddingSettings.init -> void
+LangChain.Providers.Provider.ImageToTextSettings.get -> LangChain.Providers.ImageToTextSettings?
+LangChain.Providers.Provider.ImageToTextSettings.init -> void
 LangChain.Providers.Provider.ModerationSettings.get -> LangChain.Providers.ModerationSettings?
 LangChain.Providers.Provider.ModerationSettings.init -> void
 LangChain.Providers.Provider.Provider(string! id) -> void
@@ -262,6 +287,8 @@ static LangChain.Providers.EmbeddingRequest.ToEmbeddingRequest(string![]! messag
 static LangChain.Providers.EmbeddingResponse.implicit operator float[]!(LangChain.Providers.EmbeddingResponse! response) -> float[]!
 static LangChain.Providers.EmbeddingResponse.implicit operator float[]![]!(LangChain.Providers.EmbeddingResponse! response) -> float[]![]!
 static LangChain.Providers.EmbeddingSettings.Default.get -> LangChain.Providers.EmbeddingSettings!
+static LangChain.Providers.ImageToTextSettings.Calculate(LangChain.Providers.ImageToTextSettings? requestSettings, LangChain.Providers.ImageToTextSettings? modelSettings, LangChain.Providers.ImageToTextSettings? providerSettings) -> LangChain.Providers.ImageToTextSettings!
+static LangChain.Providers.ImageToTextSettings.Default.get -> LangChain.Providers.ImageToTextSettings!
 static LangChain.Providers.Message.Add(LangChain.Providers.Message left, LangChain.Providers.Message right) -> LangChain.Providers.Message
 static LangChain.Providers.Message.Ai(string! content) -> LangChain.Providers.Message
 static LangChain.Providers.Message.Empty.get -> LangChain.Providers.Message

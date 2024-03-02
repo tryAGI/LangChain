@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
       <ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
     </ItemGroup>
 

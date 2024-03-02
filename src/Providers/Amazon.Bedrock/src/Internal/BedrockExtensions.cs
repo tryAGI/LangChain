@@ -43,13 +43,9 @@ internal static class BedrockExtensions
                 $"InvokeModelAsync failed with status code: {response.HttpStatusCode}");
         }
 
-#if NET6_0_OR_GREATER && !NET8_0_OR_GREATER
-        return JsonNode.Parse(utf8Json: response.Body);
-#else
         return await JsonNode.ParseAsync(
             utf8Json: response.Body,
             cancellationToken: cancellationToken).ConfigureAwait(false);
-#endif
     }
 
     public static async Task<JsonNode?> InvokeModelAsync(

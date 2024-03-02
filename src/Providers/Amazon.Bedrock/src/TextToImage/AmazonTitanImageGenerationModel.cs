@@ -45,7 +45,7 @@ public class AmazonTitanTextToImageModel(
             },
             cancellationToken).ConfigureAwait(false);
 
-        var images = response.Images.Select(image => Data.FromBase64(image)).ToList();
+        var images = response?.Images.Select(Data.FromBase64).ToList() ?? [];
 
         var usage = Usage.Empty with
         {
