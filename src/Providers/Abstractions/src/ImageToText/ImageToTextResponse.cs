@@ -1,5 +1,4 @@
 // ReSharper disable once CheckNamespace
-// ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 namespace LangChain.Providers;
 
 #pragma warning disable CA2225

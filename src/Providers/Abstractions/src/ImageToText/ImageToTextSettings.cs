@@ -9,18 +9,12 @@ public class ImageToTextSettings
     public static ImageToTextSettings Default { get; } = new()
     {
         User = string.Empty,
-        Endpoint = "https://api-inference.huggingface.co/models/"
     };
     
     /// <summary>
     /// Unique user identifier.
     /// </summary>
     public string? User { get; init; }
-
-    /// <summary>
-    /// Endpoint url for api.
-    /// </summary>
-    public string Endpoint { get; set; }
 
 
     /// <summary>
@@ -44,12 +38,6 @@ public class ImageToTextSettings
                 providerSettings?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
-            Endpoint =
-                requestSettings?.Endpoint ??
-                modelSettings?.Endpoint ??
-                providerSettings?.Endpoint ??
-                Default.Endpoint ??
-                throw new InvalidOperationException("Default Endpoint is not set."),
         };
     }
 }
