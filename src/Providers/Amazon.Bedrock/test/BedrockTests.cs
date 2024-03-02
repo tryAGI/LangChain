@@ -22,7 +22,6 @@ namespace LangChain.Providers.Amazon.Bedrock.Tests;
 [TestFixture, Explicit]
 public class BedrockTests
 {
-
     [Test]
     public async Task Chains()
     {
@@ -217,10 +216,11 @@ Helpful Answer:";
     {
         var provider = new BedrockProvider();
         var model = new TitanImageGeneratorV1Model(provider);
-        var response = await model.GenerateImageAsync(
-            "create a picture of the solar system");
+        var response = await model.GenerateImageAsync("create a picture of the solar system");
 
         var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
+        Data image = response.Images[0];
+        var images = response.Images.Select(x => x.ToByteArray()).ToList();
 
         await File.WriteAllBytesAsync(path, response.Images[0].ToByteArray());
 
@@ -261,7 +261,7 @@ question: who are 10 of the most popular superheros and what are their powers?";
 
         if (useChatSettings)
         {
-            var response = await llm.GenerateAsync(prompt, new BedrockChatSettings { UseStreaming = useStreaming});
+            var response = await llm.GenerateAsync(prompt, new BedrockChatSettings { UseStreaming = useStreaming });
             response.LastMessageContent.Should().NotBeNull();
         }
         else

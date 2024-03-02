@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<PropertyGroup Label="NuGet">
-		<Description>AWS Bedrock model provider.</Description>
+		<Description>Amazon Bedrock model provider.</Description>
 		<PackageTags>$(PackageTags);aws;amazon;bedrock;api</PackageTags>
 	</PropertyGroup>
 
