@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+        <ProjectReference Include="..\src\LangChain.Providers.WhisperNet.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\kennedy.wav">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Whisper.net.Runtime" />
+    </ItemGroup>
+</Project>
