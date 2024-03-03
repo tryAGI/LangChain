@@ -12,23 +12,31 @@ public class SageMakerTests
     [Test]
     public async Task SimpleChain()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var prompt = "what is the color of the moon?";
 
-        var prompt = @"what's supermans parents names?";
+        var inputParameters = new Dictionary<string, object>()
+        {
+            ["inputs"] = prompt,
+        };
 
-        var chain =
-            Set(prompt)
-            | LLM(model);
+        var settings = new SageMakerSettings
+        {
+            InputParamers = inputParameters
+        };
 
-        Console.WriteLine(await chain.Run("text"));
+        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
+        var provider = new SageMakerProvider(apiGatewayRoute: route);
+        var model = new SageMakerModel(provider, endpointName: "openchat35");
+
+        var result = await model.GenerateAsync(prompt, settings);
+        Console.WriteLine(result);
     }
 
     [Test]
     public async Task Chains()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerModel(provider, endpointName: "openchat35");
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -46,8 +54,8 @@ public class SageMakerTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerModel(provider, endpointName: "openchat");
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
         var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));
@@ -85,8 +93,8 @@ public class SageMakerTests
     [Test]
     public void LLMChainTest()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerModel(provider, endpointName: "openchat");
 
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
