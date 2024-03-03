@@ -9,14 +9,14 @@ public class WhisperNetTests
     public async Task TestWhisperSTT()
     {
         var modelPath =
-           await  WhisperNetModelDownloader.DownloadModel(GgmlType.Base, QuantizationType.NoQuantization, "./whisper");
+           await  WhisperNetModelDownloader.DownloadModel(GgmlType.Base, QuantizationType.NoQuantization, false, "./whisper");
         var model = WhisperNetSpeechToTextModel.FromPath(modelPath, new ()
         {
             Language = "en",
             Prompt = "I am Kennedy"
         });
 
-        var data = await File.ReadAllBytesAsync(".\\Resources\\kennedy.wav");
+        var data = await File.ReadAllBytesAsync("Resources/kennedy.wav");
 
         var chain =
             Set(data, "audio")

@@ -12,18 +12,27 @@ public sealed class WhisperNetModelDownloader
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "LangChain", "CSharp", "Models", "WhisperNet");
     
-    public static async Task<string> DownloadModel(GgmlType type, QuantizationType quantizationType, string? storagePath = null, CancellationToken cancellationToken = default(CancellationToken))
+    public static async Task<string> DownloadModel(GgmlType type, QuantizationType quantizationType, bool usingCoreMl = false, string? storagePath = null, CancellationToken cancellationToken = default(CancellationToken))
     {
         storagePath ??= DefaultStoragePath;
-        using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(type, quantizationType, cancellationToken).ConfigureAwait(false);
         if (!Directory.Exists(storagePath))
         {
             Directory.CreateDirectory(storagePath);
         }
+
+        if (usingCoreMl)
+        {
+            await WhisperGgmlDownloader.GetEncoderCoreMLModelAsync(type, cancellationToken)
+                .ExtractToPath(storagePath)
+                .ConfigureAwait(false);
+        }
+        
+        using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(type, quantizationType, cancellationToken).ConfigureAwait(false);
+        
 #pragma warning disable CA1308
-        var fileName = $"whisper_gglm_{type.ToString().ToLowerInvariant()}";
+        var fileName = $"gglm-{type.ToString().ToLowerInvariant()}";
         if (quantizationType != QuantizationType.NoQuantization)
-            fileName += $"_{quantizationType.ToString().ToLowerInvariant()}";
+            fileName += $"-{quantizationType.ToString().ToLowerInvariant()}";
 #pragma warning restore CA1308
         var modelPath = Path.Combine(storagePath, $"{fileName}.bin");
         using var fileWriter = File.OpenWrite(modelPath);

@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <Description></Description>
     </PropertyGroup>
     
     <ItemGroup>
@@ -12,7 +11,7 @@
     
     <ItemGroup>
       <EmbeddedResource Update="Resources\kennedy.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
     
