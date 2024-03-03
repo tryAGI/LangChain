@@ -37,7 +37,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         string tableName = "vectors",
         TextSplitter? textSplitter = null)
     {
-        using var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
+        var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
         textSplitter ??= new CharacterTextSplitter();
         VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
         var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);
