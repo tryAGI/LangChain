@@ -14,25 +14,26 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
     private string[] _headersToSplitOn;
     private const string _codeBlockseparator = "```";
-    private readonly static string[] _defauldHeaders = {"#", "##", "###", "####", "#####", "######"};
-    private readonly static string[] separator = {"\n"};
+    private readonly static string[] _defauldHeaders = { "#", "##", "###", "####", "#####", "######" };
+    private readonly static string[] separator = { "\n" };
 
     /// <inheritdoc/>
     public MarkdownHeaderTextSplitter(
         string[]? headersToSplitOn = null,
-        bool includeHeaders = true,
-        bool groupByHeaders = false)
+        bool includeHeaders = true)
     {
         _includeHeaders = includeHeaders;
 
         _headersToSplitOn = headersToSplitOn ?? _defauldHeaders;
     }
 
+
+
     /// <inheritdoc/>
     public override IReadOnlyList<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
-        
+
         // Split the input text by newline character ("\n").
         var lines = text
             .Replace("\r", "") // some people are using windows
@@ -40,7 +41,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
 
         var content = new List<LineType>();
-        string? currentHeader = null;
+        string? currentHeader = "";
         int currentHeaderLen = 999; // determines current header level
 
         bool inCodeBlock = false;
@@ -49,14 +50,14 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         {
             var strippedLine = line.Trim();
 
-            if (strippedLine.Length==0)
+            if (strippedLine.Length == 0)
             {
                 continue;
             }
 
             if (!inCodeBlock && strippedLine.StartsWith(_codeBlockseparator, StringComparison.InvariantCulture))
             {
-                inCodeBlock = strippedLine.Split(new[] {_codeBlockseparator}, StringSplitOptions.None).Length < 2;
+                inCodeBlock = strippedLine.Split(new[] { _codeBlockseparator }, StringSplitOptions.None).Length < 2;
             }
 
             if (inCodeBlock)
@@ -69,11 +70,24 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 continue;
             }
 
-            if (IsHeader(strippedLine, out int hLen) && hLen < currentHeaderLen)
+            if (IsHeader(strippedLine, out int hLen))
             {
-                currentHeader = strippedLine.TrimStart('#').Trim();
-                currentHeaderLen = hLen;
-                continue;
+                if (hLen <= currentHeaderLen)
+                {
+                    var existingHeader = currentHeader.Split('|');
+
+                    string prevHeader = string.Join("|", existingHeader.Take(existingHeader.Length - 1));
+                    currentHeader = prevHeader + "|" + strippedLine.TrimStart('#').Trim();
+                    currentHeaderLen = hLen;
+                    continue;
+                }
+
+                if (hLen > currentHeaderLen)
+                {
+                    currentHeader = currentHeader += "|" + strippedLine.TrimStart('#').Trim();
+                    currentHeaderLen = hLen;
+                    continue;
+                }
             }
 
             content.Add(new LineType()
@@ -84,12 +98,14 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         }
 
         List<string> result = new();
-        foreach (var line in content.GroupBy(x=>x.Header))
+        foreach (var line in content.GroupBy(x => x.Header))
         {
             var header = line.Key;
-            var contentLines = string.Join("\n",line.Select(x => x.Content).ToList());
-            if (_includeHeaders&&!string.IsNullOrEmpty(header))
+
+            var contentLines = string.Join("\n", line.Select(x => x.Content).ToList());
+            if (_includeHeaders && !string.IsNullOrEmpty(header))
             {
+                header = string.Join(": ", header.Trim('|').Split('|'));
                 result.Add(header + "\n" + contentLines);
                 continue;
             }
@@ -99,13 +115,13 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         return result;
     }
 
-    
+
     private bool IsHeader(string line, out int len)
     {
         len = 0;
         foreach (var header in _headersToSplitOn)
         {
-            if (line.StartsWith(header, StringComparison.Ordinal) && line[header.Length] == ' ')
+            if (line.Trim().StartsWith(header, StringComparison.Ordinal) && line[header.Length] == ' ')
             {
                 len = header.Length;
                 return true;
