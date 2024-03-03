@@ -21,6 +21,18 @@
 		<PackageReference Include="System.Text.Json" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Remove="ISageMakerModel.cs" />
+	  <Compile Remove="ISageMakerModel`2.cs" />
+	  <Compile Remove="SageMakerBaseModel.cs" />
+	  <Compile Remove="SageMakerRequest.cs" />
+	  <Compile Remove="SageMakerResponse.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.CSharp" />
+	</ItemGroup>
+
 	<ItemGroup Label="Usings">
 		<Using Include="System.Net.Http" />
 	</ItemGroup>

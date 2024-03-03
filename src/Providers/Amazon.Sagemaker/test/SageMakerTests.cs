@@ -2,6 +2,7 @@
 using LangChain.Chains.Sequentials;
 using LangChain.Prompts;
 using LangChain.Schema;
+using System.Text.Json.Nodes;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Providers.Amazon.SageMaker.Tests;
@@ -9,26 +10,56 @@ namespace LangChain.Providers.Amazon.SageMaker.Tests;
 [TestFixture, Explicit]
 public class SageMakerTests
 {
+    static async Task<string?> DeserializeFunc(HttpResponseMessage response)
+    {
+        try
+        {
+            var jsonBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var jsonNode = JsonObject.Parse(jsonBody);
+            var jsonString = jsonNode.GetValue<string>();
+            var node = JsonObject.Parse(jsonString);
+            var generatedTextAsValue = node?[0]?["generated_text"]?.AsValue();
+            var generatedText = generatedTextAsValue?.ToString();
+
+            return generatedText;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     [Test]
     public async Task SimpleChain()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var prompt = "what is the color of the moon?";
 
-        var prompt = @"what's supermans parents names?";
+        var inputParameters = new Dictionary<string, object>()
+        {
+            ["inputs"] = prompt,
+        };
 
-        var chain =
-            Set(prompt)
-            | LLM(model);
+        var settings = new SageMakerSettings
+        {
+            InputParamers = inputParameters,
+            TransformOutput = DeserializeFunc
+        };
 
-        Console.WriteLine(await chain.Run("text"));
+        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
+        var provider = new SageMakerProvider(apiGatewayRoute: route);
+        var model = new SageMakerModel(provider, endpointName: "openchat35");
+
+        var result = await model.GenerateAsync(prompt, settings);
+        Console.WriteLine(result);
     }
 
     [Test]
     public async Task Chains()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerModel(provider, endpointName: "openchat35");
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -46,8 +77,8 @@ public class SageMakerTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerModel(provider, endpointName: "openchat");
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
         var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));
@@ -85,8 +116,8 @@ public class SageMakerTests
     [Test]
     public void LLMChainTest()
     {
-        var provider = new SageMakerProvider(apiGatewayEndpoint: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
-        var model = new SageMakerChatModel(provider, sageMakerEndpointName: "openchat");
+        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var model = new SageMakerModel(provider, endpointName: "openchat");
 
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
