@@ -21,10 +21,6 @@
 		<PackageReference Include="System.Text.Json" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.CSharp" />
-	</ItemGroup>
-
 	<ItemGroup Label="Usings">
 		<Using Include="System.Net.Http" />
 	</ItemGroup>

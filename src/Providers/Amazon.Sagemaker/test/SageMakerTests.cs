@@ -2,7 +2,6 @@
 using LangChain.Chains.Sequentials;
 using LangChain.Prompts;
 using LangChain.Schema;
-using System.Text.Json.Nodes;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Providers.Amazon.SageMaker.Tests;
@@ -10,27 +9,6 @@ namespace LangChain.Providers.Amazon.SageMaker.Tests;
 [TestFixture, Explicit]
 public class SageMakerTests
 {
-    static async Task<string?> DeserializeFunc(HttpResponseMessage response)
-    {
-        try
-        {
-            var jsonBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var jsonNode = JsonObject.Parse(jsonBody);
-            var jsonString = jsonNode.GetValue<string>();
-            var node = JsonObject.Parse(jsonString);
-            var generatedTextAsValue = node?[0]?["generated_text"]?.AsValue();
-            var generatedText = generatedTextAsValue?.ToString();
-
-            return generatedText;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-
     [Test]
     public async Task SimpleChain()
     {
@@ -43,8 +21,7 @@ public class SageMakerTests
 
         var settings = new SageMakerSettings
         {
-            InputParamers = inputParameters,
-            TransformOutput = DeserializeFunc
+            InputParamers = inputParameters
         };
 
         var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");

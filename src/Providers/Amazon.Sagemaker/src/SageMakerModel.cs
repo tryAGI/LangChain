@@ -37,8 +37,8 @@ public class SageMakerModel(
 
         response.EnsureSuccessStatusCode();
 
-        dynamic output = usedSettings.TransformOutput!(response);
-        messages.Add(new Message(output.Result, MessageRole.Ai));
+        var output = usedSettings.TransformOutput!(response);
+        messages.Add(new Message(output!, MessageRole.Ai));
 
         var usage = Usage.Empty with
         {

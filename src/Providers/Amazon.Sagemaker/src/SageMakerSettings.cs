@@ -1,5 +1,7 @@
 // ReSharper disable once CheckNamespace
 
+using System.Text.Json.Nodes;
+
 namespace LangChain.Providers.Amazon.SageMaker;
 
 public class SageMakerSettings : ChatSettings
@@ -9,6 +11,7 @@ public class SageMakerSettings : ChatSettings
         User = ChatSettings.Default.User,
         ContentType = "application/json",
         Accept = "*/*",
+        TransformOutput = DeserializeFunc
     };
 
     /// <summary>
@@ -29,7 +32,7 @@ public class SageMakerSettings : ChatSettings
     /// <summary>
     /// 
     /// </summary>
-    public Func<HttpResponseMessage, object>? TransformOutput { get; init; }
+    public Func<HttpResponseMessage, string?>? TransformOutput { get; init; }
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -76,7 +79,30 @@ public class SageMakerSettings : ChatSettings
                 throw new InvalidOperationException("Default InputParamers is not set."),
             TransformOutput = requestSettingsCasted?.TransformOutput ??
                               modelSettingsCasted?.TransformOutput ??
-                              providerSettingsCasted?.TransformOutput
+                              providerSettingsCasted?.TransformOutput ??
+                              Default.TransformOutput
         };
+    }
+
+    private static string? DeserializeFunc(HttpResponseMessage response)
+    {
+        try
+        {
+            var jsonBody = response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var result = jsonBody.GetAwaiter().GetResult();
+
+            var jsonNode = JsonObject.Parse(result);
+            var jsonString = jsonNode.GetValue<string>();
+            var node = JsonObject.Parse(jsonString);
+            var generatedTextAsValue = node?[0]?["generated_text"]?.AsValue();
+            var generatedText = generatedTextAsValue?.ToString();
+
+            return generatedText;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
