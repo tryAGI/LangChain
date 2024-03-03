@@ -26,6 +26,8 @@
       "src\\Providers\\Ollama\\test\\LangChain.Providers.Ollama.Tests.csproj",
       "src\\Providers\\OpenAI\\src\\LangChain.Providers.OpenAI.csproj",
       "src\\Providers\\OpenAI\\test\\LangChain.Providers.OpenAI.Tests.csproj",
+      "src\\Providers\\WhisperNet\\test\\LangChain.Providers.WhisperNet.Tests.csproj",
+      "src\\Providers\\WhisperNet\\src\\LangChain.Providers.WhisperNet.csproj",
       "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj",
       "src\\Utilities\\Pollyfils\\src\\LangChain.Polyfills.csproj"
     ]
