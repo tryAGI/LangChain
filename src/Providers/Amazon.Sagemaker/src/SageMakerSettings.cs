@@ -4,14 +4,11 @@ namespace LangChain.Providers.Amazon.SageMaker;
 
 public class SageMakerSettings : ChatSettings
 {
-    public delegate object TransformOutputFunc(HttpResponseMessage response);
-
     public new static SageMakerSettings Default { get; } = new()
     {
         User = ChatSettings.Default.User,
         ContentType = "application/json",
         Accept = "*/*",
-        InputParamers = new Dictionary<string, object>(),
     };
 
     /// <summary>
@@ -27,12 +24,12 @@ public class SageMakerSettings : ChatSettings
     /// <summary>
     /// SageMaker input parameters
     /// </summary>
-    public Dictionary<string, object>? InputParamers { get; set; }
+    public Dictionary<string, object>? InputParamers { get; init; }
 
     /// <summary>
     /// 
     /// </summary>
-    public Func<HttpResponseMessage, object>? TransformOutput { get; set; }
+    public Func<HttpResponseMessage, object>? TransformOutput { get; init; }
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -42,7 +39,7 @@ public class SageMakerSettings : ChatSettings
     /// <param name="providerSettings"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static SageMakerSettings Calculate(
+    public new static SageMakerSettings Calculate(
         ChatSettings? requestSettings,
         ChatSettings? modelSettings,
         ChatSettings? providerSettings)
