@@ -91,9 +91,9 @@ public class SageMakerSettings : ChatSettings
             var jsonBody = response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var result = jsonBody.GetAwaiter().GetResult();
 
-            var jsonNode = JsonObject.Parse(result);
-            var jsonString = jsonNode.GetValue<string>();
-            var node = JsonObject.Parse(jsonString);
+            var jsonNode = JsonNode.Parse(result);
+            var jsonString = jsonNode?.GetValue<string>();
+            var node = JsonNode.Parse(jsonString!);
             var generatedTextAsValue = node?[0]?["generated_text"]?.AsValue();
             var generatedText = generatedTextAsValue?.ToString();
 
