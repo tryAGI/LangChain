@@ -114,6 +114,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "Lyx52",
+      "name": "Lyx52",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55701905?v=4",
+      "profile": "https://github.com/Lyx52",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
