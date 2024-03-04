@@ -27,45 +27,37 @@ Also see [examples](./examples) for example usage or [tests](./src/tests/LangCha
 // Price to run from zero(create embeddings and request to LLM): 0,015$
 // Price to re-run if database is exists: 0,0004$
 // Dependencies: LangChain, LangChain.Databases.Sqlite, LangChain.Sources.Pdf
+
 var provider = new OpenAiProvider("OPENAI_API_KEY");
-var llm = new Gpt35TurboModel(provider);
+var llm = new Gpt35TurboModel(provider).UseConsoleForDebug();
 var embeddings = new TextEmbeddingV3SmallModel(provider);
 
-if (!File.Exists("vectors.db"))
-{
-    var documents = await PdfPigPdfSource.FromUriAsync(
-        new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
-    
-    await SQLiteVectorStore.CreateIndexFromDocuments(
-        embeddings: gpt35,
-        documents: documents,
-        filename: "vectors.db",
-        tableName: "vectors",
-        textSplitter: new RecursiveCharacterTextSplitter(
-            chunkSize: 200,
-            chunkOverlap: 50));
-}
 
-var database = new SQLiteVectorStore(
-    filename: "vectors.db",
-    tableName: "vectors",
-    embeddings: embeddings);
-const string question = "Who was drinking a unicorn blood?";
-var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
 
-var answer = await llm.GenerateAsync(
-    $"""
-     Use the following pieces of context to answer the question at the end.
-     If the answer is not in context then just say that you don't know, don't try to make up an answer.
-     Keep the answer as short as possible.
+var bookURL =
+    "https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf";
+var source = await PdfPigPdfSource.CreateFromUriAsync(new Uri(bookURL));
+var index = await SQLiteVectorStore.GetOrCreateIndex(embeddings, source);
 
-     {similarDocuments.AsString()}
+string promptText =
+    @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible. Always quote the context in your answer.
 
-     Question: {question}
-     Helpful Answer:
-     """, CancellationToken.None).ConfigureAwait(false);
+{context}
 
-Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
+Question: {text}
+Helpful Answer:";
+
+
+var chain =
+    Set("Who was drinking a unicorn blood?")    // set the question
+    | RetrieveDocuments(index, amount: 5)       // take 5 most similar documents
+    | StuffDocuments(outputKey: "context")      // combine documents together and put them into context
+    | Template(promptText)                      // replace context and question in the prompt with their values
+    | LLM(llm);                                 // send the result to the language model
+
+var answer=await chain.Run("text");         // get chain result
+Console.WriteLine("Answer:"+ answer);       // print the result
+// print usage
 Console.WriteLine($"LLM usage: {llm.Usage}");
 Console.WriteLine($"Embeddings usage: {embeddings.Usage}");
 ```
