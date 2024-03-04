@@ -8,7 +8,7 @@ using LangChain.Providers.Amazon.Bedrock.Internal;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public class AnthropicClaudeChatModel(
+public class AnthropicClaude3ChatModel(
     BedrockProvider provider,
     string id)
     : ChatModel(id)
@@ -31,7 +31,7 @@ public class AnthropicClaudeChatModel(
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
 
-        var bodyJson = CreateBodyJson(prompt, usedSettings);
+        var bodyJson = CreateBodyJson(prompt, usedSettings, request.Image);
 
         if (usedSettings.UseStreaming == true)
         {
@@ -43,13 +43,15 @@ public class AnthropicClaudeChatModel(
                 var streamEvent = (PayloadPart)payloadPart;
                 var chunk = await JsonSerializer.DeserializeAsync<JsonObject>(streamEvent.Bytes, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
-                var delta = chunk?["completion"]!.GetValue<string>();
+                var type = chunk?["type"]!.GetValue<string>().ToUpperInvariant();
+                if (type == "CONTENT_BLOCK_DELTA")
+                {
+                    var delta = chunk?["delta"]?["text"]!.GetValue<string>();
 
-                OnPartialResponseGenerated(delta!);
-                stringBuilder.Append(delta);
-
-                var finished = chunk?["completionReason"]?.GetValue<string>();
-                if (finished?.ToUpperInvariant() == "FINISH")
+                    OnPartialResponseGenerated(delta!);
+                    stringBuilder.Append(delta);
+                }
+                if (type == "CONTENT_BLOCK_STOP")
                 {
                     OnCompletedResponseGenerated(stringBuilder.ToString());
                 }
@@ -69,12 +71,12 @@ public class AnthropicClaudeChatModel(
         {
             var response = await provider.Api.InvokeModelAsync(Id, bodyJson, cancellationToken).ConfigureAwait(false);
 
-            var generatedText = response?["completion"]?.GetValue<string>() ?? "";
+            var generatedText = response?["content"]?[0]?["text"]?.GetValue<string>() ?? "";
 
             messages.Add(generatedText.AsAiMessage());
             OnCompletedResponseGenerated(generatedText);
         }
-          
+
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
@@ -90,17 +92,53 @@ public class AnthropicClaudeChatModel(
         };
     }
 
-    private static JsonObject CreateBodyJson(string prompt, BedrockChatSettings usedSettings)
+    private static JsonObject CreateBodyJson(
+        string? prompt,
+        BedrockChatSettings settings,
+        BinaryData? image = null)
     {
+        settings = settings ?? throw new ArgumentNullException(nameof(settings));
+
         var bodyJson = new JsonObject
         {
-            ["prompt"] = prompt,
-            ["max_tokens_to_sample"] = usedSettings.MaxTokens!.Value,
-            ["temperature"] = usedSettings.Temperature!.Value,
-            ["top_p"] = usedSettings.TopP!.Value,
-            ["top_k"] = usedSettings.TopK!.Value,
-            ["stop_sequences"] = new JsonArray("\n\nHuman:")
+            ["anthropic_version"] = "bedrock-2023-05-31",
+            ["max_tokens"] = settings.MaxTokens!.Value,
+            ["messages"] = new JsonArray
+            {
+               new JsonObject
+               {
+                   ["role"] = "user",
+                   ["content"] = new JsonArray
+                   {
+                       new JsonObject
+                       {
+                           ["type"] = "text",
+                           ["text"] = prompt,
+                       }
+                   }
+               }
+            }
         };
+
+        if (image != null)
+        {
+            var binaryData = BinaryData.FromBytes(image);
+            var base64 = Convert.ToBase64String(binaryData.ToArray());
+            var jsonImage = new JsonObject
+            {
+                ["type"] = "image",
+                ["source"] = new JsonObject
+                {
+                    ["type"] = "base64",
+                    ["media_type"] = image?.MediaType,
+                    ["data"] = base64
+                }
+            };
+
+            var content = ((JsonArray)bodyJson["messages"]?[0]?["content"]!);
+            content.Add(jsonImage);
+        }
+
         return bodyJson;
     }
 }
