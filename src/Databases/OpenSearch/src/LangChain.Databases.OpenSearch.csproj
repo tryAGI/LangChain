@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>OpenSearch for LangChain.</Description>
+        <PackageTags>$(PackageTags);opensearch</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AWSSDK.OpenSearchServerless" />
+      <PackageReference Include="AWSSDK.OpenSearchService" />
+      <PackageReference Include="OpenSearch.Client" />
+      <PackageReference Include="OpenSearch.Net" />
+      <PackageReference Include="OpenSearch.Net.Auth.AwsSigV4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+      <PackageReference Include="Amazon.CDK.AWS.OpenSearchServerless" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+      <PackageReference Include="Amazon.CDK.AWS.OpenSearchServerless" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+      <PackageReference Include="Amazon.CDK.AWS.OpenSearchServerless" />
+    </ItemGroup>
+
+</Project>

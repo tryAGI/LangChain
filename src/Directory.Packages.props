@@ -3,12 +3,15 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Amazon.CDK.AWS.OpenSearchServerless" Version="1.204.0" />
     <PackageVersion Include="AngleSharp" Version="1.1.0" />
     <PackageVersion Include="Anthropic" Version="0.3.1" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.2.0" />
     <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.301.41" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.300.52" />
+    <PackageVersion Include="AWSSDK.OpenSearchServerless" Version="3.7.301.43" />
+    <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.3" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
     <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.13" />
     <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
@@ -46,6 +49,9 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Npgsql" Version="8.0.2" />
+    <PackageVersion Include="OpenSearch.Client" Version="1.7.0" />
+    <PackageVersion Include="OpenSearch.Net" Version="1.7.0" />
+    <PackageVersion Include="OpenSearch.Net.Auth.AwsSigV4" Version="1.7.0" />
     <PackageVersion Include="Pgvector" Version="0.2.0" />
     <PackageVersion Include="NUnit" Version="4.0.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
