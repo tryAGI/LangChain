@@ -137,7 +137,7 @@ Helpful Answer:") |
         
         if (!File.Exists("vectors.db"))
         {
-            var documents = await PdfPigPdfSource.FromUriAsync(
+            var documents = await PdfPigPdfSource.DocumentsFromUriAsync(
                 new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
             
             await SQLiteVectorStore.CreateIndexFromDocuments(

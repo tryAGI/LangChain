@@ -54,7 +54,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="embeddings">An object implementing the <see cref="IEmbeddingModel"/> interface. This object is used to generate embeddings for the documents.</param>
     /// <param name="documentsSource">An optional object implementing the <see cref="ISource"/> interface. This object is used to load documents if the vector store database file does not exist.</param>
     /// <param name="options">An optional <see cref="SQLIteVectorStoreOptions"/> object. This object provides configuration options for the SQLite vector store</param>
-    public static async Task<VectorStoreIndexWrapper> GetIndex(
+    public static async Task<VectorStoreIndexWrapper> GetOrCreateIndex(
         IEmbeddingModel embeddings,
         ISource? documentsSource = null,
         SQLIteVectorStoreOptions? options = null)

@@ -29,7 +29,7 @@ public class PdfPigPdfSource : ISource
     /// <param name="uri"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IReadOnlyCollection<Document>> FromUriAsync(
+    public static async Task<IReadOnlyCollection<Document>> DocumentsFromUriAsync(
         Uri uri,
         CancellationToken cancellationToken = default)
     {
@@ -40,11 +40,27 @@ public class PdfPigPdfSource : ISource
         
             await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
             memoryStream.Position = 0;
+            return await new PdfPigPdfSource(memoryStream).LoadAsync(cancellationToken).ConfigureAwait(false);
         }
         
-        return await new PdfPigPdfSource(memoryStream).LoadAsync(cancellationToken).ConfigureAwait(false);
+        
     }
-    
+
+    public static async Task<PdfPigPdfSource> CreateFromUriAsync(
+        Uri uri)
+    {
+        var memoryStream = new MemoryStream();
+
+        using var client = new HttpClient();
+        using var stream = await client.GetStreamAsync(uri).ConfigureAwait(false);
+
+        await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+        memoryStream.Position = 0;
+
+
+        return new PdfPigPdfSource(memoryStream);
+    }
+
     /// <summary>
     /// 
     /// </summary>
