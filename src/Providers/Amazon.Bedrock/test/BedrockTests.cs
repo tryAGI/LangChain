@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Amazon;
 using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases;
@@ -11,6 +12,7 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Mistral;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using LangChain.Sources;
@@ -25,11 +27,11 @@ public class BedrockTests
     [Test]
     public async Task Chains()
     {
-        var provider = new BedrockProvider();
+        var provider = new BedrockProvider(RegionEndpoint.USWest2);
         //var llm = new Jurassic2MidModel(provider);
-        var llm = new ClaudeV21Model(provider);
-        //var modelId = "amazon.titan-text-express-v1";
-        // var modelId = "cohere.command-light-text-v14";
+        //var llm = new ClaudeV21Model(provider);
+        //var llm = new Mistral7BInstruct(provider);
+        var llm = new Claude3SonnetModel(provider);
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));

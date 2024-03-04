@@ -8,7 +8,7 @@ using LangChain.Providers.Amazon.Bedrock.Internal;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public class AnthropicClaudeChatModel(
+public abstract class MistralInstructChatModel(
     BedrockProvider provider,
     string id)
     : ChatModel(id)
@@ -21,7 +21,7 @@ public class AnthropicClaudeChatModel(
         request = request ?? throw new ArgumentNullException(nameof(request));
 
         var watch = Stopwatch.StartNew();
-        var prompt = request.Messages.ToRolePrompt();
+        var prompt = request.Messages.ToSimplePrompt();
         var messages = request.Messages.ToList();
 
         var stringBuilder = new StringBuilder();
@@ -43,7 +43,7 @@ public class AnthropicClaudeChatModel(
                 var streamEvent = (PayloadPart)payloadPart;
                 var chunk = await JsonSerializer.DeserializeAsync<JsonObject>(streamEvent.Bytes, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
-                var delta = chunk?["completion"]!.GetValue<string>();
+                var delta = chunk?["outputText"]!.GetValue<string>();
 
                 OnPartialResponseGenerated(delta!);
                 stringBuilder.Append(delta);
@@ -67,9 +67,10 @@ public class AnthropicClaudeChatModel(
         }
         else
         {
-            var response = await provider.Api.InvokeModelAsync(Id, bodyJson, cancellationToken).ConfigureAwait(false);
+            var response = await provider.Api.InvokeModelAsync(Id, bodyJson, cancellationToken)
+                .ConfigureAwait(false);
 
-            var generatedText = response?["content"]?[0]?["text"]?.GetValue<string>() ?? "";
+            var generatedText = response?["outputs"]?[0]?["text"]?.GetValue<string>() ?? string.Empty;
 
             messages.Add(generatedText.AsAiMessage());
             OnCompletedResponseGenerated(generatedText);
@@ -94,23 +95,11 @@ public class AnthropicClaudeChatModel(
     {
         var bodyJson = new JsonObject
         {
-            ["anthropic_version"] = "bedrock-2023-05-31",
+            ["prompt"] = prompt,
             ["max_tokens"] = usedSettings.MaxTokens!.Value,
-            ["messages"] = new JsonArray
-            {
-               new JsonObject
-               {
-                   ["role"] = "user",
-                   ["content"] = new JsonArray
-                   {
-                       new JsonObject
-                       {
-                           ["type"] = "text",
-                           ["text"] = prompt,
-                       }
-                   }
-               }
-            }
+            ["temperature"] = usedSettings.Temperature!.Value,
+            ["top_p"] = usedSettings.TopP!.Value,
+           // ["top_k"] = usedSettings.TopK!.Value
         };
         return bodyJson;
     }
