@@ -14,14 +14,14 @@ public class SageMakerTests
     {
         var prompt = "what is the color of the moon?";
 
-        var inputParameters = new Dictionary<string, object>()
+        var inputParameters = new Dictionary<string, object>
         {
             ["inputs"] = prompt,
         };
 
         var settings = new SageMakerSettings
         {
-            InputParamers = inputParameters
+            InputParameters = inputParameters
         };
 
         var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
@@ -35,7 +35,8 @@ public class SageMakerTests
     [Test]
     public async Task Chains()
     {
-        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
+        var provider = new SageMakerProvider(apiGatewayRoute: route);
         var model = new SageMakerModel(provider, endpointName: "openchat35");
 
         var template = "What is a good name for a company that makes {product}?";
@@ -54,7 +55,8 @@ public class SageMakerTests
     [Test]
     public async Task SequenceChainTests()
     {
-        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
+        var provider = new SageMakerProvider(apiGatewayRoute: route);
         var model = new SageMakerModel(provider, endpointName: "openchat");
 
         var firstTemplate = "What is a good name for a company that makes {product}?";
@@ -93,7 +95,8 @@ public class SageMakerTests
     [Test]
     public void LLMChainTest()
     {
-        var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
+        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
+        var provider = new SageMakerProvider(apiGatewayRoute: route);
         var model = new SageMakerModel(provider, endpointName: "openchat");
 
         var promptText =
