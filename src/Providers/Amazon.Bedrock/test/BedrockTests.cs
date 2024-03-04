@@ -244,6 +244,26 @@ Helpful Answer:";
         Process.Start(path);
     }
 
+    [Test]
+    public async Task ClaudeImageToText()
+    {
+        var provider = new BedrockProvider(RegionEndpoint.USWest2);
+        var model = new Claude3SonnetModel(provider);
+
+        var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
+        var imageData = await File.ReadAllBytesAsync(path);
+        var binaryData = new BinaryData(imageData, "image/png");
+
+        var message = new Message(" \"what do you think of this?\"", MessageRole.Human);
+
+        var chatRequest = ChatRequest.ToChatRequest(message);
+        chatRequest.Image = binaryData;
+
+        var response = await model.GenerateAsync(chatRequest, new ChatSettings { UseStreaming = true });
+
+        Console.WriteLine(response);
+    }
+
     [TestCase(true, false)]
     [TestCase(false, false)]
     [TestCase(true, true)]
