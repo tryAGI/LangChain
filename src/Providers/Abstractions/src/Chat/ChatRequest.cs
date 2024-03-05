@@ -10,7 +10,12 @@ public class ChatRequest
     /// Defines the messages for the request.
     /// </summary>
     public required IReadOnlyCollection<Message> Messages { get; init; }
-    
+
+    /// <summary>
+    /// Upload image
+    /// </summary>
+    public BinaryData? Image { get; set; }
+
     /// <inheritdoc cref="ToChatRequest(string)"/>
     public static implicit operator ChatRequest(string message)
     {
