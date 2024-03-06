@@ -254,9 +254,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Serve", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Polyfills", "src\Utilities\Pollyfils\src\LangChain.Polyfills.csproj", "{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.WhisperNet", "src\Providers\WhisperNet\src\LangChain.Providers.WhisperNet.csproj", "{DB8A2912-2A5E-4334-91B3-F34079409DAE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WhisperNet", "WhisperNet", "{73429222-5209-49B8-96CB-F20FFFE3F3B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.WhisperNet.Tests", "src\Providers\WhisperNet\test\LangChain.Providers.WhisperNet.Tests.csproj", "{1D406E31-857C-4F30-86A5-4335F7B0A5FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.WhisperNet", "src\Providers\WhisperNet\src\LangChain.Providers.WhisperNet.csproj", "{35A74002-AD33-4516-AFA6-D67D8A272EDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.WhisperNet.Tests", "src\Providers\WhisperNet\test\LangChain.Providers.WhisperNet.Tests.csproj", "{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -520,14 +522,14 @@ Global
 		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB8A2912-2A5E-4334-91B3-F34079409DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB8A2912-2A5E-4334-91B3-F34079409DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB8A2912-2A5E-4334-91B3-F34079409DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB8A2912-2A5E-4334-91B3-F34079409DAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D406E31-857C-4F30-86A5-4335F7B0A5FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D406E31-857C-4F30-86A5-4335F7B0A5FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D406E31-857C-4F30-86A5-4335F7B0A5FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D406E31-857C-4F30-86A5-4335F7B0A5FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35A74002-AD33-4516-AFA6-D67D8A272EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35A74002-AD33-4516-AFA6-D67D8A272EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35A74002-AD33-4516-AFA6-D67D8A272EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35A74002-AD33-4516-AFA6-D67D8A272EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -629,6 +631,9 @@ Global
 		{BEE04F82-38FB-4BB2-AB48-A73AD0104142} = {1325D29E-D42F-423F-A6AC-5E880BE2AB68}
 		{67FE43AE-8B99-4744-BB61-2511BADB5265} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 		{0F3FBB54-B068-4D6E-84F7-3F70DF19C732} = {FBE21CD4-E77F-46AC-AD8C-5D360E259F7C}
+		{73429222-5209-49B8-96CB-F20FFFE3F3B1} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
+		{35A74002-AD33-4516-AFA6-D67D8A272EDE} = {73429222-5209-49B8-96CB-F20FFFE3F3B1}
+		{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9} = {73429222-5209-49B8-96CB-F20FFFE3F3B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

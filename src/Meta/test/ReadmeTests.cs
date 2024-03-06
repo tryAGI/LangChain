@@ -4,7 +4,6 @@ using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
-using LangChain.Sources;
 using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 using static LangChain.Chains.Chain;

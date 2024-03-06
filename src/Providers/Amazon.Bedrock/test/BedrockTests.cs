@@ -12,10 +12,8 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
-using LangChain.Providers.Amazon.Bedrock.Predefined.Mistral;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
-using LangChain.Sources;
 using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
 

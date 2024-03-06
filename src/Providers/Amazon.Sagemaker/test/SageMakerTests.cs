@@ -24,7 +24,7 @@ public class SageMakerTests
             InputParamers = inputParameters
         };
 
-        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute");
+        var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute") ?? throw new InvalidOperationException("SageMakerLambdaRoute is not set");
         var provider = new SageMakerProvider(apiGatewayRoute: route);
         var model = new SageMakerModel(provider, endpointName: "openchat35");
 

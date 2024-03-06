@@ -9,6 +9,7 @@ public class WhisperNetSpeechToTextModel : Model<SpeechToTextSettings>, ISpeechT
     
     public WhisperNetSpeechToTextConfiguration Configuration { get; }
     
+    [CLSCompliant(false)]
     public WhisperFactory Factory { get; }
     
     /// <summary>
