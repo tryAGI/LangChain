@@ -4,14 +4,14 @@ namespace System.Net.Http;
 
 public static partial class HttpClientExtensions
 {
-    public static async Task<byte[]> GetByteArrayAsync(
+    public static async Task<Stream> GetStreamAsync(
         this HttpClient client,
         Uri uri,
         CancellationToken cancellationToken = default)
     {
         client = client ?? throw new ArgumentNullException(nameof(client));
         
-        return await client.GetByteArrayAsync(uri).ConfigureAwait(false);
+        return await client.GetStreamAsync(uri).ConfigureAwait(false);
     }
 }
 #endif

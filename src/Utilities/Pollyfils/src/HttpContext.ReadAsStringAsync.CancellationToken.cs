@@ -1,9 +1,9 @@
+#if !NET6_0_OR_GREATER
 // ReSharper disable once CheckNamespace
 namespace System.Net.Http;
 
 public static partial class HttpContextExtensions
 {
-#if !NET6_0_OR_GREATER
     public static async Task<string> ReadAsStringAsync(
         this HttpContent content,
         CancellationToken cancellationToken = default)
@@ -12,5 +12,5 @@ public static partial class HttpContextExtensions
         
         return await content.ReadAsStringAsync().ConfigureAwait(false);
     }
-#endif
 }
+#endif

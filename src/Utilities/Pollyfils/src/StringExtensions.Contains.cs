@@ -1,16 +1,14 @@
+#if !NET6_0_OR_GREATER
 // ReSharper disable once CheckNamespace
 
 namespace System;
 
-public static class PolyfillStringExtensions
+public static partial class PolyfillStringExtensions
 {
     public static bool Contains(this string text, string value, StringComparison comparisonType)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
         
-#if NET6_0_OR_GREATER
-        return text.Contains(value, comparisonType);
-#else
         switch (comparisonType)
         {
             case StringComparison.CurrentCulture:
@@ -28,6 +26,6 @@ public static class PolyfillStringExtensions
             default:
                 throw new ArgumentOutOfRangeException(nameof(comparisonType), comparisonType, null);
         }
-#endif
     }
 }
+#endif

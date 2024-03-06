@@ -1,4 +1,3 @@
-using System.Net.Http;
 using UglyToad.PdfPig;
 
 namespace LangChain.Sources;
@@ -6,51 +5,14 @@ namespace LangChain.Sources;
 /// <summary>
 /// 
 /// </summary>
-public sealed class PdfPigPdfSource : ISource, IDisposable
+public sealed partial class PdfPigPdfSource : ISource, IDisposable
+#if NET7_0_OR_GREATER
+    , ICreatableFromStream<PdfPigPdfSource>
+#endif
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<IReadOnlyCollection<Document>> FromStreamAsync(
-        Stream stream,
-        CancellationToken cancellationToken = default)
+    public static PdfPigPdfSource CreateFromStream(Stream stream)
     {
-        using var source = new PdfPigPdfSource(stream);
-        
-        return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="uri"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<IReadOnlyCollection<Document>> DocumentsFromUriAsync(
-        Uri uri,
-        CancellationToken cancellationToken = default)
-    {
-        using var source = await CreateFromUriAsync(uri, cancellationToken).ConfigureAwait(false);
-        
-        return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
-    }
-
-    public static async Task<PdfPigPdfSource> CreateFromUriAsync(
-        Uri uri,
-        CancellationToken cancellationToken = default)
-    {
-        var memoryStream = new MemoryStream();
-
-        using var client = new HttpClient();
-        using var stream = await client.GetStreamAsync(uri).ConfigureAwait(false);
-
-        await stream.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
-        memoryStream.Position = 0;
-
-        return new PdfPigPdfSource(memoryStream);
+        return new PdfPigPdfSource(stream);
     }
 
     /// <summary>
