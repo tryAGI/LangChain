@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using LangChain.Base;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Providers;
 using LangChain.Splitters.Text;
@@ -37,7 +37,9 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         string tableName = "vectors",
         TextSplitter? textSplitter = null)
     {
+#pragma warning disable CA2000
         var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
+#pragma warning restore CA2000
         textSplitter ??= new CharacterTextSplitter();
         VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
         var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);

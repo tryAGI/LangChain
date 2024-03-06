@@ -1,7 +1,7 @@
 using LangChain.Callback;
 using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.RetrievalQA;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Retrievers;
 using Moq;
 
@@ -83,5 +83,5 @@ public class RetrievalQaChainTests
         return mock;
     }
 
-    private Document CreateDocument(string content) => new(content, new());
+    private Document CreateDocument(string content) => new(content, new Dictionary<string, object>());
 }

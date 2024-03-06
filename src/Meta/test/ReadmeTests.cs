@@ -1,6 +1,6 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;

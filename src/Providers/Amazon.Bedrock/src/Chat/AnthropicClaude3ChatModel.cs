@@ -130,7 +130,7 @@ public class AnthropicClaude3ChatModel(
                 ["source"] = new JsonObject
                 {
                     ["type"] = "base64",
-                    ["media_type"] = image?.MediaType,
+                    ["media_type"] = image.MediaType,
                     ["data"] = base64
                 }
             };

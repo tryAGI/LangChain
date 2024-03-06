@@ -3,7 +3,7 @@ using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
 using LangChain.Chains.CombineDocuments;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Schema;
 
 namespace LangChain.Chains.RetrievalQA;

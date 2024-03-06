@@ -41,7 +41,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
 
         var content = new List<LineType>();
-        string? currentHeader = "";
+        string currentHeader = string.Empty;
         int currentHeaderLen = 999; // determines current header level
 
         bool inCodeBlock = false;
@@ -65,7 +65,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 content.Add(new LineType()
                 {
                     Content = strippedLine,
-                    Header = currentHeader ?? string.Empty,
+                    Header = currentHeader,
                 });
                 continue;
             }
@@ -84,7 +84,8 @@ public class MarkdownHeaderTextSplitter : TextSplitter
 
                 if (hLen > currentHeaderLen)
                 {
-                    currentHeader = currentHeader += "|" + strippedLine.TrimStart('#').Trim();
+                    currentHeader += "|";
+                    currentHeader += strippedLine.TrimStart('#').Trim();
                     currentHeaderLen = hLen;
                     continue;
                 }
@@ -93,7 +94,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
             content.Add(new LineType()
             {
                 Content = strippedLine.TrimStart('#'), // to avoid marking subheaders
-                Header = currentHeader ?? string.Empty,
+                Header = currentHeader,
             });
         }
 

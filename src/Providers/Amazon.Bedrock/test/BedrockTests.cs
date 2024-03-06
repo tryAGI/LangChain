@@ -4,7 +4,7 @@ using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;

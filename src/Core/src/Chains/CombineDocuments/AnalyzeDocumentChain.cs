@@ -2,7 +2,8 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
-using LangChain.Docstore;
+using LangChain.Extensions;
+using LangChain.Sources;
 using LangChain.Schema;
 using LangChain.Splitters.Text;
 

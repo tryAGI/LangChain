@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS {name}
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     public async Task UpsertAsync(
         string tableName, string id, string content,
-        Dictionary<string, object>? metadata, float[]? embedding, DateTime? timestamp,
+        IReadOnlyDictionary<string, object>? metadata, float[]? embedding, DateTime? timestamp,
         CancellationToken cancellationToken = default)
     {
         var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);

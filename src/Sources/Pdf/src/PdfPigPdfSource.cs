@@ -1,7 +1,5 @@
 using System.Net.Http;
-using LangChain.Base;
 using UglyToad.PdfPig;
-using Document = LangChain.Docstore.Document;
 
 namespace LangChain.Sources;
 

@@ -11,6 +11,8 @@ LangChain.Providers.ChatModel.PromptSent -> System.EventHandler<string!>?
 LangChain.Providers.ChatModelExtensions
 LangChain.Providers.ChatRequest
 LangChain.Providers.ChatRequest.ChatRequest() -> void
+LangChain.Providers.ChatRequest.Image.get -> System.BinaryData?
+LangChain.Providers.ChatRequest.Image.set -> void
 LangChain.Providers.ChatRequest.Messages.get -> System.Collections.Generic.IReadOnlyCollection<LangChain.Providers.Message>!
 LangChain.Providers.ChatRequest.Messages.init -> void
 LangChain.Providers.ChatResponse

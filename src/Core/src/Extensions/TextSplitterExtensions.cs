@@ -1,7 +1,7 @@
-﻿using LangChain.Docstore;
+﻿using LangChain.Sources;
 using LangChain.Splitters.Text;
 
-namespace LangChain.Base;
+namespace LangChain.Extensions;
 
 /// <summary>
 /// Functionality for splitting text.
@@ -21,7 +21,7 @@ public static class TextSplitterExtensions
     public static List<Document> CreateDocuments(
         this TextSplitter splitter,
         List<string> texts,
-        List<Dictionary<string, object>>? metadatas = null)
+        List<IReadOnlyDictionary<string, object>>? metadatas = null)
     {
         splitter = splitter ?? throw new ArgumentNullException(nameof(splitter));
         texts = texts ?? throw new ArgumentNullException(nameof(texts));
@@ -29,7 +29,7 @@ public static class TextSplitterExtensions
         var documents = new List<Document>();
 
         // if no metadata is provided, create a list of empty dictionaries
-        metadatas ??= Enumerable.Repeat(new Dictionary<string, object>(), texts.Count).ToList();
+        metadatas ??= Enumerable.Repeat<IReadOnlyDictionary<string, object>>(new Dictionary<string, object>(), texts.Count).ToList();
 
         if (texts.Count != metadatas.Count)
         {
