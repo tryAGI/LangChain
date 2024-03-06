@@ -44,10 +44,7 @@ public class ChatRequest
     /// <returns></returns>
     public static ChatRequest ToChatRequest(string message)
     {
-        return new ChatRequest
-        {
-            Messages = new[] { message.AsSystemMessage() },
-        };
+        return ToChatRequest(message.AsHumanMessage());
     }
     
     /// <summary>
@@ -57,10 +54,7 @@ public class ChatRequest
     /// <returns></returns>
     public static ChatRequest ToChatRequest(Message message)
     {
-        return new ChatRequest
-        {
-            Messages = [message],
-        };
+        return ToChatRequest([message]);
     }
     
     /// <summary>

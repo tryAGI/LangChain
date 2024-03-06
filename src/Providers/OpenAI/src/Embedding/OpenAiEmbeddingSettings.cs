@@ -11,7 +11,7 @@ public class OpenAiEmbeddingSettings : EmbeddingSettings
     /// </summary>
     public new static OpenAiEmbeddingSettings Default { get; } = new()
     {
-        User = string.Empty,
+        User = null,
     };
 
     /// <summary>
@@ -42,8 +42,7 @@ public class OpenAiEmbeddingSettings : EmbeddingSettings
                 requestSettingsCasted?.User ??
                 modelSettingsCasted?.User ??
                 providerSettingsCasted?.User ??
-                Default.User ??
-                throw new InvalidOperationException("Default User is not set."),
+                Default.User,
         };
     }
 }
