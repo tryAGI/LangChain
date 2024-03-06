@@ -14,7 +14,7 @@ public static class SourceExtensions
     /// <returns></returns>
     public static async Task<IReadOnlyList<Document>> LoadAndSplit(
         this ISource source,
-        TextSplitter? textSplitter = null,
+        ITextSplitter? textSplitter = null,
         CancellationToken cancellationToken = default)
     {
         source = source ?? throw new ArgumentNullException(nameof(source));

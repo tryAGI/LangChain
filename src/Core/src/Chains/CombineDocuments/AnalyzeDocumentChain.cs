@@ -18,7 +18,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
     private readonly string _inputKey = fields.InputKey;
     private readonly string _outputKey = fields.OutputKey;
 
-    private readonly TextSplitter _textSplitter = fields.Splitter ?? new RecursiveCharacterTextSplitter();
+    private readonly ITextSplitter _textSplitter = fields.Splitter ?? new RecursiveCharacterTextSplitter();
     private readonly BaseCombineDocumentsChain _combineDocumentsChain = fields.CombineDocumentsChain;
 
     /// <inheritdoc/>
