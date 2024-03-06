@@ -35,13 +35,13 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         IReadOnlyCollection<Document> documents,
         string filename = "vectorstore.db",
         string tableName = "vectors",
-        TextSplitter? textSplitter = null)
+        ITextSplitter? textSplitter = null)
     {
 #pragma warning disable CA2000
         var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
 #pragma warning restore CA2000
         textSplitter ??= new CharacterTextSplitter();
-        VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
+        var indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
         var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);
         return index;
     }
@@ -56,22 +56,31 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="embeddings">An object implementing the <see cref="IEmbeddingModel"/> interface. This object is used to generate embeddings for the documents.</param>
     /// <param name="documentsSource">An optional object implementing the <see cref="ISource"/> interface. This object is used to load documents if the vector store database file does not exist.</param>
     /// <param name="options">An optional <see cref="SQLIteVectorStoreOptions"/> object. This object provides configuration options for the SQLite vector store</param>
-    public static async Task<VectorStoreIndexWrapper> GetOrCreateIndex(
+    /// <param name="textSplitter"></param>
+    /// <param name="cancellationToken"></param>
+    public static async Task<VectorStoreIndexWrapper> GetOrCreateIndexAsync(
         IEmbeddingModel embeddings,
         ISource? documentsSource = null,
-        SQLIteVectorStoreOptions? options = null)
+        SQLIteVectorStoreOptions? options = null,
+        ITextSplitter? textSplitter = null,
+        CancellationToken cancellationToken = default)
     {
         options ??= DefaultOptions;
-        
+        textSplitter ??= new RecursiveCharacterTextSplitter(
+            chunkSize: options.ChunkSize,
+            chunkOverlap: options.ChunkOverlap);
 
-        TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: options.ChunkSize, chunkOverlap: options.ChunkOverlap);
-
-        if (!System.IO.File.Exists("vectors.db") && documentsSource != null)
+        if (!File.Exists(options.Filename) &&
+            documentsSource != null)
         {
-            var documents = await documentsSource.LoadAsync().ConfigureAwait(false);
+            var documents = await documentsSource.LoadAsync(cancellationToken).ConfigureAwait(false);
             
             return await CreateIndexFromDocuments(
-                embeddings, documents, options.Filename, options.TableName, textSplitter: textSplitter).ConfigureAwait(false);
+                embeddings,
+                documents,
+                options.Filename,
+                options.TableName,
+                textSplitter: textSplitter).ConfigureAwait(false);
         }
 
 #pragma warning disable CA2000

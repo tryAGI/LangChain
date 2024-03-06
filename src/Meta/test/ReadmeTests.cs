@@ -2,6 +2,7 @@
 using LangChain.Databases.InMemory;
 using LangChain.Sources;
 using LangChain.Indexes;
+using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Splitters.Text;
@@ -15,7 +16,7 @@ public class ReadmeTests
 {
     [Explicit]
     [Test]
-    public async Task Readme()
+    public async Task Chains1()
     {
         var gpt4 = new Gpt4Model(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
@@ -126,36 +127,27 @@ Helpful Answer:") |
     /// <exception cref="InconclusiveException"></exception>
     [Explicit]
     [Test]
-    public async Task RagWithOpenAiUsingAsyncMethods()
+    public async Task Readme()
     {
+        // Initialize models
         var provider = new OpenAiProvider(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
         var llm = new Gpt35TurboModel(provider);
         var embeddings = new TextEmbeddingV3SmallModel(provider);
         
-        if (!File.Exists("vectors.db"))
-        {
-            var documents = await PdfPigPdfSource.DocumentsFromUriAsync(
-                new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
-            
-            await SQLiteVectorStore.CreateIndexFromDocuments(
-                embeddings: embeddings,
-                documents: documents,
-                filename: "vectors.db",
-                tableName: "vectors",
-                textSplitter: new RecursiveCharacterTextSplitter(
-                    chunkSize: 200,
-                    chunkOverlap: 50));
-        }
-
-        var database = new SQLiteVectorStore(
-            filename: "vectors.db",
-            tableName: "vectors",
-            embeddings: embeddings);
-        const string question = "Who was drinking a unicorn blood?";
-        var similarDocuments = await database.GetSimilarDocuments(question, amount: 5);
+        // Create vector database from Harry Potter book pdf
+        var source = await PdfPigPdfSource.CreateFromUriAsync(new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
+        var index = await SQLiteVectorStore.GetOrCreateIndexAsync(embeddings, source);
         
+        // Now we have two ways: use the async methods or use the chains
+        // 1. Async methods
+        
+        // Find similar documents for the question
+        const string question = "Who was drinking a unicorn blood?";
+        var similarDocuments = await index.Store.GetSimilarDocuments(question, amount: 5);
+        
+        // Use similar documents and LLM to answer the question
         var answer = await llm.GenerateAsync(
             $"""
              Use the following pieces of context to answer the question at the end.
@@ -171,6 +163,23 @@ Helpful Answer:") |
         Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
         Console.WriteLine($"LLM usage: {llm.Usage}");
         Console.WriteLine($"Embeddings usage: {embeddings.Usage}");
+        
+        // 2. Chains
+        var promptText =
+            @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible. Always quote the context in your answer.
+{context}
+Question: {text}
+Helpful Answer:";
+
+        var chain =
+            Set("Who was drinking a unicorn blood?")    // set the question
+            | RetrieveDocuments(index, amount: 5)       // take 5 most similar documents
+            | StuffDocuments(outputKey: "context")      // combine documents together and put them into context
+            | Template(promptText)                      // replace context and question in the prompt with their values
+            | LLM(llm.UseConsoleForDebug());            // send the result to the language model
+        var chainAnswer = await chain.Run("text");         // get chain result
+        
+        Console.WriteLine("Answer:"+ chainAnswer);       // print the result
     }
 
     [Explicit]

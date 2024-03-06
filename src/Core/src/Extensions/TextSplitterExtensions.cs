@@ -19,7 +19,7 @@ public static class TextSplitterExtensions
     /// If the number of texts and metadata(when not null) are not equal, this method will throw an ArgumentException.
     /// </exception>
     public static List<Document> CreateDocuments(
-        this TextSplitter splitter,
+        this ITextSplitter splitter,
         List<string> texts,
         List<IReadOnlyDictionary<string, object>>? metadatas = null)
     {
@@ -59,7 +59,7 @@ public static class TextSplitterExtensions
     /// <param name="documents"></param>
     /// <returns></returns>
     public static List<Document> SplitDocuments(
-        this TextSplitter splitter,
+        this ITextSplitter splitter,
         IReadOnlyCollection<Document> documents)
     {
         var texts = documents.Select(doc => doc.PageContent).ToList();

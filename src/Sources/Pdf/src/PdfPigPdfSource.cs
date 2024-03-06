@@ -6,7 +6,7 @@ namespace LangChain.Sources;
 /// <summary>
 /// 
 /// </summary>
-public class PdfPigPdfSource : ISource
+public sealed class PdfPigPdfSource : ISource, IDisposable
 {
     /// <summary>
     /// 
@@ -18,7 +18,9 @@ public class PdfPigPdfSource : ISource
         Stream stream,
         CancellationToken cancellationToken = default)
     {
-        return await new PdfPigPdfSource(stream).LoadAsync(cancellationToken).ConfigureAwait(false);
+        using var source = new PdfPigPdfSource(stream);
+        
+        return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
     }
     
     /// <summary>
@@ -31,30 +33,22 @@ public class PdfPigPdfSource : ISource
         Uri uri,
         CancellationToken cancellationToken = default)
     {
-        using var memoryStream = new MemoryStream();
-        {
-            using var client = new HttpClient();
-            using var stream = await client.GetStreamAsync(uri).ConfigureAwait(false);
+        using var source = await CreateFromUriAsync(uri, cancellationToken).ConfigureAwait(false);
         
-            await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
-            memoryStream.Position = 0;
-            return await new PdfPigPdfSource(memoryStream).LoadAsync(cancellationToken).ConfigureAwait(false);
-        }
-        
-        
+        return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public static async Task<PdfPigPdfSource> CreateFromUriAsync(
-        Uri uri)
+        Uri uri,
+        CancellationToken cancellationToken = default)
     {
         var memoryStream = new MemoryStream();
 
         using var client = new HttpClient();
         using var stream = await client.GetStreamAsync(uri).ConfigureAwait(false);
 
-        await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+        await stream.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
         memoryStream.Position = 0;
-
 
         return new PdfPigPdfSource(memoryStream);
     }
@@ -110,5 +104,10 @@ public class PdfPigPdfSource : ISource
         {
             return Task.FromException<IReadOnlyCollection<Document>>(exception);
         }
+    }
+
+    public void Dispose()
+    {
+        Stream?.Dispose();
     }
 }

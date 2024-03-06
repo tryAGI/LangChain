@@ -12,7 +12,7 @@ namespace LangChain.Indexes;
 /// // embeddings are not needed here because VectorStore already has them
 public class VectorStoreIndexCreator(
     VectorStore vectorStore,
-    TextSplitter textSplitter)
+    ITextSplitter textSplitter)
 {
     /// <summary>
     /// 
@@ -22,7 +22,7 @@ public class VectorStoreIndexCreator(
     /// <summary>
     /// 
     /// </summary>
-    public TextSplitter TextSplitter { get; } = textSplitter;
+    public ITextSplitter TextSplitter { get; } = textSplitter;
 
     /// <summary>
     /// Create a vectorstore index from loaders.
