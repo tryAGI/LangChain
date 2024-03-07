@@ -22,6 +22,7 @@ I want to note:
 
 ## Usage
 You can use our wiki to get started: https://github.com/tryAGI/LangChain/wiki  
+If the wiki contains unupdated code, you can always take a look at [the tests for this](src/Meta/test/WikiTests.cs)  
 Also see [examples](./examples) for example usage or [tests](./src/tests/LangChain.IntegrationTests/ReadmeTests.cs).
 ```csharp
 // Price to run from zero(create embeddings and request to LLM): 0,015$

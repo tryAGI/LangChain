@@ -4,13 +4,13 @@ public static class WithDebugExtensions
 {
     public static T UseConsoleForDebug<T>(this T model) where T : IChatModel
     {
-        model.PromptSent += (_, args) =>
+        model.PromptSent += (_, text) =>
         {
-            Console.Write(args);
+            Console.Write(text);
         };
-        model.PartialResponseGenerated += (_, args) =>
+        model.PartialResponseGenerated += (_, text) =>
         {
-            Console.Write(args);
+            Console.Write(text);
         };
         
         return model;
