@@ -14,4 +14,8 @@
         <Using Remove="System.Net.Http" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
+    </ItemGroup>
+
 </Project>

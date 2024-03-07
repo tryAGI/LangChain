@@ -1,4 +1,3 @@
-using LangChain.Base;
 using LangChain.Splitters.Text;
 
 namespace LangChain.Chains.CombineDocuments;
@@ -16,5 +15,5 @@ public class AnalyzeDocumentsChainInput(
     /// <summary>
     /// 
     /// </summary>
-    public TextSplitter? Splitter { get; set; }
+    public ITextSplitter? Splitter { get; set; }
 }

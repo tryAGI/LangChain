@@ -1,4 +1,4 @@
-﻿using LangChain.Base;
+﻿using LangChain.Extensions;
 using LangChain.Splitters.Text;
 
 namespace LangChain.Splitters;

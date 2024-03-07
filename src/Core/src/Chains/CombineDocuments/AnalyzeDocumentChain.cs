@@ -2,7 +2,8 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
-using LangChain.Docstore;
+using LangChain.Extensions;
+using LangChain.Sources;
 using LangChain.Schema;
 using LangChain.Splitters.Text;
 
@@ -17,7 +18,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
     private readonly string _inputKey = fields.InputKey;
     private readonly string _outputKey = fields.OutputKey;
 
-    private readonly TextSplitter _textSplitter = fields.Splitter ?? new RecursiveCharacterTextSplitter();
+    private readonly ITextSplitter _textSplitter = fields.Splitter ?? new RecursiveCharacterTextSplitter();
     private readonly BaseCombineDocumentsChain _combineDocumentsChain = fields.CombineDocumentsChain;
 
     /// <inheritdoc/>

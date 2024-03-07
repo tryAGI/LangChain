@@ -1,6 +1,6 @@
 using LangChain.Callback;
 using LangChain.Chains.CombineDocuments;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Providers;
 
 namespace LangChain.Chains.ConversationalRetrieval;

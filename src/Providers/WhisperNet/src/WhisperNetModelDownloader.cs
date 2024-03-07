@@ -2,6 +2,7 @@ using Whisper.net.Ggml;
 
 namespace LangChain.Providers.WhisperNet;
 
+[CLSCompliant(false)]
 public sealed class WhisperNetModelDownloader
 {
     /// <summary>
@@ -36,7 +37,7 @@ public sealed class WhisperNetModelDownloader
 #pragma warning restore CA1308
         var modelPath = Path.Combine(storagePath, $"{fileName}.bin");
         using var fileWriter = File.OpenWrite(modelPath);
-        await modelStream.CopyToAsync(fileWriter).ConfigureAwait(false);
+        await modelStream.CopyToAsync(fileWriter, cancellationToken).ConfigureAwait(false);
 
         return modelPath;
     }

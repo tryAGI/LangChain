@@ -4,7 +4,7 @@ using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
@@ -12,10 +12,8 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
-using LangChain.Providers.Amazon.Bedrock.Predefined.Mistral;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
-using LangChain.Sources;
 using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
 
@@ -179,7 +177,7 @@ Answer: ";
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
 
-        TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
+        ITextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
 
         if (File.Exists("vectors.db"))
             File.Delete("vectors.db");

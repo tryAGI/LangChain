@@ -1,4 +1,4 @@
-﻿using LangChain.Base;
+﻿using LangChain.Extensions;
 using LangChain.Splitters.Text;
 
 namespace LangChain.Splitters;
@@ -30,10 +30,10 @@ public partial class Tests
 
         var textSplitter = new CharacterTextSplitter(separator: "\n\n", chunkSize: 1000, chunkOverlap: 200);
         var text = H.Resources.state_of_the_union_txt.AsString();
-        var metadatas = new List<Dictionary<string, object>>()
+        var metadatas = new List<IReadOnlyDictionary<string, object>>
         {
-            new (){{"document", 1}},
-            new (){{"document", 2}},
+            new Dictionary<string, object>{{"document", 1}},
+            new Dictionary<string, object>{{"document", 2}},
         };
 
         var documents =

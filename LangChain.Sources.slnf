@@ -8,7 +8,10 @@
       "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj",
       "src\\Sources\\Pdf\\test\\LangChain.Sources.Pdf.IntegrationTests.csproj",
       "src\\Sources\\WebBase\\src\\LangChain.Sources.WebBase.csproj",
-      "src\\Sources\\WebBase\\test\\LangChain.Sources.WebBase.IntegrationTests.csproj"
+      "src\\Sources\\WebBase\\test\\LangChain.Sources.WebBase.IntegrationTests.csproj",
+      "src\\Sources\\Word\\src\\LangChain.Sources.Word.csproj",
+      "src\\Sources\\Word\\test\\LangChain.Sources.Word.IntegrationTests.csproj",
+      "src\\Utilities\\Pollyfils\\src\\LangChain.Polyfills.csproj"
     ]
   }
 }

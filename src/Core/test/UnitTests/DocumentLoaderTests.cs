@@ -1,4 +1,4 @@
-using LangChain.DocumentLoaders;
+using LangChain.Sources;
 
 namespace LangChain.Core.UnitTests;
 
@@ -6,12 +6,19 @@ namespace LangChain.Core.UnitTests;
 public class DocumentLoaderTests
 {
     [Test]
-    public void TextLoaderTest()
+    public async Task TextLoaderTest()
     {
         var filepath = Path.Combine(@"Resources", "state_of_the_union.txt");
-        var loader = new TextLoader(filepath);
-        var documents = loader.Load();
+        var loader = new FileSource(filepath);
+        var documents = await loader.LoadAsync();
         
         documents.Count.Should().Be(1);
+        documents.First().PageContent.Should().NotBeNullOrEmpty();
+        documents.First().Metadata.Should().NotBeNull();
+        documents.First().Metadata.Should().ContainKey("source");
+        documents.First().Metadata["source"].Should().Be(filepath);
+        documents.First().Paragraphs().Should().NotBeEmpty();
+        documents.First().Paragraphs().First().Should().NotBeNullOrWhiteSpace();
+        documents.First().Paragraphs().Should().HaveCount(359);
     }
 }

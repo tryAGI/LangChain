@@ -1,9 +1,9 @@
+#if !NET6_0_OR_GREATER
 // ReSharper disable once CheckNamespace
 namespace System.Net.Http;
 
 public static partial class HttpClientExtensions
 {
-#if !NET6_0_OR_GREATER
     public static async Task<byte[]> GetByteArrayAsync(
         this HttpClient client,
         Uri uri,
@@ -13,5 +13,5 @@ public static partial class HttpClientExtensions
         
         return await client.GetByteArrayAsync(uri).ConfigureAwait(false);
     }
-#endif
 }
+#endif

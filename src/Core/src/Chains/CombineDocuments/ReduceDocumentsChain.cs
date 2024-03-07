@@ -1,5 +1,5 @@
 using LangChain.Common;
-using LangChain.Docstore;
+using LangChain.Sources;
 
 namespace LangChain.Chains.CombineDocuments;
 

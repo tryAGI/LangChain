@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using LangChain.Common.Converters;
-using LangChain.Docstore;
+using LangChain.Sources;
 using LangChain.Providers;
 using LangChain.VectorStores;
 using Microsoft.SemanticKernel.AI.Embeddings;
@@ -102,7 +102,7 @@ public class ChromaVectorStore : VectorStore
         var documentsArray = documents.ToArray();
         var texts = new string[documentsArray.Length];
         var ids = new string[documentsArray.Length];
-        var metadatas = new Dictionary<string, object>[documentsArray.Length];
+        var metadatas = new IReadOnlyDictionary<string, object>[documentsArray.Length];
         for (var index = 0; index < documentsArray.Length; index++)
         {
             ids[index] = Guid.NewGuid().ToString();
@@ -250,7 +250,7 @@ public class ChromaVectorStore : VectorStore
 
     private async Task<IEnumerable<string>> AddCoreAsync(
         string[] texts,
-        Dictionary<string, object>[] metadatas,
+        IReadOnlyDictionary<string, object>[] metadatas,
         string[] ids,
         CancellationToken cancellationToken)
     {
@@ -312,7 +312,7 @@ public class ChromaVectorStore : VectorStore
             });
     }
 
-    private string SerializeMetadata(Dictionary<string, object> metadata)
+    private string SerializeMetadata(IReadOnlyDictionary<string, object> metadata)
     {
         return JsonSerializer.Serialize(metadata, _jsonSerializerOptions);
     }

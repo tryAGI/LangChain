@@ -1,5 +1,6 @@
 ﻿using LangChain.Base;
-using LangChain.Docstore;
+using LangChain.Extensions;
+using LangChain.Sources;
 using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 
@@ -11,7 +12,7 @@ namespace LangChain.Indexes;
 /// // embeddings are not needed here because VectorStore already has them
 public class VectorStoreIndexCreator(
     VectorStore vectorStore,
-    TextSplitter textSplitter)
+    ITextSplitter textSplitter)
 {
     /// <summary>
     /// 
@@ -21,19 +22,19 @@ public class VectorStoreIndexCreator(
     /// <summary>
     /// 
     /// </summary>
-    public TextSplitter TextSplitter { get; } = textSplitter;
+    public ITextSplitter TextSplitter { get; } = textSplitter;
 
     /// <summary>
     /// Create a vectorstore index from loaders.
     /// </summary>
-    public async Task<VectorStoreIndexWrapper> FromLoaders(List<BaseLoader> loaders)
+    public async Task<VectorStoreIndexWrapper> FromLoaders(List<FileSource> loaders, CancellationToken cancellationToken = default)
     {
         loaders = loaders ?? throw new ArgumentNullException(nameof(loaders));
         
         List<Document> documents = new();
         foreach (var loader in loaders)
         {
-            documents.AddRange(loader.Load());
+            documents.AddRange(await loader.LoadAsync(cancellationToken).ConfigureAwait(false));
         }
 
         return await FromDocumentsAsync(documents).ConfigureAwait(false);

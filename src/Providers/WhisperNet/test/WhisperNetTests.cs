@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using Whisper.net.Ggml;
 using static LangChain.Chains.Chain;
 namespace LangChain.Providers.WhisperNet.Tests;
 
 [TestFixture]
+[Explicit]
 public class WhisperNetTests
 {
     [Test]

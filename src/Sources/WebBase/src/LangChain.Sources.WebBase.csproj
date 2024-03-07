@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+        <ProjectReference Include="..\..\Abstractions\src\LangChain.Sources.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

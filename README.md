@@ -28,38 +28,58 @@ Also see [examples](./examples) for example usage or [tests](./src/tests/LangCha
 // Price to re-run if database is exists: 0,0004$
 // Dependencies: LangChain, LangChain.Databases.Sqlite, LangChain.Sources.Pdf
 
-var provider = new OpenAiProvider("OPENAI_API_KEY");
-var llm = new Gpt35TurboModel(provider).UseConsoleForDebug();
+// Initialize models
+var provider = new OpenAiProvider(
+    Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+    throw new InconclusiveException("OPENAI_API_KEY is not set"));
+var llm = new Gpt35TurboModel(provider);
 var embeddings = new TextEmbeddingV3SmallModel(provider);
 
+// Create vector database from Harry Potter book pdf
+var source = await PdfPigPdfSource.CreateFromUriAsync(new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
+var index = await SQLiteVectorStore.GetOrCreateIndexAsync(embeddings, source);
 
+// Now we have two ways: use the async methods or use the chains
+// 1. Async methods
 
-var bookURL =
-    "https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf";
-var source = await PdfPigPdfSource.CreateFromUriAsync(new Uri(bookURL));
-var index = await SQLiteVectorStore.GetOrCreateIndex(embeddings, source);
+// Find similar documents for the question
+const string question = "Who was drinking a unicorn blood?";
+var similarDocuments = await index.Store.GetSimilarDocuments(question, amount: 5);
 
-string promptText =
+// Use similar documents and LLM to answer the question
+var answer = await llm.GenerateAsync(
+    $"""
+     Use the following pieces of context to answer the question at the end.
+     If the answer is not in context then just say that you don't know, don't try to make up an answer.
+     Keep the answer as short as possible.
+
+     {similarDocuments.AsString()}
+
+     Question: {question}
+     Helpful Answer:
+     """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
+
+Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
+
+// 2. Chains
+var promptTemplate =
     @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible. Always quote the context in your answer.
-
 {context}
-
 Question: {text}
 Helpful Answer:";
 
-
 var chain =
-    Set("Who was drinking a unicorn blood?")    // set the question
-    | RetrieveDocuments(index, amount: 5)       // take 5 most similar documents
-    | StuffDocuments(outputKey: "context")      // combine documents together and put them into context
-    | Template(promptText)                      // replace context and question in the prompt with their values
-    | LLM(llm);                                 // send the result to the language model
+    Set("Who was drinking a unicorn blood?")     // set the question (default key is "text")
+    | RetrieveSimilarDocuments(index, amount: 5) // take 5 most similar documents
+    | CombineDocuments(outputKey: "context")     // combine documents together and put them into context
+    | Template(promptTemplate)                   // replace context and question in the prompt with their values
+    | LLM(llm.UseConsoleForDebug());             // send the result to the language model
+var chainAnswer = await chain.Run("text");  // get chain result
 
-var answer=await chain.Run("text");         // get chain result
-Console.WriteLine("Answer:"+ answer);       // print the result
-// print usage
-Console.WriteLine($"LLM usage: {llm.Usage}");
-Console.WriteLine($"Embeddings usage: {embeddings.Usage}");
+Console.WriteLine("Chain Answer:"+ chainAnswer);       // print the result
+        
+Console.WriteLine($"LLM usage: {llm.Usage}");    // Print usage and price
+Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and price
 ```
 
 ## Contributors
