@@ -57,7 +57,7 @@ public static class CreatableExtensions
     /// <param name="uri"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IReadOnlyCollection<Document>> CreateDocumentsFromUriAsync<TSource>(
+    public static async Task<IReadOnlyCollection<Document>> LoadDocumentsAsync<TSource>(
         this Uri uri,
         CancellationToken cancellationToken = default)
         where TSource : class, ICreatableFromStream<TSource>, ISource
