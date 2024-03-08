@@ -1,6 +1,8 @@
-﻿using Amazon.OpenSearchService;
+﻿using LangChain.Base;
 using LangChain.Docstore;
+using LangChain.Indexes;
 using LangChain.Providers;
+using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 using OpenSearch.Client;
 
@@ -10,10 +12,26 @@ namespace LangChain.Databases.OpenSearch
     {
         private OpenSearchClient? _client;
 
-        public OpenSearchVectorStore(string tableName, IEmbeddingModel embeddings) 
+        public static OpenSearchVectorStoreOptions DefaultOptions { get; } = new();
+
+        public static async Task<VectorStoreIndexWrapper> GetOrCreateIndex(
+                IEmbeddingModel embeddings,
+                ISource source = null,
+                OpenSearchVectorStoreOptions options = null
+                )
+        {
+            options ??= DefaultOptions;
+
+            TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: options.ChunkSize, chunkOverlap: options.ChunkOverlap);
+
+            return null;
+        }
+
+        public OpenSearchVectorStore(string tableName, IEmbeddingModel embeddings)
             : base(embeddings)
         {
             _client = new OpenSearchClient();
+
         }
 
         public override Task<IEnumerable<string>> AddDocumentsAsync(IEnumerable<Document> documents, CancellationToken cancellationToken = default)

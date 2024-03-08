@@ -32,6 +32,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.15.230531.5-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.AzureCognitiveSearch" Version="0.17.230711.7-preview" />
@@ -49,6 +50,7 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Npgsql" Version="8.0.2" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.0.1" />
     <PackageVersion Include="OpenSearch.Client" Version="1.7.0" />
     <PackageVersion Include="OpenSearch.Net" Version="1.7.0" />
     <PackageVersion Include="OpenSearch.Net.Auth.AwsSigV4" Version="1.7.0" />
@@ -61,8 +63,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="StackExchange.Redis" Version="2.7.20" />
+    <PackageVersion Include="System.Linq" Version="4.3.0" />
     <PackageVersion Include="System.Memory.Data" Version="8.0.0" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
+    <PackageVersion Include="System.Numerics.Tensors" Version="8.0.0" />
     <PackageVersion Include="System.Text.Json" Version="8.0.0" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Tiktoken" Version="1.1.3" />

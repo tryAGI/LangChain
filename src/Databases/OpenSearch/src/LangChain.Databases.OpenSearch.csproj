@@ -10,11 +10,22 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="FieldValue.cs" />
+      <Compile Remove="FieldValueConverter.cs" />
+      <Compile Remove="JsonSerializerOptionsExtensions.cs" />
+      <Compile Remove="LazyJson.cs" />
+      <Compile Remove="LazyJsonConverter.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="AWSSDK.OpenSearchServerless" />
       <PackageReference Include="AWSSDK.OpenSearchService" />
+      <PackageReference Include="Microsoft.Extensions.Logging" />
       <PackageReference Include="OpenSearch.Client" />
       <PackageReference Include="OpenSearch.Net" />
       <PackageReference Include="OpenSearch.Net.Auth.AwsSigV4" />
+      <PackageReference Include="System.Linq" />
+      <PackageReference Include="System.Numerics.Tensors" />
     </ItemGroup>
 
     <ItemGroup>
