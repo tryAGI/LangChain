@@ -1,4 +1,6 @@
-﻿namespace LangChain.Providers.LLamaSharp;
+﻿using LLama.Native;
+
+namespace LangChain.Providers.LLamaSharp;
 
 /// <summary>
 /// 
@@ -42,4 +44,53 @@ public class LLamaSharpConfiguration
     /// 
     /// </summary>
     public IReadOnlyList<string> AntiPrompts { get; set; } = [">", "Human: "];
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int MainGpu { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
+    public GPUSplitMode SplitMode { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int GpuLayerCount { get; set; } = 20;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool UseMemorymap { get; set; } = true;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool UseMemoryLock { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
+    public uint? Threads { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
+    public uint? BatchThreads { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
+    public uint BatchSize { get; set; } = 512u;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool EmbeddingMode { get; set; }
 }
