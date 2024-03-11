@@ -10,11 +10,29 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Abstractions\**" />
+      <Compile Remove="MemoryStorage\**" />
+      <EmbeddedResource Remove="Abstractions\**" />
+      <EmbeddedResource Remove="MemoryStorage\**" />
+      <None Remove="Abstractions\**" />
+      <None Remove="MemoryStorage\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Constants.cs" />
+      <Compile Remove="ElasticsearchMemory.cs" />
+      <Compile Remove="ElasticsearchMemoryRecord.cs" />
+      <Compile Remove="ElasticsearchTag.cs" />
       <Compile Remove="FieldValue.cs" />
       <Compile Remove="FieldValueConverter.cs" />
+      <Compile Remove="IIndexNameHelper.cs" />
+      <Compile Remove="IndexNameHelper.cs" />
+      <Compile Remove="IStringable.cs" />
       <Compile Remove="JsonSerializerOptionsExtensions.cs" />
       <Compile Remove="LazyJson.cs" />
       <Compile Remove="LazyJsonConverter.cs" />
+      <Compile Remove="MemoryFilterExtensions.cs" />
+      <Compile Remove="Refresh.cs" />
     </ItemGroup>
 
     <ItemGroup>
