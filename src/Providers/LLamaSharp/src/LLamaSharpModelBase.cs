@@ -13,7 +13,7 @@ public abstract class LLamaSharpModelBase
     /// 
     /// </summary>
     public Usage TotalUsage { get; protected set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -23,13 +23,13 @@ public abstract class LLamaSharpModelBase
     /// 
     /// </summary>
     public LLamaSharpConfiguration Configuration { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
     protected LLamaWeights Model { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -49,7 +49,15 @@ public abstract class LLamaSharpModelBase
         {
             ContextSize = (uint)configuration.ContextSize,
             Seed = (uint)configuration.Seed,
-
+            MainGpu = configuration.MainGpu,
+            SplitMode = configuration.SplitMode,
+            GpuLayerCount = configuration.GpuLayerCount,
+            UseMemorymap = configuration.UseMemorymap,
+            UseMemoryLock = configuration.UseMemoryLock,
+            Threads = configuration.Threads,
+            BatchThreads = configuration.BatchThreads,
+            BatchSize = configuration.BatchSize,
+            EmbeddingMode = configuration.EmbeddingMode
         };
         Model = LLamaWeights.LoadFromFile(Parameters);
         Configuration = configuration;
@@ -71,7 +79,7 @@ public abstract class LLamaSharpModelBase
             _ => throw new NotSupportedException($"the role {role} is not supported")
         };
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -81,7 +89,7 @@ public abstract class LLamaSharpModelBase
     {
         return $"{ConvertRole(message.Role)}{message.Content}";
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
