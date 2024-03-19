@@ -4,6 +4,7 @@ using LangChain.Utilities;
 namespace LangChain.Core.UnitTests.Utilities;
 
 [TestFixture]
+[Explicit]
 public class DuckDuckGoSearchTests
 {
     [Test]
