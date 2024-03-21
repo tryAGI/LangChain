@@ -8,7 +8,7 @@
 
     <PropertyGroup Label="NuGet">
         <Description>OpenSearch for LangChain.</Description>
-        <PackageTags>$(PackageTags);postgres</PackageTags>
+        <PackageTags>$(PackageTags);OpenSearch</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
