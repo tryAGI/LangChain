@@ -21,8 +21,6 @@ public class OpenSearchTests
     [SetUp]
     public void Setup()
     {
-        _provider = new BedrockProvider();
-
         _indexName = "test-index";
         // var uri = new Uri("https://<your uri>.aos.us-east-1.on.aws");
         var uri = new Uri("http://localhost:9200");
@@ -35,6 +33,7 @@ public class OpenSearchTests
             Password = password
         };
 
+        _provider = new BedrockProvider();
         var embeddings = new TitanEmbedTextV1Model(_provider!);
         _vectorStore = new OpenSearchVectorStore(embeddings, _options);
     }
@@ -44,8 +43,7 @@ public class OpenSearchTests
     [Test]
     public async Task index_test_documents()
     {
-        var provider = new BedrockProvider(RegionEndpoint.USWest2);
-        var embeddings = new TitanEmbedTextV1Model(provider);
+        var embeddings = new TitanEmbedTextV1Model(_provider);
 
         const string question = "what color is the car?";
         var embeddingsAsync = await embeddings.CreateEmbeddingsAsync(question);
@@ -55,22 +53,18 @@ public class OpenSearchTests
         {
             "I spent entire day watching TV",
             "My dog's name is Bob",
-            "The car is orange.",
+            "The car is orange",
             "This icecream is delicious",
             "It is cold in space",
         }.ToDocuments();
 
         var pages = await _vectorStore!.AddDocumentsAsync(documents);
         Console.WriteLine("pages: " + pages.Count());
-
-        var similaritySearchByVectorAsync = _vectorStore?.SimilaritySearchByVectorAsync(vectors).ConfigureAwait(false);
-        Console.WriteLine(similaritySearchByVectorAsync.Value);
     }
 
     [Test]
     public async Task can_query_test_documents()
     {
-        var provider = new BedrockProvider(RegionEndpoint.USWest2);
         var llm = new TitanTextExpressV1Model(_provider!);
         var index = new VectorStoreIndexWrapper(_vectorStore!);
 
