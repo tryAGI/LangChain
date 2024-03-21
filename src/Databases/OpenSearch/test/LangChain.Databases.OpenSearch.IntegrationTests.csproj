@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Providers\Amazon.Bedrock\src\LangChain.Providers.Amazon.Bedrock.csproj" />
+      <ProjectReference Include="..\src\LangChain.Databases.OpenSearch.csproj" />
+    </ItemGroup>
+
+</Project>

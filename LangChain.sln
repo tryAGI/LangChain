@@ -252,19 +252,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimmingHelper", "src\Helpe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Serve", "examples\LangChain.Samples.Serve\LangChain.Samples.Serve.csproj", "{67FE43AE-8B99-4744-BB61-2511BADB5265}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Polyfills", "src\Utilities\Pollyfils\src\LangChain.Polyfills.csproj", "{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Polyfills", "src\Utilities\Pollyfils\src\LangChain.Polyfills.csproj", "{0F3FBB54-B068-4D6E-84F7-3F70DF19C732}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WhisperNet", "WhisperNet", "{73429222-5209-49B8-96CB-F20FFFE3F3B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.WhisperNet", "src\Providers\WhisperNet\src\LangChain.Providers.WhisperNet.csproj", "{35A74002-AD33-4516-AFA6-D67D8A272EDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.WhisperNet", "src\Providers\WhisperNet\src\LangChain.Providers.WhisperNet.csproj", "{35A74002-AD33-4516-AFA6-D67D8A272EDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.WhisperNet.Tests", "src\Providers\WhisperNet\test\LangChain.Providers.WhisperNet.Tests.csproj", "{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.WhisperNet.Tests", "src\Providers\WhisperNet\test\LangChain.Providers.WhisperNet.Tests.csproj", "{6EDDCF08-5026-4E87-BF3C-0128A80C2FE9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Word", "Word", "{C8843A47-2CDD-4AF1-A894-208AC4F91C8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Word", "src\Sources\Word\src\LangChain.Sources.Word.csproj", "{57CDE62F-20ED-46D0-877E-2FF9E0E52D32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.Word", "src\Sources\Word\src\LangChain.Sources.Word.csproj", "{57CDE62F-20ED-46D0-877E-2FF9E0E52D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Sources.Word.IntegrationTests", "src\Sources\Word\test\LangChain.Sources.Word.IntegrationTests.csproj", "{F8F67787-A63D-4E6A-83DD-5FF7BA1E8EA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Sources.Word.IntegrationTests", "src\Sources\Word\test\LangChain.Sources.Word.IntegrationTests.csproj", "{F8F67787-A63D-4E6A-83DD-5FF7BA1E8EA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.OpenSearch", "src\Databases\OpenSearch\src\LangChain.Databases.OpenSearch.csproj", "{90C2108C-86FD-46C3-8BE6-AAA2E0AD3830}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.OpenSearch.IntegrationTests", "src\Databases\OpenSearch\test\LangChain.Databases.OpenSearch.IntegrationTests.csproj", "{44C389E2-A5E0-4946-8741-50709BC4D2F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenSearch", "OpenSearch", "{7D112F30-B12B-4ABE-B429-FEBC93F439AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -544,6 +550,14 @@ Global
 		{F8F67787-A63D-4E6A-83DD-5FF7BA1E8EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8F67787-A63D-4E6A-83DD-5FF7BA1E8EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8F67787-A63D-4E6A-83DD-5FF7BA1E8EA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C2108C-86FD-46C3-8BE6-AAA2E0AD3830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C2108C-86FD-46C3-8BE6-AAA2E0AD3830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C2108C-86FD-46C3-8BE6-AAA2E0AD3830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C2108C-86FD-46C3-8BE6-AAA2E0AD3830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44C389E2-A5E0-4946-8741-50709BC4D2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44C389E2-A5E0-4946-8741-50709BC4D2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44C389E2-A5E0-4946-8741-50709BC4D2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44C389E2-A5E0-4946-8741-50709BC4D2F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -651,6 +665,9 @@ Global
 		{C8843A47-2CDD-4AF1-A894-208AC4F91C8F} = {AD076803-F723-4C2E-8599-75C418A4A07F}
 		{57CDE62F-20ED-46D0-877E-2FF9E0E52D32} = {C8843A47-2CDD-4AF1-A894-208AC4F91C8F}
 		{F8F67787-A63D-4E6A-83DD-5FF7BA1E8EA9} = {C8843A47-2CDD-4AF1-A894-208AC4F91C8F}
+		{90C2108C-86FD-46C3-8BE6-AAA2E0AD3830} = {7D112F30-B12B-4ABE-B429-FEBC93F439AF}
+		{44C389E2-A5E0-4946-8741-50709BC4D2F4} = {7D112F30-B12B-4ABE-B429-FEBC93F439AF}
+		{7D112F30-B12B-4ABE-B429-FEBC93F439AF} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
