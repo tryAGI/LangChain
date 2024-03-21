@@ -20,14 +20,14 @@ public class OpenSearchTests
     public void Setup()
     {
         _indexName = "test-index";
-        // var uri = new Uri("https://<your uri>.aos.us-east-1.on.aws");
-        var uri = new Uri("http://localhost:9200");
+         var uri = new Uri("<your uri>.us-east-1.on.aws");
+        //var uri = new Uri("http://localhost:9200");
         var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
         _options = new OpenSearchVectorStoreOptions
         {
             IndexName = _indexName,
             ConnectionUri = uri,
-            Username = "<your opensearch username>",
+            Username = "<your username>",
             Password = password
         };
 
@@ -41,12 +41,6 @@ public class OpenSearchTests
     [Test]
     public async Task index_test_documents()
     {
-        var embeddings = new TitanEmbedTextV1Model(_provider);
-
-        const string question = "what color is the car?";
-        var embeddingsAsync = await embeddings.CreateEmbeddingsAsync(question);
-        var vectors = embeddingsAsync.Values.Select(value => value[0]);
-
         var documents = new[]
         {
             "I spent entire day watching TV",
