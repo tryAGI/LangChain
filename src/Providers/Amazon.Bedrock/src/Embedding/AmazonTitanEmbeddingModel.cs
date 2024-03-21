@@ -18,26 +18,39 @@ public abstract class AmazonTitanEmbeddingModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
         var splitText = request.Strings.Split(chunkSize: MaximumInputLength);
+        var tasks = new List<Task<JsonNode>>();
 
-        // TODO: Can it be done in parallel?
-        var embeddings = new List<float>(capacity: splitText.Count);
+        var embeddings = new List<float[]>(capacity: splitText.Count);
         foreach (var text in splitText)
         {
-            var response = await provider.Api.InvokeModelAsync(Id, new JsonObject
+            Task<JsonNode> task = provider.Api.InvokeModelAsync(Id, new JsonObject
             {
                 { "inputText", text },
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
 
-            embeddings.AddRange(response?["embedding"]?
-                .AsArray()
-                .Select(x => (float?)x?.AsValue() ?? 0.0f)
-                .ToArray() ?? []);
+            tasks.Add(task);
         }
 
-        // Unsupported
+        var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+        foreach (var response in results)
+        {
+            var embedding = response?["embedding"].AsArray();
+
+            var f = new float[1536];
+            if (embedding != null)
+            {
+                for (var i = 0; i < embedding.Count; i++)
+                {
+                    f[i] = (float)embedding[(Index)i]?.AsValue()!;
+                }
+            }
+
+            embeddings.Add(f);
+        }
+
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
@@ -48,9 +61,7 @@ public abstract class AmazonTitanEmbeddingModel(
         return new EmbeddingResponse
         {
             // TODO: Check this place
-            Values = embeddings
-                .Select(f => new[] { f })
-                .ToArray(),
+            Values = embeddings.ToArray(),
             Usage = Usage.Empty,
             UsedSettings = EmbeddingSettings.Default,
         };

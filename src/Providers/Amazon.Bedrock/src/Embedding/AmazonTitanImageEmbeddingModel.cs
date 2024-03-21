@@ -37,7 +37,6 @@ public abstract class AmazonTitanImageEmbeddingModel(
             .Select(x => (float?)x?.AsValue() ?? 0.0f)
             .ToArray() ?? []);
 
-        // Unsupported
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,

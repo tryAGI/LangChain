@@ -2,7 +2,6 @@
 using LangChain.Docstore;
 using LangChain.Indexes;
 using LangChain.Providers;
-using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 using OpenSearch.Client;
 
@@ -13,63 +12,51 @@ public class OpenSearchVectorStore : VectorStore
     private readonly OpenSearchClient? _client;
     private readonly string? _indexName;
 
-    public static OpenSearchVectorStoreOptions DefaultOptions { get; } = new();
+    public static OpenSearchVectorStoreOptions? DefaultOptions { get; } = new();
 
     public OpenSearchVectorStore(IEmbeddingModel embeddings,
-        OpenSearchVectorStoreOptions options)
+        OpenSearchVectorStoreOptions? options)
         : base(embeddings)
     {
         _indexName = options?.IndexName;
 
         var settings = new ConnectionSettings(options?.ConnectionUri)
-            .DefaultIndex(options.IndexName)
-            .BasicAuthentication(options.Username, options.Password);
+            .DefaultIndex(options?.IndexName)
+            .BasicAuthentication(options?.Username, options.Password);
 
         _client = new OpenSearchClient(settings);
 
-        var createIndexResponse = _client.Indices.Create(options.IndexName, c => c
-            .Settings(x => x
-                .Setting("index.knn", true)
-                .Setting("index.knn.space_type", "cosinesimil")
-            )
-            .Map<VectorRecord>(m => m
-                .Properties(p => p
-                    .Keyword(k => k.Name(n => n.Id))
-                    .Text(t => t.Name(n => n.Text))
-                    .KnnVector(d => d.Name(n => n.Vector).Dimension(1536).Similarity("cosine"))
-                )
-            )
-        );
-        var isValid = createIndexResponse.IsValid;
+        var existsResponse = _client.Indices.Exists(_indexName);
+        if (existsResponse.Exists == false)
+        {
+            CreateIndex(options);
+        }
     }
 
     public static Task<VectorStoreIndexWrapper> GetOrCreateIndex(
         IEmbeddingModel embeddings,
-        ISource source = null,
-        OpenSearchVectorStoreOptions options = null
+        ISource source = null!,
+        OpenSearchVectorStoreOptions? options = null
     )
     {
         options ??= DefaultOptions;
 
-        TextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: options.ChunkSize, chunkOverlap: options.ChunkOverlap);
-
-        return Task.FromResult<VectorStoreIndexWrapper>(null);
+        return Task.FromResult<VectorStoreIndexWrapper>(null!);
     }
 
     public OpenSearchVectorStore(string tableName, IEmbeddingModel embeddings)
         : base(embeddings)
     {
         _client = new OpenSearchClient();
-
     }
 
     public override async Task<IEnumerable<string>> AddDocumentsAsync(IEnumerable<Document> documents, CancellationToken cancellationToken = default)
     {
-        var vectorDocuments = new List<VectorRecord>();
         var bulkDescriptor = new BulkDescriptor();
         var i = 1;
 
-        foreach (var document in documents)
+        var enumerable = documents as Document[] ?? documents.ToArray();
+        foreach (var document in enumerable)
         {
             var content = document.PageContent.Trim();
             if (string.IsNullOrEmpty(content)) continue;
@@ -93,7 +80,7 @@ public class OpenSearchVectorStore : VectorStore
         var bulkResponse = await _client!.BulkAsync(bulkDescriptor, cancellationToken)
             .ConfigureAwait(false);
 
-        return documents.Select(x => x.PageContent);
+        return enumerable.Select(x => x.PageContent);
     }
 
     public override Task<IEnumerable<string>> AddTextsAsync(IEnumerable<string> texts, IEnumerable<Dictionary<string, object>>? metadatas = null, CancellationToken cancellationToken = default)
@@ -121,7 +108,6 @@ public class OpenSearchVectorStore : VectorStore
                 )
             )
         );
-        var isValid = searchResponse.IsValid;
 
         var documents = searchResponse.Documents.Select(vectorRecord => new Document { PageContent = vectorRecord.Text });
 
@@ -148,5 +134,21 @@ public class OpenSearchVectorStore : VectorStore
     protected override Func<float, float> SelectRelevanceScoreFn()
     {
         throw new NotImplementedException();
+    }
+
+    private void CreateIndex(OpenSearchVectorStoreOptions options)
+    {
+        var createIndexResponse = _client.Indices.Create(options.IndexName, c => c
+            .Settings(x => x
+                .Setting("index.knn", true)
+                .Setting("index.knn.space_type", "cosinesimil")
+            )
+        .Map<VectorRecord>(m => m
+            .Properties(p => p
+                .Keyword(k => k.Name(n => n.Id))
+                .Text(t => t.Name(n => n.Text))
+                .KnnVector(d => d.Name(n => n.Vector).Dimension(1536).Similarity("cosine"))
+            )
+        ));
     }
 }

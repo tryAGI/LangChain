@@ -1,175 +1,141 @@
-using Amazon;
+﻿using Amazon;
+using LangChain.Docstore;
+using LangChain.Indexes;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Sources;
-using Microsoft.KernelMemory;
-using Microsoft.KernelMemory.MemoryStorage;
-using Microsoft.SemanticKernel.Text;
-using System.Globalization;
-using LangChain.Providers;
 using static LangChain.Chains.Chain;
-using Microsoft.SemanticKernel.AI.Embeddings;
-using OpenSearch.Client;
 
-namespace LangChain.Databases.OpenSearch.Tests
+namespace LangChain.Databases.OpenSearch.Tests;
+
+//
+// docker run -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" -e "plugins.security.disabled=true" -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=<custom-admin-password>" opensearchproject/opensearch:latest
+//
+public class OpenSearchTests
 {
-    public class OpenSearchTests
+    private string? _indexName;
+    private OpenSearchVectorStoreOptions? _options;
+    private OpenSearchVectorStore? _vectorStore;
+    private BedrockProvider? _provider;
+
+    [SetUp]
+    public void Setup()
     {
-        public IMemoryDb MemoryDb { get; set; }
-        public IEmbeddingModel TextEmbeddingGenerator { get; set; }
-        public IOpenSearchClient OpenSearchClient { get; set; }
+        _provider = new BedrockProvider();
 
-        [SetUp]
-        public void Setup()
+        _indexName = "test-index";
+        // var uri = new Uri("https://<your uri>.aos.us-east-1.on.aws");
+        var uri = new Uri("http://localhost:9200");
+        var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
+        _options = new OpenSearchVectorStoreOptions
         {
-            OpenSearchClient = new OpenSearchClient();
+            IndexName = _indexName,
+            ConnectionUri = uri,
+            Username = "<your opensearch username>",
+            Password = password
+        };
 
-            var provider = new BedrockProvider(RegionEndpoint.USWest2);
-            TextEmbeddingGenerator = new TitanEmbedTextV1Model(provider);
-            var llm = new TitanTextExpressV1Model(provider);
+        var embeddings = new TitanEmbedTextV1Model(_provider!);
+        _vectorStore = new OpenSearchVectorStore(embeddings, _options);
+    }
 
-            MemoryDb = new ElasticsearchMemory(
-                new OpenSearchVectorStoreOptions(), 
-                OpenSearchClient, 
-                TextEmbeddingGenerator,
-                new IndexNameHelper(new OpenSearchVectorStoreOptions()));
-        }
+    #region Query Simple Documents
 
-        [Test]
-        public async Task Test1()
+    [Test]
+    public async Task index_test_documents()
+    {
+        var provider = new BedrockProvider(RegionEndpoint.USWest2);
+        var embeddings = new TitanEmbedTextV1Model(provider);
+
+        const string question = "what color is the car?";
+        var embeddingsAsync = await embeddings.CreateEmbeddingsAsync(question);
+        var vectors = embeddingsAsync.Values.Select(value => value[0]);
+
+        var documents = new[]
         {
-            var provider = new BedrockProvider(RegionEndpoint.USWest2);
-            var embeddings = new TitanEmbedTextV1Model(provider);
-            var llm = new TitanTextExpressV1Model(provider);
+            "I spent entire day watching TV",
+            "My dog's name is Bob",
+            "The car is orange.",
+            "This icecream is delicious",
+            "It is cold in space",
+        }.ToDocuments();
 
-            var bookURL =
-                "https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf";
-            var source = await PdfPigPdfSource.CreateFromUriAsync(new Uri(bookURL));
-            var index = await OpenSearchVectorStore.GetOrCreateIndex(embeddings, source);
+        var pages = await _vectorStore!.AddDocumentsAsync(documents);
+        Console.WriteLine("pages: " + pages.Count());
 
-            string promptText =
-                @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible. Always quote the context in your answer.
+        var similaritySearchByVectorAsync = _vectorStore?.SimilaritySearchByVectorAsync(vectors).ConfigureAwait(false);
+        Console.WriteLine(similaritySearchByVectorAsync.Value);
+    }
+
+    [Test]
+    public async Task can_query_test_documents()
+    {
+        var provider = new BedrockProvider(RegionEndpoint.USWest2);
+        var llm = new TitanTextExpressV1Model(_provider!);
+        var index = new VectorStoreIndexWrapper(_vectorStore!);
+
+        const string question = "what color is the car?";
+
+        var promptText =
+            @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
 
 {context}
 
-Question: {text}
+Question: {question}
+Helpful Answer:";
+        var chain =
+            Set(question, outputKey: "question")
+            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 2)
+            | StuffDocuments(inputKey: "documents", outputKey: "context")
+            | Template(promptText)
+            | LLM(llm);
+
+
+        var res = await chain.Run("text");
+        Console.WriteLine(res);
+    }
+
+    #endregion
+
+    #region Query Pdf Book
+
+    [Test]
+    public async Task index_harry_potter_book()
+    {
+        var pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
+        var documents = await pdfSource.LoadAsync();
+
+        var pages = await _vectorStore!.AddDocumentsAsync(documents);
+        Console.WriteLine("pages: " + pages.Count());
+    }
+
+    [Test]
+    public async Task can_query_harry_potter_book()
+    {
+        var llm = new TitanTextExpressV1Model(_provider!);
+        var index = new VectorStoreIndexWrapper(_vectorStore!);
+
+        var promptText =
+            @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
+
+{context}
+
+Question: {question}
 Helpful Answer:";
 
+        var chain =
+            //Set("what color is the car?", outputKey: "question")                     // set the question
+            //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
+            // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
+            Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
+            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
+            | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
+            | Template(promptText)                                                              // replace context and question in the prompt with their values
+            | LLM(llm);                                                                       // send the result to the language model
 
-            var chain =
-                Set("Who was drinking a unicorn blood?")    // set the question
-                | RetrieveDocuments(index, amount: 5)       // take 5 most similar documents
-                | StuffDocuments(outputKey: "context")      // combine documents together and put them into context
-                | Template(promptText)                      // replace context and question in the prompt with their values
-                | LLM(llm);                                 // send the result to the language model
-
-            var answer = await chain.Run("text");         // get chain result
-            Console.WriteLine("Answer:" + answer);       // print the result
-            // print usage
-            Console.WriteLine($"LLM usage: {llm.Usage}");
-            Console.WriteLine($"Embeddings usage: {embeddings.Usage}");
-        }
-
-        [Test]
-        public async Task can_upsert_one_text_document()
-        {
-            var datafile = Path.Combine(Path.GetTempPath(), "data/file1-Wikipedia-Carbon.txt");
-
-            var docIds = await UpsertTextFilesAsync(
-                memoryDb: this.MemoryDb,
-                textEmbeddingGenerator: this.TextEmbeddingGenerator,
-                indexName: nameof(can_upsert_one_text_document),
-                fileNames: new[]
-                {
-                    datafile
-                }).ConfigureAwait(false);
-        }
-
-        public static async Task<IEnumerable<string>> UpsertTextFilesAsync(
-           IMemoryDb memoryDb,
-           IEmbeddingModel textEmbeddingGenerator,
-           string indexName,
-           IEnumerable<string> fileNames)
-        {
-            ArgumentNullException.ThrowIfNull(memoryDb);
-            ArgumentNullException.ThrowIfNull(textEmbeddingGenerator);
-            ArgumentNullException.ThrowIfNull(indexName);
-            ArgumentNullException.ThrowIfNull(fileNames);
-
-            // IMemoryDb does not create the index automatically.
-            await memoryDb.CreateIndexAsync(indexName, 1536)
-                          .ConfigureAwait(false);
-
-            var results = new List<string>();
-            foreach (var fileName in fileNames)
-            {
-                // Reads the text from the file
-                string fullText = await File.ReadAllTextAsync(fileName)
-                                            .ConfigureAwait(false);
-
-                // Splits the text into lines of up to 1000 tokens each
-                var lines = TextChunker.SplitPlainTextLines(fullText,
-                    maxTokensPerLine: 1000);
-
-                // Splits the line into paragraphs
-                var paragraphs = TextChunker.SplitPlainTextParagraphs(lines,
-                    maxTokensPerParagraph: 1000,
-                    overlapTokens: 100);
-
-                Console.WriteLine($"File '{fileName}' contains {paragraphs.Count} paragraphs.");
-
-                // Indexes each paragraph as a separate document
-                var paraIdx = 0;
-                var documentId = GuidWithoutDashes() + GuidWithoutDashes();
-                var fileId = GuidWithoutDashes();
-
-                foreach (var paragraph in paragraphs)
-                {
-                    var embedding = await textEmbeddingGenerator.CreateEmbeddingsAsync(paragraph)
-                                                                     .ConfigureAwait(false);
-
-                    Console.WriteLine($"Indexed paragraph {++paraIdx}/{paragraphs.Count}. {paragraph.Length} characters.");
-
-                    var filePartId = GuidWithoutDashes();
-
-                    var esId = $"d={documentId}//p={filePartId}";
-
-                    var mrec = new MemoryRecord()
-                    {
-                        Id = esId,
-                        Payload = new Dictionary<string, object>()
-                    {
-                        { "file", fileName },
-                        { "text", paragraph },
-                        { "vector_provider", textEmbeddingGenerator.GetType().Name },
-                        { "vector_generator", "TODO" },
-                        { "last_update", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss") },
-                        { "text_embedding_generator", textEmbeddingGenerator.GetType().Name }
-                    },
-                        Tags = new TagCollection()
-                    {
-                        { "__document_id", documentId },
-                        { "__file_type", "text/plain" },
-                        { "__file_id", fileId },
-                        { "__file_part", filePartId }
-
-                    },
-                        Vector = embedding.ToSingleArray()
-                    };
-
-                    var res = await memoryDb.UpsertAsync(indexName, mrec)
-                                                 .ConfigureAwait(false);
-
-                    results.Add(res);
-                }
-
-                Console.WriteLine("");
-            }
-
-            return results;
-        }
-
-        public static string GuidWithoutDashes() => Guid.NewGuid().ToString().Replace("-", "", StringComparison.OrdinalIgnoreCase).ToLower(CultureInfo.CurrentCulture);
-
+        var res = await chain.Run("text");
+        Console.WriteLine(res);
     }
+
+    #endregion
 }
