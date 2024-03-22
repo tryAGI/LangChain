@@ -18,26 +18,29 @@ public abstract class AmazonTitanEmbeddingModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
         var splitText = request.Strings.Split(chunkSize: MaximumInputLength);
-
-        // TODO: Can it be done in parallel?
-        var embeddings = new List<float>(capacity: splitText.Count);
-        foreach (var text in splitText)
+        var embeddings = new List<float[]>(capacity: splitText.Count);
+        
+        var tasks = splitText.Select(text => provider.Api.InvokeModelAsync(Id, new JsonObject { { "inputText", text }, }, cancellationToken))
+            .ToList();
+        var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+        
+        foreach (var response in results)
         {
-            var response = await provider.Api.InvokeModelAsync(Id, new JsonObject
-            {
-                { "inputText", text },
-            }, cancellationToken).ConfigureAwait(false);
+            var embedding = response?["embedding"].AsArray();
+            if (embedding == null) continue;
 
-            embeddings.AddRange(response?["embedding"]?
-                .AsArray()
-                .Select(x => (float?)x?.AsValue() ?? 0.0f)
-                .ToArray() ?? []);
+            var f = new float[1536];
+            for (var i = 0; i < embedding.Count; i++)
+            {
+                f[i] = (float)embedding[(Index)i]?.AsValue()!;
+            }
+
+            embeddings.Add(f);
         }
 
-        // Unsupported
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
@@ -47,10 +50,7 @@ public abstract class AmazonTitanEmbeddingModel(
 
         return new EmbeddingResponse
         {
-            // TODO: Check this place
-            Values = embeddings
-                .Select(f => new[] { f })
-                .ToArray(),
+            Values = embeddings.ToArray(),
             Usage = Usage.Empty,
             UsedSettings = EmbeddingSettings.Default,
         };
