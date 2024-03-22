@@ -9,6 +9,8 @@ namespace LangChain.Databases.OpenSearch.IntegrationTests;
 //
 // docker run -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" -e "plugins.security.disabled=true" -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=<custom-admin-password>" opensearchproject/opensearch:latest
 //
+[Explicit]
+[TestFixture]
 public class OpenSearchTests
 {
     private string? _indexName;
