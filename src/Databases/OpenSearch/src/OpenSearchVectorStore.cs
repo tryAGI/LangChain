@@ -1,4 +1,5 @@
-﻿using LangChain.Indexes;
+﻿using System.Globalization;
+using LangChain.Indexes;
 using LangChain.Providers;
 using LangChain.Sources;
 using LangChain.VectorStores;
@@ -8,20 +9,23 @@ namespace LangChain.Databases.OpenSearch;
 
 public class OpenSearchVectorStore : VectorStore
 {
-    private readonly OpenSearchClient? _client;
+    private readonly OpenSearchClient _client;
     private readonly string? _indexName;
 
-    public static OpenSearchVectorStoreOptions? DefaultOptions { get; } = new();
+    public static OpenSearchVectorStoreOptions DefaultOptions { get; } = new();
 
     public OpenSearchVectorStore(IEmbeddingModel embeddings,
         OpenSearchVectorStoreOptions? options)
         : base(embeddings)
     {
-        _indexName = options?.IndexName;
+        options ??= DefaultOptions;
+        _indexName = options.IndexName;
 
-        var settings = new ConnectionSettings(options?.ConnectionUri)
-            .DefaultIndex(options?.IndexName)
-            .BasicAuthentication(options?.Username, options.Password);
+#pragma warning disable CA2000
+        var settings = new ConnectionSettings(options.ConnectionUri)
+#pragma warning restore CA2000
+            .DefaultIndex(options.IndexName)
+            .BasicAuthentication(options.Username, options.Password);
 
         _client = new OpenSearchClient(settings);
 
@@ -38,8 +42,6 @@ public class OpenSearchVectorStore : VectorStore
         OpenSearchVectorStoreOptions? options = null
     )
     {
-        options ??= DefaultOptions;
-
         return Task.FromResult<VectorStoreIndexWrapper>(null!);
     }
 
@@ -65,7 +67,7 @@ public class OpenSearchVectorStore : VectorStore
 
             var vectorRecord = new VectorRecord
             {
-                Id = i++.ToString(),
+                Id = i++.ToString(CultureInfo.InvariantCulture),
                 Text = document.PageContent,
                 Vector = embed.Values.SelectMany(x => x).ToArray()
             };
@@ -92,12 +94,12 @@ public class OpenSearchVectorStore : VectorStore
         throw new NotImplementedException();
     }
 
-    public override Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
+    public override async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
         IEnumerable<float> embedding,
         int k = 4,
         CancellationToken cancellationToken = default)
     {
-        var searchResponse = _client.Search<VectorRecord>(s => s
+        var searchResponse = await _client.SearchAsync<VectorRecord>(s => s
             .Index(_indexName)
             .Query(q => q
                 .Knn(knn => knn
@@ -105,12 +107,17 @@ public class OpenSearchVectorStore : VectorStore
                     .Vector(embedding.ToArray())
                     .K(k)
                 )
-            )
-        );
+            ), cancellationToken).ConfigureAwait(false);
 
-        var documents = searchResponse.Documents.Select(vectorRecord => new Document { PageContent = vectorRecord.Text });
+        var documents = searchResponse.Documents
+            .Where(vectorRecord => !string.IsNullOrWhiteSpace(vectorRecord.Text))
+            .Select(vectorRecord => new Document
+            {
+                PageContent = vectorRecord.Text!,
+            })
+            .ToArray();
 
-        return Task.FromResult(documents);
+        return documents;
     }
 
     public override Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(string query, int k = 4, CancellationToken cancellationToken = default)

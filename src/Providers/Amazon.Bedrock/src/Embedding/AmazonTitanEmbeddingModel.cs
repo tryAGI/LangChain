@@ -29,7 +29,7 @@ public abstract class AmazonTitanEmbeddingModel(
         
         foreach (var response in results)
         {
-            var embedding = response?["embedding"].AsArray();
+            var embedding = response?["embedding"]?.AsArray();
             if (embedding == null) continue;
 
             var f = new float[1536];
