@@ -74,9 +74,9 @@ public partial class OpenAiChatModel(
         {
             global::OpenAI.Role.System => MessageRole.System,
             global::OpenAI.Role.User => MessageRole.Human,
-            //global::OpenAI.Chat.Role.Assistant when message.Function_call != null => MessageRole.FunctionCall,
+            global::OpenAI.Role.Assistant when message.ToolCalls != null => MessageRole.FunctionCall,
             global::OpenAI.Role.Assistant => MessageRole.Ai,
-            //global::OpenAI.Chat.Role.Function => MessageRole.FunctionResult,
+            global::OpenAI.Role.Tool => MessageRole.FunctionResult,
             _ => MessageRole.Human,
         };
         
@@ -126,12 +126,6 @@ public partial class OpenAiChatModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
-        // Functions = GlobalFunctions.Count == 0
-        //     ? null
-        //     : GlobalFunctions,
-        // Function_call = GlobalFunctions.Count == 0
-        //     ? Function_call4.None
-        //     : Function_call4.Auto,
         var chatRequest = new global::OpenAI.Chat.ChatRequest(
             messages: request.Messages
                 .Select(ToRequestMessage)
@@ -139,7 +133,10 @@ public partial class OpenAiChatModel(
             model: Id,
             stops: usedSettings.StopSequences!.ToArray(),
             user: usedSettings.User!,
-            temperature: usedSettings.Temperature);
+            temperature: usedSettings.Temperature,
+            tools: GlobalTools.Count == 0
+                ? null!
+                : GlobalTools);
         if (usedSettings.UseStreaming == true)
         {
             var enumerable = provider.Api.ChatEndpoint.StreamCompletionEnumerableAsync(
@@ -198,6 +195,49 @@ public partial class OpenAiChatModel(
             AddUsage(usage);
             provider.AddUsage(usage);
 
+
+            while (CallToolsAutomatically && message.ToolCalls != null)
+            {
+                foreach (var tool in message.ToolCalls)
+                {
+                    var func = Calls[tool.Function.Name];
+                    var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
+                    messages.Add(json.AsFunctionResultMessage(tool.Function.Name));
+                }
+        
+                if (ReplyToToolCallsAutomatically)
+                {
+                    chatRequest = new global::OpenAI.Chat.ChatRequest(
+                        messages: messages
+                            .Select(ToRequestMessage)
+                            .ToArray(),
+                        model: Id,
+                        stops: usedSettings.StopSequences!.ToArray(),
+                        user: usedSettings.User!,
+                        temperature: usedSettings.Temperature,
+                        tools: GlobalTools.Count == 0
+                            ? null!
+                            : GlobalTools);
+                    response = await provider.Api.ChatEndpoint.GetCompletionAsync(
+                        chatRequest,
+                        cancellationToken).ConfigureAwait(false);
+                    message = response.GetFirstChoiceMessage();
+                    newMessage = ToMessage(message);
+                    messages.Add(newMessage);
+
+                    OnPartialResponseGenerated(newMessage.Content);
+                    OnPartialResponseGenerated(Environment.NewLine);
+                    OnCompletedResponseGenerated(newMessage.Content);
+        
+                    usage = GetUsage(response) with
+                    {
+                        Time = watch.Elapsed,
+                    };
+                    AddUsage(usage);
+                    provider.AddUsage(usage);
+                }
+            }
+            
             return new ChatResponse
             {
                 Messages = messages,
@@ -205,26 +245,6 @@ public partial class OpenAiChatModel(
                 Usage = usage,
             };
         }
-
-        // while (CallFunctionsAutomatically && message.Function_call != null)
-        // {
-        //     var functionName = message.Function_call.Name ?? string.Empty;
-        //     var func = Calls[functionName];
-        //     var json = await func(message.Function_call.Arguments ?? string.Empty, cancellationToken).ConfigureAwait(false);
-        //     messages.Add(json.AsFunctionResultMessage(functionName));
-        //
-        //     if (ReplyToFunctionCallsAutomatically)
-        //     {
-        //         response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
-        //         message = response.GetFirstChoiceMessage();
-        //         messages.Add(ToMessage(message));
-        //         usage += GetUsage(response);
-        //         lock (_usageLock)
-        //         {
-        //             TotalUsage += usage;
-        //         }
-        //     }
-        // }
     }
 
     public Task<ChatResponse> GenerateAsync(
