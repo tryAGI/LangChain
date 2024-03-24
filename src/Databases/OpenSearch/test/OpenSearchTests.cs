@@ -1,6 +1,7 @@
 ﻿using LangChain.Indexes;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Sources;
 using static LangChain.Chains.Chain;
 
@@ -22,14 +23,16 @@ public class OpenSearchTests
     public void Setup()
     {
         _indexName = "test-index";
-         var uri = new Uri("<your uri>.us-east-1.on.aws");
+        var username = Environment.GetEnvironmentVariable("OPENSEARCH_USERNAME");
+        var endpoint = Environment.GetEnvironmentVariable("OPENSEARCH_URI");
+         var uri = new Uri(endpoint);
         //var uri = new Uri("http://localhost:9200");
         var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
         _options = new OpenSearchVectorStoreOptions
         {
             IndexName = _indexName,
             ConnectionUri = uri,
-            Username = "<your username>",
+            Username = username,
             Password = password
         };
 
@@ -100,7 +103,7 @@ Helpful Answer:";
     [Test]
     public async Task can_query_harry_potter_book()
     {
-        var llm = new TitanTextExpressV1Model(_provider!);
+        var llm = new Claude3SonnetModel(_provider);
         var index = new VectorStoreIndexWrapper(_vectorStore!);
 
         var promptText =
