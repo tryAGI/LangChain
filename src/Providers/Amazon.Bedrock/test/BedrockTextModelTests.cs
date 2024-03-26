@@ -10,8 +10,8 @@ public class BedrockTextModelTests
     [Test]
     public Task TestAllTextLLMs()
     {
-        var srcDir = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\..\..\";
-        var predefined = @"libs\Providers\LangChain.Providers.Amazon.Bedrock\Predefined\";
+        var srcDir = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\..\";
+        var predefined = @"src\Predefined\";
         var predefinedDir = Path.Combine(srcDir, predefined); 
         
         var assembly = Assembly.GetAssembly(typeof(BedrockProvider));
