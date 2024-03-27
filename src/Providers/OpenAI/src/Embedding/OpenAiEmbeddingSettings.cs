@@ -15,9 +15,24 @@ public class OpenAiEmbeddingSettings : EmbeddingSettings
     };
 
     /// <summary>
-    /// 
+    /// The user associated with this embedding request.
     /// </summary>
     public string? User { get; init; }
+
+    /// <summary>
+    /// The model to use for the embedding.
+    /// </summary>
+    public string? Model { get; init; }
+
+    /// <summary>
+    /// Sampling temperature.
+    /// </summary>
+    public double? Temperature { get; init; }
+
+    /// <summary>
+    /// The maximum number of tokens to generate in the completion.
+    /// </summary>
+    public int? MaxTokens { get; init; }
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -43,6 +58,21 @@ public class OpenAiEmbeddingSettings : EmbeddingSettings
                 modelSettingsCasted?.User ??
                 providerSettingsCasted?.User ??
                 Default.User,
+            Model =
+                requestSettingsCasted?.Model ??
+                modelSettingsCasted?.Model ??
+                providerSettingsCasted?.Model ??
+                Default.Model,
+            Temperature =
+                requestSettingsCasted?.Temperature ??
+                modelSettingsCasted?.Temperature ??
+                providerSettingsCasted?.Temperature ??
+                Default.Temperature,
+            MaxTokens =
+                requestSettingsCasted?.MaxTokens ??
+                modelSettingsCasted?.MaxTokens ??
+                providerSettingsCasted?.MaxTokens ??
+                Default.MaxTokens,
         };
     }
 }

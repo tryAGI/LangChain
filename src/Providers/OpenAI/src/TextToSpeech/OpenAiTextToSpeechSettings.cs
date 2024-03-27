@@ -42,6 +42,16 @@ public class OpenAiTextToSpeechSettings : TextToSpeechSettings
     public float? Speed { get; init; }
 
     /// <summary>
+    /// The pitch of the voice, allowing for higher or lower tones.
+    /// </summary>
+    public float? Pitch { get; init; }
+
+    /// <summary>
+    /// The emphasis of the speech, affecting how expressive the voice sounds.
+    /// </summary>
+    public SpeechEmphasis? Emphasis { get; init; }
+
+    /// <summary>
     /// Calculate the settings to use for the request.
     /// </summary>
     /// <param name="requestSettings"></param>
@@ -84,6 +94,18 @@ public class OpenAiTextToSpeechSettings : TextToSpeechSettings
                 providerSettingsCasted?.Speed ??
                 Default.Speed ??
                 throw new InvalidOperationException("Default Speed is not set."),
+            Pitch =
+                requestSettingsCasted?.Pitch ??
+                modelSettingsCasted?.Pitch ??
+                providerSettingsCasted?.Pitch ??
+                Default.Pitch ??
+                throw new InvalidOperationException("Default Pitch is not set."),
+            Emphasis =
+                requestSettingsCasted?.Emphasis ??
+                modelSettingsCasted?.Emphasis ??
+                providerSettingsCasted?.Emphasis ??
+                Default.Emphasis ??
+                throw new InvalidOperationException("Default Emphasis is not set."),
         };
     }
 }
