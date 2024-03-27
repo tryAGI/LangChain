@@ -21,6 +21,8 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
         ResponseFormat = AudioResponseFormat.Json,
         Temperature = 0,
         Language = string.Empty,
+        MaxDuration = 0,
+        UseAutomaticPunctuation = false,
     };
 
     /// <summary>
@@ -54,6 +56,16 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
     /// 
     /// </summary>
     public string? Language { get; init; }
+
+    /// <summary>
+    /// The maximum duration of the audio in seconds.
+    /// </summary>
+    public int? MaxDuration { get; init; }
+
+    /// <summary>
+    /// Whether to use automatic punctuation.
+    /// </summary>
+    public bool? UseAutomaticPunctuation { get; init; }
 
     /// <summary>
     /// Calculate the settings to use for the request.
@@ -110,6 +122,18 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
                 providerSettingsCasted?.Language ??
                 Default.Language ??
                 throw new InvalidOperationException("Default Language is not set."),
+            MaxDuration =
+                requestSettingsCasted?.MaxDuration ??
+                modelSettingsCasted?.MaxDuration ??
+                providerSettingsCasted?.MaxDuration ??
+                Default.MaxDuration ??
+                throw new InvalidOperationException("Default MaxDuration is not set."),
+            UseAutomaticPunctuation =
+                requestSettingsCasted?.UseAutomaticPunctuation ??
+                modelSettingsCasted?.UseAutomaticPunctuation ??
+                providerSettingsCasted?.UseAutomaticPunctuation ??
+                Default.UseAutomaticPunctuation ??
+                throw new InvalidOperationException("Default UseAutomaticPunctuation is not set."),
         };
     }
 }
