@@ -10,6 +10,16 @@ namespace LangChain.Providers;
 public class OpenAiTextToImageSettings : TextToImageSettings
 {
     /// <summary>
+    /// The aspect ratio for the generated image.
+    /// </summary>
+    public string? AspectRatio { get; init; }
+
+    /// <summary>
+    /// The seed for random number generator.
+    /// </summary>
+    public int? Seed { get; init; }
+
+    /// <summary>
     /// 
     /// </summary>
     public static OpenAiTextToImageSettings GetDefaultSettings(string id)
@@ -121,6 +131,18 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 providerSettingsCasted?.User ??
                 defaultSettingsCasted?.User ??
                 throw new InvalidOperationException("Default User is not set."),
+            AspectRatio =
+                requestSettingsCasted?.AspectRatio ??
+                modelSettingsCasted?.AspectRatio ??
+                providerSettingsCasted?.AspectRatio ??
+                defaultSettingsCasted?.AspectRatio ??
+                throw new InvalidOperationException("Default AspectRatio is not set."),
+            Seed =
+                requestSettingsCasted?.Seed ??
+                modelSettingsCasted?.Seed ??
+                providerSettingsCasted?.Seed ??
+                defaultSettingsCasted?.Seed ??
+                throw new InvalidOperationException("Default Seed is not set."),
         };
     }
 }
