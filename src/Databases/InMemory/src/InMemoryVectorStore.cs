@@ -1,7 +1,5 @@
 ﻿using LangChain.Sources;
-using LangChain.Indexes;
 using LangChain.Providers;
-using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 
 namespace LangChain.Databases.InMemory;
@@ -25,24 +23,6 @@ public class InMemoryVectorStore(
             : Utils.ComputeManhattanDistance;
 
     private readonly List<(float[] vec, string id, Document doc)> _storage = [];
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="embeddings"></param>
-    /// <param name="documents"></param>
-    /// <returns></returns>
-    public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(
-        IEmbeddingModel embeddings,
-        IReadOnlyCollection<Document> documents)
-    {
-        var vectorStore = new InMemoryVectorStore(embeddings);
-        var textSplitter = new CharacterTextSplitter();
-        var indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
-        var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);
-        
-        return index;
-    }
 
     /// <inheritdoc />
     public override async Task<IEnumerable<string>> AddDocumentsAsync(

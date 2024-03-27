@@ -227,12 +227,12 @@ ASSISTANT:";
 
         var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
 
+        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors",embeddings);
         if (!File.Exists("vectors.db"))
         {
-            await SQLiteVectorStore.CreateIndexFromDocuments(embeddings, documents, "vectors.db", "vectors",textSplitter: textSplitter);
+            await vectorStore.CreateIndexFromDocuments(documents, textSplitter: textSplitter);
         }
 
-        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors",embeddings);
         var index = new VectorStoreIndexWrapper(vectorStore);
 
 string promptText =

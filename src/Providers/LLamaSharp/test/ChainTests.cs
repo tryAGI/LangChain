@@ -1,4 +1,5 @@
 ﻿using LangChain.Databases.InMemory;
+using LangChain.Indexes;
 using LangChain.Sources;
 using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
@@ -53,8 +54,9 @@ The pet name is
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        var index = InMemoryVectorStore
-            .CreateIndexFromDocuments(embeddings, new[]
+        var vectorStore = new InMemoryVectorStore(embeddings);
+        var index = vectorStore
+            .CreateIndexFromDocuments(new[]
             {
                 "I spent entire day watching TV",
                 "My dog name is Bob",

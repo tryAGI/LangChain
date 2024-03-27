@@ -1,5 +1,6 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
+using LangChain.Indexes;
 using LangChain.Sources;
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
@@ -17,7 +18,8 @@ public class ReadmeTests
     public async Task Chains1()
     {
         var (llm, embeddings) = Helpers.GetModels(ProviderType.OpenAi);
-        var index = await InMemoryVectorStore.CreateIndexFromDocuments(embeddings, new[]
+        var vectorStore = new InMemoryVectorStore(embeddings);
+        var index = await vectorStore.CreateIndexFromDocuments(new[]
         {
             "I spent entire day watching TV",
             "My dog name is Bob",
@@ -71,7 +73,9 @@ public class ReadmeTests
         
         // Create vector database from Harry Potter book pdf
         var source = await PdfPigPdfSource.CreateFromUriAsync(new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"));
-        var index = await SQLiteVectorStore.GetOrCreateIndexAsync(embeddings, source);
+        var options = new SQLIteVectorStoreOptions();
+        var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
+        var index = await vectorStore.GetOrCreateIndexAsync(source);
         
         // Now we have two ways: use the async methods or use the chains
         // 1. Async methods
@@ -121,7 +125,8 @@ Helpful Answer:";
     {
         var (llm, embeddings) = Helpers.GetModels(ProviderType.OpenAi);
         
-        var database = await InMemoryVectorStore.CreateIndexFromDocuments(embeddings, new[]
+        var vectorStore = new InMemoryVectorStore(embeddings);
+        var database = await vectorStore.CreateIndexFromDocuments(new[]
         {
             "I spent entire day watching TV",
             "My dog name is Bob",

@@ -5,7 +5,7 @@ namespace LangChain.VectorStores;
 /// <summary>
 /// 
 /// </summary>
-public static class VectorStoreExtensions
+public static class VectorStoreRetrieverExtensions
 {
     /// <summary>
     /// Return vector store as retriever
@@ -42,18 +42,5 @@ public static class VectorStoreExtensions
         retriever.K = amount;
         
         return await retriever.GetRelevantDocumentsAsync(query).ConfigureAwait(false);
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="documents"></param>
-    /// <param name="separator"></param>
-    /// <returns></returns>
-    public static string AsString(
-        this IEnumerable<Document> documents,
-        string separator = "\n\n")
-    {
-        return string.Join(separator, documents.Select(x => x.PageContent));
     }
 }

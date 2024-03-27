@@ -1,10 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using LangChain.Base;
 using LangChain.Sources;
-using LangChain.Indexes;
 using LangChain.Providers;
-using LangChain.Splitters.Text;
 using LangChain.VectorStores;
 using Microsoft.Data.Sqlite;
 
@@ -21,74 +18,8 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     private readonly Func<float[], float[], float> _distanceFunction;
     private readonly SqliteConnection _connection;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="embeddings"></param>
-    /// <param name="documents"></param>
-    /// <param name="filename"></param>
-    /// <param name="tableName"></param>
-    /// <param name="textSplitter"></param>
-    /// <returns></returns>
-    public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(
-        IEmbeddingModel embeddings,
-        IReadOnlyCollection<Document> documents,
-        string filename = "vectorstore.db",
-        string tableName = "vectors",
-        ITextSplitter? textSplitter = null)
-    {
-#pragma warning disable CA2000
-        var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
-#pragma warning restore CA2000
-        textSplitter ??= new CharacterTextSplitter();
-        var indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
-        var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);
-        return index;
-    }
-
     public static SQLIteVectorStoreOptions DefaultOptions { get; } = new();
 
-    /// <summary>
-    ///  If database does not exists, it loads documents from the documentsSource, creates an index from these documents and returns the created index.
-    ///  If database exists, it loads the index from the database.
-    ///  documentsSource is used only if the database does not exist. If the database exists, documentsSource is ignored.
-    /// </summary>
-    /// <param name="embeddings">An object implementing the <see cref="IEmbeddingModel"/> interface. This object is used to generate embeddings for the documents.</param>
-    /// <param name="documentsSource">An optional object implementing the <see cref="ISource"/> interface. This object is used to load documents if the vector store database file does not exist.</param>
-    /// <param name="options">An optional <see cref="SQLIteVectorStoreOptions"/> object. This object provides configuration options for the SQLite vector store</param>
-    /// <param name="textSplitter"></param>
-    /// <param name="cancellationToken"></param>
-    public static async Task<VectorStoreIndexWrapper> GetOrCreateIndexAsync(
-        IEmbeddingModel embeddings,
-        ISource? documentsSource = null,
-        SQLIteVectorStoreOptions? options = null,
-        ITextSplitter? textSplitter = null,
-        CancellationToken cancellationToken = default)
-    {
-        options ??= DefaultOptions;
-        textSplitter ??= new RecursiveCharacterTextSplitter(
-            chunkSize: options.ChunkSize,
-            chunkOverlap: options.ChunkOverlap);
-
-        if (!File.Exists(options.Filename) &&
-            documentsSource != null)
-        {
-            var documents = await documentsSource.LoadAsync(cancellationToken).ConfigureAwait(false);
-            
-            return await CreateIndexFromDocuments(
-                embeddings,
-                documents,
-                options.Filename,
-                options.TableName,
-                textSplitter: textSplitter).ConfigureAwait(false);
-        }
-
-#pragma warning disable CA2000
-        var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
-#pragma warning restore CA2000
-        var index = new VectorStoreIndexWrapper(vectorStore);
-        return index;
-    }
 
     /// <summary>
     /// 
