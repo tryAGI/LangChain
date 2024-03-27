@@ -59,6 +59,24 @@ public class OpenAiChatSettings : ChatSettings
                 providerSettingsCasted?.Temperature ??
                 Default.Temperature ??
                 throw new InvalidOperationException("Default Temperature is not set."),
+            MaxTokens = 
+                requestSettingsCasted?.MaxTokens ??
+                modelSettingsCasted?.MaxTokens ??
+                providerSettingsCasted?.MaxTokens ??
+                Default.MaxTokens ??
+                throw new InvalidOperationException("Default MaxTokens is not set."),
+            N = 
+                requestSettingsCasted?.N ??
+                modelSettingsCasted?.N ??
+                providerSettingsCasted?.N ??
+                Default.N ??
+                throw new InvalidOperationException("Default N is not set."),
+            Stop = 
+                requestSettingsCasted?.Stop ??
+                modelSettingsCasted?.Stop ??
+                providerSettingsCasted?.Stop ??
+                Default.Stop ??
+                throw new InvalidOperationException("Default Stop is not set."),
         };
     }
 }
