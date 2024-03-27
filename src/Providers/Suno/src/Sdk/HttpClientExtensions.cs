@@ -29,7 +29,7 @@ public static class HttpClientExtensions
     {
         httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+#if NET6_0_OR_GREATER
         var createResponseMessage = await httpClient.PostAsJsonAsync(
             new Uri(httpClient.BaseAddress ?? new Uri(DefaultBaseAddress), "generate/v2/"),
             request,
@@ -40,6 +40,16 @@ public static class HttpClientExtensions
         return await createResponseMessage.Content.ReadFromJsonAsync(
             SourceGenerationContext.Default.GenerateV2Response,
             cancellationToken: cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Create response is null.");
+#else
+        var createResponseMessage = await httpClient.PostAsJsonAsync(
+            new Uri(httpClient.BaseAddress ?? new Uri(DefaultBaseAddress), "generate/v2/"),
+            request,
+            cancellationToken).ConfigureAwait(false);
+        createResponseMessage.EnsureSuccessStatusCode();
+        
+        return await createResponseMessage.Content.ReadFromJsonAsync<GenerateV2Response>(
+            cancellationToken: cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Create response is null.");
+#endif
     }
     
     public static async Task<IReadOnlyList<Clip>> GetFeedAsync(
@@ -50,9 +60,15 @@ public static class HttpClientExtensions
         httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
         
+#if NET6_0_OR_GREATER
         return await httpClient.GetFromJsonAsync(
             new Uri(httpClient.BaseAddress ?? new Uri(DefaultBaseAddress), $"feed/?ids={string.Join("%2C", ids)}"),
             SourceGenerationContext.Default.ListClip,
             cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Clips is null.");
+#else
+        return await httpClient.GetFromJsonAsync<List<Clip>>(
+            new Uri(httpClient.BaseAddress ?? new Uri(DefaultBaseAddress), $"feed/?ids={string.Join("%2C", ids)}"),
+            cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Clips is null.");
+#endif
     }
 }

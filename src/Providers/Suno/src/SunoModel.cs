@@ -4,7 +4,7 @@ namespace LangChain.Providers.Suno;
 
 public class SunoModel(
     SunoProvider provider,
-    string id = "chirp-v2-xxl-alpha")
+    string id)
     : TextToMusicModel(id), ITextToMusicModel
 {
     #region Methods
@@ -26,6 +26,10 @@ public class SunoModel(
                 Mv = Id,
                 Prompt = request.Prompt,
                 MakeInstrumental = false,
+                Tags = string.Empty,
+                Title = string.Empty,
+                ContinueClipId = string.Empty,
+                ContinueAt = 0,
             },
             cancellationToken).ConfigureAwait(false);
         

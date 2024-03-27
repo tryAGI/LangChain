@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using LangChain.Providers.Suno.Predefined;
 
 namespace LangChain.Providers.Suno.Tests;
 
@@ -7,14 +8,14 @@ namespace LangChain.Providers.Suno.Tests;
 public class SunoTests
 {
     [Test]
-    public async Task Text2Music()
+    public async Task TextToMusic()
     {
         using var httpClient = new HttpClient();
         var provider = new SunoProvider(
             apiKey: Environment.GetEnvironmentVariable("SUNO_API_KEY") ??
             throw new InconclusiveException("SUNO_API_KEY is not set."),
             httpClient);
-        var model = new SunoModel(provider);
+        var model = new ChirpV3Model(provider);
 
         var data = await model.GenerateMusicAsync("Robots will soon rule the world");
 

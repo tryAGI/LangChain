@@ -15,4 +15,16 @@ public class GenerateV2Request
 
     [JsonPropertyName("make_instrumental")]
     public bool MakeInstrumental { get; set; }
+    
+    [JsonPropertyName("tags")]
+    public string Tags { get; set; } = string.Empty;
+
+    [JsonPropertyName("title")]
+    public string Title { get; set; } = string.Empty;
+
+    [JsonPropertyName("continue_clip_id")]
+    public string ContinueClipId { get; set; } = string.Empty;
+
+    [JsonPropertyName("continue_at")]
+    public int ContinueAt { get; set; }
 }
