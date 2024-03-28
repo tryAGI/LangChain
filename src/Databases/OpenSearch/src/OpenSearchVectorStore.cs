@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using LangChain.Indexes;
 using LangChain.Providers;
 using LangChain.Sources;
 using LangChain.VectorStores;
@@ -34,15 +33,6 @@ public class OpenSearchVectorStore : VectorStore
         {
             CreateIndex(options);
         }
-    }
-
-    public static Task<VectorStoreIndexWrapper> GetOrCreateIndex(
-        IEmbeddingModel embeddings,
-        ISource source = null!,
-        OpenSearchVectorStoreOptions? options = null
-    )
-    {
-        return Task.FromResult<VectorStoreIndexWrapper>(null!);
     }
 
     public OpenSearchVectorStore(string tableName, IEmbeddingModel embeddings)

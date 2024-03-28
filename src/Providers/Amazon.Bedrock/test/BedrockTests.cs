@@ -119,8 +119,9 @@ The pet name is
         //var llm = new ClaudeV21Model();
         var llm = new Llama2With13BModel(provider);
         var embeddings = new TitanEmbedTextV1Model(provider);
-        var index = InMemoryVectorStore
-            .CreateIndexFromDocuments(embeddings, new[]
+        var vectorStore = new InMemoryVectorStore(embeddings);
+        var index = vectorStore
+            .CreateIndexFromDocuments(new[]
             {
                 "I spent entire day watching TV",
                 "My dog's name is Bob",
@@ -182,10 +183,10 @@ Answer: ";
         if (File.Exists("vectors.db"))
             File.Delete("vectors.db");
 
-        if (!File.Exists("vectors.db"))
-            await SQLiteVectorStore.CreateIndexFromDocuments(embeddings, documents, "vectors.db", "vectors", textSplitter: textSplitter);
-
         var vectorStore = new SQLiteVectorStore("vectors.db", "vectors", embeddings);
+        if (!File.Exists("vectors.db"))
+            await vectorStore.CreateIndexFromDocuments(documents, textSplitter: textSplitter);
+
         var index = new VectorStoreIndexWrapper(vectorStore);
 
         string promptText =

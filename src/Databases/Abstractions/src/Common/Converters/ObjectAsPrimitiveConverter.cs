@@ -26,15 +26,8 @@ public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
     {
-        if (value == null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        if (writer == null)
-        {
-            throw new ArgumentNullException(nameof(writer));
-        }
+        value = value ?? throw new ArgumentNullException(nameof(value));
+        writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
         if (value.GetType() == typeof(object))
         {
