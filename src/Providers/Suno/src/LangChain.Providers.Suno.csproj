@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+        <NoWarn>$(NoWarn);CA1056;CA1724</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Include="System.Net.Http" />
+    </ItemGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>Suno AI API model provider.</Description>
+        <PackageTags>$(PackageTags);leonardoai;leonardo;api;music;text;music2text</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Net.Http.Json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
+      <ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

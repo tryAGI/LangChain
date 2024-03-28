@@ -26,9 +26,13 @@
       "src\\Providers\\Ollama\\test\\LangChain.Providers.Ollama.Tests.csproj",
       "src\\Providers\\OpenAI\\src\\LangChain.Providers.OpenAI.csproj",
       "src\\Providers\\OpenAI\\test\\LangChain.Providers.OpenAI.Tests.csproj",
-      "src\\Providers\\WhisperNet\\test\\LangChain.Providers.WhisperNet.Tests.csproj",
+      "src\\Providers\\Suno\\src\\LangChain.Providers.Suno.csproj",
+      "src\\Providers\\Suno\\test\\LangChain.Providers.Suno.Tests.csproj",
       "src\\Providers\\WhisperNet\\src\\LangChain.Providers.WhisperNet.csproj",
+      "src\\Providers\\WhisperNet\\test\\LangChain.Providers.WhisperNet.Tests.csproj",
+      "src\\Sources\\Abstractions\\src\\LangChain.Sources.Abstractions.csproj",
       "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj",
+      "src\\Splitters\\Abstractions\\src\\LangChain.Splitters.Abstractions.csproj",
       "src\\Utilities\\Pollyfils\\src\\LangChain.Polyfills.csproj"
     ]
   }
