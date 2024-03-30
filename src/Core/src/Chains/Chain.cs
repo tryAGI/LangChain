@@ -33,7 +33,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// Sets the value to the context.
+    /// Sets the value to the chain context.
     /// </summary>
     /// <param name="value"></param>
     /// <param name="outputKey"></param>
@@ -46,7 +46,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Sets the value returned by lambda to the chain context.
     /// </summary>
     /// <param name="valueGetter"></param>
     /// <param name="outputKey"></param>
@@ -59,7 +59,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Executes the lambda function on the chain context.
     /// </summary>
     /// <param name="func"></param>
     /// <returns></returns>
@@ -70,7 +70,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// Sends the result to the language model.
+    /// Executes the LLM model on the chain context.
     /// </summary>
     /// <param name="llm"></param>
     /// <param name="inputKey"></param>
@@ -130,7 +130,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// Combines documents together and put them into context
+    /// Combines documents together and puts them into chain context
     /// </summary>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
@@ -143,11 +143,12 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Updates chat memory.
+    /// Usually used after a model to save the context of the conversation.
     /// </summary>
     /// <param name="memory"></param>
-    /// <param name="requestKey"></param>
-    /// <param name="responseKey"></param>
+    /// <param name="requestKey">The user's request</param>
+    /// <param name="responseKey">The model's response</param>
     /// <returns></returns>
     public static UpdateMemoryChain UpdateMemory(
         BaseChatMemory memory,
@@ -157,6 +158,13 @@ public static class Chain
         return new UpdateMemoryChain(memory, requestKey, responseKey);
     }
 
+    /// <summary>
+    /// Loads chat memory.
+    /// Usually used before a model to get the context of the conversation.
+    /// </summary>
+    /// <param name="memory"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
     public static LoadMemoryChain LoadMemory(
         BaseChatMemory memory,
         string outputKey = "text")
@@ -165,7 +173,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Converts text to speech using the specified TTS model.
     /// </summary>
     /// <param name="model"></param>
     /// <param name="settings"></param>
@@ -182,7 +190,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Converts speech to text using the specified STT model.
     /// </summary>
     /// <param name="model"></param>
     /// <param name="settings"></param>
@@ -199,7 +207,8 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Uses ReAct technique to allow LLM to execute functions.
+    /// <see cref="ReActAgentExecutorChain.UseTool"/> to add tools.
     /// </summary>
     /// <param name="model"></param>
     /// <param name="reActPrompt"></param>
@@ -218,7 +227,8 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Parses the output of LLM model as it would be a ReAct output.
+    /// Can be used with custom ReAct prompts.
     /// </summary>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
@@ -231,7 +241,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Allows to group multiple agents into a single chat.
     /// </summary>
     /// <param name="agents"></param>
     /// <param name="stopPhrase"></param>
@@ -250,7 +260,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Generates an image from the text using the specified image generation model.
     /// </summary>
     /// <param name="model"></param>
     /// <param name="inputKey"></param>
@@ -265,7 +275,8 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Saves the data into a file.
+    /// Can be used to save image, text, audio or any other data.
     /// </summary>
     /// <param name="path"></param>
     /// <param name="inputKey"></param>
@@ -278,7 +289,8 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Creates a crew of agents.
+    /// See <see cref="CrewAgent"/> for more information.
     /// </summary>
     /// <param name="allAgents"></param>
     /// <param name="manager"></param>
@@ -293,6 +305,13 @@ public static class Chain
         return new CrewChain(allAgents, manager, inputKey, outputKey);
     }
 
+    /// <summary>
+    /// Extracts code from LLM response.
+    /// Can be used to ensure that model response is only code.
+    /// </summary>
+    /// <param name="inputKey"></param>
+    /// <param name="outputKey"></param>
+    /// <returns></returns>
     public static ExtractCodeChain ExtractCode(
         string inputKey = "text",
         string outputKey = "code")
@@ -301,7 +320,7 @@ public static class Chain
     }
 
     /// <summary>
-    /// 
+    /// Generates text from the image using the specified image to text model.
     /// </summary>
     /// <param name="model"></param>
     /// <param name="image"></param>
