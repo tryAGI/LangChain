@@ -1,4 +1,4 @@
-﻿using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Classes.Repository;
 
 namespace LangChain.Serve.Interfaces;
 
@@ -12,5 +12,4 @@ public interface IConversationRepository
 
     public Task AddMessage(StoredMessage message);
     public Task<List<StoredMessage>> ListMessages(Guid conversationId);
-
 }

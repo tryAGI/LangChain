@@ -1,4 +1,4 @@
-﻿namespace LangChain.Utilities.Classes.Repository;
+﻿namespace LangChain.Serve.Classes.Repository;
 
 public class StoredMessage
 {

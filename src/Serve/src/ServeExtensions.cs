@@ -1,7 +1,7 @@
 ﻿using LangChain.Serve.Classes.DTO;
 using LangChain.Serve.Interfaces;
-using LangChain.Utilities.Classes.Repository;
-using LangChain.Utilities.Services;
+using LangChain.Serve.Classes.Repository;
+using LangChain.Serve.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +10,6 @@ namespace LangChain.Serve;
 
 public static class ServeExtensions
 {
-
     public static IServiceCollection AddLangChainServe(this IServiceCollection services)
     {
         services.AddSingleton<IConversationRepository, InMemoryRepository>();
@@ -38,7 +37,7 @@ public static class ServeExtensions
 
         app.MapGet("/serve/models", () => Results.Ok(controller.ListModels()));
         app.MapGet("/serve/conversations", async () => Results.Ok(await controller.ListConversations().ConfigureAwait(false)));
-        app.MapPost("/serve/conversations", async (ConversationCreationDTO conversationCreation) =>
+        app.MapPost("/serve/conversations", async (ConversationCreationDto conversationCreation) =>
         {
             var conversation = await controller.CreateConversation(conversationCreation.ModelName).ConfigureAwait(false);
             if (conversation == null)
@@ -47,42 +46,43 @@ public static class ServeExtensions
             }
             return Results.Ok(conversation);
         });
-        app.MapPost("/serve/conversations/{conversationId}/messages", async ( PostMessageDTO message, Guid conversationId) =>
+        app.MapPost("/serve/conversations/{conversationId:guid}/messages", async ( PostMessageDto message, Guid conversationId) =>
         {
             var response = await controller.ProcessMessage(message, conversationId).ConfigureAwait(false);
             if (response == null)
             {
                 return Results.NotFound("Conversation not found");
             }
+            
             return Results.Ok(response);
         });
-        app.MapGet("/serve/conversations/{conversationId}", async (Guid conversationId) =>
+        app.MapGet("/serve/conversations/{conversationId:guid}", async (Guid conversationId) =>
         {
             var conversation = await controller.GetConversation(conversationId).ConfigureAwait(false);
             if (conversation == null)
             {
                 return Results.NotFound("Conversation not found");
             }
+            
             return Results.Ok(conversation);
         });
-        app.MapGet("/serve/conversations/{conversationId}/messages", async (Guid conversationId) =>
+        app.MapGet("/serve/conversations/{conversationId:guid}/messages", async (Guid conversationId) =>
         {
             var messages = await controller.ListMessages(conversationId).ConfigureAwait(false);
             if (messages == null)
             {
                 return Results.NotFound("Conversation not found");
             }
+            
             return Results.Ok(messages);
         });
-        app.MapDelete("/serve/conversations/{conversationId}", async (Guid conversationId) =>
+        app.MapDelete("/serve/conversations/{conversationId:guid}", async (Guid conversationId) =>
         {
             await controller.DeleteConversation(conversationId).ConfigureAwait(false);
             
             return Results.Ok();
         });
 
-
         return app;
-
     }
 }
