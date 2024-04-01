@@ -2,7 +2,7 @@ using LangChain.Memory;
 using LangChain.Providers;
 using LangChain.Providers.Ollama;
 using LangChain.Serve;
-using LangChain.Utilities.Classes.Repository;
+using LangChain.Serve.Classes.Repository;
 using static LangChain.Chains.Chain;
 using Message = LangChain.Providers.Message;
 
@@ -15,10 +15,10 @@ var builder = WebApplication.CreateBuilder();
 builder.Services.AddLangChainServe();
 
 // 2. Create a model
-var model = new OllamaChatModel(new OllamaProvider(options:new OllamaOptions()
+var model = new OllamaChatModel(new OllamaProvider(options: new OllamaOptions
 {
     Temperature = 0,
-    Stop = new[] { "User:" },
+    Stop = ["User:"],
 }),"mistral:latest");
 
 
@@ -64,9 +64,9 @@ Assistant:";
 
         // get response and send it as AI answer
         var response = await chain.Run("text");
-        return new StoredMessage()
+        return new StoredMessage
         {
-            Author = MessageAuthor.AI,
+            Author = MessageAuthor.Ai,
             Content = response ?? string.Empty,
         };
     });
@@ -79,14 +79,23 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 app.Run();
+return;
 
 async Task<ConversationBufferMemory> ConvertToConversationBuffer(List<StoredMessage> list)
 {
-    var conversationBufferMemory = new ConversationBufferMemory();
-    conversationBufferMemory.Formatter.HumanPrefix = "User";
-    conversationBufferMemory.Formatter.AiPrefix = "Assistant";
+    var conversationBufferMemory = new ConversationBufferMemory
+    {
+        Formatter =
+        {
+            HumanPrefix = "User",
+            AiPrefix = "Assistant",
+        }
+    };
     List<Message> converted = list
-        .Select(x => new Message(x.Content, x.Author == MessageAuthor.User ? MessageRole.Human : MessageRole.Ai)).ToList();
+        .Select(x => new Message(x.Content, x.Author == MessageAuthor.User ? MessageRole.Human : MessageRole.Ai))
+        .ToList();
+    
     await conversationBufferMemory.ChatHistory.AddMessages(converted);
+    
     return conversationBufferMemory;
 }
