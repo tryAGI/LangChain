@@ -64,7 +64,7 @@ public class Agents
             model: model,
             role: "Local Tour Guide",
             goal: "Provide the BEST insights about the selected city and its attractions",
-            backstory: "I am a local tour guide with expertise in providing detailed information about cities and their attractions."
+            backstory: "Knowledgeable local guide with extensive information\r\n about the city, it's attractions and customs"
         );
         LocalTourGuide.AddTools(new List<CrewAgentTool>
         {

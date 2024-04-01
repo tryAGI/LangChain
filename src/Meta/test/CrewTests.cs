@@ -16,9 +16,9 @@ public class CrewTests
         // example app https://www.youtube.com/watch?v=sPzc6hMg7So
 
         var provider = new BedrockProvider();
-        var llm = new Claude3HaikuModel(provider);
+        var llm = new Claude3SonnetModel(provider);
 
-        const string location = "Nepal";
+        const string origin = "New York";
         const string cities = "Kathmandu, Pokhara";
         const string dateRange = "May 13 to June 2, 2024";
         const string interests = "sight seeing, eating, tech";
@@ -35,7 +35,7 @@ public class CrewTests
         {
             Tasks.PlanItinerary(myAgents.TravelAgent, cities, dateRange, interests),
             Tasks.GatherCityInfo(myAgents.LocalTourGuide, cities, dateRange, interests),
-            Tasks.IdentifyCity(myAgents.CityExpert, location, cities, interests, dateRange)
+            Tasks.IdentifyCity(myAgents.CityExpert, origin, cities, interests, dateRange)
         };
 
         var crew = new Crew(agents, agentTasks);
