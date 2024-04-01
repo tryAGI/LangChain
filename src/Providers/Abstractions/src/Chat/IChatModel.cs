@@ -6,7 +6,9 @@ namespace LangChain.Providers;
 public interface IChatModel : IModel<ChatSettings>
 {
     /// <summary>
-    /// Max input tokens for the model.
+    /// Gets the maximum number of input tokens the model can handle.
+    /// This property defines the upper limit of tokens that can be processed in a single request.
+    /// Implementations should ensure that requests do not exceed this limit.
     /// </summary>
     public int ContextLength { get; }
 
@@ -28,12 +30,12 @@ public interface IChatModel : IModel<ChatSettings>
 
 
     /// <summary>
-    /// Run the LLM on the given prompt and input.
+    /// Asynchronously generates a chat response based on the provided request and settings.
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="settings"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="request">The chat request containing the prompt and any additional information required for generating a response.</param>
+    /// <param name="settings">Optional chat settings to customize the response generation process. If null, default settings are used.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation, resulting in a <see cref="ChatResponse"/> object.</returns>
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
