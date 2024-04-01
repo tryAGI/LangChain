@@ -1,4 +1,4 @@
-﻿using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Classes.Repository;
 
 namespace LangChain.Serve.Interfaces;
 

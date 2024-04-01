@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using LangChain.Serve.Interfaces;
-using LangChain.Utilities.Classes.Repository;
+using LangChain.Serve.Classes.Repository;
 
-namespace LangChain.Utilities.Services;
+namespace LangChain.Serve.Services;
 
 public class DateConversationNameProvider: IConversationNameProvider
 {
