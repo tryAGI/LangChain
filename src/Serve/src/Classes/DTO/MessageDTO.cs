@@ -1,8 +1,8 @@
-﻿using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Classes.Repository;
 
 namespace LangChain.Serve.Classes.DTO;
 
-public class MessageDTO
+public class MessageDto
 {
     public string Content { get; set; } = string.Empty;
 
@@ -12,11 +12,11 @@ public class MessageDTO
 
     public Guid MessageId { get; set; }
 
-    public static MessageDTO FromStoredMessage(StoredMessage message, string modelName)
+    public static MessageDto FromStoredMessage(StoredMessage message, string modelName)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
         
-        return new MessageDTO
+        return new MessageDto
         {
             ConversationId = message.ConversationId,
             Author = message.Author == MessageAuthor.User
