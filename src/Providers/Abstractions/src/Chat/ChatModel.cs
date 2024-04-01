@@ -17,6 +17,7 @@ public abstract class ChatModel(string id) : Model<ChatSettings>(id), IChatModel
     /// <summary>
     /// Occurs when a partial response is generated.
     /// </summary>
+    /// <inheritdoc/>
     public event EventHandler<string>? PartialResponseGenerated;
     
     protected void OnPartialResponseGenerated(string token)
@@ -24,9 +25,7 @@ public abstract class ChatModel(string id) : Model<ChatSettings>(id), IChatModel
         PartialResponseGenerated?.Invoke(this, token);
     }
 
-    /// <summary>
-    /// Occurs when a completed response is generated.
-    /// </summary>
+    /// <inheritdoc/>
     public event EventHandler<string>? CompletedResponseGenerated;
     
     protected void OnCompletedResponseGenerated(string token)
@@ -37,6 +36,7 @@ public abstract class ChatModel(string id) : Model<ChatSettings>(id), IChatModel
     /// <summary>
     /// Occurs when a prompt is sent to the chat model.
     /// </summary>
+    /// <inheritdoc/>
     public event EventHandler<string>? PromptSent;
     
 
@@ -47,13 +47,7 @@ public abstract class ChatModel(string id) : Model<ChatSettings>(id), IChatModel
 
     #endregion
 
-    /// <summary>
-    /// Generates a chat response asynchronously based on the provided request and settings.
-    /// </summary>
-    /// <param name="request">The chat request.</param>
-    /// <param name="settings">Optional chat settings.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation, containing the chat response.</returns>
+    /// <inheritdoc/>
     public abstract Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
