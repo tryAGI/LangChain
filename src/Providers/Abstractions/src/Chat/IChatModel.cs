@@ -12,6 +12,21 @@ public interface IChatModel : IModel<ChatSettings>
     /// </summary>
     public int ContextLength { get; }
 
+    /// <summary>
+    /// Occurs when a partial response is generated.
+    /// </summary>
+    event EventHandler<string>? PartialResponseGenerated;
+
+    /// <summary>
+    /// Occurs when a completed response is generated.
+    /// </summary>
+    event EventHandler<string>? CompletedResponseGenerated;
+
+    /// <summary>
+    /// Occurs when a prompt is sent to the chat model.
+    /// </summary>
+    event EventHandler<string>? PromptSent;
+
 
     /// <summary>
     /// Occurs when token generated in streaming mode.
@@ -35,7 +50,7 @@ public interface IChatModel : IModel<ChatSettings>
     /// <param name="request">The chat request containing the prompt and any additional information required for generating a response.</param>
     /// <param name="settings">Optional chat settings to customize the response generation process. If null, default settings are used.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation, resulting in a <see cref="ChatResponse"/> object.</returns>
+    /// <returns>A task that represents the asynchronous operation, containing the chat response.</returns>
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
