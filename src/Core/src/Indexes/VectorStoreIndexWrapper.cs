@@ -1,6 +1,6 @@
 ﻿using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.RetrievalQA;
-using LangChain.VectorStores;
+using LangChain.Databases;
 
 namespace LangChain.Indexes;
 

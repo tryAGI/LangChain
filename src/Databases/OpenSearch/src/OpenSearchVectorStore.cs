@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using LangChain.Providers;
 using LangChain.Sources;
-using LangChain.VectorStores;
 using OpenSearch.Client;
 
 namespace LangChain.Databases.OpenSearch;
@@ -13,9 +12,7 @@ public class OpenSearchVectorStore : VectorStore
 
     public static OpenSearchVectorStoreOptions DefaultOptions { get; } = new();
 
-    public OpenSearchVectorStore(IEmbeddingModel embeddings,
-        OpenSearchVectorStoreOptions? options)
-        : base(embeddings)
+    public OpenSearchVectorStore(OpenSearchVectorStoreOptions? options)
     {
         options ??= DefaultOptions;
         _indexName = options.IndexName;
@@ -35,8 +32,7 @@ public class OpenSearchVectorStore : VectorStore
         }
     }
 
-    public OpenSearchVectorStore(string tableName, IEmbeddingModel embeddings)
-        : base(embeddings)
+    public OpenSearchVectorStore(string tableName)
     {
         _client = new OpenSearchClient();
     }
@@ -74,7 +70,10 @@ public class OpenSearchVectorStore : VectorStore
         return enumerable.Select(x => x.PageContent);
     }
 
-    public override Task<IEnumerable<string>> AddTextsAsync(IEnumerable<string> texts, IEnumerable<Dictionary<string, object>>? metadatas = null, CancellationToken cancellationToken = default)
+    public override Task<IEnumerable<string>> AddTextsAsync(
+        IEnumerable<string> texts,
+        IEnumerable<Dictionary<string, object>>? metadatas = null,
+        CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

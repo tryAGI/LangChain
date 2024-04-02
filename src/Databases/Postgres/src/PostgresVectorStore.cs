@@ -1,8 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using LangChain.Databases.Postgres;
 using LangChain.Sources;
-using LangChain.Providers;
-using LangChain.VectorStores;
 
 namespace LangChain.Databases;
 
@@ -28,12 +26,11 @@ public class PostgresVectorStore : VectorStore
     public PostgresVectorStore(
         string connectionString,
         int vectorSize,
-        IEmbeddingModel embeddingModel,
         string schema = DefaultSchema,
         string collectionName = DefaultCollectionName,
         DistanceStrategy distanceStrategy = DistanceStrategy.Cosine,
         Func<float, float>? overrideRelevanceScoreFn = null)
-        : base(embeddingModel, overrideRelevanceScoreFn)
+        : base(overrideRelevanceScoreFn)
     {
         _distanceStrategy = distanceStrategy;
         _collectionName = collectionName;
@@ -42,58 +39,24 @@ public class PostgresVectorStore : VectorStore
     }
 
     /// <inheritdoc />
-    public override async Task<IEnumerable<string>> AddDocumentsAsync(
-        IEnumerable<Document> documents,
-        CancellationToken cancellationToken = default)
-    {
-        var documentsArray = documents.ToArray();
-        float[][] embeddings = await EmbeddingModel
-            .CreateEmbeddingsAsync(documentsArray
-                .Select(d => d.PageContent)
-                .ToArray(), null, cancellationToken)
-            .ConfigureAwait(false);
-
-        var ids = new string[documentsArray.Length];
-        foreach (var (document, i) in documentsArray.Select((d, i) => (d, i)))
-        {
-            ids[i] = Guid.NewGuid().ToString();
-            await _postgresDbClient.UpsertAsync(
-                _collectionName,
-                id: ids[i],
-                document.PageContent,
-                document.Metadata,
-                embeddings[i],
-                DateTime.UtcNow,
-                cancellationToken
-                ).ConfigureAwait(false);
-        }
-
-        return ids;
-    }
-
-    /// <inheritdoc />
     public override async Task<IEnumerable<string>> AddTextsAsync(
-        IEnumerable<string> texts,
-        IEnumerable<Dictionary<string, object>>? metadatas = null,
+        IReadOnlyCollection<string> texts,
+        IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null,
+        IReadOnlyCollection<float[]>? embeddings = null,
         CancellationToken cancellationToken = default)
     {
-        var textsArray = texts.ToArray();
-        var metadatasArray = metadatas?.ToArray() ?? new Dictionary<string, object>?[textsArray.Length];
+        texts = texts ?? throw new ArgumentNullException(nameof(texts));
         
-        float[][] embeddings = await EmbeddingModel
-            .CreateEmbeddingsAsync(textsArray, null, cancellationToken)
-            .ConfigureAwait(false);
-
-        var ids = new string[textsArray.Length];
-        for (var i = 0; i < textsArray.Length; i++)
+        var ids = new string[texts.Count];
+        for (var i = 0; i < texts.Count; i++)
         {
             ids[i] = Guid.NewGuid().ToString();
             await _postgresDbClient.UpsertAsync(
                 _collectionName,
                 id: ids[i],
-                textsArray[i],
-                metadatasArray[i],
-                embeddings[i],
+                texts.ElementAt(i),
+                metadatas?.ElementAt(i),
+                embeddings?.ElementAt(i),
                 DateTime.UtcNow,
                 cancellationToken
             ).ConfigureAwait(false);
@@ -124,30 +87,6 @@ public class PostgresVectorStore : VectorStore
             .ConfigureAwait(false);
 
         return true;
-    }
-
-    /// <inheritdoc />
-    public override async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
-        IEnumerable<float> embedding,
-        int k = 4, CancellationToken cancellationToken = default)
-    {
-        var records = await SimilaritySearchByVectorWithScoreAsync(embedding, k, cancellationToken)
-            .ConfigureAwait(false);
-
-        return records.Select(r => r.Item1);
-    }
-
-    /// <inheritdoc />
-    public override async Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(
-        string query, int k = 4,
-        CancellationToken cancellationToken = default)
-    {
-        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
-            query, null, cancellationToken).ConfigureAwait(false);
-
-        return await SimilaritySearchByVectorWithScoreAsync(
-                embedding, k, cancellationToken)
-            .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -185,19 +124,7 @@ public class PostgresVectorStore : VectorStore
     }
 
     /// <inheritdoc />
-    public override async Task<IEnumerable<Document>> MaxMarginalRelevanceSearch(
-        string query, int k = 4,
-        int fetchK = 20, float lambdaMult = 0.5f,
-        CancellationToken cancellationToken = default)
-    {
-        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(query, null, cancellationToken).ConfigureAwait(false);
-
-        return await MaxMarginalRelevanceSearchByVector(embedding, k, fetchK, lambdaMult, cancellationToken)
-            .ConfigureAwait(false);
-    }
-
-    /// <inheritdoc />
-    protected override Func<float, float> SelectRelevanceScoreFn()
+    public override Func<float, float> SelectRelevanceScoreFn()
     {
         if (OverrideRelevanceScoreFn != null)
         {
@@ -223,7 +150,7 @@ public class PostgresVectorStore : VectorStore
         }
     }
 
-    private async Task<IEnumerable<(Document, float)>> SimilaritySearchByVectorWithScoreAsync(
+    public override async Task<IEnumerable<(string Text, Dictionary<string, object>? Metadata, float Distance)>> SimilaritySearchByVectorWithScoreAsync(
         IEnumerable<float> embedding, int k = 4,
         CancellationToken cancellationToken = default)
     {
@@ -236,6 +163,6 @@ public class PostgresVectorStore : VectorStore
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        return records.Select(r => (new Document(r.Item1.Content, r.Item1.Metadata), r.Item2));
+        return records.Select(r => (r.Item1.Content, r.Item1.Metadata, r.Item2));
     }
 }

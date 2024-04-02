@@ -1,6 +1,6 @@
 using LangChain.Sources;
 
-namespace LangChain.VectorStores;
+namespace LangChain.Databases;
 
 /// <summary>
 /// 
@@ -16,7 +16,7 @@ public static class VectorStoreRetrieverExtensions
     /// <returns></returns>
     public static VectorStoreRetriever AsRetriever(
         this VectorStore store,
-        ESearchType searchType = ESearchType.Similarity,
+        VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
     {
         return new VectorStoreRetriever(store, searchType, scoreThreshold);
@@ -35,7 +35,7 @@ public static class VectorStoreRetrieverExtensions
         this VectorStore store,
         string query,
         int amount = 4,
-        ESearchType searchType = ESearchType.Similarity,
+        VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
     {
         var retriever = store.AsRetriever(searchType, scoreThreshold);

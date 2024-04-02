@@ -1,6 +1,6 @@
 ﻿using LangChain.Abstractions.Schema;
+using LangChain.Databases;
 using LangChain.Indexes;
-using LangChain.VectorStores;
 
 namespace LangChain.Chains.HelperChains;
 

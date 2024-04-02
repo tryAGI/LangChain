@@ -1,6 +1,6 @@
 ﻿using LangChain.Sources;
 using LangChain.Splitters.Text;
-using LangChain.VectorStores;
+using LangChain.Databases;
 
 namespace LangChain.Indexes;
 

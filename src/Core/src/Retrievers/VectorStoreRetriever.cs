@@ -1,8 +1,9 @@
 using LangChain.Callback;
+using LangChain.Providers;
 using LangChain.Sources;
 using LangChain.Retrievers;
 
-namespace LangChain.VectorStores;
+namespace LangChain.Databases;
 
 /// <summary>
 /// Base Retriever class for VectorStore.
@@ -15,7 +16,7 @@ public class VectorStoreRetriever : BaseRetriever
     /// </summary>
     public VectorStore Vectorstore { get; init; }
 
-    private ESearchType SearchType { get; init; }
+    private VectorSearchType SearchType { get; init; }
     
     /// <summary>
     /// 
@@ -24,15 +25,17 @@ public class VectorStoreRetriever : BaseRetriever
 
     private float? ScoreThreshold { get; init; }
 
+    private IEmbeddingModel? EmbeddingModel { get; init; }
+
     /// <inheritdoc/>
     public VectorStoreRetriever(
         VectorStore vectorstore,
-        ESearchType searchType = ESearchType.Similarity,
+        VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
     {
         SearchType = searchType;
 
-        if (SearchType == ESearchType.SimilarityScoreThreshold && ScoreThreshold == null)
+        if (SearchType == VectorSearchType.SimilarityScoreThreshold && ScoreThreshold == null)
             throw new ArgumentException($"ScoreThreshold required for {SearchType}");
 
         Vectorstore = vectorstore;
@@ -47,14 +50,15 @@ public class VectorStoreRetriever : BaseRetriever
     {
         switch (SearchType)
         {
-            case ESearchType.Similarity:
-                return await Vectorstore.SimilaritySearchAsync(query, K).ConfigureAwait(false);
+            case VectorSearchType.Similarity:
+                var embeddingModel = EmbeddingModel ?? throw new ArgumentException("EmbeddingModel required for Similarity search");
+                return await Vectorstore.SimilaritySearchAsync(embeddingModel, query, K).ConfigureAwait(false);
 
-            case ESearchType.SimilarityScoreThreshold:
+            case VectorSearchType.SimilarityScoreThreshold:
                 var docsAndSimilarities = await Vectorstore.SimilaritySearchWithRelevanceScores(query, K).ConfigureAwait(false);
                 return docsAndSimilarities.Select(dws => dws.Item1);
 
-            case ESearchType.MMR:
+            case VectorSearchType.MaximumMarginalRelevance:
                 return await Vectorstore.MaxMarginalRelevanceSearch(query, K).ConfigureAwait(false);
 
             default:
