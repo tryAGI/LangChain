@@ -9,7 +9,7 @@ namespace LangChain.Providers.OpenRouter
 {
     public static class OpenRouterModelProvider
     {
-        private static IReadOnlyDictionary<OpenRouterModelIds, ChatModels> Models { get; set; }// = new Dictionary<string, ChatModels>();
+        private static IReadOnlyDictionary<OpenRouterModelIds, ChatModels> Models { get; set; }
         static OpenRouterModelProvider()
         {
             var dic = new Dictionary<OpenRouterModelIds, ChatModels>
