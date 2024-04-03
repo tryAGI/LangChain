@@ -11,7 +11,7 @@
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.300.52" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
-    <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.13" />
+    <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.15" />
     <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
     <PackageVersion Include="DocumentFormat.OpenXml" Version="3.0.1" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
