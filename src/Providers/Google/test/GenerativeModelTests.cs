@@ -1,6 +1,6 @@
 using LangChain.Providers.Google.Predefined;
 
-namespace LangChain.Providers.Google.UnitTests;
+namespace LangChain.Providers.Google.Tests;
 
 [TestFixture, Explicit]
 public class GenerativeModelTests

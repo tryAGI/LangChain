@@ -17,7 +17,7 @@
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
-    <PackageVersion Include="Google_GenerativeAI" Version="0.1.14" />
+    <PackageVersion Include="Google_GenerativeAI" Version="0.1.18" />
     <PackageVersion Include="H.Resources.Generator" Version="1.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
