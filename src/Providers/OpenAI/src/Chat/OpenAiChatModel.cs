@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using OpenAI;
 using OpenAI.Constants;
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
@@ -59,17 +61,19 @@ public partial class OpenAiChatModel(
                         
                     },
                     content: message.Content);
+            case MessageRole.FunctionCall:
+                return new global::OpenAI.Chat.Message(
+                    role: Role.Assistant, null, message.ToToolCalls());
+            case MessageRole.FunctionResult:
+                return new global::OpenAI.Chat.Message(message.GetTool(),message.Content);
         }
-        
-        return new global::OpenAI.Chat.Message(
-            role: global::OpenAI.Role.Tool,
-            content: message.Content,
-            name: string.IsNullOrWhiteSpace(message.FunctionName)
-                 ? string.Empty
-                 : message.FunctionName);
+
+        return new global::OpenAI.Chat.Message();
     }
 
-    
+  
+
+
     private static Message ToMessage(global::OpenAI.Chat.Message message)
     {
         var role = message.Role switch
@@ -88,11 +92,11 @@ public partial class OpenAiChatModel(
         {
             content = element.GetString();
         }
-        
+
         return new Message(
-            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments ?? content,
+            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments.ToJsonString() ?? content,
             Role: role,
-            FunctionName: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name);
+            FunctionName: $"{message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name}:{message.ToolCalls?.ElementAtOrDefault(0)?.Id}");
     }
 
     private Usage GetUsage(global::OpenAI.Chat.ChatResponse response)
@@ -205,7 +209,7 @@ public partial class OpenAiChatModel(
                 {
                     var func = Calls[tool.Function.Name];
                     var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
-                    messages.Add(json.AsFunctionResultMessage(tool.Function.Name));
+                    messages.Add(json.AsFunctionResultMessage(tool));
                 }
         
                 if (ReplyToToolCallsAutomatically)
