@@ -61,10 +61,12 @@ public partial class OpenAiChatModel(
                     content: message.Content);
         }
         
-        // Name = string.IsNullOrWhiteSpace(message.FunctionName)
-        //     ? null
-        //     : message.FunctionName,
-        return new global::OpenAI.Chat.Message();
+        return new global::OpenAI.Chat.Message(
+            role: global::OpenAI.Role.Tool,
+            content: message.Content,
+            name: string.IsNullOrWhiteSpace(message.FunctionName)
+                 ? string.Empty
+                 : message.FunctionName);
     }
 
     
@@ -88,8 +90,9 @@ public partial class OpenAiChatModel(
         }
         
         return new Message(
-            Content: content, //message.Function_call?.Arguments ?? 
-            Role: role); //, FunctionName: message.Function_call?.Name
+            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments ?? content,
+            Role: role,
+            FunctionName: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name);
     }
 
     private Usage GetUsage(global::OpenAI.Chat.ChatResponse response)
