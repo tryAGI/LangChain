@@ -148,7 +148,7 @@ public partial class GoogleChatModel(
             provider.AddUsage(usage2);
 
             //Handle Function Call
-            if (ReplyToToolCallsAutomatically && response.IsFunctionCall())
+            while (ReplyToToolCallsAutomatically && response.IsFunctionCall())
             {
                 var function = response.GetFunction();
                 var name = function.Name ?? string.Empty;
