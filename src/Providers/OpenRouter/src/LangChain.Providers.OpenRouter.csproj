@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup Label="Usings">
+        <Using Include="System.Net.Http" />
+    </ItemGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>OpenRouter Chat model provider.</Description>
+        <PackageTags>$(PackageTags);openrouter;api</PackageTags>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+        <ProjectReference Include="..\..\OpenAI\src\LangChain.Providers.OpenAI.csproj" />
+    </ItemGroup>
+
+</Project>
