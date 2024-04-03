@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>OpenRouter Endpoints Chat model provider.</Description>
+        <Description>OpenRouter Chat model provider.</Description>
         <PackageTags>$(PackageTags);openrouter;api</PackageTags>
     </PropertyGroup>
 
