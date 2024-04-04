@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
@@ -19,7 +19,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
-    </ItemGroup>
+        <ProjectReference Include="..\..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+        <ProjectReference Include="..\Anthropic.Generator\LangChain.Providers.Anthropic.Generators.csproj" ReferenceOutputAssembly="false" PackAsAnalyzer="true" />
+        <None Include="..\LangChain.Providers.Anthropic.Generators\bin\$(Configuration)\netstandard2.0\H.Generators.Extensions.dll" Pack="true" PackagePath="analyzers/dotnet" Visible="false" />
+	</ItemGroup>
 
 </Project>

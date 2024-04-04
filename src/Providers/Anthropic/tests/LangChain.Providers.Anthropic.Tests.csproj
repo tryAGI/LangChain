@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\LangChain.Providers.Anthropic.csproj" />
-    </ItemGroup>
+		<ProjectReference Include="..\libs\Anthropic\LangChain.Providers.Anthropic.csproj" />
+		<ProjectReference Include="..\libs\Anthropic.Generator\LangChain.Providers.Anthropic.Generators.csproj" OutputItemType="Analyzer" />
+	</ItemGroup>
 
 </Project>

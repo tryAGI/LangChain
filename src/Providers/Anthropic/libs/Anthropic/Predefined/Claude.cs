@@ -12,12 +12,12 @@ namespace LangChain.Providers.Anthropic.Predefined;
 
 /// <inheritdoc cref="ModelIds.ClaudeInstant" />
 public class Claude3Haiku(AnthropicProvider provider)
-    : AnthropicModel(provider, id: AnthropicModels.Claude3Haiku);
+    : AnthropicModel(provider, AnthropicModels.Claude3Haiku);
 
 /// <inheritdoc cref="ModelIds.ClaudeInstant" />
 public class Claude3Sonnet(AnthropicProvider provider)
-    : AnthropicModel(provider, id: AnthropicModels.Claude3Sonnet);
+    : AnthropicModel(provider, AnthropicModels.Claude3Sonnet);
 
 /// <inheritdoc cref="ModelIds.ClaudeInstant" />
 public class Claude3Opus(AnthropicProvider provider)
-    : AnthropicModel(provider, id: AnthropicModels.Claude3Opus);
+    : AnthropicModel(provider, AnthropicModels.Claude3Opus);

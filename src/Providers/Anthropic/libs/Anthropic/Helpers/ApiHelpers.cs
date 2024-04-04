@@ -5,15 +5,13 @@ namespace LangChain.Providers.Anthropic;
 #pragma warning disable CS0618
 
 /// <summary>
-/// 
 /// </summary>
 /// <summary>
-/// 
 /// </summary>
 public static class ApiHelpers
 {
     /// <summary>
-    /// According https://www-files.anthropic.com/production/images/model_pricing_july2023.pdf <br/>
+    ///     According https://www-files.anthropic.com/production/images/model_pricing_july2023.pdf <br />
     /// </summary>
     /// <param name="modelId"></param>
     /// <param name="completionTokens"></param>
@@ -31,7 +29,7 @@ public static class ApiHelpers
             AnthropicModels.Claude3Opus => 15.00,
             AnthropicModels.ClaudeInstant_v1_2 => 0.80,
 
-            _ => throw new NotImplementedException(),
+            _ => throw new NotImplementedException()
         } * 0.001 * 0.001;
         var completionPricePerToken = modelId switch
         {
@@ -41,7 +39,7 @@ public static class ApiHelpers
             AnthropicModels.Claude3Sonnet => 5.00,
             AnthropicModels.Claude3Opus => 75.00,
             AnthropicModels.ClaudeInstant_v1_2 => 5.51,
-            _ => throw new NotImplementedException(),
+            _ => throw new NotImplementedException()
         } * 0.001 * 0.001;
 
         return completionTokens * completionPricePerToken +
@@ -49,8 +47,8 @@ public static class ApiHelpers
     }
 
     /// <summary>
-    /// Calculates the maximum number of tokens possible to generate for a model. <br/>
-    /// According https://docs.anthropic.com/claude/reference/selecting-a-model <br/>
+    ///     Calculates the maximum number of tokens possible to generate for a model. <br />
+    ///     According https://docs.anthropic.com/claude/reference/selecting-a-model <br />
     /// </summary>
     /// <param name="modelId"></param>
     /// <returns></returns>
@@ -65,7 +63,7 @@ public static class ApiHelpers
             AnthropicModels.Claude3Haiku => 200000,
             AnthropicModels.Claude3Sonnet => 200000,
             AnthropicModels.Claude3Opus => 200000,
-            _ => throw new NotImplementedException(),
+            _ => throw new NotImplementedException()
         };
     }
 }
