@@ -32,6 +32,7 @@ public class OpenRouterCodeGenerator
     /// <summary>
     ///     Generate Models and Enum files
     /// </summary>
+    /// <param name="includeUnderScoresInEnum">Should add underscore in Enum?</param>
     /// <returns></returns>
     public async Task GenerateCodesAsync(bool includeUnderScoresInEnum)
     {
@@ -176,6 +177,7 @@ public class OpenRouterCodeGenerator
 
         if (modelId == "openai/gpt-3.5-turbo-0125")
             enumType = includeUnderScoresInEnum ? "OpenAi_Gpt_3_5_Turbo_16K_0125" : "OpenAiGpt35Turbo16K0125";
+
         var description = await GetDescription(i, tr);
 
         ///Builds Enum Member with Doc
