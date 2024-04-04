@@ -17,10 +17,10 @@ public class OpenRouterCodeGenerator
     /// <returns></returns>
     public async Task GenerateCodesAsync(bool includeUnderScoresInEnum)
     {
-        var client = CreateClient();
+        using var client = CreateClient();
         var lbb = new DocumentHelper();
         Console.WriteLine("Loading Model Page...");
-        var str = await client.GetStringAsync("https://openrouter.ai/docs#quick-start").ConfigureAwait(false);
+        var str = await client.GetStringAsync(new Uri("https://openrouter.ai/docs#quick-start")).ConfigureAwait(false);
 
         var forReplace = new List<Tuple<string, string>>([
             new Tuple<string, string>(" ", ""),
@@ -63,7 +63,7 @@ public class OpenRouterCodeGenerator
                     .Replace("_🐬", "", StringComparison.InvariantCulture);
 
                 enumType = CurrentCulture.TextInfo.ToTitleCase(enumType
-                    .Replace("_", " ", StringComparison.InvariantCulture).ToLower());
+                    .Replace("_", " ", StringComparison.InvariantCulture).ToLower(CurrentCulture));
 
                 foreach (var tuple in forReplace)
                     enumType = enumType.Replace(tuple.Item1, tuple.Item2, StringComparison.InvariantCulture);
@@ -107,7 +107,7 @@ public class OpenRouterCodeGenerator
                 list.Add(new Tuple<int, string, string, string>(i, item2, item3, item4));
             }).ConfigureAwait(false);
 
-        var sorted = list.OrderBy(s => s.Item1);
+        var sorted = list.OrderBy(s => s.Item1).ToList();
         foreach (var enumType in sorted) Console.WriteLine(enumType);
 
         var sb3 = new StringBuilder();
@@ -120,7 +120,7 @@ public class OpenRouterCodeGenerator
         Directory.CreateDirectory("Codes");
         Directory.CreateDirectory("Codes\\Predefined");
         var classesFileContent = Resources.AllModels.Replace("{{OpenRouterClasses}}", sb3.ToString(),StringComparison.InvariantCulture);
-        await File.WriteAllTextAsync("Codes\\Predefined\\AllModels.cs", classesFileContent);
+        await File.WriteAllTextAsync("Codes\\Predefined\\AllModels.cs", classesFileContent).ConfigureAwait(false);
 
         sb3 = new StringBuilder();
         foreach (var item in sorted)
@@ -132,7 +132,7 @@ public class OpenRouterCodeGenerator
         var st4 = sb3.ToString();
 
         var modelIdsContent = Resources.OpenRouterModelIds.Replace("{{ModelIds}}", sb3.ToString(),StringComparison.InvariantCulture);
-        await File.WriteAllTextAsync("Codes\\OpenRouterModelIds.cs", modelIdsContent);
+        await File.WriteAllTextAsync("Codes\\OpenRouterModelIds.cs", modelIdsContent).ConfigureAwait(false);
 
 
         sb3 = new StringBuilder();
@@ -150,12 +150,12 @@ public class OpenRouterCodeGenerator
         }
 
         var dicsAdd = Resources.OpenRouterModelProvider.Replace("{{DicAdd}}", sb3.ToString(),StringComparison.InvariantCulture);
-        await File.WriteAllTextAsync("Codes\\OpenRouterModelProvider.cs", dicsAdd);
+        await File.WriteAllTextAsync("Codes\\OpenRouterModelProvider.cs", dicsAdd).ConfigureAwait(false);
     }
 
     private async Task<string> GetDescription(int i, IEnumerable<HtmlNode> tr)
     {
-        var client = CreateClient();
+        using var client = CreateClient();
         var lbb = new DocumentHelper();
         var anchor = tr.ElementAt(0).Descendants("a").FirstOrDefault();
 
@@ -164,7 +164,7 @@ public class OpenRouterCodeGenerator
 
         Console.WriteLine($"{i} Fetching doc from {url}...");
 
-        var str = await client.GetStringAsync(url);
+        var str = await client.GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
         lbb.DocumentText = str;
 
@@ -196,11 +196,9 @@ public class OpenRouterCodeGenerator
 
     private HttpClient CreateClient()
     {
-        var client = new HttpClient(new HttpClientHandler
-        {
-            AutomaticDecompression =
-                DecompressionMethods.Deflate | DecompressionMethods.Brotli | DecompressionMethods.GZip
-        });
+        var handler = new HttpClientHandler();
+        handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.Brotli | DecompressionMethods.GZip;
+        var client = new HttpClient(handler);
         client.DefaultRequestHeaders.Add("Accept", "*/*");
         client.DefaultRequestHeaders.Add("UserAgent",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
