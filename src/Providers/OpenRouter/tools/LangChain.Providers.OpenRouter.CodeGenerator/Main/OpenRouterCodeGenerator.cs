@@ -18,6 +18,7 @@ public class OpenRouterCodeGenerator
     ///     Generate Models and Enum files
     /// </summary>
     /// <param name="includeUnderScoresInEnum">Should add underscore in Enum?</param>
+    /// <param name="outputFolder">Output Folder Path</param>
     /// <returns></returns>
     public async Task GenerateCodesAsync(bool includeUnderScoresInEnum, string outputFolder)
     {
