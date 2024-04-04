@@ -136,7 +136,7 @@ namespace LangChain.Providers.OpenRouter
             }
             else
             {
-                throw new ArgumentException($"Invalid Open Router Model {modelId.ToString()}");
+                throw new ArgumentException($"Invalid Open Router Model {modelId}");
             }
         }
     }
