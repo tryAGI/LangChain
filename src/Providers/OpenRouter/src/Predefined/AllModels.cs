@@ -1,4 +1,4 @@
-﻿using LangChain.Providers.OpenRouter;
+using LangChain.Providers.OpenRouter;
 
 namespace LangChain.Providers.OpenRouter.Predefined;
 
@@ -52,14 +52,14 @@ public class NousHermes13BModel(OpenRouterProvider provider) : OpenRouterModel(p
 public class MetaCodellama34BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaCodellama34BInstruct);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.PhindCodellama34Bv2"/>
+/// <inheritdoc cref="OpenRouterModelIds.PhindCodellama34BV2"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class PhindCodellama34Bv2Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PhindCodellama34Bv2);
+public class PhindCodellama34BV2Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PhindCodellama34BV2);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.NeuralChat7Bv31"/>
+/// <inheritdoc cref="OpenRouterModelIds.NeuralChat7BV31"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class NeuralChat7Bv31Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NeuralChat7Bv31);
+public class NeuralChat7BV31Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NeuralChat7BV31);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.NousHermes2Mixtral8X7BDpo"/>
@@ -232,7 +232,7 @@ public class HuggingFaceZephyr7BModel(OpenRouterProvider provider) : OpenRouterM
 public class OpenAiGpt35TurboModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenAiGpt35Turbo);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.OpenAiGpt35Turbo16K"/>
+/// <inheritdoc cref="OpenRouterModelIds.OpenAiGpt35Turbo16K0125"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class OpenAiGpt35Turbo16K0125Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenAiGpt35Turbo16K0125);
 
@@ -387,9 +387,9 @@ public class Airoboros70BModel(OpenRouterProvider provider) : OpenRouterModel(pr
 public class Bagel34Bv02Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Bagel34Bv02);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.ChronosHermes13Bv2"/>
+/// <inheritdoc cref="OpenRouterModelIds.ChronosHermes13BV2"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class ChronosHermes13Bv2Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.ChronosHermes13Bv2);
+public class ChronosHermes13BV2Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.ChronosHermes13BV2);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Mistral7BInstruct"/>

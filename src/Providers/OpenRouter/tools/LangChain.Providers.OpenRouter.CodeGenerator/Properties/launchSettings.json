@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LangChain.Providers.OpenRouter.CodeGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-u"
+    }
+  }
+}

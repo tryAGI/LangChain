@@ -1,5 +1,8 @@
-﻿namespace LangChain.Providers.OpenRouter
+namespace LangChain.Providers.OpenRouter
 {
+    /// <summary>
+    /// List of all the Predefined OpenRouter Models
+    /// </summary>
     public enum OpenRouterModelIds
     {
         ///<summary>
@@ -92,13 +95,13 @@
         ///<summary>
         /// A fine-tune of CodeLlama-34B on an internal dataset that helps it exceed GPT-4 on some benchmarks, including HumanEval.  <br/> 
         /// </summary>
-        PhindCodellama34Bv2 = 10,
+        PhindCodellama34BV2 = 10,
 
 
         ///<summary>
         /// A fine-tuned model based on mistralai/Mistral-7B-v0.1 on the open source dataset Open-Orca/SlimOrca, aligned with DPO algorithm. For more details, refer to the blog: The Practice of Supervised Fine-tuning and Direct Preference Optimization on Habana Gaudi2.  <br/> 
         /// </summary>
-        NeuralChat7Bv31 = 11,
+        NeuralChat7BV31 = 11,
 
 
         ///<summary>
@@ -557,7 +560,7 @@
         ///<summary>
         /// A 75/25 merge of Chronos 13b v2 and Nous Hermes Llama2 13b. This offers the imaginative writing style of Chronos while retaining coherency. Outputs are long and use exceptional prose. #merge  <br/> 
         /// </summary>
-        ChronosHermes13Bv2 = 77,
+        ChronosHermes13BV2 = 77,
 
 
         ///<summary>
