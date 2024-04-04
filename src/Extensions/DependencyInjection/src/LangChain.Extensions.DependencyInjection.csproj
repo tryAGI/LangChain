@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Providers\Anthropic\libs\Anthropic\LangChain.Providers.Anthropic.csproj" />
       <ProjectReference Include="..\..\..\Providers\Anyscale\src\LangChain.Providers.Anyscale.csproj" />
       <ProjectReference Include="..\..\..\Providers\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
       <ProjectReference Include="..\..\..\Providers\OpenAI\src\LangChain.Providers.OpenAI.csproj" />
