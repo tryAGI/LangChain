@@ -256,7 +256,7 @@ public class OpenRouterCodeGenerator
         sb.AppendLine(
             $"/// <inheritdoc cref=\"OpenRouterModelIds.{enumMemberName}\"/>\r\n/// <param name=\"provider\">Open Router Provider Instance</param>");
         sb.AppendLine(
-            $"public class {enumMemberName.Replace("_", "")}Model(OpenRouterProvider provider):OpenRouterModel(provider, OpenRouterModelIds.{enumMemberName});");
+            $"public class {enumMemberName.Replace("_", "")}Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.{enumMemberName});");
         return sb.ToString();
     }
 
