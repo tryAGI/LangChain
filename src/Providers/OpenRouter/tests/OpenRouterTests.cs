@@ -1,9 +1,6 @@
-
-
-using LangChain.Providers.OpenRouter;
 using LangChain.Providers.OpenRouter.Predefined;
 
-namespace LangChain.Providers.Google.Tests;
+namespace LangChain.Providers.OpenRouter.Tests;
 
 [TestFixture, Explicit]
 public class OpenRouterTests
@@ -12,7 +9,7 @@ public class OpenRouterTests
     public async Task ShouldGenerateFine_WithPredefinedModel()
     {
         var apiKey =
-            Environment.GetEnvironmentVariable("Open_Router_Key", EnvironmentVariableTarget.User) ??
+            Environment.GetEnvironmentVariable("Open_Router_Key") ??
             throw new InvalidOperationException("Open_Router_Key is not set");
         
         var model = new Mistral7BInstructFreeModel(new OpenRouterProvider(apiKey));

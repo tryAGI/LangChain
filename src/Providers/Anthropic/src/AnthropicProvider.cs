@@ -1,3 +1,5 @@
+using Anthropic.SDK;
+
 namespace LangChain.Providers.Anthropic;
 
 /// <summary>
@@ -5,13 +7,13 @@ namespace LangChain.Providers.Anthropic;
 /// </summary>
 public class AnthropicProvider(
     string apiKey,
-    HttpClient? httpClient = null)
+    IHttpClientFactory? httpClientFactory = null)
     : Provider(id: AnthropicConfiguration.SectionName)
 {
     #region Properties
     
     [CLSCompliant(false)]
-    public AnthropicApi Api { get; } = new(apiKey, httpClient ?? new HttpClient());
+    public AnthropicClient Api { get; } = new(apiKey){HttpClientFactory = httpClientFactory };
     
     #endregion
 
@@ -21,15 +23,15 @@ public class AnthropicProvider(
     /// 
     /// </summary>
     /// <param name="configuration"></param>
-    /// <param name="httpClient"></param>
+    /// <param name="httpClientFactory"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static AnthropicProvider FromConfiguration(AnthropicConfiguration configuration, HttpClient httpClient)
+    public static AnthropicProvider FromConfiguration(AnthropicConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         
-        return new AnthropicProvider(configuration.ApiKey, httpClient);
+        return new AnthropicProvider(configuration.ApiKey, httpClientFactory);
     }
 
     #endregion

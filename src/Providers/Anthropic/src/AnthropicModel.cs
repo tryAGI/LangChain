@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using Anthropic.SDK.Messaging;
+using LangChain.Providers.Anthropic.Extensions;
 
 namespace LangChain.Providers.Anthropic;
 
@@ -12,13 +14,13 @@ public partial class AnthropicModel(
     #region Properties
     
     /// <inheritdoc/>
-    public override int ContextLength => ApiHelpers.CalculateContextLength(Id);
+    //public override int ContextLength => ApiHelpers.CalculateContextLength(Id);
 
     #endregion
 
     #region Methods
 
-    private static string ToRequestMessage(Message message)
+    private static global::Anthropic.SDK.Messaging.Message ToRequestMessage(Message message)
     {
         return message.Role switch
         {
@@ -31,21 +33,27 @@ public partial class AnthropicModel(
         };
     }
 
-    private static Message ToMessage(CreateCompletionResponse message)
+    private static Message ToMessage(global::Anthropic.SDK.Messaging.MessageResponse message)
     {
+        switch (message.Role)
+        {
+            case "user":
+                return new Message(string.Join("\r\n", message.Content.Select(s => s.Text)), MessageRole.Ai);
+            case "assistant":
+                return new Message(string.Join("\r\n", message.Content.Select(s => s.Text)), MessageRole.Human);
+        }
+
         return new Message(
-            Content: message.Completion,
+            Content: string.Join("\r\n", message.Content.Select(s => s.Text)),
             Role: MessageRole.Ai);
     }
 
-    private Usage GetUsage(IReadOnlyCollection<Message> messages)
+    private Usage GetUsage(MessageResponse messages)
     {
-        var completionTokens = CountTokens(messages.Last().Content);
-        var promptTokens = CountTokens(messages
-            .Take(messages.Count - 1)
-            .Select(ToRequestMessage)
-            .ToArray()
-            .AsPrompt());
+        var completionTokens = messages.Usage.OutputTokens;
+
+        var promptTokens = messages.Usage.InputTokens;
+
         var priceInUsd = CalculatePriceInUsd(
             outputTokens: completionTokens,
             inputTokens: promptTokens);
@@ -69,18 +77,18 @@ public partial class AnthropicModel(
         
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
-        var response = await provider.Api.CompleteAsync(new CreateCompletionRequest
+        var response = await provider.Api.Messages.GetClaudeMessageAsync(new MessageParameters()
         {
-            Prompt = messages
+            Messages = messages
                 .Select(ToRequestMessage)
-                .ToArray().AsPrompt(),
-            Max_tokens_to_sample = 100_000,
+                .ToList(),
+            MaxTokens = 4096,
             Model = Id,
         }, cancellationToken).ConfigureAwait(false);
 
         messages.Add(ToMessage(response));
 
-        var usage = GetUsage(messages) with
+        var usage = GetUsage(response) with
         {
             Time = watch.Elapsed,
         };
