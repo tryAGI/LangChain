@@ -2,6 +2,9 @@
 
 namespace LangChain.Providers.OpenRouter
 {
+    /// <summary>
+    /// Contains all the OpenRouter models.
+    /// </summary>
     public static class OpenRouterModelProvider
     {
         private static IReadOnlyDictionary<OpenRouterModelIds, ChatModels> Models { get; set; }

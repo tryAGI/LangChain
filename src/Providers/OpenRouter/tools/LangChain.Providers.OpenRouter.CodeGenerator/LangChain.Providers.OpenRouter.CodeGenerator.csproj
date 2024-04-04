@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" />
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="System.CommandLine.NamingConventionBinder" />
   </ItemGroup>
 
   <ItemGroup>
