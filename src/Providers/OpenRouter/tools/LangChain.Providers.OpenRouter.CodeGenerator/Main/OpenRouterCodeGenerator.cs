@@ -6,32 +6,14 @@ using LangChain.Providers.OpenRouter.CodeGenerator.Classes;
 using LangChain.Providers.OpenRouter.CodeGenerator.Helpers;
 using LangChain.Providers.OpenRouter.CodeGenerator.Properties;
 using static System.Globalization.CultureInfo;
-using static System.Net.Mime.MediaTypeNames;
 using static System.Text.RegularExpressions.Regex;
 
 namespace LangChain.Providers.OpenRouter.CodeGenerator.Main;
 
 public class OpenRouterCodeGenerator
 {
-    #region Fields
-    private readonly List<Tuple<string, string>> forReplace = new([
-        new Tuple<string, string>(" ", ""),
-        new Tuple<string, string>("BV0", "Bv0"),
-        new Tuple<string, string>("7b", "7B"),
-        new Tuple<string, string>("bBa", "BBa"),
-        new Tuple<string, string>("bSf", "BSf"),
-        new Tuple<string, string>("DPO", "Dpo"),
-        new Tuple<string, string>("SFT", "Sft"),
-        new Tuple<string, string>("Openai", "OpenAi"),
-        new Tuple<string, string>("Openchat", "OpenChat"),
-        new Tuple<string, string>("Openher", "OpenHer"),
-        new Tuple<string, string>("Openorca", "OpenOrca")
-    ]);
-
-    private string outputFolder = "Codes";
-    #endregion
-
     #region Public Methods
+
     /// <summary>
     ///     Generate Models and Enum files
     /// </summary>
@@ -41,13 +23,10 @@ public class OpenRouterCodeGenerator
     {
         //Initialize fields.
         var list = new List<ModelInfo>();
-        if (!string.IsNullOrEmpty(outputFolder))
-        {
-            this.outputFolder = outputFolder;
-        }
+        if (!string.IsNullOrEmpty(outputFolder)) this.outputFolder = outputFolder;
 
         if (includeUnderScoresInEnum) forReplace[0] = new Tuple<string, string>(" ", "_");
-       
+
         using var client = CreateClient();
         var lbb = new DocumentHelper();
 
@@ -91,10 +70,31 @@ public class OpenRouterCodeGenerator
     }
 
     #endregion
-    
+
+    #region Fields
+
+    private readonly List<Tuple<string, string>> forReplace = new([
+        new Tuple<string, string>(" ", ""),
+        new Tuple<string, string>("BV0", "Bv0"),
+        new Tuple<string, string>("7b", "7B"),
+        new Tuple<string, string>("bBa", "BBa"),
+        new Tuple<string, string>("bSf", "BSf"),
+        new Tuple<string, string>("DPO", "Dpo"),
+        new Tuple<string, string>("SFT", "Sft"),
+        new Tuple<string, string>("Openai", "OpenAi"),
+        new Tuple<string, string>("Openchat", "OpenChat"),
+        new Tuple<string, string>("Openher", "OpenHer"),
+        new Tuple<string, string>("Openorca", "OpenOrca")
+    ]);
+
+    private string outputFolder = "Codes";
+
+    #endregion
+
     #region Private Methods
+
     /// <summary>
-    /// Creates Codes\OpenRouterModelProvider.cs
+    ///     Creates Codes\OpenRouterModelProvider.cs
     /// </summary>
     /// <param name="sorted"></param>
     /// <returns></returns>
@@ -122,7 +122,7 @@ public class OpenRouterCodeGenerator
     }
 
     /// <summary>
-    /// Creates Codes\OpenRouterModelIds.cs
+    ///     Creates Codes\OpenRouterModelIds.cs
     /// </summary>
     /// <param name="sorted"></param>
     /// <returns></returns>
@@ -142,8 +142,9 @@ public class OpenRouterCodeGenerator
         await File.WriteAllTextAsync(fileName, modelIdsContent).ConfigureAwait(false);
         Console.WriteLine($"Saved to {fileName}");
     }
+
     /// <summary>
-    /// Creates Codes\Predefined\AllModels.cs file
+    ///     Creates Codes\Predefined\AllModels.cs file
     /// </summary>
     /// <param name="sorted"></param>
     /// <returns></returns>
@@ -158,7 +159,7 @@ public class OpenRouterCodeGenerator
 
         var classesFileContent =
             Resources.AllModels.Replace("{{OpenRouterClasses}}", sb3.ToString(), StringComparison.InvariantCulture);
-        var path1 = Path.Join(this.outputFolder, "Predefined");
+        var path1 = Path.Join(outputFolder, "Predefined");
         Directory.CreateDirectory(path1);
         var fileName = Path.Combine(path1, "AllModels.cs");
         await File.WriteAllTextAsync(fileName, classesFileContent).ConfigureAwait(false);
@@ -166,7 +167,7 @@ public class OpenRouterCodeGenerator
     }
 
     /// <summary>
-    /// Parses Model info from open router docs
+    ///     Parses Model info from open router docs
     /// </summary>
     /// <param name="i"></param>
     /// <param name="htmlNode"></param>
@@ -175,7 +176,7 @@ public class OpenRouterCodeGenerator
     private async Task<ModelInfo?> ParseModelInfo(int i, HtmlNode htmlNode, bool includeUnderScoresInEnum)
     {
         var td = htmlNode.Descendants("td");
-        
+
         //Modal Name
         var modelName = td.ElementAt(0).Descendants("a").ElementAt(0).InnerText;
 
@@ -193,7 +194,7 @@ public class OpenRouterCodeGenerator
         var description = await GetDescription(i, td);
 
         //Enum Member code with doc
-        var enumMemberCode = GetEnumMemberCode(i,enumMemberName,description);
+        var enumMemberCode = GetEnumMemberCode(i, enumMemberName, description);
 
         //Parse Cost of Prompt/Input per 1000 token
         var inputTokenCostNode = td.ElementAt(1);
@@ -207,27 +208,22 @@ public class OpenRouterCodeGenerator
 
         //Parse Context Length
         var contextLengthNode = td.ElementAt(3);
-        var tokenLength = contextLengthNode.FirstChild.FirstChild.InnerText.Replace(",", "", StringComparison.InvariantCulture);
+        var tokenLength =
+            contextLengthNode.FirstChild.FirstChild.InnerText.Replace(",", "", StringComparison.InvariantCulture);
 
         //Calculate Cost per Token
-        if (double.TryParse(promptCostText, out var promptCost))
-        {
-            promptCost = promptCost / 1000;
-        }
+        if (double.TryParse(promptCostText, out var promptCost)) promptCost = promptCost / 1000;
 
-        if (double.TryParse(completionCostText, out var completionCost))
-        {
-            completionCost = completionCost/ 1000;
-        }
-        
+        if (double.TryParse(completionCostText, out var completionCost)) completionCost = completionCost / 1000;
+
 
         //Code for adding ChatModel into Dictionary<OpenRouterModelIds,ChatModels>() 
-        var dicAddCode = GetDicAddCode(enumMemberName,modelId,tokenLength,promptCost,completionCost);
+        var dicAddCode = GetDicAddCode(enumMemberName, modelId, tokenLength, promptCost, completionCost);
 
         //Code for Predefined Model Class
         var predefinedClassCode = GetPreDefinedClassCode(enumMemberName);
 
-        return new ModelInfo()
+        return new ModelInfo
         {
             DicAddCode = dicAddCode,
             EnumMemberName = enumMemberName,
@@ -260,13 +256,16 @@ public class OpenRouterCodeGenerator
         return sb.ToString();
     }
 
-    private string? GetDicAddCode(string enumMemberName, string modelId, string tokenLength, double promptCost,double completionCost)
+    private string? GetDicAddCode(string enumMemberName, string modelId, string tokenLength, double promptCost,
+        double completionCost)
     {
-        return "{ " + $"OpenRouterModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})" + "},";
+        return "{ " +
+               $"OpenRouterModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})" +
+               "},";
     }
 
     /// <summary>
-    /// Creates Enum Member name from Model Name with C# convention
+    ///     Creates Enum Member name from Model Name with C# convention
     /// </summary>
     /// <param name="text"></param>
     /// <returns></returns>
@@ -288,7 +287,7 @@ public class OpenRouterCodeGenerator
     }
 
     /// <summary>
-    /// Fetches Model Page and parses the model description
+    ///     Fetches Model Page and parses the model description
     /// </summary>
     /// <param name="i"></param>
     /// <param name="tr"></param>
@@ -302,7 +301,7 @@ public class OpenRouterCodeGenerator
         var href = anchor.GetAttributeValue("href", "");
         var url = $"https://openrouter.ai{href}";
 
-        Console.WriteLine($"{i-1} Fetching doc from {url}...");
+        Console.WriteLine($"{i - 1} Fetching doc from {url}...");
 
         var str = await client.GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
@@ -335,7 +334,7 @@ public class OpenRouterCodeGenerator
     }
 
     /// <summary>
-    /// Creates HttpClient
+    ///     Creates HttpClient
     /// </summary>
     /// <returns></returns>
     private HttpClient CreateClient()
@@ -351,6 +350,6 @@ public class OpenRouterCodeGenerator
 
         return client;
     }
-    
+
     #endregion
 }

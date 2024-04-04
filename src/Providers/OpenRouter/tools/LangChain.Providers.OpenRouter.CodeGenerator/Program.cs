@@ -1,28 +1,21 @@
-﻿using LangChain.Providers.OpenRouter.CodeGenerator.Main;
-using System.CommandLine;
-using System.CommandLine.Binding;
-using System.CommandLine.Invocation;
+﻿using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
-using System.CommandLine.Help;
+using LangChain.Providers.OpenRouter.CodeGenerator.Main;
 
-RootCommand rootCommand = new RootCommand(
-    description: "Create Codes for OpenRouter Models")
+var rootCommand = new RootCommand(
+    "Create Codes for OpenRouter Models")
 {
     new Option<bool>(
-        aliases: ["--underscore", "-u"]
-        , description: "Add underscores into enum member name"),
+        ["--underscore", "-u"]
+        , "Add underscores into enum member name"),
     new Option<string?>(
-    aliases: [ "--output", "-o" ]
+        ["--output", "-o"])
 };
 
 rootCommand.Handler = CommandHandler.Create(async (bool underscore, string? output) =>
 {
-   
     var gc = new OpenRouterCodeGenerator();
-    await gc.GenerateCodesAsync(false,output).ConfigureAwait(false);
+    await gc.GenerateCodesAsync(false, output).ConfigureAwait(false);
 });
 
 return await rootCommand.InvokeAsync(args);
-
-
-
