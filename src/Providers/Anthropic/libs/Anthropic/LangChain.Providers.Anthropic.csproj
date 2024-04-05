@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+    
+    <Sdk Name="ViHo.PackAsAnalyzer" Version="1.0.1" />
+    
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
     </PropertyGroup>
