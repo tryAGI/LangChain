@@ -1,5 +1,6 @@
 
 using System.Xml.Serialization;
+using Anthropic.SDK.Constants;
 using LangChain.Providers.Anthropic.Extensions;
 using LangChain.Providers.Anthropic.Predefined;
 using LangChain.Providers.Anthropic.Tools;
@@ -44,12 +45,13 @@ public class GeneralTests
         var response = await model.GenerateAsync(
             new[]
             {
-                "How's the weather today in Nainital".AsHumanMessage(),
+                "How's the weather today in Delhi".AsHumanMessage(),
             });
 
         Console.WriteLine(response.Messages.AsHistory());
     }
 
+    
 
     [Test]
     public async Task SerializeToolsToXml()
