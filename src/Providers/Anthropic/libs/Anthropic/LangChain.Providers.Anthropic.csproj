@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup Label="Usings">
-        <Using Include="Anthropic" />
+        <Using Include="Anthropic.SDK" />
         <Using Include="System.Net.Http" />
     </ItemGroup>
 
