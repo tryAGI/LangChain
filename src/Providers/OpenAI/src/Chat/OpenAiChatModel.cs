@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using OpenAI;
 using OpenAI.Constants;
 
@@ -41,10 +42,19 @@ public partial class OpenAiChatModel(
     }
 
     #endregion
-    
-    #region Methods
 
-    private static global::OpenAI.Chat.Message ToRequestMessage(Message message)
+    #region Methods
+    protected virtual async Task CallFunctionsAsync(global::OpenAI.Chat.Message message, List<Message> messages, CancellationToken cancellationToken = default)
+    {
+        foreach (var tool in message.ToolCalls)
+        {
+            var func = Calls[tool.Function.Name];
+            var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
+            messages.Add(json.AsFunctionResultMessage(tool));
+        }
+    }
+
+    protected virtual global::OpenAI.Chat.Message ToRequestMessage(Message message)
     {
         switch (message.Role)
         {
@@ -70,11 +80,8 @@ public partial class OpenAiChatModel(
 
         return new global::OpenAI.Chat.Message();
     }
-
-  
-
-
-    private static Message ToMessage(global::OpenAI.Chat.Message message)
+    
+    protected virtual Message ToMessage(global::OpenAI.Chat.Message message)
     {
         var role = message.Role switch
         {
@@ -205,12 +212,7 @@ public partial class OpenAiChatModel(
 
             while (CallToolsAutomatically && message.ToolCalls != null)
             {
-                foreach (var tool in message.ToolCalls)
-                {
-                    var func = Calls[tool.Function.Name];
-                    var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
-                    messages.Add(json.AsFunctionResultMessage(tool));
-                }
+                await CallFunctionsAsync(message, messages);
         
                 if (ReplyToToolCallsAutomatically)
                 {
@@ -253,6 +255,8 @@ public partial class OpenAiChatModel(
             };
         }
     }
+
+    
 
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
