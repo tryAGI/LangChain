@@ -20,14 +20,5 @@ public class OpenRouterModel(OpenRouterProvider provider, ChatModels model) : Op
     {
     }
 
-    #region MyRegion
-    
-    protected override Task CallFunctionsAsync(global::OpenAI.Chat.Message message, List<Message> messages, CancellationToken cancellationToken = default)
-    {
-        if (!this.Id.Contains("openai/"))
-            throw new NotImplementedException("Function calling is only supported with OpenAI Models.");
-        return base.CallFunctionsAsync(message, messages, cancellationToken);
-    }
-
-    #endregion
+   
 }
