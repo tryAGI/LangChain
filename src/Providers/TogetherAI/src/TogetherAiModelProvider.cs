@@ -4,7 +4,7 @@ using OpenAI.Constants;
 namespace LangChain.Providers.OpenRouter
 {
     /// <summary>
-    /// Contains all the OpenRouter models.
+    /// Contains all the TogetherAi models.
     /// </summary>
     public static class TogetherAiModelProvider
     {

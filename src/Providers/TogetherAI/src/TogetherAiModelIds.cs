@@ -1,7 +1,7 @@
 namespace LangChain.Providers.TogetherAi
 {
     /// <summary>
-    /// List of all the Predefined OpenRouter Models
+    /// List of all the Predefined TogetherAi Models
     /// </summary>
     public enum TogetherAiModelIds
     {
