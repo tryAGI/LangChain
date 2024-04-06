@@ -12,8 +12,14 @@ public static class TogetherAiModelProvider
     {
         var dic = new Dictionary<TogetherAiModelIds, ChatModels>
         {
-            { TogetherAiModelIds.ChronosHermes13B, new ChatModels("Austism/chronos-hermes-13b", 2048, 3E-07, 3E-07) },
-            { TogetherAiModelIds.MythomaxL213B, new ChatModels("Gryphe/MythoMax-L2-13b", 4096, 3E-07, 3E-07) },
+            {
+                TogetherAiModelIds.ChronosHermes13B, 
+                new ChatModels("Austism/chronos-hermes-13b", 2048, 3E-07, 3E-07)
+            },
+            {
+                TogetherAiModelIds.MythomaxL213B, 
+                new ChatModels("Gryphe/MythoMax-L2-13b", 4096, 3E-07, 3E-07)
+            },
             {
                 TogetherAiModelIds.NousCapybaraV197B,
                 new ChatModels("NousResearch/Nous-Capybara-7B-V1p9", 8192, 2.0000000000000002E-07,
@@ -78,7 +84,10 @@ public static class TogetherAiModelProvider
                 TogetherAiModelIds.Qwen15Chat7B,
                 new ChatModels("Qwen/Qwen1.5-7B-Chat", 32768, 2.0000000000000002E-07, 2.0000000000000002E-07)
             },
-            { TogetherAiModelIds.RemmSlerpL213B, new ChatModels("Undi95/ReMM-SLERP-L2-13B", 4096, 3E-07, 3E-07) },
+            {
+                TogetherAiModelIds.RemmSlerpL213B, 
+                new ChatModels("Undi95/ReMM-SLERP-L2-13B", 4096, 3E-07, 3E-07)
+            },
             {
                 TogetherAiModelIds.ToppyM7B,
                 new ChatModels("Undi95/Toppy-M-7B", 4096, 2.0000000000000002E-07, 2.0000000000000002E-07)
@@ -166,7 +175,10 @@ public static class TogetherAiModelProvider
                 TogetherAiModelIds.GemmaInstruct7B,
                 new ChatModels("google/gemma-7b-it", 8192, 2.0000000000000002E-07, 2.0000000000000002E-07)
             },
-            { TogetherAiModelIds.VicunaV1513B, new ChatModels("lmsys/vicuna-13b-v1.5", 4096, 3E-07, 3E-07) },
+            {
+                TogetherAiModelIds.VicunaV1513B, 
+                new ChatModels("lmsys/vicuna-13b-v1.5", 4096, 3E-07, 3E-07)
+            },
             {
                 TogetherAiModelIds.VicunaV157B,
                 new ChatModels("lmsys/vicuna-7b-v1.5", 4096, 2.0000000000000002E-07, 2.0000000000000002E-07)
