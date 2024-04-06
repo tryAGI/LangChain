@@ -7,8 +7,8 @@ public class DeepSeekProvider : OpenAiProvider
     public DeepSeekProvider(DeepSeekConfiguration configuration) : base(configuration)
     {
     }
-    
-    public DeepSeekProvider(string apiKey) : base(apiKey, customEndpoint: "api.deepseek.com")
+
+    public DeepSeekProvider(string apiKey) : base(apiKey, "api.deepseek.com")
     {
     }
 }

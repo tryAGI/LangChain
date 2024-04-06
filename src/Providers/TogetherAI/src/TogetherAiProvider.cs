@@ -7,8 +7,8 @@ public class TogetherAiProvider : OpenAiProvider
     public TogetherAiProvider(TogetherAiConfiguration configuration) : base(configuration)
     {
     }
-    
-    public TogetherAiProvider(string apiKey) : base(apiKey, customEndpoint: "api.together.xyz")
+
+    public TogetherAiProvider(string apiKey) : base(apiKey, "api.together.xyz")
     {
     }
 }

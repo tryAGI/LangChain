@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenAI.Constants;
+﻿using OpenAI.Constants;
 
-namespace LangChain.Providers.DeepSeek
+namespace LangChain.Providers.DeepSeek;
+
+public static class DeepSeekModels
 {
-    public static class DeepSeekModels
+    /// <summary>
+    ///     Good at general tasks
+    ///     Context Length 16k
+    /// </summary>
+    public const string DeepSeekChat = "deepseek-chat";
+
+    /// <summary>
+    ///     Good at coding tasks
+    ///     Context Length 16k
+    /// </summary>
+    public const string DeepSeekCoder = "deepseek-coder";
+
+    public static ChatModels GetModelById(string id)
     {
-        /// <summary>
-        /// Good at general tasks
-        /// Context Length 16k
-        /// </summary>
-        public const string DeepSeekChat = "deepseek-chat";
-
-        /// <summary>
-        /// Good at coding tasks
-        /// Context Length 16k
-        /// </summary>
-        public const string DeepSeekCoder = "deepseek-coder";
-
-        public static ChatModels GetModelById(string id)
+        switch (id)
         {
-            switch (id)
-            {
-                case DeepSeekChat:
-                    return new ChatModels(DeepSeekChat, 16*1000, 0, 0);
-                case DeepSeekCoder:
-                    return new ChatModels(DeepSeekCoder, 16 * 1000, 0, 0);
-                default:
-                    throw new NotImplementedException("Not a valid DeepSeek model.");
-            }
+            case DeepSeekChat:
+                return new ChatModels(DeepSeekChat, 16 * 1000, 0, 0);
+            case DeepSeekCoder:
+                return new ChatModels(DeepSeekCoder, 16 * 1000, 0, 0);
+            default:
+                throw new NotImplementedException("Not a valid DeepSeek model.");
         }
     }
 }

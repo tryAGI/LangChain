@@ -20,5 +20,4 @@ public class TogetherAiModel(TogetherAiProvider provider, ChatModels model) : Op
         PricePerInputTokenInUsd: 0.0))
     {
     }
-   
 }
