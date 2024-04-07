@@ -6,7 +6,7 @@ namespace LangChain.Databases;
 /// <summary>
 /// 
 /// </summary>
-public static class VectorStoreExtensions
+public static class VectorDatabaseExtensions
 {
     /// <summary>
     /// 
@@ -24,92 +24,45 @@ public static class VectorStoreExtensions
     /// <summary>
     /// Return docs most similar to query.
     /// </summary>
-    /// <param name="vectorStore"></param>
+    /// <param name="vectorDatabase"></param>
     /// <param name="embeddingModel"></param>
-    /// <param name="query"></param>
-    /// <param name="k"></param>
+    /// <param name="embeddingRequest"></param>
+    /// <param name="embeddingSettings"></param>
+    /// <param name="searchSettings"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IEnumerable<Document>> SimilaritySearchAsync(
-        this VectorStore vectorStore,
+    public static async Task<VectorSearchResponse> SearchAsync(
+        this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
-        string query,
-        int k = 4,
+        EmbeddingRequest embeddingRequest,
+        EmbeddingSettings? embeddingSettings = default,
+        VectorSearchSettings? searchSettings = default,
         CancellationToken cancellationToken = default)
     {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
+        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
-        var (embedding, _) = await embeddingModel.CreateEmbeddingsAsync(
-            request: query,
-            settings: null,
+        var response = await embeddingModel.CreateEmbeddingsAsync(
+            request: embeddingRequest,
+            settings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        return await vectorStore.SimilaritySearchByVectorAsync(embedding, k, cancellationToken).ConfigureAwait(false);
-    }
-    
-    public static async Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(
-        this VectorStore vectorStore,
-        IEmbeddingModel embeddingModel,
-        string query,
-        int k = 4,
-        CancellationToken cancellationToken = default)
-    {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
-        float[] embedding = await embeddingModel.CreateEmbeddingsAsync(
-            query, null, cancellationToken).ConfigureAwait(false);
-
-        var records = await vectorStore.SimilaritySearchByVectorWithScoreAsync(
-                embedding, k, cancellationToken)
-            .ConfigureAwait(false);
-        
-        return records.Select(r => (new Document(r.Text, r.Metadata), r.Distance));
-    }
-
-    public static async Task<IEnumerable<Document>> MaxMarginalRelevanceSearch(
-        this VectorStore vectorStore,
-        IEmbeddingModel embeddingModel,
-        string query,
-        int k = 4,
-        int fetchK = 20,
-        float lambdaMult = 0.5f,
-        CancellationToken cancellationToken = default)
-    {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
-        float[] embedding = await embeddingModel.CreateEmbeddingsAsync(query, null, cancellationToken).ConfigureAwait(false);
-
-        return await vectorStore.MaxMarginalRelevanceSearchByVector(embedding, k, fetchK, lambdaMult, cancellationToken)
-            .ConfigureAwait(false);
-    }
-    
-    public static async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
-        this VectorStore vectorStore,
-        IEnumerable<float> embedding,
-        int k = 4,
-        CancellationToken cancellationToken = default)
-    {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
-        
-        var records = await vectorStore.SimilaritySearchByVectorWithScoreAsync(embedding, k, cancellationToken)
-            .ConfigureAwait(false);
-
-        return records.Select(r => new Document(r.Text, r.Metadata));
+        return await vectorDatabase.SearchAsync(new VectorSearchRequest
+        {
+            Embeddings = [response.ToSingleArray()],
+        }, searchSettings, cancellationToken).ConfigureAwait(false);
     }
     
     public static async Task<IEnumerable<string>> AddDocumentsAsync(
-        this VectorStore vectorStore,
+        this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<Document> documents,
         CancellationToken cancellationToken = default)
     {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
+        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
-        return await vectorStore.AddTextsAsync(
+        return await vectorDatabase.AddTextsAsync(
             embeddingModel: embeddingModel,
             texts: documents.Select(x => x.PageContent).ToArray(), 
             metadatas: documents.Select(x => x.Metadata).ToArray(),
@@ -117,89 +70,75 @@ public static class VectorStoreExtensions
     }
     
     public static async Task<IEnumerable<string>> AddTextsAsync(
-        this VectorStore vectorStore,
+        this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<string> texts,
         IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null,
         CancellationToken cancellationToken = default)
     {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
+        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
         float[][] embeddings = await embeddingModel
             .CreateEmbeddingsAsync(texts.ToArray(), null, cancellationToken)
             .ConfigureAwait(false);
 
-        return await vectorStore.AddTextsAsync(
-            texts: texts, 
-            metadatas: metadatas,
-            embeddings: embeddings,
+        return await vectorDatabase.AddAsync(
+            items: texts.Select((text, i) => new VectorSearchItem
+            {
+                Text = text,
+                Metadata = metadatas?.ElementAt(i),
+                Embedding = embeddings[i],
+            }).ToArray(),
             cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Default similarity search with relevance scores. Modify if necessary in subclass.
-    /// </summary>
-    /// <param name="embeddingModel"></param>
-    /// <param name="query">The query string.</param>
-    /// <param name="k">The number of results to return.</param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="vectorStore"></param>
-    /// <returns>A list of tuples containing the document and its relevance score.</returns>
-    public static async Task<IReadOnlyCollection<(Document, float)>> SimilaritySearchWithRelevanceScoresCore(
-        this VectorStore vectorStore,
-        IEmbeddingModel embeddingModel,
-        string query,
-        int k = 4,
-        CancellationToken cancellationToken = default)
-    {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
-        var relevanceScoreFn = vectorStore.SelectRelevanceScoreFn();
-        var docsAndScores = await vectorStore.SimilaritySearchWithScoreAsync(embeddingModel, query, k, cancellationToken).ConfigureAwait(false);
-
-        return docsAndScores.Select(x => (x.Item1, relevanceScoreFn(x.Item2))).ToList();
-    }
-
-    /// <summary>
     /// Return docs and relevance scores in the range [0, 1].
     /// 0 is dissimilar, 1 is most similar.
     /// </summary>
-    /// <param name="vectorStore"></param>
     /// <param name="embeddingModel"></param>
-    /// <param name="query">input text</param>
-    /// <param name="k">Number of Documents to return. Defaults to 4.</param>
-    /// <param name="scoreThreshold">a floating point value between 0 to 1 to filter the resulting set of retrieved docs</param>
+    /// <param name="embeddingRequest">The query string(string will be converted implicitly) or embedding request.</param>
+    /// <param name="searchSettings"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<IEnumerable<(Document, float)>> SimilaritySearchWithRelevanceScores(
-        this VectorStore vectorStore,
+    /// <param name="vectorDatabase"></param>
+    /// <param name="embeddingSettings"></param>
+    /// <returns>A list of tuples containing the document and its relevance score.</returns>
+    public static async Task<VectorSearchResponse> SearchWithRelevanceScoresAsync(
+        this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
-        string query,
-        int k = 4,
-        float? scoreThreshold = null,
+        EmbeddingRequest embeddingRequest,
+        EmbeddingSettings? embeddingSettings = default,
+        VectorSearchSettings? searchSettings = default,
         CancellationToken cancellationToken = default)
     {
-        vectorStore = vectorStore ?? throw new ArgumentNullException(nameof(vectorStore));
+        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-
-        var docsAndSimilarities = await vectorStore.SimilaritySearchWithRelevanceScoresCore(embeddingModel, query, k, cancellationToken).ConfigureAwait(false);
-        var docsAndSimilaritiesArray = docsAndSimilarities as (Document, float)[] ?? docsAndSimilarities.ToArray();
-        if (docsAndSimilaritiesArray.Any(x => x.Item2 < 0.0 || x.Item2 > 1.0))
+        
+        var response = await vectorDatabase.SearchAsync(
+            embeddingModel: embeddingModel,
+            embeddingRequest: embeddingRequest,
+            embeddingSettings: embeddingSettings,
+            searchSettings: searchSettings,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        
+        var relevanceScoreFunc = searchSettings?.RelevanceScoreFunc ?? RelevanceScoreFunctions.Euclidean;
+        foreach (var item in response.Items)
         {
-            throw new ArgumentException($"Relevance scores must be between 0 and 1, got {docsAndSimilarities}");
+            item.RelevanceScore = Math.Max(0.0F, Math.Min(1.0F, relevanceScoreFunc(item.Distance)));
         }
 
-        if (scoreThreshold == null)
+        if (searchSettings?.ScoreThreshold == null)
         {
-            return docsAndSimilaritiesArray;
+            return response;
         }
 
-        var passedThreshold = docsAndSimilaritiesArray.Where(x => x.Item2 >= scoreThreshold).ToList();
-
-        // TODO: log? if No relevant docs were retrieved using the relevance score threshold {scoreThreshold}
-
-        return passedThreshold;
+        return new VectorSearchResponse
+        {
+            Items = response.Items
+                .Where(x => x.RelevanceScore >= searchSettings.ScoreThreshold)
+                .ToArray(),
+        };
     }
 }

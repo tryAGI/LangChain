@@ -1,9 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using LangChain.Common.Converters;
+using LangChain.Databases.JsonConverters;
 using LangChain.Sources;
-using LangChain.Providers;
-using LangChain.VectorStores;
 using Microsoft.SemanticKernel.AI.Embeddings;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma.Http.ApiSchema;
@@ -17,7 +15,7 @@ namespace LangChain.Databases;
 /// </summary>
 [RequiresDynamicCode("Requires dynamic code.")]
 [RequiresUnreferencedCode("Requires unreferenced code.")]
-public class ChromaVectorStore : VectorStore
+public class ChromaVectorStore : IVectorDatabase
 {
     private const string LangchainDefaultCollectionName = "langchain";
 
@@ -30,13 +28,10 @@ public class ChromaVectorStore : VectorStore
     private readonly string _collectionName;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    /// <inheritdoc />
     public ChromaVectorStore(
         HttpClient httpClient,
         string endpoint,
-        IEmbeddingModel embeddings,
         string collectionName = LangchainDefaultCollectionName)
-        : base(embeddings)
     {
         _client = new ChromaClient(httpClient, endpoint);
 
