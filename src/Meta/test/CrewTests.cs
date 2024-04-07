@@ -64,12 +64,19 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
             myAgents.LocalTourGuide
         };
 
-        var chain =
-            Set(prompt)
-            | Crew(agents, myAgents.TravelAgent, inputKey: "text", outputKey: "text")
-            | LLM(llm);
+        try
+        {
+            var chain =
+                Set(prompt)
+                | Crew(agents, myAgents.TravelAgent, inputKey: "text", outputKey: "text")
+                | LLM(llm);
 
-        Console.WriteLine(await chain.Run("text"));
+            Console.WriteLine(await chain.Run("text"));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
+        }
     }
 
     [Test]
