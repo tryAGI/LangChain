@@ -20,11 +20,15 @@ public class ChatSettings
     
     /// <summary>
     /// Defines the stop sequences for the model.
+    /// Up to 4 sequences where the API will stop generating further tokens. <br/>
     /// </summary>
     public IReadOnlyList<string>? StopSequences { get; init; }
 
     /// <summary>
-    /// Sampling temperature
+    /// If set, partial message deltas will be sent, like in ChatGPT. <br/>
+    /// Tokens will be sent as data-only server-sent events as they become available. <br/>
+    /// Enabling disables tokenUsage reporting <br/>
+    /// Defaults to false. <br/>
     /// </summary>
     public bool? UseStreaming { get; init; }
 
