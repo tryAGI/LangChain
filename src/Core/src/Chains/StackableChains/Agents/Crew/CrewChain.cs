@@ -42,8 +42,17 @@ public class CrewChain(
             task.Tools.Add(new DelegateWorkTool(allAgents.Except(new[] { task.Agent })));
         }
         
-        var res = await task.ExecuteAsync(Context).ConfigureAwait(false);
-        Context = res;
+        string res;
+        try
+        {
+            res = await task.ExecuteAsync(Context).ConfigureAwait(false);
+            Context = res;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred during task execution: {ex.Message}");
+            return values; // Return the original values if an exception occurs
+        }
 
         values.Value[outputKey] = res;
         return values;
