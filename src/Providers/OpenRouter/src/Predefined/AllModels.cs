@@ -1,5 +1,3 @@
-using LangChain.Providers.OpenRouter;
-
 namespace LangChain.Providers.OpenRouter.Predefined;
 
 /// <inheritdoc cref="OpenRouterModelIds.NousCapybara7BFree"/>
@@ -17,24 +15,9 @@ public class Mistral7BInstructFreeModel(OpenRouterProvider provider) : OpenRoute
 public class Mythomist7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomist7BFree);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.ToppyM7BFree"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class ToppyM7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.ToppyM7BFree);
-
-
-/// <inheritdoc cref="OpenRouterModelIds.Cinematika7BAlphaFree"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Cinematika7BAlphaFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Cinematika7BAlphaFree);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.GoogleGemma7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class GoogleGemma7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7BFree);
-
-
-/// <inheritdoc cref="OpenRouterModelIds.Psyfighter13B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Psyfighter13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Psyfighter13B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.PsyfighterV213B"/>
@@ -327,11 +310,6 @@ public class PerplexitySonar7BModel(OpenRouterProvider provider) : OpenRouterMod
 public class PerplexitySonar8X7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PerplexitySonar8X7B);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.PerplexitySonar7BOnline"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class PerplexitySonar7BOnlineModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PerplexitySonar7BOnline);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.PerplexitySonar8X7BOnline"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class PerplexitySonar8X7BOnlineModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PerplexitySonar8X7BOnline);
@@ -560,5 +538,10 @@ public class CohereCommandModel(OpenRouterProvider provider) : OpenRouterModel(p
 /// <inheritdoc cref="OpenRouterModelIds.CohereCommandR"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class CohereCommandRModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.CohereCommandR);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.CohereCommandRPlus"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CohereCommandRPlusModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.CohereCommandRPlus);
 
 

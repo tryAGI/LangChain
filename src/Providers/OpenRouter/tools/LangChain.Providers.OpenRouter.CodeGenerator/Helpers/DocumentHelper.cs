@@ -1,11 +1,12 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using HtmlAgilityPack;
 
 namespace LangChain.Providers.OpenRouter.CodeGenerator.Helpers;
 
 public class DocumentHelper
 {
-    private string _DocHTML;
+    private string _docHtml = string.Empty;
 
     public DocumentHelper()
     {
@@ -21,7 +22,7 @@ public class DocumentHelper
 
     public string DocumentText
     {
-        get => _DocHTML;
+        get => _docHtml;
 
         set
         {
@@ -29,32 +30,34 @@ public class DocumentHelper
             {
                 Document = new HtmlDocument();
                 Document.LoadHtml(value);
-                _DocHTML = value;
+                _docHtml = value;
             }
             else
             {
-                _DocHTML = "";
+                _docHtml = "";
                 Document = new HtmlDocument();
             }
         }
     }
 
-    public HtmlNode FindNode(string TagName, string AttibuteName, string AttributeValue, bool Approx)
+    public HtmlNode? FindNode(string tagName, string attributeName, string attributeValue, bool approx)
     {
-        if (!Approx)
+        tagName = tagName ?? throw new ArgumentNullException(nameof(tagName));
+        
+        if (!approx)
         {
             var htmlNode =
-                Document.DocumentNode.SelectSingleNode(string.Format("//{0}[@{1}='{2}']", TagName.ToLower(),
-                    AttibuteName, AttributeValue));
+                Document.DocumentNode.SelectSingleNode(string.Format("//{0}[@{1}='{2}']", tagName.ToLower(CultureInfo.InvariantCulture),
+                    attributeName, attributeValue));
 
             if (htmlNode != null) return htmlNode;
         }
         else
         {
-            foreach (var nd in Document.DocumentNode.Descendants(TagName.ToLower()))
-                if (nd.Attributes[AttibuteName] != null)
-                    if (!string.IsNullOrEmpty(nd.Attributes[AttibuteName].Value))
-                        if (nd.Attributes[AttibuteName].Value.ToLower().Contains(AttributeValue.ToLower()))
+            foreach (var nd in Document.DocumentNode.Descendants(tagName.ToLower(CultureInfo.InvariantCulture)))
+                if (nd.Attributes[attributeName] != null)
+                    if (!string.IsNullOrEmpty(nd.Attributes[attributeName].Value))
+                        if (nd.Attributes[attributeName].Value.Contains(attributeValue, StringComparison.InvariantCultureIgnoreCase))
                             return nd;
         }
 

@@ -1,34 +1,24 @@
 ﻿using OpenAI.Constants;
 
-namespace LangChain.Providers.OpenRouter
+namespace LangChain.Providers.OpenRouter;
+
+/// <summary>
+/// Contains all the OpenRouter models.
+/// </summary>
+public static class OpenRouterModelProvider
 {
-    /// <summary>
-    /// Contains all the OpenRouter models.
-    /// </summary>
-    public static class OpenRouterModelProvider
+    private static Dictionary<OpenRouterModelIds, ChatModels> Models { get; set; } = new()
     {
-        private static IReadOnlyDictionary<OpenRouterModelIds, ChatModels> Models { get; set; }
-        static OpenRouterModelProvider()
+        {{DicAdd}}
+    };
+
+    public static ChatModels GetModelById(OpenRouterModelIds modelId)
+    {
+        if (Models.TryGetValue(modelId, out var id))
         {
-            var dic = new Dictionary<OpenRouterModelIds, ChatModels>
-            {
-                {{DicAdd}}
-            };
-
-
-            Models = dic;
+            return id;
         }
 
-        public static ChatModels GetModelById(OpenRouterModelIds modelId)
-        {
-            if (Models.ContainsKey(modelId))
-            {
-                return Models[modelId];
-            }
-            else
-            {
-                throw new ArgumentException($"Invalid Open Router Model {modelId.ToString()}");
-            }
-        }
+        throw new ArgumentException($"Invalid Open Router Model {modelId}");
     }
 }

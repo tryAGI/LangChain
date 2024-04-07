@@ -4,29 +4,28 @@ using System.Web;
 using HtmlAgilityPack;
 using LangChain.Providers.OpenRouter.CodeGenerator.Classes;
 using LangChain.Providers.OpenRouter.CodeGenerator.Helpers;
-using LangChain.Providers.OpenRouter.CodeGenerator.Properties;
 using static System.Globalization.CultureInfo;
 using static System.Text.RegularExpressions.Regex;
 
+// ReSharper disable LocalizableElement
+
 namespace LangChain.Providers.OpenRouter.CodeGenerator.Main;
 
-public class OpenRouterCodeGenerator
+public static class OpenRouterCodeGenerator
 {
     #region Public Methods
 
     /// <summary>
     ///     Generate Models and Enum files
     /// </summary>
-    /// <param name="includeUnderScoresInEnum">Should add underscore in Enum?</param>
-    /// <param name="outputFolder">Output Folder Path</param>
+    /// <param name="options"></param>
     /// <returns></returns>
-    public async Task GenerateCodesAsync(bool includeUnderScoresInEnum, string outputFolder)
+    public static async Task GenerateCodesAsync(GenerationOptions options)
     {
+        options = options ?? throw new ArgumentNullException(nameof(options));
+        
         //Initialize fields.
         var list = new List<ModelInfo>();
-        if (!string.IsNullOrEmpty(outputFolder)) this.outputFolder = outputFolder;
-
-        if (includeUnderScoresInEnum) forReplace[0] = new Tuple<string, string>(" ", "_");
 
         using var client = CreateClient();
         var lbb = new DocumentHelper();
@@ -39,14 +38,14 @@ public class OpenRouterCodeGenerator
         lbb.DocumentText = str;
 
         //Get Models Table on https://openrouter.ai/docs#models
-        var trs = lbb.Document.DocumentNode.Descendants("tr");
-        Console.WriteLine($"{trs.Count() - 2} Models Found...");
+        var trs = lbb.Document.DocumentNode.Descendants("tr").ToArray();
+        Console.WriteLine($"{trs.Length - 2} Models Found...");
 
         //Run Parallel loop for each model
-        await Parallel.ForAsync(2, trs.Count(), new ParallelOptions { MaxDegreeOfParallelism = 2 },
-            async (i, cancellation) =>
+        await Parallel.ForAsync(2, trs.Length, new ParallelOptions { MaxDegreeOfParallelism = 8 },
+            async (i, _) =>
             {
-                var item = await ParseModelInfo(i, trs.ElementAt(i), includeUnderScoresInEnum)
+                var item = await ParseModelInfo(i, trs.ElementAt(i), options)
                     .ConfigureAwait(false);
                 if (item != null)
                     list.Add(item);
@@ -57,38 +56,18 @@ public class OpenRouterCodeGenerator
 
         //Create AllModels.cs
         Console.WriteLine("Creating AllModels.cs...");
-        await CreateAllModelsFile(sorted).ConfigureAwait(false);
+        await CreateAllModelsFile(sorted, options.OutputFolder).ConfigureAwait(false);
 
         //Create OpenRouterModelIds.cs
         Console.WriteLine("Creating OpenRouterModelIds.cs...");
-        await CreateOpenRouterModelIdsFile(sorted).ConfigureAwait(false);
+        await CreateOpenRouterModelIdsFile(sorted, options.OutputFolder).ConfigureAwait(false);
 
         //Create OpenRouterModelIds.cs
         Console.WriteLine("Creating OpenRouterModelProvider.cs...");
-        await CreateOpenRouterModelProviderFile(sorted).ConfigureAwait(false);
+        await CreateOpenRouterModelProviderFile(sorted, options.OutputFolder).ConfigureAwait(false);
 
         Console.WriteLine("Task Completed!");
     }
-
-    #endregion
-
-    #region Fields
-
-    private readonly List<Tuple<string, string>> forReplace = new([
-        new Tuple<string, string>(" ", ""),
-        new Tuple<string, string>("BV0", "Bv0"),
-        new Tuple<string, string>("7b", "7B"),
-        new Tuple<string, string>("bBa", "BBa"),
-        new Tuple<string, string>("bSf", "BSf"),
-        new Tuple<string, string>("DPO", "Dpo"),
-        new Tuple<string, string>("SFT", "Sft"),
-        new Tuple<string, string>("Openai", "OpenAi"),
-        new Tuple<string, string>("Openchat", "OpenChat"),
-        new Tuple<string, string>("Openher", "OpenHer"),
-        new Tuple<string, string>("Openorca", "OpenOrca")
-    ]);
-
-    private string outputFolder = "Codes";
 
     #endregion
 
@@ -98,8 +77,9 @@ public class OpenRouterCodeGenerator
     ///     Creates Codes\OpenRouterModelProvider.cs
     /// </summary>
     /// <param name="sorted"></param>
+    /// <param name="outputFolder"></param>
     /// <returns></returns>
-    private async Task CreateOpenRouterModelProviderFile(List<ModelInfo> sorted)
+    private static async Task CreateOpenRouterModelProviderFile(List<ModelInfo> sorted, string outputFolder)
     {
         var sb3 = new StringBuilder();
         var first = true;
@@ -111,11 +91,11 @@ public class OpenRouterCodeGenerator
                 first = false;
             }
 
-            sb3.AppendLine($"\t\t\t\t{item.DicAddCode}");
+            sb3.AppendLine($"\t\t{item.DicAddCode}");
         }
 
         var dicsAdd =
-            Resources.OpenRouterModelProvider.Replace("{{DicAdd}}", sb3.ToString(), StringComparison.InvariantCulture);
+            H.Resources.OpenRouterModelProvider_cs.AsString().Replace("{{DicAdd}}", sb3.ToString(), StringComparison.InvariantCulture);
         Directory.CreateDirectory(outputFolder);
         var fileName = Path.Combine(outputFolder, "OpenRouterModelProvider.cs");
         await File.WriteAllTextAsync(fileName, dicsAdd).ConfigureAwait(false);
@@ -126,18 +106,22 @@ public class OpenRouterCodeGenerator
     ///     Creates Codes\OpenRouterModelIds.cs
     /// </summary>
     /// <param name="sorted"></param>
+    /// <param name="outputFolder"></param>
     /// <returns></returns>
-    private async Task CreateOpenRouterModelIdsFile(List<ModelInfo> sorted)
+    private static async Task CreateOpenRouterModelIdsFile(List<ModelInfo> sorted, string outputFolder)
     {
         var sb3 = new StringBuilder();
         foreach (var item in sorted)
         {
-            var tem = item.EnumMemberCode.Replace("\r\n", "\r\n\t\t", StringComparison.InvariantCulture);
+            var tem = item.EnumMemberCode?
+                .Replace("\r\n", "\n", StringComparison.InvariantCulture)
+                .Replace("\n", "\n\t\t", StringComparison.InvariantCulture)
+                ;
             sb3.Append(tem);
         }
 
         var modelIdsContent =
-            Resources.OpenRouterModelIds.Replace("{{ModelIds}}", sb3.ToString(), StringComparison.InvariantCulture);
+            H.Resources.OpenRouterModelIds_cs.AsString().Replace("{{ModelIds}}", sb3.ToString(), StringComparison.InvariantCulture);
         Directory.CreateDirectory(outputFolder);
         var fileName = Path.Combine(outputFolder, "OpenRouterModelIds.cs");
         await File.WriteAllTextAsync(fileName, modelIdsContent).ConfigureAwait(false);
@@ -148,8 +132,9 @@ public class OpenRouterCodeGenerator
     ///     Creates Codes\Predefined\AllModels.cs file
     /// </summary>
     /// <param name="sorted"></param>
+    /// <param name="outputFolder"></param>
     /// <returns></returns>
-    private async Task CreateAllModelsFile(List<ModelInfo> sorted)
+    private static async Task CreateAllModelsFile(List<ModelInfo> sorted, string outputFolder)
     {
         var sb3 = new StringBuilder();
         foreach (var item in sorted)
@@ -159,7 +144,7 @@ public class OpenRouterCodeGenerator
         }
 
         var classesFileContent =
-            Resources.AllModels.Replace("{{OpenRouterClasses}}", sb3.ToString(), StringComparison.InvariantCulture);
+            H.Resources.AllModels_cs.AsString().Replace("{{OpenRouterClasses}}", sb3.ToString(), StringComparison.InvariantCulture);
         var path1 = Path.Join(outputFolder, "Predefined");
         Directory.CreateDirectory(path1);
         var fileName = Path.Combine(path1, "AllModels.cs");
@@ -172,11 +157,11 @@ public class OpenRouterCodeGenerator
     /// </summary>
     /// <param name="i"></param>
     /// <param name="htmlNode"></param>
-    /// <param name="includeUnderScoresInEnum"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
-    private async Task<ModelInfo?> ParseModelInfo(int i, HtmlNode htmlNode, bool includeUnderScoresInEnum)
+    private static async Task<ModelInfo?> ParseModelInfo(int i, HtmlNode htmlNode, GenerationOptions options)
     {
-        var td = htmlNode.Descendants("td");
+        var td = htmlNode.Descendants("td").ToArray();
 
         //Modal Name
         var modelName = td.ElementAt(0).Descendants("a").ElementAt(0).InnerText;
@@ -187,12 +172,9 @@ public class OpenRouterCodeGenerator
         //Model Id
         var modelId = td.ElementAt(0).Descendants("code").ElementAt(0).InnerText;
 
-        var enumMemberName = GetModelIdsEnumMemberFromName(modelName);
+        var enumMemberName = GetModelIdsEnumMemberFromName(modelId, modelName, options);
 
-        if (modelId == "openai/gpt-3.5-turbo-0125")
-            enumMemberName = includeUnderScoresInEnum ? "OpenAi_Gpt_3_5_Turbo_16K_0125" : "OpenAiGpt35Turbo16K0125";
-
-        var description = await GetDescription(i, td);
+        var description = await GetDescription(i, td).ConfigureAwait(false);
 
         //Enum Member code with doc
         var enumMemberCode = GetEnumMemberCode(i, enumMemberName, description);
@@ -237,7 +219,7 @@ public class OpenRouterCodeGenerator
         };
     }
 
-    private string? GetEnumMemberCode(int i, string enumMemberName, string description)
+    private static string GetEnumMemberCode(int i, string enumMemberName, string description)
     {
         var sb2 = new StringBuilder();
 
@@ -247,17 +229,17 @@ public class OpenRouterCodeGenerator
         return sb2.ToString();
     }
 
-    private string? GetPreDefinedClassCode(string enumMemberName)
+    private static string GetPreDefinedClassCode(string enumMemberName)
     {
         var sb = new StringBuilder();
         sb.AppendLine(
             $"/// <inheritdoc cref=\"OpenRouterModelIds.{enumMemberName}\"/>\r\n/// <param name=\"provider\">Open Router Provider Instance</param>");
         sb.AppendLine(
-            $"public class {enumMemberName.Replace("_", "")}Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.{enumMemberName});");
+            $"public class {enumMemberName.Replace("_", "", StringComparison.OrdinalIgnoreCase)}Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.{enumMemberName});");
         return sb.ToString();
     }
 
-    private string? GetDicAddCode(string enumMemberName, string modelId, string tokenLength, double promptCost,
+    private static string GetDicAddCode(string enumMemberName, string modelId, string tokenLength, double promptCost,
         double completionCost)
     {
         return "{ " +
@@ -268,21 +250,23 @@ public class OpenRouterCodeGenerator
     /// <summary>
     ///     Creates Enum Member name from Model Name with C# convention
     /// </summary>
-    /// <param name="text"></param>
+    /// <param name="modelId"></param>
+    /// <param name="modelName"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
-    private string GetModelIdsEnumMemberFromName(string modelName)
+    private static string GetModelIdsEnumMemberFromName(string modelId, string modelName, GenerationOptions options)
     {
         var enumType = Replace(modelName, "[_.: -]", "_");
         enumType = Replace(enumType, "[()]", "");
 
-        enumType = enumType.Replace("__", "_", StringComparison.InvariantCulture)
+        enumType = enumType
+            .Replace("__", "_", StringComparison.InvariantCulture)
             .Replace("_🐬", "", StringComparison.InvariantCulture);
 
         enumType = CurrentCulture.TextInfo.ToTitleCase(enumType
             .Replace("_", " ", StringComparison.InvariantCulture).ToLower(CurrentCulture));
 
-        foreach (var tuple in forReplace)
-            enumType = enumType.Replace(tuple.Item1, tuple.Item2, StringComparison.InvariantCulture);
+        enumType = options.ReplaceEnumNameFunc?.Invoke(enumType, modelId, modelName) ?? enumType;
 
         return enumType;
     }
@@ -293,22 +277,30 @@ public class OpenRouterCodeGenerator
     /// <param name="i"></param>
     /// <param name="tr"></param>
     /// <returns></returns>
-    private async Task<string> GetDescription(int i, IEnumerable<HtmlNode> tr)
+    private static async Task<string> GetDescription(int i, IEnumerable<HtmlNode> tr)
     {
-        using var client = CreateClient();
         var lbb = new DocumentHelper();
-        var anchor = tr.ElementAt(0).Descendants("a").FirstOrDefault();
+        var anchor = tr.ElementAt(0).Descendants("a").First();
 
         var href = anchor.GetAttributeValue("href", "");
         var url = $"https://openrouter.ai{href}";
 
         Console.WriteLine($"{i - 1} Fetching doc from {url}...");
-
+        
+        var path = Path.Combine("cache", href.Replace('/', '_') + ".html");
+        if (File.Exists(path))
+        {
+            return await File.ReadAllTextAsync(path).ConfigureAwait(false);
+        }
+        
+        using var client = CreateClient();
         var str = await client.GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
         lbb.DocumentText = str;
 
-        var msg = lbb.FindNode("div", "class", "prose-slate", true);
+        var msg =
+            lbb.FindNode("div", "class", "prose-slate", true) ??
+            throw new InvalidOperationException("Description not found");
 
         var sb = new StringBuilder();
         var first = true;
@@ -325,25 +317,36 @@ public class OpenRouterCodeGenerator
                     first = false;
                 }
 
-                if (sb.ToString().Contains(text3))
+                if (sb.ToString().Contains(text3, StringComparison.OrdinalIgnoreCase))
                     continue;
                 sb.AppendLine($"/// {text3}  <br/>");
             }
         }
 
-        return sb.ToString().Trim();
+        var html = sb.ToString().Trim();
+        
+        Directory.CreateDirectory("cache");
+        
+        await File.WriteAllTextAsync(path, html).ConfigureAwait(false);
+        
+        return html;
     }
 
     /// <summary>
     ///     Creates HttpClient
     /// </summary>
     /// <returns></returns>
-    private HttpClient CreateClient()
+    private static HttpClient CreateClient()
     {
-        var handler = new HttpClientHandler();
+#pragma warning disable CA2000
+        var handler = new HttpClientHandler
+        {
+            CheckCertificateRevocationList = true,
+        };
+#pragma warning restore CA2000
         handler.AutomaticDecompression =
             DecompressionMethods.Deflate | DecompressionMethods.Brotli | DecompressionMethods.GZip;
-        var client = new HttpClient(handler);
+        var client = new HttpClient(handler, disposeHandler: true);
         client.DefaultRequestHeaders.Add("Accept", "*/*");
         client.DefaultRequestHeaders.Add("UserAgent",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");

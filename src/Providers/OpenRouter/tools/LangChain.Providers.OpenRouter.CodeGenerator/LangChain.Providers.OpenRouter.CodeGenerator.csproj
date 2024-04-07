@@ -5,39 +5,22 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);CA1303;CA1305;CA1304;CA1308</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Resources\AllModels.cs" />
-    <Compile Remove="Resources\OpenRouterModelIds.cs" />
-    <Compile Remove="Resources\OpenRouterModelProvider.cs" />
+    <Compile Remove="Resources\*.cs" />
+    <None Include="Resources\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\AllModels.cs" />
-    <None Include="Resources\OpenRouterModelIds.cs" />
-    <None Include="Resources\OpenRouterModelProvider.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="H.Resources.Generator">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="HtmlAgilityPack" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.CommandLine.NamingConventionBinder" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
