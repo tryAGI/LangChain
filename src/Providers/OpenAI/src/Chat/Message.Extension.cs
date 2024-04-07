@@ -10,6 +10,8 @@ public static class MessageExtensions
 
     public static Message AsFunctionResultMessage(this string json, Tool tool)
     {
+        tool = tool ?? throw new ArgumentNullException(nameof(tool));
+        
         return new Message(json, MessageRole.FunctionResult, $"{tool.Function.Name}:{tool.Id}");
     }
 
@@ -32,7 +34,7 @@ public static class MessageExtensions
     public static Tool GetTool(this Message message)
     {
         var nameAndId = message.FunctionName?.Split(Separator, StringSplitOptions.RemoveEmptyEntries) ??
-                        throw new ArgumentException("Invalid functionCall name and id string"); ;
+                        throw new ArgumentException("Invalid functionCall name and id string");
         if (nameAndId.Length < 2)
             throw new ArgumentException("Invalid functionCall name and id string");
         return new Tool(new Function(nameAndId[0]))
