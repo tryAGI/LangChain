@@ -60,7 +60,7 @@ public class Tasks
                 **Description**: Expand the city guide into a full 7-day travel itinerary with detailed 
                     per-day plans, including weather forecasts, places to eat, packing suggestions, local transportation,
                     and a budget breakdown. You MUST suggest actual places to visit, actual hotels to stay, 
-                    and actual restaurants to go to. This itinerary should cover all aspects of the trip, 
+                    and actual restaurants to go to along with costs. This itinerary should cover all aspects of the trip, 
                     from arrival to departure, integrating the city guide information with practical travel logistics.
 
                 **Parameters**: 
@@ -92,7 +92,7 @@ public class Tasks
                     including actual flight costs, weather forecast, and attractions.
 
                 **Parameters**: 
-                - Origin: {origin}
+                - Home City: {origin}
                 - Cities: {cities}
                 - Interests: {interests}
                 - Travel Date: {travelDates}

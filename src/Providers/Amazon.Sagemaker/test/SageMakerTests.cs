@@ -21,7 +21,7 @@ public class SageMakerTests
 
         var settings = new SageMakerSettings
         {
-            InputParamers = inputParameters
+            InputParameters = inputParameters
         };
 
         var route = Environment.GetEnvironmentVariable("SageMakerLambdaRoute") ?? throw new InvalidOperationException("SageMakerLambdaRoute is not set");

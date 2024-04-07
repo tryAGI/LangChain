@@ -1,8 +1,7 @@
-﻿using LangChain.Chains.HelperChains;
-using LangChain.Serve.Interfaces;
-using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Interfaces;
+using LangChain.Serve.Classes.Repository;
 
-namespace LangChain.Utilities.Services;
+namespace LangChain.Serve.Services;
 
 public class CustomNameProvider(Func<List<StoredMessage>, Task<string>> generator) : IConversationNameProvider
 {

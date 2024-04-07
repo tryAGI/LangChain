@@ -1,6 +1,9 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Threading;
+using OpenAI;
 using OpenAI.Constants;
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
@@ -39,10 +42,19 @@ public partial class OpenAiChatModel(
     }
 
     #endregion
-    
-    #region Methods
 
-    private static global::OpenAI.Chat.Message ToRequestMessage(Message message)
+    #region Methods
+    protected virtual async Task CallFunctionsAsync(global::OpenAI.Chat.Message message, List<Message> messages, CancellationToken cancellationToken = default)
+    {
+        foreach (var tool in message.ToolCalls)
+        {
+            var func = Calls[tool.Function.Name];
+            var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
+            messages.Add(json.AsFunctionResultMessage(tool));
+        }
+    }
+
+    protected virtual global::OpenAI.Chat.Message ToRequestMessage(Message message)
     {
         switch (message.Role)
         {
@@ -59,16 +71,17 @@ public partial class OpenAiChatModel(
                         
                     },
                     content: message.Content);
+            case MessageRole.FunctionCall:
+                return new global::OpenAI.Chat.Message(
+                    role: Role.Assistant, null, message.ToToolCalls());
+            case MessageRole.FunctionResult:
+                return new global::OpenAI.Chat.Message(message.GetTool(),message.Content);
         }
-        
-        // Name = string.IsNullOrWhiteSpace(message.FunctionName)
-        //     ? null
-        //     : message.FunctionName,
+
         return new global::OpenAI.Chat.Message();
     }
-
     
-    private static Message ToMessage(global::OpenAI.Chat.Message message)
+    protected virtual Message ToMessage(global::OpenAI.Chat.Message message)
     {
         var role = message.Role switch
         {
@@ -86,10 +99,11 @@ public partial class OpenAiChatModel(
         {
             content = element.GetString();
         }
-        
+
         return new Message(
-            Content: content, //message.Function_call?.Arguments ?? 
-            Role: role); //, FunctionName: message.Function_call?.Name
+            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments.ToJsonString() ?? content,
+            Role: role,
+            FunctionName: $"{message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name}:{message.ToolCalls?.ElementAtOrDefault(0)?.Id}");
     }
 
     private Usage GetUsage(global::OpenAI.Chat.ChatResponse response)
@@ -198,12 +212,7 @@ public partial class OpenAiChatModel(
 
             while (CallToolsAutomatically && message.ToolCalls != null)
             {
-                foreach (var tool in message.ToolCalls)
-                {
-                    var func = Calls[tool.Function.Name];
-                    var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
-                    messages.Add(json.AsFunctionResultMessage(tool.Function.Name));
-                }
+                await CallFunctionsAsync(message, messages);
         
                 if (ReplyToToolCallsAutomatically)
                 {
@@ -246,6 +255,8 @@ public partial class OpenAiChatModel(
             };
         }
     }
+
+    
 
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,

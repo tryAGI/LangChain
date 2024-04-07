@@ -5,24 +5,28 @@
   <ItemGroup>
     <PackageVersion Include="AngleSharp" Version="1.1.0" />
     <PackageVersion Include="Anthropic" Version="0.3.1" />
+    <PackageVersion Include="Anthropic.SDK" Version="2.0.1" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.2.0" />
     <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.301.43" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.300.52" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
-    <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.13" />
+    <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.15" />
     <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
     <PackageVersion Include="DocumentFormat.OpenXml" Version="3.0.1" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
-    <PackageVersion Include="Google_GenerativeAI" Version="0.1.14" />
+    <PackageVersion Include="Google_GenerativeAI" Version="0.1.19" />
+    <PackageVersion Include="H.Generators.Extensions" Version="1.22.0" />
     <PackageVersion Include="H.Resources.Generator" Version="1.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
+    <PackageVersion Include="HtmlAgilityPack" Version="1.11.60" />
     <PackageVersion Include="HuggingFace" Version="0.2.4" />
+    <PackageVersion Include="IsExternalInit" Version="1.0.3" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
     <PackageVersion Include="LLamaSharp" Version="0.10.0" />
     <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.10.0" />
@@ -58,12 +62,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="StackExchange.Redis" Version="2.7.20" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    <PackageVersion Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.Memory.Data" Version="8.0.0" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Text.Json" Version="8.0.0" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Tiktoken" Version="1.1.3" />
-    <PackageVersion Include="tryAGI.OpenAI" Version="2.0.0" />
+    <PackageVersion Include="tryAGI.OpenAI" Version="2.0.4" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />

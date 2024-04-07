@@ -11,8 +11,4 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" Version="2.1.34" />
 	</ItemGroup>
 	
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Core\src\LangChain.Core.csproj" />
-	</ItemGroup>
-	
 </Project>

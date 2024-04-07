@@ -1,11 +1,11 @@
-﻿using LangChain.Serve.Classes.DTO;
-using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Classes.Repository;
 
 namespace LangChain.Serve;
 
 public class ServeOptions
 {
-    Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>> _models = new Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>>();
+    private readonly Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>> _models = [];
+    
     public ServeOptions RegisterModel(string name, Func<List<StoredMessage>, Task<StoredMessage>> messageProcessor)
     {
         _models[name] = messageProcessor;

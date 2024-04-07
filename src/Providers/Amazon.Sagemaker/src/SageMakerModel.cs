@@ -25,10 +25,10 @@ public class SageMakerModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
-        usedSettings.InputParamers?.Add("endpointName", Id);
+        usedSettings.InputParameters?.Add("endpointName", Id);
 
         using StringContent jsonContent = new(
-            JsonSerializer.Serialize(usedSettings.InputParamers),
+            JsonSerializer.Serialize(usedSettings.InputParameters),
             Encoding.UTF8,
             usedSettings.ContentType!);
 
