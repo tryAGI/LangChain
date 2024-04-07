@@ -1,5 +1,3 @@
-﻿using LangChain.Providers.OpenRouter;
-
-namespace LangChain.Providers.OpenRouter.Predefined;
+﻿namespace LangChain.Providers.OpenRouter.Predefined;
 
 {{OpenRouterClasses}}
