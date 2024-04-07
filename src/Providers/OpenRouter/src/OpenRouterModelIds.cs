@@ -29,11 +29,38 @@ public enum OpenRouterModelIds
 		Mythomist7BFree = 2,
 		
 		/// <summary>
+		/// A wild 7B parameter model that merges several models using the new task_arithmetic merge method from mergekit.  <br/>
+		/// List of merged models:  <br/>
+		/// NousResearch/Nous-Capybara-7B-V1.9  <br/>
+		/// HuggingFaceH4/zephyr-7b-beta  <br/>
+		/// lemonilia/AshhLimaRP-Mistral-7B  <br/>
+		/// Vulkane/120-Days-of-Sodom-LoRA-Mistral-7b  <br/>
+		/// Undi95/Mistral-pippa-sharegpt-7b-qlora  <br/>
+		/// #merge #uncensored  <br/>
+		/// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
+		/// </summary>
+		ToppyM7BFree = 3,
+		
+		/// <summary>
+		/// This model is under development. Check the OpenRouter Discord for updates.  <br/>
+		/// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
+		/// </summary>
+		Cinematika7BAlphaFree = 4,
+		
+		/// <summary>
 		/// Gemma by Google is an advanced, open-source language model family, leveraging the latest in decoder-only, text-to-text technology. It offers English language capabilities across text generation tasks like question answering, summarization, and reasoning. The Gemma 7B variant is comparable in performance to leading open source models.  <br/>
 		/// Usage of Gemma is subject to Google's Gemma Terms of Use.  <br/>
 		/// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
 		/// </summary>
 		GoogleGemma7BFree = 5,
+		
+		/// <summary>
+		/// A #merge model based on Llama-2-13B and made possible thanks to the compute provided by the KoboldAI community. It's a merge between:  <br/>
+		/// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
+		/// chaoyi-wu/MedLLaMA_13B  <br/>
+		/// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/> 
+		/// </summary>
+		Psyfighter13B = 6,
 		
 		/// <summary>
 		/// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
@@ -375,6 +402,12 @@ public enum OpenRouterModelIds
 		
 		/// <summary>
 		/// Sonar is Perplexity's latest model family. It surpasses their earlier models in cost-efficiency, speed, and performance.  <br/>
+		/// This is the online version of Sonar 7B. It is focused on delivering helpful, up-to-date, and factual responses. #online  <br/> 
+		/// </summary>
+		PerplexitySonar7BOnline = 65,
+		
+		/// <summary>
+		/// Sonar is Perplexity's latest model family. It surpasses their earlier models in cost-efficiency, speed, and performance.  <br/>
 		/// This is the online version of Sonar 8x7B. It is focused on delivering helpful, up-to-date, and factual responses. #online  <br/> 
 		/// </summary>
 		PerplexitySonar8X7BOnline = 66,
@@ -659,13 +692,15 @@ public enum OpenRouterModelIds
 		MistralLarge = 109,
 		
 		/// <summary>
-		/// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/> 
+		/// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/>
+		/// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/> 
 		/// </summary>
 		CohereCommand = 110,
 		
 		/// <summary>
-		/// Command-R is an instruction-following conversational model that performs language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
-		/// Read the launch post here.  <br/> 
+		/// Command-R is a 35B parameter model that performs conversational language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
+		/// Read the launch post here.  <br/>
+		/// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/> 
 		/// </summary>
 		CohereCommandR = 111,
 		
