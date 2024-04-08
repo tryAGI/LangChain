@@ -15,10 +15,10 @@ namespace LangChain.Databases.Chroma;
 /// </summary>
 public class ChromaVectorStore : IVectorDatabase
 {
-    private const string LangChainDefaultCollectionName = "langchain";
+    private const string DefaultCollectionName = "langchain";
 
     // TODO: SemanticKernel impl doesn't support collection metadata. Need changes when moved to another impl
-    private Dictionary<string, string>? CollectionMetadata { get; } = new();
+    //private Dictionary<string, string> CollectionMetadata { get; } = [];
 
     private readonly ChromaMemoryStore _store;
 
@@ -28,15 +28,13 @@ public class ChromaVectorStore : IVectorDatabase
     public ChromaVectorStore(
         HttpClient httpClient,
         string endpoint,
-        string collectionName = LangChainDefaultCollectionName)
+        string collectionName = DefaultCollectionName)
     {
         _client = new ChromaClient(httpClient, endpoint);
 
         _collectionName = collectionName;
 
         _store = new ChromaMemoryStore(_client);
-
-        _client.CreateCollectionAsync(_collectionName).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -84,36 +82,26 @@ public class ChromaVectorStore : IVectorDatabase
         return true;
     }
 
-    protected Func<float, float> SelectRelevanceScoreFn()
+    private static float SelectRelevanceScoreFn(float distance)
     {
-        return GetFuncForDistance();
+        //const string distanceKey = "hnsw:space";
 
-        Func<float, float> GetFuncForDistance()
+        var distanceType = "l2";
+        //if (CollectionMetadata.TryGetValue(distanceKey, out var value))
+        //{
+        //    distanceType = value;
+        //}
+
+        return distanceType switch
         {
-            return distance =>
-            {
-                const string distanceKey = "hnsw:space";
+            "cosine" => RelevanceScoreFunctions.Cosine(distance),
+            "l2" => RelevanceScoreFunctions.Euclidean(distance),
+            "ip" => RelevanceScoreFunctions.MaxInnerProduct(distance),
 
-                var distanceType = "l2";
-
-                if (CollectionMetadata != null
-                    && CollectionMetadata.TryGetValue(distanceKey, out var value))
-                {
-                    distanceType = value;
-                }
-
-                return distanceType switch
-                {
-                    "cosine" => RelevanceScoreFunctions.Cosine(distance),
-                    "l2" => RelevanceScoreFunctions.Euclidean(distance),
-                    "ip" => RelevanceScoreFunctions.MaxInnerProduct(distance),
-
-                    _ => throw new ArgumentException(
-                        $@"No supported normalization function for distance metric of type: {distanceType}.
-                        Consider providing relevance_score_fn to Chroma constructor.")
-                };
-            };
-        }
+            _ => throw new ArgumentException(
+                $@"No supported normalization function for distance metric of type: {distanceType}.
+                Consider providing relevance_score_fn to Chroma constructor.")
+        };
     }
 
     /// <inheritdoc />
@@ -145,6 +133,12 @@ public class ChromaVectorStore : IVectorDatabase
             );
         }
 
+        var collection = await _client.GetCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
+        if (collection == null)
+        {
+            await _client.CreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
+        }
+        
         var resultIds = new List<string>(items.Count);
         var resultIdsIterator = _store.UpsertBatchAsync(_collectionName, records, cancellationToken);
         await foreach (var item in resultIdsIterator.ConfigureAwait(false))
@@ -163,6 +157,8 @@ public class ChromaVectorStore : IVectorDatabase
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
+        
+        settings.RelevanceScoreFunc ??= SelectRelevanceScoreFn;
         
         var matches = await _store
             .GetNearestMatchesAsync(
