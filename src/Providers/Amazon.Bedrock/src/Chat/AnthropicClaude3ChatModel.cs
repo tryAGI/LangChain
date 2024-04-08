@@ -35,7 +35,7 @@ public class AnthropicClaude3ChatModel(
 
         if (usedSettings.UseStreaming == true)
         {
-            var streamRequest = BedrockModelStreamRequest.Create(Id, bodyJson);
+            var streamRequest = BedrockModelRequest.CreateStreamRequest(Id, bodyJson);
             var response = await provider.Api.InvokeModelWithResponseStreamAsync(streamRequest, cancellationToken).ConfigureAwait(false);
 
             foreach (var payloadPart in response.Body)

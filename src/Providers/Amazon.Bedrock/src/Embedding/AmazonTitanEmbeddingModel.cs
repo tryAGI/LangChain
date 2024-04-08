@@ -10,8 +10,6 @@ public abstract class AmazonTitanEmbeddingModel(
     string id)
     : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
-    public int MaximumInputLength => 10_000;
-
     public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
         EmbeddingRequest request,
         EmbeddingSettings? settings = null,
@@ -20,19 +18,25 @@ public abstract class AmazonTitanEmbeddingModel(
         request = request ?? throw new ArgumentNullException(nameof(request));
 
         var watch = Stopwatch.StartNew();
-        var splitText = request.Strings.Split(chunkSize: MaximumInputLength);
+
+        var usedSettings = BedrockEmbeddingSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.EmbeddingSettings);
+
+        var splitText = request.Strings.Split(chunkSize: (int)usedSettings.MaximumInputLength!);
         var embeddings = new List<float[]>(capacity: splitText.Count);
-        
+
         var tasks = splitText.Select(text => provider.Api.InvokeModelAsync(Id, new JsonObject { { "inputText", text }, }, cancellationToken))
             .ToList();
         var results = await Task.WhenAll(tasks).ConfigureAwait(false);
-        
+
         foreach (var response in results)
         {
             var embedding = response?["embedding"]?.AsArray();
             if (embedding == null) continue;
 
-            var f = new float[1536];
+            var f = new float[(int)usedSettings.Dimensions!];
             for (var i = 0; i < embedding.Count; i++)
             {
                 f[i] = (float)embedding[(Index)i]?.AsValue()!;
@@ -52,7 +56,7 @@ public abstract class AmazonTitanEmbeddingModel(
         {
             Values = embeddings.ToArray(),
             Usage = Usage.Empty,
-            UsedSettings = EmbeddingSettings.Default,
+            UsedSettings = usedSettings,
         };
     }
 }

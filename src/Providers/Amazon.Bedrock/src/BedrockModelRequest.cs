@@ -4,9 +4,9 @@ using Amazon.BedrockRuntime.Model;
 
 namespace LangChain.Providers.Amazon.Bedrock;
 
-internal static class BedrockModelStreamRequest
+internal static class BedrockModelRequest
 {
-    public static InvokeModelWithResponseStreamRequest Create(string modelId, JsonObject bodyJson)
+    public static InvokeModelWithResponseStreamRequest CreateStreamRequest(string modelId, JsonObject bodyJson)
     {
         bodyJson = bodyJson ?? throw new ArgumentNullException(nameof(bodyJson));
         
