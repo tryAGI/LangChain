@@ -10,6 +10,8 @@ public abstract class AmazonTitanEmbeddingModel(
     string id)
     : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
+    public int MaximumInputLength => 10_000;
+
     public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
         EmbeddingRequest request,
         EmbeddingSettings? settings = null,
