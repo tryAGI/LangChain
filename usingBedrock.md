@@ -50,7 +50,7 @@ You can configure the Bedrock provider one of three ways.
 ```
 var provider = new BedrockProvider();
 ```
-This configuration assumes you've defined an AWS Profile and have set it up on your local computer and you're default Region Endpoint is USEast-1.
+This configuration assumes you've defined an AWS Profile and have set it up on your local computer and your default Region Endpoint is USEast-1.
 
 2. You can pass the Bedrock provider with a Region parameter.
 ```
