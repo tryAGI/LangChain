@@ -1,5 +1,5 @@
 # AWS Access
-First, you need to configure your AWS access.  You can do this several way but here we're going to show you how to do that with a AWS Profile or Access Key ID and Secret Access Key.
+First, you need to configure your AWS access.  You can do this several ways, but here we're going to show you how to do that with an AWS Profile or Access Key ID and Secret Access Key.
 
 
 ## Installation
