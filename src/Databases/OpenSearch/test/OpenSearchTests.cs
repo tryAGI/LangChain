@@ -28,7 +28,7 @@ public class OpenSearchTests
         _indexName = "images-index";
         var username = Environment.GetEnvironmentVariable("OPENSEARCH_USERNAME");
         var endpoint = Environment.GetEnvironmentVariable("OPENSEARCH_URI");
-        var uri = new Uri(endpoint);
+        var uri = new Uri(endpoint!);
         //var uri = new Uri("http://localhost:9200");
         var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
         _options = new OpenSearchVectorStoreOptions
@@ -150,7 +150,7 @@ Helpful Answer:";
         _indexName = "test-index";
         var username = Environment.GetEnvironmentVariable("OPENSEARCH_USERNAME");
         var endpoint = Environment.GetEnvironmentVariable("OPENSEARCH_URI");
-        var uri = new Uri(endpoint);
+        var uri = new Uri(endpoint!);
         //var uri = new Uri("http://localhost:9200");
         var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
         _options = new OpenSearchVectorStoreOptions
