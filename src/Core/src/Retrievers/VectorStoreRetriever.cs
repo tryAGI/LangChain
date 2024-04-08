@@ -1,9 +1,9 @@
 using LangChain.Callback;
+using LangChain.Databases;
 using LangChain.Providers;
 using LangChain.Sources;
-using LangChain.Retrievers;
 
-namespace LangChain.Databases;
+namespace LangChain.Retrievers;
 
 /// <summary>
 /// Base Retriever class for VectorStore.
@@ -14,7 +14,7 @@ public class VectorStoreRetriever : BaseRetriever
     /// <summary>
     /// 
     /// </summary>
-    public VectorStore Vectorstore { get; init; }
+    public IVectorDatabase VectorDatabase { get; init; }
 
     private VectorSearchType SearchType { get; init; }
     
@@ -25,11 +25,12 @@ public class VectorStoreRetriever : BaseRetriever
 
     private float? ScoreThreshold { get; init; }
 
-    private IEmbeddingModel? EmbeddingModel { get; init; }
+    private IEmbeddingModel EmbeddingModel { get; init; }
 
     /// <inheritdoc/>
     public VectorStoreRetriever(
-        VectorStore vectorstore,
+        IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
         VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
     {
@@ -38,7 +39,8 @@ public class VectorStoreRetriever : BaseRetriever
         if (SearchType == VectorSearchType.SimilarityScoreThreshold && ScoreThreshold == null)
             throw new ArgumentException($"ScoreThreshold required for {SearchType}");
 
-        Vectorstore = vectorstore;
+        EmbeddingModel = embeddingModel;
+        VectorDatabase = vectorDatabase;
         SearchType = searchType;
         ScoreThreshold = scoreThreshold;
     }
@@ -48,22 +50,14 @@ public class VectorStoreRetriever : BaseRetriever
         string query,
         CallbackManagerForRetrieverRun? runManager = null)
     {
-        switch (SearchType)
+        var response = await VectorDatabase.SearchAsync(EmbeddingModel, query, searchSettings: new VectorSearchSettings
         {
-            case VectorSearchType.Similarity:
-                var embeddingModel = EmbeddingModel ?? throw new ArgumentException("EmbeddingModel required for Similarity search");
-                return await Vectorstore.SimilaritySearchAsync(embeddingModel, query, K).ConfigureAwait(false);
-
-            case VectorSearchType.SimilarityScoreThreshold:
-                var docsAndSimilarities = await Vectorstore.SimilaritySearchWithRelevanceScores(query, K).ConfigureAwait(false);
-                return docsAndSimilarities.Select(dws => dws.Item1);
-
-            case VectorSearchType.MaximumMarginalRelevance:
-                return await Vectorstore.MaxMarginalRelevanceSearch(query, K).ConfigureAwait(false);
-
-            default:
-                throw new ArgumentException($"{SearchType} not supported");
-        }
+            Type = SearchType,
+            NumberOfResults = K,
+            ScoreThreshold = ScoreThreshold,
+        }).ConfigureAwait(false);
+        
+        return response.ToDocuments();
     }
 
     /// <summary>
@@ -71,6 +65,8 @@ public class VectorStoreRetriever : BaseRetriever
     /// </summary>
     /// <param name="documents"></param>
     /// <returns></returns>
-    public Task<IEnumerable<string>> AddDocumentsAsync(IEnumerable<Document> documents)
-        => Vectorstore.AddDocumentsAsync(documents);
+    public Task<IReadOnlyCollection<string>> AddDocumentsAsync(IReadOnlyCollection<Document> documents)
+    {
+        return VectorDatabase.AddDocumentsAsync(EmbeddingModel, documents);
+    }
 }

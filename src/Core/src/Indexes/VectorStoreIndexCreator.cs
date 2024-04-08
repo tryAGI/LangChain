@@ -1,54 +1,51 @@
-﻿using LangChain.Base;
-using LangChain.Extensions;
-using LangChain.Sources;
+﻿using LangChain.Sources;
 using LangChain.Splitters.Text;
 using LangChain.Databases;
+using LangChain.Extensions;
+using LangChain.Providers;
 
 namespace LangChain.Indexes;
 
 /// <summary>
-/// Logic for creating a vectorstore index.
+/// Logic for creating a VectorDatabases tables.
 /// </summary>
 /// // embeddings are not needed here because VectorStore already has them
-public class VectorStoreIndexCreator(
-    VectorStore vectorStore,
-    ITextSplitter textSplitter)
+public static class VectorStoreIndexCreator
 {
     /// <summary>
-    /// 
+    /// Create a VectorDatabase table from loaders.
     /// </summary>
-    public VectorStore VectorStore { get; } = vectorStore;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public ITextSplitter TextSplitter { get; } = textSplitter;
-
-    /// <summary>
-    /// Create a vectorstore index from loaders.
-    /// </summary>
-    public async Task<VectorStoreIndexWrapper> FromLoaders(List<FileSource> loaders, CancellationToken cancellationToken = default)
+    public static async Task<IReadOnlyCollection<string>> LoadAndSplitDocuments(
+        this IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
+        IReadOnlyCollection<ISource> sources,
+        ITextSplitter? textSplitter = null,
+        CancellationToken cancellationToken = default)
     {
-        loaders = loaders ?? throw new ArgumentNullException(nameof(loaders));
+        sources = sources ?? throw new ArgumentNullException(nameof(sources));
         
-        List<Document> documents = new();
-        foreach (var loader in loaders)
+        var documents = new List<Document>();
+        foreach (var source in sources)
         {
-            documents.AddRange(await loader.LoadAsync(cancellationToken).ConfigureAwait(false));
+            documents.AddRange(await source.LoadAsync(cancellationToken).ConfigureAwait(false));
         }
 
-        return await FromDocumentsAsync(documents).ConfigureAwait(false);
+        return await vectorDatabase.AddSplitDocumentsAsync(embeddingModel, documents, textSplitter).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Create a vectorstore index from documents.
+    /// Create a VectorDatabase table from documents.
     /// </summary>
-    public async Task<VectorStoreIndexWrapper> FromDocumentsAsync(IReadOnlyCollection<Document> documents)
+    public static async Task<IReadOnlyCollection<string>> AddSplitDocumentsAsync(
+        this IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
+        IReadOnlyCollection<Document> documents,
+        ITextSplitter? textSplitter = null)
     {
-        var subDocs = TextSplitter.SplitDocuments(documents);
+        textSplitter ??= new CharacterTextSplitter();
         
-        await VectorStore.AddDocumentsAsync(subDocs).ConfigureAwait(false);
+        var splitDocuments = textSplitter.SplitDocuments(documents);
         
-        return new VectorStoreIndexWrapper(VectorStore);
+        return await vectorDatabase.AddDocumentsAsync(embeddingModel, splitDocuments).ConfigureAwait(false);
     }
 }

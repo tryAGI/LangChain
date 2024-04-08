@@ -1,4 +1,5 @@
-﻿using LangChain.Databases.InMemory;
+﻿using LangChain.Databases;
+using LangChain.Databases.InMemory;
 using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Prompts;
@@ -28,7 +29,8 @@ public partial class LLamaSharpTests
         return model;
 
     }
-    IChatModel CreateChatModel()
+    
+    private IChatModel CreateChatModel()
     {
         var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
         {
@@ -36,15 +38,17 @@ public partial class LLamaSharpTests
             Temperature = 0
         });
         return model;
-
     }
-    VectorStoreIndexWrapper CreateVectorStoreIndex(IEmbeddingModel embeddings, string[] texts)
+    
+    private static async Task<IVectorDatabase> CreateVectorStoreIndex(IEmbeddingModel embeddings, string[] texts)
     {
-        InMemoryVectorStore vectorStore = new InMemoryVectorStore(embeddings);
-        var textSplitter = new CharacterTextSplitter();
-        VectorStoreIndexCreator indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
-        var index = indexCreator.FromDocumentsAsync(texts.Select(x => new Document(x)).ToList()).Result;
-        return index;
+        var vectorDatabase = new InMemoryVectorStore();
+        await vectorDatabase.AddSplitDocumentsAsync(
+            embeddings,
+            texts.ToDocuments(),
+            new CharacterTextSplitter());
+        
+        return vectorDatabase;
     }
 
     PromptTemplate CreatePromptTemplate()

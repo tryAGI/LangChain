@@ -11,7 +11,7 @@ public interface IVectorDatabase
     /// <param name="items"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<IEnumerable<string>> AddAsync(
+    public Task<IReadOnlyCollection<string>> AddAsync(
         IReadOnlyCollection<VectorSearchItem> items,
         CancellationToken cancellationToken = default);
 

@@ -53,7 +53,7 @@ public static class VectorDatabaseExtensions
         }, searchSettings, cancellationToken).ConfigureAwait(false);
     }
     
-    public static async Task<IEnumerable<string>> AddDocumentsAsync(
+    public static async Task<IReadOnlyCollection<string>> AddDocumentsAsync(
         this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<Document> documents,
@@ -69,7 +69,7 @@ public static class VectorDatabaseExtensions
             cancellationToken).ConfigureAwait(false);
     }
     
-    public static async Task<IEnumerable<string>> AddTextsAsync(
+    public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
         this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<string> texts,

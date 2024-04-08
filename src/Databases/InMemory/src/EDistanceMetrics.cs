@@ -13,5 +13,5 @@ public enum EDistanceMetrics
     /// <summary>
     /// 
     /// </summary>
-    Manhattan
+    Manhattan,
 }

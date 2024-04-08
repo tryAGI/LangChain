@@ -27,7 +27,7 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
         var actual = await chroma.GetCollectionAsync();
 
@@ -47,7 +47,7 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
         var documents = new[]
         {
@@ -61,7 +61,7 @@ public class ChromaTests
             })
         };
 
-        var ids = await chroma.AddDocumentsAsync(documents);
+        var ids = await chroma.AddDocumentsAsync(embeddingsMock.Object, documents);
 
         ids.Should().HaveCount(2);
 
@@ -88,7 +88,7 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
         var texts = new[] { "apple", "orange" };
         var metadatas = new Dictionary<string, object>[2];
@@ -104,7 +104,7 @@ public class ChromaTests
             ["color"] = "orange"
         };
 
-        var ids = await chroma.AddTextsAsync(texts, metadatas);
+        var ids = await chroma.AddTextsAsync(embeddingsMock.Object, texts, metadatas);
 
         ids.Should().HaveCount(2);
 
@@ -133,7 +133,7 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
         var documents = new[]
         {
@@ -147,7 +147,7 @@ public class ChromaTests
             })
         };
 
-        var ids = await chroma.AddDocumentsAsync(documents);
+        var ids = await chroma.AddDocumentsAsync(embeddingsMock.Object, documents);
 
         await chroma.DeleteAsync(ids);
 
@@ -167,14 +167,21 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
-        await chroma.AddTextsAsync(EmbeddingsDict.Keys);
+        await chroma.AddTextsAsync(embeddingsMock.Object, EmbeddingsDict.Keys);
 
-        var similar = await chroma.SimilaritySearchAsync("lemon", k: 5);
-        similar.Should().HaveCount(5);
+        var similar = await chroma.SearchAsync(
+            embeddingsMock.Object,
+            embeddingRequest: "lemon",
+            searchSettings: new VectorSearchSettings
+            {
+                Type = VectorSearchType.Similarity,
+                NumberOfResults = 5,
+            });
+        similar.Items.Should().HaveCount(5);
 
-        var similarTexts = similar.Select(s => s.PageContent).ToArray();
+        var similarTexts = similar.Items.Select(s => s.Text).ToArray();
 
         similarTexts[0].Should().BeEquivalentTo("lemon");
         similarTexts.Should().Contain("orange");
@@ -189,14 +196,17 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
-        await chroma.AddTextsAsync(EmbeddingsDict.Keys);
+        await chroma.AddTextsAsync(embeddingsMock.Object, EmbeddingsDict.Keys);
 
-        var similar = await chroma.SimilaritySearchByVectorAsync(EmbeddingsDict["lemon"], k: 5);
-        similar.Should().HaveCount(5);
+        var similar = await chroma.SearchAsync(EmbeddingsDict["lemon"], new VectorSearchSettings
+        {
+            NumberOfResults = 5,
+        });
+        similar.Items.Should().HaveCount(5);
 
-        var similarTexts = similar.Select(s => s.PageContent).ToArray();
+        var similarTexts = similar.Items.Select(s => s.Text).ToArray();
 
         similarTexts[0].Should().BeEquivalentTo("lemon");
         similarTexts.Should().Contain("orange");
@@ -211,17 +221,20 @@ public class ChromaTests
         using var httpClient = new HttpClient();
         var embeddingsMock = CreateFakeEmbeddings();
         var collectionName = GenerateCollectionName();
-        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", embeddingsMock.Object, collectionName);
+        var chroma = new ChromaVectorStore(httpClient, "http://localhost:8000", collectionName);
 
-        await chroma.AddTextsAsync(EmbeddingsDict.Keys);
+        await chroma.AddTextsAsync(embeddingsMock.Object, EmbeddingsDict.Keys);
 
-        var similar = await chroma.SimilaritySearchWithScoreAsync("lemon", k: 5);
-        similar.Should().HaveCount(5);
+        var similar = await chroma.SearchAsync(embeddingsMock.Object, "lemon", searchSettings: new VectorSearchSettings
+        {
+            NumberOfResults = 5,
+        });
+        similar.Items.Should().HaveCount(5);
 
-        var first = similar.First();
+        var first = similar.Items.First();
 
-        first.Item1.PageContent.Should().BeEquivalentTo("lemon");
-        first.Item2.Should().BeGreaterOrEqualTo(1f);
+        first.Text.Should().BeEquivalentTo("lemon");
+        first.Distance.Should().BeGreaterOrEqualTo(1f);
     }
 
     private void PopulateEmbedding()

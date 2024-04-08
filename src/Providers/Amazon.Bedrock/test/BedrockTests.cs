@@ -112,22 +112,22 @@ The pet name is
 
 
     [Test]
-    public void RetrievalChainTest()
+    public async Task RetrievalChainTest()
     {
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
         var llm = new Llama2With13BModel(provider);
         var embeddings = new TitanEmbedTextV1Model(provider);
-        var vectorStore = new InMemoryVectorStore(embeddings);
-        var index = vectorStore
-            .CreateIndexFromDocuments(new[]
+        var vectorDatabase = new InMemoryVectorStore();
+        await vectorDatabase
+            .AddDocumentsAsync(embeddings, new[]
             {
                 "I spent entire day watching TV",
                 "My dog's name is Bob",
                 "This icecream is delicious",
                 "It is cold in space"
-            }.ToDocuments()).Result;
+            }.ToDocuments());
 
         string prompt1Text =
             @"Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -149,7 +149,7 @@ Answer: ";
 
         var chainQuestion =
             Set("What is the good name for a pet?", outputKey: "question")
-            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents")
+            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents")
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(prompt1Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "pet_sentence");
@@ -183,11 +183,9 @@ Answer: ";
         if (File.Exists("vectors.db"))
             File.Delete("vectors.db");
 
-        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors", embeddings);
+        var vectorDatabase = new SQLiteVectorStore("vectors.db", "vectors");
         if (!File.Exists("vectors.db"))
-            await vectorStore.CreateIndexFromDocuments(documents, textSplitter: textSplitter);
-
-        var index = new VectorStoreIndexWrapper(vectorStore);
+            await vectorDatabase.AddSplitDocumentsAsync(embeddings, documents, textSplitter: textSplitter);
 
         string promptText =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
@@ -203,7 +201,7 @@ Helpful Answer:";
                                                                                      //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
                                                                                      // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
                                                                                      // Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
-            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
+            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model

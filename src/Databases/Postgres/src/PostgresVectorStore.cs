@@ -24,7 +24,7 @@ public class PostgresVectorDatabase(
     private readonly PostgresDbClient _postgresDbClient = new(connectionString, schema, vectorSize);
 
     /// <inheritdoc />
-    public async Task<IEnumerable<string>> AddAsync(
+    public async Task<IReadOnlyCollection<string>> AddAsync(
         IReadOnlyCollection<VectorSearchItem> items,
         CancellationToken cancellationToken = default)
     {

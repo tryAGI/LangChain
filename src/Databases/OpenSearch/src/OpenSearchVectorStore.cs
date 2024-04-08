@@ -35,7 +35,7 @@ public class OpenSearchVectorStore : IVectorDatabase
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<string>> AddAsync(
+    public async Task<IReadOnlyCollection<string>> AddAsync(
         IReadOnlyCollection<VectorSearchItem> items,
         CancellationToken cancellationToken = default)
     {

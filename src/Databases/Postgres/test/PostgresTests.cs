@@ -57,7 +57,7 @@ public class PostgresTests
 
         var db = new PostgresDbClient(_connectionString, "public", 1536);
         await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddingsMock.Object, collectionName: collectionName);
+        var store = new PostgresVectorDatabase(_connectionString, 1526, collectionName: collectionName);
 
         var documents = new[]
         {
@@ -71,7 +71,7 @@ public class PostgresTests
             })
         };
 
-        var ids = await store.AddDocumentsAsync(documents);
+        var ids = await store.AddDocumentsAsync(embeddingsMock.Object, documents);
 
         ids.Should().HaveCount(2);
 
@@ -101,7 +101,7 @@ public class PostgresTests
 
         var db = new PostgresDbClient(_connectionString, "public", 1536);
         await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddingsMock.Object, collectionName: collectionName);
+        var store = new PostgresVectorDatabase(_connectionString, 1526, collectionName: collectionName);
 
         var texts = new[] { "apple", "orange" };
         var metadatas = new Dictionary<string, object>[2];
@@ -117,7 +117,7 @@ public class PostgresTests
             ["color"] = "orange"
         };
 
-        var ids = await store.AddTextsAsync(texts, metadatas);
+        var ids = await store.AddTextsAsync(embeddingsMock.Object, texts, metadatas);
 
         ids.Should().HaveCount(2);
 
@@ -149,7 +149,7 @@ public class PostgresTests
 
         var db = new PostgresDbClient(_connectionString, "public", 1536);
         await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddingsMock.Object, collectionName: collectionName);
+        var store = new PostgresVectorDatabase(_connectionString, 1526, collectionName: collectionName);
 
         var documents = new[]
         {
@@ -163,7 +163,7 @@ public class PostgresTests
             })
         };
 
-        var ids = await store.AddDocumentsAsync(documents);
+        var ids = await store.AddDocumentsAsync(embeddingsMock.Object, documents);
 
         await store.DeleteAsync(ids);
 
@@ -186,14 +186,20 @@ public class PostgresTests
 
         var db = new PostgresDbClient(_connectionString, "public", 1536);
         await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddingsMock.Object, collectionName: collectionName);
+        var store = new PostgresVectorDatabase(_connectionString, 1526, collectionName: collectionName);
 
-        await store.AddTextsAsync(EmbeddingsDict.Keys);
+        await store.AddTextsAsync(embeddingsMock.Object, EmbeddingsDict.Keys);
 
-        var similar = await store.SimilaritySearchAsync("lemon", k: 5);
-        similar.Should().HaveCount(5);
+        var similar = await store.SearchAsync(
+            embeddingModel: embeddingsMock.Object,
+            embeddingRequest: "lemon",
+            searchSettings: new VectorSearchSettings
+        {
+            NumberOfResults = 5
+        });
+        similar.Items.Should().HaveCount(5);
 
-        var similarTexts = similar.Select(s => s.PageContent).ToArray();
+        var similarTexts = similar.Items.Select(s => s.Text).ToArray();
 
         similarTexts[0].Should().BeEquivalentTo("lemon");
         similarTexts.Should().Contain("orange");
@@ -211,14 +217,19 @@ public class PostgresTests
 
         var db = new PostgresDbClient(_connectionString, "public", 1536);
         await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddingsMock.Object, collectionName: collectionName);
+        var store = new PostgresVectorDatabase(_connectionString, 1526, collectionName: collectionName);
 
-        await store.AddTextsAsync(EmbeddingsDict.Keys);
+        await store.AddTextsAsync(embeddingsMock.Object, EmbeddingsDict.Keys);
 
-        var similar = await store.SimilaritySearchByVectorAsync(EmbeddingsDict["lemon"], k: 5);
-        similar.Should().HaveCount(5);
+        var similar = await store.SearchAsync(
+            request: EmbeddingsDict["lemon"],
+            settings: new VectorSearchSettings
+            {
+                NumberOfResults = 5
+            });
+        similar.Items.Should().HaveCount(5);
 
-        var similarTexts = similar.Select(s => s.PageContent).ToArray();
+        var similarTexts = similar.Items.Select(s => s.Text).ToArray();
 
         similarTexts[0].Should().BeEquivalentTo("lemon");
         similarTexts.Should().Contain("orange");
@@ -236,17 +247,23 @@ public class PostgresTests
 
         var db = new PostgresDbClient(_connectionString, "public", 1536);
         await db.CreateEmbeddingTableAsync(collectionName);
-        var store = new PostgresVectorStore(_connectionString, 1526, embeddingsMock.Object, collectionName: collectionName);
+        var store = new PostgresVectorDatabase(_connectionString, 1526, collectionName: collectionName);
 
-        await store.AddTextsAsync(EmbeddingsDict.Keys);
+        await store.AddTextsAsync(embeddingsMock.Object, EmbeddingsDict.Keys);
 
-        var similar = await store.SimilaritySearchWithScoreAsync("lemon", k: 5);
-        similar.Should().HaveCount(5);
+        var similar = await store.SearchAsync(
+            embeddingModel: embeddingsMock.Object,
+            embeddingRequest: "lemon",
+            searchSettings: new VectorSearchSettings
+            {
+                NumberOfResults = 5
+            });
+        similar.Items.Should().HaveCount(5);
 
-        var first = similar.First();
+        var first = similar.Items.First();
 
-        first.Item1.PageContent.Should().BeEquivalentTo("lemon");
-        first.Item2.Should().BeGreaterOrEqualTo(1f);
+        first.Text.Should().BeEquivalentTo("lemon");
+        first.Distance.Should().BeGreaterOrEqualTo(1f);
     }
 
     private void PopulateEmbedding()

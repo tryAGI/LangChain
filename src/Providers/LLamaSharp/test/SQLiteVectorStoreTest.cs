@@ -1,7 +1,6 @@
 ﻿using LangChain.Databases;
 using LangChain.Sources;
 using LangChain.Providers.HuggingFace.Downloader;
-using LangChain.VectorStores;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
@@ -12,28 +11,26 @@ public class SQLiteVectorStoreTest
 
     [Test]
     [Explicit]
-    public void SqliteTest()
+    public async Task SqliteTest()
     {
-        
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        var documents = new string[]
-        {
-            "I spent entire day watching TV",
-            "My dog name is Bob",
-            "This icecream is delicious",
-            "It is cold in space"
-        }.ToDocuments();
         
         var dbExists = File.Exists("vectors.db");
-        var store = new SQLiteVectorStore("vectors.db","vectors",embeddings);
+        var vectorDatabase = new SQLiteVectorStore("vectors.db","vectors");
         if (!dbExists)
         {
-            store.AddDocumentsAsync(documents).Wait();
+            await vectorDatabase.AddDocumentsAsync(embeddings, new string[]
+            {
+                "I spent entire day watching TV",
+                "My dog name is Bob",
+                "This icecream is delicious",
+                "It is cold in space"
+            }.ToDocuments());
         }
         
 
-        var results = store.AsRetriever().GetRelevantDocumentsAsync("What is my dog name?").Result.ToList();
+        var results = await vectorDatabase.AsRetriever(embeddings).GetRelevantDocumentsAsync("What is my dog name?");
 
-        results[0].PageContent.Should().Be("My dog name is Bob");
+        results.ElementAt(0).PageContent.Should().Be("My dog name is Bob");
     }
 }

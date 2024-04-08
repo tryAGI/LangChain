@@ -227,13 +227,11 @@ ASSISTANT:";
 
         var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
 
-        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors",embeddings);
+        var vectorDatabase= new SQLiteVectorStore("vectors.db", "vectors");
         if (!File.Exists("vectors.db"))
         {
-            await vectorStore.CreateIndexFromDocuments(documents, textSplitter: textSplitter);
+            await vectorDatabase.AddSplitDocumentsAsync(embeddings, documents, textSplitter: textSplitter);
         }
-
-        var index = new VectorStoreIndexWrapper(vectorStore);
 
 string promptText =
     @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
@@ -246,7 +244,7 @@ Helpful Answer:";
 
         var chain =
             Set("Who was drinking a unicorn blood?", outputKey: "question")                // set the question
-            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
+            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(model);                                                                       // send the result to the language model
