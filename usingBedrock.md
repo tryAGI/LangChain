@@ -58,7 +58,7 @@ var provider = new BedrockProvider(RegionEndpoint.USWest2);
 ```
 This configuration configures your provides to use the specified AWS Region.
 
-3. Finally, you can configure the Bedrock provider with a AWS Access Key ID and Secret Access Key parameters.
+3. Finally, you can configure the Bedrock provider with an AWS Access Key ID and Secret Access Key parameters.
 ```
 var accessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESSKEYID");
 var secretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRETACCESSKEY");
