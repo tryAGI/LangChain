@@ -23,7 +23,6 @@ public class OpenSearchTests
 
     #region Query Images
 
-    [Test]
     public Task setup_image_tests()
     {
         _indexName = "images-index";
@@ -59,15 +58,18 @@ public class OpenSearchTests
     {
         await setup_image_tests();
 
-        var files = Directory.EnumerateFiles(@"you image location");
+        string[] extensions = { ".bmp",".gif", ".jpg", ".jpeg", ".png", ".tiff" };
+        var files = Directory.EnumerateFiles(@"[images directory]", "*.*", SearchOption.AllDirectories)
+            .Where(s => extensions.Any(ext => ext == Path.GetExtension(s)));
+
         var images = files.ToBinaryData();
 
         var documents = new List<Document>();
 
         foreach (BinaryData image in images)
         {
-            var model = new Claude3HaikuModel(_provider);
-            var message = new Message(" \"what's this a picture of and describe details?\"", MessageRole.Human);
+            var model = new Claude3HaikuModel(_provider!);
+            var message = new Message(" \"what's this an image of and describe the details?\"", MessageRole.Human);
 
             var chatRequest = ChatRequest.ToChatRequest(message);
             chatRequest.Image = image;
@@ -103,7 +105,7 @@ public class OpenSearchTests
             Strings = new List<string>(),
             Images = new List<Data> { Data.FromBytes(binaryData.ToArray()) }
         };
-        var embedding = await _embeddings.CreateEmbeddingsAsync(embeddingRequest)
+        var embedding = await _embeddings!.CreateEmbeddingsAsync(embeddingRequest)
             .ConfigureAwait(false);
 
         var floats = embedding.ToSingleArray();
@@ -117,7 +119,7 @@ public class OpenSearchTests
     {
         await setup_image_tests();
 
-        var llm = new Claude3SonnetModel(_provider);
+        var llm = new Claude3SonnetModel(_provider!);
         var index = new VectorStoreIndexWrapper(_vectorStore!);
 
         var promptText =
@@ -143,7 +145,6 @@ Helpful Answer:";
 
     #region Query Simple Documents
 
-    [Test]
     public Task setup_document_tests()
     {
         _indexName = "test-index";
@@ -242,7 +243,7 @@ Helpful Answer:";
     {
         await setup_document_tests();
 
-        var llm = new Claude3SonnetModel(_provider);
+        var llm = new Claude3SonnetModel(_provider!);
         var index = new VectorStoreIndexWrapper(_vectorStore!);
 
         var promptText =
