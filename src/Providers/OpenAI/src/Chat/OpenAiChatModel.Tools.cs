@@ -17,8 +17,8 @@ public partial class OpenAiChatModel
     /// </summary>
     public bool ReplyToToolCallsAutomatically { get; set; } = true;
 
-    private List<Tool> GlobalTools { get; set; } = [];
-    private Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = [];
+    protected List<Tool> GlobalTools { get; set; } = [];
+    protected Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; set; } = [];
 
     #endregion
 
