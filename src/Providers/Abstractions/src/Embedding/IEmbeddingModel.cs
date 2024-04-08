@@ -10,6 +10,7 @@ public interface IEmbeddingModel : IModel<EmbeddingSettings>
     /// 
     /// </summary>
     public int MaximumInputLength { get; }
+    
     /// <summary>
     /// 
     /// </summary>
