@@ -147,6 +147,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Abstrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Abstractions.Tests", "Abstractions\test\LangChain.Databases.Abstractions.Tests.csproj", "{C0A29AA1-DBE8-4B6F-8A8F-716F0BDF5C72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.IntegrationTests", "IntegrationTests\LangChain.Databases.IntegrationTests.csproj", "{35EF63EC-8FB8-47AB-9D64-1F7AE8DADD70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +271,10 @@ Global
 		{C0A29AA1-DBE8-4B6F-8A8F-716F0BDF5C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0A29AA1-DBE8-4B6F-8A8F-716F0BDF5C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0A29AA1-DBE8-4B6F-8A8F-716F0BDF5C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35EF63EC-8FB8-47AB-9D64-1F7AE8DADD70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35EF63EC-8FB8-47AB-9D64-1F7AE8DADD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35EF63EC-8FB8-47AB-9D64-1F7AE8DADD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35EF63EC-8FB8-47AB-9D64-1F7AE8DADD70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -320,6 +326,7 @@ Global
 		{847E2EAD-CDC7-47A9-ACA7-D0B0B6690074} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 		{3D3FFFD5-534C-4C27-8040-F5BF24DA5727} = {847E2EAD-CDC7-47A9-ACA7-D0B0B6690074}
 		{C0A29AA1-DBE8-4B6F-8A8F-716F0BDF5C72} = {847E2EAD-CDC7-47A9-ACA7-D0B0B6690074}
+		{35EF63EC-8FB8-47AB-9D64-1F7AE8DADD70} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
