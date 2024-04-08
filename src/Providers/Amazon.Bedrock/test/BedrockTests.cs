@@ -117,8 +117,8 @@ The pet name is
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new Llama2With13BModel(provider);
-        var embeddings = new TitanEmbedTextV1Model(provider);
+        var llm = new Claude3HaikuModel(provider);
+        var embeddings = new TitanEmbedImageV1Model(provider);
         var index = InMemoryVectorStore
             .CreateIndexFromDocuments(embeddings, new[]
             {
@@ -171,8 +171,8 @@ Answer: ";
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new TitanTextExpressV1Model(provider);
-        var embeddings = new TitanEmbedTextV1Model(provider);
+        var llm = new Claude3HaikuModel(provider);
+        var embeddings = new TitanEmbedImageV1Model(provider);
 
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
@@ -245,14 +245,14 @@ Helpful Answer:";
     [Test]
     public async Task ClaudeImageToText()
     {
-        var provider = new BedrockProvider(RegionEndpoint.USWest2);
-        var model = new Claude3SonnetModel(provider);
+        var provider = new BedrockProvider();
+        var model = new Claude3HaikuModel(provider);
 
         var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
         var imageData = await File.ReadAllBytesAsync(path);
         var binaryData = new BinaryData(imageData, "image/png");
 
-        var message = new Message(" \"what do you think of this?\"", MessageRole.Human);
+        var message = new Message(" \"what's this a picture of and describe details?\"", MessageRole.Human);
 
         var chatRequest = ChatRequest.ToChatRequest(message);
         chatRequest.Image = binaryData;

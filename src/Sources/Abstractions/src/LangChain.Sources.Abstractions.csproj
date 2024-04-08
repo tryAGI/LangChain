@@ -15,6 +15,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="System.Memory.Data" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
     </ItemGroup>
 
