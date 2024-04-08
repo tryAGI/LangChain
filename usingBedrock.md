@@ -1,5 +1,5 @@
 # AWS Access
-First, you need to configure your AWS access.  You can do this serveral way but here we're going to show you how to do that with a AWS Profile or Access Key ID and Secret Access Key.
+First, you need to configure your AWS access.  You can do this several ways, but here we're going to show you how to do that with an AWS Profile or Access Key ID and Secret Access Key.
 
 
 ## Installation
@@ -50,7 +50,7 @@ You can configure the Bedrock provider one of three ways.
 ```
 var provider = new BedrockProvider();
 ```
-This configuration assumes you've defined an AWS Profile and have set it up on your local computer and you're default Region Endpoint is USEast-1.
+This configuration assumes you've defined an AWS Profile and have set it up on your local computer and your default Region Endpoint is USEast-1.
 
 2. You can pass the Bedrock provider with a Region parameter.
 ```
@@ -58,7 +58,7 @@ var provider = new BedrockProvider(RegionEndpoint.USWest2);
 ```
 This configuration configures your provides to use the specified AWS Region.
 
-3. Finally, you can configure the Bedrock provider with a AWS Access Key ID and Secret Access Key parameters.
+3. Finally, you can configure the Bedrock provider with an AWS Access Key ID and Secret Access Key parameters.
 ```
 var accessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESSKEYID");
 var secretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRETACCESSKEY");
