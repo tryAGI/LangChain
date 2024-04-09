@@ -12,11 +12,6 @@ public class OpenAiProvider : Provider
     /// <summary>
     /// 
     /// </summary>
-    public string ApiKey { get; init; }
-
-    /// <summary>
-    /// 
-    /// </summary>
     [CLSCompliant(false)]
     public OpenAIClient Api { get; private set; }
 
@@ -28,18 +23,19 @@ public class OpenAiProvider : Provider
         : base(id: OpenAiConfiguration.SectionName)
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        ApiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
+        var apiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
 
-        ChatSettings = new OpenAiChatSettings
-        {
-            //StopSequences = configuration.StopSequences,
-            Temperature = configuration.Temperature,
-            User = string.Empty,
-        };
         Api = configuration.Endpoint != null &&
               !string.IsNullOrWhiteSpace(configuration.Endpoint)
-            ? new OpenAIClient(ApiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
-            : new OpenAIClient(ApiKey);
+            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
+            : new OpenAIClient(apiKey);
+        ChatSettings = configuration.ChatSettings;
+        EmbeddingSettings = configuration.EmbeddingSettings;
+        TextToImageSettings = configuration.TextToImageSettings;
+        ModerationSettings = configuration.ModerationSettings;
+        SpeechToTextSettings = configuration.SpeechToTextSettings;
+        TextToSpeechSettings = configuration.TextToSpeechSettings;
+        ImageToTextSettings = configuration.ImageToTextSettings;
     }
     
     public OpenAiProvider(
@@ -47,11 +43,11 @@ public class OpenAiProvider : Provider
         string? customEndpoint = null)
         : base(id: OpenAiConfiguration.SectionName)
     {
-        ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+        apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
 
         Api = customEndpoint != null
-            ? new OpenAIClient(ApiKey, new OpenAIClientSettings(domain: customEndpoint))
-            : new OpenAIClient(ApiKey);
+            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: customEndpoint))
+            : new OpenAIClient(apiKey);
     }
 
     #endregion

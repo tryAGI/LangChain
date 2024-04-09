@@ -73,6 +73,45 @@ public class OpenSearchVectorStore : IVectorDatabase
             .ToArray();
     }
 
+    public async Task<IEnumerable<string>> AddImagesAsync(IEnumerable<Document> documents, CancellationToken cancellationToken = default)
+    {
+        var bulkDescriptor = new BulkDescriptor();
+        var i = 1;
+
+        var enumerable = documents as Document[] ?? documents.ToArray();
+        foreach (var document in enumerable)
+        {
+            document.Metadata.TryGetValue(document.PageContent, out object? value);
+            var image = (BinaryData)value!;
+            var images = new List<Data> { Data.FromBytes(image.ToArray()) };
+
+            var embeddingRequest = new EmbeddingRequest
+            {
+                Strings = new List<string>() { document.PageContent },
+                Images = images
+            };
+            var embed = await EmbeddingModel.CreateEmbeddingsAsync(embeddingRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
+            var vectorRecord = new VectorRecord
+            {
+                Id = i++.ToString(CultureInfo.InvariantCulture),
+                Text = document.PageContent,
+                Vector = embed.Values.SelectMany(x => x).ToArray()
+            };
+
+            bulkDescriptor.Index<VectorRecord>(desc => desc
+                .Document(vectorRecord)
+                .Index(_indexName)
+            );
+        }
+
+        var bulkResponse = await _client!.BulkAsync(bulkDescriptor, cancellationToken)
+            .ConfigureAwait(false);
+
+        return new List<string>();
+    }
+    
     public Task<bool> DeleteAsync(
         IEnumerable<string> ids,
         CancellationToken cancellationToken = default)
@@ -123,7 +162,7 @@ public class OpenSearchVectorStore : IVectorDatabase
             .Properties(p => p
                 .Keyword(k => k.Name(n => n.Id))
                 .Text(t => t.Name(n => n.Text))
-                .KnnVector(d => d.Name(n => n.Vector).Dimension(1536).Similarity("cosine"))
+                .KnnVector(d => d.Name(n => n.Vector).Dimension(options.Dimensions).Similarity("cosine"))
             )
         ));
     }
