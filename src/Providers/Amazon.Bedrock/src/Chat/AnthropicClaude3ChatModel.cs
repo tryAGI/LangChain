@@ -13,6 +13,13 @@ public class AnthropicClaude3ChatModel(
     string id)
     : ChatModel(id)
 {
+    /// <summary>
+    /// Generates a chat response based on the provided `ChatRequest`.
+    /// </summary>
+    /// <param name="request">The `ChatRequest` containing the input messages and other parameters.</param>
+    /// <param name="settings">Optional `ChatSettings` to override the model's default settings.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A `ChatResponse` containing the generated messages and usage information.</returns>
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
@@ -26,7 +33,7 @@ public class AnthropicClaude3ChatModel(
 
         var stringBuilder = new StringBuilder();
 
-        var usedSettings = BedrockChatSettings.Calculate(
+        var usedSettings = AnthropicChatSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
@@ -92,17 +99,24 @@ public class AnthropicClaude3ChatModel(
         };
     }
 
+    /// <summary>
+    /// Creates the request body JSON for the Anthropic model based on the provided prompt and settings.
+    /// </summary>
+    /// <param name="prompt">The input prompt for the model.</param>
+    /// <param name="usedSettings">The settings to use for the request.</param>
+    /// <param name="image">Binary image to use for the request.</param>
+    /// <returns>A `JsonObject` representing the request body.</returns>
     private static JsonObject CreateBodyJson(
         string? prompt,
-        BedrockChatSettings settings,
+        BedrockChatSettings usedSettings,
         BinaryData? image = null)
     {
-        settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        usedSettings = usedSettings ?? throw new ArgumentNullException(nameof(usedSettings));
 
         var bodyJson = new JsonObject
         {
             ["anthropic_version"] = "bedrock-2023-05-31",
-            ["max_tokens"] = settings.MaxTokens!.Value,
+            ["max_tokens"] = usedSettings.MaxTokens!.Value,
             ["messages"] = new JsonArray
             {
                new JsonObject
