@@ -103,7 +103,7 @@ public class AnthropicClaudeChatModel(
     /// <param name="prompt">The input prompt for the model.</param>
     /// <param name="usedSettings">The settings to use for the request.</param>
     /// <returns>A `JsonObject` representing the request body.</returns>
-    private static JsonObject CreateBodyJson(string prompt, BedrockChatSettings usedSettings)
+    private static JsonObject CreateBodyJson(string prompt, AnthropicChatSettings usedSettings)
     {
         var bodyJson = new JsonObject
         {

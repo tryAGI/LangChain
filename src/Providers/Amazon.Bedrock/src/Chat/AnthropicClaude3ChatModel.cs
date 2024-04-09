@@ -108,7 +108,7 @@ public class AnthropicClaude3ChatModel(
     /// <returns>A `JsonObject` representing the request body.</returns>
     private static JsonObject CreateBodyJson(
         string? prompt,
-        BedrockChatSettings usedSettings,
+        AnthropicChatSettings usedSettings,
         BinaryData? image = null)
     {
         usedSettings = usedSettings ?? throw new ArgumentNullException(nameof(usedSettings));
