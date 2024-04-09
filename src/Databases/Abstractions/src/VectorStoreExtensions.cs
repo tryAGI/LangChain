@@ -57,6 +57,7 @@ public static class VectorDatabaseExtensions
         this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<Document> documents,
+        EmbeddingSettings? embeddingSettings = default,
         CancellationToken cancellationToken = default)
     {
         vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
@@ -66,6 +67,7 @@ public static class VectorDatabaseExtensions
             embeddingModel: embeddingModel,
             texts: documents.Select(x => x.PageContent).ToArray(), 
             metadatas: documents.Select(x => x.Metadata).ToArray(),
+            embeddingSettings: embeddingSettings,
             cancellationToken).ConfigureAwait(false);
     }
     
@@ -74,13 +76,26 @@ public static class VectorDatabaseExtensions
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<string> texts,
         IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null,
+        EmbeddingSettings? embeddingSettings = default,
         CancellationToken cancellationToken = default)
     {
         vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
+        var embeddingRequest = new EmbeddingRequest
+        {
+            Strings = texts.ToArray(),
+            Images = metadatas?
+                .Select((metadata, i) => metadata.TryGetValue(texts.ElementAt(i), out object? result)
+                    ? result as BinaryData
+                    : null)
+                .Where(x => x != null)
+                .Select(x => Data.FromBytes(x!.ToArray()))
+                .ToArray() ?? [],
+        };
+        
         float[][] embeddings = await embeddingModel
-            .CreateEmbeddingsAsync(texts.ToArray(), null, cancellationToken)
+            .CreateEmbeddingsAsync(embeddingRequest, embeddingSettings, cancellationToken)
             .ConfigureAwait(false);
 
         return await vectorDatabase.AddAsync(
