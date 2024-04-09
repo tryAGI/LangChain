@@ -16,6 +16,7 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
+using Microsoft.SemanticKernel.AI.Embeddings;
 
 namespace LangChain.Providers.Amazon.Bedrock.Tests;
 
@@ -289,5 +290,19 @@ question: who are 10 of the most popular superheros and what are their powers?";
             var response = await llm.GenerateAsync(prompt);
             response.LastMessageContent.Should().NotBeNull();
         }
+    }
+
+    [Test]
+    public async Task TestEmbedding()
+    {
+        var provider = new BedrockProvider();
+        var embeddings = new EmbedEnglishV3Model(provider);
+
+        var prompt = @"
+you are a comic book writer.  you will be given a question and you will answer it. 
+question: who are 10 of the most popular superheros and what are their powers?";
+
+        var embedding = await embeddings.CreateEmbeddingsAsync("prompt")
+            .ConfigureAwait(false);
     }
 }

@@ -9,11 +9,6 @@ public interface IEmbeddingModel : IModel<EmbeddingSettings>
     /// <summary>
     /// 
     /// </summary>
-    public int MaximumInputLength { get; }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="request"></param>
     /// <param name="settings"></param>
     /// <param name="cancellationToken"></param>

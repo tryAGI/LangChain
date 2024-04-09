@@ -8,7 +8,7 @@
 
     <PropertyGroup Label="NuGet">
         <Description>OpenSearch for LangChain.</Description>
-        <PackageTags>$(PackageTags);OpenSearch</PackageTags>
+        <PackageTags>$(PackageTags);aws, amazon, opensearch, api</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
