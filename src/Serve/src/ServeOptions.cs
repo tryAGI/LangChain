@@ -1,4 +1,4 @@
-﻿using LangChain.Serve.Classes.Repository;
+﻿using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve;
 
