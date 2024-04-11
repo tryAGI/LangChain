@@ -83,6 +83,9 @@ Console.WriteLine($"LLM usage: {llm.Usage}");    // Print usage and price
 Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and price
 ```
 
+## Featured projects
+- [LangChainChat](https://github.com/TesAnti/LangChainChat) - Allows you to run a chat based on a Blazor project using LangChain.Serve and any of the supported local or paid models
+
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
