@@ -11,4 +11,8 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" Version="2.1.34" />
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <ProjectReference Include="..\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj" />
+	</ItemGroup>
+	
 </Project>

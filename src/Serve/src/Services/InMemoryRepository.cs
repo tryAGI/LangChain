@@ -1,5 +1,5 @@
-﻿using LangChain.Serve.Interfaces;
-using LangChain.Serve.Classes.Repository;
+﻿using LangChain.Serve.Abstractions;
+using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve.Services;
 
