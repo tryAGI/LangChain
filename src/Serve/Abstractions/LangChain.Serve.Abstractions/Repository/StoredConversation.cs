@@ -1,4 +1,4 @@
-﻿namespace LangChain.Serve.Classes.Repository;
+﻿namespace LangChain.Serve.Abstractions.Repository;
 
 public class StoredConversation
 {

@@ -12,11 +12,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Sqlite" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+        <ProjectReference Include="..\..\..\Serve\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

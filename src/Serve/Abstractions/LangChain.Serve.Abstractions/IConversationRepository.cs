@@ -1,6 +1,6 @@
-﻿using LangChain.Serve.Classes.Repository;
+﻿using LangChain.Serve.Abstractions.Repository;
 
-namespace LangChain.Serve.Interfaces;
+namespace LangChain.Serve.Abstractions;
 
 public interface IConversationRepository
 {
