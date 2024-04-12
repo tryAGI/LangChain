@@ -298,7 +298,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Togethe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.TogetherAi.Tests", "src\Providers\TogetherAI\tests\LangChain.Providers.TogetherAi.Tests.csproj", "{0161A0F5-D55C-418A-BF54-AEE8EC73C52C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Serve.Abstractions", "src\Serve\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj", "{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Serve.Abstractions", "src\Serve\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj", "{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Sqlite.IntegrationTests", "src\tests\LangChain.Databases.Sqlite.IntegrationTests\LangChain.Databases.Sqlite.IntegrationTests.csproj", "{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -630,6 +632,10 @@ Global
 		{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -754,6 +760,7 @@ Global
 		{15D318BC-3954-4B32-B72A-B0FC97048EB3} = {CD001ADE-7B22-4325-9B3C-5C7D3B812797}
 		{0161A0F5-D55C-418A-BF54-AEE8EC73C52C} = {CD001ADE-7B22-4325-9B3C-5C7D3B812797}
 		{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6} = {C5C6EB91-CF9B-48F8-A198-9D9065E65BD1}
+		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F} = {5168348E-52FD-4905-83B2-AAF546EAD676}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

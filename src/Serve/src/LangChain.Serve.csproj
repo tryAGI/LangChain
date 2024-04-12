@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<NoWarn>$(NoWarn);CA1002</NoWarn>
 	</PropertyGroup>
-	
+	<PropertyGroup Label="NuGet">
+		<Description>LangChain Serve</Description>
+		<PackageTags>$(PackageTags);serve</PackageTags>
+	</PropertyGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" Version="2.1.34" />
 	</ItemGroup>
