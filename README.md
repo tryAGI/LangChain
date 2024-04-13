@@ -1,4 +1,4 @@
-# 🦜️🔗 LangChain
+# 🦜️🔗 LangChain .NET
 
 [![Nuget package](https://img.shields.io/nuget/vpre/LangChain)](https://www.nuget.org/packages/LangChain/)
 [![dotnet](https://github.com/tryAGI/LangChain/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/tryAGI/LangChain/actions/workflows/dotnet.yml)
