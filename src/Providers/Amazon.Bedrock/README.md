@@ -1,7 +1,6 @@
 # AWS Access
 First, you need to configure your AWS access.  You can do this several ways, but here we're going to show you how to do that with an AWS Profile or Access Key ID and Secret Access Key.
 
-
 ## Installation
 
 1. Install the AWS CLI by following the instructions for your operating system from the [official AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).

@@ -130,3 +130,10 @@ Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and
 Priority place for bugs: https://github.com/tryAGI/LangChain/issues  
 Priority place for ideas and general questions: https://github.com/tryAGI/LangChain/discussions  
 Discord: https://discord.gg/Ca2xhfBf3v  
+
+## Legal information and credits
+It's licensed under [the MIT license](LICENSE). We do not plan to change the license in any foreseeable future for this project, 
+but projects based on this within the organization may have different licenses.  
+Some documentation is based on documentation from [dotnet/docs](https://github.com/dotnet/docs/) repository 
+under [CC BY 4.0 license](https://github.com/dotnet/docs/blob/main/LICENSE), 
+where code examples are changed to code examples for using this project.  
