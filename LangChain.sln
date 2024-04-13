@@ -313,44 +313,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bedrock", "Bedrock", "{6622
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SageMaker", "SageMaker", "{E6A4D04E-CC83-4F24-89B4-04F3EF61715F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{37CAA12B-031B-4B87-B63B-4A5042EA6F44}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cli", "Cli", "{177349C8-4FD3-466E-A7F4-67983A5B2C1F}"
 	ProjectSection(SolutionItems) = preProject
-		docs\azure-ai-for-dotnet-developers.md = docs\azure-ai-for-dotnet-developers.md
-		docs\dotnet-ai-ecosystem.md = docs\dotnet-ai-ecosystem.md
-		docs\get-started-app-chat-scaling-with-azure-container-apps.md = docs\get-started-app-chat-scaling-with-azure-container-apps.md
-		docs\get-started-app-chat-template.md = docs\get-started-app-chat-template.md
+		src\Cli\README.md = src\Cli\README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "quickstarts", "quickstarts", "{2D096845-F569-4E34-BE9F-5615646F7021}"
-	ProjectSection(SolutionItems) = preProject
-		docs\quickstarts\get-started-azure-openai.md = docs\quickstarts\get-started-azure-openai.md
-		docs\quickstarts\quickstart-ai-chat-with-data.md = docs\quickstarts\quickstart-ai-chat-with-data.md
-		docs\quickstarts\quickstart-azure-openai-tool.md = docs\quickstarts\quickstart-azure-openai-tool.md
-		docs\quickstarts\quickstart-openai-generate-images.md = docs\quickstarts\quickstart-openai-generate-images.md
-		docs\quickstarts\quickstart-openai-summarize-text.md = docs\quickstarts\quickstart-openai-summarize-text.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "includes", "includes", "{2CE90537-105E-45DB-B7AB-F592C6A822B9}"
-	ProjectSection(SolutionItems) = preProject
-		docs\quickstarts\includes\prerequisites-and-azure-deploy.md = docs\quickstarts\includes\prerequisites-and-azure-deploy.md
-		docs\quickstarts\includes\prerequisites-openai.md = docs\quickstarts\includes\prerequisites-openai.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "media", "media", "{BA41145E-6401-4CE4-B2B9-6C37E8F00A6B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "get-started-app-chat-template", "get-started-app-chat-template", "{75B1E432-1D6C-4141-91B6-A3D68BDF7E52}"
-	ProjectSection(SolutionItems) = preProject
-		docs\media\get-started-app-chat-template\browser-chat-developer-settings-chat-pane.png = docs\media\get-started-app-chat-template\browser-chat-developer-settings-chat-pane.png
-		docs\media\get-started-app-chat-template\browser-chat-initial-answer-citation-highlighted.png = docs\media\get-started-app-chat-template\browser-chat-initial-answer-citation-highlighted.png
-		docs\media\get-started-app-chat-template\browser-chat-initial-answer.png = docs\media\get-started-app-chat-template\browser-chat-initial-answer.png
-		docs\media\get-started-app-chat-template\browser-chat-with-your-data.png = docs\media\get-started-app-chat-template\browser-chat-with-your-data.png
-		docs\media\get-started-app-chat-template\github-codespace-dashboard.png = docs\media\get-started-app-chat-template\github-codespace-dashboard.png
-		docs\media\get-started-app-chat-template\github-codespace-delete.png = docs\media\get-started-app-chat-template\github-codespace-delete.png
-		docs\media\get-started-app-chat-template\github-create-codespace.png = docs\media\get-started-app-chat-template\github-create-codespace.png
-		docs\media\get-started-app-chat-template\open-terminal-option.png = docs\media\get-started-app-chat-template\open-terminal-option.png
-		docs\media\get-started-app-chat-template\reopen-local-command-palette.png = docs\media\get-started-app-chat-template\reopen-local-command-palette.png
-		docs\media\get-started-app-chat-template\simple-architecture-diagram.png = docs\media\get-started-app-chat-template\simple-architecture-diagram.png
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Cli", "src\Cli\src\LangChain.Cli.csproj", "{DE30162A-5D05-4E9B-80D7-43A8927D450E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -686,6 +654,10 @@ Global
 		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE30162A-5D05-4E9B-80D7-43A8927D450E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE30162A-5D05-4E9B-80D7-43A8927D450E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE30162A-5D05-4E9B-80D7-43A8927D450E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE30162A-5D05-4E9B-80D7-43A8927D450E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -813,10 +785,7 @@ Global
 		{E6A4D04E-CC83-4F24-89B4-04F3EF61715F} = {96CCA968-1CE4-4DAB-9495-F8BA1249ADCD}
 		{08BA819F-538B-44A8-9463-3F90381F7F0D} = {E6A4D04E-CC83-4F24-89B4-04F3EF61715F}
 		{08270801-B335-4DDE-8329-9D9198C3D3A1} = {E6A4D04E-CC83-4F24-89B4-04F3EF61715F}
-		{2D096845-F569-4E34-BE9F-5615646F7021} = {37CAA12B-031B-4B87-B63B-4A5042EA6F44}
-		{2CE90537-105E-45DB-B7AB-F592C6A822B9} = {2D096845-F569-4E34-BE9F-5615646F7021}
-		{BA41145E-6401-4CE4-B2B9-6C37E8F00A6B} = {37CAA12B-031B-4B87-B63B-4A5042EA6F44}
-		{75B1E432-1D6C-4141-91B6-A3D68BDF7E52} = {BA41145E-6401-4CE4-B2B9-6C37E8F00A6B}
+		{DE30162A-5D05-4E9B-80D7-43A8927D450E} = {177349C8-4FD3-466E-A7F4-67983A5B2C1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

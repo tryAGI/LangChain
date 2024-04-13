@@ -9,7 +9,7 @@ public class OpenAiChatSettings : ChatSettings
         User = ChatSettings.Default.User,
         UseStreaming = ChatSettings.Default.UseStreaming,
         Temperature = 1.0,
-        MaxTokens = int.MaxValue,
+        MaxTokens = 0,
         TopP = 1.0,
         FrequencyPenalty = 0.0,
         PresencePenalty = 0.0,
