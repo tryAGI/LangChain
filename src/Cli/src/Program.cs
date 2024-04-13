@@ -63,10 +63,7 @@ async Task SummarizeAsync(string inputPath, string outputPath, int wordCount)
         $"""
          Please summarize the the following text in {wordCount} words or less:
          {inputText}
-         """, new OpenAiChatSettings
-        {
-            MaxTokens = 400,
-        }).ConfigureAwait(false);
+         """).ConfigureAwait(false);
             
     await File.WriteAllTextAsync(outputPath, outputText).ConfigureAwait(false);
 }

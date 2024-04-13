@@ -3,18 +3,21 @@ namespace LangChain.Providers.OpenAI;
 
 public class OpenAiChatSettings : ChatSettings
 {
+    /// <summary>
+    /// According: https://platform.openai.com/docs/api-reference/chat/create
+    /// </summary>
     public new static OpenAiChatSettings Default { get; } = new()
     {
         StopSequences = ChatSettings.Default.StopSequences,
         User = ChatSettings.Default.User,
         UseStreaming = ChatSettings.Default.UseStreaming,
-        Temperature = 1.0,
-        MaxTokens = 0,
-        TopP = 1.0,
-        FrequencyPenalty = 0.0,
-        PresencePenalty = 0.0,
-        Number = 1,
-        LogitBias = new Dictionary<string, double>(),
+        Temperature = null,
+        MaxTokens = null,
+        TopP = null,
+        FrequencyPenalty = null,
+        PresencePenalty = null,
+        Number = null,
+        LogitBias = null,
     };
 
     /// <summary>
@@ -115,44 +118,37 @@ public class OpenAiChatSettings : ChatSettings
                 requestSettingsCasted?.Temperature ??
                 modelSettingsCasted?.Temperature ??
                 providerSettingsCasted?.Temperature ??
-                Default.Temperature ??
-                throw new InvalidOperationException("Default Temperature is not set."),
+                Default.Temperature,
             MaxTokens =
                 requestSettingsCasted?.MaxTokens ??
                 modelSettingsCasted?.MaxTokens ??
                 providerSettingsCasted?.MaxTokens ??
-                Default.MaxTokens ??
-                throw new InvalidOperationException("Default MaxTokens is not set."),
+                Default.MaxTokens,
             TopP =
                 requestSettingsCasted?.TopP ??
                 modelSettingsCasted?.TopP ??
                 providerSettingsCasted?.TopP ??
-                Default.TopP ??
-                throw new InvalidOperationException("Default TopP is not set."),
+                Default.TopP,
             FrequencyPenalty =
                 requestSettingsCasted?.FrequencyPenalty ??
                 modelSettingsCasted?.FrequencyPenalty ??
                 providerSettingsCasted?.FrequencyPenalty ??
-                Default.FrequencyPenalty ??
-                throw new InvalidOperationException("Default FrequencyPenalty is not set."),
+                Default.FrequencyPenalty,
             PresencePenalty =
                 requestSettingsCasted?.PresencePenalty ??
                 modelSettingsCasted?.PresencePenalty ??
                 providerSettingsCasted?.PresencePenalty ??
-                Default.PresencePenalty ??
-                throw new InvalidOperationException("Default PresencePenalty is not set."),
+                Default.PresencePenalty,
             Number =
                 requestSettingsCasted?.Number ??
                 modelSettingsCasted?.Number ??
                 providerSettingsCasted?.Number ??
-                Default.Number ??
-                throw new InvalidOperationException("Default Number is not set."),
+                Default.Number,
             LogitBias =
                 requestSettingsCasted?.LogitBias ??
                 modelSettingsCasted?.LogitBias ??
                 providerSettingsCasted?.LogitBias ??
-                Default.LogitBias ??
-                throw new InvalidOperationException("Default LogitBias is not set."),
+                Default.LogitBias,
         };
     }
 }
