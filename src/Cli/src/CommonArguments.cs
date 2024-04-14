@@ -2,7 +2,7 @@ using System.CommandLine;
 
 namespace LangChain.Cli;
 
-public static class Arguments
+public static class CommonArguments
 {
     public static Argument<string> InputPath => new(
         name: "Input file",
