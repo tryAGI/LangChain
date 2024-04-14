@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Meta\src\LangChain.csproj" />
+    <ProjectReference Include="..\..\Providers\OpenRouter\src\LangChain.Providers.OpenRouter.csproj" />
   </ItemGroup>
 
 </Project>
