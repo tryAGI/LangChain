@@ -11,7 +11,7 @@
 
     <PropertyGroup Label="NuGet">
         <Description>Suno AI API model provider.</Description>
-        <PackageTags>$(PackageTags);leonardoai;leonardo;api;music;text;music2text</PackageTags>
+        <PackageTags>$(PackageTags);suno;ai;api;music;text;music2text</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
