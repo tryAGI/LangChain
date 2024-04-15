@@ -1,30 +1,28 @@
 ﻿using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.RetrievalQA;
-using LangChain.VectorStores;
+using LangChain.Databases;
+using LangChain.Providers;
 
 namespace LangChain.Indexes;
 
 /// <summary>
 /// 
 /// </summary>
-/// <param name="vectorStore"></param>
-public class VectorStoreIndexWrapper(
-    VectorStore vectorStore)
+public static class VectorStoreIndexWrapper
 {
     /// <summary>
     /// 
     /// </summary>
-    public VectorStore Store { get; } = vectorStore;
-
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <param name="vectorDatabase"></param>
+    /// <param name="embeddingModel"></param>
     /// <param name="question"></param>
     /// <param name="llm"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
-    public Task<string?> QueryAsync(
+    public static Task<string?> QueryAsync(
+        this IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
         string question,
         BaseCombineDocumentsChain llm,
         string inputKey = "question",
@@ -33,7 +31,7 @@ public class VectorStoreIndexWrapper(
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 llm,
-                Store.AsRetriever())
+                vectorDatabase.AsRetriever(embeddingModel))
             {
                 InputKey = inputKey,
                 OutputKey = outputKey,

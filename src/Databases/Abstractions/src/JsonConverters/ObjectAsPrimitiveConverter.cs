@@ -1,11 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace LangChain.Common.Converters;
+namespace LangChain.Databases.JsonConverters;
 
 /// <inheritdoc />
 /// According: https://stackoverflow.com/questions/65972825/c-sharp-deserializing-nested-json-to-nested-dictionarystring-object
+[RequiresUnreferencedCode("JSON serialization and deserialization might require types that cannot be statically analyzed. Use the overload that takes a JsonTypeInfo or JsonSerializerContext, or make sure all of the required types are preserved.")]
+[RequiresDynamicCode("JSON serialization and deserialization might require types that cannot be statically analyzed and might need runtime code generation. Use System.Text.Json source generation for native AOT applications.")]
 public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
 {
     FloatFormat FloatFormat { get; init; }
@@ -26,15 +29,8 @@ public sealed class ObjectAsPrimitiveConverter : JsonConverter<object>
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
     {
-        if (value == null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        if (writer == null)
-        {
-            throw new ArgumentNullException(nameof(writer));
-        }
+        value = value ?? throw new ArgumentNullException(nameof(value));
+        writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
         if (value.GetType() == typeof(object))
         {

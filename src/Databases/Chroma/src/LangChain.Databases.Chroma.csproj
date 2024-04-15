@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-        <NoWarn>$(NoWarn);CA1720;CA1510</NoWarn>
+        <NoWarn>$(NoWarn);CA1720;CA1510;CS3016</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+      <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

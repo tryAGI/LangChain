@@ -1,9 +1,9 @@
-﻿namespace LangChain.VectorStores;
+﻿namespace LangChain.Databases;
 
 /// <summary>
 /// 
 /// </summary>
-public enum ESearchType
+public enum VectorSearchType
 {
     /// <summary>
     /// 
@@ -16,7 +16,7 @@ public enum ESearchType
     SimilarityScoreThreshold,
     
     /// <summary>
-    /// 
+    /// Maximal marginal relevance optimizes for similarity to query and diversity among selected documents.
     /// </summary>
-    MMR,
+    MaximumMarginalRelevance,
 }

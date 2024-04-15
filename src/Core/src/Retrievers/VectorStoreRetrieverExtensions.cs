@@ -1,59 +1,52 @@
+using LangChain.Providers;
+using LangChain.Retrievers;
 using LangChain.Sources;
 
-namespace LangChain.VectorStores;
+namespace LangChain.Databases;
 
 /// <summary>
 /// 
 /// </summary>
-public static class VectorStoreExtensions
+public static class VectorStoreRetrieverExtensions
 {
     /// <summary>
     /// Return vector store as retriever
     /// </summary>
-    /// <param name="store">vector store</param>
+    /// <param name="vectorDatabase">vector store</param>
+    /// <param name="embeddingModel"></param>
     /// <param name="searchType">search type</param>
     /// <param name="scoreThreshold">score threshold</param>
     /// <returns></returns>
     public static VectorStoreRetriever AsRetriever(
-        this VectorStore store,
-        ESearchType searchType = ESearchType.Similarity,
+        this IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
+        VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
     {
-        return new VectorStoreRetriever(store, searchType, scoreThreshold);
+        return new VectorStoreRetriever(vectorDatabase, embeddingModel, searchType, scoreThreshold);
     }
 
     /// <summary>
     /// Return vector store as retriever
     /// </summary>
-    /// <param name="store">vector store</param>
+    /// <param name="vectorDatabase">vector store</param>
+    /// <param name="embeddingModel"></param>
     /// <param name="query"></param>
     /// <param name="amount"></param>
     /// <param name="searchType">search type</param>
     /// <param name="scoreThreshold">score threshold</param>
     /// <returns></returns>
     public static async Task<IReadOnlyCollection<Document>> GetSimilarDocuments(
-        this VectorStore store,
+        this IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
         string query,
         int amount = 4,
-        ESearchType searchType = ESearchType.Similarity,
+        VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
     {
-        var retriever = store.AsRetriever(searchType, scoreThreshold);
+        var retriever = vectorDatabase.AsRetriever(embeddingModel, searchType, scoreThreshold);
         retriever.K = amount;
         
         return await retriever.GetRelevantDocumentsAsync(query).ConfigureAwait(false);
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="documents"></param>
-    /// <param name="separator"></param>
-    /// <returns></returns>
-    public static string AsString(
-        this IEnumerable<Document> documents,
-        string separator = "\n\n")
-    {
-        return string.Join(separator, documents.Select(x => x.PageContent));
     }
 }

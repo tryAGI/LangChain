@@ -1,11 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
-using LangChain.Base;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using LangChain.Databases.JsonConverters;
 using LangChain.Sources;
-using LangChain.Indexes;
-using LangChain.Providers;
-using LangChain.Splitters.Text;
-using LangChain.VectorStores;
 using Microsoft.Data.Sqlite;
 
 namespace LangChain.Databases;
@@ -13,96 +9,25 @@ namespace LangChain.Databases;
 /// <summary>
 /// 
 /// </summary>
-[RequiresDynamicCode("Requires dynamic code.")]
-[RequiresUnreferencedCode("Requires unreferenced code.")]
-public sealed class SQLiteVectorStore : VectorStore, IDisposable
+public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
 {
     private readonly string _tableName;
     private readonly Func<float[], float[], float> _distanceFunction;
     private readonly SqliteConnection _connection;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="embeddings"></param>
-    /// <param name="documents"></param>
-    /// <param name="filename"></param>
-    /// <param name="tableName"></param>
-    /// <param name="textSplitter"></param>
-    /// <returns></returns>
-    public static async Task<VectorStoreIndexWrapper> CreateIndexFromDocuments(
-        IEmbeddingModel embeddings,
-        IReadOnlyCollection<Document> documents,
-        string filename = "vectorstore.db",
-        string tableName = "vectors",
-        ITextSplitter? textSplitter = null)
-    {
-#pragma warning disable CA2000
-        var vectorStore = new SQLiteVectorStore(filename,tableName,embeddings);
-#pragma warning restore CA2000
-        textSplitter ??= new CharacterTextSplitter();
-        var indexCreator = new VectorStoreIndexCreator(vectorStore, textSplitter);
-        var index = await indexCreator.FromDocumentsAsync(documents).ConfigureAwait(false);
-        return index;
-    }
-
     public static SQLIteVectorStoreOptions DefaultOptions { get; } = new();
 
-    /// <summary>
-    ///  If database does not exists, it loads documents from the documentsSource, creates an index from these documents and returns the created index.
-    ///  If database exists, it loads the index from the database.
-    ///  documentsSource is used only if the database does not exist. If the database exists, documentsSource is ignored.
-    /// </summary>
-    /// <param name="embeddings">An object implementing the <see cref="IEmbeddingModel"/> interface. This object is used to generate embeddings for the documents.</param>
-    /// <param name="documentsSource">An optional object implementing the <see cref="ISource"/> interface. This object is used to load documents if the vector store database file does not exist.</param>
-    /// <param name="options">An optional <see cref="SQLIteVectorStoreOptions"/> object. This object provides configuration options for the SQLite vector store</param>
-    /// <param name="textSplitter"></param>
-    /// <param name="cancellationToken"></param>
-    public static async Task<VectorStoreIndexWrapper> GetOrCreateIndexAsync(
-        IEmbeddingModel embeddings,
-        ISource? documentsSource = null,
-        SQLIteVectorStoreOptions? options = null,
-        ITextSplitter? textSplitter = null,
-        CancellationToken cancellationToken = default)
-    {
-        options ??= DefaultOptions;
-        textSplitter ??= new RecursiveCharacterTextSplitter(
-            chunkSize: options.ChunkSize,
-            chunkOverlap: options.ChunkOverlap);
-
-        if (!File.Exists(options.Filename) &&
-            documentsSource != null)
-        {
-            var documents = await documentsSource.LoadAsync(cancellationToken).ConfigureAwait(false);
-            
-            return await CreateIndexFromDocuments(
-                embeddings,
-                documents,
-                options.Filename,
-                options.TableName,
-                textSplitter: textSplitter).ConfigureAwait(false);
-        }
-
-#pragma warning disable CA2000
-        var vectorStore = new SQLiteVectorStore(options.Filename, options.TableName, embeddings);
-#pragma warning restore CA2000
-        var index = new VectorStoreIndexWrapper(vectorStore);
-        return index;
-    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="filename"></param>
     /// <param name="tableName"></param>
-    /// <param name="embeddings"></param>
     /// <param name="distanceMetrics"></param>
     public SQLiteVectorStore(
         string filename,
         string tableName,
-        IEmbeddingModel embeddings,
         EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
-        : base(embeddings)
     {
         _tableName = tableName;
         if (distanceMetrics == EDistanceMetrics.Euclidean)
@@ -119,8 +44,8 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
             (string a, string b)
                 =>
             {
-                var vecA = JsonSerializer.Deserialize<float[]>(a);
-                var vecB = JsonSerializer.Deserialize<float[]>(b);
+                var vecA = JsonSerializer.Deserialize(a, SourceGenerationContext.Default.SingleArray);
+                var vecB = JsonSerializer.Deserialize(b, SourceGenerationContext.Default.SingleArray);
                 if (vecA == null || vecB == null)
                     return 0f;
                 
@@ -148,14 +73,14 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         
     }
 
-    static string SerializeDocument(Document document)
+    private static string SerializeDocument(Document document)
     {
-        return JsonSerializer.Serialize(document);
+        return JsonSerializer.Serialize(document, SourceGenerationContext.Default.Document);
     }
 
-    static string SerializeVector(float[] vector)
+    private static string SerializeVector(float[] vector)
     {
-        return JsonSerializer.Serialize(vector);
+        return JsonSerializer.Serialize(vector, SourceGenerationContext.Default.SingleArray);
     }
 
     async Task InsertDocument(string id, float[] vector, Document document)
@@ -197,7 +122,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
             var id = reader.GetString(0);
             var vec = await reader.GetFieldValueAsync<string>(1).ConfigureAwait(false);
             var doc = await reader.GetFieldValueAsync<string>(2).ConfigureAwait(false);
-            var docDeserialized = JsonSerializer.Deserialize<Document>(doc) ?? new Document("");
+            var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Document) ?? new Document("");
             var distance = reader.GetFloat(3);
             res.Add((docDeserialized, distance));
             
@@ -207,55 +132,24 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     }
     
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="documents"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<IEnumerable<string>> AddDocumentsAsync(
-        IEnumerable<Document> documents,
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<string>> AddAsync(
+        IReadOnlyCollection<VectorSearchItem> items,
         CancellationToken cancellationToken = default)
     {
-
-        var docs = documents.ToArray();
-
-        float[][] embeddings = await EmbeddingModel.CreateEmbeddingsAsync(
-            docs
-                .Select(x => x.PageContent)
-                .ToArray(),
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-        List<string> ids = new List<string>();
-        for (int i = 0; i < docs.Length; i++)
+        items = items ?? throw new ArgumentNullException(nameof(items));
+        
+        foreach (var item in items)
         {
-            var id = Guid.NewGuid().ToString();
-            ids.Add(id);
-            await InsertDocument(id, embeddings[i],  docs[i]).ConfigureAwait(false);
+            if (item.Embedding is null)
+            {
+                throw new ArgumentException("Embedding is required", nameof(items));
+            }
+            
+            await InsertDocument(item.Id, item.Embedding, new Document(item.Text, item.Metadata)).ConfigureAwait(false);
         }
 
-        return ids;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="texts"></param>
-    /// <param name="metadatas"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<IEnumerable<string>> AddTextsAsync(IEnumerable<string> texts, IEnumerable<Dictionary<string, object>>? metadatas = null, CancellationToken cancellationToken = default)
-    {
-        if (metadatas != null)
-        {
-            var docs = texts.Zip(metadatas, (d, m) => new Document(d, m)).ToArray();
-            return await AddDocumentsAsync(docs, cancellationToken).ConfigureAwait(false);
-        }
-        else
-        {
-            var docs = texts.Select(d => new Document(d)).ToArray();
-            return await AddDocumentsAsync(docs, cancellationToken).ConfigureAwait(false);
-        }
-
+        return items.Select(i => i.Id).ToArray();
     }
 
     /// <summary>
@@ -264,7 +158,7 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
     /// <param name="ids"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public override async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
         
@@ -274,102 +168,32 @@ public sealed class SQLiteVectorStore : VectorStore, IDisposable
         return true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="query"></param>
-    /// <param name="k"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<IEnumerable<Document>> SimilaritySearchAsync(
-        string query,
-        int k = 4,
+    /// <inheritdoc />
+    public async Task<VectorSearchResponse> SearchAsync(
+        VectorSearchRequest request,
+        VectorSearchSettings? settings = default,
         CancellationToken cancellationToken = default)
     {
-        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
-            query,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        settings ??= new VectorSearchSettings();
         
-        return await SimilaritySearchByVectorAsync(
-            embedding,
-            k,
-            cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="embedding"></param>
-    /// <param name="k"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(IEnumerable<float> embedding, int k = 4, CancellationToken cancellationToken = default)
-    {
-
-        var arr = embedding.ToArray();
-        var documents = await SearchByVector(arr, k).ConfigureAwait(false);
-        return documents.Select(x=>x.Item1);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="query"></param>
-    /// <param name="k"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public override async Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(string query,
-        int k = 4, CancellationToken cancellationToken = default)
-    {
-        float[] embedding = await EmbeddingModel.CreateEmbeddingsAsync(
-            query,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
         var documents = await SearchByVector(
-            embedding,
-            k).ConfigureAwait(false);
+            request.Embeddings.First(),
+            settings.NumberOfResults).ConfigureAwait(false);
         
-        return documents;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="embedding"></param>
-    /// <param name="k"></param>
-    /// <param name="fetchK"></param>
-    /// <param name="lambdaMult"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public override Task<IEnumerable<Document>> MaxMarginalRelevanceSearchByVector(IEnumerable<float> embedding, int k = 4, int fetchK = 20, float lambdaMult = 0.5f,
-        CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="query"></param>
-    /// <param name="k"></param>
-    /// <param name="fetchK"></param>
-    /// <param name="lambdaMult"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public override Task<IEnumerable<Document>> MaxMarginalRelevanceSearch(string query, int k = 4, int fetchK = 20, float lambdaMult = 0.5f,
-        CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    protected override Func<float, float> SelectRelevanceScoreFn()
-    {
-        throw new NotImplementedException();
+        return new VectorSearchResponse
+        {
+            Items = documents.Select(d => new VectorSearchItem
+            {
+                Text = d.Item1.PageContent,
+                Metadata = d.Item1.Metadata,
+                Distance = d.Item2,
+            }).ToArray(),
+        };
     }
 }
+
+[JsonSourceGenerationOptions(WriteIndented = true, Converters = [typeof(ObjectAsPrimitiveConverter)])]
+[JsonSerializable(typeof(Document))]
+[JsonSerializable(typeof(float[]))]
+internal sealed partial class SourceGenerationContext : JsonSerializerContext;
