@@ -11,8 +11,13 @@ public abstract class CohereEmbeddingModel(
     string id)
     : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
-    public int MaximumInputLength => 10_000;
-
+    /// <summary>
+    /// Creates embeddings for the input strings using the Cohere model.
+    /// </summary>
+    /// <param name="request">The `EmbeddingRequest` containing the input strings.</param>
+    /// <param name="settings">Optional `EmbeddingSettings` to override the model's default settings.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>An `EmbeddingResponse` containing the generated embeddings and usage information.</returns>
     public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
         EmbeddingRequest request,
         EmbeddingSettings? settings = null,
@@ -21,7 +26,14 @@ public abstract class CohereEmbeddingModel(
         request = request ?? throw new ArgumentNullException(nameof(request));
         
         var watch = Stopwatch.StartNew();
-        var splitText = request.Strings.Split(chunkSize: MaximumInputLength);
+
+        var usedSettings = CohereEmbeddingSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.EmbeddingSettings);
+
+        var splitText = request.Strings.Split(chunkSize: (int)usedSettings.MaximumInputLength!);
+        var embeddings = new List<float>(capacity: splitText.Count);
 
         var response = await provider.Api.InvokeModelAsync(Id, Encoding.UTF8.GetBytes(
             JsonSerializer.Serialize(new
@@ -31,13 +43,11 @@ public abstract class CohereEmbeddingModel(
             })
         ), cancellationToken).ConfigureAwait(false);
 
-        var embeddings = new List<float>(capacity: splitText.Count);
-        embeddings.AddRange(response?["embeddings"]?
+        embeddings.AddRange(response?["embeddings"]?[0]?
             .AsArray()
             .Select(x => (float?)x?.AsValue() ?? 0.0f)
             .ToArray() ?? []);
 
-        // Unsupported
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
@@ -47,12 +57,11 @@ public abstract class CohereEmbeddingModel(
 
         return new EmbeddingResponse
         {
-            // TODO: Check this place
             Values = embeddings
                 .Select(f => new[] { f })
                 .ToArray(),
             Usage = Usage.Empty,
-            UsedSettings = EmbeddingSettings.Default,
+            UsedSettings = usedSettings,
         };
     }
 }

@@ -1,12 +1,12 @@
-﻿using LangChain.Serve.Interfaces;
-using LangChain.Serve.Classes.Repository;
+﻿using LangChain.Serve.Abstractions;
+using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve.Services;
 
 public class InMemoryRepository : IConversationRepository
 {
-    private readonly List<StoredConversation> _conversations = [];
-    private readonly List<StoredMessage> _messages = [];
+    private readonly List<StoredConversation> _conversations = new ();
+    private readonly List<StoredMessage> _messages = new();
 
     public Task<StoredConversation> CreateConversation(string modelName)
     {

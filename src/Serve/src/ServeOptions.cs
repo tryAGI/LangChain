@@ -1,10 +1,10 @@
-﻿using LangChain.Serve.Classes.Repository;
+﻿using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve;
 
 public class ServeOptions
 {
-    private readonly Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>> _models = [];
+    private readonly Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>> _models = new ();
     
     public ServeOptions RegisterModel(string name, Func<List<StoredMessage>, Task<StoredMessage>> messageProcessor)
     {

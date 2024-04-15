@@ -153,7 +153,7 @@ public partial class OpenAiChatModel(
                 .ToArray(),
             model: Id,
             stops: usedSettings.StopSequences!.ToArray(),
-            user: usedSettings.User!,
+            user: usedSettings.User ?? string.Empty,
             temperature: usedSettings.Temperature,
             frequencyPenalty: usedSettings.FrequencyPenalty,
             number: usedSettings.Number,

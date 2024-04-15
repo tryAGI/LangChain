@@ -10,7 +10,14 @@ public abstract class AmazonTitanEmbeddingModel(
     string id)
     : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
-    public int MaximumInputLength => 10_000;
+
+    /// <summary>
+    /// Creates embeddings for the input strings using the Amazon model.
+    /// </summary>
+    /// <param name="request">The `EmbeddingRequest` containing the input strings.</param>
+    /// <param name="settings">Optional `EmbeddingSettings` to override the model's default settings.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>An `EmbeddingResponse` containing the generated embeddings and usage information.</returns>
 
     public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
         EmbeddingRequest request,
@@ -21,7 +28,7 @@ public abstract class AmazonTitanEmbeddingModel(
 
         var watch = Stopwatch.StartNew();
 
-        var usedSettings = BedrockEmbeddingSettings.Calculate(
+        var usedSettings = AmazonEmbeddingSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.EmbeddingSettings);

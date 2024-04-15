@@ -2,7 +2,8 @@ using LangChain.Memory;
 using LangChain.Providers;
 using LangChain.Providers.Ollama;
 using LangChain.Serve;
-using LangChain.Serve.Classes.Repository;
+using LangChain.Serve.Abstractions.Repository;
+using LangChain.Serve.Classes;
 using static LangChain.Chains.Chain;
 using Message = LangChain.Providers.Message;
 
