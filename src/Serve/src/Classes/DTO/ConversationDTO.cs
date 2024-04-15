@@ -1,19 +1,19 @@
-﻿using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve.Classes.DTO;
 
-public class ConversationDTO
+public class ConversationDto
 {
     public Guid ConversationId { get; set; }
     public string ModelName { get; set; } = string.Empty;
     public string? ConversationName { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public static ConversationDTO FromStoredConversation(StoredConversation conversation)
+    public static ConversationDto FromStoredConversation(StoredConversation conversation)
     {
         conversation = conversation ?? throw new ArgumentNullException(nameof(conversation));
         
-        return new ConversationDTO
+        return new ConversationDto
         {
             ConversationId = conversation.ConversationId,
             ModelName = conversation.ModelName,
@@ -22,7 +22,7 @@ public class ConversationDTO
         };
     }
 
-    public static StoredConversation ToStoredConversation(ConversationDTO conversation)
+    public static StoredConversation ToStoredConversation(ConversationDto conversation)
     {
         conversation = conversation ?? throw new ArgumentNullException(nameof(conversation));
 

@@ -1,62 +1,40 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using LangChain.Common.Converters;
+using System.Text.Json.Serialization;
+using LangChain.Databases.JsonConverters;
 using LangChain.Sources;
-using LangChain.Providers;
-using LangChain.VectorStores;
 using Microsoft.SemanticKernel.AI.Embeddings;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma.Http.ApiSchema;
 using Microsoft.SemanticKernel.Memory;
 
-namespace LangChain.Databases;
+namespace LangChain.Databases.Chroma;
 
 /// <summary>
 /// ChromaDB vector store.
 /// According: https://api.python.langchain.com/en/latest/_modules/langchain/vectorstores/chroma.html
 /// </summary>
-[RequiresDynamicCode("Requires dynamic code.")]
-[RequiresUnreferencedCode("Requires unreferenced code.")]
-public class ChromaVectorStore : VectorStore
+public class ChromaVectorStore : IVectorDatabase
 {
-    private const string LangchainDefaultCollectionName = "langchain";
+    private const string DefaultCollectionName = "langchain";
 
     // TODO: SemanticKernel impl doesn't support collection metadata. Need changes when moved to another impl
-    private Dictionary<string, string>? CollectionMetadata { get; } = new();
+    //private Dictionary<string, string> CollectionMetadata { get; } = [];
 
     private readonly ChromaMemoryStore _store;
 
     private readonly ChromaClient _client;
     private readonly string _collectionName;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    /// <inheritdoc />
     public ChromaVectorStore(
         HttpClient httpClient,
         string endpoint,
-        IEmbeddingModel embeddings,
-        string collectionName = LangchainDefaultCollectionName)
-        : base(embeddings)
+        string collectionName = DefaultCollectionName)
     {
         _client = new ChromaClient(httpClient, endpoint);
 
         _collectionName = collectionName;
 
         _store = new ChromaMemoryStore(_client);
-
-        _client.CreateCollectionAsync(_collectionName).GetAwaiter().GetResult();
-
-        _jsonSerializerOptions = new JsonSerializerOptions
-        {
-            Converters =
-            {
-                new ObjectAsPrimitiveConverter(
-                    floatFormat: FloatFormat.Double,
-                    unknownNumberFormat: UnknownNumberFormat.Error,
-                    objectFormat: ObjectFormat.Expando)
-            },
-            WriteIndented = true,
-        };
     }
 
     /// <summary>
@@ -95,54 +73,7 @@ public class ChromaVectorStore : VectorStore
     }
 
     /// <inheritdoc />
-    public override async Task<IEnumerable<string>> AddDocumentsAsync(
-        IEnumerable<Document> documents,
-        CancellationToken cancellationToken = default)
-    {
-        var documentsArray = documents.ToArray();
-        var texts = new string[documentsArray.Length];
-        var ids = new string[documentsArray.Length];
-        var metadatas = new IReadOnlyDictionary<string, object>[documentsArray.Length];
-        for (var index = 0; index < documentsArray.Length; index++)
-        {
-            ids[index] = Guid.NewGuid().ToString();
-            texts[index] = documentsArray[index].PageContent;
-            metadatas[index] = documentsArray[index].Metadata;
-        }
-
-        var result = await AddCoreAsync(texts, metadatas, ids, cancellationToken).ConfigureAwait(false);
-
-        return result;
-    }
-
-    /// <inheritdoc />
-    public override async Task<IEnumerable<string>> AddTextsAsync(
-        IEnumerable<string> texts,
-        IEnumerable<Dictionary<string, object>>? metadatas = null,
-        CancellationToken cancellationToken = default)
-    {
-        var textsArray = texts.ToArray();
-        var metadatasArray = metadatas?.ToArray() ?? new Dictionary<string, object>?[textsArray.Length];
-        var ids = new string[textsArray.Length];
-
-        for (var index = 0; index < textsArray.Length; index++)
-        {
-            ids[index] = Guid.NewGuid().ToString();
-            metadatasArray[index] ??= new Dictionary<string, object>();
-        }
-
-        var result = await AddCoreAsync(
-                textsArray,
-                metadatasArray as Dictionary<string, object>[],
-                ids,
-                cancellationToken)
-            .ConfigureAwait(false);
-
-        return result;
-    }
-
-    /// <inheritdoc />
-    public override async Task<bool> DeleteAsync(
+    public async Task<bool> DeleteAsync(
         IEnumerable<string> ids,
         CancellationToken cancellationToken = default)
     {
@@ -151,134 +82,64 @@ public class ChromaVectorStore : VectorStore
         return true;
     }
 
-    /// <inheritdoc />
-    public override async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
-        IEnumerable<float> embedding,
-        int k = 4,
-        CancellationToken cancellationToken = default)
+    private static float SelectRelevanceScoreFn(float distance)
     {
-        var documentsWithScores = await SimilaritySearchByVectorWithAsync(embedding.ToArray(), k, cancellationToken).ConfigureAwait(false);
-        var documents = documentsWithScores.Select(dws => dws.Item1);
+        //const string distanceKey = "hnsw:space";
 
-        return documents;
-    }
+        var distanceType = "l2";
+        //if (CollectionMetadata.TryGetValue(distanceKey, out var value))
+        //{
+        //    distanceType = value;
+        //}
 
-    /// <inheritdoc />
-    public override async Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(
-        string query,
-        int k = 4,
-        CancellationToken cancellationToken = default)
-    {
-        var embeddings = await EmbeddingModel
-            .CreateEmbeddingsAsync(query, null, cancellationToken)
-            .ConfigureAwait(false);
-
-        var documentsWithScores = await SimilaritySearchByVectorWithAsync(embeddings, k, cancellationToken).ConfigureAwait(false);
-
-        return documentsWithScores;
-    }
-
-    /// <inheritdoc />
-    public override Task<IEnumerable<Document>> MaxMarginalRelevanceSearchByVector(
-        IEnumerable<float> embedding,
-        int k = 4,
-        int fetchK = 20,
-        float lambdaMult = 0.5f,
-        CancellationToken cancellationToken = default)
-        => Task.FromException<IEnumerable<Document>>(new NotSupportedException("Querying not supported by SemanticKernel impl."));
-
-    /// <inheritdoc />
-    public override async Task<IEnumerable<Document>> MaxMarginalRelevanceSearch(
-        string query,
-        int k = 4,
-        int fetchK = 20,
-        float lambdaMult = 0.5f,
-        CancellationToken cancellationToken = default)
-    {
-        float[] embeddings = await EmbeddingModel
-            .CreateEmbeddingsAsync(query, null, cancellationToken)
-            .ConfigureAwait(false);
-
-        var documents = await MaxMarginalRelevanceSearchByVector(
-                embeddings,
-                k,
-                fetchK,
-                lambdaMult,
-                cancellationToken)
-            .ConfigureAwait(false);
-
-        return documents;
-    }
-
-    /// <inheritdoc />
-    protected override Func<float, float> SelectRelevanceScoreFn()
-    {
-        if (OverrideRelevanceScoreFn != null)
+        return distanceType switch
         {
-            return OverrideRelevanceScoreFn;
-        }
+            "cosine" => RelevanceScoreFunctions.Cosine(distance),
+            "l2" => RelevanceScoreFunctions.Euclidean(distance),
+            "ip" => RelevanceScoreFunctions.MaxInnerProduct(distance),
 
-        return GetFuncForDistance();
-
-        Func<float, float> GetFuncForDistance()
-        {
-            return distance =>
-            {
-                const string distanceKey = "hnsw:space";
-
-                var distanceType = "l2";
-
-                if (CollectionMetadata != null
-                    && CollectionMetadata.TryGetValue(distanceKey, out var value))
-                {
-                    distanceType = value;
-                }
-
-                return distanceType switch
-                {
-                    "cosine" => CosineRelevanceScoreFn(distance),
-                    "l2" => EuclideanRelevanceScoreFn(distance),
-                    "ip" => MaxInnerProductRelevanceScoreFn(distance),
-
-                    _ => throw new ArgumentException(
-                        $@"No supported normalization function for distance metric of type: {distanceType}.
-                        Consider providing relevance_score_fn to Chroma constructor.")
-                };
-            };
-        }
+            _ => throw new ArgumentException(
+                $@"No supported normalization function for distance metric of type: {distanceType}.
+                Consider providing relevance_score_fn to Chroma constructor.")
+        };
     }
 
-    private async Task<IEnumerable<string>> AddCoreAsync(
-        string[] texts,
-        IReadOnlyDictionary<string, object>[] metadatas,
-        string[] ids,
-        CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<string>> AddAsync(
+        IReadOnlyCollection<VectorSearchItem> items,
+        CancellationToken cancellationToken = default)
     {
-        float[][] embeddings = await EmbeddingModel
-            .CreateEmbeddingsAsync(texts, null, cancellationToken)
-            .ConfigureAwait(false);
-
-        var records = new MemoryRecord[texts.Length];
-        for (var index = 0; index < texts.Length; index++)
+        items = items ?? throw new ArgumentNullException(nameof(items));
+        
+        var records = new MemoryRecord[items.Count];
+        for (var index = 0; index < items.Count; index++)
         {
+            var item = items.ElementAt(index);
+            
             // TODO: check: description, externalSourceName, key
             records[index] = new MemoryRecord
             (
                 new MemoryRecordMetadata
                 (
                     isReference: false,
-                    id: ids[index],
-                    text: texts[index],
+                    id: item.Id,
+                    text: item.Text,
                     description: string.Empty,
                     externalSourceName: string.Empty,
-                    additionalMetadata: SerializeMetadata(metadatas[index])
+                    additionalMetadata: SerializeMetadata(item.Metadata ?? new Dictionary<string, object>())
                 ),
-                new Embedding<float>(embeddings[index]),
+                new Embedding<float>(item.Embedding ?? []),
                 key: null
             );
         }
 
-        var resultIds = new List<string>(texts.Length);
+        var collection = await _client.GetCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
+        if (collection == null)
+        {
+            await _client.CreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
+        }
+        
+        var resultIds = new List<string>(items.Count);
         var resultIdsIterator = _store.UpsertBatchAsync(_collectionName, records, cancellationToken);
         await foreach (var item in resultIdsIterator.ConfigureAwait(false))
         {
@@ -288,38 +149,59 @@ public class ChromaVectorStore : VectorStore
         return resultIds;
     }
 
-    private async Task<IEnumerable<(Document, float)>> SimilaritySearchByVectorWithAsync(
-        float[] embeddings,
-        int k,
-        CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<VectorSearchResponse> SearchAsync(
+        VectorSearchRequest request,
+        VectorSearchSettings? settings = default,
+        CancellationToken cancellationToken = default)
     {
+        request = request ?? throw new ArgumentNullException(nameof(request));
+        settings ??= new VectorSearchSettings();
+        
+        settings.RelevanceScoreFunc ??= SelectRelevanceScoreFn;
+        
         var matches = await _store
             .GetNearestMatchesAsync(
-                _collectionName,
-                new Embedding<float>(embeddings),
-                k,
+                collectionName: _collectionName,
+                embedding: new Embedding<float>(request.Embeddings.First()),
+                limit: settings.NumberOfResults,
                 cancellationToken: cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return matches.Select(
-            record =>
-            {
-                var text = record.Item1.Metadata.Text;
-                var metadata = DeserializeMetadata(record.Item1.Metadata);
+        return new VectorSearchResponse
+        {
+            Items = matches
+                .Select(record =>
+                {
+                    var text = record.Item1.Metadata.Text;
+                    var metadata = DeserializeMetadata(record.Item1.Metadata);
 
-                return (new Document(text, metadata), (float)record.Item2);
-            });
+                    return new VectorSearchItem
+                    {
+                        Id = record.Item1.Metadata.Id,
+                        Text = text,
+                        Metadata = metadata,
+                        Embedding = record.Item1.Embedding.Vector.ToArray(),
+                        Distance = (float)record.Item2
+                    };
+                })
+                .ToArray(),
+        };
     }
 
-    private string SerializeMetadata(IReadOnlyDictionary<string, object> metadata)
+    private static string SerializeMetadata(IReadOnlyDictionary<string, object> metadata)
     {
-        return JsonSerializer.Serialize(metadata, _jsonSerializerOptions);
+        return JsonSerializer.Serialize(metadata, SourceGenerationContext.Default.IReadOnlyDictionaryStringObject);
     }
 
-    private Dictionary<string, object> DeserializeMetadata(MemoryRecordMetadata metadata)
+    private static IReadOnlyDictionary<string, object> DeserializeMetadata(MemoryRecordMetadata metadata)
     {
-        return JsonSerializer.Deserialize<Dictionary<string, object>>(metadata.AdditionalMetadata, _jsonSerializerOptions)
+        return JsonSerializer.Deserialize(metadata.AdditionalMetadata, SourceGenerationContext.Default.IReadOnlyDictionaryStringObject)
                ?? new Dictionary<string, object>();
     }
 }
+
+[JsonSourceGenerationOptions(WriteIndented = true, Converters = [typeof(ObjectAsPrimitiveConverter)])]
+[JsonSerializable(typeof(IReadOnlyDictionary<string, object>))]
+internal sealed partial class SourceGenerationContext : JsonSerializerContext;

@@ -1,11 +1,11 @@
-# 🦜️🔗 LangChain
+# 🦜️🔗 LangChain .NET
 
 [![Nuget package](https://img.shields.io/nuget/vpre/LangChain)](https://www.nuget.org/packages/LangChain/)
 [![dotnet](https://github.com/tryAGI/LangChain/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/tryAGI/LangChain/actions/workflows/dotnet.yml)
 [![License: MIT](https://img.shields.io/github/license/tryAGI/LangChain)](https://github.com/tryAGI/LangChain/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/1115206893015662663?label=Discord&logo=discord&logoColor=white&color=d82679)](https://discord.gg/Ca2xhfBf3v)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ⚡ Building applications with LLMs through composability ⚡  
@@ -83,6 +83,9 @@ Console.WriteLine($"LLM usage: {llm.Usage}");    // Print usage and price
 Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and price
 ```
 
+## Featured projects
+- [LangChainChat](https://github.com/TesAnti/LangChainChat) - Allows you to run a chat based on a Blazor project using LangChain.Serve and any of the supported local or paid models
+
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -105,6 +108,7 @@ Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ericgreenmix"><img src="https://avatars.githubusercontent.com/u/1297049?v=4?s=100" width="100px;" alt="Eric Green"/><br /><sub><b>Eric Green</b></sub></a><br /><a href="#infra-ericgreenmix" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=ericgreenmix" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=ericgreenmix" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lyx52"><img src="https://avatars.githubusercontent.com/u/55701905?v=4?s=100" width="100px;" alt="Lyx52"/><br /><sub><b>Lyx52</b></sub></a><br /><a href="#infra-Lyx52" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=Lyx52" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=Lyx52" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/fiorelorenzo"><img src="https://avatars.githubusercontent.com/u/29930922?v=4?s=100" width="100px;" alt="Lorenzo Fiore"/><br /><sub><b>Lorenzo Fiore</b></sub></a><br /><a href="#infra-fiorelorenzo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=fiorelorenzo" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=fiorelorenzo" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/matt-regier"><img src="https://avatars.githubusercontent.com/u/13575802?v=4?s=100" width="100px;" alt="matt-regier"/><br /><sub><b>matt-regier</b></sub></a><br /><a href="#infra-matt-regier" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=matt-regier" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=matt-regier" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
@@ -126,3 +130,10 @@ Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and
 Priority place for bugs: https://github.com/tryAGI/LangChain/issues  
 Priority place for ideas and general questions: https://github.com/tryAGI/LangChain/discussions  
 Discord: https://discord.gg/Ca2xhfBf3v  
+
+## Legal information and credits
+It's licensed under [the MIT license](LICENSE). We do not plan to change the license in any foreseeable future for this project, 
+but projects based on this within the organization may have different licenses.  
+Some documentation is based on documentation from [dotnet/docs](https://github.com/dotnet/docs/) repository 
+under [CC BY 4.0 license](https://github.com/dotnet/docs/blob/main/LICENSE), 
+where code examples are changed to code examples for using this project.  

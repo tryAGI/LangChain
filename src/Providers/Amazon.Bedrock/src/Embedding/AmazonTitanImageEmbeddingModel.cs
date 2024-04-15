@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Text;
-using System.Text.Json;
+using System.Text.Json.Nodes;
 using LangChain.Providers.Amazon.Bedrock.Internal;
 
 // ReSharper disable once CheckNamespace
@@ -11,33 +10,43 @@ public abstract class AmazonTitanImageEmbeddingModel(
     string id)
     : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
-    public int MaximumInputLength => 10_000;
-
+    /// <summary>
+    /// Creates embeddings for the input strings using the Amazon model.
+    /// </summary>
+    /// <param name="request">The `EmbeddingRequest` containing the input strings.</param>
+    /// <param name="settings">Optional `EmbeddingSettings` to override the model's default settings.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>An `EmbeddingResponse` containing the generated embeddings and usage information.</returns>
     public async Task<EmbeddingResponse> CreateEmbeddingsAsync(
         EmbeddingRequest request,
         EmbeddingSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
-        var splitText = request.Strings.Split(chunkSize: MaximumInputLength);
 
-        var response = await provider.Api.InvokeModelAsync(Id, Encoding.UTF8.GetBytes(
-            JsonSerializer.Serialize(new
-            {
-                inputText = string.Join(" ", splitText),
-                inputImage = request.Images.FirstOrDefault()?.ToBase64() ?? string.Empty,
-            })
-        ), cancellationToken).ConfigureAwait(false);
+        var usedSettings = AmazonMultiModalEmbeddingSettings.Calculate(
+            requestSettings: settings,
+            modelSettings: Settings,
+            providerSettings: provider.EmbeddingSettings);
 
-        var embeddings = new List<float>(capacity: splitText.Count);
-        embeddings.AddRange(response?["embedding"]?
-            .AsArray()
-            .Select(x => (float?)x?.AsValue() ?? 0.0f)
-            .ToArray() ?? []);
+        var splitText = request.Strings.Split(chunkSize: (int)usedSettings.MaximumInputLength!);
+        var embeddings = new List<float[]>(capacity: splitText.Count);
 
-        // Unsupported
+        var bodyJson = CreateBodyJson(string.Join(" ", splitText), request.Images);
+
+        var response = await provider.Api.InvokeModelAsync(Id, bodyJson, cancellationToken).ConfigureAwait(false);
+        var embedding = response?["embedding"]?.AsArray();
+
+        var f = new float[(int)usedSettings.Dimensions!];
+        for (var i = 0; i < embedding!.Count; i++)
+        {
+            f[i] = (float)embedding[(Index)i]?.AsValue()!;
+        }
+
+        embeddings.Add(f);
+
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,
@@ -47,12 +56,26 @@ public abstract class AmazonTitanImageEmbeddingModel(
 
         return new EmbeddingResponse
         {
-            // TODO: Check this place
-            Values = embeddings
-                .Select(f => new[] { f })
-                .ToArray(),
+            Values = embeddings.ToArray(),
             Usage = Usage.Empty,
-            UsedSettings = EmbeddingSettings.Default,
+            UsedSettings = usedSettings,
         };
+    }
+
+    private static JsonObject CreateBodyJson(
+        string? prompt,
+        IList<Data>? images = null)
+    {
+        var bodyJson = new JsonObject
+        {
+            ["inputText"] = string.IsNullOrEmpty(prompt) ? "describe image" : prompt,
+        };
+
+        if (images!.Count <= 0) return bodyJson;
+
+        var base64 = Convert.ToBase64String(images[0]);
+        bodyJson.Add("inputImage", base64);
+
+        return bodyJson;
     }
 }

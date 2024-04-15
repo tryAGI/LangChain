@@ -1,8 +1,8 @@
-﻿using LangChain.Utilities.Classes.Repository;
+﻿using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve.Classes.DTO;
 
-public class PostMessageDTO
+public class PostMessageDto
 {
     public string Content { get; set; } = string.Empty;
 

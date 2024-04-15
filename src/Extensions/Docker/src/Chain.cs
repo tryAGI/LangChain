@@ -6,7 +6,7 @@
 public static class Chain
 {
     /// <summary>
-    /// 
+    /// Executes code in a docker container
     /// </summary>
     /// <param name="image"></param>
     /// <param name="arguments"></param>

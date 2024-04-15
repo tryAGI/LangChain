@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
       <ProjectReference Include="..\..\..\Providers\Amazon.Bedrock\src\LangChain.Providers.Amazon.Bedrock.csproj" />
       <ProjectReference Include="..\..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
       <ProjectReference Include="..\src\LangChain.Databases.OpenSearch.csproj" />

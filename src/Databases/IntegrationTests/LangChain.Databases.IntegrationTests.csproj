@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
+      <ProjectReference Include="..\InMemory\src\LangChain.Databases.InMemory.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -27,7 +27,7 @@ public class SageMakerSettings : ChatSettings
     /// <summary>
     /// SageMaker input parameters
     /// </summary>
-    public Dictionary<string, object>? InputParamers { get; init; }
+    public Dictionary<string, object>? InputParameters { get; init; }
 
     /// <summary>
     /// 
@@ -71,12 +71,12 @@ public class SageMakerSettings : ChatSettings
                 providerSettingsCasted?.ContentType ??
                 Default.ContentType ??
                 throw new InvalidOperationException("Default ContentType is not set."),
-            InputParamers =
-                requestSettingsCasted?.InputParamers ??
-                modelSettingsCasted?.InputParamers ??
-                providerSettingsCasted?.InputParamers ??
-                Default.InputParamers ??
-                throw new InvalidOperationException("Default InputParamers is not set."),
+            InputParameters =
+                requestSettingsCasted?.InputParameters ??
+                modelSettingsCasted?.InputParameters ??
+                providerSettingsCasted?.InputParameters ??
+                Default.InputParameters ??
+                throw new InvalidOperationException("Default InputParameters is not set."),
             TransformOutput = requestSettingsCasted?.TransformOutput ??
                               modelSettingsCasted?.TransformOutput ??
                               providerSettingsCasted?.TransformOutput ??

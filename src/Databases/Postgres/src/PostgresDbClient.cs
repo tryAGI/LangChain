@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using LangChain.Common.Converters;
+using LangChain.Databases.JsonConverters;
 using Npgsql;
 using NpgsqlTypes;
 using Pgvector;
@@ -126,8 +126,12 @@ CREATE TABLE IF NOT EXISTS {name}
     /// <param name="timestamp"></param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     public async Task UpsertAsync(
-        string tableName, string id, string content,
-        IReadOnlyDictionary<string, object>? metadata, float[]? embedding, DateTime? timestamp,
+        string tableName,
+        string id,
+        string content,
+        IReadOnlyDictionary<string, object>? metadata,
+        ReadOnlyMemory<float>? embedding,
+        DateTime? timestamp,
         CancellationToken cancellationToken = default)
     {
         var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
@@ -150,7 +154,7 @@ DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timest
                 : (object)DBNull.Value;
             cmd.Parameters.AddWithValue("@metadata", NpgsqlDbType.Jsonb, metadataString);
 
-            var vector = embedding != null ? new Vector(embedding) : (object)DBNull.Value;
+            var vector = embedding != null ? new Vector(embedding.Value) : (object)DBNull.Value;
             cmd.Parameters.AddWithValue("@embedding", vector);
             cmd.Parameters.AddWithValue("@timestamp", NpgsqlDbType.TimestampTz, timestamp ?? (object)DBNull.Value);
 
@@ -454,27 +458,6 @@ WHERE id = ANY(@ids)";
     /// <param name="tableName"></param>
     /// <returns></returns>
     private string GetFullTableName(string tableName) => $"{_schema}.\"{tableName}\"";
-}
-
-/// <summary>
-/// 
-/// </summary>
-public enum DistanceStrategy
-{
-    /// <summary>
-    /// Euclidean distance (L2 distance)
-    /// </summary>
-    Euclidean,
-
-    /// <summary>
-    /// Cosine distance
-    /// </summary>
-    Cosine,
-
-    /// <summary>
-    /// Inner product
-    /// </summary>
-    InnerProduct
 }
 
 /// <summary>

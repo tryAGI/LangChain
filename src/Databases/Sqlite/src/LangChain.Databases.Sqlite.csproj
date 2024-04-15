@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-        <NoWarn>$(NoWarn);NETSDK1206;CA2100</NoWarn>
+        <NoWarn>$(NoWarn);NETSDK1206;CA2100;CS3016</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -12,11 +12,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Sqlite" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+        <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\Serve\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

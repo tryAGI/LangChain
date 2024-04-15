@@ -1,4 +1,4 @@
-namespace LangChain.Databases;
+namespace LangChain.Databases.Chroma;
 
 /// <summary>
 /// 

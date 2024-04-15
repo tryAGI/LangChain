@@ -1,6 +1,6 @@
 ﻿namespace LangChain.Serve.Classes.DTO;
 
-public class ConversationCreationDTO
+public class ConversationCreationDto
 {
     public string ModelName { get; set; } = string.Empty;
 }

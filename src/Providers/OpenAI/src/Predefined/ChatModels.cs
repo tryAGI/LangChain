@@ -27,3 +27,7 @@ public class Gpt4TurboPreviewModel(OpenAiProvider provider)
 /// <inheritdoc cref="ChatModels.Gpt4VisionPreview" />
 public class Gpt4VisionPreviewModel(OpenAiProvider provider)
     : OpenAiChatModel(provider, id: ChatModels.Gpt4VisionPreview);
+
+/// <inheritdoc cref="ChatModels.Gpt4Turbo" />
+public class Gpt4TurboModel(OpenAiProvider provider)
+    : OpenAiChatModel(provider, id: ChatModels.Gpt4Turbo);

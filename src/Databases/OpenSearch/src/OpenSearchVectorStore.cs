@@ -1,22 +1,15 @@
-﻿using System.Globalization;
-using LangChain.Indexes;
-using LangChain.Providers;
-using LangChain.Sources;
-using LangChain.VectorStores;
-using OpenSearch.Client;
+﻿using OpenSearch.Client;
 
 namespace LangChain.Databases.OpenSearch;
 
-public class OpenSearchVectorStore : VectorStore
+public class OpenSearchVectorStore : IVectorDatabase
 {
     private readonly OpenSearchClient _client;
     private readonly string? _indexName;
 
     public static OpenSearchVectorStoreOptions DefaultOptions { get; } = new();
 
-    public OpenSearchVectorStore(IEmbeddingModel embeddings,
-        OpenSearchVectorStoreOptions? options)
-        : base(embeddings)
+    public OpenSearchVectorStore(OpenSearchVectorStoreOptions? options)
     {
         options ??= DefaultOptions;
         _indexName = options.IndexName;
@@ -36,110 +29,87 @@ public class OpenSearchVectorStore : VectorStore
         }
     }
 
-    public static Task<VectorStoreIndexWrapper> GetOrCreateIndex(
-        IEmbeddingModel embeddings,
-        ISource source = null!,
-        OpenSearchVectorStoreOptions? options = null
-    )
-    {
-        return Task.FromResult<VectorStoreIndexWrapper>(null!);
-    }
-
-    public OpenSearchVectorStore(string tableName, IEmbeddingModel embeddings)
-        : base(embeddings)
+    public OpenSearchVectorStore(string tableName)
     {
         _client = new OpenSearchClient();
     }
 
-    public override async Task<IEnumerable<string>> AddDocumentsAsync(IEnumerable<Document> documents, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<string>> AddAsync(
+        IReadOnlyCollection<VectorSearchItem> items,
+        CancellationToken cancellationToken = default)
     {
+        items = items ?? throw new ArgumentNullException(nameof(items));
+        
         var bulkDescriptor = new BulkDescriptor();
-        var i = 1;
 
-        var enumerable = documents as Document[] ?? documents.ToArray();
-        foreach (var document in enumerable)
+        foreach (var item in items)
         {
-            var content = document.PageContent.Trim();
-            if (string.IsNullOrEmpty(content)) continue;
-
-            var embed = await EmbeddingModel.CreateEmbeddingsAsync(document.PageContent, cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+            var content = item.Text.Trim();
+            if (string.IsNullOrEmpty(content))
+            {
+                continue;
+            }
 
             var vectorRecord = new VectorRecord
             {
-                Id = i++.ToString(CultureInfo.InvariantCulture),
-                Text = document.PageContent,
-                Vector = embed.Values.SelectMany(x => x).ToArray()
+                Id = item.Id, //i++.ToString(CultureInfo.InvariantCulture),
+                Text = content,
+                Vector = item.Embedding ?? [],
             };
 
-            bulkDescriptor.Index<VectorRecord>(desc => desc
-                .Document(vectorRecord)
-                .Index(_indexName)
+            bulkDescriptor.Index<VectorRecord>(
+                indexDescriptor => indexDescriptor
+                    .Document(vectorRecord)
+                    .Index(_indexName)
             );
         }
 
-        var bulkResponse = await _client!.BulkAsync(bulkDescriptor, cancellationToken)
+        var bulkResponse = await _client.BulkAsync(bulkDescriptor, cancellationToken)
             .ConfigureAwait(false);
 
-        return enumerable.Select(x => x.PageContent);
+        return items
+            .Select(i => i.Id)
+            .ToArray();
     }
 
-    public override Task<IEnumerable<string>> AddTextsAsync(IEnumerable<string> texts, IEnumerable<Dictionary<string, object>>? metadatas = null, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override async Task<IEnumerable<Document>> SimilaritySearchByVectorAsync(
-        IEnumerable<float> embedding,
-        int k = 4,
+    public Task<bool> DeleteAsync(
+        IEnumerable<string> ids,
         CancellationToken cancellationToken = default)
     {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public async Task<VectorSearchResponse> SearchAsync(
+        VectorSearchRequest request,
+        VectorSearchSettings? settings = default,
+        CancellationToken cancellationToken = default)
+    {
+        settings ??= new VectorSearchSettings();
+        
         var searchResponse = await _client.SearchAsync<VectorRecord>(s => s
             .Index(_indexName)
             .Query(q => q
                 .Knn(knn => knn
                     .Field(f => f.Vector)
-                    .Vector(embedding.ToArray())
-                    .K(k)
+                    .Vector(request.Embeddings.First())
+                    .K(settings.NumberOfResults)
                 )
             ), cancellationToken).ConfigureAwait(false);
 
-        var documents = searchResponse.Documents
-            .Where(vectorRecord => !string.IsNullOrWhiteSpace(vectorRecord.Text))
-            .Select(vectorRecord => new Document
-            {
-                PageContent = vectorRecord.Text!,
-            })
-            .ToArray();
-
-        return documents;
-    }
-
-    public override Task<IEnumerable<(Document, float)>> SimilaritySearchWithScoreAsync(string query, int k = 4, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Task<IEnumerable<Document>> MaxMarginalRelevanceSearchByVector(IEnumerable<float> embedding, int k = 4, int fetchK = 20, float lambdaMult = default,
-        CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Task<IEnumerable<Document>> MaxMarginalRelevanceSearch(string query, int k = 4, int fetchK = 20, float lambdaMult = default,
-        CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override Func<float, float> SelectRelevanceScoreFn()
-    {
-        throw new NotImplementedException();
+        return new VectorSearchResponse
+        {
+            Items = searchResponse.Documents
+                .Where(vectorRecord => !string.IsNullOrWhiteSpace(vectorRecord.Text))
+                .Select(vectorRecord => new VectorSearchItem
+                {
+                    Text = vectorRecord.Text ?? string.Empty,
+                    Id = vectorRecord.Id,
+                    Embedding = vectorRecord.Vector,
+                })
+                .ToArray()
+        };
     }
 
     private void CreateIndex(OpenSearchVectorStoreOptions options)
@@ -153,7 +123,7 @@ public class OpenSearchVectorStore : VectorStore
             .Properties(p => p
                 .Keyword(k => k.Name(n => n.Id))
                 .Text(t => t.Name(n => n.Text))
-                .KnnVector(d => d.Name(n => n.Vector).Dimension(1536).Similarity("cosine"))
+                .KnnVector(d => d.Name(n => n.Vector).Dimension(options.Dimensions).Similarity("cosine"))
             )
         ));
     }
