@@ -147,23 +147,37 @@ public partial class OpenAiChatModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
-        var chatRequest = new global::OpenAI.Chat.ChatRequest(
-            messages: request.Messages
-                .Select(ToRequestMessage)
-                .ToArray(),
-            model: Id,
-            stops: usedSettings.StopSequences!.ToArray(),
-            user: usedSettings.User ?? string.Empty,
-            temperature: usedSettings.Temperature,
-            frequencyPenalty: usedSettings.FrequencyPenalty,
-            number: usedSettings.Number,
-            maxTokens: usedSettings.MaxTokens,
-            topP: usedSettings.TopP,
-            presencePenalty: usedSettings.PresencePenalty,
-            logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>(),
-            tools: GlobalTools.Count == 0
-                ? null!
-                : GlobalTools);
+        var chatRequest = GlobalTools.Count == 0
+            ? new global::OpenAI.Chat.ChatRequest(
+                messages: request.Messages
+                    .Select(ToRequestMessage)
+                    .ToArray(),
+                model: Id,
+                seed: usedSettings.Seed,
+                stops: usedSettings.StopSequences!.ToArray(),
+                user: usedSettings.User ?? string.Empty,
+                temperature: usedSettings.Temperature,
+                frequencyPenalty: usedSettings.FrequencyPenalty,
+                number: usedSettings.Number,
+                maxTokens: usedSettings.MaxTokens,
+                topP: usedSettings.TopP,
+                presencePenalty: usedSettings.PresencePenalty,
+                logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>())
+            : new global::OpenAI.Chat.ChatRequest(
+                messages: request.Messages
+                    .Select(ToRequestMessage)
+                    .ToArray(),
+                tools: GlobalTools,
+                model: Id,
+                stops: usedSettings.StopSequences!.ToArray(),
+                user: usedSettings.User ?? string.Empty,
+                temperature: usedSettings.Temperature,
+                frequencyPenalty: usedSettings.FrequencyPenalty,
+                number: usedSettings.Number,
+                maxTokens: usedSettings.MaxTokens,
+                topP: usedSettings.TopP,
+                presencePenalty: usedSettings.PresencePenalty,
+                logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>());
         if (usedSettings.UseStreaming == true)
         {
             var enumerable = provider.Api.ChatEndpoint.StreamCompletionEnumerableAsync(

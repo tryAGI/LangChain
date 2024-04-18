@@ -14,6 +14,7 @@ public class OpenAiChatSettings : ChatSettings
         Temperature = null,
         MaxTokens = null,
         TopP = null,
+        Seed = null,
         FrequencyPenalty = null,
         PresencePenalty = null,
         Number = null,
@@ -44,6 +45,15 @@ public class OpenAiChatSettings : ChatSettings
     /// Defaults to 1. <br/>
     /// </summary>
     public double? TopP { get; set; }
+
+    /// <summary>
+    /// This feature is in Beta. <br/>
+    /// If specified, our system will make a best effort to sample deterministically,
+    /// such that repeated requests with the same seed and parameters should return the same result.
+    /// Determinism is not guaranteed, and you should refer to the system_fingerprint response parameter to monitor changes in the backend. <br/>
+    /// Defaults to null. <br/>
+    /// </summary>
+    public int? Seed { get; set; }
 
     /// <summary>
     /// Number between -2.0 and 2.0. <br/>
@@ -129,6 +139,11 @@ public class OpenAiChatSettings : ChatSettings
                 modelSettingsCasted?.TopP ??
                 providerSettingsCasted?.TopP ??
                 Default.TopP,
+            Seed = 
+                requestSettingsCasted?.Seed ??
+                modelSettingsCasted?.Seed ??
+                providerSettingsCasted?.Seed ??
+                Default.Seed,
             FrequencyPenalty =
                 requestSettingsCasted?.FrequencyPenalty ??
                 modelSettingsCasted?.FrequencyPenalty ??
