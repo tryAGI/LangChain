@@ -6,7 +6,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
+      <ProjectReference Include="..\Chroma\src\LangChain.Databases.Chroma.csproj" />
       <ProjectReference Include="..\InMemory\src\LangChain.Databases.InMemory.csproj" />
+      <ProjectReference Include="..\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
     </ItemGroup>
 
 </Project>
