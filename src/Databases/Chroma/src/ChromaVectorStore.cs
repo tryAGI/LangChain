@@ -133,8 +133,17 @@ public class ChromaVectorStore : IVectorDatabase
             );
         }
 
-        var collection = await _client.GetCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
-        if (collection == null)
+        var collections =  _client.ListCollectionsAsync(cancellationToken).ConfigureAwait(false);
+        var isCollectionExists = false;
+        await foreach (var collectionName in collections)
+        {
+            if (collectionName == _collectionName)
+            {
+                isCollectionExists = true;
+                break;
+            }
+        }
+        if (!isCollectionExists)
         {
             await _client.CreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
         }
