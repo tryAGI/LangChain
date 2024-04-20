@@ -17,8 +17,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
         run: |
-          LABELS=$(gh label list --jq '.[].name' --json name | tr '\n' '","')
-          echo "available_labels=\"$LABELS\"" >> $GITHUB_OUTPUT
+          LABELS=$(gh label list --jq '.[].name' --json name | tr '\n' ',')
+          echo "available_labels=$LABELS" >> $GITHUB_OUTPUT
           
       - name: Install LangChain CLI
         run: |
@@ -33,7 +33,7 @@ jobs:
           echo "Available labels: ${{ steps.labels.outputs.available_labels }}" >> prompt.txt
           echo " " >> prompt.txt
           echo "IMPORTANT: Return ONLY replacement for $ARGUMENTS_WILL_BE_HERE$. It should contains one or more --add-label arguments" >> prompt.txt 
-          echo "Example output: --add-label \"vector-databases\" --add-label \"enhancement\"" >> prompt.txt 
+          echo "Example output: --add-label \"vector databases\" --add-label \"enhancement\"" >> prompt.txt 
           cat prompt.txt
 
       - name: Analyse issue
