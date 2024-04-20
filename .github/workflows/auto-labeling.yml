@@ -17,7 +17,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
         run: |
-          LABELS=$(gh label list)
+          LABELS=$(gh label list --jq '.[].name' --json name | tr '\n' ', ')
           echo "available_labels=$LABELS" >> $GITHUB_OUTPUT
           
       - name: Install LangChain CLI
