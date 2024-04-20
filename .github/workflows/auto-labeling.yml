@@ -33,6 +33,7 @@ jobs:
           echo "Available labels: ${{ steps.labels.outputs.available_labels }}" >> prompt.txt
           echo " " >> prompt.txt
           echo "IMPORTANT: Return ONLY replacement for $ARGUMENTS_WILL_BE_HERE$. It should contains one or more --add-label arguments" >> prompt.txt 
+          echo "Example output: `--add-label \"vector-databases\" --add-label \"enhancement\"`" >> prompt.txt 
           cat prompt.txt
 
       - name: Analyse issue
