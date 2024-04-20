@@ -23,7 +23,9 @@ jobs:
           git config --local user.name "OpenRouter Bot"
         
       - name: Create branch
-        run: git checkout -b bot/update-open-router
+        run: |
+          git checkout -b bot/update-open-router origin/main
+          git rebase main
 
       - name: Generate code
         run: |
