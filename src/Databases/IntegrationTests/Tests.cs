@@ -4,16 +4,17 @@ namespace LangChain.Databases.IntegrationTests;
 public partial class Tests
 {
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma, Description = "Requires Chroma server running on localhost:8000. Use `docker run -p 8000:8000 chromadb/chroma`", Explicit = true)]
+    [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.SqLite)]
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
+    [TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
     {
-        var embeddingsMock = CreateEmbeddingModelMock();
-        var vectorStore = GetConfiguredVectorDatabase(database);
+        await using var environment = await StartEnvironmentForAsync(database);
 
-        await vectorStore.AddTextsAsync(embeddingsMock.Object, Embeddings.Keys);
+        await environment.VectorDatabase.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
-        var similar = await vectorStore.SearchAsync(Embeddings["lemon"], new VectorSearchSettings
+        var similar = await environment.VectorDatabase.SearchAsync(Embeddings["lemon"], new VectorSearchSettings
         {
             NumberOfResults = 5,
         });

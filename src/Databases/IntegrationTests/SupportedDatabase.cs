@@ -5,4 +5,6 @@ public enum SupportedDatabase
     InMemory,
     Chroma,
     SqLite,
+    OpenSearch,
+    Postgres,
 }

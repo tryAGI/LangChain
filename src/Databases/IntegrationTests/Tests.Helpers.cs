@@ -1,4 +1,3 @@
-using LangChain.Databases.InMemory;
 using LangChain.Providers;
 using Moq;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -8,11 +7,11 @@ namespace LangChain.Databases.IntegrationTests;
 [TestFixture]
 public partial class Tests
 {
-    public Dictionary<string, float[]> Embeddings { get; } = LoadEmbeddings();
+    public static Dictionary<string, float[]> Embeddings { get; } = LoadEmbeddings();
 
     private static string GenerateCollectionName() => "test" + Guid.NewGuid().ToString("N");
 
-    private Mock<IEmbeddingModel> CreateEmbeddingModelMock()
+    internal static Mock<IEmbeddingModel> CreateEmbeddingModelMock()
     {
         var mock = new Mock<IEmbeddingModel>();
 
