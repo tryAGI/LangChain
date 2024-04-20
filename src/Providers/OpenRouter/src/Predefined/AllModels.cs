@@ -5,6 +5,16 @@ namespace LangChain.Providers.OpenRouter.Predefined;
 public class Mistral7BInstructFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mistral7BInstructFree);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.OpenChat35Free"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class OpenChat35FreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenChat35Free);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Mythomist7BFree"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Mythomist7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomist7BFree);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.ToppyM7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class ToppyM7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.ToppyM7BFree);
@@ -15,9 +25,14 @@ public class ToppyM7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(pr
 public class Cinematika7BAlphaFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Cinematika7BAlphaFree);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.Psyfighter13B"/>
+/// <inheritdoc cref="OpenRouterModelIds.GoogleGemma7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class Psyfighter13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Psyfighter13B);
+public class GoogleGemma7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7BFree);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.PsyfighterV213B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class PsyfighterV213BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PsyfighterV213B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.NeuralChat7BV31"/>
@@ -338,11 +353,6 @@ public class AnthropicClaude3HaikuSelfModeratedModel(OpenRouterProvider provider
 /// <inheritdoc cref="OpenRouterModelIds.MetaLlamaV270BChat"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlamaV270BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlamaV270BChat);
-
-
-/// <inheritdoc cref="OpenRouterModelIds.NousCapybara34B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class NousCapybara34BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NousCapybara34B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Airoboros70B"/>

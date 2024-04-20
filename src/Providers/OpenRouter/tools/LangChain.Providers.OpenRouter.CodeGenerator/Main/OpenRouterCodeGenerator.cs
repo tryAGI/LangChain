@@ -90,7 +90,7 @@ public static class OpenRouterCodeGenerator
                 first = false;
             }
 
-            sb3.AppendLine($"\t\t{item.DicAddCode}");
+            sb3.AppendLine($"        {item.DicAddCode}");
         }
 
         var dicsAdd =
@@ -114,7 +114,7 @@ public static class OpenRouterCodeGenerator
         {
             var tem = item.EnumMemberCode?
                 .Replace("\r\n", "\n", StringComparison.InvariantCulture)
-                .Replace("\n", "\n\t\t", StringComparison.InvariantCulture)
+                .Replace("\n", "\n        ", StringComparison.InvariantCulture)
                 ;
             sb3.Append(tem);
         }
