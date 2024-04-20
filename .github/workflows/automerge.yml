@@ -8,9 +8,10 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' && github.repository_owner == 'tryAGI' }}
+    if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'github-actions[bot]') && github.repository_owner == 'tryAGI' }}
     steps:
       - name: Dependabot metadata
+        if: ${{ github.actor == 'dependabot[bot]' }}
         id: metadata
         uses: dependabot/fetch-metadata@0fb21704c18a42ce5aa8d720ea4b912f5e6babef
         with:
