@@ -27,12 +27,11 @@ public static class OpenRouterCodeGenerator
         //Initialize fields.
         var list = new List<ModelInfo>();
 
-        using var client = CreateClient();
         var lbb = new DocumentHelper();
 
         //Load Open Router Docs Page...
         Console.WriteLine("Loading Model Page...");
-        var str = await client.GetStringAsync(new Uri("https://openrouter.ai/docs")).ConfigureAwait(false);
+        var str = await GetStringAsync(new Uri("https://openrouter.ai/docs")).ConfigureAwait(false);
 
         //Parse Html
         lbb.DocumentText = str;
@@ -293,8 +292,7 @@ public static class OpenRouterCodeGenerator
             return await File.ReadAllTextAsync(path).ConfigureAwait(false);
         }
         
-        using var client = CreateClient();
-        var str = await client.GetStringAsync(new Uri(url)).ConfigureAwait(false);
+        var str = await GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
         lbb.DocumentText = str;
 
@@ -336,23 +334,34 @@ public static class OpenRouterCodeGenerator
     ///     Creates HttpClient
     /// </summary>
     /// <returns></returns>
-    private static HttpClient CreateClient()
+    private static async Task<string> GetStringAsync(Uri uri, CancellationToken cancellationToken = default)
     {
-#pragma warning disable CA2000
-        var handler = new HttpClientHandler
-        {
-            CheckCertificateRevocationList = true,
-        };
-#pragma warning restore CA2000
+        using var handler = new HttpClientHandler();
+        handler.CheckCertificateRevocationList = true;
         handler.AutomaticDecompression =
             DecompressionMethods.Deflate | DecompressionMethods.Brotli | DecompressionMethods.GZip;
-        var client = new HttpClient(handler, disposeHandler: true);
+        using var client = new HttpClient(handler);
         client.DefaultRequestHeaders.Add("Accept", "*/*");
         client.DefaultRequestHeaders.Add("UserAgent",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
         client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-        return client;
+        using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(5));
+        
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                return await client.GetStringAsync(uri, cancellationToken).ConfigureAwait(false);
+            }
+            catch (HttpRequestException)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
+            }
+        }
+        
+        throw new TaskCanceledException();
     }
 
     #endregion
