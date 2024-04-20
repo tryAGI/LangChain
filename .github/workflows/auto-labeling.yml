@@ -25,10 +25,19 @@ jobs:
           dotnet tool install --global langchain.cli --prerelease
           langchain auth openai ${{ secrets.OPENAI_API_KEY }}
 
+      - name: Prepare prompt
+        run: |
+          echo "Return arguments for `gh issue edit $ISSUE_URL $ARGUMENTS_WILL_BE_HERE$` for issue with these data:" > prompt.txt
+          echo "Title: ${{ github.event.issue.title }}" >> prompt.txt
+          echo "Body: ${{ github.event.issue.body }}" >> prompt.txt
+          echo "Available labels: ${{ steps.labels.outputs.available_labels }}" >> prompt.txt
+          echo " " >> prompt.txt
+          echo "IMPORTANT: Return ONLY replacement for $ARGUMENTS_WILL_BE_HERE$. It should contains one or more --add-label arguments" >> prompt.txt 
+
       - name: Analyse issue
         id: analyse
         run: |
-          $ARGUMENTS=$(langchain generate --input "Return arguments for `gh issue edit $ISSUE_URL $ARGUMENTS_WILL_BE_HERE$` for issue with these data:\nTitle: ${{ github.event.issue.title }}\nBody: ${{ github.event.issue.body }}\n Available labels: ${{ steps.labels.outputs.available_labels }}\n\nIMPORTANT: Return ONLY replacement for $ARGUMENTS_WILL_BE_HERE$. It should contains one or more --add-label arguments")
+          $ARGUMENTS=$(langchain generate --input-file "prompt.txt")
           echo "arguments=$ARGUMENTS" >> $GITHUB_OUTPUT
 
       - env:
