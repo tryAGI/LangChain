@@ -33,11 +33,13 @@ jobs:
           echo "Available labels: ${{ steps.labels.outputs.available_labels }}" >> prompt.txt
           echo " " >> prompt.txt
           echo "IMPORTANT: Return ONLY replacement for $ARGUMENTS_WILL_BE_HERE$. It should contains one or more --add-label arguments" >> prompt.txt 
+          cat prompt.txt
 
       - name: Analyse issue
         id: analyse
         run: |
-          $ARGUMENTS=$(langchain generate --input-file "prompt.txt")
+          ARGUMENTS=$(langchain generate --input-file prompt.txt)
+          echo $ARGUMENTS
           echo "arguments=$ARGUMENTS" >> $GITHUB_OUTPUT
 
       - env:
