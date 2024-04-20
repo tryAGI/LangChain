@@ -7,11 +7,18 @@ public enum OpenRouterModelIds
 {
 
 		/// <summary>
-		/// A 7.3B parameter model that outperforms Llama 2 13B on all benchmarks, with optimizations for speed and context length.  <br/>
-		/// This is v0.1 of Mistral 7B Instruct. For v0.2, use this model.  <br/>
+		/// OpenChat is a library of open-source language models, fine-tuned with "C-RLFT (Conditioned Reinforcement Learning Fine-Tuning)" - a strategy inspired by offline reinforcement learning. It has been trained on mixed-quality data without preference labels.  <br/>
 		/// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
 		/// </summary>
-		Mistral7BInstructFree = 0,
+		OpenChat35Free = 1,
+		
+		/// <summary>
+		/// From the creator of MythoMax, merges a suite of models to reduce word anticipation, ministrations, and other undesirable words in ChatGPT roleplaying data.  <br/>
+		/// It combines Neural Chat 7B, Airoboros 7b, Toppy M 7B, Zepher 7b beta, Nous Capybara 34B, OpenHeremes 2.5, and many others.  <br/>
+		/// #merge  <br/>
+		/// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
+		/// </summary>
+		Mythomist7BFree = 2,
 		
 		/// <summary>
 		/// A wild 7B parameter model that merges several models using the new task_arithmetic merge method from mergekit.  <br/>
@@ -33,12 +40,30 @@ public enum OpenRouterModelIds
 		Cinematika7BAlphaFree = 4,
 		
 		/// <summary>
+		/// Gemma by Google is an advanced, open-source language model family, leveraging the latest in decoder-only, text-to-text technology. It offers English language capabilities across text generation tasks like question answering, summarization, and reasoning. The Gemma 7B variant is comparable in performance to leading open source models.  <br/>
+		/// Usage of Gemma is subject to Google's Gemma Terms of Use.  <br/>
+		/// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
+		/// </summary>
+		GoogleGemma7BFree = 5,
+		
+		/// <summary>
 		/// A #merge model based on Llama-2-13B and made possible thanks to the compute provided by the KoboldAI community. It's a merge between:  <br/>
 		/// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
 		/// chaoyi-wu/MedLLaMA_13B  <br/>
 		/// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/> 
 		/// </summary>
 		Psyfighter13B = 6,
+		
+		/// <summary>
+		/// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
+		/// The intent was to add medical data to supplement the model's fictional ability with more details on anatomy and mental states. This model should not be used for medical advice or therapy because of its high likelihood of pulling in fictional data.  <br/>
+		/// It's a merge between:  <br/>
+		/// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
+		/// Doctor-Shotgun/cat-v1.0-13b  <br/>
+		/// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/>
+		/// #merge  <br/> 
+		/// </summary>
+		PsyfighterV213B = 7,
 		
 		/// <summary>
 		/// A fine-tuned model based on mistralai/Mistral-7B-v0.1 on the open source dataset Open-Orca/SlimOrca, aligned with DPO algorithm. For more details, refer to the blog: The Practice of Supervised Fine-tuning and Direct Preference Optimization on Habana Gaudi2.  <br/> 
@@ -228,7 +253,8 @@ public enum OpenRouterModelIds
 		HuggingFaceZephyr7B = 40,
 		
 		/// <summary>
-		/// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks. Training data: up to Sep 2021.  <br/> 
+		/// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.  <br/>
+		/// Updated by OpenAI to point to the latest version of GPT-3.5. Training data up to Sep 2021.  <br/> 
 		/// </summary>
 		OpenAiGpt35Turbo = 41,
 		
@@ -250,7 +276,7 @@ public enum OpenRouterModelIds
 		OpenAiGpt4Turbo = 44,
 		
 		/// <summary>
-		/// The latest GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Apr 2023.  <br/>
+		/// The latest GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Dec 2023.  <br/>
 		/// Note: heavily rate limited by OpenAI while in preview.  <br/> 
 		/// </summary>
 		OpenAiGpt4TurboPreview = 45,

@@ -9,10 +9,14 @@ public static class OpenRouterModelProvider
 {
     private static Dictionary<OpenRouterModelIds, ChatModels> Models { get; set; } = new()
     {
-        { OpenRouterModelIds.Mistral7BInstructFree, new ChatModels("mistralai/mistral-7b-instruct:free",32768,0,0)},
+        { OpenRouterModelIds.OpenChat35Free, new ChatModels("openchat/openchat-7b:free",8192,0,0)},
+		{ OpenRouterModelIds.OpenChat35Free, new ChatModels("openchat/openchat-7b:free",8192,0,0)},
+		{ OpenRouterModelIds.Mythomist7BFree, new ChatModels("gryphe/mythomist-7b:free",32768,0,0)},
 		{ OpenRouterModelIds.ToppyM7BFree, new ChatModels("undi95/toppy-m-7b:free",4096,0,0)},
 		{ OpenRouterModelIds.Cinematika7BAlphaFree, new ChatModels("openrouter/cinematika-7b:free",8000,0,0)},
+		{ OpenRouterModelIds.GoogleGemma7BFree, new ChatModels("google/gemma-7b-it:free",8192,0,0)},
 		{ OpenRouterModelIds.Psyfighter13B, new ChatModels("jebcarter/psyfighter-13b",4096,1E-06,1E-06)},
+		{ OpenRouterModelIds.PsyfighterV213B, new ChatModels("koboldai/psyfighter-13b-2",4096,1E-06,1E-06)},
 		{ OpenRouterModelIds.NeuralChat7BV31, new ChatModels("intel/neural-chat-7b",4096,5E-06,5E-06)},
 		{ OpenRouterModelIds.Llava13B, new ChatModels("haotian-liu/llava-13b",2048,5E-06,5E-06)},
 		{ OpenRouterModelIds.NousHermes2Vision7BAlpha, new ChatModels("nousresearch/nous-hermes-2-vision-7b",4096,5E-06,5E-06)},
@@ -85,7 +89,7 @@ public static class OpenRouterModelProvider
 		{ OpenRouterModelIds.Mythomax13B, new ChatModels("gryphe/mythomax-l2-13b",4096,1.8000000000000002E-07,1.8000000000000002E-07)},
 		{ OpenRouterModelIds.OpenChat35, new ChatModels("openchat/openchat-7b",8192,1.3E-07,1.3E-07)},
 		{ OpenRouterModelIds.ToppyM7B, new ChatModels("undi95/toppy-m-7b",4096,1.5E-07,1.5E-07)},
-		{ OpenRouterModelIds.Lzlv70B, new ChatModels("lizpreciatior/lzlv-70b-fp16-hf",4096,7E-07,9E-07)},
+		{ OpenRouterModelIds.Lzlv70B, new ChatModels("lizpreciatior/lzlv-70b-fp16-hf",4096,7E-07,8.000000000000001E-07)},
 		{ OpenRouterModelIds.Dolphin26Mixtral8X7B, new ChatModels("cognitivecomputations/dolphin-mixtral-8x7b",32000,5E-07,5E-07)},
 		{ OpenRouterModelIds.NoromaidMixtral8X7BInstruct, new ChatModels("neversleep/noromaid-mixtral-8x7b-instruct",8000,8E-06,8E-06)},
 		{ OpenRouterModelIds.NousHermes2Mixtral8X7BDpo, new ChatModels("nousresearch/nous-hermes-2-mixtral-8x7b-dpo",32000,3E-07,5E-07)},

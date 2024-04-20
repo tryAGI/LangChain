@@ -1,8 +1,13 @@
 namespace LangChain.Providers.OpenRouter.Predefined;
 
-/// <inheritdoc cref="OpenRouterModelIds.Mistral7BInstructFree"/>
+/// <inheritdoc cref="OpenRouterModelIds.OpenChat35Free"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class Mistral7BInstructFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mistral7BInstructFree);
+public class OpenChat35FreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenChat35Free);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Mythomist7BFree"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Mythomist7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomist7BFree);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.ToppyM7BFree"/>
@@ -15,9 +20,19 @@ public class ToppyM7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(pr
 public class Cinematika7BAlphaFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Cinematika7BAlphaFree);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.GoogleGemma7BFree"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class GoogleGemma7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7BFree);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.Psyfighter13B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Psyfighter13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Psyfighter13B);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.PsyfighterV213B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class PsyfighterV213BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PsyfighterV213B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.NeuralChat7BV31"/>
