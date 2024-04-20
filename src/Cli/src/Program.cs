@@ -7,5 +7,6 @@ var rootCommand = new RootCommand(
 rootCommand.AddCommand(new AuthCommand());
 rootCommand.AddCommand(new GenerateCommand());
 rootCommand.AddCommand(new SummarizeCommand());
+rootCommand.AddCommand(new ModelCommand());
 
 return await rootCommand.InvokeAsync(args).ConfigureAwait(false);
