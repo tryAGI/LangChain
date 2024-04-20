@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Get labels
         id: labels
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
         run: |
           LABELS=$(gh label list)
           echo "available_labels=$LABELS" >> $GITHUB_OUTPUT
@@ -27,6 +29,5 @@ jobs:
 
       - env:
           GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-          ISSUE_URL: ${{ github.event.issue.html_url }}
         run: |
-          gh issue edit $ISSUE_URL ${{ steps.analyse.outputs.arguments }}
+          gh issue edit ${{ github.event.issue.html_url }} ${{ steps.analyse.outputs.arguments }}
