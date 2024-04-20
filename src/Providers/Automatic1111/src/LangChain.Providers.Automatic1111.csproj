@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+		<SignAssembly>false</SignAssembly>
+		<NoWarn>$(NoWarn);CA1003;CA1307;CA1054</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LLamaSharp" />
+		<PackageReference Include="Newtonsoft.Json" />
+	</ItemGroup>
+
+	<ItemGroup Label="Usings">
+		<Using Include="System.Net.Http" />
+	</ItemGroup>
+
+	<PropertyGroup Label="NuGet">
+		<Description>Automatic1111 Stable DIffusion model provider.</Description>
+		<PackageTags>$(PackageTags);Auto1111;Automatic1111;Stable Diffusion;Stable Diffusion;api</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>

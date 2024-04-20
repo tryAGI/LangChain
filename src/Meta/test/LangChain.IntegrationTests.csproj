@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+        <ProjectReference Include="..\..\Providers\Amazon.Bedrock\src\LangChain.Providers.Amazon.Bedrock.csproj" />
+        <ProjectReference Include="..\..\Providers\Automatic1111\src\LangChain.Providers.Automatic1111.csproj" />
+        <ProjectReference Include="..\..\Providers\LLamaSharp\src\LangChain.Providers.LLamaSharp.csproj" />
+        <ProjectReference Include="..\..\Providers\Ollama\src\LangChain.Providers.Ollama.csproj" />
+        <ProjectReference Include="..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+        <ProjectReference Include="..\src\LangChain.csproj" />
+    </ItemGroup>
+
+</Project>

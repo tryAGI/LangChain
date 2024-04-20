@@ -1,0 +1,24 @@
+﻿{
+  "solution": {
+    "path": "LangChain.sln",
+    "projects": [
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Databases\\AzureCognitiveSearch\\src\\LangChain.Databases.AzureCognitiveSearch.csproj",
+      "src\\Databases\\AzureSearch\\src\\LangChain.Databases.AzureSearch.csproj",
+      "src\\Databases\\Chroma\\src\\LangChain.Databases.Chroma.csproj",
+      "src\\Databases\\Chroma\\test\\LangChain.Databases.Chroma.IntegrationTests.csproj",
+      "src\\Databases\\DuckDb\\src\\LangChain.Databases.DuckDb.csproj",
+      "src\\Databases\\InMemory\\src\\LangChain.Databases.InMemory.csproj",
+      "src\\Databases\\Kendra\\src\\LangChain.Databases.Kendra.csproj",
+      "src\\Databases\\Pinecone\\src\\LangChain.Databases.Pinecone.csproj",
+      "src\\Databases\\Postgres\\src\\LangChain.Databases.Postgres.csproj",
+      "src\\Databases\\Postgres\\test\\LangChain.Databases.Postgres.IntegrationTests.csproj",
+      "src\\Databases\\Qdrant\\src\\LangChain.Databases.Qdrant.csproj",
+      "src\\Databases\\Redis\\src\\LangChain.Databases.Redis.csproj",
+      "src\\Databases\\Redis\\test\\LangChain.Databases.Redis.IntegrationTests.csproj",
+      "src\\Databases\\Sqlite\\src\\LangChain.Databases.Sqlite.csproj",
+      "src\\Databases\\Weaviate\\src\\LangChain.Databases.Weaviate.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 using LangChain.Providers.OpenAI;
 using Microsoft.AspNetCore.Mvc;
+using OpenAI.Constants;
 
 namespace LangChain.Samples.AspNet.Controllers;
 
@@ -7,11 +8,11 @@ namespace LangChain.Samples.AspNet.Controllers;
 [Route("[controller]")]
 public class OpenAiSampleController : ControllerBase
 {
-    private readonly OpenAiModel _openAi;
+    private readonly OpenAiProvider _openAi;
     private readonly ILogger<OpenAiSampleController> _logger;
 
     public OpenAiSampleController(
-        OpenAiModel openAi,
+        OpenAiProvider openAi,
         ILogger<OpenAiSampleController> logger)
     {
         _openAi = openAi;
@@ -21,7 +22,8 @@ public class OpenAiSampleController : ControllerBase
     [HttpGet(Name = "GetOpenAiResponse")]
     public async Task<string> Get()
     {
-        var response = await _openAi.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        var llm = new OpenAiChatModel(_openAi, id: ChatModels.Gpt35Turbo);
+        var response = await llm.GenerateAsync("What is a good name for a company that sells colourful socks?");
         
         return response.LastMessageContent;
     }

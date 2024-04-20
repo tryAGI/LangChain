@@ -1,0 +1,9 @@
+<Project>
+
+    <Import Project="..\Directory.Build.props" />
+
+    <PropertyGroup Label="NuGet" Condition="'$(IsLibraryProject)' == 'true'">
+        <PackageTags>$(PackageTags);providers;llms</PackageTags>
+    </PropertyGroup>
+
+</Project>

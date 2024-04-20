@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+      <ProjectReference Include="..\src\LangChain.Providers.OpenAI.csproj" />
+    </ItemGroup>
+
+</Project>

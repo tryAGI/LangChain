@@ -1,0 +1,14 @@
+<Project>
+
+    <Import Project="..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <RootNamespace>LangChain.Utilities</RootNamespace>
+        <NoWarn>$(NoWarn);NU5104</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <PackageTags>$(PackageTags);utilities</PackageTags>
+    </PropertyGroup>
+
+</Project>

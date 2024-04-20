@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);CA1031</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet">
+    <Description>LangChain polyfills for .Net Framework/.Net Standard to reduce #ifs in code.</Description>
+    <PackageTags>$(PackageTags);polyfills</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net4.6.2'">
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>

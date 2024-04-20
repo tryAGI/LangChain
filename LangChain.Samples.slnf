@@ -1,0 +1,26 @@
+﻿{
+  "solution": {
+    "path": "LangChain.sln",
+    "projects": [
+      "examples\\LangChain.Samples.AspNet\\LangChain.Samples.AspNet.csproj",
+      "examples\\LangChain.Samples.Azure\\LangChain.Samples.Azure.csproj",
+      "examples\\LangChain.Samples.HuggingFace\\LangChain.Samples.HuggingFace.csproj",
+      "examples\\LangChain.Samples.Memory\\LangChain.Samples.Memory.csproj",
+      "examples\\LangChain.Samples.OpenAI\\LangChain.Samples.OpenAI.csproj",
+      "examples\\LangChain.Samples.Prompts\\LangChain.Samples.Prompts.csproj",
+      "examples\\LangChain.Samples.SequentialChain\\LangChain.Samples.SequentialChain.csproj",
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Databases\\InMemory\\src\\LangChain.Databases.InMemory.csproj",
+      "src\\Extensions\\DependencyInjection\\src\\LangChain.Extensions.DependencyInjection.csproj",
+      "src\\Meta\\src\\LangChain.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj",
+      "src\\Providers\\Anthropic\\src\\LangChain.Providers.Anthropic.csproj",
+      "src\\Providers\\Anyscale\\src\\LangChain.Providers.Anyscale.csproj",
+      "src\\Providers\\Azure\\src\\LangChain.Providers.Azure.csproj",
+      "src\\Providers\\Google\\src\\LangChain.Providers.Google.csproj",
+      "src\\Providers\\HuggingFace\\src\\LangChain.Providers.HuggingFace.csproj",
+      "src\\Providers\\OpenAI\\src\\LangChain.Providers.OpenAI.csproj",
+      "src\\Splitters\\Abstractions\\src\\LangChain.Splitters.Abstractions.csproj"
+    ]
+  }
+}

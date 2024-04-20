@@ -114,6 +114,39 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "Lyx52",
+      "name": "Lyx52",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55701905?v=4",
+      "profile": "https://github.com/Lyx52",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "fiorelorenzo",
+      "name": "Lorenzo Fiore",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29930922?v=4",
+      "profile": "https://github.com/fiorelorenzo",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "matt-regier",
+      "name": "matt-regier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13575802?v=4",
+      "profile": "https://github.com/matt-regier",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

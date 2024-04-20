@@ -1,0 +1,13 @@
+<Project>
+
+    <Import Project="..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU5104</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet" Condition="'$(IsLibraryProject)' == 'true'">
+        <PackageTags>$(PackageTags);databases</PackageTags>
+    </PropertyGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+<Project>
+
+    <Import Project="..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <RootNamespace>LangChain.Splitters</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <PackageTags>$(PackageTags);splitters</PackageTags>
+    </PropertyGroup>
+
+</Project>

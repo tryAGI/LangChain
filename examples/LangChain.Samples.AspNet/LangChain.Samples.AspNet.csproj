@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\libs\Extensions\LangChain.Extensions.DependencyInjection\LangChain.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\..\src\Meta\src\LangChain.csproj" />
     </ItemGroup>
 
 </Project>

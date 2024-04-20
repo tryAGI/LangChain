@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <Description>LangChain meta-package with the most used things.</Description>
+        <PackageTags>langchain;meta;llms</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\src\LangChain.Core.csproj" />
+        <ProjectReference Include="..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
+        <ProjectReference Include="..\..\Extensions\DependencyInjection\src\LangChain.Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\..\Providers\Anthropic\libs\Anthropic\LangChain.Providers.Anthropic.csproj" />
+        <ProjectReference Include="..\..\Providers\Anyscale\src\LangChain.Providers.Anyscale.csproj" />
+        <ProjectReference Include="..\..\Providers\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
+        <ProjectReference Include="..\..\Providers\OpenAI\src\LangChain.Providers.OpenAI.csproj" />
+        <ProjectReference Include="..\..\Providers\Azure\src\LangChain.Providers.Azure.csproj" />
+        <ProjectReference Include="..\..\Providers\Google\src\LangChain.Providers.Google.csproj" />
+    </ItemGroup>
+
+</Project>

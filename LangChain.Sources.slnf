@@ -1,13 +1,17 @@
-{
+﻿{
   "solution": {
     "path": "LangChain.sln",
     "projects": [
-      "src\\libs\\LangChain.Core\\LangChain.Core.csproj",
-      "src\\libs\\Providers\\LangChain.Providers.LLamaSharp\\LangChain.Providers.LLamaSharp.csproj",
-	  "src\\libs\\Providers\\LangChain.Providers.HuggingFace\\LangChain.Providers.HuggingFace.csproj",
-	  "src\\tests\\LangChain.Providers.LLamaSharp.IntegrationTests\\LangChain.Providers.LLamaSharp.IntegrationTests.csproj",
-      "src\\tests\\LangChain.UnitTest\\LangChain.UnitTest.csproj",
-	  "src\\libs\\Databases\\LangChain.Databases.InMemory\\LangChain.Databases.InMemory.csproj"
+      "src\\Core\\src\\LangChain.Core.csproj",
+      "src\\Providers\\Abstractions\\src\\LangChain.Providers.Abstractions.csproj",
+      "src\\Sources\\Abstractions\\src\\LangChain.Sources.Abstractions.csproj",
+      "src\\Sources\\Pdf\\src\\LangChain.Sources.Pdf.csproj",
+      "src\\Sources\\Pdf\\test\\LangChain.Sources.Pdf.IntegrationTests.csproj",
+      "src\\Sources\\WebBase\\src\\LangChain.Sources.WebBase.csproj",
+      "src\\Sources\\WebBase\\test\\LangChain.Sources.WebBase.IntegrationTests.csproj",
+      "src\\Sources\\Word\\src\\LangChain.Sources.Word.csproj",
+      "src\\Sources\\Word\\test\\LangChain.Sources.Word.IntegrationTests.csproj",
+      "src\\Utilities\\Pollyfils\\src\\LangChain.Polyfills.csproj"
     ]
   }
 }
