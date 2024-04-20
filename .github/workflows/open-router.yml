@@ -1,0 +1,47 @@
+name: Opens a new PR if there are model updates
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  open-router:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Create branch
+        run: git checkout -b bot/update-open-router
+
+      - name: Generate code
+        run: cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
+
+      - name: Generate code
+        run: dotnet run
+
+      - name: Check for changes
+        id: changes
+        run: |
+          CHANGED=$(git diff --name-only main...HEAD)
+          if [ -z "$CHANGED" ]; then
+            echo "::set-output name=has_changes::false"
+          else
+            echo "::set-output name=has_changes::true"
+          fi
+
+      - name: Push changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: git push -u origin bot/update-open-router
+        
+      - name: Create pull request
+        if: steps.changes.outputs.has_changes == 'true'
+        run: gh pr create -B bot/update-open-router -H main --title 'feat:Updated OpenRouter models' --body 'Created by Github Actions'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
