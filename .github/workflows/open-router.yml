@@ -21,10 +21,14 @@ jobs:
         run: |
           git config --local user.email "bot@langchain.com"
           git config --local user.name "OpenRouter Bot"
-        
+
+      - name: Generate branch name
+        id: branch
+        run: echo "branch_name=bot/update-open-router_$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+
       - name: Create branch
         run: |
-          git checkout -b bot/update-open-router origin/main
+          git checkout -b ${{ steps.branch.outputs.branch_name }} origin/main
           git rebase main
 
       - name: Generate code
@@ -47,13 +51,13 @@ jobs:
         run: |
           git add .
           git commit -m "feat: Updated OpenRouter models"
-          git push --force-with-lease -u origin bot/update-open-router
+          git push --force-with-lease -u origin ${{ steps.branch.outputs.branch_name }}
 
       - name: Wait for 15 seconds
         run: sleep 15
       
       - name: Create pull request
         if: steps.changes.outputs.has_changes == 'true'
-        run: gh pr create -B bot/update-open-router -H main --title 'feat:Updated OpenRouter models' --body 'Created by Github Actions'
+        run: gh pr create -B main -H ${{ steps.branch.outputs.branch_name }} --title 'feat:Updated OpenRouter models' --body 'Created by Github Actions'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
