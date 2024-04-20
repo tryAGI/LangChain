@@ -45,7 +45,7 @@ jobs:
         run: |
           git add .
           git commit -m "feat: Updated OpenRouter models"
-          git push -u origin bot/update-open-router
+          git push --force-with-lease -u origin bot/update-open-router
         
       - name: Create pull request
         if: steps.changes.outputs.has_changes == 'true'
