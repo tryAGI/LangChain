@@ -2,9 +2,6 @@ name: Opens a new PR if there are model updates
 on:
   schedule:
     - cron: '0 12 * * *'
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
