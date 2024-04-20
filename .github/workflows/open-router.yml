@@ -48,7 +48,10 @@ jobs:
           git add .
           git commit -m "feat: Updated OpenRouter models"
           git push --force-with-lease -u origin bot/update-open-router
-        
+
+      - name: Wait for 15 seconds
+        run: sleep 15
+      
       - name: Create pull request
         if: steps.changes.outputs.has_changes == 'true'
         run: gh pr create -B bot/update-open-router -H main --title 'feat:Updated OpenRouter models' --body 'Created by Github Actions'
