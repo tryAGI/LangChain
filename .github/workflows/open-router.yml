@@ -23,7 +23,7 @@ jobs:
       - name: Generate code
         run: |
           cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
-          cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
+          dotnet run
 
       - name: Check for changes
         id: changes
