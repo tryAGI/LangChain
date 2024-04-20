@@ -3,7 +3,7 @@
 /// <summary>
 /// 
 /// </summary>
-public static class Utils
+public static class DistanceFunctions
 {
     /// <summary>
     /// 
@@ -11,7 +11,7 @@ public static class Utils
     /// <param name="vector1"></param>
     /// <param name="vector2"></param>
     /// <returns></returns>
-    public static float ComputeEuclideanDistance(float[] vector1, float[] vector2)
+    public static float Euclidean(float[] vector1, float[] vector2)
     {
         vector1 = vector1 ?? throw new ArgumentNullException(nameof(vector1));
         vector2 = vector2 ?? throw new ArgumentNullException(nameof(vector2));
@@ -32,7 +32,7 @@ public static class Utils
     /// <param name="vector2"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static float ComputeManhattanDistance(float[] vector1, float[] vector2)
+    public static float Manhattan(float[] vector1, float[] vector2)
     {
         vector1 = vector1 ?? throw new ArgumentNullException(nameof(vector1));
         vector2 = vector2 ?? throw new ArgumentNullException(nameof(vector2));

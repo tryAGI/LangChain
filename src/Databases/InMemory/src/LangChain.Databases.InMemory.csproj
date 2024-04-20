@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+	  <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

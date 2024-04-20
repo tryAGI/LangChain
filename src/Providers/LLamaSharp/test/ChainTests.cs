@@ -1,4 +1,6 @@
-﻿using LangChain.Databases.InMemory;
+﻿using LangChain.Databases;
+using LangChain.Databases.InMemory;
+using LangChain.Indexes;
 using LangChain.Sources;
 using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
@@ -49,18 +51,19 @@ The pet name is
 
     [Test]
     [Explicit]
-    public void RetrievalChainTest()
+    public async Task RetrievalChainTest()
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        var index = InMemoryVectorStore
-            .CreateIndexFromDocuments(embeddings, new[]
+        var vectorStore = new InMemoryVectorStore();
+        await vectorStore
+            .AddDocumentsAsync(embeddings, new[]
             {
                 "I spent entire day watching TV",
                 "My dog name is Bob",
                 "This icecream is delicious",
                 "It is cold in space"
-            }.ToDocuments()).Result;
+            }.ToDocuments());
 
         string prompt1Text =
             @"Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -84,7 +87,7 @@ Answer: ";
 
         var chainQuestion =
             Set("What is the good name for a pet?", outputKey: "question")
-            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents")
+            | RetrieveDocuments(vectorStore, embeddings, inputKey: "question", outputKey: "documents")
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(prompt1Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "pet_sentence");

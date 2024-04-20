@@ -1,6 +1,4 @@
-﻿using OpenSearch.Client;
-
-namespace LangChain.Databases.OpenSearch;
+﻿namespace LangChain.Databases.OpenSearch;
 
 public class OpenSearchVectorStoreOptions
 {
@@ -8,4 +6,5 @@ public class OpenSearchVectorStoreOptions
     public Uri? ConnectionUri { get; set; }
     public string? Username { get; set; }
     public string? Password { get; set; }
+    public int? Dimensions { get; set; }
 }

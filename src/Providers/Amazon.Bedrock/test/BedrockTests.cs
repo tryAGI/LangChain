@@ -16,6 +16,7 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
+using Microsoft.SemanticKernel.AI.Embeddings;
 
 namespace LangChain.Providers.Amazon.Bedrock.Tests;
 
@@ -112,21 +113,22 @@ The pet name is
 
 
     [Test]
-    public void RetrievalChainTest()
+    public async Task RetrievalChainTest()
     {
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new Llama2With13BModel(provider);
-        var embeddings = new TitanEmbedTextV1Model(provider);
-        var index = InMemoryVectorStore
-            .CreateIndexFromDocuments(embeddings, new[]
+        var llm = new Claude3HaikuModel(provider);
+        var embeddings = new TitanEmbedImageV1Model(provider);
+        var vectorDatabase = new InMemoryVectorStore();
+        await vectorDatabase
+            .AddDocumentsAsync(embeddings, new[]
             {
                 "I spent entire day watching TV",
                 "My dog's name is Bob",
                 "This icecream is delicious",
                 "It is cold in space"
-            }.ToDocuments()).Result;
+            }.ToDocuments());
 
         string prompt1Text =
             @"Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -148,7 +150,7 @@ Answer: ";
 
         var chainQuestion =
             Set("What is the good name for a pet?", outputKey: "question")
-            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents")
+            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents")
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(prompt1Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "pet_sentence");
@@ -171,8 +173,8 @@ Answer: ";
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel();
         //var llm = new ClaudeV21Model();
-        var llm = new TitanTextExpressV1Model(provider);
-        var embeddings = new TitanEmbedTextV1Model(provider);
+        var llm = new Claude3HaikuModel(provider);
+        var embeddings = new TitanEmbedImageV1Model(provider);
 
         PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
@@ -182,11 +184,9 @@ Answer: ";
         if (File.Exists("vectors.db"))
             File.Delete("vectors.db");
 
+        var vectorDatabase = new SQLiteVectorStore("vectors.db", "vectors");
         if (!File.Exists("vectors.db"))
-            await SQLiteVectorStore.CreateIndexFromDocuments(embeddings, documents, "vectors.db", "vectors", textSplitter: textSplitter);
-
-        var vectorStore = new SQLiteVectorStore("vectors.db", "vectors", embeddings);
-        var index = new VectorStoreIndexWrapper(vectorStore);
+            await vectorDatabase.AddSplitDocumentsAsync(embeddings, documents, textSplitter: textSplitter);
 
         string promptText =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
@@ -202,7 +202,7 @@ Helpful Answer:";
                                                                                      //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
                                                                                      // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
                                                                                      // Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
-            | RetrieveDocuments(index, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
+            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
@@ -245,14 +245,14 @@ Helpful Answer:";
     [Test]
     public async Task ClaudeImageToText()
     {
-        var provider = new BedrockProvider(RegionEndpoint.USWest2);
-        var model = new Claude3SonnetModel(provider);
+        var provider = new BedrockProvider();
+        var model = new Claude3HaikuModel(provider);
 
         var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
         var imageData = await File.ReadAllBytesAsync(path);
         var binaryData = new BinaryData(imageData, "image/png");
 
-        var message = new Message(" \"what do you think of this?\"", MessageRole.Human);
+        var message = new Message(" \"what's this a picture of and describe details?\"", MessageRole.Human);
 
         var chatRequest = ChatRequest.ToChatRequest(message);
         chatRequest.Image = binaryData;
@@ -289,5 +289,19 @@ question: who are 10 of the most popular superheros and what are their powers?";
             var response = await llm.GenerateAsync(prompt);
             response.LastMessageContent.Should().NotBeNull();
         }
+    }
+
+    [Test]
+    public async Task TestEmbedding()
+    {
+        var provider = new BedrockProvider();
+        var embeddings = new EmbedEnglishV3Model(provider);
+
+        var prompt = @"
+you are a comic book writer.  you will be given a question and you will answer it. 
+question: who are 10 of the most popular superheros and what are their powers?";
+
+        var embedding = await embeddings.CreateEmbeddingsAsync("prompt")
+            .ConfigureAwait(false);
     }
 }

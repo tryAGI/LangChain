@@ -6,7 +6,7 @@ using LangChain.Chains.StackableChains.Files;
 using LangChain.Chains.StackableChains.ImageGeneration;
 using LangChain.Chains.StackableChains.ImageToTextGeneration;
 using LangChain.Chains.StackableChains.ReAct;
-using LangChain.Indexes;
+using LangChain.Databases;
 using LangChain.Memory;
 using LangChain.Providers;
 
@@ -95,30 +95,33 @@ public static class Chain
 
     /// <inheritdoc cref="RetrieveSimilarDocuments"/>
     public static RetrieveDocumentsChain RetrieveDocuments(
-        VectorStoreIndexWrapper index,
+        IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
         int amount = 4,
         string inputKey = "text",
         string outputKey = "docs")
     {
-        return new RetrieveDocumentsChain(index, inputKey, outputKey, amount);
+        return new RetrieveDocumentsChain(vectorDatabase, embeddingModel, inputKey, outputKey, amount);
     }
 
 
     /// <summary>
     /// Takes most similar documents.
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="vectorDatabase"></param>
+    /// <param name="embeddingModel"></param>
     /// <param name="amount"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static RetrieveDocumentsChain RetrieveSimilarDocuments(
-        VectorStoreIndexWrapper index,
+        IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
         int amount = 4,
         string inputKey = "text",
         string outputKey = "docs")
     {
-        return new RetrieveDocumentsChain(index, inputKey, outputKey, amount);
+        return new RetrieveDocumentsChain(vectorDatabase, embeddingModel, inputKey, outputKey, amount);
     }
     
     /// <inheritdoc cref="CombineDocuments"/>

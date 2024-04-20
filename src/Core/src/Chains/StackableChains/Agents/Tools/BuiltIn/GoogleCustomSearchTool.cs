@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text;
 using System.Security.Cryptography;
@@ -7,24 +6,38 @@ using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn.Classes;
 
 namespace LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
 
-public class GoogleCustomSearchTool(string key, string cx, bool useCache = true, int resultsLimit=3) : AgentTool("google",
-    "to search information on internet")
+/// <summary>
+/// To use it you need to get key and cx from Google. <br/>
+/// Custom Search JSON API provides 100 search queries per day for free. If you need more, you may sign up for billing in the API Console. Additional requests cost $5 per 1000 queries, up to 10k queries per day. <br/>
+/// To get api key go here: https://developers.google.com/custom-search/v1/overview. <br/>
+/// You need to create Programmable Search Engine to get cx(It's Code in Programmable Search Engine Overview)
+/// </summary>
+/// <param name="key"></param>
+/// <param name="cx"></param>
+/// <param name="useCache"></param>
+/// <param name="resultsLimit"></param>
+public class GoogleCustomSearchTool(
+    string key,
+    string cx,
+    bool useCache = true,
+    int resultsLimit = 3)
+    : AgentTool(
+        name: "google",
+        description: "to search information on internet")
 {
-    private const string CACHE_DIR = "cache";
+    private const string CacheDir = "cache";
 
-    private string Hash(string prompt)
+    private static string Hash(string prompt)
     {
         using var sha256 = SHA256.Create();
         var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(prompt));
-        string resultHex = "";
-        foreach (var b in hash)
-            resultHex += $"{b:x2}";
-        return resultHex;
+        
+        return hash.Aggregate("", (current, b) => current + $"{b:x2}");
     }
 
-    string? GetCachedAnswer(string prompt)
+    private static string? GetCachedAnswer(string prompt)
     {
-        var file = Path.Combine(CACHE_DIR, $"{Hash(prompt)}.googlecache");
+        var file = Path.Combine(CacheDir, $"{Hash(prompt)}.googlecache");
         if (File.Exists(file))
         {
             return File.ReadAllText(file);
@@ -33,10 +46,10 @@ public class GoogleCustomSearchTool(string key, string cx, bool useCache = true,
         return null;
     }
 
-    void SaveCachedAnswer(string prompt, string answer)
+    private static void SaveCachedAnswer(string prompt, string answer)
     {
-        Directory.CreateDirectory(CACHE_DIR);
-        var file = Path.Combine(CACHE_DIR, $"{Hash(prompt)}.googlecache");
+        Directory.CreateDirectory(CacheDir);
+        var file = Path.Combine(CacheDir, $"{Hash(prompt)}.googlecache");
         File.WriteAllText(file, answer);
     }
 
@@ -48,24 +61,22 @@ public class GoogleCustomSearchTool(string key, string cx, bool useCache = true,
             using var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://www.googleapis.com");
             var response = await httpClient.GetAsync(
-                new Uri($"/customsearch/v1?key={key}&cx={cx}&q={input}"), cancellationToken).ConfigureAwait(false);
+                new Uri($"/customsearch/v1?key={key}&cx={cx}&q={input}", UriKind.Relative), cancellationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
-
         
-        GoogleResult results = JsonSerializer.Deserialize<GoogleResult>(responseString!)!;
-
+        var results = JsonSerializer.Deserialize<GoogleResult>(responseString!)!;
 
         var stringBuilder = new StringBuilder();
-        int cnt = 0;
+        int count = 0;
         foreach (var result in results.items)
         {
             stringBuilder.AppendLine($"{result.title}");
             stringBuilder.AppendLine($"{result.snippet}");
             stringBuilder.AppendLine($"Source url: {result.link}");
             stringBuilder.AppendLine();
-            if (++cnt >= resultsLimit)
+            if (++count >= resultsLimit)
                 break;
         }
 
@@ -77,6 +88,7 @@ public class GoogleCustomSearchTool(string key, string cx, bool useCache = true,
 
         if (useCache)
             SaveCachedAnswer(input, responseString);
+        
         return stringBuilder.ToString();
     }
 }

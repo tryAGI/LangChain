@@ -1,19 +1,26 @@
 ﻿using LangChain.Abstractions.Schema;
-using LangChain.Indexes;
-using LangChain.VectorStores;
+using LangChain.Databases;
+using LangChain.Providers;
 
 namespace LangChain.Chains.HelperChains;
 
 /// <inheritdoc/>
 public class RetrieveDocumentsChain : BaseStackableChain
 {
-    private readonly VectorStoreIndexWrapper _index;
+    private readonly IVectorDatabase _vectorDatabase;
+    private readonly IEmbeddingModel _embeddingModel;
     private readonly int _amount;
 
     /// <inheritdoc/>
-    public RetrieveDocumentsChain(VectorStoreIndexWrapper index, string inputKey = "query", string outputKey = "documents", int amount = 4)
+    public RetrieveDocumentsChain(
+        IVectorDatabase vectorDatabase,
+        IEmbeddingModel embeddingModel,
+        string inputKey = "query",
+        string outputKey = "documents",
+        int amount = 4)
     {
-        _index = index;
+        _vectorDatabase = vectorDatabase;
+        _embeddingModel = embeddingModel;
         _amount = amount;
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
@@ -24,7 +31,7 @@ public class RetrieveDocumentsChain : BaseStackableChain
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
-        var retriever = _index.Store.AsRetriever();
+        var retriever = _vectorDatabase.AsRetriever(_embeddingModel);
         retriever.K = _amount;
 
         var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;

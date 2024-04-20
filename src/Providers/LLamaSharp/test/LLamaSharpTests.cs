@@ -3,10 +3,11 @@ using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
 using LangChain.Chains.RetrievalQA;
 using LangChain.Chains.Sequentials;
+using LangChain.Databases;
 using LangChain.Databases.InMemory;
+using LangChain.Indexes;
 using LangChain.Prompts;
 using LangChain.Providers.HuggingFace.Downloader;
-using LangChain.VectorStores;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
@@ -69,34 +70,36 @@ public partial class LLamaSharpTests
 
     [Test]
     [Explicit]
-    public void EmbeddingsTestWithInMemory()
+    public async Task EmbeddingsTestWithInMemory()
     {
         var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
         {
             PathToModelFile = ModelPath,
-            Temperature = 0
+            Temperature = 0,
         });
 
-        string[] texts = new string[]
-        {
+        var vectorStore = new InMemoryVectorStore();
+        await vectorStore.AddTextsAsync(embeddings, [
             "I spent entire day watching TV",
             "My dog name is Bob",
             "This icecream is delicious",
             "It is cold in space"
-        };
+        ]);
 
-        InMemoryVectorStore vectorStore = new InMemoryVectorStore(embeddings);
-        vectorStore.AddTextsAsync(texts).Wait();
+        var closest = (await vectorStore.SearchAsync(
+            embeddings,
+            "How do you call your pet?",
+            searchSettings: new VectorSearchSettings
+            {
+                NumberOfResults = 1,
+            })).Items[0];
 
-        var query = "How do you call your pet?";
-        var closest = vectorStore.SimilaritySearchAsync(query, k: 1).Result.First();
-
-        closest.PageContent.Should().Be("My dog name is Bob");
+        closest.Text.Should().Be("My dog name is Bob");
     }
 
     [Test]
     [Explicit]
-    public void DocumentsQuestionAnsweringTest()
+    public async Task DocumentsQuestionAnsweringTest()
     {
         // setup
         var embeddings = CreateEmbeddings();
@@ -110,7 +113,7 @@ public partial class LLamaSharpTests
             "It is cold in space"
         };
 
-        var index = CreateVectorStoreIndex(embeddings, texts);
+        var vectorDatabase = await CreateVectorStoreIndex(embeddings, texts);
         var template = CreatePromptTemplate();
 
         var chain = new LlmChain(new LlmChainInput(model, template));
@@ -124,7 +127,7 @@ public partial class LLamaSharpTests
 
         // test
         var question = "What is the good name for a pet?";
-        var answer = index.QueryAsync(question, stuffDocumentsChain,
+        var answer = vectorDatabase.QueryAsync(embeddings, question, stuffDocumentsChain,
             inputKey: "question" // variable name in prompt template for the question
                                  // it would be passed by to stuffDocumentsChain
             ).Result ?? string.Empty;
@@ -132,7 +135,7 @@ public partial class LLamaSharpTests
         answer.Contains("Bob").Should().BeTrue();
     }
 
-    private IChain CreateChain1(IChatModel model, IEmbeddingModel embeddings)
+    private async Task<IChain> CreateChain1(IChatModel model, IEmbeddingModel embeddings)
     {
         string[] texts = {
             "I spent entire day watching TV",
@@ -141,7 +144,7 @@ public partial class LLamaSharpTests
             "It is cold in space"
         };
 
-        var index = CreateVectorStoreIndex(embeddings, texts);
+        var index = await CreateVectorStoreIndex(embeddings, texts);
         var template = CreatePromptTemplate();
 
         var llmchain = new LlmChain(new LlmChainInput(model, template)
@@ -158,7 +161,7 @@ public partial class LLamaSharpTests
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 stuffDocumentsChain,
-                index.Store.AsRetriever())
+                index.AsRetriever(embeddings))
             {
                 InputKey = "question",
                 OutputKey = "pet_sentence",
@@ -170,13 +173,13 @@ public partial class LLamaSharpTests
 
     [Test]
     [Explicit]
-    public void SequentialChainTest()
+    public async Task SequentialChainTest()
     {
         // setup
         var embeddings = CreateEmbeddings();
         var model = CreateInstructionModel();
 
-        var chain1 = CreateChain1(model, embeddings);
+        var chain1 = await CreateChain1(model, embeddings);
 
         var prompt =
             @"Human will provide you with sentence about pet. You need to answer with pet name.
@@ -191,8 +194,8 @@ Answer:";
 
         var sequence = new SequentialChain(
             new SequentialChainInput(
-                new[] { chain1, chain2 },
-                inputVariables: new[] { "question" }));
+                [chain1, chain2],
+                inputVariables: ["question"]));
 
         var answer = sequence.Run("What is the good name for a pet?").Result;
 

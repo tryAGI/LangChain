@@ -1,6 +1,6 @@
-﻿using LangChain.Serve.Classes.DTO;
-using LangChain.Serve.Interfaces;
-using LangChain.Serve.Classes.Repository;
+﻿using LangChain.Serve.Abstractions;
+using LangChain.Serve.Abstractions.Repository;
+using LangChain.Serve.Classes.DTO;
 using LangChain.Serve.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

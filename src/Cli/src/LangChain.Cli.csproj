@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet">
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>langchain</ToolCommandName>
+    <Description>Command Line Interface to run some LangChain tasks.</Description>
+    <PackageTags>$(PackageTags);cli</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Meta\src\LangChain.csproj" />
+    <ProjectReference Include="..\..\Providers\OpenRouter\src\LangChain.Providers.OpenRouter.csproj" />
+  </ItemGroup>
+
+</Project>

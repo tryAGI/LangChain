@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading;
 using OpenAI;
 using OpenAI.Constants;
 
@@ -44,9 +42,16 @@ public partial class OpenAiChatModel(
     #endregion
 
     #region Methods
-    protected virtual async Task CallFunctionsAsync(global::OpenAI.Chat.Message message, List<Message> messages, CancellationToken cancellationToken = default)
+    
+    protected virtual async Task CallFunctionsAsync(
+        global::OpenAI.Chat.Message message,
+        IList<Message> messages,
+        CancellationToken cancellationToken = default)
     {
-        foreach (var tool in message.ToolCalls)
+        message = message ?? throw new ArgumentNullException(nameof(message));
+        messages = messages ?? throw new ArgumentNullException(nameof(messages));
+        
+        foreach (var tool in message.ToolCalls ?? [])
         {
             var func = Calls[tool.Function.Name];
             var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
@@ -64,16 +69,16 @@ public partial class OpenAiChatModel(
                 return new global::OpenAI.Chat.Message(
                     role: message.Role switch
                     {
-                        MessageRole.System => global::OpenAI.Role.System,
-                        MessageRole.Ai => global::OpenAI.Role.Assistant,
-                        MessageRole.Human => global::OpenAI.Role.User,
-                        _ => global::OpenAI.Role.User,
+                        MessageRole.System => Role.System,
+                        MessageRole.Ai => Role.Assistant,
+                        MessageRole.Human => Role.User,
+                        _ => Role.User,
                         
                     },
                     content: message.Content);
             case MessageRole.FunctionCall:
                 return new global::OpenAI.Chat.Message(
-                    role: Role.Assistant, null, message.ToToolCalls());
+                    role: Role.Assistant, string.Empty, message.ToToolCalls());
             case MessageRole.FunctionResult:
                 return new global::OpenAI.Chat.Message(message.GetTool(),message.Content);
         }
@@ -83,13 +88,15 @@ public partial class OpenAiChatModel(
     
     protected virtual Message ToMessage(global::OpenAI.Chat.Message message)
     {
+        message = message ?? throw new ArgumentNullException(nameof(message));
+        
         var role = message.Role switch
         {
-            global::OpenAI.Role.System => MessageRole.System,
-            global::OpenAI.Role.User => MessageRole.Human,
-            global::OpenAI.Role.Assistant when message.ToolCalls != null => MessageRole.FunctionCall,
-            global::OpenAI.Role.Assistant => MessageRole.Ai,
-            global::OpenAI.Role.Tool => MessageRole.FunctionResult,
+            Role.System => MessageRole.System,
+            Role.User => MessageRole.Human,
+            Role.Assistant when message.ToolCalls != null => MessageRole.FunctionCall,
+            Role.Assistant => MessageRole.Ai,
+            Role.Tool => MessageRole.FunctionResult,
             _ => MessageRole.Human,
         };
         
@@ -140,17 +147,37 @@ public partial class OpenAiChatModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
-        var chatRequest = new global::OpenAI.Chat.ChatRequest(
-            messages: request.Messages
-                .Select(ToRequestMessage)
-                .ToArray(),
-            model: Id,
-            stops: usedSettings.StopSequences!.ToArray(),
-            user: usedSettings.User!,
-            temperature: usedSettings.Temperature,
-            tools: GlobalTools.Count == 0
-                ? null!
-                : GlobalTools);
+        var chatRequest = GlobalTools.Count == 0
+            ? new global::OpenAI.Chat.ChatRequest(
+                messages: request.Messages
+                    .Select(ToRequestMessage)
+                    .ToArray(),
+                model: Id,
+                seed: usedSettings.Seed,
+                stops: usedSettings.StopSequences!.ToArray(),
+                user: usedSettings.User ?? string.Empty,
+                temperature: usedSettings.Temperature,
+                frequencyPenalty: usedSettings.FrequencyPenalty,
+                number: usedSettings.Number,
+                maxTokens: usedSettings.MaxTokens,
+                topP: usedSettings.TopP,
+                presencePenalty: usedSettings.PresencePenalty,
+                logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>())
+            : new global::OpenAI.Chat.ChatRequest(
+                messages: request.Messages
+                    .Select(ToRequestMessage)
+                    .ToArray(),
+                tools: GlobalTools,
+                model: Id,
+                stops: usedSettings.StopSequences!.ToArray(),
+                user: usedSettings.User ?? string.Empty,
+                temperature: usedSettings.Temperature,
+                frequencyPenalty: usedSettings.FrequencyPenalty,
+                number: usedSettings.Number,
+                maxTokens: usedSettings.MaxTokens,
+                topP: usedSettings.TopP,
+                presencePenalty: usedSettings.PresencePenalty,
+                logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>());
         if (usedSettings.UseStreaming == true)
         {
             var enumerable = provider.Api.ChatEndpoint.StreamCompletionEnumerableAsync(
@@ -212,7 +239,7 @@ public partial class OpenAiChatModel(
 
             while (CallToolsAutomatically && message.ToolCalls != null)
             {
-                await CallFunctionsAsync(message, messages);
+                await CallFunctionsAsync(message, messages, cancellationToken).ConfigureAwait(false);
         
                 if (ReplyToToolCallsAutomatically)
                 {
