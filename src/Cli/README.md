@@ -20,3 +20,6 @@ langchain generate --input "Give me random word" # It will output random word to
 langchain model gpt-4-turbo
 langchain generate --input "Give me solution for these problem: $PROBLEM"
 ```
+
+## Samples
+- Auto-labeling: https://github.com/tryAGI/LangChain/blob/main/.github/workflows/auto-labeling.yml
