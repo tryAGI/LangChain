@@ -16,6 +16,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Git user
+        run: |
+          git config --local user.email "bot@langchain.com"
+          git config --local user.name "OpenRouter Bot"
         
       - name: Create branch
         run: git checkout -b bot/update-open-router
