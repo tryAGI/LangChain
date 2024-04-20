@@ -21,10 +21,9 @@ jobs:
         run: git checkout -b bot/update-open-router
 
       - name: Generate code
-        run: cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
-
-      - name: Generate code
-        run: dotnet run
+        run: |
+          cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
+          cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
 
       - name: Check for changes
         id: changes
