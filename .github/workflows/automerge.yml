@@ -1,12 +1,16 @@
-name: dependabot auto-approve and auto-merge
-on: pull_request
+name: Auto-approve and auto-merge bot pull requests
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  dependabot:
+  auto-merge:
     runs-on: ubuntu-latest
     if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'github-actions[bot]') && github.repository_owner == 'tryAGI' }}
     steps:
