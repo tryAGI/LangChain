@@ -23,7 +23,7 @@ jobs:
       - name: Install LangChain CLI
         run: |
           dotnet tool install --global langchain.cli --prerelease
-          langchain auth openai ${{ secrets.OPENAI_API_KEY }}
+          langchain auth openai ${{ secrets.OPENAI_API_KEY }} --model gpt-4-turbo
 
       - name: Prepare prompt
         run: |
