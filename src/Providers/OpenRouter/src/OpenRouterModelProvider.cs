@@ -10,7 +10,6 @@ public static class OpenRouterModelProvider
     private static Dictionary<OpenRouterModelIds, ChatModels> Models { get; set; } = new()
     {
         { OpenRouterModelIds.Mistral7BInstructFree, new ChatModels("mistralai/mistral-7b-instruct:free",32768,0,0)},
-        { OpenRouterModelIds.Mistral7BInstructFree, new ChatModels("mistralai/mistral-7b-instruct:free",32768,0,0)},
         { OpenRouterModelIds.OpenChat35Free, new ChatModels("openchat/openchat-7b:free",8192,0,0)},
         { OpenRouterModelIds.Mythomist7BFree, new ChatModels("gryphe/mythomist-7b:free",32768,0,0)},
         { OpenRouterModelIds.ToppyM7BFree, new ChatModels("undi95/toppy-m-7b:free",4096,0,0)},
