@@ -5,11 +5,6 @@ namespace LangChain.Providers.OpenRouter.Predefined;
 public class Mistral7BInstructFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mistral7BInstructFree);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.OpenChat35Free"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class OpenChat35FreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenChat35Free);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.Mythomist7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Mythomist7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomist7BFree);
@@ -28,6 +23,11 @@ public class Cinematika7BAlphaFreeModel(OpenRouterProvider provider) : OpenRoute
 /// <inheritdoc cref="OpenRouterModelIds.GoogleGemma7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class GoogleGemma7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7BFree);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Psyfighter13B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Psyfighter13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Psyfighter13B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.PsyfighterV213B"/>
@@ -353,6 +353,11 @@ public class AnthropicClaude3HaikuSelfModeratedModel(OpenRouterProvider provider
 /// <inheritdoc cref="OpenRouterModelIds.MetaLlamaV270BChat"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlamaV270BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlamaV270BChat);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.NousCapybara34B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class NousCapybara34BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NousCapybara34B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Airoboros70B"/>

@@ -14,12 +14,6 @@ public enum OpenRouterModelIds
         Mistral7BInstructFree = 0,
         
         /// <summary>
-        /// OpenChat is a library of open-source language models, fine-tuned with "C-RLFT (Conditioned Reinforcement Learning Fine-Tuning)" - a strategy inspired by offline reinforcement learning. It has been trained on mixed-quality data without preference labels.  <br/>
-        /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
-        /// </summary>
-        OpenChat35Free = 1,
-        
-        /// <summary>
         /// From the creator of MythoMax, merges a suite of models to reduce word anticipation, ministrations, and other undesirable words in ChatGPT roleplaying data.  <br/>
         /// It combines Neural Chat 7B, Airoboros 7b, Toppy M 7B, Zepher 7b beta, Nous Capybara 34B, OpenHeremes 2.5, and many others.  <br/>
         /// #merge  <br/>
@@ -52,6 +46,14 @@ public enum OpenRouterModelIds
         /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/> 
         /// </summary>
         GoogleGemma7BFree = 5,
+        
+        /// <summary>
+        /// A #merge model based on Llama-2-13B and made possible thanks to the compute provided by the KoboldAI community. It's a merge between:  <br/>
+        /// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
+        /// chaoyi-wu/MedLLaMA_13B  <br/>
+        /// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/> 
+        /// </summary>
+        Psyfighter13B = 6,
         
         /// <summary>
         /// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
@@ -450,6 +452,12 @@ public enum OpenRouterModelIds
         MetaLlamaV270BChat = 71,
         
         /// <summary>
+        /// This model is trained on the Yi-34B model for 3 epochs on the Capybara dataset. It's the first 34B Nous model and first 200K context length Nous model.  <br/>
+        /// Note: This endpoint currently supports 32k context.  <br/> 
+        /// </summary>
+        NousCapybara34B = 72,
+        
+        /// <summary>
         /// A Llama 2 70B fine-tune using synthetic data (the Airoboros dataset).  <br/>
         /// Currently based on jondurbin/airoboros-l2-70b-2.2.1, but might get updated in the future.  <br/> 
         /// </summary>
@@ -781,13 +789,15 @@ public enum OpenRouterModelIds
         MistralLarge = 120,
         
         /// <summary>
-        /// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/> 
+        /// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/>
+        /// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/> 
         /// </summary>
         CohereCommand = 121,
         
         /// <summary>
-        /// Command-R is an instruction-following conversational model that performs language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
-        /// Read the launch post here.  <br/> 
+        /// Command-R is a 35B parameter model that performs conversational language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
+        /// Read the launch post here.  <br/>
+        /// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/> 
         /// </summary>
         CohereCommandR = 122,
         

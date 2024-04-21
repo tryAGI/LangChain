@@ -82,12 +82,17 @@ public static class OpenRouterCodeGenerator
     {
         var sb3 = new StringBuilder();
         var first = true;
+        HashSet<string?> keys = new HashSet<string?>();
         foreach (var item in sorted)
         {
+            if(!keys.Add(item.EnumMemberName))
+                continue;
+
             if (first)
             {
                 sb3.AppendLine(item.DicAddCode);
                 first = false;
+                continue;
             }
 
             sb3.AppendLine($"        {item.DicAddCode}");
