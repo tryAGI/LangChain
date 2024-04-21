@@ -3,7 +3,7 @@ using System.CommandLine.NamingConventionBinder;
 using LangChain.Providers.TogetherAi.CodeGenerator.Main;
 
 var rootCommand = new RootCommand(
-    "Create Codes for OpenRouter Models")
+    "Create Codes for Together AI Models")
 {
     new Option<bool>(
         ["--underscore", "-u"], "Add underscores into enum member name"),
