@@ -1,5 +1,3 @@
-using LangChain.Providers.TogetherAi;
-
 namespace LangChain.Providers.TogetherAi.Predefined;
 
 /// <inheritdoc cref="TogetherAiModelIds.ChronosHermes13B"/>
