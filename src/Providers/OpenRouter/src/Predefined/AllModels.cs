@@ -30,6 +30,11 @@ public class Cinematika7BAlphaFreeModel(OpenRouterProvider provider) : OpenRoute
 public class GoogleGemma7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7BFree);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.Psyfighter13B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Psyfighter13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Psyfighter13B);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.PsyfighterV213B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class PsyfighterV213BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PsyfighterV213B);
@@ -320,11 +325,6 @@ public class PerplexitySonar7BOnlineModel(OpenRouterProvider provider) : OpenRou
 public class PerplexitySonar8X7BOnlineModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PerplexitySonar8X7BOnline);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.AnthropicClaude3Opus"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class AnthropicClaude3OpusModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.AnthropicClaude3Opus);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.AnthropicClaude3Sonnet"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class AnthropicClaude3SonnetModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.AnthropicClaude3Sonnet);
@@ -353,6 +353,11 @@ public class AnthropicClaude3HaikuSelfModeratedModel(OpenRouterProvider provider
 /// <inheritdoc cref="OpenRouterModelIds.MetaLlamaV270BChat"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlamaV270BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlamaV270BChat);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.NousCapybara34B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class NousCapybara34BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NousCapybara34B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Airoboros70B"/>

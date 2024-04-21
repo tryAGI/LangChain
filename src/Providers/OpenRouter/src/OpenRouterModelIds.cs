@@ -54,6 +54,14 @@ public enum OpenRouterModelIds
         GoogleGemma7BFree = 5,
         
         /// <summary>
+        /// A #merge model based on Llama-2-13B and made possible thanks to the compute provided by the KoboldAI community. It's a merge between:  <br/>
+        /// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
+        /// chaoyi-wu/MedLLaMA_13B  <br/>
+        /// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/> 
+        /// </summary>
+        Psyfighter13B = 6,
+        
+        /// <summary>
         /// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
         /// The intent was to add medical data to supplement the model's fictional ability with more details on anatomy and mental states. This model should not be used for medical advice or therapy because of its high likelihood of pulling in fictional data.  <br/>
         /// It's a merge between:  <br/>
@@ -252,7 +260,8 @@ public enum OpenRouterModelIds
         HuggingFaceZephyr7B = 40,
         
         /// <summary>
-        /// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks. Training data: up to Sep 2021.  <br/> 
+        /// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.  <br/>
+        /// Updated by OpenAI to point to the latest version of GPT-3.5. Training data up to Sep 2021.  <br/> 
         /// </summary>
         OpenAiGpt35Turbo = 41,
         
@@ -274,7 +283,7 @@ public enum OpenRouterModelIds
         OpenAiGpt4Turbo = 44,
         
         /// <summary>
-        /// The latest GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Apr 2023.  <br/>
+        /// The latest GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Dec 2023.  <br/>
         /// Note: heavily rate limited by OpenAI while in preview.  <br/> 
         /// </summary>
         OpenAiGpt4TurboPreview = 45,
@@ -398,13 +407,6 @@ public enum OpenRouterModelIds
         PerplexitySonar8X7BOnline = 64,
         
         /// <summary>
-        /// Claude 3 Opus is Anthropic's most powerful model for highly complex tasks. It boasts top-level performance, intelligence, fluency, and understanding.  <br/>
-        /// See the launch announcement and benchmark results here  <br/>
-        /// #multimodal  <br/> 
-        /// </summary>
-        AnthropicClaude3Opus = 65,
-        
-        /// <summary>
         /// Claude 3 Sonnet is an ideal balance of intelligence and speed for enterprise workloads. Maximum utility at a lower price, dependable, balanced for scaled deployments.  <br/>
         /// See the launch announcement and benchmark results here  <br/>
         /// #multimodal  <br/> 
@@ -448,6 +450,12 @@ public enum OpenRouterModelIds
         /// The flagship, 70 billion parameter language model from Meta, fine tuned for chat completions. Llama 2 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align to human preferences for helpfulness and safety.  <br/> 
         /// </summary>
         MetaLlamaV270BChat = 71,
+        
+        /// <summary>
+        /// This model is trained on the Yi-34B model for 3 epochs on the Capybara dataset. It's the first 34B Nous model and first 200K context length Nous model.  <br/>
+        /// Note: This endpoint currently supports 32k context.  <br/> 
+        /// </summary>
+        NousCapybara34B = 72,
         
         /// <summary>
         /// A Llama 2 70B fine-tune using synthetic data (the Airoboros dataset).  <br/>
@@ -781,13 +789,15 @@ public enum OpenRouterModelIds
         MistralLarge = 120,
         
         /// <summary>
-        /// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/> 
+        /// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/>
+        /// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/> 
         /// </summary>
         CohereCommand = 121,
         
         /// <summary>
-        /// Command-R is an instruction-following conversational model that performs language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
-        /// Read the launch post here.  <br/> 
+        /// Command-R is a 35B parameter model that performs conversational language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
+        /// Read the launch post here.  <br/>
+        /// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/> 
         /// </summary>
         CohereCommandR = 122,
         
