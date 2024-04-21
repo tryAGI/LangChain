@@ -20,6 +20,9 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           
+      - name: Show sender
+        run: echo ${{ github.event.pull_request.sender }}
+          
       - name: Approve a PR
         if: ${{ github.actor == 'dependabot[bot]' }}
         run: gh pr review --approve "$PR_URL"
