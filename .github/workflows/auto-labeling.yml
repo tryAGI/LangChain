@@ -1,0 +1,49 @@
+name: Auto-labeling issue
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  label_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get labels
+        id: labels
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          LABELS=$(gh label list --jq '.[].name' --json name | tr '\n' ',')
+          echo "available_labels=$LABELS" >> $GITHUB_OUTPUT
+          
+      - name: Install LangChain CLI
+        run: |
+          dotnet tool install --global langchain.cli --prerelease
+          langchain auth openai ${{ secrets.OPENAI_API_KEY }} --model gpt-4-turbo
+
+      - name: Prepare prompt
+        run: |
+          echo "Return arguments for `gh issue edit $ISSUE_URL $ARGUMENTS_WILL_BE_HERE$` for issue with these data:" > prompt.txt
+          echo "Title: ${{ github.event.issue.title }}" >> prompt.txt
+          echo "Body: ${{ github.event.issue.body }}" >> prompt.txt
+          echo "Available labels: ${{ steps.labels.outputs.available_labels }}" >> prompt.txt
+          echo " " >> prompt.txt
+          echo "IMPORTANT: Return ONLY replacement for $ARGUMENTS_WILL_BE_HERE$. It should contains one or more --add-label arguments" >> prompt.txt 
+          echo "Example output: --add-label \"vector databases\" --add-label \"enhancement\"" >> prompt.txt 
+          cat prompt.txt
+
+      - name: Analyse issue
+        id: analyse
+        run: |
+          ARGUMENTS=$(langchain generate --input-file prompt.txt)
+          echo $ARGUMENTS
+          echo "arguments=$ARGUMENTS" >> $GITHUB_OUTPUT
+
+      - env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          gh issue edit ${{ github.event.issue.html_url }} ${{ steps.analyse.outputs.arguments }}

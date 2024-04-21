@@ -70,7 +70,6 @@ LangChain.Providers.IChatModel<TRequest, TResponse, TSettings>.GenerateAsync(TRe
 LangChain.Providers.IChatModelWithTokenCounting
 LangChain.Providers.IEmbeddingModel
 LangChain.Providers.IEmbeddingModel.CreateEmbeddingsAsync(LangChain.Providers.EmbeddingRequest! request, LangChain.Providers.EmbeddingSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.EmbeddingResponse!>!
-LangChain.Providers.IEmbeddingModel.MaximumInputLength.get -> int
 LangChain.Providers.IImageToTextModel
 LangChain.Providers.IImageToTextModel.GenerateTextFromImageAsync(LangChain.Providers.ImageToTextRequest! request, LangChain.Providers.ImageToTextSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.ImageToTextResponse!>!
 LangChain.Providers.IImageToTextModel<TRequest, TResponse, TSettings>

@@ -1,28 +1,33 @@
-name: dependabot auto-approve and auto-merge
-on: pull_request
+name: Auto-approve and auto-merge bot pull requests
+on:
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  dependabot:
+  auto-merge:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' && github.repository_owner == 'tryAGI' }}
+    if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
     steps:
       - name: Dependabot metadata
+        if: ${{ github.actor == 'dependabot[bot]' }}
         id: metadata
         uses: dependabot/fetch-metadata@0fb21704c18a42ce5aa8d720ea4b912f5e6babef
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           
       - name: Approve a PR
+        if: ${{ github.actor == 'dependabot[bot]' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Enable auto-merge for Dependabot PRs
+      - name: Enable auto-merge
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}

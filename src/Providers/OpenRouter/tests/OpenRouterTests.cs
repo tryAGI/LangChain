@@ -12,7 +12,7 @@ public class OpenRouterTests
             Environment.GetEnvironmentVariable("Open_Router_Key") ??
             throw new InvalidOperationException("Open_Router_Key is not set");
         
-        var model = new Mistral7BInstructFreeModel(new OpenRouterProvider(apiKey));
+        var model = new OpenAiGpt35TurboModel(new OpenRouterProvider(apiKey));
 
         var result = await model.GenerateAsync("Write a Poem".AsHumanMessage());
 
@@ -27,7 +27,11 @@ public class OpenRouterTests
             Environment.GetEnvironmentVariable("Open_Router_Key", EnvironmentVariableTarget.User) ??
             throw new InvalidOperationException("Open_Router_Key is not set");
         
+<<<<<<< HEAD
         var model = new OpenRouterModel(new OpenRouterProvider(apiKey),OpenRouterModelIds.Mistral7BInstructFree);
+=======
+        var model = new OpenRouterModel(new OpenRouterProvider(apiKey),OpenRouterModelIds.OpenAiGpt35Turbo);
+>>>>>>> 302591c889dff8d9947b2270d1b5885fc84d619f
 
         var result = await model.GenerateAsync("Write a Poem".AsHumanMessage());
 
