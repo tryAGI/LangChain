@@ -211,7 +211,7 @@ public static class TogetherAiCodeGenerator
             $"Name: {(string)modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>";
 
         //Enum Member code with doc
-        var enumMemberCode = GetEnumMemberCode(i, enumMemberName, description);
+        var enumMemberCode = GetEnumMemberCode(enumMemberName, description);
 
         //Code for adding ChatModel into Dictionary<Together AiModelIds,ChatModels>() 
         var dicAddCode = GetDicAddCode(enumMemberName, modelId, tokenLength, promptCost / (1000 * 1000),
@@ -233,13 +233,16 @@ public static class TogetherAiCodeGenerator
         };
     }
 
-    private static string GetEnumMemberCode(int i, string enumMemberName, string description)
+    private static string GetEnumMemberCode(string enumMemberName, string description)
     {
         var sb2 = new StringBuilder();
 
-        sb2.AppendLine($"\r\n/// <summary>\r\n/// {description} \r\n/// </summary>");
-
-        sb2.AppendLine($"{enumMemberName} = {i},");
+        sb2.AppendLine();
+        sb2.AppendLine("/// <summary>");
+        sb2.AppendLine($"/// {description}");
+        sb2.AppendLine("/// </summary>");
+        sb2.AppendLine($"{enumMemberName},");
+        
         return sb2.ToString();
     }
 

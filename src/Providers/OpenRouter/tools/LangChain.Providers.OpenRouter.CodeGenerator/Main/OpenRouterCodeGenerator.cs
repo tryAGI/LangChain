@@ -181,7 +181,7 @@ public static class OpenRouterCodeGenerator
         var description = await GetDescription(i, td).ConfigureAwait(false);
 
         //Enum Member code with doc
-        var enumMemberCode = GetEnumMemberCode(i, enumMemberName, description);
+        var enumMemberCode = GetEnumMemberCode(enumMemberName, description);
 
         //Parse Cost of Prompt/Input per 1000 token
         var inputTokenCostNode = td.ElementAt(1);
@@ -223,13 +223,16 @@ public static class OpenRouterCodeGenerator
         };
     }
 
-    private static string GetEnumMemberCode(int i, string enumMemberName, string description)
+    private static string GetEnumMemberCode(string enumMemberName, string description)
     {
         var sb2 = new StringBuilder();
 
-        sb2.AppendLine($"\r\n/// <summary>\r\n/// {description} \r\n/// </summary>");
-
-        sb2.AppendLine($"{enumMemberName} = {i - 2},");
+        sb2.AppendLine();
+        sb2.AppendLine("/// <summary>");
+        sb2.AppendLine($"/// {description}");
+        sb2.AppendLine("/// </summary>");
+        sb2.AppendLine($"{enumMemberName},");
+        
         return sb2.ToString();
     }
 
