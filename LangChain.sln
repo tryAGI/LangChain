@@ -34,13 +34,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Sequentia
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\auto-labeling.yml = .github\workflows\auto-labeling.yml
+		.github\workflows\automerge.yml = .github\workflows\automerge.yml
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
-		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\workflows\open-router.yml = .github\workflows\open-router.yml
-		.github\workflows\automerge.yml = .github\workflows\automerge.yml
-		.github\workflows\auto-labeling.yml = .github\workflows\auto-labeling.yml
+		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
@@ -306,7 +306,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Togethe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Serve.Abstractions", "src\Serve\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj", "{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Sqlite.IntegrationTests", "src\tests\LangChain.Databases.Sqlite.IntegrationTests\LangChain.Databases.Sqlite.IntegrationTests.csproj", "{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Sqlite.IntegrationTests", "src\tests\LangChain.Databases.Sqlite.IntegrationTests\LangChain.Databases.Sqlite.IntegrationTests.csproj", "{9481A85D-F8B4-4DC6-9F05-71E52B76D46F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bedrock", "Bedrock", "{6622DE9C-A23A-44E6-B661-EC784CE6C75C}"
 	ProjectSection(SolutionItems) = preProject
@@ -320,26 +320,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cli", "Cli", "{177349C8-4FD
 		src\Cli\README.md = src\Cli\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Cli", "src\Cli\src\LangChain.Cli.csproj", "{DE30162A-5D05-4E9B-80D7-43A8927D450E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Cli", "src\Cli\src\LangChain.Cli.csproj", "{DE30162A-5D05-4E9B-80D7-43A8927D450E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{3E6FEA5C-3F34-4BFF-BB68-2AFFF3B86436}"
 	ProjectSection(SolutionItems) = preProject
 		src\Databases\Abstractions\README.md = src\Databases\Abstractions\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Abstractions", "src\Databases\Abstractions\src\LangChain.Databases.Abstractions.csproj", "{FFB4B70D-85F9-4C9D-BBAE-4863F83AF950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Abstractions", "src\Databases\Abstractions\src\LangChain.Databases.Abstractions.csproj", "{FFB4B70D-85F9-4C9D-BBAE-4863F83AF950}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Abstractions.Tests", "src\Databases\Abstractions\test\LangChain.Databases.Abstractions.Tests.csproj", "{A2CF5ADB-7FF7-499A-9FE8-858793A5E67D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Abstractions.Tests", "src\Databases\Abstractions\test\LangChain.Databases.Abstractions.Tests.csproj", "{A2CF5ADB-7FF7-499A-9FE8-858793A5E67D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.IntegrationTests", "src\Databases\IntegrationTests\LangChain.Databases.IntegrationTests.csproj", "{6B66A8D4-4536-4B3C-AD2E-F6F48D2C7C13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.IntegrationTests", "src\Databases\IntegrationTests\LangChain.Databases.IntegrationTests.csproj", "{6B66A8D4-4536-4B3C-AD2E-F6F48D2C7C13}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{DDE920D6-6506-430F-938A-A29C9177F850}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Suno", "Suno", "{1434F398-ACFA-47F4-8978-70E698D03684}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Suno", "src\Providers\Suno\src\LangChain.Providers.Suno.csproj", "{58026C3B-69DC-49EA-BD6E-032E27AA44E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Suno", "src\Providers\Suno\src\LangChain.Providers.Suno.csproj", "{58026C3B-69DC-49EA-BD6E-032E27AA44E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Suno.Tests", "src\Providers\Suno\test\LangChain.Providers.Suno.Tests.csproj", "{F3A3A951-F83E-4072-92D7-A7D8C75CF9F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Suno.Tests", "src\Providers\Suno\test\LangChain.Providers.Suno.Tests.csproj", "{F3A3A951-F83E-4072-92D7-A7D8C75CF9F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.TogetherAi.CodeGenerator", "src\Providers\TogetherAI\tools\LangChain.Providers.TogetherAi.CodeGenerator\LangChain.Providers.TogetherAi.CodeGenerator.csproj", "{5FF0458E-0E77-4934-B170-ED05CAE3DFDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -699,6 +701,10 @@ Global
 		{F3A3A951-F83E-4072-92D7-A7D8C75CF9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3A3A951-F83E-4072-92D7-A7D8C75CF9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3A3A951-F83E-4072-92D7-A7D8C75CF9F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FF0458E-0E77-4934-B170-ED05CAE3DFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF0458E-0E77-4934-B170-ED05CAE3DFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF0458E-0E77-4934-B170-ED05CAE3DFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF0458E-0E77-4934-B170-ED05CAE3DFDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -727,6 +733,10 @@ Global
 		{0ACB8140-8198-4FA4-94DF-95A159E38E5C} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
 		{E8880C1D-8C06-46B0-8C0D-345FE94FC2A3} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
 		{96CCA968-1CE4-4DAB-9495-F8BA1249ADCD} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
+		{8EE9C3E5-04E0-4D78-9CC3-DD2384490E48} = {6622DE9C-A23A-44E6-B661-EC784CE6C75C}
+		{10B7C532-327F-4424-85EE-A7D4E06E9976} = {6622DE9C-A23A-44E6-B661-EC784CE6C75C}
+		{08BA819F-538B-44A8-9463-3F90381F7F0D} = {E6A4D04E-CC83-4F24-89B4-04F3EF61715F}
+		{08270801-B335-4DDE-8329-9D9198C3D3A1} = {E6A4D04E-CC83-4F24-89B4-04F3EF61715F}
 		{F9B5D1B9-3390-47B5-BE37-219B66E44F70} = {B165FD5F-43B9-4A0C-A627-C4C94F6C027C}
 		{DA40F290-6B2D-451B-8BE2-9C577C4F1B11} = {0ACB8140-8198-4FA4-94DF-95A159E38E5C}
 		{4724E9F2-A344-4B64-9492-AD6A6964AF43} = {0ACB8140-8198-4FA4-94DF-95A159E38E5C}
@@ -821,20 +831,17 @@ Global
 		{4F7C9B03-84B8-47D9-9EA2-499BC5F1D4A6} = {C5C6EB91-CF9B-48F8-A198-9D9065E65BD1}
 		{9481A85D-F8B4-4DC6-9F05-71E52B76D46F} = {5168348E-52FD-4905-83B2-AAF546EAD676}
 		{6622DE9C-A23A-44E6-B661-EC784CE6C75C} = {96CCA968-1CE4-4DAB-9495-F8BA1249ADCD}
-		{8EE9C3E5-04E0-4D78-9CC3-DD2384490E48} = {6622DE9C-A23A-44E6-B661-EC784CE6C75C}
-		{10B7C532-327F-4424-85EE-A7D4E06E9976} = {6622DE9C-A23A-44E6-B661-EC784CE6C75C}
 		{E6A4D04E-CC83-4F24-89B4-04F3EF61715F} = {96CCA968-1CE4-4DAB-9495-F8BA1249ADCD}
-		{08BA819F-538B-44A8-9463-3F90381F7F0D} = {E6A4D04E-CC83-4F24-89B4-04F3EF61715F}
-		{08270801-B335-4DDE-8329-9D9198C3D3A1} = {E6A4D04E-CC83-4F24-89B4-04F3EF61715F}
 		{DE30162A-5D05-4E9B-80D7-43A8927D450E} = {177349C8-4FD3-466E-A7F4-67983A5B2C1F}
 		{3E6FEA5C-3F34-4BFF-BB68-2AFFF3B86436} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 		{FFB4B70D-85F9-4C9D-BBAE-4863F83AF950} = {3E6FEA5C-3F34-4BFF-BB68-2AFFF3B86436}
 		{A2CF5ADB-7FF7-499A-9FE8-858793A5E67D} = {3E6FEA5C-3F34-4BFF-BB68-2AFFF3B86436}
-		{DDE920D6-6506-430F-938A-A29C9177F850} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 		{6B66A8D4-4536-4B3C-AD2E-F6F48D2C7C13} = {DDE920D6-6506-430F-938A-A29C9177F850}
+		{DDE920D6-6506-430F-938A-A29C9177F850} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 		{1434F398-ACFA-47F4-8978-70E698D03684} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
 		{58026C3B-69DC-49EA-BD6E-032E27AA44E7} = {1434F398-ACFA-47F4-8978-70E698D03684}
 		{F3A3A951-F83E-4072-92D7-A7D8C75CF9F0} = {1434F398-ACFA-47F4-8978-70E698D03684}
+		{5FF0458E-0E77-4934-B170-ED05CAE3DFDA} = {CD001ADE-7B22-4325-9B3C-5C7D3B812797}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

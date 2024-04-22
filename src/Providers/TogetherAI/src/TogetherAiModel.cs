@@ -1,5 +1,4 @@
 using LangChain.Providers.OpenAI;
-using LangChain.Providers.OpenRouter;
 using OpenAI.Constants;
 
 namespace LangChain.Providers.TogetherAi;
