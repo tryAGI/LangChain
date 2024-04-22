@@ -10,9 +10,9 @@ public static class OpenRouterModelProvider
     private static Dictionary<OpenRouterModelIds, ChatModels> Models { get; set; } = new()
     {
         { OpenRouterModelIds.Mistral7BInstructFree, new ChatModels("mistralai/mistral-7b-instruct:free",32768,0,0)},
+        { OpenRouterModelIds.OpenChat35Free, new ChatModels("openchat/openchat-7b:free",8192,0,0)},
         { OpenRouterModelIds.Mythomist7BFree, new ChatModels("gryphe/mythomist-7b:free",32768,0,0)},
         { OpenRouterModelIds.ToppyM7BFree, new ChatModels("undi95/toppy-m-7b:free",4096,0,0)},
-        { OpenRouterModelIds.Cinematika7BAlphaFree, new ChatModels("openrouter/cinematika-7b:free",8000,0,0)},
         { OpenRouterModelIds.GoogleGemma7BFree, new ChatModels("google/gemma-7b-it:free",8192,0,0)},
         { OpenRouterModelIds.Psyfighter13B, new ChatModels("jebcarter/psyfighter-13b",4096,1E-06,1E-06)},
         { OpenRouterModelIds.PsyfighterV213B, new ChatModels("koboldai/psyfighter-13b-2",4096,1E-06,1E-06)},
@@ -26,7 +26,9 @@ public static class OpenRouterModelProvider
         { OpenRouterModelIds.Noromaid20B, new ChatModels("neversleep/noromaid-20b",8192,2.2499999999999996E-06,2.2499999999999996E-06)},
         { OpenRouterModelIds.Mythomist7B, new ChatModels("gryphe/mythomist-7b",32768,3.75E-07,3.75E-07)},
         { OpenRouterModelIds.MidnightRose70B, new ChatModels("sophosympatheia/midnight-rose-70b",4096,8.999999999999999E-06,8.999999999999999E-06)},
+        { OpenRouterModelIds.Fimbulvetr11BV2, new ChatModels("sao10k/fimbulvetr-11b-v2",8192,5.499E-07,2.826E-06)},
         { OpenRouterModelIds.RemmSlerp13BExtended, new ChatModels("undi95/remm-slerp-l2-13b:extended",6144,1.1249999999999998E-06,1.1249999999999998E-06)},
+        { OpenRouterModelIds.MetaLlama38BInstructExtended, new ChatModels("meta-llama/llama-3-8b-instruct:extended",16384,2.751E-07,3.249E-07)},
         { OpenRouterModelIds.MancerWeaverAlpha, new ChatModels("mancer/weaver",8000,3.375E-06,3.375E-06)},
         { OpenRouterModelIds.Mixtral8X7BInstruct, new ChatModels("mistralai/mixtral-8x7b-instruct",32768,2.5E-07,4.1669999999999997E-07)},
         { OpenRouterModelIds.NousHermes13B, new ChatModels("nousresearch/nous-hermes-llama2-13b",4096,2.7E-07,2.7E-07)},
@@ -119,7 +121,6 @@ public static class OpenRouterModelProvider
         { OpenRouterModelIds.Mythomax13BNitro, new ChatModels("gryphe/mythomax-l2-13b:nitro",4096,2.0000000000000002E-07,2.0000000000000002E-07)},
         { OpenRouterModelIds.Mistral7BInstructNitro, new ChatModels("mistralai/mistral-7b-instruct:nitro",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
         { OpenRouterModelIds.GoogleGemma7BNitro, new ChatModels("google/gemma-7b-it:nitro",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
-        { OpenRouterModelIds.DatabricksDbrx132BInstructNitro, new ChatModels("databricks/dbrx-instruct:nitro",32768,9E-07,9E-07)},
         { OpenRouterModelIds.ToppyM7BNitro, new ChatModels("undi95/toppy-m-7b:nitro",4096,1.5E-07,1.5E-07)},
         { OpenRouterModelIds.Wizardlm28X22bNitro, new ChatModels("microsoft/wizardlm-2-8x22b:nitro",65536,1E-06,1E-06)},
         { OpenRouterModelIds.MetaLlama38BInstructNitro, new ChatModels("meta-llama/llama-3-8b-instruct:nitro",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
