@@ -1,0 +1,62 @@
+name: Opens a new PR if there are model updates
+on:
+  schedule:
+    - cron: '0 12 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  together:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Git user
+        run: |
+          git config --local user.email "together-bot@langchain.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Generate branch name
+        id: branch
+        run: echo "branch_name=bot/update-together_$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Create branch
+        run: |
+          git checkout -b ${{ steps.branch.outputs.branch_name }} origin/main
+          git rebase main
+
+      - name: Generate code
+        run: |
+          cd src/Providers/TogetherAI/tools/LangChain.Providers.TogetherAi.CodeGenerator
+          dotnet run --output ../../src --key ${{ secrets.TOGETHER_AI_API_KEY }}
+
+      - name: Check for changes
+        id: changes
+        run: |
+          CHANGED=$(git diff --name-only)
+          if [ -z "$CHANGED" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git add .
+          git commit -m "feat: Updated Together AI models"
+          git push --force-with-lease -u origin ${{ steps.branch.outputs.branch_name }}
+
+      - name: Wait for 15 seconds
+        if: steps.changes.outputs.has_changes == 'true'
+        run: sleep 15
+      
+      - name: Create pull request
+        if: steps.changes.outputs.has_changes == 'true'
+        run: gh pr create -B main -H ${{ steps.branch.outputs.branch_name }} --title 'feat:Updated Together AI models' --body 'Created by Github Actions'
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}

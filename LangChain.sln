@@ -35,12 +35,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B4ED97D9-08F2-4531-B21B-EA1B9CB4E52B}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\auto-labeling.yml = .github\workflows\auto-labeling.yml
-		.github\workflows\automerge.yml = .github\workflows\automerge.yml
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
 		.github\workflows\open-router.yml = .github\workflows\open-router.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
+		.github\workflows\auto-merge.yml = .github\workflows\auto-merge.yml
+		.github\workflows\together.yml = .github\workflows\together.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
