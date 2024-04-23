@@ -1,6 +1,7 @@
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenRouter;
+using LangChain.Providers.Together;
 
 namespace LangChain.Cli;
 
@@ -57,7 +58,25 @@ public static class Helpers
         
         await File.WriteAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), provider).ConfigureAwait(false);
         await File.WriteAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), apiKey).ConfigureAwait(false);
-        await SetModelAsync(model).ConfigureAwait(false);
+
+        ChatModel? chatModel = null;
+        
+        switch (provider)
+        {
+            case Providers.Together:
+            {
+                var togetherProvider = new TogetherProvider(apiKey: apiKey);
+                chatModel = new TogetherModel(togetherProvider, id: model);
+                break;
+            }
+            default:
+                throw new NotSupportedException($"Provider '{provider}' is not supported.");
+        }
+        
+        if (chatModel != null)
+        {
+            await SetModelAsync(chatModel.Id).ConfigureAwait(false);
+        }
     }
 
     public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt)
@@ -78,6 +97,12 @@ public static class Helpers
             {
                 var provider = new OpenRouterProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt")).ConfigureAwait(false));
                 model = new OpenRouterModel(provider, id: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt")).ConfigureAwait(false));
+                break;
+            }
+            case Providers.Together:
+            {
+                var provider = new TogetherProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt")).ConfigureAwait(false));
+                model = new TogetherModel(provider, id: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt")).ConfigureAwait(false));
                 break;
             }
             default:
