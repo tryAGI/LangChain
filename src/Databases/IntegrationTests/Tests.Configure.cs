@@ -19,9 +19,10 @@ public partial class Tests
             }
             case SupportedDatabase.Chroma:
             {
+                var port = Random.Shared.Next(49152, 65535);
                 var container = new ContainerBuilder()
                     .WithImage("chromadb/chroma")
-                    .WithPortBinding(hostPort: 8000, containerPort: 8000)
+                    .WithPortBinding(hostPort: port, containerPort: 8000)
                     .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8000))
                     .Build();
 
@@ -29,7 +30,7 @@ public partial class Tests
 
                 return new TestEnvironment
                 {
-                    VectorDatabase = new ChromaVectorStore(new HttpClient(), "http://localhost:8000",
+                    VectorDatabase = new ChromaVectorStore(new HttpClient(), $"http://localhost:{port}",
                         GenerateCollectionName()),
                 };
             }

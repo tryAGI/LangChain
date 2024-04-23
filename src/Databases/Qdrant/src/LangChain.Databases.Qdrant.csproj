@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Qdrant" />
+        <PackageReference Include="Qdrant.Client" />
     </ItemGroup>
 
 </Project>
