@@ -51,12 +51,13 @@ public static class Helpers
         Console.WriteLine($"Model set to {model}");
     }
     
-    public static async Task AuthenticateWithApiKeyAsync(string apiKey, string model, string provider)
+    public static async Task AuthenticateWithApiKeyAsync(string apiKey, string model, string provider, double temperature)
     {
         var settingsFolder = GetSettingsFolder();
         
         await File.WriteAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), provider).ConfigureAwait(false);
         await File.WriteAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), apiKey).ConfigureAwait(false);
+        await File.WriteAllTextAsync(Path.Combine(settingsFolder, "temperature.txt"), temperature.ToString()).ConfigureAwait(false);
         await SetModelAsync(model).ConfigureAwait(false);
     }
 
