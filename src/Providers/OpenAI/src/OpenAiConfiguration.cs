@@ -20,7 +20,7 @@ public class OpenAiConfiguration
     /// </summary>
     public string? Endpoint { get; set; }
     
-    public OpenAiChatSettings ChatSettings { get; set; } = new();
+    public OpenAiChatSettings ChatSettings { get; set; }
     
     public EmbeddingSettings EmbeddingSettings { get; init; } = new();
     
@@ -33,4 +33,14 @@ public class OpenAiConfiguration
     public TextToSpeechSettings TextToSpeechSettings { get; init; } = new();
 
     public ImageToTextSettings ImageToTextSettings { get; init; } = new();
+
+    public OpenAiConfiguration(
+        string? apiKey = null,
+        string? endpoint = null,
+        OpenAiChatSettings? chatSettings = null)
+    {
+        ApiKey = apiKey;
+        Endpoint = endpoint;
+        ChatSettings = chatSettings ?? new();
+    }
 }
