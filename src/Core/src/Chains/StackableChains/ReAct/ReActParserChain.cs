@@ -44,7 +44,8 @@ public class ReActParserChain : BaseStackableChain
         {
             if (includesAnswer)
             {
-                throw new OutputParserException($"{FinalAnswerAndParsableActionErrorMessage}: {text}");
+                Console.WriteLine($"Warning: LLM output contained both a final answer and parseable action. Prioritizing action and continuing. Output: {text}");
+                // Continue execution, the parseable action will be returned
             }
             string action = actionMatch.Groups[1].Value.Trim();
             string actionInput = actionMatch.Groups[2].Value.Trim().Trim('\"');
