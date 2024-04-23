@@ -4,7 +4,6 @@ using LangChain.Databases.JsonConverters;
 using LangChain.Sources;
 using Microsoft.SemanticKernel.AI.Embeddings;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
-using Microsoft.SemanticKernel.Connectors.Memory.Chroma.Http.ApiSchema;
 using Microsoft.SemanticKernel.Memory;
 
 namespace LangChain.Databases.Chroma;
@@ -13,10 +12,8 @@ namespace LangChain.Databases.Chroma;
 /// ChromaDB vector store.
 /// According: https://api.python.langchain.com/en/latest/_modules/langchain/vectorstores/chroma.html
 /// </summary>
-public class ChromaVectorStore : IVectorDatabase
+public class ChromaVectorStore : IVectorDatabaseExtended
 {
-    private const string DefaultCollectionName = "langchain";
-
     // TODO: SemanticKernel impl doesn't support collection metadata. Need changes when moved to another impl
     //private Dictionary<string, string> CollectionMetadata { get; } = [];
 
@@ -28,7 +25,7 @@ public class ChromaVectorStore : IVectorDatabase
     public ChromaVectorStore(
         HttpClient httpClient,
         string endpoint,
-        string collectionName = DefaultCollectionName)
+        string collectionName = VectorCollection.DefaultName)
     {
         _client = new ChromaClient(httpClient, endpoint);
 
@@ -37,30 +34,62 @@ public class ChromaVectorStore : IVectorDatabase
         _store = new ChromaMemoryStore(_client);
     }
 
-    /// <summary>
-    /// Get collection
-    /// </summary>
-    [CLSCompliant(false)]
-    public async Task<ChromaCollectionModel?> GetCollectionAsync()
+    /// <inheritdoc />
+    public async Task<VectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
-        return await _client.GetCollectionAsync(_collectionName).ConfigureAwait(false);
+        try
+        {
+            var collection = await _client.GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Collection not found");
+        
+            return new VectorCollection
+            {
+                Id = collection.Id,
+                Name = collection.Name
+            };
+        }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException("Collection not found", innerException: exception);
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default)
+    {
+        await foreach (var name in _client.ListCollectionsAsync(cancellationToken).ConfigureAwait(false))
+        {
+            if (name == collectionName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc />
+    public async Task<VectorCollection> GetOrCreateCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
+    {
+        if (!await IsCollectionExistsAsync(_collectionName, cancellationToken).ConfigureAwait(false))
+        {
+            await _client.CreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
+    {
+        await _store.DeleteCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Delete collection
-    /// </summary>
-    public async Task DeleteCollectionAsync()
-    {
-        await _store.DeleteCollectionAsync(_collectionName).ConfigureAwait(false);
-    }
-
-    /// <summary>
     /// Get collection
     /// </summary>
-    public async Task<Document?> GetDocumentByIdAsync(string id)
+    public async Task<VectorSearchItem?> GetItemByIdAsync(string collectionName, string id, CancellationToken cancellationToken = default)
     {
-        var record = await _store.GetAsync(_collectionName, id, withEmbedding: true).ConfigureAwait(false);
-
+        var record = await _store.GetAsync(collectionName, id, withEmbedding: true, cancellationToken: cancellationToken).ConfigureAwait(false);
         if (record == null)
         {
             return null;
@@ -69,7 +98,11 @@ public class ChromaVectorStore : IVectorDatabase
         var text = record.Metadata.Text;
         var metadata = DeserializeMetadata(record.Metadata);
 
-        return new Document(text, metadata);
+        return new VectorSearchItem
+        {
+            Text = text,
+            Metadata = metadata,
+        };
     }
 
     /// <inheritdoc />
@@ -133,20 +166,7 @@ public class ChromaVectorStore : IVectorDatabase
             );
         }
 
-        var collections =  _client.ListCollectionsAsync(cancellationToken).ConfigureAwait(false);
-        var isCollectionExists = false;
-        await foreach (var collectionName in collections)
-        {
-            if (collectionName == _collectionName)
-            {
-                isCollectionExists = true;
-                break;
-            }
-        }
-        if (!isCollectionExists)
-        {
-            await _client.CreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
-        }
+        _ = await GetOrCreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
         
         var resultIds = new List<string>(items.Count);
         var resultIdsIterator = _store.UpsertBatchAsync(_collectionName, records, cancellationToken);
@@ -211,6 +231,10 @@ public class ChromaVectorStore : IVectorDatabase
     }
 }
 
-[JsonSourceGenerationOptions(WriteIndented = true, Converters = [typeof(ObjectAsPrimitiveConverter)])]
+[JsonSourceGenerationOptions(Converters = [typeof(ObjectAsPrimitiveConverter)])]
 [JsonSerializable(typeof(IReadOnlyDictionary<string, object>))]
+[JsonSerializable(typeof(double))]
+[JsonSerializable(typeof(float))]
+[JsonSerializable(typeof(int))]
+[JsonSerializable(typeof(decimal))]
 internal sealed partial class SourceGenerationContext : JsonSerializerContext;

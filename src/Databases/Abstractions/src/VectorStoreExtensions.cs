@@ -71,6 +71,21 @@ public static class VectorDatabaseExtensions
             cancellationToken).ConfigureAwait(false);
     }
     
+    public static async Task<Document?> GetDocumentByIdAsync(
+        this IVectorDatabaseExtended vectorDatabase,
+        string collectionName,
+        string id,
+        CancellationToken cancellationToken = default)
+    {
+        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
+        
+        var item = await vectorDatabase.GetItemByIdAsync(collectionName, id, cancellationToken).ConfigureAwait(false);
+        
+        return item == null
+            ? null
+            : new Document(item.Text, item.Metadata);
+    }
+    
     public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
         this IVectorDatabase vectorDatabase,
         IEmbeddingModel embeddingModel,
