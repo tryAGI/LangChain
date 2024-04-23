@@ -15,11 +15,15 @@ public partial class Tests
         {
             case SupportedDatabase.InMemory:
             {
-                return new TestEnvironment { VectorDatabase = new InMemoryVectorStore(), };
+                return new TestEnvironment
+                {
+                    VectorDatabase = new InMemoryVectorStore(),
+                };
             }
             case SupportedDatabase.Chroma:
             {
                 var port = Random.Shared.Next(49152, 65535);
+                var collectionName = GenerateCollectionName();
                 var container = new ContainerBuilder()
                     .WithImage("chromadb/chroma")
                     .WithPortBinding(hostPort: port, containerPort: 8000)
@@ -30,8 +34,12 @@ public partial class Tests
 
                 return new TestEnvironment
                 {
-                    VectorDatabase = new ChromaVectorStore(new HttpClient(), $"http://localhost:{port}",
-                        GenerateCollectionName()),
+                    VectorDatabase = new ChromaVectorStore(
+                        new HttpClient(),
+                        $"http://localhost:{port}",
+                        collectionName),
+                    Port = port,
+                    CollectionName = collectionName,
                 };
             }
             case SupportedDatabase.SqLite:
