@@ -19,16 +19,18 @@ public class OpenAiProvider : Provider
 
     #region Constructors
 
-    public OpenAiProvider(OpenAiConfiguration configuration)
+    public OpenAiProvider(OpenAiConfiguration configuration, OpenAIClient? openAiClient = null)
         : base(id: OpenAiConfiguration.SectionName)
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         var apiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
 
-        Api = configuration.Endpoint != null &&
+        Api = openAiClient != null
+            ? openAiClient
+            : configuration.Endpoint != null &&
               !string.IsNullOrWhiteSpace(configuration.Endpoint)
-            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
-            : new OpenAIClient(apiKey);
+                ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
+                : new OpenAIClient(apiKey);
         ChatSettings = configuration.ChatSettings;
         EmbeddingSettings = configuration.EmbeddingSettings;
         TextToImageSettings = configuration.TextToImageSettings;
