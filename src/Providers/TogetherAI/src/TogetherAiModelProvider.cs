@@ -43,6 +43,7 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.CodeLlamaInstruct7B, new ChatModels("codellama/CodeLlama-7b-Instruct-hf",16384,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.CodeLlamaPython7B, new ChatModels("codellama/CodeLlama-7b-Python-hf",16384,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Dolphin25Mixtral8X7B, new ChatModels("cognitivecomputations/dolphin-2.5-mixtral-8x7b",32768,6E-07,6E-07)},
+        { TogetherAiModelIds.ReservedDbrxInstruct, new ChatModels("coursconnecte/Llama-3-70b-chat",0,1.2E-06,1.2E-06)},
         { TogetherAiModelIds.DeepseekCoderInstruct33B, new ChatModels("deepseek-ai/deepseek-coder-33b-instruct",16384,8.000000000000001E-07,8.000000000000001E-07)},
         { TogetherAiModelIds.DeepseekLlmChat67B, new ChatModels("deepseek-ai/deepseek-llm-67b-chat",4096,9.000000000000001E-07,9.000000000000001E-07)},
         { TogetherAiModelIds.Platypus2Instruct70B, new ChatModels("garage-bAInd/Platypus2-70B-instruct",4096,9.000000000000001E-07,9.000000000000001E-07)},

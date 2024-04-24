@@ -170,6 +170,16 @@ public class CodeLlamaPython7BModel(TogetherAiProvider provider) : TogetherAiMod
 public class Dolphin25Mixtral8X7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Dolphin25Mixtral8X7B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.ReservedDbrxInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class ReservedDbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.ReservedDbrxInstruct);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.ReservedDbrxInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class ReservedDbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.ReservedDbrxInstruct);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.DeepseekCoderInstruct33B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class DeepseekCoderInstruct33BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.DeepseekCoderInstruct33B);

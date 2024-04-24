@@ -381,6 +381,28 @@ public enum TogetherAiModelIds
         Dolphin25Mixtral8X7B,
         
         /// <summary>
+        /// Name: Reserved - DBRX Instruct <br/>
+        /// Organization: Databricks <br/>
+        /// Context Length: 0 <br/>
+        /// Prompt Cost: $1.2/MTok <br/>
+        /// Completion Cost: $1.2/MTok <br/>
+        /// Description: DBRX Instruct is a mixture-of-experts (MoE) large language model trained from scratch by Databricks. DBRX Instruct specializes in few-turn interactions. <br/>
+        /// HuggingFace Url: <a href="https://huggingface.co/coursconnecte/Llama-3-70b-chat">https://huggingface.co/coursconnecte/Llama-3-70b-chat</a>
+        /// </summary>
+        ReservedDbrxInstruct,
+        
+        /// <summary>
+        /// Name: Reserved - DBRX Instruct <br/>
+        /// Organization: Databricks <br/>
+        /// Context Length: 0 <br/>
+        /// Prompt Cost: $1.2/MTok <br/>
+        /// Completion Cost: $1.2/MTok <br/>
+        /// Description: DBRX Instruct is a mixture-of-experts (MoE) large language model trained from scratch by Databricks. DBRX Instruct specializes in few-turn interactions. <br/>
+        /// HuggingFace Url: <a href="https://huggingface.co/coursconnecte/dbrx-instruct">https://huggingface.co/coursconnecte/dbrx-instruct</a>
+        /// </summary>
+        ReservedDbrxInstruct,
+        
+        /// <summary>
         /// Name: Deepseek Coder Instruct (33B) <br/>
         /// Organization: DeepSeek <br/>
         /// Context Length: 16384 <br/>
