@@ -98,11 +98,6 @@ public enum OpenRouterModelIds
         NousHermes2Vision7BAlpha,
         
         /// <summary>
-        /// One of the highest performing and most popular fine-tunes of Llama 2 13B, with rich descriptions and roleplay. #merge  <br/>
-        /// </summary>
-        Mythomax13B,
-        
-        /// <summary>
         /// A 13 billion parameter language model from Meta, fine tuned for chat completions  <br/>
         /// </summary>
         MetaLlamaV213BChat,
@@ -518,6 +513,11 @@ public enum OpenRouterModelIds
         /// This is v0.1 of Mistral 7B Instruct. For v0.2, use this model.  <br/>
         /// </summary>
         Mistral7BInstruct,
+        
+        /// <summary>
+        /// One of the highest performing and most popular fine-tunes of Llama 2 13B, with rich descriptions and roleplay. #merge  <br/>
+        /// </summary>
+        Mythomax13B,
         
         /// <summary>
         /// OpenChat is a library of open-source language models, fine-tuned with "C-RLFT (Conditioned Reinforcement Learning Fine-Tuning)" - a strategy inspired by offline reinforcement learning. It has been trained on mixed-quality data without preference labels.  <br/>
