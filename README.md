@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/github/license/tryAGI/LangChain)](https://github.com/tryAGI/LangChain/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/1115206893015662663?label=Discord&logo=discord&logoColor=white&color=d82679)](https://discord.gg/Ca2xhfBf3v)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ⚡ Building applications with LLMs through composability ⚡  
@@ -110,6 +110,9 @@ Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/fiorelorenzo"><img src="https://avatars.githubusercontent.com/u/29930922?v=4?s=100" width="100px;" alt="Lorenzo Fiore"/><br /><sub><b>Lorenzo Fiore</b></sub></a><br /><a href="#infra-fiorelorenzo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=fiorelorenzo" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=fiorelorenzo" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/matt-regier"><img src="https://avatars.githubusercontent.com/u/13575802?v=4?s=100" width="100px;" alt="matt-regier"/><br /><sub><b>matt-regier</b></sub></a><br /><a href="#infra-matt-regier" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=matt-regier" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=matt-regier" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jekakmail"><img src="https://avatars.githubusercontent.com/u/1722792?v=4?s=100" width="100px;" alt="Sotski Eugene"/><br /><sub><b>Sotski Eugene</b></sub></a><br /><a href="https://github.com/tryAGI/LangChain/commits?author=jekakmail" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vikhyat90"><img src="https://avatars.githubusercontent.com/u/9795857?v=4?s=100" width="100px;" alt="vikhyat90"/><br /><sub><b>vikhyat90</b></sub></a><br /><a href="#infra-vikhyat90" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=vikhyat90" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=vikhyat90" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
