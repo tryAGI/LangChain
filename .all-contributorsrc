@@ -156,6 +156,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "vikhyat90",
+      "name": "vikhyat90",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9795857?v=4",
+      "profile": "https://github.com/vikhyat90",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
