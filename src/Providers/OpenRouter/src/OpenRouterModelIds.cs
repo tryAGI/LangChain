@@ -7,6 +7,12 @@ public enum OpenRouterModelIds
 {
 
         /// <summary>
+        /// Soliloquy-L3 is a fast, highly capable roleplaying model designed for immersive, dynamic experiences. Trained on over 250 million tokens of roleplaying data, Soliloquy-L3 has a vast knowledge base, rich literary expression, and support for up to 24k context length. It outperforms existing ~13B models, delivering enhanced roleplaying capabilities.  <br/>
+        /// Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
+        /// </summary>
+        LynnLlama3Soliloquy8B,
+        
+        /// <summary>
         /// The Capybara series is a collection of datasets and models made by fine-tuning on data created by Nous, mostly in-house.  <br/>
         /// V1.9 uses unalignment techniques for more consistent and dynamic control. It also leverages a significantly better foundation model, Mistral 7B.  <br/>
         /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
@@ -59,14 +65,6 @@ public enum OpenRouterModelIds
         /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
         /// </summary>
         GoogleGemma7BFree,
-        
-        /// <summary>
-        /// A #merge model based on Llama-2-13B and made possible thanks to the compute provided by the KoboldAI community. It's a merge between:  <br/>
-        /// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
-        /// chaoyi-wu/MedLLaMA_13B  <br/>
-        /// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/>
-        /// </summary>
-        Psyfighter13B,
         
         /// <summary>
         /// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
@@ -457,6 +455,31 @@ public enum OpenRouterModelIds
         AnthropicClaude3Haiku,
         
         /// <summary>
+        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// </summary>
+        AnthropicClaudeV2,
+        
+        /// <summary>
+        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// </summary>
+        AnthropicClaudeV21,
+        
+        /// <summary>
+        /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
+        /// </summary>
+        AnthropicClaudeV20,
+        
+        /// <summary>
+        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
+        /// </summary>
+        AnthropicClaudeInstantV1,
+        
+        /// <summary>
+        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
+        /// </summary>
+        AnthropicClaudeInstantV12,
+        
+        /// <summary>
         /// This is a lower-latency version of Claude 3 Opus, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
         /// Claude 3 Opus is Anthropic's most powerful model for highly complex tasks. It boasts top-level performance, intelligence, fluency, and understanding.  <br/>
         /// See the launch announcement and benchmark results here  <br/>
@@ -482,6 +505,30 @@ public enum OpenRouterModelIds
         AnthropicClaude3HaikuSelfModerated,
         
         /// <summary>
+        /// This is a lower-latency version of Claude v2, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
+        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// </summary>
+        AnthropicClaudeV2SelfModerated,
+        
+        /// <summary>
+        /// This is a lower-latency version of Claude v2.1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
+        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// </summary>
+        AnthropicClaudeV21SelfModerated,
+        
+        /// <summary>
+        /// This is a lower-latency version of Claude v2.0, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
+        /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
+        /// </summary>
+        AnthropicClaudeV20SelfModerated,
+        
+        /// <summary>
+        /// This is a lower-latency version of Claude Instant v1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
+        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
+        /// </summary>
+        AnthropicClaudeInstantV1SelfModerated,
+        
+        /// <summary>
         /// The flagship, 70 billion parameter language model from Meta, fine tuned for chat completions. Llama 2 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align to human preferences for helpfulness and safety.  <br/>
         /// </summary>
         MetaLlamaV270BChat,
@@ -497,11 +544,6 @@ public enum OpenRouterModelIds
         /// Currently based on jondurbin/airoboros-l2-70b-2.2.1, but might get updated in the future.  <br/>
         /// </summary>
         Airoboros70B,
-        
-        /// <summary>
-        /// An experimental fine-tune of Yi 34b 200k using bagel. This is the version of the fine-tune before direct preference optimization (DPO) has been applied. DPO performs better on benchmarks, but this version is likely better for creative writing, roleplay, etc.  <br/>
-        /// </summary>
-        Bagel34Bv02,
         
         /// <summary>
         /// A 75/25 merge of Chronos 13b v2 and Nous Hermes Llama2 13b. This offers the imaginative writing style of Chronos while retaining coherency. Outputs are long and use exceptional prose. #merge  <br/>
@@ -658,55 +700,6 @@ public enum OpenRouterModelIds
         /// #moe  <br/>
         /// </summary>
         MistralMixtral8X22bInstruct,
-        
-        /// <summary>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV2,
-        
-        /// <summary>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV21,
-        
-        /// <summary>
-        /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
-        /// </summary>
-        AnthropicClaudeV20,
-        
-        /// <summary>
-        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
-        /// </summary>
-        AnthropicClaudeInstantV1,
-        
-        /// <summary>
-        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
-        /// </summary>
-        AnthropicClaudeInstantV12,
-        
-        /// <summary>
-        /// This is a lower-latency version of Claude v2, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV2SelfModerated,
-        
-        /// <summary>
-        /// This is a lower-latency version of Claude v2.1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV21SelfModerated,
-        
-        /// <summary>
-        /// This is a lower-latency version of Claude v2.0, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
-        /// </summary>
-        AnthropicClaudeV20SelfModerated,
-        
-        /// <summary>
-        /// This is a lower-latency version of Claude Instant v1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
-        /// </summary>
-        AnthropicClaudeInstantV1SelfModerated,
         
         /// <summary>
         /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
