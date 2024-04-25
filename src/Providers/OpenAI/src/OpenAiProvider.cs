@@ -25,15 +25,13 @@ public class OpenAiProvider : Provider
         Api = openAiClient ?? throw new ArgumentNullException(nameof(openAiClient));
     }
 
-    public OpenAiProvider(OpenAiConfiguration configuration, OpenAIClient? openAiClient = null)
+    public OpenAiProvider(OpenAiConfiguration configuration)
         : base(id: OpenAiConfiguration.SectionName)
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         var apiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
 
-        Api = openAiClient != null
-            ? openAiClient
-            : configuration.Endpoint != null &&
+        Api = configuration.Endpoint != null &&
               !string.IsNullOrWhiteSpace(configuration.Endpoint)
                 ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
                 : new OpenAIClient(apiKey);
