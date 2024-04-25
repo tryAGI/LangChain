@@ -37,13 +37,13 @@ public partial class AnthropicModel(
         switch (message.Role)
         {
             case "user":
-                return new Message(string.Join("\r\n", message.Content.Select(s => s.Text)), MessageRole.Human);
+                return new Message(string.Join("\r\n", message.Content.Select(s => s is TextContent textContent ? textContent.Text : string.Empty)), MessageRole.Human);
             case "assistant":
-                return new Message(string.Join("\r\n", message.Content.Select(s => s.Text)), MessageRole.Ai);
+                return new Message(string.Join("\r\n", message.Content.Select(s => s is TextContent textContent ? textContent.Text : string.Empty)), MessageRole.Ai);
         }
 
         return new Message(
-            string.Join("\r\n", message.Content.Select(s => s.Text)),
+            string.Join("\r\n", message.Content.Select(s => s is TextContent textContent ? textContent.Text : string.Empty)),
             MessageRole.Ai);
     }
 
@@ -84,7 +84,7 @@ public partial class AnthropicModel(
             SystemMessage = GetSystemMessage(),
             MaxTokens = 4096,
             Model = Id
-        }, cancellationToken).ConfigureAwait(false);
+        }, ctx: cancellationToken).ConfigureAwait(false);
 
         var newMessage = ToMessage(response);
         messages.Add(newMessage);
@@ -115,7 +115,7 @@ public partial class AnthropicModel(
                     SystemMessage = GetSystemMessage(),
                     MaxTokens = 4096,
                     Model = Id
-                }, cancellationToken).ConfigureAwait(false);
+                }, ctx: cancellationToken).ConfigureAwait(false);
                 newMessage = ToMessage(response);
                 messages.Add(newMessage);
 

@@ -24,7 +24,10 @@ public static class StringExtensions
     /// <returns></returns>
     public static global::Anthropic.SDK.Messaging.Message AsHumanMessage(this string content)
     {
-        return new global::Anthropic.SDK.Messaging.Message { Content = content, Role = RoleType.User };
+        return new global::Anthropic.SDK.Messaging.Message { Content = [new TextContent
+        {
+            Text = content,
+        }], Role = RoleType.User };
     }
 
     /// <summary>
@@ -33,7 +36,10 @@ public static class StringExtensions
     /// <returns></returns>
     public static global::Anthropic.SDK.Messaging.Message AsAssistantMessage(this string content)
     {
-        return new global::Anthropic.SDK.Messaging.Message { Content = content, Role = RoleType.Assistant };
+        return new global::Anthropic.SDK.Messaging.Message { Content = [new TextContent
+        {
+            Text = content,
+        }], Role = RoleType.Assistant };
     }
 
     /// <summary>

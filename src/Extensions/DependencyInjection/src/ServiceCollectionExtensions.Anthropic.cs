@@ -30,8 +30,7 @@ public static partial class ServiceCollectionExtensions
             .AddHttpClient<AnthropicModel>();
         _ = services
             .AddScoped<AnthropicProvider>(static services => AnthropicProvider.FromConfiguration(
-                configuration: services.GetRequiredService<IOptions<AnthropicConfiguration>>().Value,
-                httpClientFactory: services.GetRequiredService<IHttpClientFactory>()));
+                configuration: services.GetRequiredService<IOptions<AnthropicConfiguration>>().Value));
 
         return services;
     }

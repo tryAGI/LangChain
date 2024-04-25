@@ -22,7 +22,7 @@ public static class ApiHelpers
     {
         var promptPricePerToken = modelId switch
         {
-            AnthropicModels.Claude_v2 => 8.00,
+            AnthropicModels.Claude_v2_0 => 8.00,
             AnthropicModels.Claude_v2_1 => 8.00,
             AnthropicModels.Claude3Haiku => 0.25,
             AnthropicModels.Claude3Sonnet => 3.00,
@@ -33,7 +33,7 @@ public static class ApiHelpers
         } * 0.001 * 0.001;
         var completionPricePerToken = modelId switch
         {
-            AnthropicModels.Claude_v2 => 24.0,
+            AnthropicModels.Claude_v2_0 => 24.0,
             AnthropicModels.Claude_v2_1 => 24.0,
             AnthropicModels.Claude3Haiku => 1.25,
             AnthropicModels.Claude3Sonnet => 5.00,
@@ -57,7 +57,7 @@ public static class ApiHelpers
     {
         return modelId switch
         {
-            AnthropicModels.Claude_v2 => 100000,
+            AnthropicModels.Claude_v2_0 => 100000,
             AnthropicModels.ClaudeInstant_v1_2 => 100000,
             AnthropicModels.Claude_v2_1 => 200000,
             AnthropicModels.Claude3Haiku => 200000,
