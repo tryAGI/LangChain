@@ -11,7 +11,7 @@ permissions:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
+    if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
     steps:
       - name: Dependabot metadata
         if: ${{ github.actor == 'dependabot[bot]' }}
@@ -23,8 +23,10 @@ jobs:
       - name: Show sender
         run: echo ${{ github.event.pull_request.sender }}
           
+      - name: Show triggering_actor
+        run: echo ${{ github.triggering_actor }}
+          
       - name: Approve a PR
-        if: ${{ github.actor == 'dependabot[bot]' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
