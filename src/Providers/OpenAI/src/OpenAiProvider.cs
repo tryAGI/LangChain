@@ -19,6 +19,12 @@ public class OpenAiProvider : Provider
 
     #region Constructors
 
+    public OpenAiProvider(OpenAIClient openAiClient)
+        : base(id: OpenAiConfiguration.SectionName)
+    {
+        Api = openAiClient ?? throw new ArgumentNullException(nameof(openAiClient));
+    }
+
     public OpenAiProvider(OpenAiConfiguration configuration, OpenAIClient? openAiClient = null)
         : base(id: OpenAiConfiguration.SectionName)
     {
