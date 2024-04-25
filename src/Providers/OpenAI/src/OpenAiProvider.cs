@@ -19,6 +19,12 @@ public class OpenAiProvider : Provider
 
     #region Constructors
 
+    public OpenAiProvider(OpenAIClient openAiClient)
+        : base(id: OpenAiConfiguration.SectionName)
+    {
+        Api = openAiClient ?? throw new ArgumentNullException(nameof(openAiClient));
+    }
+
     public OpenAiProvider(OpenAiConfiguration configuration)
         : base(id: OpenAiConfiguration.SectionName)
     {
@@ -27,8 +33,8 @@ public class OpenAiProvider : Provider
 
         Api = configuration.Endpoint != null &&
               !string.IsNullOrWhiteSpace(configuration.Endpoint)
-            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
-            : new OpenAIClient(apiKey);
+                ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
+                : new OpenAIClient(apiKey);
         ChatSettings = configuration.ChatSettings;
         EmbeddingSettings = configuration.EmbeddingSettings;
         TextToImageSettings = configuration.TextToImageSettings;
