@@ -55,11 +55,4 @@ public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
         
         await GetCollection<T>().InsertOneAsync(entity).ConfigureAwait(false);
     }
-
-    public async Task<bool> RemoveBatchAsync<T>(IEnumerable<string> ids, CancellationToken cancellationToken = default)
-    {
-        var filter = Builders<T>.Filter.In("Id", ids);
-        var result = await GetCollection<T>().DeleteManyAsync(filter, cancellationToken).ConfigureAwait(false);
-        return result.IsAcknowledged;
-    }
 }
