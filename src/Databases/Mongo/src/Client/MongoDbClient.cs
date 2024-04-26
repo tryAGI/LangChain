@@ -1,7 +1,5 @@
 ﻿using LangChain.Databases.Mongo.Model;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using SharpCompress.Common;
 using System.Linq.Expressions;
 
 namespace LangChain.Databases.Mongo.Client;
