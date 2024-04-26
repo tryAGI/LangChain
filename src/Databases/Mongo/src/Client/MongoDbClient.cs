@@ -1,5 +1,7 @@
 ﻿using LangChain.Databases.Mongo.Model;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using SharpCompress.Common;
 using System.Linq.Expressions;
 
 namespace LangChain.Databases.Mongo.Client;
@@ -52,5 +54,12 @@ public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
         entity = entity ?? throw new ArgumentNullException(nameof(entity));
         
         await GetCollection<T>().InsertOneAsync(entity).ConfigureAwait(false);
+    }
+
+    public async Task<bool> RemoveBatchAsync<T>(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<T>.Filter.In("Id", ids);
+        var result = await GetCollection<T>().DeleteManyAsync(filter, cancellationToken).ConfigureAwait(false);
+        return result.IsAcknowledged;
     }
 }

@@ -15,4 +15,8 @@ public interface IMongoDbClient
 
     Task InsertAsync<T>(T entity)
         where T : BaseEntity;
+
+    Task<bool> RemoveBatchAsync<T>(
+        IEnumerable<string> ids,
+        CancellationToken cancellationToken = default);
 }
