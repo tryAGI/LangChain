@@ -1,10 +1,5 @@
 namespace LangChain.Providers.OpenRouter.Predefined;
 
-/// <inheritdoc cref="OpenRouterModelIds.LynnLlama3Soliloquy8B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class LynnLlama3Soliloquy8BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.LynnLlama3Soliloquy8B);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.NousCapybara7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class NousCapybara7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NousCapybara7BFree);
@@ -538,6 +533,11 @@ public class MistralMixtral8X22BBaseModel(OpenRouterProvider provider) : OpenRou
 /// <inheritdoc cref="OpenRouterModelIds.MistralMixtral8X22bInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MistralMixtral8X22bInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MistralMixtral8X22bInstruct);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.LynnLlama3Soliloquy8B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class LynnLlama3Soliloquy8BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.LynnLlama3Soliloquy8B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.HuggingFaceZephyr7BFree"/>
