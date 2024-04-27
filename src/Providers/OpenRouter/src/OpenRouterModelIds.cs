@@ -7,12 +7,6 @@ public enum OpenRouterModelIds
 {
 
         /// <summary>
-        /// Soliloquy-L3 is a fast, highly capable roleplaying model designed for immersive, dynamic experiences. Trained on over 250 million tokens of roleplaying data, Soliloquy-L3 has a vast knowledge base, rich literary expression, and support for up to 24k context length. It outperforms existing ~13B models, delivering enhanced roleplaying capabilities.  <br/>
-        /// Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
-        /// </summary>
-        LynnLlama3Soliloquy8B,
-        
-        /// <summary>
         /// The Capybara series is a collection of datasets and models made by fine-tuning on data created by Nous, mostly in-house.  <br/>
         /// V1.9 uses unalignment techniques for more consistent and dynamic control. It also leverages a significantly better foundation model, Mistral 7B.  <br/>
         /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
@@ -700,6 +694,12 @@ public enum OpenRouterModelIds
         /// #moe  <br/>
         /// </summary>
         MistralMixtral8X22bInstruct,
+        
+        /// <summary>
+        /// Soliloquy-L3 is a fast, highly capable roleplaying model designed for immersive, dynamic experiences. Trained on over 250 million tokens of roleplaying data, Soliloquy-L3 has a vast knowledge base, rich literary expression, and support for up to 24k context length. It outperforms existing ~13B models, delivering enhanced roleplaying capabilities.  <br/>
+        /// Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
+        /// </summary>
+        LynnLlama3Soliloquy8B,
         
         /// <summary>
         /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
