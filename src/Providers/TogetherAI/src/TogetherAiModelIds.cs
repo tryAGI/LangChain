@@ -688,4 +688,15 @@ public enum TogetherAiModelIds
         /// </summary>
         _01AiYiChat34B,
         
+        /// <summary>
+        /// Name: Upstage SOLAR Instruct v1 (11B)-Int4 <br/>
+        /// Organization: upstage <br/>
+        /// Context Length: 4096 <br/>
+        /// Prompt Cost: $0.3/MTok <br/>
+        /// Completion Cost: $0.3/MTok <br/>
+        /// Description: Built on the Llama2 architecture, SOLAR-10.7B incorporates the innovative Upstage Depth Up-Scaling <br/>
+        /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4">https://huggingface.co/togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4</a>
+        /// </summary>
+        UpstageSolarInstructV111BInt4,
+        
 }

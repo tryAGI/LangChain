@@ -71,6 +71,7 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.Alpaca7B, new ChatModels("togethercomputer/alpaca-7b",2048,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.UpstageSolarInstructV111B, new ChatModels("upstage/SOLAR-10.7B-Instruct-v1.0",4096,3E-07,3E-07)},
         { TogetherAiModelIds._01AiYiChat34B, new ChatModels("zero-one-ai/Yi-34B-Chat",4096,8.000000000000001E-07,8.000000000000001E-07)},
+        { TogetherAiModelIds.UpstageSolarInstructV111BInt4, new ChatModels("togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4",4096,3E-07,3E-07)},
 
     };
 
