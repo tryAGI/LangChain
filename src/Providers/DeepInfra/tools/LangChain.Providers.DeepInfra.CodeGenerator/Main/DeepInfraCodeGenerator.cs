@@ -67,7 +67,7 @@ public static class DeepInfraCodeGenerator
             var links = lbb.FindNode("script", "type", "json", true);
 
             if (links == null)
-                throw new Exception("Model Info script node not found.");
+                throw new InvalidOperationException("Model Info script node not found in the HTML document.");
 
             var json = JObject.Parse(links.InnerText);
 
