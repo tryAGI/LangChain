@@ -6,6 +6,7 @@ namespace LangChain.Databases.IntegrationTests;
 public partial class Tests
 {
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -29,6 +30,7 @@ public partial class Tests
     }
     
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
     public async Task AddDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -68,6 +70,7 @@ public partial class Tests
     }
     
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
     public async Task AddTexts_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -111,6 +114,7 @@ public partial class Tests
     }
 
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
     public async Task DeleteDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -141,11 +145,11 @@ public partial class Tests
         actualFist.Should().BeNull();
         actualSecond.Should().BeNull();
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.SqLite)]
-    //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
     //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
     {
@@ -171,11 +175,11 @@ public partial class Tests
         similarTexts.Should().Contain("banana");
         similarTexts.Should().Contain("apple");
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.SqLite)]
-    //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
     //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
     {
@@ -198,10 +202,10 @@ public partial class Tests
         similarTexts.Should().Contain("apple");
     }
     
-    [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.SqLite)]
-    //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
+    //[TestCase(SupportedDatabase.InMemory)]
+    //[TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.SqLite)]
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
     //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)
     {

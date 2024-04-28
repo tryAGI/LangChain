@@ -167,6 +167,7 @@ Helpful Answer:";
             }
         };
         _vectorDatabase = new OpenSearchVectorStore(_options);
+        _vectorDatabase.CreateCollectionAsync(_options);
     }
 
     [Test]

@@ -84,6 +84,7 @@ public partial class Tests
                 
                 await container.StartAsync(cancellationToken);
 
+                var collectionName = GenerateCollectionName();
                 return new TestEnvironment
                 {
                     VectorDatabase = new OpenSearchVectorStore(new OpenSearchVectorStoreOptions
@@ -91,9 +92,10 @@ public partial class Tests
                         ConnectionUri = new Uri("http://localhost:9200"),
                         Username = "admin",
                         Password = password,
-                        IndexName = GenerateCollectionName(),
-                        Dimensions = 1024
+                        IndexName = collectionName,
+                        Dimensions = 1536
                     }),
+                    CollectionName = collectionName
                 };
             }
             default:

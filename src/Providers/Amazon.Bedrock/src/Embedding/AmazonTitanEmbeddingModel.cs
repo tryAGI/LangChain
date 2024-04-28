@@ -33,10 +33,9 @@ public abstract class AmazonTitanEmbeddingModel(
             modelSettings: Settings,
             providerSettings: provider.EmbeddingSettings);
 
-        var splitText = request.Strings.Split(chunkSize: (int)usedSettings.MaximumInputLength!);
-        var embeddings = new List<float[]>(capacity: splitText.Count);
+        var embeddings = new List<float[]>(capacity: request.Strings.Count);
 
-        var tasks = splitText.Select(text => provider.Api.InvokeModelAsync(Id, new JsonObject { { "inputText", text }, }, cancellationToken))
+        var tasks = request.Strings.Select(text => provider.Api.InvokeModelAsync(Id, new JsonObject { { "inputText", text }, }, cancellationToken))
             .ToList();
         var results = await Task.WhenAll(tasks).ConfigureAwait(false);
 
