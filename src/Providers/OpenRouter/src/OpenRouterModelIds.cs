@@ -35,43 +35,6 @@ public enum OpenRouterModelIds
         Mythomist7BFree,
         
         /// <summary>
-        /// A wild 7B parameter model that merges several models using the new task_arithmetic merge method from mergekit.  <br/>
-        /// List of merged models:  <br/>
-        /// NousResearch/Nous-Capybara-7B-V1.9  <br/>
-        /// HuggingFaceH4/zephyr-7b-beta  <br/>
-        /// lemonilia/AshhLimaRP-Mistral-7B  <br/>
-        /// Vulkane/120-Days-of-Sodom-LoRA-Mistral-7b  <br/>
-        /// Undi95/Mistral-pippa-sharegpt-7b-qlora  <br/>
-        /// #merge #uncensored  <br/>
-        /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
-        /// </summary>
-        ToppyM7BFree,
-        
-        /// <summary>
-        /// This model is under development. Check the OpenRouter Discord for updates.  <br/>
-        /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
-        /// </summary>
-        Cinematika7BAlphaFree,
-        
-        /// <summary>
-        /// Gemma by Google is an advanced, open-source language model family, leveraging the latest in decoder-only, text-to-text technology. It offers English language capabilities across text generation tasks like question answering, summarization, and reasoning. The Gemma 7B variant is comparable in performance to leading open source models.  <br/>
-        /// Usage of Gemma is subject to Google's Gemma Terms of Use.  <br/>
-        /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
-        /// </summary>
-        GoogleGemma7BFree,
-        
-        /// <summary>
-        /// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
-        /// The intent was to add medical data to supplement the model's fictional ability with more details on anatomy and mental states. This model should not be used for medical advice or therapy because of its high likelihood of pulling in fictional data.  <br/>
-        /// It's a merge between:  <br/>
-        /// KoboldAI/LLaMA2-13B-Tiefighter  <br/>
-        /// Doctor-Shotgun/cat-v1.0-13b  <br/>
-        /// Doctor-Shotgun/llama-2-13b-chat-limarp-v2-merged.  <br/>
-        /// #merge  <br/>
-        /// </summary>
-        PsyfighterV213B,
-        
-        /// <summary>
         /// A fine-tuned model based on mistralai/Mistral-7B-v0.1 on the open source dataset Open-Orca/SlimOrca, aligned with DPO algorithm. For more details, refer to the blog: The Practice of Supervised Fine-tuning and Direct Preference Optimization on Habana Gaudi2.  <br/>
         /// </summary>
         NeuralChat7BV31,
@@ -138,7 +101,7 @@ public enum OpenRouterModelIds
         Mythomax13BExtended,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// Note: this is an extended-context version of this model. It may have higher prices and different outputs.  <br/>
@@ -221,7 +184,7 @@ public enum OpenRouterModelIds
         
         /// <summary>
         /// Nous Hermes 2 Yi 34B was trained on 1,000,000 entries of primarily GPT-4 generated data, as well as other high quality data from open datasets across the AI landscape.  <br/>
-        /// Nous-Hermes 2 on Yi 34B outperforms all Nous-Hermes & Open-Hermes models of the past, achieving new heights in all benchmarks for a Nous Research LLM as well as surpassing many popular finetunes.  <br/>
+        /// Nous-Hermes 2 on Yi 34B outperforms all Nous-Hermes and Open-Hermes models of the past, achieving new heights in all benchmarks for a Nous Research LLM as well as surpassing many popular finetunes.  <br/>
         /// </summary>
         NousHermes2Yi34B,
         
@@ -239,7 +202,7 @@ public enum OpenRouterModelIds
         NousHermes2Mistral7BDpo,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// </summary>
@@ -253,7 +216,7 @@ public enum OpenRouterModelIds
         Mixtral8X7BInstructNitro,
         
         /// <summary>
-        /// A fine-tune of Mistral using the OpenOrca dataset. First 7B model to beat all other models <30B.  <br/>
+        /// A fine-tune of Mistral using the OpenOrca dataset. First 7B model to beat all other models less 30B.  <br/>
         /// </summary>
         MistralOpenOrca7B,
         
@@ -263,8 +226,7 @@ public enum OpenRouterModelIds
         HuggingFaceZephyr7B,
         
         /// <summary>
-        /// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.  <br/>
-        /// Updated by OpenAI to point to the latest version of GPT-3.5. Training data up to Sep 2021.  <br/>
+        /// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks. Training data: up to Sep 2021.  <br/>
         /// </summary>
         OpenAiGpt35Turbo,
         
@@ -286,7 +248,7 @@ public enum OpenRouterModelIds
         OpenAiGpt4Turbo,
         
         /// <summary>
-        /// The latest GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Dec 2023.  <br/>
+        /// The latest GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Apr 2023.  <br/>
         /// Note: heavily rate limited by OpenAI while in preview.  <br/>
         /// </summary>
         OpenAiGpt4TurboPreview,
@@ -443,11 +405,6 @@ public enum OpenRouterModelIds
         AnthropicClaudeV2,
         
         /// <summary>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV21,
-        
-        /// <summary>
         /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
         /// </summary>
         AnthropicClaudeV20,
@@ -456,11 +413,6 @@ public enum OpenRouterModelIds
         /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
         /// </summary>
         AnthropicClaudeInstantV1,
-        
-        /// <summary>
-        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
-        /// </summary>
-        AnthropicClaudeInstantV12,
         
         /// <summary>
         /// This is a lower-latency version of Claude 3 Opus, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
@@ -492,12 +444,6 @@ public enum OpenRouterModelIds
         /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
         /// </summary>
         AnthropicClaudeV2SelfModerated,
-        
-        /// <summary>
-        /// This is a lower-latency version of Claude v2.1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV21SelfModerated,
         
         /// <summary>
         /// This is a lower-latency version of Claude v2.0, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
@@ -656,19 +602,11 @@ public enum OpenRouterModelIds
         Zephyr141BA35b,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// </summary>
         MetaLlama38BInstruct,
-        
-        /// <summary>
-        /// WizardLM-2 8x22B is Microsoft AI's most advanced Wizard model. It demonstrates highly competitive performance compared to leading proprietary models, and it consistently outperforms all existing state-of-the-art opensource models.  <br/>
-        /// It is an instruct finetune of Mixtral 8x22B.  <br/>
-        /// To read more about the model release, click here.  <br/>
-        /// #moe  <br/>
-        /// </summary>
-        Wizardlm28X22b,
         
         /// <summary>
         /// WizardLM-2 7B is the smaller variant of Microsoft AI's latest Wizard model. It is the fastest and achieves comparable performance with existing 10x larger opensource leading models  <br/>
@@ -700,12 +638,6 @@ public enum OpenRouterModelIds
         /// Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// </summary>
         LynnLlama3Soliloquy8B,
-        
-        /// <summary>
-        /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
-        /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
-        /// </summary>
-        HuggingFaceZephyr7BFree,
         
         /// <summary>
         /// The flagship, 70 billion parameter language model from Meta, fine tuned for chat completions. Llama 2 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align to human preferences for helpfulness and safety.  <br/>
@@ -756,7 +688,7 @@ public enum OpenRouterModelIds
         Wizardlm28X22bNitro,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
@@ -764,7 +696,7 @@ public enum OpenRouterModelIds
         MetaLlama38BInstructNitro,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
@@ -808,14 +740,12 @@ public enum OpenRouterModelIds
         
         /// <summary>
         /// Command is an instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models.  <br/>
-        /// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/>
         /// </summary>
         CohereCommand,
         
         /// <summary>
-        /// Command-R is a 35B parameter model that performs conversational language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
+        /// Command-R is an instruction-following conversational model that performs language tasks at a higher quality, more reliably, and with a longer context than previous models. It can be used for complex workflows like code generation, retrieval augmented generation (RAG), tool use, and agents.  <br/>
         /// Read the launch post here.  <br/>
-        /// Use of this model is subject to Cohere's Acceptable Use Policy.  <br/>
         /// </summary>
         CohereCommandR,
         

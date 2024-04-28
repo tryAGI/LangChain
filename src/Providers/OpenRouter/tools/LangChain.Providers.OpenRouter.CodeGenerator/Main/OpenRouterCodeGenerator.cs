@@ -229,7 +229,7 @@ public static class OpenRouterCodeGenerator
 
         sb2.AppendLine();
         sb2.AppendLine("/// <summary>");
-        sb2.AppendLine($"/// {description}");
+        sb2.AppendLine($"/// {description.Replace("&", "and", StringComparison.OrdinalIgnoreCase).Replace("<", "less ", StringComparison.OrdinalIgnoreCase).Replace("less br/>", "<br/>", StringComparison.OrdinalIgnoreCase)}");
         sb2.AppendLine("/// </summary>");
         sb2.AppendLine($"{enumMemberName},");
         
@@ -250,7 +250,7 @@ public static class OpenRouterCodeGenerator
         double completionCost)
     {
         return "{ " +
-               $"OpenRouterModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})" +
+               FormattableString.Invariant($"OpenRouterModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
                "},";
     }
 
