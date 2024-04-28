@@ -17,7 +17,6 @@ public class AnthropicProvider(
     /// <summary>
     /// </summary>
     /// <param name="configuration"></param>
-    /// <param name="httpClientFactory"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
     public static AnthropicProvider FromConfiguration(AnthropicConfiguration configuration)

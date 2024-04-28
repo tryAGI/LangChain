@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace H.Generators;
 
-public static class CommonSteps
+internal static class CommonSteps
 {
     public static IncrementalValuesProvider<GeneratorAttributeSyntaxContext>
         ForAttributeWithMetadataName(

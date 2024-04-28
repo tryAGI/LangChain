@@ -4,6 +4,8 @@
     
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+        <NoWarn>$(NoWarn);CA2227;CA1002;CS3016;SYSLIB1034</NoWarn>
+        <SignAssembly>false</SignAssembly>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
         <ProjectReference Include="..\..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
         <ProjectReference Include="..\Anthropic.Generator\LangChain.Providers.Anthropic.Generators.csproj" ReferenceOutputAssembly="false" PackAsAnalyzer="true" />
         <None Include="..\Anthropic.Generator\bin\$(Configuration)\netstandard2.0\H.Generators.Extensions.dll" Pack="true" PackagePath="analyzers/dotnet" Visible="false" />

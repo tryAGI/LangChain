@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Anthropic.SDK.Messaging;
 using LangChain.Providers.Anthropic.Extensions;
 
@@ -6,13 +7,13 @@ namespace LangChain.Providers.Anthropic;
 
 /// <summary>
 /// </summary>
+[RequiresUnreferencedCode("Members from serialized types may be trimmed if not referenced directly")]
 public partial class AnthropicModel(
     AnthropicProvider provider,
     string id) : ChatModel(id), IPaidLargeLanguageModel
 {
     #region Properties
 
-    /// <inheritdoc />
     //public override int ContextLength => ApiHelpers.CalculateContextLength(Id);
 
     #endregion
@@ -103,7 +104,7 @@ public partial class AnthropicModel(
 
         while (CallToolsAutomatically && newMessage.IsToolMessage())
         {
-            await CallFunctionsAsync(newMessage, messages);
+            await CallFunctionsAsync(newMessage, messages, cancellationToken).ConfigureAwait(false);
 
             if (ReplyToToolCallsAutomatically)
             {
@@ -148,7 +149,7 @@ public partial class AnthropicModel(
         if (!string.IsNullOrEmpty(function.FunctionName))
         {
             var call = Calls[function.FunctionName];
-            var result = await call(function.Arguments.ToString(), cancellationToken);
+            var result = await call(function.Arguments?.ToString() ?? string.Empty, cancellationToken).ConfigureAwait(false);
             messages.Add(result.ToAnthropicToolResponseMessage(function.FunctionName));
         }
     }

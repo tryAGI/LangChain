@@ -1,15 +1,19 @@
-﻿using LangChain.Providers.Anthropic.Tools;
+﻿using System.Diagnostics.CodeAnalysis;
+using LangChain.Providers.Anthropic.Tools;
 
 namespace LangChain.Providers.Anthropic;
 
 public partial class AnthropicModel
 {
+    [RequiresUnreferencedCode("Members from serialized types may be trimmed if not referenced directly")]
     private string? GetSystemMessage()
     {
-        if (GlobalTools != null && GlobalTools.Count > 0)
+        if (GlobalTools.Count > 0)
         {
-            var tools = new AnthropicTools();
-            tools.Tools = GlobalTools;
+            var tools = new AnthropicTools
+            {
+                Tools = GlobalTools,
+            };
             var toolsString = tools.ToXml();
 
             return

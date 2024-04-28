@@ -54,7 +54,7 @@ public class GeneralTests
     
 
     [Test]
-    public async Task SerializeToolsToXml()
+    public void SerializeToolsToXml()
     {
         var anthropicTool = new AnthropicTool()
         {

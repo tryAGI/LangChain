@@ -301,7 +301,7 @@ question: who are 10 of the most popular superheros and what are their powers?";
 you are a comic book writer.  you will be given a question and you will answer it. 
 question: who are 10 of the most popular superheros and what are their powers?";
 
-        var embedding = await embeddings.CreateEmbeddingsAsync("prompt")
+        var embedding = await embeddings.CreateEmbeddingsAsync(prompt)
             .ConfigureAwait(false);
     }
 }
