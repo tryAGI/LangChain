@@ -4,5 +4,5 @@ namespace LangChain.Serve.Abstractions;
 
 public interface IConversationNameProvider
 {
-    public Task<string> GetConversationName(List<StoredMessage> messages);
+    public Task<string> GetConversationName(IReadOnlyCollection<StoredMessage> messages);
 }

@@ -3,7 +3,6 @@ using LangChain.Providers;
 using LangChain.Providers.Ollama;
 using LangChain.Serve;
 using LangChain.Serve.Abstractions.Repository;
-using LangChain.Serve.Classes;
 using static LangChain.Chains.Chain;
 using Message = LangChain.Providers.Message;
 
@@ -82,7 +81,7 @@ app.UseSwaggerUI(c =>
 app.Run();
 return;
 
-async Task<ConversationBufferMemory> ConvertToConversationBuffer(List<StoredMessage> list)
+async Task<ConversationBufferMemory> ConvertToConversationBuffer(IReadOnlyCollection<StoredMessage> list)
 {
     var conversationBufferMemory = new ConversationBufferMemory
     {

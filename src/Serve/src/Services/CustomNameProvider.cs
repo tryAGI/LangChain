@@ -3,9 +3,9 @@ using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Serve.Services;
 
-public class CustomNameProvider(Func<List<StoredMessage>, Task<string>> generator) : IConversationNameProvider
+public class CustomNameProvider(Func<IReadOnlyCollection<StoredMessage>, Task<string>> generator) : IConversationNameProvider
 {
-    public Task<string> GetConversationName(List<StoredMessage> messages)
+    public Task<string> GetConversationName(IReadOnlyCollection<StoredMessage> messages)
     {
         return generator(messages);
     }

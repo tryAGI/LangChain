@@ -10,7 +10,7 @@ namespace LangChain.Databases.Sqlite
     {
         public static IServiceCollection AddSQLiteConversationRepository(this IServiceCollection services, string connectionString)
         {
-            services.AddSingleton<IConversationRepository>(sp => new SQLiteConversationRepository(connectionString));
+            services.AddSingleton<IConversationRepository>(sp => new SqLiteConversationRepository(connectionString));
             return services;
         }
     }
