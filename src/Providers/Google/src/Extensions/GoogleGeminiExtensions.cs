@@ -5,15 +5,8 @@ using GenerativeAI.Types;
 
 namespace LangChain.Providers.Google.Extensions;
 
-public static class GoogleGeminiExtensions
+internal static class GoogleGeminiExtensions
 {
-    private static JsonSerializerOptions SerializerOptions => new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        Converters = { new JsonStringEnumConverter() },
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-    };
-
     public static bool IsFunctionCall(this EnhancedGenerateContentResponse response)
     {
         return response.GetFunction() != null;
@@ -34,6 +27,13 @@ public static class GoogleGeminiExtensions
         if (arguments == null)
             return string.Empty;
 
-        return JsonSerializer.Serialize(arguments, SerializerOptions);
+        return JsonSerializer.Serialize(arguments, SourceGenerationContext.Default.DictionaryStringObject);
     }
 }
+
+[JsonSourceGenerationOptions(
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    Converters = [typeof(JsonStringEnumConverter)])]
+[JsonSerializable(typeof(Dictionary<string, object>))]
+internal sealed partial class SourceGenerationContext : JsonSerializerContext;

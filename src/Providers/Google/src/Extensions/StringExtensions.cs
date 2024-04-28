@@ -47,7 +47,7 @@ public static class StringExtensions
     /// <summary>
     ///     To Model/Assistant Content
     /// </summary>
-    /// <param name="message">Serialized Arguments</param>
+    /// <param name="args">Serialized Arguments</param>
     /// <param name="functionName">Function name</param>
     /// <returns></returns>
     [CLSCompliant(false)]
@@ -58,7 +58,7 @@ public static class StringExtensions
             {
                 FunctionCall = new ChatFunctionCall
                 {
-                    Arguments = JsonSerializer.Deserialize<Dictionary<string, object>>(args),
+                    Arguments = JsonSerializer.Deserialize(args, SourceGenerationContext.Default.DictionaryStringObject),
                     Name = functionName
                 }
             }
@@ -69,7 +69,7 @@ public static class StringExtensions
     /// <summary>
     ///     To Model/Assistant Content
     /// </summary>
-    /// <param name="message">Serialized Arguments</param>
+    /// <param name="args">Serialized Arguments</param>
     /// <param name="functionName">Function name</param>
     /// <returns></returns>
     [CLSCompliant(false)]
