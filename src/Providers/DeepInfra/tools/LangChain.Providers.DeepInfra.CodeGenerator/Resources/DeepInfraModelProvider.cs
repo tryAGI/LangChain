@@ -12,6 +12,7 @@ public static class DeepInfraModelProvider
         {{DicAdd}}
     };
 
+    [CLSCompliant(false)]
     public static ChatModels GetModelById(DeepInfraModelIds modelId)
     {
         if (Models.TryGetValue(modelId, out var id))

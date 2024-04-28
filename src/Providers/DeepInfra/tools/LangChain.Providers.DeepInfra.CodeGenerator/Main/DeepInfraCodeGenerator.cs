@@ -63,7 +63,7 @@ public static class DeepInfraCodeGenerator
         var hashSet = new HashSet<string?>();
         do
         {
-            lbb.DocumentText = str;
+            lbb.DocumentText = str ?? string.Empty;
             var links = lbb.FindNode("script", "type", "json", true);
 
             if (links == null)
@@ -188,10 +188,10 @@ public static class DeepInfraCodeGenerator
     ///     Parses Model info from Deep Infra docs
     /// </summary>
     /// <param name="i"></param>
-    /// <param name="htmlNode"></param>
+    /// <param name="modelToken"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    private static ModelInfo? ParseModelInfo(int i, JToken modelToken, GenerationOptions options)
+    private static ModelInfo? ParseModelInfo(int i, JToken? modelToken, GenerationOptions options)
     {
         if (modelToken == null)
             return null;
@@ -217,7 +217,7 @@ public static class DeepInfraCodeGenerator
         var completionCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_output_token") ?? 0) * 10000,2);
 
         var description =
-            $"Name: {(string)modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>";
+            FormattableString.Invariant($"Name: {modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string?)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>");
 
         //Enum Member code with doc
         var enumMemberCode = GetEnumMemberCode(enumMemberName, description);
@@ -266,7 +266,7 @@ public static class DeepInfraCodeGenerator
         double completionCost)
     {
         return "{ " +
-               $"DeepInfraModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})" +
+               FormattableString.Invariant($"DeepInfraModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
                "},";
     }
 
@@ -318,7 +318,7 @@ public static class DeepInfraCodeGenerator
         
         var str = await GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
-        lbb.DocumentText = str;
+        lbb.DocumentText = str ?? string.Empty;
 
         var msg =
             lbb.FindNode("div", "class", "prose-slate", true) ??
@@ -361,7 +361,7 @@ public static class DeepInfraCodeGenerator
     private static async Task<string?> GetStringAsync(Uri uri, CancellationToken cancellationToken = default)
     {
         using var handler = new HttpClientHandler();
-        //handler.CheckCertificateRevocationList = true;
+        handler.CheckCertificateRevocationList = true;
         handler.AutomaticDecompression =
             DecompressionMethods.Deflate | DecompressionMethods.Brotli | DecompressionMethods.GZip;
         using var client = new HttpClient(handler);
