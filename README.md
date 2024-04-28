@@ -141,3 +141,9 @@ but projects based on this within the organization may have different licenses.
 Some documentation is based on documentation from [dotnet/docs](https://github.com/dotnet/docs/) repository 
 under [CC BY 4.0 license](https://github.com/dotnet/docs/blob/main/LICENSE), 
 where code examples are changed to code examples for using this project.  
+
+## Acknowledgments
+
+![JetBrains logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png)
+
+This project is supported by JetBrains through the [Open Source Support Program](https://jb.gg/OpenSourceSupport).
