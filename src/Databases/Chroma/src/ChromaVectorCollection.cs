@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LangChain.Databases.JsonConverters;
-using LangChain.Sources;
 using Microsoft.SemanticKernel.AI.Embeddings;
 using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
 using Microsoft.SemanticKernel.Memory;
@@ -9,87 +8,24 @@ using Microsoft.SemanticKernel.Memory;
 namespace LangChain.Databases.Chroma;
 
 /// <summary>
-/// ChromaDB vector store.
+/// ChromaDB vector collection.
 /// According: https://api.python.langchain.com/en/latest/_modules/langchain/vectorstores/chroma.html
 /// </summary>
-public class ChromaVectorStore : IVectorDatabaseExtended
+public class ChromaVectorCollection(
+    ChromaMemoryStore store,
+    string name = VectorCollection.DefaultName,
+    string? id = null)
+    : VectorCollection(name, id), IVectorCollection
 {
     // TODO: SemanticKernel impl doesn't support collection metadata. Need changes when moved to another impl
     //private Dictionary<string, string> CollectionMetadata { get; } = [];
 
-    private readonly ChromaMemoryStore _store;
-
-    private readonly ChromaClient _client;
-    private readonly string _collectionName;
-
-    public ChromaVectorStore(
-        HttpClient httpClient,
-        string endpoint,
-        string collectionName = VectorCollection.DefaultName)
-    {
-        _client = new ChromaClient(httpClient, endpoint);
-
-        _collectionName = collectionName;
-
-        _store = new ChromaMemoryStore(_client);
-    }
-
-    /// <inheritdoc />
-    public async Task<VectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var collection = await _client.GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Collection not found");
-        
-            return new VectorCollection
-            {
-                Id = collection.Id,
-                Name = collection.Name
-            };
-        }
-        catch (Exception exception)
-        {
-            throw new InvalidOperationException("Collection not found", innerException: exception);
-        }
-    }
-
-    /// <inheritdoc />
-    public async Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default)
-    {
-        await foreach (var name in _client.ListCollectionsAsync(cancellationToken).ConfigureAwait(false))
-        {
-            if (name == collectionName)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <inheritdoc />
-    public async Task<VectorCollection> GetOrCreateCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
-    {
-        if (!await IsCollectionExistsAsync(_collectionName, cancellationToken).ConfigureAwait(false))
-        {
-            await _client.CreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
-        }
-
-        return await GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <inheritdoc />
-    public async Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
-    {
-        await _store.DeleteCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
-    }
-
     /// <summary>
     /// Get collection
     /// </summary>
-    public async Task<VectorSearchItem?> GetItemByIdAsync(string collectionName, string id, CancellationToken cancellationToken = default)
+    public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        var record = await _store.GetAsync(collectionName, id, withEmbedding: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var record = await store.GetAsync(Name, id, withEmbedding: true, cancellationToken: cancellationToken).ConfigureAwait(false);
         if (record == null)
         {
             return null;
@@ -98,7 +34,7 @@ public class ChromaVectorStore : IVectorDatabaseExtended
         var text = record.Metadata.Text;
         var metadata = DeserializeMetadata(record.Metadata);
 
-        return new VectorSearchItem
+        return new Vector
         {
             Text = text,
             Metadata = metadata,
@@ -110,7 +46,7 @@ public class ChromaVectorStore : IVectorDatabaseExtended
         IEnumerable<string> ids,
         CancellationToken cancellationToken = default)
     {
-        await _store.RemoveBatchAsync(_collectionName, ids, cancellationToken).ConfigureAwait(false);
+        await store.RemoveBatchAsync(Name, ids, cancellationToken).ConfigureAwait(false);
 
         return true;
     }
@@ -139,7 +75,7 @@ public class ChromaVectorStore : IVectorDatabaseExtended
 
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(
-        IReadOnlyCollection<VectorSearchItem> items,
+        IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
@@ -166,10 +102,8 @@ public class ChromaVectorStore : IVectorDatabaseExtended
             );
         }
 
-        _ = await GetOrCreateCollectionAsync(_collectionName, cancellationToken).ConfigureAwait(false);
-        
         var resultIds = new List<string>(items.Count);
-        var resultIdsIterator = _store.UpsertBatchAsync(_collectionName, records, cancellationToken);
+        var resultIdsIterator = store.UpsertBatchAsync(Name, records, cancellationToken);
         await foreach (var item in resultIdsIterator.ConfigureAwait(false))
         {
             resultIds.Add(item);
@@ -189,9 +123,9 @@ public class ChromaVectorStore : IVectorDatabaseExtended
         
         settings.RelevanceScoreFunc ??= SelectRelevanceScoreFn;
         
-        var matches = await _store
+        var matches = await store
             .GetNearestMatchesAsync(
-                collectionName: _collectionName,
+                collectionName: Name,
                 embedding: new Embedding<float>(request.Embeddings.First()),
                 limit: settings.NumberOfResults,
                 cancellationToken: cancellationToken)
@@ -206,7 +140,7 @@ public class ChromaVectorStore : IVectorDatabaseExtended
                     var text = record.Item1.Metadata.Text;
                     var metadata = DeserializeMetadata(record.Item1.Metadata);
 
-                    return new VectorSearchItem
+                    return new Vector
                     {
                         Id = record.Item1.Metadata.Id,
                         Text = text,

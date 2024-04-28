@@ -134,7 +134,7 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
 
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(
-        IReadOnlyCollection<VectorSearchItem> items,
+        IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
@@ -183,7 +183,7 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
         
         return new VectorSearchResponse
         {
-            Items = documents.Select(d => new VectorSearchItem
+            Items = documents.Select(d => new Vector
             {
                 Text = d.Item1.PageContent,
                 Metadata = d.Item1.Metadata,

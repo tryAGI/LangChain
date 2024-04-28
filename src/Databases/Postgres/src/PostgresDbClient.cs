@@ -154,7 +154,7 @@ DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timest
                 : (object)DBNull.Value;
             cmd.Parameters.AddWithValue("@metadata", NpgsqlDbType.Jsonb, metadataString);
 
-            var vector = embedding != null ? new Vector(embedding.Value) : (object)DBNull.Value;
+            var vector = embedding != null ? new Pgvector.Vector(embedding.Value) : (object)DBNull.Value;
             cmd.Parameters.AddWithValue("@embedding", vector);
             cmd.Parameters.AddWithValue("@timestamp", NpgsqlDbType.TimestampTz, timestamp ?? (object)DBNull.Value);
 
@@ -251,7 +251,7 @@ WHERE score >= @min_relevance_score
 ORDER BY score DESC
 LIMIT @limit";
 
-            cmd.Parameters.AddWithValue("@embedding", new Vector(embedding));
+            cmd.Parameters.AddWithValue("@embedding", new Pgvector.Vector(embedding));
             cmd.Parameters.AddWithValue("@collection", tableName);
             cmd.Parameters.AddWithValue("@min_relevance_score", minRelevanceScore);
             cmd.Parameters.AddWithValue("@limit", limit);
@@ -441,11 +441,11 @@ WHERE id = ANY(@ids)";
             .GetFieldValueAsync<DateTime?>(dataReader.GetOrdinal("timestamp"), cancellationToken)
             .ConfigureAwait(false);
 
-        Vector? embedding = null;
+        Pgvector.Vector? embedding = null;
         if (withEmbeddings)
         {
             embedding = await dataReader
-                .GetFieldValueAsync<Vector>(dataReader.GetOrdinal("embedding"), cancellationToken)
+                .GetFieldValueAsync<Pgvector.Vector>(dataReader.GetOrdinal("embedding"), cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -468,5 +468,5 @@ public record EmbeddingTableRecord(
     string Id,
     string Content,
     Dictionary<string, object>? Metadata,
-    Vector? Embedding,
+    Pgvector.Vector? Embedding,
     DateTime? DateTime);

@@ -25,7 +25,7 @@ public class PostgresVectorDatabase(
 
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(
-        IReadOnlyCollection<VectorSearchItem> items,
+        IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
@@ -119,7 +119,7 @@ public class PostgresVectorDatabase(
         return new VectorSearchResponse
         {
             Items = records
-                .Select(r => new VectorSearchItem
+                .Select(r => new Vector
                 {
                     Text = r.Item1.Content,
                     Metadata = r.Item1.Metadata,

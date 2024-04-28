@@ -36,7 +36,7 @@ public class OpenSearchVectorStore : IVectorDatabase
 
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(
-        IReadOnlyCollection<VectorSearchItem> items,
+        IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
@@ -102,7 +102,7 @@ public class OpenSearchVectorStore : IVectorDatabase
         {
             Items = searchResponse.Documents
                 .Where(vectorRecord => !string.IsNullOrWhiteSpace(vectorRecord.Text))
-                .Select(vectorRecord => new VectorSearchItem
+                .Select(vectorRecord => new Vector
                 {
                     Text = vectorRecord.Text ?? string.Empty,
                     Id = vectorRecord.Id,

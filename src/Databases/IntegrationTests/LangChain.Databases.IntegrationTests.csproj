@@ -7,19 +7,19 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
-      <ProjectReference Include="..\AzureCognitiveSearch\src\LangChain.Databases.AzureCognitiveSearch.csproj" />
-      <ProjectReference Include="..\AzureSearch\src\LangChain.Databases.AzureSearch.csproj" />
+<!--      <ProjectReference Include="..\AzureCognitiveSearch\src\LangChain.Databases.AzureCognitiveSearch.csproj" />-->
+<!--      <ProjectReference Include="..\AzureSearch\src\LangChain.Databases.AzureSearch.csproj" />-->
       <ProjectReference Include="..\Chroma\src\LangChain.Databases.Chroma.csproj" />
-      <ProjectReference Include="..\DuckDb\src\LangChain.Databases.DuckDb.csproj" />
+<!--      <ProjectReference Include="..\DuckDb\src\LangChain.Databases.DuckDb.csproj" />-->
       <ProjectReference Include="..\InMemory\src\LangChain.Databases.InMemory.csproj" />
-      <ProjectReference Include="..\Kendra\src\LangChain.Databases.Kendra.csproj" />
-      <ProjectReference Include="..\OpenSearch\src\LangChain.Databases.OpenSearch.csproj" />
-      <ProjectReference Include="..\Pinecone\src\LangChain.Databases.Pinecone.csproj" />
-      <ProjectReference Include="..\Postgres\src\LangChain.Databases.Postgres.csproj" />
-      <ProjectReference Include="..\Qdrant\src\LangChain.Databases.Qdrant.csproj" />
-      <ProjectReference Include="..\Redis\src\LangChain.Databases.Redis.csproj" />
-      <ProjectReference Include="..\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
-      <ProjectReference Include="..\Weaviate\src\LangChain.Databases.Weaviate.csproj" />
+<!--      <ProjectReference Include="..\Kendra\src\LangChain.Databases.Kendra.csproj" />-->
+<!--      <ProjectReference Include="..\OpenSearch\src\LangChain.Databases.OpenSearch.csproj" />-->
+<!--      <ProjectReference Include="..\Pinecone\src\LangChain.Databases.Pinecone.csproj" />-->
+<!--      <ProjectReference Include="..\Postgres\src\LangChain.Databases.Postgres.csproj" />-->
+<!--      <ProjectReference Include="..\Qdrant\src\LangChain.Databases.Qdrant.csproj" />-->
+<!--      <ProjectReference Include="..\Redis\src\LangChain.Databases.Redis.csproj" />-->
+<!--      <ProjectReference Include="..\Sqlite\src\LangChain.Databases.Sqlite.csproj" />-->
+<!--      <ProjectReference Include="..\Weaviate\src\LangChain.Databases.Weaviate.csproj" />-->
     </ItemGroup>
 
     <ItemGroup>

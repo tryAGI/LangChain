@@ -6,21 +6,23 @@
 /// <remarks>
 /// 
 /// </remarks>
+/// <param name="name"></param>
 /// <param name="distanceMetrics"></param>
-public class InMemoryVectorStore(
+public class InMemoryVectorCollection(
+    string name = VectorCollection.DefaultName,
     EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
-    : IVectorDatabase
+    : VectorCollection(name), IVectorCollection
 {
     private readonly Func<float[], float[], float> _distanceFunction =
         distanceMetrics == EDistanceMetrics.Euclidean
             ? DistanceFunctions.Euclidean
             : DistanceFunctions.Manhattan;
 
-    private readonly Dictionary<string, VectorSearchItem> _storage = [];
+    private readonly Dictionary<string, Vector> _storage = [];
 
     /// <inheritdoc />
     public Task<IReadOnlyCollection<string>> AddAsync(
-        IReadOnlyCollection<VectorSearchItem> items,
+        IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
@@ -64,7 +66,7 @@ public class InMemoryVectorStore(
         return Task.FromResult(new VectorSearchResponse
         {
             Items = _storage
-                .Select(d => new VectorSearchItem
+                .Select(d => new Vector
                 {
                     Text = d.Value.Text,
                     Metadata = d.Value.Metadata,
@@ -74,5 +76,11 @@ public class InMemoryVectorStore(
                 .Take(settings.NumberOfResults)
                 .ToArray(),
         });
+    }
+
+    /// <inheritdoc />
+    public Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(_storage.GetValueOrDefault(id));
     }
 }

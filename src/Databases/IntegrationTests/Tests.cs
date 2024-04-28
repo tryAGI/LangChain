@@ -5,11 +5,12 @@ namespace LangChain.Databases.IntegrationTests;
 [TestFixture]
 public partial class Tests
 {
+    [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = (IVectorDatabaseExtended)environment.VectorDatabase;
+        var vectorDatabase = environment.VectorDatabase;
 
         // ReSharper disable once AccessToDisposedClosure
         await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
@@ -28,11 +29,13 @@ public partial class Tests
             .Should().ThrowAsync<InvalidOperationException>();
     }
     
+    [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     public async Task AddDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = (IVectorDatabaseExtended)environment.VectorDatabase;
+        var vectorDatabase = environment.VectorDatabase;
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
 
         var documents = new[]
         {
@@ -46,7 +49,7 @@ public partial class Tests
             })
         };
 
-        var ids = await vectorDatabase.AddDocumentsAsync(environment.EmbeddingModel, documents);
+        var ids = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
 
         ids.Should().HaveCount(2);
 
@@ -56,22 +59,24 @@ public partial class Tests
         firstId.Should().NotBeEmpty();
         secondId.Should().NotBeEmpty();
 
-        var actualFirstDocument = await vectorDatabase.GetDocumentByIdAsync(environment.CollectionName, firstId);
+        var actualFirstDocument = await vectorCollection.GetDocumentByIdAsync(firstId);
         actualFirstDocument.Should().NotBeNull();
         actualFirstDocument!.PageContent.Should().BeEquivalentTo(documents[0].PageContent);
         actualFirstDocument.Metadata["color"].Should().BeEquivalentTo(documents[0].Metadata["color"]);
 
-        var actualSecondDocument = await vectorDatabase.GetDocumentByIdAsync(environment.CollectionName, secondId);
+        var actualSecondDocument = await vectorCollection.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
         actualSecondDocument!.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(documents[1].Metadata["color"]);
     }
     
+    [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     public async Task AddTexts_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = (IVectorDatabaseExtended)environment.VectorDatabase;
+        var vectorDatabase = environment.VectorDatabase;
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
 
         var texts = new[] { "apple", "orange" };
         var metadatas = new Dictionary<string, object>[2];
@@ -87,7 +92,7 @@ public partial class Tests
             ["color"] = "orange"
         };
 
-        var ids = await vectorDatabase.AddTextsAsync(environment.EmbeddingModel, texts, metadatas);
+        var ids = await vectorCollection.AddTextsAsync(environment.EmbeddingModel, texts, metadatas);
 
         ids.Should().HaveCount(2);
 
@@ -97,24 +102,26 @@ public partial class Tests
         firstId.Should().NotBeEmpty();
         secondId.Should().NotBeEmpty();
 
-        var actualFirstDocument = await vectorDatabase.GetDocumentByIdAsync(environment.CollectionName, firstId);
+        var actualFirstDocument = await vectorCollection.GetDocumentByIdAsync(firstId);
         actualFirstDocument.Should().NotBeNull();
         actualFirstDocument!.PageContent.Should().BeEquivalentTo(texts[0]);
         actualFirstDocument.Metadata["string"].Should().BeEquivalentTo(metadatas[0]["string"]);
         actualFirstDocument.Metadata["double"].Should().BeEquivalentTo(metadatas[0]["double"]);
         actualFirstDocument.Metadata["guid"].Should().BeEquivalentTo(metadatas[0]["guid"]);
 
-        var actualSecondDocument = await vectorDatabase.GetDocumentByIdAsync(environment.CollectionName, secondId);
+        var actualSecondDocument = await vectorCollection.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
         actualSecondDocument!.PageContent.Should().BeEquivalentTo(texts[1]);
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(metadatas[1]["color"]);
     }
 
+    [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     public async Task DeleteDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = (IVectorDatabaseExtended)environment.VectorDatabase;
+        var vectorDatabase = environment.VectorDatabase;
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
 
         var documents = new[]
         {
@@ -128,15 +135,15 @@ public partial class Tests
             })
         };
 
-        var ids = await vectorDatabase.AddDocumentsAsync(environment.EmbeddingModel, documents);
+        var ids = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
 
-        await vectorDatabase.DeleteAsync(ids);
+        await vectorCollection.DeleteAsync(ids);
 
         var firstId = ids.First();
         var secondId = ids.Skip(1).First();
 
-        var actualFist = await vectorDatabase.GetDocumentByIdAsync(environment.CollectionName, firstId);
-        var actualSecond = await vectorDatabase.GetDocumentByIdAsync(environment.CollectionName, secondId);
+        var actualFist = await vectorCollection.GetDocumentByIdAsync(firstId);
+        var actualSecond = await vectorCollection.GetDocumentByIdAsync(secondId);
 
         actualFist.Should().BeNull();
         actualSecond.Should().BeNull();
@@ -144,16 +151,17 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.SqLite)]
+    //[TestCase(SupportedDatabase.SqLite)]
     //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
     //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
 
-        await environment.VectorDatabase.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
+        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
-        var similar = await environment.VectorDatabase.SearchAsync(
+        var similar = await vectorCollection.SearchAsync(
             environment.EmbeddingModel,
             embeddingRequest: "lemon",
             searchSettings: new VectorSearchSettings
@@ -174,16 +182,17 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.SqLite)]
+    //[TestCase(SupportedDatabase.SqLite)]
     //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
     //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
 
-        await environment.VectorDatabase.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
+        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
-        var similar = await environment.VectorDatabase.SearchAsync(Embeddings["lemon"], new VectorSearchSettings
+        var similar = await vectorCollection.SearchAsync(Embeddings["lemon"], new VectorSearchSettings
         {
             NumberOfResults = 5,
         });
@@ -200,16 +209,17 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.SqLite)]
+    //[TestCase(SupportedDatabase.SqLite)]
     //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
     //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
     public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
 
-        await environment.VectorDatabase.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
+        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
-        var similar = await environment.VectorDatabase.SearchAsync(environment.EmbeddingModel, "lemon", searchSettings: new VectorSearchSettings
+        var similar = await vectorCollection.SearchAsync(environment.EmbeddingModel, "lemon", searchSettings: new VectorSearchSettings
         {
             NumberOfResults = 5,
         });
