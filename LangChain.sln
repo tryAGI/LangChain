@@ -42,6 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\open-router.yml = .github\workflows\open-router.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\workflows\together.yml = .github\workflows\together.yml
+		.github\workflows\deep-infra.yml = .github\workflows\deep-infra.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
