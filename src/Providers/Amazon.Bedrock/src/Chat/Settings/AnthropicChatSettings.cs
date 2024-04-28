@@ -9,7 +9,7 @@ public class AnthropicChatSettings : BedrockChatSettings
         User = ChatSettings.Default.User,
         UseStreaming = false,
         Temperature = 0.7,
-        MaxTokens = 100_000,
+        MaxTokens = 4000,
         TopP = 0.9,
         TopK = 0.0
     };

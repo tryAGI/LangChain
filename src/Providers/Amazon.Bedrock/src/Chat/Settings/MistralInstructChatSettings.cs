@@ -9,7 +9,7 @@ public class MistralInstructChatSettings : BedrockChatSettings
         User = ChatSettings.Default.User,
         UseStreaming = false,
         Temperature = 0.5,
-        MaxTokens = 30_000,
+        MaxTokens = 4000,
         TopP = 0.9,
         TopK = 50.0
     };
