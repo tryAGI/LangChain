@@ -59,6 +59,7 @@ public partial class OpenAiChatModel(
         }
     }
 
+    [CLSCompliant(false)]
     protected virtual global::OpenAI.Chat.Message ToRequestMessage(Message message)
     {
         switch (message.Role)
