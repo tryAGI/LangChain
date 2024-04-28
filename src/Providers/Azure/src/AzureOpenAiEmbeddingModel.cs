@@ -13,7 +13,9 @@ public class AzureOpenAiEmbeddingModel(
 {
     #region Properties
 
-    /// <inheritdoc cref="OpenAiConfiguration.EmbeddingModelId"/>
+    /// <summary>
+    /// 
+    /// </summary>
     public string EmbeddingModelId { get; init; } = EmbeddingModels.Ada002;
 
     /// <summary>

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <NoWarn>$(NoWarn);NETSDK1206</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

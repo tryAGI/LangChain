@@ -28,7 +28,7 @@ public class BedrockEmbeddingSettings : EmbeddingSettings
     /// <param name="providerSettings"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public new static BedrockEmbeddingSettings Calculate(
+    public static BedrockEmbeddingSettings Calculate(
         EmbeddingSettings? requestSettings,
         EmbeddingSettings? modelSettings,
         EmbeddingSettings? providerSettings)

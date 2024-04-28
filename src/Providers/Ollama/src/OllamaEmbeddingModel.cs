@@ -13,8 +13,7 @@ public class OllamaEmbeddingModel(
     /// </summary>
     public OllamaProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
 
-    /// <inheritdoc/>
-    public int MaximumInputLength => 0;
+    //public int MaximumInputLength => 0;
 
     /// <inheritdoc />
     public async Task<EmbeddingResponse> CreateEmbeddingsAsync(

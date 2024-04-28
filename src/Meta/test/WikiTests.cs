@@ -89,7 +89,7 @@ AI:";
         while (true)
         {
             Console.Write("Human: ");
-            var input = Console.ReadLine();
+            var input = Console.ReadLine() ?? string.Empty;
             if (input == "exit")
                 break;
 

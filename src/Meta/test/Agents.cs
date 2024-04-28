@@ -33,8 +33,8 @@ public class Agents
 {
     public Agents(IChatModel model)
     {
-        var googleKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
-        var googleCx = Environment.GetEnvironmentVariable("GOOGLE_API_CX");
+        var googleKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? throw new InvalidOperationException("GOOGLE_API_KEY is not set");
+        var googleCx = Environment.GetEnvironmentVariable("GOOGLE_API_CX") ?? throw new InvalidOperationException("GOOGLE_API_CX is not set");
 
         TravelAgent = new CrewAgent(
             model: model,
