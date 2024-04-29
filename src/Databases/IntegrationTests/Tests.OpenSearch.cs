@@ -1,5 +1,4 @@
-﻿using LangChain.Databases.OpenSearch;
-using LangChain.Providers;
+﻿using LangChain.Providers;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
@@ -8,53 +7,31 @@ using static LangChain.Chains.Chain;
 
 namespace LangChain.Databases.IntegrationTests;
 
-//
-// docker run -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" -e "plugins.security.disabled=true" -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=<custom-admin-password>" opensearchproject/opensearch:latest
-//
 public partial class Tests
 {
-    private string? _indexName;
-    private OpenSearchVectorDatabaseOptions? _options;
-    private OpenSearchVectorDatabase? _vectorDatabase;
-    private BedrockProvider? _provider;
-    private IEmbeddingModel? _embeddingModel;
-    private int _dimensions = 1536;
-
     #region Query Images
 
-    public void setup_image_tests()
+    private static async Task<TestEnvironment> SetupImageTestsAsync()
     {
-        _indexName = "images-index";
-        var username = Environment.GetEnvironmentVariable("OPENSEARCH_USERNAME");
-        var endpoint = Environment.GetEnvironmentVariable("OPENSEARCH_URI");
-        var uri = new Uri(endpoint!);
-        //var uri = new Uri("http://localhost:9200");
-        var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
-        _options = new OpenSearchVectorDatabaseOptions
-        {
-            ConnectionUri = uri,
-            Username = username,
-            Password = password,
-        };
-        _dimensions = 1024;
-
-        _provider = new BedrockProvider();
-        _embeddingModel = new TitanEmbedImageV1Model(_provider)
+        var environment = await StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
+        environment.Dimensions = 1024;
+        environment.EmbeddingModel = new TitanEmbedImageV1Model(new BedrockProvider())
         {
             Settings = new BedrockEmbeddingSettings
             {
-                Dimensions = _dimensions
+                Dimensions = environment.Dimensions,
             }
         };
-        _vectorDatabase = new OpenSearchVectorDatabase(_options);
+
+        return environment;
     }
 
     [Test]
     [Explicit]
     public async Task index_test_images()
     {
-        setup_image_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupImageTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
         string[] extensions = { ".bmp",".gif", ".jpg", ".jpeg", ".png", ".tiff" };
         var files = Directory.EnumerateFiles(@"[images directory]", "*.*", SearchOption.AllDirectories)
@@ -66,7 +43,7 @@ public partial class Tests
 
         foreach (BinaryData image in images)
         {
-            var model = new Claude3HaikuModel(_provider!);
+            var model = new Claude3HaikuModel(new BedrockProvider());
             var message = new Message(" \"what's this an image of and describe the details?\"", MessageRole.Human);
 
             var chatRequest = ChatRequest.ToChatRequest(message);
@@ -77,7 +54,7 @@ public partial class Tests
             var document = new Document
             {
                 PageContent = response,
-                Metadata = new Dictionary<string, object>()
+                Metadata = new Dictionary<string, object>
                 {
                     {response, image}
                 }
@@ -86,15 +63,15 @@ public partial class Tests
             documents.Add(document);
         }
 
-        var pages = await vectorCollection.AddDocumentsAsync(_embeddingModel!, documents);
+        var pages = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
     }
 
     [Test]
     [Explicit]
     public async Task can_query_image_against_images()
     {
-        setup_image_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupImageTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
       
         var path = Path.Combine(Path.GetTempPath(), "test_image.jpg");
         var imageData = await File.ReadAllBytesAsync(path);
@@ -105,7 +82,7 @@ public partial class Tests
             Strings = new List<string>(),
             Images = new List<Data> { Data.FromBytes(binaryData.ToArray()) }
         };
-        var embedding = await _embeddingModel!.CreateEmbeddingsAsync(embeddingRequest)
+        var embedding = await environment.EmbeddingModel.CreateEmbeddingsAsync(embeddingRequest)
             .ConfigureAwait(false);
 
         var floats = embedding.ToSingleArray();
@@ -118,10 +95,10 @@ public partial class Tests
     [Explicit]
     public async Task can_query_text_against_images()
     {
-        setup_image_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupImageTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
-        var llm = new Claude3SonnetModel(_provider!);
+        var llm = new Claude3SonnetModel(new BedrockProvider());
 
         var promptText =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
@@ -133,7 +110,7 @@ Helpful Answer:";
 
         var chain =
             Set("tell me about the orange shirt", outputKey: "question")                     // set the question
-            | RetrieveDocuments(vectorCollection, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
+            | RetrieveDocuments(vectorCollection, environment.EmbeddingModel, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
@@ -146,39 +123,27 @@ Helpful Answer:";
 
     #region Query Simple Documents
 
-    public void setup_document_tests()
+    private static async Task<TestEnvironment> SetupDocumentTestsAsync()
     {
-        _indexName = "test-index";
-        var username = Environment.GetEnvironmentVariable("OPENSEARCH_USERNAME");
-        var endpoint = Environment.GetEnvironmentVariable("OPENSEARCH_URI");
-        var uri = new Uri(endpoint!);
-        //var uri = new Uri("http://localhost:9200");
-        var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
-        _options = new OpenSearchVectorDatabaseOptions
-        {
-            ConnectionUri = uri,
-            Username = username,
-            Password = password,
-        };
-        _dimensions = 1536;
-
-        _provider = new BedrockProvider();
-        _embeddingModel = new TitanEmbedTextV1Model(_provider)
+        var environment = await StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
+        environment.Dimensions = 1536;
+        environment.EmbeddingModel = new TitanEmbedTextV1Model(new BedrockProvider())
         {
             Settings = new BedrockEmbeddingSettings
             {
-                Dimensions = _dimensions
+                Dimensions = environment.Dimensions,
             }
         };
-        _vectorDatabase = new OpenSearchVectorDatabase(_options);
-    }
 
+        return environment;
+    }
+    
     [Test]
     [Explicit]
     public async Task index_test_documents()
     {
-        setup_document_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupDocumentTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
         var documents = new[]
         {
@@ -189,7 +154,7 @@ Helpful Answer:";
             "It is cold in space",
         }.ToDocuments();
 
-        var pages = await vectorCollection.AddDocumentsAsync(_embeddingModel!, documents);
+        var pages = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
         Console.WriteLine("pages: " + pages.Count());
     }
 
@@ -197,10 +162,10 @@ Helpful Answer:";
     [Explicit]
     public async Task can_query_test_documents()
     {
-        setup_document_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupDocumentTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
-        var llm = new Claude3SonnetModel(_provider!);
+        var llm = new Claude3SonnetModel(new BedrockProvider());
 
         const string question = "what color is the car?";
 
@@ -213,7 +178,7 @@ Question: {question}
 Helpful Answer:";
         var chain =
             Set(question, outputKey: "question")
-            | RetrieveDocuments(vectorCollection, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 2)
+            | RetrieveDocuments(vectorCollection, environment.EmbeddingModel, inputKey: "question", outputKey: "documents", amount: 2)
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(promptText)
             | LLM(llm);
@@ -231,13 +196,13 @@ Helpful Answer:";
     [Explicit]
     public async Task index_harry_potter_book()
     {
-        setup_document_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupDocumentTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
         var pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
 
-        var pages = await vectorCollection.AddDocumentsAsync(_embeddingModel!, documents);
+        var pages = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
         Console.WriteLine("pages: " + pages.Count());
     }
 
@@ -245,10 +210,10 @@ Helpful Answer:";
     [Explicit]
     public async Task can_query_harry_potter_book()
     {
-        setup_document_tests();
-        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
+        await using var environment = await SetupDocumentTestsAsync();
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
-        var llm = new Claude3SonnetModel(_provider!);
+        var llm = new Claude3SonnetModel(new BedrockProvider());
 
         var promptText =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
@@ -263,7 +228,7 @@ Helpful Answer:";
             //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
             // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
             Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
-            | RetrieveDocuments(vectorCollection, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
+            | RetrieveDocuments(vectorCollection, environment.EmbeddingModel, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
