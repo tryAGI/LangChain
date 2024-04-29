@@ -173,7 +173,7 @@ public partial class Tests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
-    [TestCase(SupportedDatabase.Postgres, Explicit = true)]
+    [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
     {
@@ -204,7 +204,7 @@ public partial class Tests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
-    [TestCase(SupportedDatabase.Postgres, Explicit = true)]
+    [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
     {
@@ -231,7 +231,7 @@ public partial class Tests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
-    [TestCase(SupportedDatabase.Postgres, Explicit = true)]
+    [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)
     {
