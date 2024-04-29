@@ -92,7 +92,7 @@ public class StuffDocumentsChainTests
 
         mock.Setup(x => x
                 .PredictAsync(It.IsAny<ChainValues>(), It.IsAny<CancellationToken>()))
-            .Returns<ChainValues>(_ => Task.FromResult((object)"predict response"));
+            .Returns<ChainValues, CancellationToken>((_, _) => Task.FromResult((object)"predict response"));
         
         mock.Setup(x => x.InputKeys)
             .Returns(Array.Empty<string>());

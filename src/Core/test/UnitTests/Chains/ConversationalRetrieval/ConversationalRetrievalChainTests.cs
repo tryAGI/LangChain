@@ -22,7 +22,7 @@ public class ConversationalRetrievalChainTests
         var combineDocsChainMock = new Mock<BaseCombineDocumentsChain>(combineDocumentsChainInput);
         combineDocsChainMock.Setup(x => x
                 .RunAsync(It.IsAny<Dictionary<string, object>>(), It.IsAny<ICallbacks?>(), It.IsAny<CancellationToken>()))
-            .Returns<Dictionary<string, object>, ICallbacks>((_, _) => Task.FromResult("Alice"));
+            .Returns<Dictionary<string, object>, ICallbacks, CancellationToken>((_, _, _) => Task.FromResult("Alice"));
 
         var retrieverMock = new Mock<BaseRetriever>();
         retrieverMock
@@ -35,7 +35,7 @@ public class ConversationalRetrievalChainTests
                     It.IsAny<List<string>>(),
                     It.IsAny<Dictionary<string, object>>(),
                     It.IsAny<CancellationToken>()))
-            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>>((_, _, _, _, _, _) =>
+            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>, CancellationToken>((_, _, _, _, _, _, _) =>
             {
                 var docs = new List<Document>
                 {

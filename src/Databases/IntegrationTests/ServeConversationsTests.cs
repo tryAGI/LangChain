@@ -1,4 +1,5 @@
 using LangChain.Databases.Sqlite;
+using LangChain.Serve.Abstractions;
 using LangChain.Serve.Abstractions.Repository;
 
 namespace LangChain.Databases.IntegrationTests;
@@ -9,7 +10,7 @@ public class ServeConversationsTests
     [Test]
     public async Task Test1()
     {
-        var repository = new SqLiteConversationRepository("Data Source=:memory:;");
+        IConversationRepository repository = new SqLiteConversationRepository("Data Source=:memory:;");
             
         // setup
         var conversation = await repository.CreateConversation("test");

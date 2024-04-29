@@ -39,8 +39,8 @@ public class MapReduceDocumentsChainTests
                     It.IsAny<IReadOnlyList<Document>>(),
                     It.IsAny<IReadOnlyDictionary<string, object>>(),
                     It.IsAny<CancellationToken>()))
-            .Returns<IReadOnlyList<Document>, IReadOnlyDictionary<string, object>>(
-                (docs, otherKeys) =>
+            .Returns<IReadOnlyList<Document>, IReadOnlyDictionary<string, object>, CancellationToken>(
+                (docs, otherKeys, _) =>
                     Task.FromResult(("mapreduced", new Dictionary<string, object>())));
 
         var input = new MapReduceDocumentsChainInput
@@ -94,7 +94,7 @@ public class MapReduceDocumentsChainTests
 
         mock.Setup(x => x
                 .ApplyAsync(It.IsAny<IReadOnlyList<ChainValues>>(), It.IsAny<CancellationToken>()))
-            .Returns<IReadOnlyList<ChainValues>>(values =>
+            .Returns<IReadOnlyList<ChainValues>, CancellationToken>((values, _) =>
             {
                 var result = values
                     .Select(value => new ChainValues(outputKey, predict(value)))

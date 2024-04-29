@@ -60,7 +60,7 @@ public class RetrievalQaChainTests
                     It.IsAny<List<string>>(),
                     It.IsAny<Dictionary<string, object>>(),
                     It.IsAny<CancellationToken>()))
-            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>>((query, _, _, _, _, _) =>
+            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>, CancellationToken>((query, _, _, _, _, _, _) =>
             {
                 var docs = new List<Document>
                 {
@@ -81,7 +81,7 @@ public class RetrievalQaChainTests
 
         mock.Setup(x => x
                 .RunAsync(It.IsAny<Dictionary<string, object>>(), It.IsAny<ICallbacks?>(), It.IsAny<CancellationToken>()))
-            .Returns<Dictionary<string, object>, ICallbacks>((input, _) => Task.FromResult("answer"));
+            .Returns<Dictionary<string, object>, ICallbacks, CancellationToken>((input, _, _) => Task.FromResult("answer"));
 
         return mock;
     }

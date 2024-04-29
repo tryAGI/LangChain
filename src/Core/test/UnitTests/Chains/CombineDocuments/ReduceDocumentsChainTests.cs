@@ -85,7 +85,7 @@ public class ReduceDocumentsChainTests
 
         mock.Setup(x => x
                 .PredictAsync(It.IsAny<ChainValues>(), It.IsAny<CancellationToken>()))
-            .Returns<ChainValues>(value => Task.FromResult((object)predict(value)));
+            .Returns<ChainValues, CancellationToken>((value, _) => Task.FromResult((object)predict(value)));
 
         mock.Setup(x => x.Prompt)
             .Returns(promptTemplate);

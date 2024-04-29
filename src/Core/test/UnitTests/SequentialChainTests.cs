@@ -99,7 +99,7 @@ public class SequentialChainTests
                 It.IsAny<List<string>>(),
                 It.IsAny<Dictionary<string, object>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns<IChainValues, CallbackManager?, List<string>, Dictionary<string, object>>((chainValues, _, _, _) =>
+            .Returns<IChainValues, CallbackManager?, List<string>, Dictionary<string, object>, CancellationToken>((chainValues, _, _, _, _) =>
             {
                 var output = new ChainValues();
 
