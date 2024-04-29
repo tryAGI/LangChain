@@ -22,7 +22,7 @@ public static class VectorCollectionExtensions
     }
 
     /// <summary>
-    /// Return docs most similar to query.
+    /// Return documents most similar to query.
     /// </summary>
     /// <param name="vectorCollection"></param>
     /// <param name="embeddingModel"></param>
@@ -41,7 +41,13 @@ public static class VectorCollectionExtensions
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
+        searchSettings ??= new VectorSearchSettings();
+
+        if (searchSettings is { Type: VectorSearchType.SimilarityScoreThreshold, ScoreThreshold: null })
+        {
+            throw new ArgumentException($"ScoreThreshold required for {searchSettings.Type}");
+        }
+
         var response = await embeddingModel.CreateEmbeddingsAsync(
             request: embeddingRequest,
             settings: embeddingSettings,
@@ -51,6 +57,43 @@ public static class VectorCollectionExtensions
         {
             Embeddings = [response.ToSingleArray()],
         }, searchSettings, cancellationToken).ConfigureAwait(false);
+    }
+    
+    /// <summary>
+    /// Return similar documents to the given document.
+    /// </summary>
+    /// <param name="vectorCollection">vector store</param>
+    /// <param name="embeddingModel"></param>
+    /// <param name="request"></param>
+    /// <param name="amount"></param>
+    /// <param name="searchType">search type</param>
+    /// <param name="scoreThreshold">score threshold</param>
+    /// <param name="embeddingSettings"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IReadOnlyCollection<Document>> GetSimilarDocuments(
+        this IVectorCollection vectorCollection,
+        IEmbeddingModel embeddingModel,
+        EmbeddingRequest request,
+        int amount = 4,
+        VectorSearchType searchType = VectorSearchType.Similarity,
+        float? scoreThreshold = null,
+        EmbeddingSettings? embeddingSettings = null,
+        CancellationToken cancellationToken = default)
+    {
+        var results = await vectorCollection.SearchAsync(
+            embeddingModel: embeddingModel, 
+            embeddingRequest: request,
+            embeddingSettings: embeddingSettings,
+            searchSettings: new VectorSearchSettings
+            {
+                Type = searchType,
+                NumberOfResults = amount,
+                ScoreThreshold = scoreThreshold
+            },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        
+        return results.ToDocuments();
     }
     
     public static async Task<IReadOnlyCollection<string>> AddDocumentsAsync(

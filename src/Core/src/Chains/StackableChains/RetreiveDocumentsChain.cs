@@ -33,11 +33,12 @@ public class RetrieveDocumentsChain : BaseStackableChain
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
-        var retriever = _vectorCollection.AsRetriever(_embeddingModel);
-        retriever.K = _amount;
-
         var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;
-        var results = await retriever.GetRelevantDocumentsAsync(query, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var results = await _vectorCollection.GetSimilarDocuments(
+            _embeddingModel,
+            query,
+            amount: _amount,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = results.ToList();
         return values;
     }
