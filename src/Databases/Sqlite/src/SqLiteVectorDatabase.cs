@@ -13,10 +13,10 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="filename"></param>
+    /// <param name="dataSource">File path(like vectors.db) or :memory:</param>
     /// <param name="distanceMetrics"></param>
     public SqLiteVectorDatabase(
-        string filename,
+        string dataSource = ":memory:",
         EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
     {
         Func<float[], float[], float> distanceFunction;
@@ -27,7 +27,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
 
         SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
 
-        _connection = new SqliteConnection($"Data Source={filename}");
+        _connection = new SqliteConnection($"Data Source={dataSource}");
         _connection.Open();
         _connection.CreateFunction(
             "distance",
