@@ -17,9 +17,11 @@ public sealed class DuckDuckGoSearchApiWrapper(
     /// <summary>
     /// Get aggregated search result
     /// </summary>
-    public async Task<string> RunAsync(string query)
+    public async Task<string> RunAsync(
+        string query,
+        CancellationToken cancellationToken = default)
     {
-        var snippets = await GetSnippetsAsync(query).ConfigureAwait(false);
+        var snippets = await GetSnippetsAsync(query, cancellationToken).ConfigureAwait(false);
 
         return String.Join(" ", snippets);
     }
@@ -27,13 +29,15 @@ public sealed class DuckDuckGoSearchApiWrapper(
     /// <summary>
     /// Run query through DuckDuckGo and return concatenated results.
     /// </summary>
-    public async Task<IEnumerable<string>> GetSnippetsAsync(string query)
+    public async Task<IEnumerable<string>> GetSnippetsAsync(
+        string query,
+        CancellationToken cancellationToken = default)
     {
         var results = _search.TextSearchAsync(
             query,
             region: region,
             safeSearch: safeSearch,
-            timeLimit: time);
+            timeLimit: time, cancellationToken: cancellationToken);
 
         var snippets = new List<string>();
         await foreach (var result in results)
@@ -62,6 +66,7 @@ public sealed class DuckDuckGoSearchApiWrapper(
     /// </remarks>
     /// <param name="query">The query to search for.</param>
     /// <param name="numResults">The number of results to return.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>
     /// A list of items with the following props:
     ///     title - The description of the result.
@@ -70,14 +75,15 @@ public sealed class DuckDuckGoSearchApiWrapper(
     /// </returns>
     public async Task<List<WebSearchResult>> ResultsAsync(
         string query,
-        int numResults)
+        int numResults,
+        CancellationToken cancellationToken = default)
     {
         var results = _search.TextSearchAsync(
             query,
             region: region,
             safeSearch: safeSearch,
             timeLimit: time,
-            maxResults: maxResults);
+            maxResults: maxResults, cancellationToken: cancellationToken);
 
         var formattedResults = new List<WebSearchResult>();
         await foreach (var result in results)

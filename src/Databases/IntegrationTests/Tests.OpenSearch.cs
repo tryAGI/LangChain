@@ -138,7 +138,7 @@ Helpful Answer:";
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 
@@ -219,7 +219,7 @@ Helpful Answer:";
             | LLM(llm);
 
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 
@@ -268,7 +268,7 @@ Helpful Answer:";
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 

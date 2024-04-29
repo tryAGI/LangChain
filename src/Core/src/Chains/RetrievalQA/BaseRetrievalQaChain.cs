@@ -42,11 +42,13 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
     /// </summary>
     /// <param name="values"></param>
     /// <param name="runManager"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     protected override async Task<IChainValues> CallAsync(
         IChainValues values,
-        CallbackManagerForChainRun? runManager)
+        CallbackManagerForChainRun? runManager,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
@@ -61,7 +63,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
             [_inputKey] = question
         };
 
-        var answer = await _combineDocumentsChain.Run(input).ConfigureAwait(false);
+        var answer = await _combineDocumentsChain.RunAsync(input, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var output = new Dictionary<string, object>
         {

@@ -197,7 +197,7 @@ Answer:";
                 [chain1, chain2],
                 inputVariables: ["question"]));
 
-        var answer = sequence.Run("What is the good name for a pet?").Result;
+        var answer = await sequence.RunAsync("What is the good name for a pet?");
 
         answer.Should().Be("Bob");
     }

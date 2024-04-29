@@ -24,7 +24,7 @@ For example, `coworker|task|context`";
     }
 
     /// <inheritdoc />
-    public override async Task<string> ToolTask(string input, CancellationToken token = default)
+    public override async Task<string> ToolTask(string input, CancellationToken cancellationToken = default)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
         
@@ -37,7 +37,7 @@ For example, `coworker|task|context`";
         coworker.Context = context;
         var chain = Chain.Set(task, "task")
                     | coworker;
-        var res = await chain.Run("result").ConfigureAwait(false) ?? string.Empty;
+        var res = await chain.RunAsync("result", cancellationToken: cancellationToken).ConfigureAwait(false) ?? string.Empty;
         
         return res;
     }

@@ -42,7 +42,8 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
     /// <inheritdoc/>
     protected override async Task<IChainValues> CallAsync(
         IChainValues values,
-        CallbackManagerForChainRun? runManager)
+        CallbackManagerForChainRun? runManager,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
@@ -56,13 +57,14 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         if (chatHistoryStr != null)
         {
             var callbacks = runManager.GetChild();
-            newQuestion = await _fields.QuestionGenerator.Run(
+            newQuestion = await _fields.QuestionGenerator.RunAsync(
                 new Dictionary<string, object>
                 {
                     ["question"] = question ?? string.Empty,
                     ["chat_history"] = chatHistoryStr
                 },
-                callbacks: new ManagerCallbacks(callbacks)).ConfigureAwait(false);
+                callbacks: new ManagerCallbacks(callbacks),
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -83,9 +85,10 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
 
         newInputs.TryAddKeyValues(values.Value);
 
-        var answer = await _fields.CombineDocsChain.Run(
+        var answer = await _fields.CombineDocsChain.RunAsync(
             input: newInputs,
-            callbacks: new ManagerCallbacks(runManager.GetChild())).ConfigureAwait(false);
+            callbacks: new ManagerCallbacks(runManager.GetChild()),
+            cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var output = new Dictionary<string, object>
         {

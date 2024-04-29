@@ -1,7 +1,5 @@
 ﻿using LangChain.Memory;
 using LangChain.Providers;
-using LangChain.Providers.OpenAI;
-using System.Runtime.Serialization;
 using LangChain.Providers.OpenAI.Predefined;
 using static LangChain.Chains.Chain;
 
@@ -59,7 +57,7 @@ AI: ";
                 | chain;
 
             // Get a response from the AI
-            var response = await currentChain.Run("text");
+            var response = await currentChain.RunAsync("text", CancellationToken.None);
 
             Console.Write("AI: ");
             Console.WriteLine(response);

@@ -27,7 +27,9 @@ public class RetrieveDocumentsChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -35,7 +37,7 @@ public class RetrieveDocumentsChain : BaseStackableChain
         retriever.K = _amount;
 
         var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;
-        var results = await retriever.GetRelevantDocumentsAsync(query).ConfigureAwait(false);
+        var results = await retriever.GetRelevantDocumentsAsync(query, cancellationToken: cancellationToken).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = results.ToList();
         return values;
     }

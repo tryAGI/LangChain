@@ -11,9 +11,11 @@ public class AiMessagePromptTemplate : BaseMessageStringPromptTemplate
     public AiMessagePromptTemplate(BaseStringPromptTemplate prompt) : base(prompt) { }
 
     /// <inheritdoc/>
-    public override async Task<Message> Format(InputValues values)
+    public override async Task<Message> FormatAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        return (await this.Prompt.Format(values).ConfigureAwait(false)).AsAiMessage();
+        return (await Prompt.FormatAsync(values, cancellationToken).ConfigureAwait(false)).AsAiMessage();
     }
 
     /// <summary>

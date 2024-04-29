@@ -33,14 +33,16 @@ public class PromptChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override Task<IChainValues> InternalCall(IChainValues values)
+    protected override Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
         // validate that input keys containing all variables
         var valueKeys = values.Value.Keys;
-        var missing = InputKeys.Except(valueKeys);
-        if (missing.Any())
+        var missing = InputKeys.Except(valueKeys).ToList();
+        if (missing.Count != 0)
         {
             throw new InvalidOperationException($"Input keys must contain all variables in template. Missing: {string.Join(",", missing)}");
         }

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -31,6 +32,7 @@ public sealed class DuckDuckGoSearch : IDisposable
     /// <param name="safeSearch"><see cref="SafeSearchType"/></param>
     /// <param name="timeLimit"><see cref="TimeLimit"/></param>
     /// <param name="maxResults">max number of results. If null, returns results only from the first response</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// // /// &lt;param name="backend"&gt;
     /// // /// api, html, lite. Defaults to api.
@@ -43,9 +45,10 @@ public sealed class DuckDuckGoSearch : IDisposable
         string region = "wt-wt",
         SafeSearchType safeSearch = SafeSearchType.Moderate,
         TimeLimit? timeLimit = null,
-        int? maxResults = null)
+        int? maxResults = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var results = TextSearchApiAsync(keywords, region, safeSearch, timeLimit, maxResults);
+        var results = TextSearchApiAsync(keywords, region, safeSearch, timeLimit, maxResults, cancellationToken);
         var resultsCounter = 0;
         await foreach (var result in results)
         {
@@ -63,9 +66,10 @@ public sealed class DuckDuckGoSearch : IDisposable
         string region,
         SafeSearchType safeSearch,
         TimeLimit? timeLimit,
-        int? maxResults)
+        int? maxResults,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var payload = await GetPayloadAsync(keywords, region, safeSearch, timeLimit).ConfigureAwait(false);
+        var payload = await GetPayloadAsync(keywords, region, safeSearch, timeLimit, cancellationToken).ConfigureAwait(false);
 
         var i = 0;
         var cache = new HashSet<string>();
@@ -80,7 +84,7 @@ public sealed class DuckDuckGoSearch : IDisposable
             LinksResponse.LinksResponseItem[]? pageData;
             try
             {
-                var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var contentRaw = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 var content = JsonSerializer.Deserialize<LinksResponse>(contentRaw);
 
                 pageData = content?.Results;
@@ -137,9 +141,11 @@ public sealed class DuckDuckGoSearch : IDisposable
     private async Task<Dictionary<string, string>> GetPayloadAsync(
         string keywords,
         string region,
-        SafeSearchType safeSearch, TimeLimit? timeLimit)
+        SafeSearchType safeSearch,
+        TimeLimit? timeLimit,
+        CancellationToken cancellationToken = default)
     {
-        var vqd = await GetVqdAsync(keywords).ConfigureAwait(false);
+        var vqd = await GetVqdAsync(keywords, cancellationToken).ConfigureAwait(false);
 
         var timeLimitString = timeLimit switch
         {
@@ -248,8 +254,11 @@ public sealed class DuckDuckGoSearch : IDisposable
     /// Get vqd value for a search query.
     /// </summary>
     /// <param name="keywords"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private async Task<string> GetVqdAsync(string keywords)
+    private async Task<string> GetVqdAsync(
+        string keywords,
+        CancellationToken cancellationToken = default)
     {
         var resp = await HttpGetAsync(
             "https://duckduckgo.com",
@@ -260,7 +269,7 @@ public sealed class DuckDuckGoSearch : IDisposable
 
         if (resp.StatusCode == HttpStatusCode.OK)
         {
-            var content = await resp.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             var vqdIndex = content.IndexOf("vqd=", StringComparison.Ordinal);
             if (vqdIndex > 0)

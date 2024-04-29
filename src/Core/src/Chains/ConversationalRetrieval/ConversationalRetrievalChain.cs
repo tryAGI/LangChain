@@ -28,8 +28,6 @@ namespace LangChain.Chains.ConversationalRetrieval;
 public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fields)
     : BaseConversationalRetrievalChain(fields)
 {
-    private readonly ConversationalRetrievalChainInput _fields = fields;
-    
     /// <inheritdoc/>
     public override string ChainType() => "conversational_retrieval";
     
@@ -39,7 +37,7 @@ public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fiel
         Dictionary<string, object> inputs,
         CallbackManagerForChainRun? runManager = null)
     {
-        var docs = await _fields.Retriever.GetRelevantDocumentsAsync(
+        var docs = await fields.Retriever.GetRelevantDocumentsAsync(
             question,
             callbacks: runManager?.ToCallbacks()).ConfigureAwait(false);
 
@@ -56,14 +54,14 @@ public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fiel
         var docsList = docs.ToList();
         var numDocs = docsList.Count;
 
-        if (_fields.MaxTokensLimit != null &&
-            _fields.CombineDocsChain is StuffDocumentsChain stuffDocumentsChain &&
+        if (fields.MaxTokensLimit != null &&
+            fields.CombineDocsChain is StuffDocumentsChain stuffDocumentsChain &&
             stuffDocumentsChain.LlmChain.Llm is ISupportsCountTokens counter)
         {
             var tokens = docsList.Select(doc => counter.CountTokens(doc.PageContent)).ToArray();
             var tokenCount = tokens.Sum();
 
-            while (tokenCount > _fields.MaxTokensLimit)
+            while (tokenCount > fields.MaxTokensLimit)
             {
                 numDocs -= 1;
                 tokenCount -= tokens[numDocs];

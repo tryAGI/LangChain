@@ -108,7 +108,7 @@ The pet name is
             | Template(promptText, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var res = chain.Run(resultKey: "text").Result;
+        var res = chain.RunAsync(resultKey: "text", CancellationToken.None).Result;
         Console.WriteLine(res);
     }
 
@@ -164,7 +164,7 @@ Answer: ";
             | Template(prompt2Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var res = chainFilter.Run(resultKey: "text").Result;
+        var res = chainFilter.RunAsync(resultKey: "text", CancellationToken.None).Result;
         Console.WriteLine(res);
     }
 
@@ -209,7 +209,7 @@ Helpful Answer:";
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 

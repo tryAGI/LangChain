@@ -6,9 +6,11 @@ namespace LangChain.Prompts.Base;
 public abstract class BaseStringPromptTemplate : BasePromptTemplate
 {
     /// <inheritdoc />
-    public override async Task<BasePromptValue> FormatPromptValue(InputValues values)
+    public override async Task<BasePromptValue> FormatPromptValueAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        var formattedPrompt = await Format(values).ConfigureAwait(false);
+        var formattedPrompt = await FormatAsync(values, cancellationToken).ConfigureAwait(false);
 
         return new StringPromptValue()
         {

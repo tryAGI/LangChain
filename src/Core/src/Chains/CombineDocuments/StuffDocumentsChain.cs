@@ -66,25 +66,29 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
     /// <inheritdoc/>
     public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys)
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
         otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
         
-        var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
-        var predict = await LlmChain.Predict(new ChainValues(inputs.Value)).ConfigureAwait(false);
+        var inputs = await GetInputs(docs, otherKeys, cancellationToken).ConfigureAwait(false);
+        var predict = await LlmChain.PredictAsync(new ChainValues(inputs.Value), cancellationToken).ConfigureAwait(false);
 
         return (predict.ToString() ?? string.Empty, new Dictionary<string, object>());
     }
 
     /// <inheritdoc/>
-    public override async Task<int?> PromptLength(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
+    public override async Task<int?> PromptLengthAsync(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
         otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
         
         if (LlmChain.Llm is ISupportsCountTokens supportsCountTokens)
         {
-            var inputs = await GetInputs(docs, otherKeys).ConfigureAwait(false);
-            var prompt = await LlmChain.Prompt.FormatPromptValue(inputs).ConfigureAwait(false);
+            var inputs = await GetInputs(docs, otherKeys, cancellationToken).ConfigureAwait(false);
+            var prompt = await LlmChain.Prompt.FormatPromptValueAsync(inputs, cancellationToken).ConfigureAwait(false);
 
             return supportsCountTokens.CountTokens(prompt.ToString());
         }
@@ -92,9 +96,12 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         return null;
     }
 
-    private async Task<InputValues> GetInputs(IReadOnlyList<Document> docs, IReadOnlyDictionary<string, object> otherKeys)
+    private async Task<InputValues> GetInputs(
+        IReadOnlyList<Document> docs,
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
-        var docsString = await GetDocsString(docs).ConfigureAwait(false);
+        var docsString = await GetDocsString(docs, cancellationToken).ConfigureAwait(false);
 
         var inputs = new Dictionary<string, object>();
         foreach (var kv in otherKeys)
@@ -110,12 +117,14 @@ public class StuffDocumentsChain : BaseCombineDocumentsChain
         return new InputValues(inputs);
     }
 
-    private async Task<string> GetDocsString(IReadOnlyList<Document> docs)
+    private async Task<string> GetDocsString(
+        IReadOnlyList<Document> docs,
+        CancellationToken cancellationToken = default)
     {
         var docStrings = new List<string>();
         foreach (var doc in docs)
         {
-            var docString = await PromptHelpers.FormatDocumentAsync(doc, _documentPrompt).ConfigureAwait(false);
+            var docString = await PromptHelpers.FormatDocumentAsync(doc, _documentPrompt, cancellationToken).ConfigureAwait(false);
             docStrings.Add(docString);
         }
 

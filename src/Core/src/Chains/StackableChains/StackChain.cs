@@ -51,7 +51,9 @@ public class StackChain(
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
 
@@ -79,7 +81,7 @@ public class StackChain(
             hook?.LinkEnter(a, stackableChainValues);
         }
         
-        await a.CallAsync(values).ConfigureAwait(false);
+        await a.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         if (a is not StackChain &&
             stackableChainValues != null)
@@ -92,7 +94,7 @@ public class StackChain(
             hook?.LinkEnter(b, stackableChainValues);
         }
         
-        await b.CallAsync(values).ConfigureAwait(false);
+        await b.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         if (b is not StackChain &&
             stackableChainValues != null)

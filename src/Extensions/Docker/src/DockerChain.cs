@@ -67,8 +67,9 @@ namespace LangChain.Extensions.Docker
         /// 
         /// </summary>
         /// <param name="values"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected override async Task<IChainValues> InternalCall(IChainValues values)
+        protected override async Task<IChainValues> InternalCallAsync(IChainValues values, CancellationToken cancellationToken = default)
         {
             values = values ?? throw new ArgumentNullException(nameof(values));
             
@@ -99,13 +100,13 @@ namespace LangChain.Extensions.Docker
                     Binds = binds
                 }
                 
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
 
 
-            await _client.Containers.StartContainerAsync(container.ID, null).ConfigureAwait(false);
+            await _client.Containers.StartContainerAsync(container.ID, null, cancellationToken).ConfigureAwait(false);
 
-            await _client.Containers.WaitContainerAsync(container.ID).ConfigureAwait(false);
+            await _client.Containers.WaitContainerAsync(container.ID, cancellationToken).ConfigureAwait(false);
 
             var logs = await _client.Containers.GetContainerLogsAsync(container.ID,
                 false,
@@ -113,7 +114,7 @@ namespace LangChain.Extensions.Docker
                                {
                     ShowStdout = true,
                     ShowStderr = true
-                }).ConfigureAwait(false);
+                }, cancellationToken).ConfigureAwait(false);
 
             var res = await logs.ReadOutputToEndAsync(CancellationToken.None).ConfigureAwait(false);
 
@@ -123,7 +124,7 @@ namespace LangChain.Extensions.Docker
                                new ContainerRemoveParameters()
                                {
                     Force = true
-                }).ConfigureAwait(false);
+                }, cancellationToken).ConfigureAwait(false);
 
             values.Value[OutputKeys[0]] = result;
             return values;

@@ -18,7 +18,9 @@ public class UpdateMemoryChain(
     : BaseStackableChain
 {
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         

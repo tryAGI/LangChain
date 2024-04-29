@@ -61,9 +61,11 @@ public class PromptTemplate : BaseStringPromptTemplate
     }
 
     /// <inheritdoc/>
-    public override async Task<string> Format(InputValues values)
+    public override async Task<string> FormatAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        InputValues allValues = await MergePartialAndUserVariables(values).ConfigureAwait(false);
+        InputValues allValues = await MergePartialAndUserVariablesAsync(values, cancellationToken).ConfigureAwait(false);
         return RenderTemplate(Template, TemplateFormat, allValues.Value);
     }
 
@@ -113,7 +115,9 @@ public class PromptTemplate : BaseStringPromptTemplate
     }
 
     /// <inheritdoc/>
-    public override Task<BasePromptTemplate> AddPartial(PartialValues values)
+    public override Task<BasePromptTemplate> AddPartialAsync(
+        PartialValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         

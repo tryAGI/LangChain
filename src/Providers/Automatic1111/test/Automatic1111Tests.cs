@@ -17,6 +17,6 @@ public class Automatic1111Tests
             | GenerateImage(model, inputKey: "prompt", outputKey: "image")
             | SaveIntoFile(path: tempPath, inputKey: "image");
             
-        await chain.Run();
+        await chain.RunAsync();
     }
 }

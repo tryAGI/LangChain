@@ -32,7 +32,9 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
     }
 
     /// <inheritdoc/>
-    public override Task<BasePromptTemplate> AddPartial(PartialValues values)
+    public override Task<BasePromptTemplate> AddPartialAsync(
+        PartialValues values,
+        CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -50,13 +52,15 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
     }
 
     /// <inheritdoc/>
-    public override async Task<IReadOnlyCollection<Message>> FormatMessages(InputValues values)
+    public override async Task<IReadOnlyCollection<Message>> FormatMessagesAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        var allValues = await this.MergePartialAndUserVariables(values).ConfigureAwait(false);
+        var allValues = await MergePartialAndUserVariablesAsync(values, cancellationToken).ConfigureAwait(false);
 
         var resultMessages = new List<Message>();
 
-        foreach (var promptMessage in this.PromptMessages)
+        foreach (var promptMessage in PromptMessages)
         {
             var inputValues = new InputValues(new Dictionary<string, object>());
 
@@ -70,7 +74,7 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
                 inputValues.Value.Add(inputVariable, allValues.Value[inputVariable]);
             }
 
-            var message = await promptMessage.FormatMessages(inputValues).ConfigureAwait(false);
+            var message = await promptMessage.FormatMessagesAsync(inputValues, cancellationToken).ConfigureAwait(false);
             resultMessages.AddRange(message);
         }
 

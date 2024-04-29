@@ -72,7 +72,9 @@ public class GroupChat : BaseStackableChain
     public IReadOnlyList<Message> History => _chatMessageHistory.Messages;
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -91,7 +93,7 @@ public class GroupChat : BaseStackableChain
             var agent = GetNextAgent();
             string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages);
             agent.SetHistory(bufferText + "\n" + $"{agent.Name}:");
-            var res = await agent.CallAsync(values).ConfigureAwait(false);
+            var res = await agent.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
             var message = (string)res.Value[agent.OutputKeys[0]];
             if (message.Contains(_stopPhrase))
             {

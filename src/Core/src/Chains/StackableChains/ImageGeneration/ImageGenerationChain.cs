@@ -28,14 +28,16 @@ public class ImageGenerationChain : BaseStackableChain
     }
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
         var prompt =
             values.Value[InputKeys[0]].ToString() ??
             throw new InvalidOperationException("Input key is null");
-        byte[] image = await _model.GenerateImageAsync(prompt).ConfigureAwait(false);
+        byte[] image = await _model.GenerateImageAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = image;
         return values;
     }

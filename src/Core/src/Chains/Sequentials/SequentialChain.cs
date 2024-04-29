@@ -52,7 +52,7 @@ public class SequentialChain : BaseChain
     public override string ChainType() => "sequential_chain";
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -64,7 +64,7 @@ public class SequentialChain : BaseChain
 
         foreach (var chain in Chains)
         {
-            var input = await chain.CallAsync(allChainValues).ConfigureAwait(false);
+            var input = await chain.CallAsync(allChainValues, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             foreach (var inputValue in input.Value)
             {

@@ -12,7 +12,7 @@ public class PromptTests
         var message = new PromptTemplate(new PromptTemplateInput("{foo}{bar}", new List<string>(2) { "foo" },
             new Dictionary<string, object>(1) { { "bar", "baz" } }));
 
-        var formatted = await message.Format(new InputValues(new Dictionary<string, object>(1) { { "foo", "foo" } }));
+        var formatted = await message.FormatAsync(new InputValues(new Dictionary<string, object>(1) { { "foo", "foo" } }));
 
         formatted.Should().Be("foobaz");
     }
@@ -23,7 +23,7 @@ public class PromptTests
         var message = new PromptTemplate(new PromptTemplateInput("{foo}{bar}", new List<string>(),
             new Dictionary<string, object>(1) { { "bar", "baz" }, { "foo", "foo" } }));
 
-        var formatted = await message.Format(new InputValues(new Dictionary<string, object>(0)));
+        var formatted = await message.FormatAsync(new InputValues(new Dictionary<string, object>(0)));
 
         formatted.Should().Be("foobaz");
     }

@@ -48,14 +48,15 @@ public class VectorStoreRetriever : BaseRetriever
     /// <inheritdoc/>
     protected override async Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,
-        CallbackManagerForRetrieverRun? runManager = null)
+        CallbackManagerForRetrieverRun? runManager = null,
+        CancellationToken cancellationToken = default)
     {
         var response = await VectorCollection.SearchAsync(EmbeddingModel, query, searchSettings: new VectorSearchSettings
         {
             Type = SearchType,
             NumberOfResults = K,
             ScoreThreshold = ScoreThreshold,
-        }).ConfigureAwait(false);
+        }, cancellationToken: cancellationToken).ConfigureAwait(false);
         
         return response.ToDocuments();
     }

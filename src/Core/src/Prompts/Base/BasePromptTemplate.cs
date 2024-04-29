@@ -39,15 +39,21 @@ public abstract class BasePromptTemplate
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<BasePromptTemplate> AddPartial(PartialValues values);
+    public abstract Task<BasePromptTemplate> AddPartialAsync(
+        PartialValues values,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="userVariables"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<InputValues> MergePartialAndUserVariables(InputValues userVariables)
+    public async Task<InputValues> MergePartialAndUserVariablesAsync(
+        InputValues userVariables,
+        CancellationToken cancellationToken = default)
     {
         userVariables = userVariables ?? throw new ArgumentNullException(nameof(userVariables));
         
@@ -76,15 +82,19 @@ public abstract class BasePromptTemplate
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<string> Format(InputValues values);
+    public abstract Task<string> FormatAsync(InputValues values, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<BasePromptValue> FormatPromptValue(InputValues values);
+    public abstract Task<BasePromptValue> FormatPromptValueAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 

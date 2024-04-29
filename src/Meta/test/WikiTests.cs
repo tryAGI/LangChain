@@ -32,7 +32,7 @@ public class WikiTests
             Set("What is tryAGI/LangChain?")
             | LLM(model);
 
-        await chain.Run();
+        await chain.RunAsync();
     }
     
     [Test]
@@ -54,7 +54,7 @@ public class WikiTests
             | ReActAgentExecutor(model) // does the magic
                 .UseTool(searchTool); // add the google search tool
 
-        await chain.Run();
+        await chain.RunAsync();
     }
     
     [Test]
@@ -99,7 +99,7 @@ AI:";
                             |chain;
     
             // get response from AI
-            var res = await chatChain.Run("text");
+            var res = await chatChain.RunAsync("text", CancellationToken.None);
 
 
             Console.Write("AI: ");
@@ -129,7 +129,7 @@ Assistant:";
             Set(prompt, outputKey:"prompt")
             | LLM(model, inputKey:"prompt");
 
-        await chain.Run();
+        await chain.RunAsync();
     }
 
     [Test]
@@ -140,7 +140,7 @@ Assistant:";
             Set("Hello!", outputKey:"request")          // set context variable `request` to "Hello"
             |LLM(model,inputKey:"request",outputKey:"text"); // get text from context variable `request`, pass it to the model and put result into `text`
 
-        var result = await chain.Run("text");  // execute chain and get `text` context variable
+        var result = await chain.RunAsync("text", CancellationToken.None);  // execute chain and get `text` context variable
         Console.WriteLine(result);
     }
 
@@ -152,7 +152,7 @@ Assistant:";
             Set("Hello!")
             | LLM(model);
 
-        Console.WriteLine(await chain.Run("text"));
+        Console.WriteLine(await chain.RunAsync("text", CancellationToken.None));
     }
 
     [Test]
@@ -206,7 +206,7 @@ ASSISTANT:";
                     | SaveIntoFile("image.png", inputKey: "image");                     // save the image into a file
 
         // run the chain
-        await chain.Run();
+        await chain.RunAsync();
     }
 
     [Test]
@@ -255,7 +255,7 @@ Helpful Answer:";
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(model);                                                                       // send the result to the language model
 
-        var result = await chain.Run("text");                                        // get chain result
+        var result = await chain.RunAsync("text", CancellationToken.None);                                        // get chain result
         
         Console.WriteLine(result);
     }
@@ -282,7 +282,7 @@ Assistant:";
             Set(prompt, outputKey:"prompt")
             | LLM(model, inputKey:"prompt", outputKey: "result");
 
-        var result = await chain.Run("result");
+        var result = await chain.RunAsync("result", CancellationToken.None);
         Console.WriteLine("---");
         Console.WriteLine(result);
         Console.WriteLine("---");

@@ -102,9 +102,10 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     }
 
     /// <inheritdoc/>
-    public override Task<int?> PromptLength(
+    public override Task<int?> PromptLengthAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys)
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
         return Task.FromException<int?>(new NotImplementedException());
     }
@@ -117,10 +118,12 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     /// </summary>
     /// <param name="docs"></param>
     /// <param name="otherKeys"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys)
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
         var inputs = docs
             .Select(doc =>
@@ -136,7 +139,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
             })
             .ToList();
 
-        var mapResults = await LlmChain.ApplyAsync(inputs).ConfigureAwait(false);
+        var mapResults = await LlmChain.ApplyAsync(inputs, cancellationToken).ConfigureAwait(false);
         var questionResultKey = LlmChain.OutputKey;
 
         // this uses metadata from the docs, and the textual results from `results`
@@ -145,7 +148,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
                 .Select((r, i) => new Document(r.Value[questionResultKey] as string ?? string.Empty, docs[i].Metadata))
                 .ToList();
 
-        var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);
+        var (result, extraReturnDict) = await ReduceDocumentsChain.CombineDocsAsync(resultDocs, otherKeys, cancellationToken).ConfigureAwait(false);
 
         if (ReturnIntermediateSteps)
         {

@@ -19,6 +19,7 @@ public static class VectorStoreIndexWrapper
     /// <param name="llm"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static Task<string?> QueryAsync(
         this IVectorCollection vectorCollection,
@@ -26,7 +27,8 @@ public static class VectorStoreIndexWrapper
         string question,
         BaseCombineDocumentsChain llm,
         string inputKey = "question",
-        string outputKey = "output_text")
+        string outputKey = "output_text",
+        CancellationToken cancellationToken = default)
     {
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
@@ -38,6 +40,6 @@ public static class VectorStoreIndexWrapper
             }
         );
         
-        return chain.Run(question);
+        return chain.RunAsync(question, cancellationToken);
     }
 }

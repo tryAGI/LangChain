@@ -116,7 +116,9 @@ Thought:{history}";
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -132,12 +134,12 @@ Thought:{history}";
 
         for (int i = 0; i < _maxActions; i++)
         {
-            var res = await _chain!.CallAsync(valuesChain).ConfigureAwait(false);
+            var res = await _chain!.CallAsync(valuesChain, cancellationToken: cancellationToken).ConfigureAwait(false);
             if (res.Value[ReActAnswer] is AgentAction)
             {
                 var action = (AgentAction)res.Value[ReActAnswer];
                 var tool = _tools[action.Action.ToLower(CultureInfo.InvariantCulture)];
-                var toolRes = await tool.ToolTask(action.ActionInput).ConfigureAwait(false);
+                var toolRes = await tool.ToolTask(action.ActionInput, cancellationToken).ConfigureAwait(false);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + toolRes, MessageRole.System))
                     .ConfigureAwait(false);
                 await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Thought:", MessageRole.System))

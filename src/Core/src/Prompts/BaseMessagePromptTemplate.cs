@@ -18,8 +18,11 @@ public abstract class BaseMessagePromptTemplate
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<List<Message>> FormatMessages(InputValues values);
+    public abstract Task<List<Message>> FormatMessagesAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 
