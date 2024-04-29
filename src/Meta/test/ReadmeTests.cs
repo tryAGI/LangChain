@@ -69,7 +69,7 @@ public class ReadmeTests
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
         var llm = new Gpt35TurboModel(provider);
-        var embeddings = new TextEmbeddingV3SmallModel(provider);
+        var embeddingModel = new TextEmbeddingV3SmallModel(provider);
         
         // Create vector database from Harry Potter book pdf
         var vectorDatabase = new SqLiteVectorDatabase(dataSource: "vectors.db");
@@ -79,7 +79,7 @@ public class ReadmeTests
             new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf")))
         {
             await vectorCollection.LoadAndSplitDocuments(
-                embeddings,
+                embeddingModel,
                 sources: new []{ source }).ConfigureAwait(false);
         }
         
@@ -88,7 +88,7 @@ public class ReadmeTests
         
         // Find similar documents for the question
         const string question = "Who was drinking a unicorn blood?";
-        var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddings, question, amount: 5);
+        var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingModel, question, amount: 5);
         
         // Use similar documents and LLM to answer the question
         var answer = await llm.GenerateAsync(
@@ -114,7 +114,7 @@ Helpful Answer:";
 
         var chain =
             Set("Who was drinking a unicorn blood?")     // set the question (default key is "text")
-            | RetrieveSimilarDocuments(vectorCollection, embeddings, amount: 5) // take 5 most similar documents
+            | RetrieveSimilarDocuments(vectorCollection, embeddingModel, amount: 5) // take 5 most similar documents
             | CombineDocuments(outputKey: "context")     // combine documents together and put them into context
             | Template(promptTemplate)                   // replace context and question in the prompt with their values
             | LLM(llm.UseConsoleForDebug());             // send the result to the language model
@@ -123,7 +123,7 @@ Helpful Answer:";
         Console.WriteLine("Chain Answer:"+ chainAnswer); // print the result
         
         Console.WriteLine($"LLM usage: {llm.Usage}");    // Print usage and price
-        Console.WriteLine($"Embeddings usage: {embeddings.Usage}");   // Print usage and price
+        Console.WriteLine($"Embedding model usage: {embeddingModel.Usage}");   // Print usage and price
     }
 
     [Test]
