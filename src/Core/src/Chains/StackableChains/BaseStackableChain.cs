@@ -113,7 +113,7 @@ public abstract class BaseStackableChain : IChain
                 ? GenerateName()
                 : Name;
             var inputValues = FormatInputValues(values);
-            var message = $"Error occured in {name} with inputs \n{inputValues}\n.";
+            var message = $"Error occurred in {name} with inputs \n{inputValues}\n.";
 
             throw new StackableChainException(message, ex);
         }
