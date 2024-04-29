@@ -3,7 +3,7 @@ using LangChain.Sources;
 namespace LangChain.Databases.IntegrationTests;
 
 [TestFixture]
-public partial class Tests
+public partial class DatabaseTests
 {
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]

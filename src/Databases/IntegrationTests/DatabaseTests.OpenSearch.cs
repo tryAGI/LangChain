@@ -7,11 +7,11 @@ using static LangChain.Chains.Chain;
 
 namespace LangChain.Databases.IntegrationTests;
 
-public partial class Tests
+public partial class DatabaseTests
 {
     #region Query Images
 
-    private static async Task<TestEnvironment> SetupImageTestsAsync()
+    private static async Task<DatabaseTestEnvironment> SetupImageTestsAsync()
     {
         var environment = await StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
         environment.Dimensions = 1024;
@@ -123,7 +123,7 @@ Helpful Answer:";
 
     #region Query Simple Documents
 
-    private static async Task<TestEnvironment> SetupDocumentTestsAsync()
+    private static async Task<DatabaseTestEnvironment> SetupDocumentTestsAsync()
     {
         var environment = await StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
         environment.Dimensions = 1536;

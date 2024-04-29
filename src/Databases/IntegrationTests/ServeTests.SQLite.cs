@@ -5,7 +5,7 @@ using LangChain.Serve.Abstractions.Repository;
 namespace LangChain.Databases.IntegrationTests;
 
 [TestFixture]
-public class ServeConversationsTests
+public partial class ServeTests
 {
     [Test]
     public async Task Test1()

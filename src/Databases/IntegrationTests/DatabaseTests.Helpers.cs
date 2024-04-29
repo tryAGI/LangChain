@@ -4,8 +4,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace LangChain.Databases.IntegrationTests;
 
-[TestFixture]
-public partial class Tests
+public partial class DatabaseTests
 {
     public static Dictionary<string, float[]> Embeddings { get; } = LoadEmbeddings();
 
@@ -41,7 +40,7 @@ public partial class Tests
         return mock;
     }
     
-    private static Dictionary<string, float[]> LoadEmbeddings()
+    internal static Dictionary<string, float[]> LoadEmbeddings()
     {
         var dict = new Dictionary<string, float[]>();
         foreach (var resource in new []

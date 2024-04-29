@@ -8,15 +8,15 @@ using Testcontainers.PostgreSql;
 
 namespace LangChain.Databases.IntegrationTests;
 
-public partial class Tests
+public partial class DatabaseTests
 {
-    private static async Task<TestEnvironment> StartEnvironmentForAsync(SupportedDatabase database, CancellationToken cancellationToken = default)
+    private static async Task<DatabaseTestEnvironment> StartEnvironmentForAsync(SupportedDatabase database, CancellationToken cancellationToken = default)
     {
         switch (database)
         {
             case SupportedDatabase.InMemory:
             {
-                return new TestEnvironment
+                return new DatabaseTestEnvironment
                 {
                     VectorDatabase = new InMemoryVectorDatabase(),
                 };
@@ -32,17 +32,18 @@ public partial class Tests
 
                 await container.StartAsync(cancellationToken);
 
-                return new TestEnvironment
+                return new DatabaseTestEnvironment
                 {
                     VectorDatabase = new ChromaVectorDatabase(
                         new HttpClient(),
                         $"http://localhost:{port}"),
+                    Container = container,
                     Port = port,
                 };
             }
             case SupportedDatabase.SqLite:
             {
-                return new TestEnvironment
+                return new DatabaseTestEnvironment
                 {
                     VectorDatabase = new SqLiteVectorDatabase("vectors.db"),
                 };
@@ -64,7 +65,7 @@ public partial class Tests
             
                 await container.StartAsync(cancellationToken);
                 
-                return new TestEnvironment
+                return new DatabaseTestEnvironment
                 {
                     VectorDatabase = new PostgresVectorDatabase(container.GetConnectionString()),
                     Container = container,
@@ -88,7 +89,7 @@ public partial class Tests
                 
                 await container.StartAsync(cancellationToken);
             
-                return new TestEnvironment
+                return new DatabaseTestEnvironment
                 {
                     VectorDatabase = new OpenSearchVectorDatabase(new OpenSearchVectorDatabaseOptions
                     {
@@ -96,6 +97,7 @@ public partial class Tests
                         Username = "admin",
                         Password = password,
                     }),
+                    Container = container,
                     Port = port2,
                 };
             }
