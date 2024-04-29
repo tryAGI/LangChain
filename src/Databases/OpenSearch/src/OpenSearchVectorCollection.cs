@@ -1,4 +1,5 @@
 ﻿using OpenSearch.Client;
+using OpenSearch.Net;
 
 namespace LangChain.Databases.OpenSearch;
 
@@ -17,7 +18,8 @@ public class OpenSearchVectorCollection(
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
         
-        var bulkDescriptor = new BulkDescriptor();
+        var bulkDescriptor = new BulkDescriptor()
+            .Refresh(Refresh.WaitFor);
 
         foreach (var item in items)
         {
@@ -49,9 +51,6 @@ public class OpenSearchVectorCollection(
             throw new InvalidOperationException($"Failed to add items to collection '{Name}'. DebugInformation: {response.DebugInformation}");
         }
         
-        // TODO: Search right after adding doesn't return the added items. Fix this later, it's just a temporary solution. 
-        await Task.Delay(TimeSpan.FromMilliseconds(1000), cancellationToken).ConfigureAwait(false);
-
         return response.Items
             .Select(i => i.Id)
             .ToArray();
@@ -74,7 +73,7 @@ public class OpenSearchVectorCollection(
             Text = response.Source.Text ?? string.Empty,
             Metadata = response.Source.Metadata?
                 .ToDictionary(x => x.Key, x => x.Value),
-        }!;
+        };
     }
 
     /// <inheritdoc />
