@@ -95,7 +95,7 @@ public partial class OpenAiChatModel(
         {
             Role.System => MessageRole.System,
             Role.User => MessageRole.Human,
-            Role.Assistant when message.ToolCalls != null => MessageRole.FunctionCall,
+            Role.Assistant when message.ToolCalls != null && message.ToolCalls.Count>0 => MessageRole.FunctionCall,
             Role.Assistant => MessageRole.Ai,
             Role.Tool => MessageRole.FunctionResult,
             _ => MessageRole.Human,
@@ -238,7 +238,7 @@ public partial class OpenAiChatModel(
             provider.AddUsage(usage);
 
 
-            while (CallToolsAutomatically && message.ToolCalls != null)
+            while (CallToolsAutomatically && message.ToolCalls != null && message.ToolCalls.Count>0)
             {
                 await CallFunctionsAsync(message, messages, cancellationToken).ConfigureAwait(false);
         
