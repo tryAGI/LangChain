@@ -16,7 +16,7 @@ public static class VectorStoreIndexCreator
     /// Create a VectorDatabase table from loaders.
     /// </summary>
     public static async Task<IReadOnlyCollection<string>> LoadAndSplitDocuments(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<ISource> sources,
         ITextSplitter? textSplitter = null,
@@ -30,14 +30,14 @@ public static class VectorStoreIndexCreator
             documents.AddRange(await source.LoadAsync(cancellationToken).ConfigureAwait(false));
         }
 
-        return await vectorDatabase.AddSplitDocumentsAsync(embeddingModel, documents, textSplitter).ConfigureAwait(false);
+        return await vectorCollection.AddSplitDocumentsAsync(embeddingModel, documents, textSplitter).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Create a VectorDatabase table from documents.
     /// </summary>
     public static async Task<IReadOnlyCollection<string>> AddSplitDocumentsAsync(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<Document> documents,
         ITextSplitter? textSplitter = null)
@@ -46,6 +46,6 @@ public static class VectorStoreIndexCreator
         
         var splitDocuments = textSplitter.SplitDocuments(documents);
         
-        return await vectorDatabase.AddDocumentsAsync(embeddingModel, splitDocuments).ConfigureAwait(false);
+        return await vectorCollection.AddDocumentsAsync(embeddingModel, splitDocuments).ConfigureAwait(false);
     }
 }

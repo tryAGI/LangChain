@@ -42,7 +42,7 @@ public class AgentTask(
         Agent.Context = context;
         var chain = Chain.Set(Description, "task") 
                     | Agent;
-        var res = await chain.Run("result").ConfigureAwait(false) ?? string.Empty;
+        var res = await chain.RunAsync("result", cancellationToken: cancellationToken).ConfigureAwait(false) ?? string.Empty;
         return res;
     }
 }

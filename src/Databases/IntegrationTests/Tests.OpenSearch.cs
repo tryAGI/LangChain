@@ -1,24 +1,24 @@
-﻿using LangChain.Providers;
+﻿using LangChain.Databases.OpenSearch;
+using LangChain.Providers;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Sources;
 using static LangChain.Chains.Chain;
 
-namespace LangChain.Databases.OpenSearch.IntegrationTests;
+namespace LangChain.Databases.IntegrationTests;
 
 //
 // docker run -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" -e "plugins.security.disabled=true" -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=<custom-admin-password>" opensearchproject/opensearch:latest
 //
-[Explicit]
-[TestFixture]
-public class OpenSearchTests
+public partial class Tests
 {
     private string? _indexName;
-    private OpenSearchVectorStoreOptions? _options;
-    private OpenSearchVectorStore? _vectorDatabase;
+    private OpenSearchVectorDatabaseOptions? _options;
+    private OpenSearchVectorDatabase? _vectorDatabase;
     private BedrockProvider? _provider;
     private IEmbeddingModel? _embeddingModel;
+    private int _dimensions = 1536;
 
     #region Query Images
 
@@ -30,30 +30,31 @@ public class OpenSearchTests
         var uri = new Uri(endpoint!);
         //var uri = new Uri("http://localhost:9200");
         var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
-        _options = new OpenSearchVectorStoreOptions
+        _options = new OpenSearchVectorDatabaseOptions
         {
             ConnectionUri = uri,
             Username = username,
             Password = password,
-            IndexName = _indexName,
-            Dimensions = 1024
         };
+        _dimensions = 1024;
 
         _provider = new BedrockProvider();
         _embeddingModel = new TitanEmbedImageV1Model(_provider)
         {
             Settings = new BedrockEmbeddingSettings
             {
-                Dimensions = _options.Dimensions
+                Dimensions = _dimensions
             }
         };
-        _vectorDatabase = new OpenSearchVectorStore(_options);
+        _vectorDatabase = new OpenSearchVectorDatabase(_options);
     }
 
     [Test]
+    [Explicit]
     public async Task index_test_images()
     {
         setup_image_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
 
         string[] extensions = { ".bmp",".gif", ".jpg", ".jpeg", ".png", ".tiff" };
         var files = Directory.EnumerateFiles(@"[images directory]", "*.*", SearchOption.AllDirectories)
@@ -85,13 +86,15 @@ public class OpenSearchTests
             documents.Add(document);
         }
 
-        var pages = await _vectorDatabase!.AddDocumentsAsync(_embeddingModel!, documents);
+        var pages = await vectorCollection.AddDocumentsAsync(_embeddingModel!, documents);
     }
 
     [Test]
+    [Explicit]
     public async Task can_query_image_against_images()
     {
         setup_image_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
       
         var path = Path.Combine(Path.GetTempPath(), "test_image.jpg");
         var imageData = await File.ReadAllBytesAsync(path);
@@ -106,15 +109,17 @@ public class OpenSearchTests
             .ConfigureAwait(false);
 
         var floats = embedding.ToSingleArray();
-        var similaritySearchByVectorAsync = await _vectorDatabase!.SearchAsync(floats).ConfigureAwait(false);
+        var similaritySearchByVectorAsync = await vectorCollection.SearchAsync(floats).ConfigureAwait(false);
 
         Console.WriteLine("Count: " + similaritySearchByVectorAsync.Items.Count);
     }
 
     [Test]
+    [Explicit]
     public async Task can_query_text_against_images()
     {
         setup_image_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
 
         var llm = new Claude3SonnetModel(_provider!);
 
@@ -128,12 +133,12 @@ Helpful Answer:";
 
         var chain =
             Set("tell me about the orange shirt", outputKey: "question")                     // set the question
-            | RetrieveDocuments(_vectorDatabase!, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
+            | RetrieveDocuments(vectorCollection, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 
@@ -149,30 +154,31 @@ Helpful Answer:";
         var uri = new Uri(endpoint!);
         //var uri = new Uri("http://localhost:9200");
         var password = Environment.GetEnvironmentVariable("OPENSEARCH_INITIAL_ADMIN_PASSWORD");
-        _options = new OpenSearchVectorStoreOptions
+        _options = new OpenSearchVectorDatabaseOptions
         {
             ConnectionUri = uri,
             Username = username,
             Password = password,
-            IndexName = _indexName,
-            Dimensions = 1536
         };
+        _dimensions = 1536;
 
         _provider = new BedrockProvider();
         _embeddingModel = new TitanEmbedTextV1Model(_provider)
         {
             Settings = new BedrockEmbeddingSettings
             {
-                Dimensions = _options.Dimensions
+                Dimensions = _dimensions
             }
         };
-        _vectorDatabase = new OpenSearchVectorStore(_options);
+        _vectorDatabase = new OpenSearchVectorDatabase(_options);
     }
 
     [Test]
+    [Explicit]
     public async Task index_test_documents()
     {
         setup_document_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
 
         var documents = new[]
         {
@@ -183,14 +189,16 @@ Helpful Answer:";
             "It is cold in space",
         }.ToDocuments();
 
-        var pages = await _vectorDatabase!.AddDocumentsAsync(_embeddingModel!, documents);
+        var pages = await vectorCollection.AddDocumentsAsync(_embeddingModel!, documents);
         Console.WriteLine("pages: " + pages.Count());
     }
 
     [Test]
+    [Explicit]
     public async Task can_query_test_documents()
     {
         setup_document_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
 
         var llm = new Claude3SonnetModel(_provider!);
 
@@ -205,13 +213,13 @@ Question: {question}
 Helpful Answer:";
         var chain =
             Set(question, outputKey: "question")
-            | RetrieveDocuments(_vectorDatabase!, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 2)
+            | RetrieveDocuments(vectorCollection, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 2)
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(promptText)
             | LLM(llm);
 
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 
@@ -220,21 +228,25 @@ Helpful Answer:";
     #region Query Pdf Book
 
     [Test]
+    [Explicit]
     public async Task index_harry_potter_book()
     {
         setup_document_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
 
         var pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
         var documents = await pdfSource.LoadAsync();
 
-        var pages = await _vectorDatabase!.AddDocumentsAsync(_embeddingModel!, documents);
+        var pages = await vectorCollection.AddDocumentsAsync(_embeddingModel!, documents);
         Console.WriteLine("pages: " + pages.Count());
     }
 
     [Test]
+    [Explicit]
     public async Task can_query_harry_potter_book()
     {
         setup_document_tests();
+        var vectorCollection = await _vectorDatabase!.GetOrCreateCollectionAsync(_indexName!, _dimensions);
 
         var llm = new Claude3SonnetModel(_provider!);
 
@@ -251,12 +263,12 @@ Helpful Answer:";
             //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
             // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
             Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
-            | RetrieveDocuments(_vectorDatabase!, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
+            | RetrieveDocuments(vectorCollection, _embeddingModel!, inputKey: "question", outputKey: "documents", amount: 10) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 

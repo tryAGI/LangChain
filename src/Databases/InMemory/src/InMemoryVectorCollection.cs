@@ -1,4 +1,6 @@
-﻿namespace LangChain.Databases.InMemory;
+﻿using System.Collections.Concurrent;
+
+namespace LangChain.Databases.InMemory;
 
 /// <summary>
 /// 
@@ -6,21 +8,23 @@
 /// <remarks>
 /// 
 /// </remarks>
+/// <param name="name"></param>
 /// <param name="distanceMetrics"></param>
-public class InMemoryVectorStore(
+public class InMemoryVectorCollection(
+    string name = VectorCollection.DefaultName,
     EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
-    : IVectorDatabase
+    : VectorCollection(name), IVectorCollection
 {
     private readonly Func<float[], float[], float> _distanceFunction =
         distanceMetrics == EDistanceMetrics.Euclidean
             ? DistanceFunctions.Euclidean
             : DistanceFunctions.Manhattan;
 
-    private readonly Dictionary<string, VectorSearchItem> _storage = [];
+    private readonly ConcurrentDictionary<string, Vector> _vectors = [];
 
     /// <inheritdoc />
     public Task<IReadOnlyCollection<string>> AddAsync(
-        IReadOnlyCollection<VectorSearchItem> items,
+        IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
@@ -32,7 +36,7 @@ public class InMemoryVectorStore(
                 throw new ArgumentException("Embedding is required", nameof(items));
             }
             
-            _storage.Add(item.Id, item);
+            _vectors.TryAdd(item.Id, item);
         }
         
         return Task.FromResult<IReadOnlyCollection<string>>(items.Select(i => i.Id).ToArray());
@@ -47,7 +51,7 @@ public class InMemoryVectorStore(
         
         foreach (var id in ids)
         {
-            _storage.Remove(id);
+            _vectors.TryRemove(id, out _);
         }
         
         return Task.FromResult(true);
@@ -63,8 +67,8 @@ public class InMemoryVectorStore(
         
         return Task.FromResult(new VectorSearchResponse
         {
-            Items = _storage
-                .Select(d => new VectorSearchItem
+            Items = _vectors
+                .Select(d => new Vector
                 {
                     Text = d.Value.Text,
                     Metadata = d.Value.Metadata,
@@ -74,5 +78,16 @@ public class InMemoryVectorStore(
                 .Take(settings.NumberOfResults)
                 .ToArray(),
         });
+    }
+
+    public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(_vectors.IsEmpty);
+    }
+
+    /// <inheritdoc />
+    public Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(_vectors.GetValueOrDefault(id));
     }
 }

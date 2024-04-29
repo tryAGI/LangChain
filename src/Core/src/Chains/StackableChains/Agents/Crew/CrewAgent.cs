@@ -170,7 +170,9 @@ public class CrewAgent : BaseStackableChain
     }
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -193,7 +195,7 @@ public class CrewAgent : BaseStackableChain
             | _chain!;
         for (int i = 0; i < _maxActions; i++)
         {
-            var res = await chain.Run<object>(OutputKeys[0]).ConfigureAwait(false);
+            var res = await chain.RunAsync<object>(OutputKeys[0], cancellationToken: cancellationToken).ConfigureAwait(false);
             if (res is AgentAction action)
             {
                 CalledAction(action.Action, action.ActionInput);
@@ -207,7 +209,7 @@ public class CrewAgent : BaseStackableChain
                 }
 
                 var tool = _tools[action.Action];
-                var toolRes = await tool.ToolTask(action.ActionInput).ConfigureAwait(false);
+                var toolRes = await tool.ToolTask(action.ActionInput, cancellationToken).ConfigureAwait(false);
                 ActionResult(toolRes);
                 _actionsHistory.Add("Observation: " + toolRes);
                 _actionsHistory.Add("Thought:");

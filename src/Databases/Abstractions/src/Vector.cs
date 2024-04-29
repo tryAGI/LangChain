@@ -3,7 +3,7 @@ namespace LangChain.Databases;
 /// <summary>
 /// Vector search item.
 /// </summary>
-public class VectorSearchItem
+public class Vector
 {
     /// <summary>
     /// 

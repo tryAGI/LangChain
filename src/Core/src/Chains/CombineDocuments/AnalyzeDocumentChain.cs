@@ -31,7 +31,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
     public override IReadOnlyList<string> OutputKeys => new[] { _outputKey };
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -44,7 +44,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
 
         otherKeys[_combineDocumentsChain.InputKey] = docs;
 
-        var combined = await _combineDocumentsChain.CallAsync(new ChainValues(otherKeys)).ConfigureAwait(false);
+        var combined = await _combineDocumentsChain.CallAsync(new ChainValues(otherKeys), cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return combined;
     }

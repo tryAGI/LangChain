@@ -43,7 +43,9 @@ public class LLMChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -61,7 +63,7 @@ public class LLMChain : BaseStackableChain
             }
         }
         
-        var response = await _llm.GenerateAsync(prompt).ConfigureAwait(false);
+        var response = await _llm.GenerateAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
         responseContent = response.Messages.Last().Content;
         if (_useCache)
             SaveCachedAnswer(prompt, responseContent);

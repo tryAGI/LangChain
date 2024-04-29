@@ -42,6 +42,7 @@ public class OllamaEmbeddingModel(
                 .Select(x => x.Select(y => (float)y).ToArray())
                 .ToArray(),
             UsedSettings = EmbeddingSettings.Default,
+            Dimensions = results.FirstOrDefault()?.Length ?? 0,
         };
     }
 }

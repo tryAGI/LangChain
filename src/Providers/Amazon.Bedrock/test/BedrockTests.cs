@@ -4,6 +4,7 @@ using LangChain.Chains.LLM;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
+using LangChain.Databases.Sqlite;
 using LangChain.Sources;
 using LangChain.Indexes;
 using LangChain.Prompts;
@@ -107,7 +108,7 @@ The pet name is
             | Template(promptText, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var res = chain.Run(resultKey: "text").Result;
+        var res = chain.RunAsync(resultKey: "text", CancellationToken.None).Result;
         Console.WriteLine(res);
     }
 
@@ -120,8 +121,8 @@ The pet name is
         //var llm = new ClaudeV21Model();
         var llm = new Claude3HaikuModel(provider);
         var embeddings = new TitanEmbedImageV1Model(provider);
-        var vectorDatabase = new InMemoryVectorStore();
-        await vectorDatabase
+        var vectorCollection = new InMemoryVectorCollection();
+        await vectorCollection
             .AddDocumentsAsync(embeddings, new[]
             {
                 "I spent entire day watching TV",
@@ -150,7 +151,7 @@ Answer: ";
 
         var chainQuestion =
             Set("What is the good name for a pet?", outputKey: "question")
-            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents")
+            | RetrieveDocuments(vectorCollection, embeddings, inputKey: "question", outputKey: "documents")
             | StuffDocuments(inputKey: "documents", outputKey: "context")
             | Template(prompt1Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "pet_sentence");
@@ -163,7 +164,7 @@ Answer: ";
             | Template(prompt2Text, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var res = chainFilter.Run(resultKey: "text").Result;
+        var res = chainFilter.RunAsync(resultKey: "text", CancellationToken.None).Result;
         Console.WriteLine(res);
     }
 
@@ -184,9 +185,10 @@ Answer: ";
         if (File.Exists("vectors.db"))
             File.Delete("vectors.db");
 
-        var vectorDatabase = new SQLiteVectorStore("vectors.db", "vectors");
+        var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, dimensions: 1536);
         if (!File.Exists("vectors.db"))
-            await vectorDatabase.AddSplitDocumentsAsync(embeddings, documents, textSplitter: textSplitter);
+            await vectorCollection.AddSplitDocumentsAsync(embeddings, documents, textSplitter: textSplitter);
 
         string promptText =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
@@ -202,12 +204,12 @@ Helpful Answer:";
                                                                                      //Set("Hagrid was looking for the golden key.  Where was it?", outputKey: "question")                     // set the question
                                                                                      // Set("Who was on the Dursleys front step?", outputKey: "question")                     // set the question
                                                                                      // Set("Who was drinking a unicorn blood?", outputKey: "question")                     // set the question
-            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
+            | RetrieveDocuments(vectorCollection, embeddings, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(llm);                                                                       // send the result to the language model
 
-        var res = await chain.Run("text");
+        var res = await chain.RunAsync("text", CancellationToken.None);
         Console.WriteLine(res);
     }
 

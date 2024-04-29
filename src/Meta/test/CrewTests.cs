@@ -69,7 +69,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
             | Crew(agents, myAgents.TravelAgent, inputKey: "text", outputKey: "text")
             | LLM(llm);
 
-        Console.WriteLine(await chain.Run("text"));
+        Console.WriteLine(await chain.RunAsync("text", CancellationToken.None));
     }
 
     [Test]
@@ -87,6 +87,6 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
             | ReActAgentExecutor(llm)
                 .UseTool(searchTool);
 
-        Console.WriteLine(await chain.Run("text"));
+        Console.WriteLine(await chain.RunAsync("text", CancellationToken.None));
     }
 }

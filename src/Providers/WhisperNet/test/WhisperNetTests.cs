@@ -24,7 +24,7 @@ public class WhisperNetTests
             Set(data, "audio")
             | STT(model);
 
-        var result = await chain.Run<string>("text");
+        var result = await chain.RunAsync<string>("text");
         result.Should().Contain("nation should commit");
     }
 }

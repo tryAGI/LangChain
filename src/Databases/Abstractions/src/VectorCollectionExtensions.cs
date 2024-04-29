@@ -6,7 +6,7 @@ namespace LangChain.Databases;
 /// <summary>
 /// 
 /// </summary>
-public static class VectorDatabaseExtensions
+public static class VectorCollectionExtensions
 {
     /// <summary>
     /// 
@@ -24,7 +24,7 @@ public static class VectorDatabaseExtensions
     /// <summary>
     /// Return docs most similar to query.
     /// </summary>
-    /// <param name="vectorDatabase"></param>
+    /// <param name="vectorCollection"></param>
     /// <param name="embeddingModel"></param>
     /// <param name="embeddingRequest"></param>
     /// <param name="embeddingSettings"></param>
@@ -32,14 +32,14 @@ public static class VectorDatabaseExtensions
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static async Task<VectorSearchResponse> SearchAsync(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         EmbeddingRequest embeddingRequest,
         EmbeddingSettings? embeddingSettings = default,
         VectorSearchSettings? searchSettings = default,
         CancellationToken cancellationToken = default)
     {
-        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
+        vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
         var response = await embeddingModel.CreateEmbeddingsAsync(
@@ -47,23 +47,23 @@ public static class VectorDatabaseExtensions
             settings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        return await vectorDatabase.SearchAsync(new VectorSearchRequest
+        return await vectorCollection.SearchAsync(new VectorSearchRequest
         {
             Embeddings = [response.ToSingleArray()],
         }, searchSettings, cancellationToken).ConfigureAwait(false);
     }
     
     public static async Task<IReadOnlyCollection<string>> AddDocumentsAsync(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<Document> documents,
         EmbeddingSettings? embeddingSettings = default,
         CancellationToken cancellationToken = default)
     {
-        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
+        vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
-        return await vectorDatabase.AddTextsAsync(
+        return await vectorCollection.AddTextsAsync(
             embeddingModel: embeddingModel,
             texts: documents.Select(x => x.PageContent).ToArray(), 
             metadatas: documents.Select(x => x.Metadata).ToArray(),
@@ -72,14 +72,13 @@ public static class VectorDatabaseExtensions
     }
     
     public static async Task<Document?> GetDocumentByIdAsync(
-        this IVectorDatabaseExtended vectorDatabase,
-        string collectionName,
+        this IVectorCollection vectorCollection,
         string id,
         CancellationToken cancellationToken = default)
     {
-        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
+        vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         
-        var item = await vectorDatabase.GetItemByIdAsync(collectionName, id, cancellationToken).ConfigureAwait(false);
+        var item = await vectorCollection.GetAsync(id, cancellationToken).ConfigureAwait(false);
         
         return item == null
             ? null
@@ -87,14 +86,14 @@ public static class VectorDatabaseExtensions
     }
     
     public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<string> texts,
         IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null,
         EmbeddingSettings? embeddingSettings = default,
         CancellationToken cancellationToken = default)
     {
-        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
+        vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
         var embeddingRequest = new EmbeddingRequest
@@ -113,8 +112,8 @@ public static class VectorDatabaseExtensions
             .CreateEmbeddingsAsync(embeddingRequest, embeddingSettings, cancellationToken)
             .ConfigureAwait(false);
 
-        return await vectorDatabase.AddAsync(
-            items: texts.Select((text, i) => new VectorSearchItem
+        return await vectorCollection.AddAsync(
+            items: texts.Select((text, i) => new Vector
             {
                 Text = text,
                 Metadata = metadatas?.ElementAt(i),
@@ -132,21 +131,21 @@ public static class VectorDatabaseExtensions
     /// <param name="embeddingRequest">The query string(string will be converted implicitly) or embedding request.</param>
     /// <param name="searchSettings"></param>
     /// <param name="cancellationToken"></param>
-    /// <param name="vectorDatabase"></param>
+    /// <param name="vectorCollection"></param>
     /// <param name="embeddingSettings"></param>
     /// <returns>A list of tuples containing the document and its relevance score.</returns>
     public static async Task<VectorSearchResponse> SearchWithRelevanceScoresAsync(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         EmbeddingRequest embeddingRequest,
         EmbeddingSettings? embeddingSettings = default,
         VectorSearchSettings? searchSettings = default,
         CancellationToken cancellationToken = default)
     {
-        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(nameof(vectorDatabase));
+        vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
         
-        var response = await vectorDatabase.SearchAsync(
+        var response = await vectorCollection.SearchAsync(
             embeddingModel: embeddingModel,
             embeddingRequest: embeddingRequest,
             embeddingSettings: embeddingSettings,

@@ -3,9 +3,9 @@ using static LangChain.Chains.Chain;
 
 namespace LangChain.Memory;
 
-public class MessageSummarizer
+public static class MessageSummarizer
 {
-    private const string SummaryPrompt = @"
+    public const string SummaryPrompt = @"
 Progressively summarize the lines of conversation provided, adding onto the previous summary returning a new summary.
 
 EXAMPLE
@@ -28,31 +28,22 @@ New lines of conversation:
 
 New summary:";
 
-    private IChatModel Model { get; }
-    private MessageFormatter Formatter { get; }
-
-    public MessageSummarizer(IChatModel model)
+    public static async Task<string> SummarizeAsync(
+        this IChatModel chatModel,
+        IEnumerable<Message> newMessages,
+        string existingSummary,
+        MessageFormatter? formatter = null,
+        CancellationToken cancellationToken = default)
     {
-        Model = model ?? throw new ArgumentNullException(nameof(model));
-        Formatter = new MessageFormatter();
-    }
-
-    public MessageSummarizer(IChatModel model, MessageFormatter formatter)
-    {
-        Model = model ?? throw new ArgumentNullException(nameof(model));
-        Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
-    }
-
-    public async Task<string> Summarize(IEnumerable<Message> newMessages, string existingSummary)
-    {
-        string newLines = Formatter.Format(newMessages);
+        formatter ??= new MessageFormatter();
+        var newLines = formatter.Format(newMessages);
 
         var chain =
             Set(existingSummary, outputKey: "summary")
             | Set(newLines, outputKey: "new_lines")
             | Template(SummaryPrompt)
-            | LLM(Model);
+            | LLM(chatModel);
 
-        return await chain.Run("text").ConfigureAwait(false) ?? string.Empty;
+        return await chain.RunAsync("text", cancellationToken: cancellationToken).ConfigureAwait(false) ?? string.Empty;
     }
 }

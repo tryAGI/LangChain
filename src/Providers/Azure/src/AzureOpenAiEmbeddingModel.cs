@@ -76,6 +76,7 @@ public class AzureOpenAiEmbeddingModel(
             Values = rr,
             Usage = Usage.Empty,
             UsedSettings = EmbeddingSettings.Default,
+            Dimensions = rr.FirstOrDefault()?.Length ?? 0,
         };
     }
     

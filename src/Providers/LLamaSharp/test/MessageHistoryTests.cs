@@ -11,7 +11,7 @@ public class MessageHistoryTests
 
     [Test]
     [Explicit]
-    public void TestHistory()
+    public async Task TestHistory()
     {
         var model = LLamaSharpModelInstruction.FromPath(ModelPath);
 
@@ -34,13 +34,13 @@ AI: ";
             | LLM(model, inputKey: "prompt", outputKey: "text")
             | UpdateMemory(memory, requestKey: "message", responseKey: "text"); // save the messages to the buffer
                     
-        chain.Run().Wait(); // call the chain for the first time.
+        await chain.RunAsync(); // call the chain for the first time.
                             // memory would contain 2 messages(1 from Human, 1 from AI).
 
         message.Value = "what is my name?"; // change the message.
                                             // This will appear as a new message from human
 
-        var res=chain.Run().Result;  // call the chain for the second time.
+        var res= await chain.RunAsync();  // call the chain for the second time.
                                                 // prompt will contain previous messages and a question about the name.
 
         history.Messages.Count.Should().Be(4);

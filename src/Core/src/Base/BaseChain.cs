@@ -34,9 +34,10 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// Run the chain using a simple input/output.
     /// </summary>
     /// <param name="input">The string input to use to execute the chain.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>A text value containing the result of the chain.</returns>
     /// <exception cref="ArgumentException">If the type of chain used expects multiple inputs, this method will throw an ArgumentException.</exception>
-    public virtual async Task<string?> Run(string input)
+    public virtual async Task<string?> RunAsync(string input, CancellationToken cancellationToken = default)
     {
         var isKeylessInput = InputKeys.Count <= 1;
 
@@ -46,7 +47,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
         }
 
         var values = InputKeys.Count > 0 ? new ChainValues(InputKeys[0], input) : new ChainValues();
-        var returnValues = await CallAsync(values).ConfigureAwait(false);
+        var returnValues = await CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
         var keys = returnValues.Value.Keys;
 
         if (keys.Count(p => p != RunKey) == 1)
@@ -68,8 +69,9 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// addition to callbacks passed to the chain during construction, but only
     /// these runtime callbacks will propagate to calls to other objects.
     /// </param>
+    /// <param name="cancellationToken"></param>
     /// <returns>A text value containing the result of the chain.</returns>
-    public virtual async Task<string> Run(Dictionary<string, object> input, ICallbacks? callbacks = null)
+    public virtual async Task<string> RunAsync(Dictionary<string, object> input, ICallbacks? callbacks = null, CancellationToken cancellationToken = default)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
         
@@ -80,7 +82,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
             throw new ArgumentException($"Chain {ChainType()} expects {InputKeys.Count} but, received {input.Count}");
         }
 
-        var returnValues = await CallAsync(new ChainValues(input), callbacks).ConfigureAwait(false);
+        var returnValues = await CallAsync(new ChainValues(input), callbacks, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var returnValue = returnValues.Value.FirstOrDefault(kv => kv.Key == OutputKeys[0]).Value;
 
@@ -94,12 +96,14 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <param name="callbacks"></param>
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task<IChainValues> CallAsync(
         IChainValues values,
         ICallbacks? callbacks = null,
         IReadOnlyList<string>? tags = null,
-        IReadOnlyDictionary<string, object>? metadata = null)
+        IReadOnlyDictionary<string, object>? metadata = null,
+        CancellationToken cancellationToken = default)
     {
         var callbackManager = await CallbackManager.Configure(
             callbacks,
@@ -114,7 +118,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
 
         try
         {
-            var result = await CallAsync(values, runManager).ConfigureAwait(false);
+            var result = await CallAsync(values, runManager, cancellationToken).ConfigureAwait(false);
 
             await runManager.HandleChainEndAsync(values, result).ConfigureAwait(false);
 
@@ -132,15 +136,16 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// </summary>
     /// <param name="values">The <see cref="ChainValues"/> to use.</param>
     /// <param name="runManager"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected abstract Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager);
+    protected abstract Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Call the chain on all inputs in the list.
     /// </summary>
-    public virtual async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs)
+    public virtual async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs, CancellationToken cancellationToken = default)
     {
-        var tasks = inputs.Select(input=> CallAsync(input));
+        var tasks = inputs.Select(input=> CallAsync(input, cancellationToken: cancellationToken));
         var results = await Task.WhenAll(tasks).ConfigureAwait(false);
 
         return results.ToList();
@@ -153,7 +158,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// <param name="values"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async static Task<BaseChain> Deserialize(SerializedBaseChain data, LoadValues? values = null)
+    public static async Task<BaseChain> Deserialize(SerializedBaseChain data, LoadValues? values = null)
     {
         data = data ?? throw new ArgumentNullException(nameof(data));
         

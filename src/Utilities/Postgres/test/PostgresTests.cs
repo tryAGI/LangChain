@@ -237,7 +237,7 @@ id	name	age
         var chainInput = new SqlDatabaseChainInput(db, llmChain);
         var chain = new SqlDatabaseChain(chainInput);
 
-        var result = await chain.Run("How many kids have dogs?");
+        var result = await chain.RunAsync("How many kids have dogs?");
 
         result.Should().NotBeNullOrEmpty();
         Console.WriteLine(result);

@@ -8,7 +8,7 @@ using LangChain.Providers.Amazon.Bedrock.Internal;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.Amazon.Bedrock;
 
-public abstract class MistralInstructChatModel(
+public class MetaLlamaChatModel(
     BedrockProvider provider,
     string id)
     : ChatModel(id)
@@ -33,7 +33,7 @@ public abstract class MistralInstructChatModel(
 
         var stringBuilder = new StringBuilder();
 
-        var usedSettings = MistralInstructChatSettings.Calculate(
+        var usedSettings = MetaLlama2ChatSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
@@ -50,34 +50,25 @@ public abstract class MistralInstructChatModel(
                 var streamEvent = (PayloadPart)payloadPart;
                 var chunk = await JsonSerializer.DeserializeAsync<JsonObject>(streamEvent.Bytes, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
-                var delta = chunk?["outputText"]!.GetValue<string>();
+                var delta = chunk?["generation"]?.GetValue<string>() ?? string.Empty;
 
                 OnPartialResponseGenerated(delta!);
                 stringBuilder.Append(delta);
 
-                var finished = chunk?["completionReason"]?.GetValue<string>();
-                if (finished?.ToUpperInvariant() == "FINISH")
+                var finished = chunk?["stop_reason"]?.GetValue<string>() ?? string.Empty;
+                if (string.Equals(finished.ToUpperInvariant(), "STOP", StringComparison.Ordinal))
                 {
                     OnCompletedResponseGenerated(stringBuilder.ToString());
                 }
             }
-
-            OnPartialResponseGenerated(Environment.NewLine);
-            stringBuilder.Append(Environment.NewLine);
-
-            var newMessage = new Message(
-                Content: stringBuilder.ToString(),
-                Role: MessageRole.Ai);
-            messages.Add(newMessage);
-
-            OnCompletedResponseGenerated(newMessage.Content);
         }
         else
         {
             var response = await provider.Api.InvokeModelAsync(Id, bodyJson, cancellationToken)
                 .ConfigureAwait(false);
 
-            var generatedText = response?["outputs"]?[0]?["text"]?.GetValue<string>() ?? string.Empty;
+            var generatedText = response?["generation"]?
+                .GetValue<string>() ?? string.Empty;
 
             messages.Add(generatedText.AsAiMessage());
             OnCompletedResponseGenerated(generatedText);
@@ -99,20 +90,19 @@ public abstract class MistralInstructChatModel(
     }
 
     /// <summary>
-    /// Creates the request body JSON for the Mistral model based on the provided prompt and settings.
+    /// Creates the request body JSON for the Meta model based on the provided prompt and settings.
     /// </summary>
     /// <param name="prompt">The input prompt for the model.</param>
     /// <param name="usedSettings">The settings to use for the request.</param>
     /// <returns>A `JsonObject` representing the request body.</returns>
-    private static JsonObject CreateBodyJson(string prompt, MistralInstructChatSettings usedSettings)
+    private static JsonObject CreateBodyJson(string prompt, MetaLlama2ChatSettings usedSettings)
     {
         var bodyJson = new JsonObject
         {
             ["prompt"] = prompt,
-            ["max_tokens"] = usedSettings.MaxTokens!.Value,
+            ["max_gen_len"] = usedSettings.MaxTokens!.Value,
             ["temperature"] = usedSettings.Temperature!.Value,
             ["top_p"] = usedSettings.TopP!.Value,
-           // ["top_k"] = usedSettings.TopK!.Value
         };
         return bodyJson;
     }

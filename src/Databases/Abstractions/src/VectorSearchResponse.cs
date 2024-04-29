@@ -8,5 +8,5 @@ public class VectorSearchResponse
     /// <summary>
     /// 
     /// </summary>
-    public IReadOnlyList<VectorSearchItem> Items { get; set; } = [];
+    public IReadOnlyList<Vector> Items { get; set; } = [];
 }

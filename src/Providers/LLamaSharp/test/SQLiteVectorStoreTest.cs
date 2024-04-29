@@ -1,4 +1,5 @@
 ﻿using LangChain.Databases;
+using LangChain.Databases.Sqlite;
 using LangChain.Sources;
 using LangChain.Providers.HuggingFace.Downloader;
 
@@ -16,10 +17,11 @@ public class SQLiteVectorStoreTest
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
         
         var dbExists = File.Exists("vectors.db");
-        var vectorDatabase = new SQLiteVectorStore("vectors.db","vectors");
+        var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, dimensions: 1536);
         if (!dbExists)
         {
-            await vectorDatabase.AddDocumentsAsync(embeddings, new string[]
+            await vectorCollection.AddDocumentsAsync(embeddings, new string[]
             {
                 "I spent entire day watching TV",
                 "My dog name is Bob",
@@ -29,7 +31,7 @@ public class SQLiteVectorStoreTest
         }
         
 
-        var results = await vectorDatabase.AsRetriever(embeddings).GetRelevantDocumentsAsync("What is my dog name?");
+        var results = await vectorCollection.AsRetriever(embeddings).GetRelevantDocumentsAsync("What is my dog name?");
 
         results.ElementAt(0).PageContent.Should().Be("My dog name is Bob");
     }

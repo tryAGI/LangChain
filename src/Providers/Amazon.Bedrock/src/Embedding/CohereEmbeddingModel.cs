@@ -62,6 +62,7 @@ public abstract class CohereEmbeddingModel(
                 .ToArray(),
             Usage = Usage.Empty,
             UsedSettings = usedSettings,
+            Dimensions = embeddings.Count,
         };
     }
 }

@@ -71,7 +71,9 @@ public class ReActParserChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override Task<IChainValues> InternalCall(IChainValues values)
+    protected override Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         

@@ -44,8 +44,9 @@ public abstract class BaseCombineDocumentsChain(
     /// </summary>
     /// <param name="values"></param>
     /// <param name="runManager"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -57,7 +58,7 @@ public abstract class BaseCombineDocumentsChain(
             .ToDictionary(kv => kv.Key, kv => kv.Value);
 
         var (output, returnDict) = await CombineDocsAsync(
-            (docs as List<Document> ?? new List<Document>()), otherKeys).ConfigureAwait(false);
+            (docs as List<Document> ?? new List<Document>()), otherKeys, cancellationToken).ConfigureAwait(false);
 
         returnDict[OutputKey] = output;
         returnDict.TryAddKeyValues(values.Value);
@@ -75,18 +76,22 @@ public abstract class BaseCombineDocumentsChain(
     /// </summary>
     /// <param name="docs">a list of documents to use to calculate the total prompt length.</param>
     /// <param name="otherKeys"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>Returns null if the method does not depend on the prompt length, otherwise the length of the prompt in tokens.</returns>
-    public abstract Task<int?> PromptLength(
+    public abstract Task<int?> PromptLengthAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys);
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Combine documents into a single string.
     /// </summary>
     /// <param name="docs">the documents to combine</param>
     /// <param name="otherKeys"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>The first element returned is the single string output. The second element returned is a dictionary of other keys to return.</returns>
     public abstract Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys);
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default);
 }

@@ -91,7 +91,7 @@ public class SageMakerTests
     }
 
     [Test]
-    public void LLMChainTest()
+    public async Task LLMChainTest()
     {
         var provider = new SageMakerProvider(apiGatewayRoute: "https://your-url.execute-api.us-east-1.amazonaws.com/model");
         var model = new SageMakerModel(provider, endpointName: "openchat");
@@ -110,7 +110,7 @@ The pet name is
             | Template(promptText, outputKey: "prompt")
             | LLM(model, inputKey: "prompt", outputKey: "text");
 
-        var res = chain.Run(resultKey: "text").Result;
+        var res = await chain.RunAsync(resultKey: "text", CancellationToken.None);
         Console.WriteLine(res);
     }
 

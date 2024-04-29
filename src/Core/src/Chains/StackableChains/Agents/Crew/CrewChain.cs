@@ -27,8 +27,11 @@ public class CrewChain(
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -42,7 +45,7 @@ public class CrewChain(
             task.Tools.Add(new DelegateWorkTool(allAgents.Except(new[] { task.Agent })));
         }
         
-        var res = await task.ExecuteAsync(Context).ConfigureAwait(false);
+        var res = await task.ExecuteAsync(Context, cancellationToken).ConfigureAwait(false);
         Context = res;
 
         values.Value[outputKey] = res;

@@ -7,19 +7,19 @@ namespace LangChain.Chains.HelperChains;
 /// <inheritdoc/>
 public class RetrieveDocumentsChain : BaseStackableChain
 {
-    private readonly IVectorDatabase _vectorDatabase;
+    private readonly IVectorCollection _vectorCollection;
     private readonly IEmbeddingModel _embeddingModel;
     private readonly int _amount;
 
     /// <inheritdoc/>
     public RetrieveDocumentsChain(
-        IVectorDatabase vectorDatabase,
+        IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         string inputKey = "query",
         string outputKey = "documents",
         int amount = 4)
     {
-        _vectorDatabase = vectorDatabase;
+        _vectorCollection = vectorCollection;
         _embeddingModel = embeddingModel;
         _amount = amount;
         InputKeys = new[] { inputKey };
@@ -27,15 +27,17 @@ public class RetrieveDocumentsChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
-        var retriever = _vectorDatabase.AsRetriever(_embeddingModel);
+        var retriever = _vectorCollection.AsRetriever(_embeddingModel);
         retriever.K = _amount;
 
         var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;
-        var results = await retriever.GetRelevantDocumentsAsync(query).ConfigureAwait(false);
+        var results = await retriever.GetRelevantDocumentsAsync(query, cancellationToken: cancellationToken).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = results.ToList();
         return values;
     }

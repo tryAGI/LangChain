@@ -21,7 +21,7 @@ public class AudioTests
             | TTS(tts, inputKey: "message", outputKey: "audio").UseCache()
             | STT(stt, inputKey: "audio", outputKey: "text").UseCache();
 
-        var result = await chain.Run();
+        var result = await chain.RunAsync();
         var text = result.Value["text"].ToString() ?? string.Empty;
 
         messageText.ToLowerInvariant().Should().Be(text.ToLowerInvariant());

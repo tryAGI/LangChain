@@ -81,14 +81,17 @@ public abstract class BaseStackableChain : IChain
     /// <param name="callbacks"></param>
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="StackableChainException"></exception>
-    public Task<IChainValues> CallAsync(IChainValues values, ICallbacks? callbacks = null,
-        IReadOnlyList<string>? tags = null, IReadOnlyDictionary<string, object>? metadata = null)
+    public Task<IChainValues> CallAsync(
+        IChainValues values,
+        ICallbacks? callbacks = null,
+        IReadOnlyList<string>? tags = null,
+        IReadOnlyDictionary<string, object>? metadata = null,
+        CancellationToken cancellationToken = default)
     {
-        
-            
         if (values == null)
         {
             throw new ArgumentNullException(nameof(values));
@@ -96,7 +99,7 @@ public abstract class BaseStackableChain : IChain
 
         try
         {
-            var res= InternalCall(values);
+            var res = InternalCallAsync(values, cancellationToken);
             if (_hook!=null)
             {
                 _hook(values);
@@ -113,7 +116,7 @@ public abstract class BaseStackableChain : IChain
                 ? GenerateName()
                 : Name;
             var inputValues = FormatInputValues(values);
-            var message = $"Error occured in {name} with inputs \n{inputValues}\n.";
+            var message = $"Error occurred in {name} with inputs \n{inputValues}\n.";
 
             throw new StackableChainException(message, ex);
         }
@@ -124,8 +127,11 @@ public abstract class BaseStackableChain : IChain
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected abstract Task<IChainValues> InternalCall(IChainValues values);
+    protected abstract Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 
@@ -153,11 +159,14 @@ public abstract class BaseStackableChain : IChain
     /// 
     /// </summary>
     /// <returns></returns>
-    public async Task<IChainValues> Run(StackableChainHook? hook=null)
+    public async Task<IChainValues> RunAsync(StackableChainHook? hook = null, CancellationToken cancellationToken = default)
     {
-        var values = new StackableChainValues() {Hook = hook};
+        var values = new StackableChainValues
+        {
+            Hook = hook
+        };
         hook?.ChainStart(values);
-        var res = await CallAsync(values).ConfigureAwait(false);
+        var res = await CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
         return res;
     }
 
@@ -166,15 +175,17 @@ public abstract class BaseStackableChain : IChain
     /// </summary>
     /// <param name="resultKey"></param>
     /// <param name="hook"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<string?> Run(
+    public async Task<string?> RunAsync(
         string resultKey,
-        StackableChainHook? hook = null)
+        StackableChainHook? hook = null,
+        CancellationToken cancellationToken = default)
     {
         var values = await CallAsync(new StackableChainValues
         {
             Hook = hook,
-        }).ConfigureAwait(false);
+        }, cancellationToken: cancellationToken).ConfigureAwait(false);
         
         return values.Value[resultKey].ToString();
     }
@@ -184,16 +195,18 @@ public abstract class BaseStackableChain : IChain
     /// </summary>
     /// <param name="resultKey"></param>
     /// <param name="hook"></param>
+    /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public async Task<T> Run<T>(
+    public async Task<T> RunAsync<T>(
         string resultKey,
-        StackableChainHook? hook = null)
+        StackableChainHook? hook = null,
+        CancellationToken cancellationToken = default)
     {
         var values = await CallAsync(new StackableChainValues
         {
             Hook = hook,
-        }).ConfigureAwait(false);
+        }, cancellationToken: cancellationToken).ConfigureAwait(false);
         
         return (T)values.Value[resultKey];
     }
@@ -202,10 +215,11 @@ public abstract class BaseStackableChain : IChain
     /// 
     /// </summary>
     /// <param name="resultKey"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<string?> Run(string resultKey)
+    public Task<string?> RunAsync(string resultKey, CancellationToken cancellationToken = default)
     {
-        return Run(resultKey, null);
+        return RunAsync(resultKey, null, cancellationToken);
     }
 
     /// <summary>
@@ -213,12 +227,14 @@ public abstract class BaseStackableChain : IChain
     /// </summary>
     /// <param name="input"></param>
     /// <param name="callbacks"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<string> Run(
+    public async Task<string> RunAsync(
         Dictionary<string, object> input,
-        ICallbacks? callbacks = null)
+        ICallbacks? callbacks = null,
+        CancellationToken cancellationToken = default)
     {
-        var res = await CallAsync(new ChainValues(input)).ConfigureAwait(false);
+        var res = await CallAsync(new ChainValues(input), cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return res.Value[OutputKeys[0]].ToString() ?? string.Empty;
     }

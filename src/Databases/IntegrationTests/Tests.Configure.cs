@@ -3,6 +3,7 @@ using LangChain.Databases.Chroma;
 using LangChain.Databases.InMemory;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
+using LangChain.Databases.Sqlite;
 using Testcontainers.PostgreSql;
 
 namespace LangChain.Databases.IntegrationTests;
@@ -17,13 +18,12 @@ public partial class Tests
             {
                 return new TestEnvironment
                 {
-                    VectorDatabase = new InMemoryVectorStore(),
+                    VectorDatabase = new InMemoryVectorDatabase(),
                 };
             }
             case SupportedDatabase.Chroma:
             {
                 var port = Random.Shared.Next(49152, 65535);
-                var collectionName = GenerateCollectionName();
                 var container = new ContainerBuilder()
                     .WithImage("chromadb/chroma")
                     .WithPortBinding(hostPort: port, containerPort: 8000)
@@ -34,37 +34,39 @@ public partial class Tests
 
                 return new TestEnvironment
                 {
-                    VectorDatabase = new ChromaVectorStore(
+                    VectorDatabase = new ChromaVectorDatabase(
                         new HttpClient(),
-                        $"http://localhost:{port}",
-                        collectionName),
+                        $"http://localhost:{port}"),
                     Port = port,
-                    CollectionName = collectionName,
                 };
             }
             case SupportedDatabase.SqLite:
             {
                 return new TestEnvironment
                 {
-                    VectorDatabase = new SQLiteVectorStore("vectors.db", GenerateCollectionName()),
+                    VectorDatabase = new SqLiteVectorDatabase("vectors.db"),
                 };
             }
+            // In order to run tests please run postgres with installed pgvector locally
+            // e.g. with docker <see href="https://github.com/pgvector/pgvector#additional-installation-methods"/>
+            // docker run -p 5433:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=test ankane/pgvector
             case SupportedDatabase.Postgres:
             {
+                var port = Random.Shared.Next(49152, 65535);
                 var container = new PostgreSqlBuilder()
                     .WithImage("pgvector/pgvector:pg16")
                     .WithPassword("password")
                     .WithDatabase("test")
                     .WithUsername("postgres")
-                    .WithPortBinding(hostPort: 5433, containerPort: 5432)
+                    .WithPortBinding(hostPort: port, containerPort: 5432)
                     .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
                     .Build();
-
+            
                 await container.StartAsync(cancellationToken);
                 
                 return new TestEnvironment
                 {
-                    VectorDatabase = new PostgresVectorDatabase(container.GetConnectionString(), vectorSize: 1536),
+                    VectorDatabase = new PostgresVectorDatabase(container.GetConnectionString()),
                     Container = container,
                 };
             }
@@ -72,10 +74,12 @@ public partial class Tests
             {
                 const string password = "StronG#1235";
                 
+                var port1 = Random.Shared.Next(49152, 65535);
+                var port2 = Random.Shared.Next(49152, 65535);
                 var container = new ContainerBuilder()
                     .WithImage("opensearchproject/opensearch:latest")
-                    .WithPortBinding(hostPort: 9600, containerPort: 9600) // multiple ports can be not supported
-                    .WithPortBinding(hostPort: 9200, containerPort: 9200) // multiple ports can be not supported
+                    .WithPortBinding(hostPort: port1, containerPort: 9600) // multiple ports can be not supported
+                    .WithPortBinding(hostPort: port2, containerPort: 9200) // multiple ports can be not supported
                     .WithEnvironment("discovery.type", "single-node")
                     .WithEnvironment("plugins.security.disabled", "true")
                     .WithEnvironment("OPENSEARCH_INITIAL_ADMIN_PASSWORD", password)
@@ -83,17 +87,16 @@ public partial class Tests
                     .Build();
                 
                 await container.StartAsync(cancellationToken);
-
+            
                 return new TestEnvironment
                 {
-                    VectorDatabase = new OpenSearchVectorStore(new OpenSearchVectorStoreOptions
+                    VectorDatabase = new OpenSearchVectorDatabase(new OpenSearchVectorDatabaseOptions
                     {
-                        ConnectionUri = new Uri("http://localhost:9200"),
+                        ConnectionUri = new Uri($"http://localhost:{port2}"),
                         Username = "admin",
                         Password = password,
-                        IndexName = GenerateCollectionName(),
-                        Dimensions = 1024
                     }),
+                    Port = port2,
                 };
             }
             default:

@@ -9,8 +9,6 @@ public partial class Tests
 {
     public static Dictionary<string, float[]> Embeddings { get; } = LoadEmbeddings();
 
-    private static string GenerateCollectionName() => "test" + Guid.NewGuid().ToString("N");
-
     internal static Mock<IEmbeddingModel> CreateEmbeddingModelMock()
     {
         var mock = new Mock<IEmbeddingModel>();
