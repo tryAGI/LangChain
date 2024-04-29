@@ -1,24 +1,25 @@
-﻿using LangChain.Providers;
+﻿using DotNet.Testcontainers.Builders;
+using LangChain.Memory;
+using LangChain.Providers;
+using Testcontainers.Redis;
 
 namespace LangChain.Databases.IntegrationTests;
 
-/// <summary>
-/// In order to run tests please run redis locally, e.g. with docker
-/// docker run -p 6379:6379 redis
-/// </summary>
 [TestFixture]
 public class RedisTests
 {
-    private readonly string _connectionString = "127.0.0.1:6379";
-
     [Test]
-    [Explicit]
-    public void GetMessages_EmptyHistory_Ok()
+    public async Task GetMessages_EmptyHistory_Ok()
     {
-        var sessionId = "GetMessages_EmptyHistory_Ok";
-        var history = new RedisChatMessageHistory(
-            sessionId,
-            _connectionString,
+        await using var container = new RedisBuilder()
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
+            .Build();
+
+        await container.StartAsync();
+
+        BaseChatMessageHistory history = new RedisChatMessageHistory(
+            sessionId: "GetMessages_EmptyHistory_Ok",
+            connectionString: container.GetConnectionString(),
             ttl: TimeSpan.FromSeconds(30));
 
         var existing = history.Messages;
@@ -27,13 +28,17 @@ public class RedisTests
     }
 
     [Test]
-    [Explicit]
     public async Task AddMessage_Ok()
     {
-        var sessionId = "RedisChatMessageHistoryTests_AddMessage_Ok";
-        var history = new RedisChatMessageHistory(
-            sessionId,
-            _connectionString,
+        await using var container = new RedisBuilder()
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
+            .Build();
+
+        await container.StartAsync();
+
+        BaseChatMessageHistory history = new RedisChatMessageHistory(
+            sessionId: "RedisChatMessageHistoryTests_AddMessage_Ok",
+            connectionString: container.GetConnectionString(),
             ttl: TimeSpan.FromSeconds(30));
 
         var humanMessage = Message.Human("Hi, AI");
@@ -53,13 +58,17 @@ public class RedisTests
     }
 
     [Test]
-    [Explicit]
     public async Task Ttl_Ok()
     {
-        var sessionId = "Ttl_Ok";
-        var history = new RedisChatMessageHistory(
-            sessionId,
-            _connectionString,
+        await using var container = new RedisBuilder()
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
+            .Build();
+
+        await container.StartAsync();
+
+        BaseChatMessageHistory history = new RedisChatMessageHistory(
+            sessionId: "Ttl_Ok",
+            connectionString: container.GetConnectionString(),
             ttl: TimeSpan.FromSeconds(2));
 
         var humanMessage = Message.Human("Hi, AI");
@@ -73,13 +82,17 @@ public class RedisTests
     }
 
     [Test]
-    [Explicit]
     public async Task Clear_Ok()
     {
-        var sessionId = "Ttl_Ok";
-        var history = new RedisChatMessageHistory(
-            sessionId,
-            _connectionString,
+        await using var container = new RedisBuilder()
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
+            .Build();
+
+        await container.StartAsync();
+
+        BaseChatMessageHistory history = new RedisChatMessageHistory(
+            sessionId: "Clear_Ok",
+            connectionString: container.GetConnectionString(),
             ttl: TimeSpan.FromSeconds(30));
 
         await history.Clear();
