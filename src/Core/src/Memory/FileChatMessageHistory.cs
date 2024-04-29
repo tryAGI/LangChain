@@ -64,8 +64,11 @@ public class FileChatMessageHistory : BaseChatMessageHistory
         {
             if (File.Exists(MessagesFilePath))
             {
-                string json = File.ReadAllText(MessagesFilePath);
-                _messages = JsonSerializer.Deserialize<List<Message>>(json) ?? new List<Message>();
+                var json = File.ReadAllText(MessagesFilePath);
+                if (!string.IsNullOrWhiteSpace(json))
+                {
+                    _messages = JsonSerializer.Deserialize<List<Message>>(json) ?? new List<Message>();
+                }
             }
             
             return Task.CompletedTask;
