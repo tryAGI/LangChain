@@ -1,76 +1,31 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using LangChain.Databases.JsonConverters;
 using LangChain.Sources;
 using Microsoft.Data.Sqlite;
 
-namespace LangChain.Databases;
+namespace LangChain.Databases.Sqlite;
 
 /// <summary>
 /// 
 /// </summary>
-public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
+public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
 {
-    private readonly string _tableName;
-    private readonly Func<float[], float[], float> _distanceFunction;
     private readonly SqliteConnection _connection;
 
-    public static SQLIteVectorStoreOptions DefaultOptions { get; } = new();
-
-
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="filename"></param>
-    /// <param name="tableName"></param>
-    /// <param name="distanceMetrics"></param>
-    public SQLiteVectorStore(
-        string filename,
-        string tableName,
-        EDistanceMetrics distanceMetrics = EDistanceMetrics.Euclidean)
+    /// <param name="connection"></param>
+    /// <param name="name"></param>
+    /// <param name="id"></param>
+    public SqLiteVectorCollection(
+        SqliteConnection connection,
+        string name = DefaultName,
+        string? id = null) : base(name, id)
     {
-        _tableName = tableName;
-        if (distanceMetrics == EDistanceMetrics.Euclidean)
-            _distanceFunction = Utils.ComputeEuclideanDistance;
-        else
-            _distanceFunction = Utils.ComputeManhattanDistance;
-
-        SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
-
-        _connection = new SqliteConnection($"Data Source={filename}");
-        _connection.Open();
-        _connection.CreateFunction(
-            "distance",
-            (string a, string b)
-                =>
-            {
-                var vecA = JsonSerializer.Deserialize(a, SourceGenerationContext.Default.SingleArray);
-                var vecB = JsonSerializer.Deserialize(b, SourceGenerationContext.Default.SingleArray);
-                if (vecA == null || vecB == null)
-                    return 0f;
-                
-                return _distanceFunction(vecA, vecB);
-            });
-        EnsureTable();
-
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Dispose()
-    {
-        _connection.Close();
-        _connection.Dispose();
-    }
-
-    void EnsureTable() {
-        
-        var createCommand = _connection.CreateCommand();
-        string query = $"CREATE TABLE IF NOT EXISTS {_tableName} (id TEXT PRIMARY KEY, vector BLOB, document TEXT)";
-        createCommand.CommandText = query;
-        createCommand.ExecuteNonQuery();
-        
+        _connection = connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
     private static string SerializeDocument(Document document)
@@ -85,9 +40,8 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
 
     async Task InsertDocument(string id, float[] vector, Document document)
     {
-        
         var insertCommand = _connection.CreateCommand();
-        string query = $"INSERT INTO {_tableName} (id, vector, document) VALUES (@id, @vector, @document)";
+        string query = $"INSERT INTO {Name} (id, vector, document) VALUES (@id, @vector, @document)";
         insertCommand.CommandText = query;
         insertCommand.Parameters.AddWithValue("@id", id);
         insertCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
@@ -98,20 +52,17 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
 
     async Task DeleteDocument(string id)
     {
-        
         var deleteCommand = _connection.CreateCommand();
-        string query = $"DELETE FROM {_tableName} WHERE id=@id";
+        string query = $"DELETE FROM {Name} WHERE id=@id";
         deleteCommand.CommandText = query;
         deleteCommand.Parameters.AddWithValue("@id", id);
         await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
-        
     }
 
     async Task<List<(Document,float)>> SearchByVector(float[] vector, int k)
     {
-        
         var searchCommand = _connection.CreateCommand();
-        string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {_tableName} ORDER BY d LIMIT @k";
+        string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {Name} ORDER BY d LIMIT @k";
         searchCommand.CommandText = query;
         searchCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
         searchCommand.Parameters.AddWithValue("@k", k);
@@ -130,7 +81,6 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
         
         return res;
     }
-    
 
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(
@@ -150,6 +100,43 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
         }
 
         return items.Select(i => i.Id).ToArray();
+    }
+
+    /// <inheritdoc />
+    public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var command = _connection.CreateCommand();
+        var query = $"SELECT vector, document FROM {Name} WHERE id=@id";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@id", id);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+        {
+            return null;
+        }
+        
+        var vec = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
+        var doc = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
+        var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Document) ?? new Document("");
+        
+        return new Vector
+        {
+            Id = id,
+            Text = docDeserialized.PageContent,
+            Metadata = docDeserialized.Metadata,
+            Embedding = JsonSerializer.Deserialize(vec, SourceGenerationContext.Default.SingleArray),
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        var command = _connection.CreateCommand();
+        var query = $"SELECT COUNT(*) FROM {Name}";
+        command.CommandText = query;
+        var count = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+        
+        return count == null || Convert.ToInt32(count, CultureInfo.InvariantCulture) == 0;
     }
 
     /// <summary>
@@ -196,4 +183,7 @@ public sealed class SQLiteVectorStore : IVectorDatabase, IDisposable
 [JsonSourceGenerationOptions(WriteIndented = true, Converters = [typeof(ObjectAsPrimitiveConverter)])]
 [JsonSerializable(typeof(Document))]
 [JsonSerializable(typeof(float[]))]
+[JsonSerializable(typeof(int))]
+[JsonSerializable(typeof(double))]
+[JsonSerializable(typeof(float))]
 internal sealed partial class SourceGenerationContext : JsonSerializerContext;

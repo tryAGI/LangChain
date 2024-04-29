@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using LangChain.Sources;
 
 namespace LangChain.Databases.Postgres;
 
@@ -11,18 +10,12 @@ namespace LangChain.Databases.Postgres;
 /// </summary>
 [RequiresDynamicCode("Requires dynamic code.")]
 [RequiresUnreferencedCode("Requires unreferenced code.")]
-public class PostgresVectorDatabase(
-    string connectionString,
-    int vectorSize,
-    string schema = PostgresVectorDatabase.DefaultSchema,
-    string collectionName = PostgresVectorDatabase.DefaultCollectionName)
-    : IVectorDatabase
+public class PostgresVectorCollection(
+    PostgresDbClient client,
+    string name = VectorCollection.DefaultName,
+    string? id = null)
+    : VectorCollection(name, id), IVectorCollection
 {
-    private const string DefaultSchema = "public";
-    private const string DefaultCollectionName = "langchain";
-
-    private readonly PostgresDbClient _postgresDbClient = new(connectionString, schema, vectorSize);
-
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(
         IReadOnlyCollection<Vector> items,
@@ -32,8 +25,8 @@ public class PostgresVectorDatabase(
         
         foreach (var item in items)
         {
-            await _postgresDbClient.UpsertAsync(
-                tableName: collectionName,
+            await client.UpsertAsync(
+                tableName: Name,
                 id: item.Id,
                 content: item.Text,
                 metadata: item.Metadata,
@@ -48,25 +41,25 @@ public class PostgresVectorDatabase(
             .ToArray();
     }
 
-    /// <summary>
-    /// Get document by id
-    /// </summary>
-    /// <param name="id">id</param>
-    /// <param name="cancellationToken"></param>
-    public async Task<Document?> GetDocumentByIdAsync(string id, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        var record = await _postgresDbClient.GetRecordByIdAsync(collectionName, id, withEmbeddings: false, cancellationToken).ConfigureAwait(false);
+        var record = await client.GetRecordByIdAsync(Name, id, withEmbeddings: false, cancellationToken).ConfigureAwait(false);
 
         return record != null
-            ? new Document(record.Content, record.Metadata)
+            ? new Vector
+            {
+                Text = record.Content,
+                Metadata = record.Metadata,
+            }
             : null;
     }
     
     /// <inheritdoc />
     public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
-        await _postgresDbClient
-            .DeleteBatchAsync(collectionName, ids.ToList(), cancellationToken)
+        await client
+            .DeleteBatchAsync(Name, ids.ToList(), cancellationToken)
             .ConfigureAwait(false);
 
         return true;
@@ -81,9 +74,9 @@ public class PostgresVectorDatabase(
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
         
-        var records = await _postgresDbClient
+        var records = await client
             .GetWithDistanceAsync(
-                collectionName,
+                Name,
                 request.Embeddings.First(),
                 settings.DistanceStrategy,
                 limit: settings.NumberOfResults,
@@ -127,5 +120,10 @@ public class PostgresVectorDatabase(
                 })
                 .ToArray(),   
         };
+    }
+    
+    public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

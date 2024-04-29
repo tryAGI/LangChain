@@ -8,49 +8,59 @@ public interface IVectorCollection
     /// <summary>
     /// Id of the collection.
     /// </summary>
-    public string Id { get; }
+    string Id { get; }
     
     /// <summary>
     /// Name of the collection.
     /// </summary>
-    public string Name { get; }
+    string Name { get; }
     
     /// <summary>
-    /// Adds texts to the vector database and returns the ids.
+    /// Adds a collection of vectors to the store.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public Task<IReadOnlyCollection<string>> AddAsync(
+    /// <param name="items">The collection of vector search items to add.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A read-only collection of the added item IDs.</returns>
+    Task<IReadOnlyCollection<string>> AddAsync(
         IReadOnlyCollection<Vector> items,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Get vector by id.
+    /// Gets an item by its ID from a specific collection.
     /// </summary>
+    /// <param name="id">The ID of the item.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains the vector search item.</returns>
     Task<Vector?> GetAsync(
         string id,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes by ids.
+    /// Deletes items from the store by their IDs.
     /// </summary>
-    /// <param name="ids">List of Ids to delete</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public Task<bool> DeleteAsync(
+    /// <param name="ids">The IDs of the items to delete.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains a boolean indicating whether the deletion was successful.</returns>
+    Task<bool> DeleteAsync(
         IEnumerable<string> ids,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Performs a search.
+    /// Searches for vector records based on a search request.
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="settings"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>List of documents.</returns>
-    public Task<VectorSearchResponse> SearchAsync(
+    /// <param name="request">The search request.</param>
+    /// <param name="settings">The search settings.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains the search response.</returns>
+    Task<VectorSearchResponse> SearchAsync(
         VectorSearchRequest request,
         VectorSearchSettings? settings = default,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if the collection is empty.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default);
 }

@@ -1,5 +1,6 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
+using LangChain.Databases.Sqlite;
 using LangChain.Indexes;
 using LangChain.Sources;
 using LangChain.Providers;
@@ -17,8 +18,8 @@ public class ReadmeTests
     public async Task Chains1()
     {
         var (llm, embeddings) = Helpers.GetModels(ProviderType.OpenAi);
-        var vectorDatabase = new InMemoryVectorStore();
-        await vectorDatabase.AddDocumentsAsync(embeddings, new[]
+        var vectorCollection = new InMemoryVectorCollection();
+        await vectorCollection.AddDocumentsAsync(embeddings, new[]
         {
             "I spent entire day watching TV",
             "My dog name is Bob",
@@ -28,7 +29,7 @@ public class ReadmeTests
 
         var chain = (
             Set("What is the good name for a pet?", outputKey: "question") |
-            RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents") |
+            RetrieveDocuments(vectorCollection, embeddings, inputKey: "question", outputKey: "documents") |
             StuffDocuments(inputKey: "documents", outputKey: "context") |
             Template("""
                 Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -72,12 +73,13 @@ public class ReadmeTests
         
         // Create vector database from Harry Potter book pdf
         var options = new SQLIteVectorStoreOptions();
-        var vectorDatabase = new SQLiteVectorStore(options.Filename, options.TableName);
+        var vectorDatabase = new SqLiteVectorDatabase(options.Filename);
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(collectionName: "harrypotter", dimensions: 1536);
 
         using (var source = await PdfPigPdfSource.CreateFromUriAsync(
             new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf")))
         {
-            await vectorDatabase.LoadAndSplitDocuments(
+            await vectorCollection.LoadAndSplitDocuments(
                 embeddings,
                 sources: new []{ source }).ConfigureAwait(false);
         }
@@ -87,7 +89,7 @@ public class ReadmeTests
         
         // Find similar documents for the question
         const string question = "Who was drinking a unicorn blood?";
-        var similarDocuments = await vectorDatabase.GetSimilarDocuments(embeddings, question, amount: 5);
+        var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddings, question, amount: 5);
         
         // Use similar documents and LLM to answer the question
         var answer = await llm.GenerateAsync(
@@ -113,7 +115,7 @@ Helpful Answer:";
 
         var chain =
             Set("Who was drinking a unicorn blood?")     // set the question (default key is "text")
-            | RetrieveSimilarDocuments(vectorDatabase, embeddings, amount: 5) // take 5 most similar documents
+            | RetrieveSimilarDocuments(vectorCollection, embeddings, amount: 5) // take 5 most similar documents
             | CombineDocuments(outputKey: "context")     // combine documents together and put them into context
             | Template(promptTemplate)                   // replace context and question in the prompt with their values
             | LLM(llm.UseConsoleForDebug());             // send the result to the language model
@@ -130,8 +132,8 @@ Helpful Answer:";
     {
         var (llm, embeddings) = Helpers.GetModels(ProviderType.OpenAi);
         
-        var vectorDatabase = new InMemoryVectorStore();
-        await vectorDatabase.AddDocumentsAsync(embeddings, new[]
+        var vectorCollection = new InMemoryVectorCollection();
+        await vectorCollection.AddDocumentsAsync(embeddings, new[]
         {
             "I spent entire day watching TV",
             "My dog name is Bob",
@@ -140,7 +142,7 @@ Helpful Answer:";
         }.ToDocuments());
 
         const string question = "What is the good name for a pet?";
-        var similarDocuments = await vectorDatabase.GetSimilarDocuments(embeddings, question, amount: 1);
+        var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddings, question, amount: 1);
         
         Console.WriteLine($"Similar Documents: {similarDocuments.AsString()}");
         

@@ -7,35 +7,50 @@ public partial class Tests
 {
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch)]
+    [TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
         var vectorDatabase = environment.VectorDatabase;
 
+        var exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
+        exists.Should().BeFalse();
+        
         // ReSharper disable once AccessToDisposedClosure
         await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
             .Should().ThrowAsync<InvalidOperationException>();
         
-        var actual = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var actual = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         actual.Should().NotBeNull();
         actual.Id.Should().NotBeEmpty();
         actual.Name.Should().BeEquivalentTo(environment.CollectionName);
+        
+        exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
+        exists.Should().BeTrue();
 
         await vectorDatabase.DeleteCollectionAsync(environment.CollectionName);
         
         // ReSharper disable once AccessToDisposedClosure
         await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
             .Should().ThrowAsync<InvalidOperationException>();
+        
+        exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
+        exists.Should().BeFalse();
     }
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch)]
+    [TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task AddDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
         var vectorDatabase = environment.VectorDatabase;
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         var documents = new[]
         {
@@ -72,11 +87,14 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch)]
+    [TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task AddTexts_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
         var vectorDatabase = environment.VectorDatabase;
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         var texts = new[] { "apple", "orange" };
         var metadatas = new Dictionary<string, object>[2];
@@ -117,11 +135,14 @@ public partial class Tests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
+    [TestCase(SupportedDatabase.OpenSearch)]
+    [TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task DeleteDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
         var vectorDatabase = environment.VectorDatabase;
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         var documents = new[]
         {
@@ -151,13 +172,13 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.SqLite)]
-    //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
-    //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
+    [TestCase(SupportedDatabase.Postgres, Explicit = true)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
@@ -182,13 +203,13 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.SqLite)]
-    //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
-    //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
+    [TestCase(SupportedDatabase.Postgres, Explicit = true)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
@@ -209,13 +230,13 @@ public partial class Tests
     
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.SqLite)]
-    //[TestCase(SupportedDatabase.OpenSearch, Explicit = true)] // #TODO: Fix OpenSearch tests
-    //[TestCase(SupportedDatabase.Postgres, Explicit = true)] // #TODO: Fix Postgres tests
+    [TestCase(SupportedDatabase.OpenSearch, Explicit = true)]
+    [TestCase(SupportedDatabase.Postgres, Explicit = true)]
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
@@ -228,7 +249,7 @@ public partial class Tests
         var first = similar.Items.First();
 
         first.Text.Should().BeEquivalentTo("lemon");
-        if (database is SupportedDatabase.Chroma)
+        if (database is SupportedDatabase.Chroma or SupportedDatabase.Postgres)
         {
             first.Distance.Should().BeGreaterOrEqualTo(1f);
         }

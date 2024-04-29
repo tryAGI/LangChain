@@ -1,4 +1,6 @@
-﻿namespace LangChain.Databases.InMemory;
+﻿using System.Collections.Concurrent;
+
+namespace LangChain.Databases.InMemory;
 
 /// <summary>
 /// 
@@ -18,7 +20,7 @@ public class InMemoryVectorCollection(
             ? DistanceFunctions.Euclidean
             : DistanceFunctions.Manhattan;
 
-    private readonly Dictionary<string, Vector> _storage = [];
+    private readonly ConcurrentDictionary<string, Vector> _vectors = [];
 
     /// <inheritdoc />
     public Task<IReadOnlyCollection<string>> AddAsync(
@@ -34,7 +36,7 @@ public class InMemoryVectorCollection(
                 throw new ArgumentException("Embedding is required", nameof(items));
             }
             
-            _storage.Add(item.Id, item);
+            _vectors.TryAdd(item.Id, item);
         }
         
         return Task.FromResult<IReadOnlyCollection<string>>(items.Select(i => i.Id).ToArray());
@@ -49,7 +51,7 @@ public class InMemoryVectorCollection(
         
         foreach (var id in ids)
         {
-            _storage.Remove(id);
+            _vectors.TryRemove(id, out _);
         }
         
         return Task.FromResult(true);
@@ -65,7 +67,7 @@ public class InMemoryVectorCollection(
         
         return Task.FromResult(new VectorSearchResponse
         {
-            Items = _storage
+            Items = _vectors
                 .Select(d => new Vector
                 {
                     Text = d.Value.Text,
@@ -78,9 +80,14 @@ public class InMemoryVectorCollection(
         });
     }
 
+    public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(_vectors.IsEmpty);
+    }
+
     /// <inheritdoc />
     public Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(_storage.GetValueOrDefault(id));
+        return Task.FromResult(_vectors.GetValueOrDefault(id));
     }
 }

@@ -78,7 +78,7 @@ public partial class LLamaSharpTests
             Temperature = 0,
         });
 
-        var vectorStore = new InMemoryVectorStore();
+        var vectorStore = new InMemoryVectorCollection();
         await vectorStore.AddTextsAsync(embeddings, [
             "I spent entire day watching TV",
             "My dog name is Bob",

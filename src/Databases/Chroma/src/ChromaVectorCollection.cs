@@ -153,6 +153,11 @@ public class ChromaVectorCollection(
         };
     }
 
+    public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     private static string SerializeMetadata(IReadOnlyDictionary<string, object> metadata)
     {
         return JsonSerializer.Serialize(metadata, SourceGenerationContext.Default.IReadOnlyDictionaryStringObject);

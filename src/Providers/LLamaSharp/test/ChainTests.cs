@@ -55,7 +55,7 @@ The pet name is
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        var vectorStore = new InMemoryVectorStore();
+        var vectorStore = new InMemoryVectorCollection();
         await vectorStore
             .AddDocumentsAsync(embeddings, new[]
             {

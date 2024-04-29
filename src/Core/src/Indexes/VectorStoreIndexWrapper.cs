@@ -13,7 +13,7 @@ public static class VectorStoreIndexWrapper
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="vectorDatabase"></param>
+    /// <param name="vectorCollection"></param>
     /// <param name="embeddingModel"></param>
     /// <param name="question"></param>
     /// <param name="llm"></param>
@@ -21,7 +21,7 @@ public static class VectorStoreIndexWrapper
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static Task<string?> QueryAsync(
-        this IVectorDatabase vectorDatabase,
+        this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         string question,
         BaseCombineDocumentsChain llm,
@@ -31,7 +31,7 @@ public static class VectorStoreIndexWrapper
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 llm,
-                vectorDatabase.AsRetriever(embeddingModel))
+                vectorCollection.AsRetriever(embeddingModel))
             {
                 InputKey = inputKey,
                 OutputKey = outputKey,

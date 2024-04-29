@@ -16,7 +16,6 @@ namespace LangChain.Databases.Postgres;
 public class PostgresDbClient
 {
     private readonly NpgsqlDataSource _dataSource;
-    private readonly int _vectorSize;
     private readonly string _schema;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
@@ -25,15 +24,23 @@ public class PostgresDbClient
     /// </summary>
     /// <param name="connectionString">connection string</param>
     /// <param name="schema">schema name</param>
-    /// <param name="vectorSize">embeddings size</param>
-    public PostgresDbClient(string connectionString, string schema, int vectorSize)
+    public PostgresDbClient(string connectionString, string schema)
     {
+        var dataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
+        var connection = dataSource.OpenConnection();
+        using (connection)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = "CREATE EXTENSION IF NOT EXISTS vector";
+
+            command.ExecuteNonQuery();
+        }
+        
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         dataSourceBuilder.UseVector();
 
         _dataSource = dataSourceBuilder.Build();
         _schema = schema;
-        _vectorSize = vectorSize;
 
         _jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -72,8 +79,9 @@ public class PostgresDbClient
     /// Create table for documents with embeddings
     /// </summary>
     /// <param name="tableName">name of the table</param>
+    /// <param name="dimensions"></param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-    public async Task CreateEmbeddingTableAsync(string tableName, CancellationToken cancellationToken = default)
+    public async Task CreateEmbeddingTableAsync(string tableName, int dimensions, CancellationToken cancellationToken = default)
     {
         var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -88,7 +96,7 @@ CREATE TABLE IF NOT EXISTS {name}
     id TEXT NOT NULL,
     content TEXT,
     metadata JSONB,
-    embedding vector({_vectorSize}),
+    embedding vector({dimensions}),
     timestamp TIMESTAMP WITH TIME ZONE,
     PRIMARY KEY (id)
 );";

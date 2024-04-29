@@ -1,5 +1,6 @@
 ﻿using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
 using LangChain.Databases;
+using LangChain.Databases.Sqlite;
 using LangChain.Indexes;
 using LangChain.Memory;
 using LangChain.Providers;
@@ -213,24 +214,29 @@ ASSISTANT:";
     {
         // prepare OpenAI embedding model
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? throw new InvalidOperationException("OpenAI API key is not set");
-        var embeddings = new TextEmbeddingV3SmallModel(apiKey);
+        var embeddingModel = new TextEmbeddingV3SmallModel(apiKey);
 
         // prepare Ollama with mistral model
-        var model = new OllamaLanguageModelInstruction("mistral:latest",options: new OllamaLanguageModelOptions
+        var model = new OllamaLanguageModelInstruction("mistral:latest", options: new OllamaLanguageModelOptions
         {
-            Stop = new string[] { "\n" },
+            Stop = ["\n"],
             Temperature = 0.0f,
         }).UseConsoleForDebug();
 
-        var pdfSource = new PdfPigPdfSource("E:\\AI\\Datasets\\Books\\Harry-Potter-Book-1.pdf");
-        var documents = await pdfSource.LoadAsync();
 
-        var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
-
-        var vectorDatabase= new SQLiteVectorStore("vectors.db", "vectors");
-        if (!File.Exists("vectors.db"))
+        var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
+        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync("harry-potter", dimensions: 1536);
+        if (await vectorCollection.IsEmptyAsync())
         {
-            await vectorDatabase.AddSplitDocumentsAsync(embeddings, documents, textSplitter: textSplitter);
+            var pdfSource = new PdfPigPdfSource("E:\\AI\\Datasets\\Books\\Harry-Potter-Book-1.pdf");
+            var documents = await pdfSource.LoadAsync();
+
+            await vectorCollection.AddSplitDocumentsAsync(
+                embeddingModel,
+                documents,
+                textSplitter: new RecursiveCharacterTextSplitter(
+                    chunkSize: 200,
+                    chunkOverlap: 50));
         }
 
 string promptText =
@@ -244,7 +250,7 @@ Helpful Answer:";
 
         var chain =
             Set("Who was drinking a unicorn blood?", outputKey: "question")                // set the question
-            | RetrieveDocuments(vectorDatabase, embeddings, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
+            | RetrieveDocuments(vectorCollection, embeddingModel, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
             | LLM(model);                                                                       // send the result to the language model

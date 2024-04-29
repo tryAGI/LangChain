@@ -1,12 +1,12 @@
 ﻿using DotNet.Testcontainers.Builders;
+using LangChain.Databases.Mongo;
 using LangChain.Databases.Mongo.Client;
 using LangChain.Providers;
 using Testcontainers.MongoDb;
 
-namespace LangChain.Databases.Mongo.IntegrationTests;
+namespace LangChain.Databases.IntegrationTests;
 
-[TestFixture]
-public class MongoChatMessageHistoryTests
+public partial class Tests
 {
     [Test]
     public async Task GetMessages_EmptyHistory_Ok()

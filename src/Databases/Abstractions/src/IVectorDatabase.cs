@@ -7,22 +7,44 @@ namespace LangChain.Databases;
 public interface IVectorDatabase
 {
     /// <summary>
-    /// Get collection
+    /// Gets a collection by its name.
     /// </summary>
+    /// <param name="collectionName">The name of the collection.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains the vector collection.</returns>
     Task<IVectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Delete collection
+    /// Deletes a collection by its name.
     /// </summary>
+    /// <param name="collectionName">The name of the collection.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Get or create collection
+    /// Gets or creates a collection by its name.
     /// </summary>
-    Task<IVectorCollection> GetOrCreateCollectionAsync(string collectionName, CancellationToken cancellationToken = default);
+    /// <param name="collectionName">The name of the collection.</param>
+    /// <param name="dimensions">The number of dimensions of the vectors.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains the vector collection.</returns>
+    Task<IVectorCollection> GetOrCreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Check if collection exists
+    /// Checks if a collection exists.
     /// </summary>
+    /// <param name="collectionName">The name of the collection.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains a boolean indicating whether the collection exists.</returns>
     Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates a new collection with the specified options.
+    /// </summary>
+    /// <param name="collectionName">The name of the collection.</param>
+    /// <param name="dimensions">The number of dimensions of the vectors.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default);
 }

@@ -1,18 +1,18 @@
 ﻿using LangChain.Providers;
 
-namespace LangChain.Databases.Redis.IntegrationTests;
+namespace LangChain.Databases.IntegrationTests;
 
 /// <summary>
 /// In order to run tests please run redis locally, e.g. with docker
 /// docker run -p 6379:6379 redis
 /// </summary>
 [TestFixture]
-[Explicit]
-public class RedisChatMessageHistoryTests
+public class RedisTests
 {
     private readonly string _connectionString = "127.0.0.1:6379";
 
     [Test]
+    [Explicit]
     public void GetMessages_EmptyHistory_Ok()
     {
         var sessionId = "GetMessages_EmptyHistory_Ok";
@@ -27,6 +27,7 @@ public class RedisChatMessageHistoryTests
     }
 
     [Test]
+    [Explicit]
     public async Task AddMessage_Ok()
     {
         var sessionId = "RedisChatMessageHistoryTests_AddMessage_Ok";
@@ -52,6 +53,7 @@ public class RedisChatMessageHistoryTests
     }
 
     [Test]
+    [Explicit]
     public async Task Ttl_Ok()
     {
         var sessionId = "Ttl_Ok";
@@ -71,6 +73,7 @@ public class RedisChatMessageHistoryTests
     }
 
     [Test]
+    [Explicit]
     public async Task Clear_Ok()
     {
         var sessionId = "Ttl_Ok";

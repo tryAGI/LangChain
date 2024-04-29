@@ -40,9 +40,9 @@ public partial class LLamaSharpTests
         return model;
     }
     
-    private static async Task<IVectorDatabase> CreateVectorStoreIndex(IEmbeddingModel embeddings, string[] texts)
+    private static async Task<IVectorCollection> CreateVectorStoreIndex(IEmbeddingModel embeddings, string[] texts)
     {
-        var vectorDatabase = new InMemoryVectorStore();
+        var vectorDatabase = new InMemoryVectorCollection();
         await vectorDatabase.AddSplitDocumentsAsync(
             embeddings,
             texts.ToDocuments(),
