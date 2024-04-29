@@ -1,6 +1,5 @@
 using LangChain.Providers;
 using LangChain.Schema;
-using System.Security.Cryptography;
 
 namespace LangChain.Memory;
 
@@ -17,7 +16,6 @@ public class ConversationSummaryMemory : BaseChatMemory
     public override List<string> MemoryVariables => new List<string> { MemoryKey };
 
     private IChatModel Model { get; }
-    private MessageSummarizer Summarizer { get; }
     private string SummaryText { get; set; } = string.Empty;
 
     /// <summary>
@@ -26,10 +24,8 @@ public class ConversationSummaryMemory : BaseChatMemory
     /// <param name="model">Model to use for summarization</param>
     /// <exception cref="ArgumentNullException"></exception>
     public ConversationSummaryMemory(IChatModel model)
-        : base()
     {
         Model = model ?? throw new ArgumentNullException(nameof(model));
-        Summarizer = new MessageSummarizer(model);
     }
 
     /// <summary>
@@ -42,7 +38,6 @@ public class ConversationSummaryMemory : BaseChatMemory
         : base(chatHistory)
     {
         Model = model ?? throw new ArgumentNullException(nameof(model));
-        Summarizer = new MessageSummarizer(model);
     }
 
     /// <inheritdoc />
@@ -62,7 +57,7 @@ public class ConversationSummaryMemory : BaseChatMemory
             .Skip(ChatHistory.Messages.Count - 2)
             .Take(2);
 
-        SummaryText = await Summarizer.Summarize(newMessages, SummaryText).ConfigureAwait(false);
+        SummaryText = await Model.SummarizeAsync(newMessages, SummaryText).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
