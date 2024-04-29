@@ -65,6 +65,7 @@ public abstract class AmazonTitanEmbeddingModel(
             Values = embeddings.ToArray(),
             Usage = Usage.Empty,
             UsedSettings = usedSettings,
+            Dimensions = embeddings.FirstOrDefault()?.Length ?? 0,
         };
     }
 }

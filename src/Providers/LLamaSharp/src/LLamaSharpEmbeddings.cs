@@ -66,6 +66,7 @@ public sealed class LLamaSharpEmbeddings
             Values = values,
             Usage = Usage.Empty,
             UsedSettings = EmbeddingSettings.Default,
+            Dimensions = values.FirstOrDefault()?.Length ?? 0,
         };
     }
 

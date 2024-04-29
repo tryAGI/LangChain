@@ -69,7 +69,7 @@ public class OpenAiEmbeddingModel(
                     model: Id,
                     user: usedSettings.User!),
                 cancellationToken).ConfigureAwait(false);
-
+            
             var usage = GetUsage(response) with
             {
                 Time = watch.Elapsed,
@@ -91,6 +91,7 @@ public class OpenAiEmbeddingModel(
                 .ToArray(),
             UsedSettings = usedSettings,
             Usage = Usage,
+            Dimensions = results.FirstOrDefault()?.FirstOrDefault()?.Length ?? 0,
         };
     }
 }
