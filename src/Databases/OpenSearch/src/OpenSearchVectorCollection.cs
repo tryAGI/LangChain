@@ -49,6 +49,9 @@ public class OpenSearchVectorCollection(
             throw new InvalidOperationException($"Failed to add items to collection '{Name}'. DebugInformation: {response.DebugInformation}");
         }
         
+        // TODO: Search right after adding doesn't return the added items. Fix this later, it's just a temporary solution. 
+        await Task.Delay(TimeSpan.FromMilliseconds(1000), cancellationToken).ConfigureAwait(false);
+
         return response.Items
             .Select(i => i.Id)
             .ToArray();
