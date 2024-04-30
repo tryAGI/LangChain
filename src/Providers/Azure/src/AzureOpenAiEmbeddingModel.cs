@@ -70,7 +70,7 @@ public class AzureOpenAiEmbeddingModel(
         var rr = results
             .SelectMany(x => x.ToArray())
             .ToArray();
-        
+
         return new EmbeddingResponse
         {
             Values = rr,
@@ -79,14 +79,14 @@ public class AzureOpenAiEmbeddingModel(
             Dimensions = rr.FirstOrDefault()?.Length ?? 0,
         };
     }
-    
+
     private Usage GetUsage(Response<Embeddings>? response)
     {
         if (response?.Value?.Usage == null!)
         {
             return Usage.Empty;
         }
-        
+
         var tokens = response.Value?.Usage.PromptTokens ?? 0;
         var priceInUsd = EmbeddingModels
             .ById(EmbeddingModelId)?
@@ -98,6 +98,6 @@ public class AzureOpenAiEmbeddingModel(
             PriceInUsd = priceInUsd,
         };
     }
-    
+
     #endregion
 }

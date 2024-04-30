@@ -16,10 +16,10 @@ public class OpenAiCommand : Command
             description: "Model to use for commands");
         AddArgument(apiKeyArgument);
         AddOption(modelOption);
-        
+
         this.SetHandler(HandleAsync, apiKeyArgument, modelOption);
     }
-    
+
     private static async Task HandleAsync(string apiKey, string model)
     {
         await Helpers.AuthenticateWithApiKeyAsync(apiKey, model, Providers.OpenAi).ConfigureAwait(false);

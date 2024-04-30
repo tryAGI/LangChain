@@ -30,9 +30,9 @@ public class DoChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         _func(values.Value);
-        
+
         return Task.FromResult(values);
     }
 }

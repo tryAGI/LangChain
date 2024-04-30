@@ -64,7 +64,7 @@ public class MapReduceDocumentsChainTests
 
         chain.ChainType().Should().BeEquivalentTo("map_reduce_documents_chain");
 
-        var result = await chain.CombineDocsAsync(new [] { document1, document2 }, new Dictionary<string, object>());
+        var result = await chain.CombineDocsAsync(new[] { document1, document2 }, new Dictionary<string, object>());
 
         result.Output.Should().BeEquivalentTo("mapreduced");
 
@@ -87,7 +87,7 @@ public class MapReduceDocumentsChainTests
                     It.IsAny<CancellationToken>()),
                 Times.Once());
     }
-    
+
     private Mock<ILlmChain> CreateFakeLlmChain(Func<ChainValues, string> predict, PromptTemplate promptTemplate, string inputKey, string outputKey)
     {
         var mock = new Mock<ILlmChain>();

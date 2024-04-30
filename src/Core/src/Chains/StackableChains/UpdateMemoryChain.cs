@@ -23,7 +23,7 @@ public class UpdateMemoryChain(
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         await memory.SaveContext(new InputValues(
             new Dictionary<string, object>
             {
@@ -33,7 +33,7 @@ public class UpdateMemoryChain(
             {
                 [responseKey] = values.Value[responseKey],
             })).ConfigureAwait(false);
-     
+
         return values;
     }
 }

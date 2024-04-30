@@ -17,7 +17,7 @@ public class ImageToTextResponse
     /// 
     /// </summary>
     public Usage Usage { get; init; } = Usage.Empty;
-    
+
 
     /// <summary>
     /// Generated text

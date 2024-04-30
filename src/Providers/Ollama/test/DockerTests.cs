@@ -29,7 +29,7 @@ Code:
                     | LLM(model, inputKey: "prompt", outputKey: "code")
                     | ExtractCode("code", "data")
                     | SaveIntoFile("test\\Program.cs")
-                    | RunCodeInDocker(image: "mcr.microsoft.com/dotnet/sdk:8.0", command:"dotnet", arguments:"run",attachVolume: "./test", outputKey: "result");
+                    | RunCodeInDocker(image: "mcr.microsoft.com/dotnet/sdk:8.0", command: "dotnet", arguments: "run", attachVolume: "./test", outputKey: "result");
         var result = await chain.RunAsync();
 
         result.Value["result"].ToString()?.Trim().Should().Be("Hello, Anti!");

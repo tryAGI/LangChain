@@ -11,12 +11,12 @@ namespace LangChain.Chains.StackableChains.Agents;
 public class GroupChat : BaseStackableChain
 {
     private readonly IList<AgentExecutorChain> _agents;
-    
+
     private readonly string _stopPhrase;
     private readonly int _messagesLimit;
     private readonly string _inputKey;
     private readonly string _outputKey;
-    
+
     int _currentAgentId;
     private readonly MessageFormatter _messageFormatter;
     private readonly ChatMessageHistory _chatMessageHistory;
@@ -25,7 +25,7 @@ public class GroupChat : BaseStackableChain
     /// 
     /// </summary>
     public bool ThrowOnLimit { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -42,7 +42,7 @@ public class GroupChat : BaseStackableChain
         string outputKey = "output")
     {
         _agents = agents;
-        
+
         _stopPhrase = stopPhrase ?? string.Empty;
         _messagesLimit = messagesLimit;
         _inputKey = inputKey;
@@ -77,7 +77,7 @@ public class GroupChat : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         await _chatMessageHistory.Clear().ConfigureAwait(false);
         foreach (var agent in _agents)
         {
@@ -88,7 +88,7 @@ public class GroupChat : BaseStackableChain
         await _chatMessageHistory.AddMessage(new Message($"{firstAgent.Name}: {firstAgentMessage}",
             MessageRole.System)).ConfigureAwait(false);
         int messagesCount = 1;
-        while (messagesCount<_messagesLimit)
+        while (messagesCount < _messagesLimit)
         {
             var agent = GetNextAgent();
             string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages);

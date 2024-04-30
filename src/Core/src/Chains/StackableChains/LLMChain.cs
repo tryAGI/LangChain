@@ -27,7 +27,7 @@ public class LLMChain : BaseStackableChain
 
     string? GetCachedAnswer(string prompt)
     {
-        var file= Path.Combine(CACHE_DIR, $"{_llm.Id}.{Hash(prompt)}.llmcache");
+        var file = Path.Combine(CACHE_DIR, $"{_llm.Id}.{Hash(prompt)}.llmcache");
         if (File.Exists(file))
         {
             return File.ReadAllText(file);
@@ -38,7 +38,7 @@ public class LLMChain : BaseStackableChain
     void SaveCachedAnswer(string prompt, string answer)
     {
         Directory.CreateDirectory(CACHE_DIR);
-        var file= Path.Combine(CACHE_DIR, $"{_llm.Id}.{Hash(prompt)}.llmcache");
+        var file = Path.Combine(CACHE_DIR, $"{_llm.Id}.{Hash(prompt)}.llmcache");
         File.WriteAllText(file, answer);
     }
 
@@ -48,7 +48,7 @@ public class LLMChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var prompt = values.Value[InputKeys[0]].ToString() ?? string.Empty;
         string responseContent;
 
@@ -62,7 +62,7 @@ public class LLMChain : BaseStackableChain
                 return values;
             }
         }
-        
+
         var response = await _llm.GenerateAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
         responseContent = response.Messages.Last().Content;
         if (_useCache)
@@ -76,7 +76,7 @@ public class LLMChain : BaseStackableChain
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
-    public LLMChain UseCache(bool enabled=true)
+    public LLMChain UseCache(bool enabled = true)
     {
         _useCache = enabled;
         return this;

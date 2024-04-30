@@ -20,11 +20,11 @@ public class DockerTests
 
         var chain = Template(@"Generate a python program that prints ""Hello world"" do not explain or comment the code. I expect only generated code from you. Print [END] after you are done.
 
-Generated code:", outputKey:"prompt")
-                    | LLM(model, inputKey:"prompt", outputKey:"code")
-                    | ExtractCode("code","data")
+Generated code:", outputKey: "prompt")
+                    | LLM(model, inputKey: "prompt", outputKey: "code")
+                    | ExtractCode("code", "data")
                     | SaveIntoFile("main.py")
-                    | RunCodeInDocker(attachVolume:"./", outputKey:"result");
+                    | RunCodeInDocker(attachVolume: "./", outputKey: "result");
         var result = await chain.RunAsync();
 
         result.Value["result"].ToString()?.Trim().Should().Be("Hello world");

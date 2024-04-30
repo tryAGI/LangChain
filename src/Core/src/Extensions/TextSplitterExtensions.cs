@@ -25,7 +25,7 @@ public static class TextSplitterExtensions
     {
         splitter = splitter ?? throw new ArgumentNullException(nameof(splitter));
         texts = texts ?? throw new ArgumentNullException(nameof(texts));
-        
+
         var documents = new List<Document>();
 
         // if no metadata is provided, create a list of empty dictionaries

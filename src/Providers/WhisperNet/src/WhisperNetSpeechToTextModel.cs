@@ -6,12 +6,12 @@ namespace LangChain.Providers.WhisperNet;
 
 public class WhisperNetSpeechToTextModel : Model<SpeechToTextSettings>, ISpeechToTextModel
 {
-    
+
     public WhisperNetSpeechToTextConfiguration Configuration { get; }
-    
+
     [CLSCompliant(false)]
     public WhisperFactory Factory { get; }
-    
+
     /// <summary>
     /// Wrapper around Whisper.Net models
     /// </summary>
@@ -35,7 +35,7 @@ public class WhisperNetSpeechToTextModel : Model<SpeechToTextSettings>, ISpeechT
         configuration.PathToModelFile = path;
         return new WhisperNetSpeechToTextModel(Path.GetFileNameWithoutExtension(path), configuration);
     }
-    
+
     /// <inheritdoc/>
     [CLSCompliant(false)]
     public async Task<SpeechToTextResponse> TranscribeAsync(SpeechToTextRequest request, SpeechToTextSettings? settings = null,
@@ -45,11 +45,11 @@ public class WhisperNetSpeechToTextModel : Model<SpeechToTextSettings>, ISpeechT
         try
         {
             var builder = Factory.CreateBuilder();
-            if (Configuration.Temperature.HasValue) builder.WithTemperature(Configuration.Temperature.Value);        
-            if (!string.IsNullOrEmpty(Configuration.Language)) builder.WithLanguage(Configuration.Language!);        
+            if (Configuration.Temperature.HasValue) builder.WithTemperature(Configuration.Temperature.Value);
+            if (!string.IsNullOrEmpty(Configuration.Language)) builder.WithLanguage(Configuration.Language!);
             if (!string.IsNullOrEmpty(Configuration.Prompt)) builder.WithPrompt(Configuration.Prompt!);
 
-            using var audioProcessor = builder.Build(); 
+            using var audioProcessor = builder.Build();
             var sb = new StringBuilder();
             await foreach (var result in audioProcessor.ProcessAsync(request.Stream, cancellationToken))
             {

@@ -12,7 +12,7 @@ public interface IChain
     /// 
     /// </summary>
     IReadOnlyList<string> InputKeys { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>

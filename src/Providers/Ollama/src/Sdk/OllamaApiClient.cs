@@ -52,14 +52,14 @@ public class OllamaApiClient
         request.Content = new StringContent(JsonSerializer.Serialize(new
         {
             name,
-            stream=false,
+            stream = false,
         }), Encoding.UTF8, "application/json");
         using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
         using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         using var reader = new StreamReader(stream);
-        
+
         await reader.ReadToEndAsync().ConfigureAwait(false);
     }
 
@@ -81,7 +81,7 @@ public class OllamaApiClient
         GenerateCompletionRequest generateRequest)
     {
         generateRequest = generateRequest ?? throw new ArgumentNullException(nameof(generateRequest));
-        
+
         _jsonSerializerOptions ??= new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
@@ -105,7 +105,7 @@ public class OllamaApiClient
             string line = await reader.ReadLineAsync().ConfigureAwait(false) ?? string.Empty;
             var streamedResponse = JsonSerializer.Deserialize<GenerateCompletionResponseStream>(line) ??
                                    throw new InvalidOperationException("Response body was null");
-            
+
             yield return streamedResponse;
         }
     }

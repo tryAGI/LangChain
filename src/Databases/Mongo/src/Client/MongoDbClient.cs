@@ -50,7 +50,7 @@ public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
     public async Task InsertAsync<T>(T entity) where T : BaseEntity
     {
         entity = entity ?? throw new ArgumentNullException(nameof(entity));
-        
+
         await GetCollection<T>().InsertOneAsync(entity).ConfigureAwait(false);
     }
 }

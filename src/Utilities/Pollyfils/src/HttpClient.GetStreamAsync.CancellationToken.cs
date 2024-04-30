@@ -10,7 +10,7 @@ public static partial class HttpClientExtensions
         CancellationToken cancellationToken = default)
     {
         client = client ?? throw new ArgumentNullException(nameof(client));
-        
+
         return await client.GetStreamAsync(uri).ConfigureAwait(false);
     }
 }

@@ -121,7 +121,7 @@ Thought:{history}";
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var input = (string)values.Value[InputKeys[0]];
         var valuesChain = new ChainValues();
 
@@ -149,7 +149,7 @@ Thought:{history}";
             else if (res.Value[ReActAnswer] is AgentFinish)
             {
                 var finish = (AgentFinish)res.Value[ReActAnswer];
-                values.Value[OutputKeys[0]]= finish.Output;
+                values.Value[OutputKeys[0]] = finish.Output;
                 return values;
             }
         }
@@ -178,7 +178,7 @@ Thought:{history}";
     public ReActAgentExecutorChain UseTool(AgentTool tool)
     {
         tool = tool ?? throw new ArgumentNullException(nameof(tool));
-        
+
         _tools.Add(tool.Name, tool);
         return this;
     }

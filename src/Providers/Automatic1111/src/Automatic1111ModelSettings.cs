@@ -23,37 +23,37 @@ public class Automatic1111ModelSettings : TextToImageSettings
     /// </summary>
     [MemberNotNull(nameof(NegativePrompt))]
     public string? NegativePrompt { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [MemberNotNull(nameof(Seed))]
     public int? Seed { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [MemberNotNull(nameof(Steps))]
     public int? Steps { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [MemberNotNull(nameof(CfgScale))]
     public float? CfgScale { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [MemberNotNull(nameof(Width))]
     public int? Width { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [MemberNotNull(nameof(Height))]
     public int? Height { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -76,46 +76,46 @@ public class Automatic1111ModelSettings : TextToImageSettings
         var requestSettingsCasted = requestSettings as Automatic1111ModelSettings;
         var modelSettingsCasted = modelSettings as Automatic1111ModelSettings;
         var providerSettingsCasted = providerSettings as Automatic1111ModelSettings;
-        
+
         return new Automatic1111ModelSettings
         {
-            NegativePrompt = 
+            NegativePrompt =
                 requestSettingsCasted?.NegativePrompt ??
                 modelSettingsCasted?.NegativePrompt ??
                 providerSettingsCasted?.NegativePrompt ??
                 Default.NegativePrompt ??
                 throw new InvalidOperationException("Default NegativePrompt is not set."),
-            Seed = 
+            Seed =
                 requestSettingsCasted?.Seed ??
                 modelSettingsCasted?.Seed ??
                 providerSettingsCasted?.Seed ??
                 Default.Seed ??
                 throw new InvalidOperationException("Default Seed is not set."),
-            Steps = 
+            Steps =
                 requestSettingsCasted?.Steps ??
                 modelSettingsCasted?.Steps ??
                 providerSettingsCasted?.Steps ??
                 Default.Steps ??
                 throw new InvalidOperationException("Default Steps is not set."),
-            CfgScale = 
+            CfgScale =
                 requestSettingsCasted?.CfgScale ??
                 modelSettingsCasted?.CfgScale ??
                 providerSettingsCasted?.CfgScale ??
                 Default.CfgScale ??
                 throw new InvalidOperationException("Default CfgScale is not set."),
-            Width = 
+            Width =
                 requestSettingsCasted?.Width ??
                 modelSettingsCasted?.Width ??
                 providerSettingsCasted?.Width ??
                 Default.Width ??
                 throw new InvalidOperationException("Default Width is not set."),
-            Height = 
+            Height =
                 requestSettingsCasted?.Height ??
                 modelSettingsCasted?.Height ??
                 providerSettingsCasted?.Height ??
                 Default.Height ??
                 throw new InvalidOperationException("Default Height is not set."),
-            Sampler = 
+            Sampler =
                 requestSettingsCasted?.Sampler ??
                 modelSettingsCasted?.Sampler ??
                 providerSettingsCasted?.Sampler ??

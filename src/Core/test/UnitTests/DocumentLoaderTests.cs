@@ -11,7 +11,7 @@ public class DocumentLoaderTests
         var filepath = Path.Combine(@"Resources", "state_of_the_union.txt");
         var loader = new FileSource(filepath);
         var documents = await loader.LoadAsync();
-        
+
         documents.Count.Should().Be(1);
         documents.First().PageContent.Should().NotBeNullOrEmpty();
         documents.First().Metadata.Should().NotBeNull();

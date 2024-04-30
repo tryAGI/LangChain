@@ -18,12 +18,12 @@ public static class ServeExtensions
         return services;
     }
 
-    public static IServiceCollection AddCustomNameGenerator(this IServiceCollection services,Func<IReadOnlyCollection<StoredMessage>,Task<string>> generator)
+    public static IServiceCollection AddCustomNameGenerator(this IServiceCollection services, Func<IReadOnlyCollection<StoredMessage>, Task<string>> generator)
     {
         services.AddSingleton<IConversationNameProvider>(new CustomNameProvider(generator));
         return services;
     }
-    
+
     [RequiresUnreferencedCode("This API may perform reflection on the supplied delegate and its parameters. These types may be trimmed if not directly referenced.")]
     [RequiresDynamicCode("This API may perform reflection on the supplied delegate and its parameters. These types may require generated code and aren't compatible with native AOT applications.")]
     [CLSCompliant(false)]
@@ -31,7 +31,7 @@ public static class ServeExtensions
     {
         app = app ?? throw new ArgumentNullException(nameof(app));
         options = options ?? throw new ArgumentNullException(nameof(options));
-        
+
         var serveMiddlewareOptions = new ServeOptions();
         options(serveMiddlewareOptions);
         var repository = app.Services.GetRequiredService<IConversationRepository>();
@@ -49,14 +49,14 @@ public static class ServeExtensions
             }
             return Results.Ok(conversation);
         });
-        app.MapPost("/serve/conversations/{conversationId:guid}/messages", async ( PostMessageDto message, Guid conversationId) =>
+        app.MapPost("/serve/conversations/{conversationId:guid}/messages", async (PostMessageDto message, Guid conversationId) =>
         {
             var response = await controller.ProcessMessage(message, conversationId).ConfigureAwait(false);
             if (response == null)
             {
                 return Results.NotFound("Conversation not found");
             }
-            
+
             return Results.Ok(response);
         });
         app.MapGet("/serve/conversations/{conversationId:guid}", async (Guid conversationId) =>
@@ -66,7 +66,7 @@ public static class ServeExtensions
             {
                 return Results.NotFound("Conversation not found");
             }
-            
+
             return Results.Ok(conversation);
         });
         app.MapGet("/serve/conversations/{conversationId:guid}/messages", async (Guid conversationId) =>
@@ -76,13 +76,13 @@ public static class ServeExtensions
             {
                 return Results.NotFound("Conversation not found");
             }
-            
+
             return Results.Ok(messages);
         });
         app.MapDelete("/serve/conversations/{conversationId:guid}", async (Guid conversationId) =>
         {
             await controller.DeleteConversation(conversationId).ConfigureAwait(false);
-            
+
             return Results.Ok();
         });
 

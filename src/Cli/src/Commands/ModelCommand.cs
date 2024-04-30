@@ -12,10 +12,10 @@ public class ModelCommand : Command
             getDefaultValue: () => ChatModels.Gpt35Turbo,
             description: "Model to use for commands");
         AddArgument(model);
-        
+
         this.SetHandler(HandleAsync, model);
     }
-    
+
     private static async Task HandleAsync(string model)
     {
         await Helpers.SetModelAsync(model).ConfigureAwait(false);

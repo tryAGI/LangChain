@@ -17,25 +17,25 @@ public class OpenAiTextToSpeechSettings : TextToSpeechSettings
         ResponseFormat = SpeechResponseFormat.MP3,
         Speed = 1.0F,
     };
-    
+
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
     public TextToSpeechModels? Model { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
     public SpeechVoice? Voice { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
     public SpeechResponseFormat? ResponseFormat { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>

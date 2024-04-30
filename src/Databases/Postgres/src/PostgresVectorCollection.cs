@@ -22,7 +22,7 @@ public class PostgresVectorCollection(
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
-        
+
         foreach (var item in items)
         {
             await client.UpsertAsync(
@@ -35,7 +35,7 @@ public class PostgresVectorCollection(
                 cancellationToken: cancellationToken
             ).ConfigureAwait(false);
         }
-        
+
         return items
             .Select(i => i.Id)
             .ToArray();
@@ -54,7 +54,7 @@ public class PostgresVectorCollection(
             }
             : null;
     }
-    
+
     /// <inheritdoc />
     public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
@@ -73,7 +73,7 @@ public class PostgresVectorCollection(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
-        
+
         var records = await client
             .GetWithDistanceAsync(
                 Name,
@@ -82,7 +82,7 @@ public class PostgresVectorCollection(
                 limit: settings.NumberOfResults,
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
-        
+
         // MMR
         // TODO: implement maximal_marginal_relevance method or call python?
         // var embeddingArray = embedding.ToArray();
@@ -118,10 +118,10 @@ public class PostgresVectorCollection(
                     Metadata = r.Item1.Metadata,
                     Distance = r.Item2,
                 })
-                .ToArray(),   
+                .ToArray(),
         };
     }
-    
+
     public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

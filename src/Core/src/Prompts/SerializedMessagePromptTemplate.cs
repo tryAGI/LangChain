@@ -9,7 +9,7 @@ public class SerializedMessagePromptTemplate
     /// 
     /// </summary>
     public string Type { get; set; } = "message";
-    
+
     /// <summary>
     /// 
     /// </summary>

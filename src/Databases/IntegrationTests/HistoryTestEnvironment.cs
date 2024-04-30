@@ -12,7 +12,7 @@ public sealed class HistoryTestEnvironment : IAsyncDisposable
     public int Dimensions { get; set; } = 1536;
     public IContainer? Container { get; set; }
     public IEmbeddingModel EmbeddingModel { get; set; } = DatabaseTests.CreateEmbeddingModelMock().Object;
-    
+
     public async ValueTask DisposeAsync()
     {
         if (Container != null)

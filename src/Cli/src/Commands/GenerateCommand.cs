@@ -12,10 +12,10 @@ public class GenerateCommand : Command
         AddOption(inputOption);
         AddOption(inputFileOption);
         AddOption(outputFileOption);
-        
+
         this.SetHandler(HandleAsync, inputOption, inputFileOption, outputFileOption);
     }
-    
+
     private static async Task HandleAsync(string input, string inputPath, string outputPath)
     {
         var inputText = await Helpers.ReadInputAsync(input, inputPath).ConfigureAwait(false);

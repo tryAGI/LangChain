@@ -21,32 +21,32 @@ public class CallbackManager
     /// 
     /// </summary>
     public List<BaseCallbackHandler> InheritableHandlers { get; private set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string Name { get; } = "callback_manager";
-    
+
     /// <summary>
     /// 
     /// </summary>
-    public string? ParentRunId { get; } 
+    public string? ParentRunId { get; }
 
     /// <summary>
     /// 
     /// </summary>
     protected List<string> Tags { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     protected List<string> InheritableTags { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     protected Dictionary<string, object> Metadata { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -105,7 +105,7 @@ public class CallbackManager
     public void RemoveTags(IReadOnlyList<string> tags)
     {
         tags = tags ?? throw new ArgumentNullException(nameof(tags));
-        
+
         foreach (var tag in tags)
         {
             Tags.Remove(tag);
@@ -122,7 +122,7 @@ public class CallbackManager
     public void AddMetadata(IReadOnlyDictionary<string, object> metadata, bool inherit = true)
     {
         metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-        
+
         foreach (var kv in metadata)
         {
             Metadata[kv.Key] = kv.Value;
@@ -141,7 +141,7 @@ public class CallbackManager
     public void RemoveMetadata(IReadOnlyList<string> keys)
     {
         keys = keys ?? throw new ArgumentNullException(nameof(keys));
-        
+
         foreach (var key in keys)
         {
             Metadata.Remove(key);
@@ -349,7 +349,7 @@ public class CallbackManager
     public void SetHandlers(List<BaseCallbackHandler> handlers, bool inherit = true)
     {
         handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
-        
+
         Handlers.Clear();
         InheritableHandlers.Clear();
         foreach (var handler in handlers)
@@ -396,7 +396,7 @@ public class CallbackManager
     public static CallbackManager FromHandlers(List<Handler> handlers)
     {
         handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
-        
+
         var manager = new CallbackManager();
 
         foreach (var handler in handlers)

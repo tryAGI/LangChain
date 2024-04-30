@@ -19,7 +19,7 @@ public class BaseRetrievalQaChainInput(BaseCombineDocumentsChain combineDocument
     /// 
     /// </summary>
     public string InputKey { get; set; } = "question";
-    
+
     /// <summary>
     /// 
     /// </summary>

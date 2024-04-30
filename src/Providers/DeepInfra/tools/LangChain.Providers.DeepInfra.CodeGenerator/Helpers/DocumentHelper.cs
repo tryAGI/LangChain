@@ -43,7 +43,7 @@ public class DocumentHelper
     public HtmlNode? FindNode(string tagName, string attributeName, string attributeValue, bool approx)
     {
         tagName = tagName ?? throw new ArgumentNullException(nameof(tagName));
-        
+
         if (!approx)
         {
             var htmlNode =

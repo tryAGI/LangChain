@@ -8,7 +8,7 @@ public static partial class PolyfillStringExtensions
     public static bool StartsWith(this string text, char value)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
-        
+
         return text.StartsWith(value.ToString(), StringComparison.Ordinal);
     }
 }

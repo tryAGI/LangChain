@@ -10,7 +10,7 @@ public class SerializedLlmChain : SerializedBaseChain
     /// 
     /// </summary>
     public required BaseLlm Llm { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -68,7 +68,7 @@ public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
                     {
                         // ReSharper disable once AccessToDisposedClosure
                         var bytes = await client.GetByteArrayAsync(new Uri(x.Url), cancellationToken).ConfigureAwait(false);
-                        
+
                         return Data.FromBytes(bytes);
                     })).ConfigureAwait(false);
 

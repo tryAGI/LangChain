@@ -10,14 +10,14 @@ public static partial class PolyfillStringExtensions
         text = text ?? throw new ArgumentNullException(nameof(text));
         from = from ?? throw new ArgumentNullException(nameof(from));
         to = to ?? throw new ArgumentNullException(nameof(to));
-        
+
         switch (comparisonType)
         {
             case StringComparison.CurrentCulture:
             case StringComparison.InvariantCulture:
             case StringComparison.Ordinal:
                 return text.Replace(from, to);
-            
+
             case StringComparison.InvariantCultureIgnoreCase:
             case StringComparison.OrdinalIgnoreCase:
             case StringComparison.CurrentCultureIgnoreCase:

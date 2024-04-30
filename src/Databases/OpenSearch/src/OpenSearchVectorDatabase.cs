@@ -24,7 +24,7 @@ public class OpenSearchVectorDatabase : IVectorDatabase
 
         _client = new OpenSearchClient(settings);
     }
-    
+
     /// <inheritdoc />
     public async Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
@@ -65,7 +65,7 @@ public class OpenSearchVectorDatabase : IVectorDatabase
 
     /// <inheritdoc />
     public async Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
-    {        
+    {
         var response = await _client.Indices.DeleteAsync(new DeleteIndexRequest(collectionName), cancellationToken).ConfigureAwait(false);
         if (!response.IsValid)
         {
@@ -88,7 +88,7 @@ public class OpenSearchVectorDatabase : IVectorDatabase
     public async Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         var response = await _client.Indices.ExistsAsync(collectionName, ct: cancellationToken).ConfigureAwait(false);
-        
+
         return response.Exists;
     }
 }

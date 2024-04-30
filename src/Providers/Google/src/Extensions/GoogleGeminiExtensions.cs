@@ -17,7 +17,7 @@ internal static class GoogleGeminiExtensions
         return new List<GenerativeAITool>([
             new GenerativeAITool
             {
-                FunctionDeclaration = [..functions]
+                FunctionDeclaration = [.. functions]
             }
         ]);
     }

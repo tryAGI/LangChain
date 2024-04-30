@@ -4,12 +4,12 @@ using LangChain.Chains.HelperChains;
 
 namespace LangChain.Chains.StackableChains;
 
-public class ExtractCodeChain: BaseStackableChain
+public class ExtractCodeChain : BaseStackableChain
 {
-    public ExtractCodeChain(string inputKey="text", string outputKey="code")
+    public ExtractCodeChain(string inputKey = "text", string outputKey = "code")
     {
-        InputKeys = new[] {inputKey};
-        OutputKeys = new[] {outputKey};
+        InputKeys = new[] { inputKey };
+        OutputKeys = new[] { outputKey };
     }
 
     string ExtractCode(string md)
@@ -55,7 +55,7 @@ public class ExtractCodeChain: BaseStackableChain
         {
             throw new InvalidOperationException($"Input key {InputKeys[0]} must be string");
         }
-        
+
         return Task.FromResult(values);
     }
 }

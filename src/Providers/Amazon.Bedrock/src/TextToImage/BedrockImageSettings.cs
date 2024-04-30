@@ -5,10 +5,10 @@ public class BedrockImageSettings : TextToImageSettings
 {
     public new static BedrockImageSettings Default { get; } = new()
     {
-       Height = 1024, 
-       Width = 1024,
-       Seed = 0,
-       NumOfImages = 1,
+        Height = 1024,
+        Width = 1024,
+        Seed = 0,
+        NumOfImages = 1,
     };
 
     /// <summary>
@@ -49,25 +49,25 @@ public class BedrockImageSettings : TextToImageSettings
 
         return new BedrockImageSettings
         {
-          Height =
+            Height =
               requestSettingsCasted?.Height ??
               modelSettingsCasted?.Height ??
               providerSettingsCasted?.Height ??
               Default.Height ??
               throw new InvalidOperationException("Default Height is not set."),
-          Width = 
+            Width =
               requestSettingsCasted?.Width ??
               modelSettingsCasted?.Width ??
               providerSettingsCasted?.Width ??
               Default.Width ??
               throw new InvalidOperationException("Default Width is not set."),
-          Seed =
+            Seed =
               requestSettingsCasted?.Seed ??
               modelSettingsCasted?.Seed ??
               providerSettingsCasted?.Seed ??
               Default.Seed ??
               throw new InvalidOperationException("Default Seed is not set."),
-          NumOfImages =
+            NumOfImages =
               requestSettingsCasted?.NumOfImages ??
               modelSettingsCasted?.NumOfImages ??
               providerSettingsCasted?.NumOfImages ??

@@ -11,12 +11,12 @@ public interface ILlmChainInput : IChainInputs
     /// 
     /// </summary>
     BasePromptTemplate Prompt { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     IChatModel Llm { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>

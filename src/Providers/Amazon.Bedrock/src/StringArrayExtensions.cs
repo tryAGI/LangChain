@@ -15,7 +15,7 @@ public static class StringArrayExtensions
     public static JsonArray AsArray(this IReadOnlyList<string> stringArray)
     {
         stringArray = stringArray ?? throw new ArgumentNullException(nameof(stringArray));
-        
+
         var jsonArray = new JsonArray();
         foreach (var arr in stringArray)
         {

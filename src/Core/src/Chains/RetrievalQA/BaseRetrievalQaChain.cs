@@ -28,7 +28,7 @@ public abstract class BaseRetrievalQaChain(BaseRetrievalQaChainInput fields) : B
 
     /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
-    
+
     /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => fields.ReturnSourceDocuments
         ? new[] { _outputKey, SourceDocuments }

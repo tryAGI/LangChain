@@ -38,7 +38,7 @@ internal static class SourceGenerationHelper
                                     .Select(static x => $"\"{x.Name}\""))} }},
 {indent}                    }}";
         }
-        
+
         if (parameter.EnumValues.Count != 0)
         {
             return $@"new
@@ -48,7 +48,7 @@ internal static class SourceGenerationHelper
 {indent}                        @enum = new string[] {{ {string.Join(", ", parameter.EnumValues.Select(static x => $"\"{x}\""))} }},
 {indent}                    }}";
         }
-        
+
         return $@"new
 {indent}                    {{
 {indent}                        type = ""{parameter.SchemaType}"",{(parameter.Format != null ? $@"
@@ -60,7 +60,7 @@ internal static class SourceGenerationHelper
     public static string GenerateClientImplementation(InterfaceData @interface)
     {
         var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "AnthropicExtensions";
-        
+
         return @$"
 using System.Collections.Generic;
 
@@ -116,10 +116,10 @@ namespace {@interface.Namespace}
 {@interface.Methods.Select((method, i) => $@"
             var function{i} = functions.{method.Name}AsDictionary();").Inject()}
 
-            {@interface.Methods.Select((_,i)=>$@"                
+            {@interface.Methods.Select((_, i) => $@"                
             var methodParams{i} = new global::System.Collections.Generic.List<global::LangChain.Providers.Anthropic.Tools.AnthropicToolParameter>();").Inject()}
 
-            {@interface.Methods.Select((_, i) => string.Join("\r\n", _.Parameters.Select(s => $"\r\n\t\t\tmethodParams{i}.Add(new global::LangChain.Providers.Anthropic.Tools.AnthropicToolParameter(){{Type = {"\"" + s.SchemaType + "\""}, Name = {"\""+s.Name+"\""}, Format = {"\"" + s.Format + "\""}, Description = " +"\""+s.Description+"\""+ $@"}});"))).Inject()}
+            {@interface.Methods.Select((_, i) => string.Join("\r\n", _.Parameters.Select(s => $"\r\n\t\t\tmethodParams{i}.Add(new global::LangChain.Providers.Anthropic.Tools.AnthropicToolParameter(){{Type = {"\"" + s.SchemaType + "\""}, Name = {"\"" + s.Name + "\""}, Format = {"\"" + s.Format + "\""}, Description = " + "\"" + s.Description + "\"" + $@"}});"))).Inject()}
 
             return new global::System.Collections.Generic.List<global::LangChain.Providers.Anthropic.Tools.AnthropicTool>
             {{

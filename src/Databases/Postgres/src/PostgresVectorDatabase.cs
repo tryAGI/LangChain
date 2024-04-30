@@ -25,7 +25,7 @@ public class PostgresVectorDatabase(
         {
             throw new InvalidOperationException($"Collection '{collectionName}' does not exist.");
         }
-        
+
         return new PostgresVectorCollection(_client, collectionName);
     }
 

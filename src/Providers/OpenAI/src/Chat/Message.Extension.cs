@@ -11,7 +11,7 @@ internal static class MessageExtensions
     public static Message AsFunctionResultMessage(this string json, Tool tool)
     {
         tool = tool ?? throw new ArgumentNullException(nameof(tool));
-        
+
         return new Message(json, MessageRole.FunctionResult, $"{tool.Function.Name}:{tool.Id}");
     }
 
@@ -19,7 +19,7 @@ internal static class MessageExtensions
     {
         var nameAndId = message.FunctionName?.Split(Separator, StringSplitOptions.RemoveEmptyEntries) ??
                         throw new ArgumentException("Invalid functionCall name and id string");
-        
+
         if (nameAndId.Length < 2)
             throw new ArgumentException("Invalid functionCall name and id string");
 

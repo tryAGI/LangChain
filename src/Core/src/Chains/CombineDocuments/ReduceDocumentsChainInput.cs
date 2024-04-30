@@ -8,14 +8,14 @@ public class ReduceDocumentsChainInput : BaseCombineDocumentsChainInput
     /// This is typically a StuffDocumentsChain.
     /// </summary>
     public required BaseCombineDocumentsChain CombineDocumentsChain { get; set; }
-    
+
     /// <summary>
     /// Chain to use to collapse documents if needed until they can all fit.
     /// If null, will use the combine_documents_chain.
     /// This is typically a StuffDocumentsChain.
     /// </summary>
     public required BaseCombineDocumentsChain CollapseDocumentsChain { get; set; }
-    
+
     /// <summary>
     /// The maximum number of tokens to group documents into. For example, if
     /// set to 3000 then documents will be grouped into chunks of no greater than

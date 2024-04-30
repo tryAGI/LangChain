@@ -15,7 +15,7 @@ public static class Chain
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static DockerChain RunCodeInDocker(
-        string image= "python:3.10",
+        string image = "python:3.10",
         string arguments = "main.py",
         string command = "python",
         string? attachVolume = null,

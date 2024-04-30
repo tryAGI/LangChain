@@ -28,17 +28,17 @@ public class InMemoryVectorCollection(
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
-        
+
         foreach (var item in items)
         {
             if (item.Embedding is null)
             {
                 throw new ArgumentException("Embedding is required", nameof(items));
             }
-            
+
             _vectors.TryAdd(item.Id, item);
         }
-        
+
         return Task.FromResult<IReadOnlyCollection<string>>(items.Select(i => i.Id).ToArray());
     }
 
@@ -48,12 +48,12 @@ public class InMemoryVectorCollection(
         CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
-        
+
         foreach (var id in ids)
         {
             _vectors.TryRemove(id, out _);
         }
-        
+
         return Task.FromResult(true);
     }
 
@@ -64,7 +64,7 @@ public class InMemoryVectorCollection(
         CancellationToken cancellationToken = default)
     {
         settings ??= new VectorSearchSettings();
-        
+
         return Task.FromResult(new VectorSearchResponse
         {
             Items = _vectors

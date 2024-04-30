@@ -15,18 +15,18 @@ public class CrewAgent : BaseStackableChain
     /// <summary>
     /// 
     /// </summary>
-    public event Action<string> ReceivedTask=delegate{};
-    
+    public event Action<string> ReceivedTask = delegate { };
+
     /// <summary>
     /// 
     /// </summary>
-    public event Action<string,string> CalledAction = delegate { };
-    
+    public event Action<string, string> CalledAction = delegate { };
+
     /// <summary>
     /// 
     /// </summary>
     public event Action<string> ActionResult = delegate { };
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -36,28 +36,28 @@ public class CrewAgent : BaseStackableChain
     /// 
     /// </summary>
     public string Role { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string Goal { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string Backstory { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool UseMemory { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool UseCache { get; set; }
-    
-    
+
+
     private readonly IChatModel _model;
     private readonly List<string> _actionsHistory;
     private Dictionary<string, CrewAgentTool> _tools = new();
@@ -84,8 +84,8 @@ public class CrewAgent : BaseStackableChain
         Backstory = backstory ?? string.Empty;
         _model = model;
 
-        InputKeys = new[] {"task"};
-        OutputKeys = new[] {"result"};
+        InputKeys = new[] { "task" };
+        OutputKeys = new[] { "result" };
 
         _actionsHistory = new List<string>();
         _memory = new List<string>();
@@ -119,7 +119,7 @@ public class CrewAgent : BaseStackableChain
 
     private string GenerateToolsDescriptions()
     {
-        if (_tools.Count==0) return "";
+        if (_tools.Count == 0) return "";
         return string.Join("\n", _tools.Select(x => $"- {x.Value.Name}, {x.Value.Description}\n"));
     }
 
@@ -175,15 +175,15 @@ public class CrewAgent : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var task = values.Value[InputKeys[0]] as string ?? string.Empty;
         _actionsHistory.Clear();
-        
+
         ReceivedTask(task);
 
-        if (Context!=null)
+        if (Context != null)
         {
-            task += "\n" + "This is the context you are working with:\n"+Context;
+            task += "\n" + "This is the context you are working with:\n" + Context;
         }
 
         if (_chain == null)
@@ -217,7 +217,7 @@ public class CrewAgent : BaseStackableChain
             else if (res is AgentFinish finish)
             {
                 values.Value.Add(OutputKeys[0], finish.Output);
-                if(UseMemory)
+                if (UseMemory)
                     _memory.Add(finish.Output);
 
                 Answered(finish.Output);

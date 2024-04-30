@@ -8,13 +8,13 @@ public class EmbeddingRequest
 {
     public required IList<string> Strings { get; init; } = Array.Empty<string>();
     public IList<Data> Images { get; init; } = Array.Empty<Data>();
-    
+
     /// <inheritdoc cref="ToEmbeddingRequest(string)"/>
     public static implicit operator EmbeddingRequest(string message)
     {
         return ToEmbeddingRequest(message);
     }
-    
+
     /// <inheritdoc cref="ToEmbeddingRequest(string)"/>
     public static implicit operator EmbeddingRequest(string[] messages)
     {

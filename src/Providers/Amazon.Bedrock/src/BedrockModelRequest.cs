@@ -9,7 +9,7 @@ internal static class BedrockModelRequest
     public static InvokeModelWithResponseStreamRequest CreateStreamRequest(string modelId, JsonObject bodyJson)
     {
         bodyJson = bodyJson ?? throw new ArgumentNullException(nameof(bodyJson));
-        
+
         var byteArray = Encoding.UTF8.GetBytes(bodyJson.ToJsonString());
         var stream = new MemoryStream(byteArray);
 

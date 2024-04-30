@@ -12,7 +12,7 @@ public class ServeController(
     public async Task<MessageDto?> ProcessMessage(PostMessageDto message, Guid conversationId)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
-            
+
         var conversation = await repository.GetConversation(conversationId).ConfigureAwait(false);
         if (conversation == null)
         {
@@ -22,10 +22,10 @@ public class ServeController(
         var convertedMessage = message.ToStoredMessage(conversationId);
         await repository.AddMessage(convertedMessage).ConfigureAwait(false);
 
-        var allMessages =  await repository.ListMessages(conversation.ConversationId).ConfigureAwait(false);
+        var allMessages = await repository.ListMessages(conversation.ConversationId).ConfigureAwait(false);
 
         var messageProcessor = options.GetModel(conversation.ModelName);
-        var response= await messageProcessor(allMessages).ConfigureAwait(false);
+        var response = await messageProcessor(allMessages).ConfigureAwait(false);
         response.ConversationId = conversationId;
         response.MessageId = Guid.NewGuid();
         response.Author = MessageAuthor.Ai;
@@ -33,8 +33,8 @@ public class ServeController(
 
         if (string.IsNullOrEmpty(conversation.ConversationName))
         {
-            var withResponse = allMessages.Concat(new[] {response}).ToList();
-            var name= await conversationNameProvider.GetConversationName(withResponse).ConfigureAwait(false);
+            var withResponse = allMessages.Concat(new[] { response }).ToList();
+            var name = await conversationNameProvider.GetConversationName(withResponse).ConfigureAwait(false);
             await repository.UpdateConversationName(conversation.ConversationId, name).ConfigureAwait(false);
         }
 
@@ -49,7 +49,7 @@ public class ServeController(
         {
             return null;
         }
-            
+
         return ConversationDto.FromStoredConversation(conversation);
     }
 
@@ -59,7 +59,7 @@ public class ServeController(
         {
             return null;
         }
-        
+
         return ConversationDto.FromStoredConversation(await repository.CreateConversation(modelName).ConfigureAwait(false));
     }
 
@@ -82,8 +82,8 @@ public class ServeController(
         {
             return null;
         }
-        var res= await repository.ListMessages(conversationId).ConfigureAwait(false);
-        return res.Select(x=>MessageDto.FromStoredMessage(x,conversation.ModelName)).ToList();
+        var res = await repository.ListMessages(conversationId).ConfigureAwait(false);
+        return res.Select(x => MessageDto.FromStoredMessage(x, conversation.ModelName)).ToList();
     }
 
     public List<string> ListModels()

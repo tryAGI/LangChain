@@ -17,7 +17,7 @@ public class OllamaChatModel(
 
     /// <inheritdoc />
     public override int ContextLength => 0;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -30,13 +30,13 @@ public class OllamaChatModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var models = await Provider.Api.ListLocalModels().ConfigureAwait(false);
         if (models.All(x => x.Name != Id))
         {
             await Provider.Api.PullModel(Id).ConfigureAwait(false);
         }
-        
+
         var prompt = ToPrompt(request.Messages);
         var watch = Stopwatch.StartNew();
         var response = Provider.Api.GenerateCompletion(new GenerateCompletionRequest()
@@ -48,9 +48,9 @@ public class OllamaChatModel(
             Raw = true,
             Format = UseJson ? "json" : string.Empty,
         });
-        
+
         OnPromptSent(prompt);
-        
+
         var buf = "";
         await foreach (var completion in response)
         {
@@ -59,7 +59,7 @@ public class OllamaChatModel(
         }
 
         OnCompletedResponseGenerated(buf);
-        
+
         var result = request.Messages.ToList();
         result.Add(buf.AsAiMessage());
 

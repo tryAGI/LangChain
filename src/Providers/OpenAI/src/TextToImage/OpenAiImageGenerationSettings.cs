@@ -36,7 +36,7 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 User = string.Empty,
             };
         }
-        
+
         throw new NotSupportedException($"OpenAI model {id} is not supported");
     }
 

@@ -19,17 +19,17 @@ namespace LangChain.Extensions.Docker
         }
 
         private readonly DockerClient _client;
-        
+
         /// <summary>
         /// 
         /// </summary>
         public string Image { get; }
-        
+
         /// <summary>
         /// 
         /// </summary>
         public string Arguments { get; }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -46,17 +46,17 @@ namespace LangChain.Extensions.Docker
         /// <param name="attachVolume"></param>
         /// <param name="outputKey"></param>
         public DockerChain(
-            string image= "python:3",
-            string arguments="main.py",
-            string command="python",
-            string? attachVolume=null,
-            string outputKey="result")
+            string image = "python:3",
+            string arguments = "main.py",
+            string command = "python",
+            string? attachVolume = null,
+            string outputKey = "result")
         {
             Image = image;
             Arguments = arguments;
             Command = command;
             AttachVolume = attachVolume;
-            OutputKeys = new[] {outputKey};
+            OutputKeys = new[] { outputKey };
 
             using var configuration = new DockerClientConfiguration();
             _client = configuration.CreateClient();
@@ -72,7 +72,7 @@ namespace LangChain.Extensions.Docker
         protected override async Task<IChainValues> InternalCallAsync(IChainValues values, CancellationToken cancellationToken = default)
         {
             values = values ?? throw new ArgumentNullException(nameof(values));
-            
+
             await _client.Images.CreateImageAsync(new ImagesCreateParameters()
             {
                 FromImage = Image
@@ -80,26 +80,26 @@ namespace LangChain.Extensions.Docker
 
             var binds = new List<string>();
 
-            
+
             if (AttachVolume != null)
             {
                 var absolutePath = Path.GetFullPath(AttachVolume)
-                    .Replace("\\","/")
-                    .Replace(":","");
+                    .Replace("\\", "/")
+                    .Replace(":", "");
                 binds.Add($"/{absolutePath}:/app");
             }
 
             var container = await _client.Containers.CreateContainerAsync(new CreateContainerParameters()
             {
-               
+
                 Image = Image,
-                Cmd = new[] {Command,Arguments},
+                Cmd = new[] { Command, Arguments },
                 WorkingDir = "/app",
                 HostConfig = new HostConfig()
                 {
                     Binds = binds
                 }
-                
+
             }, cancellationToken).ConfigureAwait(false);
 
 
@@ -112,19 +112,19 @@ namespace LangChain.Extensions.Docker
                 false,
                                new ContainerLogsParameters()
                                {
-                    ShowStdout = true,
-                    ShowStderr = true
-                }, cancellationToken).ConfigureAwait(false);
+                                   ShowStdout = true,
+                                   ShowStderr = true
+                               }, cancellationToken).ConfigureAwait(false);
 
             var res = await logs.ReadOutputToEndAsync(CancellationToken.None).ConfigureAwait(false);
 
-            var result = res.stdout+res.stderr;
+            var result = res.stdout + res.stderr;
 
             await _client.Containers.RemoveContainerAsync(container.ID,
                                new ContainerRemoveParameters()
                                {
-                    Force = true
-                }, cancellationToken).ConfigureAwait(false);
+                                   Force = true
+                               }, cancellationToken).ConfigureAwait(false);
 
             values.Value[OutputKeys[0]] = result;
             return values;

@@ -9,7 +9,7 @@ public abstract class BaseCombineDocumentsChainInput : ChainInputs
     /// 
     /// </summary>
     public string InputKey { get; set; } = "input_documents";
-    
+
     /// <summary>
     /// 
     /// </summary>

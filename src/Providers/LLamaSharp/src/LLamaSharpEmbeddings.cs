@@ -11,7 +11,7 @@ public sealed class LLamaSharpEmbeddings
 {
     /// <inheritdoc />
     public int MaximumInputLength { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -26,7 +26,7 @@ public sealed class LLamaSharpEmbeddings
             Temperature = temperature
         });
     }
-    
+
     private readonly LLamaSharpConfiguration _configuration;
     private readonly LLamaWeights _model;
     private readonly LLamaEmbedder _embedder;
@@ -38,7 +38,7 @@ public sealed class LLamaSharpEmbeddings
     public LLamaSharpEmbeddings(LLamaSharpConfiguration configuration) : base(id: "LLamaSharp")
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        
+
         var parameters = new ModelParams(configuration.PathToModelFile)
         {
             ContextSize = (uint)configuration.ContextSize,
@@ -60,7 +60,7 @@ public sealed class LLamaSharpEmbeddings
         var values = await Task.WhenAll(request.Strings
             .Select(prompt => _embedder.GetEmbeddings(prompt, cancellationToken))
             .ToArray()).ConfigureAwait(false);
-        
+
         return new EmbeddingResponse
         {
             Values = values,

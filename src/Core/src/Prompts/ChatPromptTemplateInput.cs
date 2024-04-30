@@ -14,10 +14,10 @@ public class ChatPromptTemplateInput : IBasePromptTemplateInput
     /// 
     /// </summary>
     public bool ValidateTemplate { get; set; } = true;
-    
+
     /// <inheritdoc/>
     public IReadOnlyList<string> InputVariables { get; set; } = new List<string>();
-    
+
     /// <inheritdoc/>
     public Dictionary<string, object> PartialVariables { get; set; } = new();
 }

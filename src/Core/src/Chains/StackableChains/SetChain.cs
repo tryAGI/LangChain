@@ -18,14 +18,14 @@ public class SetChain : BaseStackableChain
     /// 
     /// </summary>
     public object Value { get; set; }
-    
+
     /// <inheritdoc/>
     protected override Task<IChainValues> InternalCallAsync(
         IChainValues values,
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         values.Value[OutputKeys[0]] = Value;
         return Task.FromResult(values);
     }

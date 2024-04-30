@@ -7,7 +7,7 @@ namespace LangChain.Providers;
 public class ModerationRequest
 {
     public required string Prompt { get; init; }
-    
+
     /// <inheritdoc cref="ToModerationRequest(string)"/>
     public static implicit operator ModerationRequest(string message)
     {

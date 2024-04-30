@@ -9,7 +9,7 @@ public static partial class HttpContextExtensions
         CancellationToken cancellationToken = default)
     {
         content = content ?? throw new ArgumentNullException(nameof(content));
-        
+
         return await content.ReadAsStringAsync().ConfigureAwait(false);
     }
 }

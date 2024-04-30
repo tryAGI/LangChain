@@ -9,7 +9,7 @@ public enum EDistanceMetrics
     /// 
     /// </summary>
     Euclidean,
-        
+
     /// <summary>
     /// 
     /// </summary>

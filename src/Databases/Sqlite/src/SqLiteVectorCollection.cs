@@ -47,7 +47,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         insertCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
         insertCommand.Parameters.AddWithValue("@document", SerializeDocument(document));
         await insertCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
-        
+
     }
 
     async Task DeleteDocument(string id)
@@ -59,7 +59,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
-    async Task<List<(Document,float)>> SearchByVector(float[] vector, int k)
+    async Task<List<(Document, float)>> SearchByVector(float[] vector, int k)
     {
         var searchCommand = _connection.CreateCommand();
         string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {Name} ORDER BY d LIMIT @k";
@@ -76,9 +76,9 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
             var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Document) ?? new Document("");
             var distance = reader.GetFloat(3);
             res.Add((docDeserialized, distance));
-            
+
         }
-        
+
         return res;
     }
 
@@ -88,14 +88,14 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
-        
+
         foreach (var item in items)
         {
             if (item.Embedding is null)
             {
                 throw new ArgumentException("Embedding is required", nameof(items));
             }
-            
+
             await InsertDocument(item.Id, item.Embedding, new Document(item.Text, item.Metadata)).ConfigureAwait(false);
         }
 
@@ -114,11 +114,11 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         {
             return null;
         }
-        
+
         var vec = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
         var doc = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
         var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Document) ?? new Document("");
-        
+
         return new Vector
         {
             Id = id,
@@ -135,7 +135,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         var query = $"SELECT COUNT(*) FROM {Name}";
         command.CommandText = query;
         var count = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
-        
+
         return count == null || Convert.ToInt32(count, CultureInfo.InvariantCulture) == 0;
     }
 
@@ -148,10 +148,10 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
     public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
-        
+
         foreach (var id in ids)
             await DeleteDocument(id).ConfigureAwait(false);
-        
+
         return true;
     }
 
@@ -163,11 +163,11 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
-        
+
         var documents = await SearchByVector(
             request.Embeddings.First(),
             settings.NumberOfResults).ConfigureAwait(false);
-        
+
         return new VectorSearchResponse
         {
             Items = documents.Select(d => new Vector

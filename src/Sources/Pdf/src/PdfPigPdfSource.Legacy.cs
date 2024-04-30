@@ -10,16 +10,16 @@ public sealed partial class PdfPigPdfSource
         CancellationToken cancellationToken = default)
     {
         using var source = new PdfPigPdfSource(stream);
-        
+
         return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
     }
-    
+
     public static async Task<IReadOnlyCollection<Document>> LoadDocumentsFromUriAsync(
         Uri uri,
         CancellationToken cancellationToken = default)
     {
         using var source = await CreateFromUriAsync(uri, cancellationToken).ConfigureAwait(false);
-        
+
         return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
     }
 

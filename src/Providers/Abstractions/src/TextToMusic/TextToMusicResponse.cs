@@ -7,14 +7,14 @@ namespace LangChain.Providers;
 public class TextToMusicResponse
 {
     public IReadOnlyList<Data> Images { get; init; } = new List<Data>();
-    
+
     public Usage Usage { get; init; } = Usage.Empty;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public required TextToMusicSettings UsedSettings { get; init; }
-    
+
     public void Deconstruct(
         out byte[] values,
         out Usage usage)
@@ -22,7 +22,7 @@ public class TextToMusicResponse
         values = ToByteArray();
         usage = Usage;
     }
-    
+
     public void Deconstruct(
         out byte[] values,
         out Usage usage,
@@ -32,12 +32,12 @@ public class TextToMusicResponse
         usage = Usage;
         usedSettings = UsedSettings;
     }
-    
+
     public static implicit operator byte[](TextToMusicResponse response)
     {
         return response?.ToByteArray() ?? [];
     }
-    
+
     public byte[] ToByteArray()
     {
         return Images.ElementAtOrDefault(0)?.ToByteArray() ?? Array.Empty<byte>();

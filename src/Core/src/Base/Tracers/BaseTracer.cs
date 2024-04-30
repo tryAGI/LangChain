@@ -101,7 +101,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     public override async Task HandleLlmEndAsync(LlmResult output, string runId, string? parentRunId = null)
     {
         output = output ?? throw new ArgumentNullException(nameof(output));
-        
+
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_llm_end callback.");
@@ -221,7 +221,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
         string? parentRunId = null)
     {
         err = err ?? throw new ArgumentNullException(nameof(err));
-        
+
         if (runId == null)
         {
             throw new TracerException("No run_id provided for on_chain_error callback.");
@@ -545,7 +545,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleLlmStartAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -553,105 +553,105 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     /// <param name="token"></param>
     /// <returns></returns>
     protected abstract Task HandleLlmNewTokenAsync(Run run, string token);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleLlmErrorAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleLlmEndAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleChatModelStartAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleChainStartAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleChainErrorAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleChainEndAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleToolStartAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleToolErrorAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleToolEndAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleTextAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleAgentActionAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleAgentEndAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleRetrieverStartAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="run"></param>
     /// <returns></returns>
     protected abstract Task HandleRetrieverEndAsync(Run run);
-    
+
     /// <summary>
     /// 
     /// </summary>

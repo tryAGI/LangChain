@@ -5,9 +5,9 @@ namespace LangChain.Providers.Suno.Sdk;
 
 public static class HttpClientExtensions
 {
-    public const string DefaultStagingApiKey ="#%VQBd*UO0z!T6r4l99GsWLmWS*Bzq%D@0wL#32J!RMf#iWkkABDu2&R*7Najf9F";
+    public const string DefaultStagingApiKey = "#%VQBd*UO0z!T6r4l99GsWLmWS*Bzq%D@0wL#32J!RMf#iWkkABDu2&R*7Najf9F";
     public const string DefaultBaseAddress = "https://studio-api.suno.ai/api/";
-    
+
     public static void Authorize(
         this HttpClient httpClient,
         string apiKey,
@@ -21,7 +21,7 @@ public static class HttpClientExtensions
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         httpClient.DefaultRequestHeaders.Add("Staging-Api-Key", stagingApiKey);
     }
-    
+
     public static async Task<GenerateV2Response> GenerateV2Async(
         this HttpClient httpClient,
         GenerateV2Request request,
@@ -46,12 +46,12 @@ public static class HttpClientExtensions
             request,
             cancellationToken).ConfigureAwait(false);
         createResponseMessage.EnsureSuccessStatusCode();
-        
+
         return await createResponseMessage.Content.ReadFromJsonAsync<GenerateV2Response>(
             cancellationToken: cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Create response is null.");
 #endif
     }
-    
+
     public static async Task<IReadOnlyList<Clip>> GetFeedAsync(
         this HttpClient httpClient,
         string[] ids,
@@ -59,7 +59,7 @@ public static class HttpClientExtensions
     {
         httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
-        
+
 #if NET6_0_OR_GREATER
         return await httpClient.GetFromJsonAsync(
             new Uri(httpClient.BaseAddress ?? new Uri(DefaultBaseAddress), $"feed/?ids={string.Join("%2C", ids)}"),

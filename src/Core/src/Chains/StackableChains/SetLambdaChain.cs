@@ -23,7 +23,7 @@ public class SetLambdaChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         values.Value[OutputKeys[0]] = QueryGetter();
         return Task.FromResult(values);
     }

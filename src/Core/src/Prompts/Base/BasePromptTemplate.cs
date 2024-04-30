@@ -25,7 +25,7 @@ public abstract class BasePromptTemplate
     protected BasePromptTemplate(IBasePromptTemplateInput input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         if (input.InputVariables.Contains("stop"))
         {
             throw new ArgumentException("Cannot have an input variable named 'stop', as it is used internally, please rename.");
@@ -56,7 +56,7 @@ public abstract class BasePromptTemplate
         CancellationToken cancellationToken = default)
     {
         userVariables = userVariables ?? throw new ArgumentNullException(nameof(userVariables));
-        
+
         InputValues partialValues = new InputValues(new Dictionary<string, object>());
 
         foreach (KeyValuePair<string, object> entry in PartialVariables.Value)
@@ -117,7 +117,7 @@ public abstract class BasePromptTemplate
     public async static Task<BasePromptTemplate> Deserialize(SerializedBasePromptTemplate data)
     {
         data = data ?? throw new ArgumentNullException(nameof(data));
-        
+
         switch (data.Type)
         {
             case "prompt":

@@ -12,7 +12,7 @@ public class ConversationDto
     public static ConversationDto FromStoredConversation(StoredConversation conversation)
     {
         conversation = conversation ?? throw new ArgumentNullException(nameof(conversation));
-        
+
         return new ConversationDto
         {
             ConversationId = conversation.ConversationId,

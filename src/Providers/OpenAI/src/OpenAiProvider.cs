@@ -44,7 +44,7 @@ public class OpenAiProvider : Provider
         TextToSpeechSettings = configuration.TextToSpeechSettings;
         ImageToTextSettings = configuration.ImageToTextSettings;
     }
-    
+
     public OpenAiProvider(
         string apiKey,
         string? customEndpoint = null, string? apiVersion = "v1")
@@ -58,13 +58,13 @@ public class OpenAiProvider : Provider
     }
 
     #endregion
-    
+
     /// <inheritdoc cref="ToOpenAiProvider(string)"/>
     public static implicit operator OpenAiProvider(string apiKey)
     {
         return ToOpenAiProvider(apiKey);
     }
-    
+
     /// <summary>
     /// Explicitly converts a string to a <see cref="OpenAiProvider"/> with this string as apiKey parameter. <br/>
     /// </summary>

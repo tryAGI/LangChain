@@ -21,7 +21,7 @@ public static class ManagerCallbacksExtensions
     public static ManagerCallbacks ToCallbacks(this ParentRunManager source)
     {
         source = source ?? throw new ArgumentNullException(nameof(source));
-        
+
         return new ManagerCallbacks(source.GetChild());
     }
 }

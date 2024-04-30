@@ -372,17 +372,17 @@ public sealed class DuckDuckGoSearch : IDisposable
         /// 
         /// </summary>
         Day,
-        
+
         /// <summary>
         /// 
         /// </summary>
         Week,
-        
+
         /// <summary>
         /// 
         /// </summary>
         Month,
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -398,12 +398,12 @@ public sealed class DuckDuckGoSearch : IDisposable
         /// 
         /// </summary>
         On,
-        
+
         /// <summary>
         /// 
         /// </summary>
         Moderate,
-        
+
         /// <summary>
         /// 
         /// </summary>

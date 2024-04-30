@@ -72,7 +72,7 @@ public sealed class PostgresDatabase : SqlDatabase
         // WHERE  grantee = CURRENT_USER
         // possible values https://www.postgresql.org/docs/current/ddl-priv.html
         // throw if not SELECT only or some flag passed to constructor?
-        
+
         return Task.CompletedTask;
     }
 

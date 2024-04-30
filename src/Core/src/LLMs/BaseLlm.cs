@@ -13,7 +13,7 @@ public abstract class BaseLlm : BaseLanguageModel
     protected BaseLlm(IBaseLlmParams parameters) : base(parameters)
     {
         parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
-        
+
         _cache = parameters.Cache;
     }
 

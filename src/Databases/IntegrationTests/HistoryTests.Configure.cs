@@ -14,73 +14,73 @@ public partial class HistoryTests
         switch (database)
         {
             case SupportedDatabase.InMemory:
-            {
-                return new HistoryTestEnvironment
                 {
-                    History = new ChatMessageHistory(),
-                };
-            }
+                    return new HistoryTestEnvironment
+                    {
+                        History = new ChatMessageHistory(),
+                    };
+                }
             case SupportedDatabase.File:
-            {
-                return new HistoryTestEnvironment
                 {
-                    History = await FileChatMessageHistory.CreateAsync(Path.GetTempFileName(), cancellationToken),
-                };
-            }
+                    return new HistoryTestEnvironment
+                    {
+                        History = await FileChatMessageHistory.CreateAsync(Path.GetTempFileName(), cancellationToken),
+                    };
+                }
             case SupportedDatabase.Chroma:
-            {
-                throw new NotImplementedException();
-            }
+                {
+                    throw new NotImplementedException();
+                }
             case SupportedDatabase.SqLite:
-            {
-                throw new NotImplementedException();
-            }
+                {
+                    throw new NotImplementedException();
+                }
             case SupportedDatabase.Postgres:
-            {
-                throw new NotImplementedException();
-            }
+                {
+                    throw new NotImplementedException();
+                }
             case SupportedDatabase.OpenSearch:
-            {
-                throw new NotImplementedException();
-            }
+                {
+                    throw new NotImplementedException();
+                }
             case SupportedDatabase.Mongo:
-            {
-                var container = new MongoDbBuilder()
-                    .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
-                    .Build();
-
-                await container.StartAsync(cancellationToken);
-                
-                return new HistoryTestEnvironment
                 {
-                    History = new MongoChatMessageHistory(
-                        "History",
-                        new MongoDbClient(new MongoContext(new DatabaseConfiguration
-                        {
-                            ConnectionString = container.GetConnectionString(),
-                            DatabaseName = "langchain",
-                        }))
-                    ),
-                    Container = container,
-                };
-            }
+                    var container = new MongoDbBuilder()
+                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
+                        .Build();
+
+                    await container.StartAsync(cancellationToken);
+
+                    return new HistoryTestEnvironment
+                    {
+                        History = new MongoChatMessageHistory(
+                            "History",
+                            new MongoDbClient(new MongoContext(new DatabaseConfiguration
+                            {
+                                ConnectionString = container.GetConnectionString(),
+                                DatabaseName = "langchain",
+                            }))
+                        ),
+                        Container = container,
+                    };
+                }
             case SupportedDatabase.Redis:
-            {
-                var container = new RedisBuilder()
-                    .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
-                    .Build();
-
-                await container.StartAsync(cancellationToken);
-
-                return new HistoryTestEnvironment
                 {
-                    History = new RedisChatMessageHistory(
-                        sessionId: "History",
-                        connectionString: container.GetConnectionString(),
-                        ttl: TimeSpan.FromSeconds(30)),
-                    Container = container,
-                };
-            }
+                    var container = new RedisBuilder()
+                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
+                        .Build();
+
+                    await container.StartAsync(cancellationToken);
+
+                    return new HistoryTestEnvironment
+                    {
+                        History = new RedisChatMessageHistory(
+                            sessionId: "History",
+                            connectionString: container.GetConnectionString(),
+                            ttl: TimeSpan.FromSeconds(30)),
+                        Container = container,
+                    };
+                }
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
         }

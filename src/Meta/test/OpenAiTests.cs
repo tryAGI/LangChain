@@ -19,10 +19,10 @@ public class OpenAiTests
         string result = await model.GenerateAsync("What is a good name for a company that sells colourful socks?");
 
         result.Should().NotBeEmpty();
-        
+
         Console.WriteLine(result);
     }
-    
+
     [Test]
     public async Task TestOpenAi_WithChain_ShouldReturnResponse()
     {
@@ -31,7 +31,7 @@ public class OpenAiTests
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
 
         var template = "What is a good name for a company that makes {product}?";
-        var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1){"product"}));
+        var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
 
         var chain = new LlmChain(new LlmChainInput(llm, prompt));
 
@@ -42,7 +42,7 @@ public class OpenAiTests
 
         // The result is an object with a `text` property.
         result.Value["text"].ToString().Should().NotBeEmpty();
-        
+
         Console.WriteLine(result.Value["text"]);
     }
 }

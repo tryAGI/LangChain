@@ -24,7 +24,7 @@ public partial class OpenAiChatModel
     #endregion
 
     #region Methods
-    
+
     /// <summary>
     /// Adds user-defined OpenAI tools to each request to the model.
     /// </summary>
@@ -38,14 +38,14 @@ public partial class OpenAiChatModel
     {
         tools = tools ?? throw new ArgumentNullException(nameof(tools));
         calls = calls ?? throw new ArgumentNullException(nameof(calls));
-    
+
         GlobalTools.AddRange(tools);
         foreach (var call in calls)
         {
             Calls.Add(call.Key, call.Value);
         }
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
