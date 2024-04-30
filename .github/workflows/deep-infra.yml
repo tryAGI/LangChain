@@ -34,6 +34,11 @@ jobs:
           cd src/Providers/DeepInfra/tools/LangChain.Providers.DeepInfra.CodeGenerator
           dotnet run --output ../../src
 
+      - name: Format code
+        run: |
+          dotnet format LangChain.sln
+          dotnet format LangChain.sln analyzers --diagnostics=RS0016
+
       - name: Check for changes
         id: changes
         run: |
