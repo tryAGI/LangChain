@@ -24,7 +24,7 @@ public class OpenAiSampleController : ControllerBase
     {
         var llm = new OpenAiChatModel(_openAi, id: ChatModels.Gpt35Turbo);
         var response = await llm.GenerateAsync("What is a good name for a company that sells colourful socks?");
-        
+
         return response.LastMessageContent;
     }
 }

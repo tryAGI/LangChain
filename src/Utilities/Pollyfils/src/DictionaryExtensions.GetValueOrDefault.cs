@@ -11,7 +11,7 @@ public static partial class PolyfillDictionaryExtensions
     public static TValue? GetValueOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
     {
         dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
-        
+
         return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
     }
 }

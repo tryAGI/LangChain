@@ -17,10 +17,10 @@ public class OpenRouterCommand : Command
             description: "Model to use for commands");
         AddArgument(apiKeyArgument);
         AddOption(modelOption);
-        
+
         this.SetHandler(HandleAsync, apiKeyArgument, modelOption);
     }
-    
+
     private static async Task HandleAsync(string apiKey, string model)
     {
         await Helpers.AuthenticateWithApiKeyAsync(apiKey, model, Providers.OpenRouter).ConfigureAwait(false);

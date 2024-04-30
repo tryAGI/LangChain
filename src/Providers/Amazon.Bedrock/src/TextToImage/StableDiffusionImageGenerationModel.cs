@@ -17,7 +17,7 @@ public class StableDiffusionTextToImageModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
         string[] prompts = [request.Prompt];
 
@@ -33,7 +33,7 @@ public class StableDiffusionTextToImageModel(
 
         var base64 = response?["artifacts"]?[0]?["base64"]?
             .GetValue<string>() ?? string.Empty;
-        
+
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,

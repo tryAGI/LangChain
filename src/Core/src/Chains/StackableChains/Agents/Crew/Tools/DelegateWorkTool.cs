@@ -14,7 +14,7 @@ public class DelegateWorkTool : CrewAgentTool
     public DelegateWorkTool(IEnumerable<CrewAgent> coworkers) : base("delegate")
     {
         _coworkers = coworkers ?? throw new ArgumentNullException(nameof(coworkers));
-        Description = 
+        Description =
             $@"Useful to delegate a specific task to one of the
 following co-workers: [{string.Join(", ", coworkers.Select(x => $"'{x.Role}'"))}].
 The input to this tool should be a pipe (|) separated text of length
@@ -27,7 +27,7 @@ For example, `coworker|task|context`";
     public override async Task<string> ToolTask(string input, CancellationToken cancellationToken = default)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         var split = input.Split('|');
         var agent = split[0];
         var task = split[1];
@@ -38,7 +38,7 @@ For example, `coworker|task|context`";
         var chain = Chain.Set(task, "task")
                     | coworker;
         var res = await chain.RunAsync("result", cancellationToken: cancellationToken).ConfigureAwait(false) ?? string.Empty;
-        
+
         return res;
     }
 }

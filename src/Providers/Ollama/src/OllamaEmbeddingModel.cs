@@ -32,10 +32,10 @@ public class OllamaEmbeddingModel(
                 Model = Id,
                 Options = Provider.Options,
             }).ConfigureAwait(false);
-            
+
             results.Add(response.Embedding);
         }
-        
+
         return new EmbeddingResponse
         {
             Values = results

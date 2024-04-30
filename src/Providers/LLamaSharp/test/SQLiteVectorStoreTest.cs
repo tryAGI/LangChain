@@ -15,7 +15,7 @@ public class SQLiteVectorStoreTest
     public async Task SqliteTest()
     {
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        
+
         var dbExists = File.Exists("vectors.db");
         var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
         var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, dimensions: 1536);
@@ -29,7 +29,7 @@ public class SQLiteVectorStoreTest
                 "It is cold in space"
             }.ToDocuments());
         }
-        
+
 
         var results = await vectorCollection.AsRetriever(embeddings).GetRelevantDocumentsAsync("What is my dog name?");
 

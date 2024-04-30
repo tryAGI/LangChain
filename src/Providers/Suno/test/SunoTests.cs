@@ -24,9 +24,9 @@ public class SunoTests
         data.Images.First().Should().NotBeNull();
         var bytes = data.Images.First().ToByteArray();
         bytes.Should().NotBeNullOrEmpty();
-        
+
         await File.WriteAllBytesAsync("robots-must-rule.mp3", bytes);
-        
+
         Process.Start("robots-must-rule.mp3");
     }
 }

@@ -55,7 +55,7 @@ public class ReadmeTests
         var result = await chain.RunAsync(resultKey: "text", CancellationToken.None);
         result.Should().Be("Bob");
     }
-    
+
     /// <summary>
     /// Price to run from zero(create embeddings and request to LLM): 0,015$
     /// Price to re-run if database is exists: 0,0004$
@@ -70,7 +70,7 @@ public class ReadmeTests
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
         var llm = new Gpt35TurboModel(provider);
         var embeddingModel = new TextEmbeddingV3SmallModel(provider);
-        
+
         // Create vector database from Harry Potter book pdf
         var vectorDatabase = new SqLiteVectorDatabase(dataSource: "vectors.db");
         var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(collectionName: "harrypotter", dimensions: 1536); // Should be 1536 for TextEmbeddingV3SmallModel
@@ -80,16 +80,16 @@ public class ReadmeTests
         {
             await vectorCollection.LoadAndSplitDocuments(
                 embeddingModel,
-                sources: new []{ source }).ConfigureAwait(false);
+                sources: new[] { source }).ConfigureAwait(false);
         }
-        
+
         // Now we have two ways: use the async methods or use the chains
         // 1. Async methods
-        
+
         // Find similar documents for the question
         const string question = "Who was drinking a unicorn blood?";
         var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingModel, question, amount: 5);
-        
+
         // Use similar documents and LLM to answer the question
         var answer = await llm.GenerateAsync(
             $"""
@@ -102,9 +102,9 @@ public class ReadmeTests
              Question: {question}
              Helpful Answer:
              """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
-        
+
         Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
-        
+
         // 2. Chains
         var promptTemplate =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible. Always quote the context in your answer.
@@ -119,9 +119,9 @@ Helpful Answer:";
             | Template(promptTemplate)                   // replace context and question in the prompt with their values
             | LLM(llm.UseConsoleForDebug());             // send the result to the language model
         var chainAnswer = await chain.RunAsync("text", CancellationToken.None);  // get chain result
-        
-        Console.WriteLine("Chain Answer:"+ chainAnswer); // print the result
-        
+
+        Console.WriteLine("Chain Answer:" + chainAnswer); // print the result
+
         Console.WriteLine($"LLM usage: {llm.Usage}");    // Print usage and price
         Console.WriteLine($"Embedding model usage: {embeddingModel.Usage}");   // Print usage and price
     }
@@ -130,7 +130,7 @@ Helpful Answer:";
     public async Task SimpleTestUsingAsync()
     {
         var (llm, embeddings) = Helpers.GetModels(ProviderType.OpenAi);
-        
+
         var vectorCollection = new InMemoryVectorCollection();
         await vectorCollection.AddDocumentsAsync(embeddings, new[]
         {
@@ -142,9 +142,9 @@ Helpful Answer:";
 
         const string question = "What is the good name for a pet?";
         var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddings, question, amount: 1);
-        
+
         Console.WriteLine($"Similar Documents: {similarDocuments.AsString()}");
-        
+
         var petNameResponse = await llm.GenerateAsync(
             $"""
 
@@ -157,10 +157,10 @@ Helpful Answer:";
              Human: {similarDocuments.AsString()}
              Answer:
              """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
-        
+
         Console.WriteLine($"LLM answer: {petNameResponse}");
         Console.WriteLine($"Total usage: {llm.Usage}");
-        
+
         petNameResponse.ToString().Should().Be("Bob");
     }
 }

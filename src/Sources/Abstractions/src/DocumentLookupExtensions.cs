@@ -9,7 +9,7 @@ public static class DocumentLookupExtensions
     {
         document = document ?? throw new ArgumentNullException(nameof(document));
         searchString = searchString ?? throw new ArgumentNullException(nameof(searchString));
-        
+
         foreach (var lookup in document.Paragraphs()
             .Where(p => p.Contains(searchString, StringComparison.OrdinalIgnoreCase)))
         {

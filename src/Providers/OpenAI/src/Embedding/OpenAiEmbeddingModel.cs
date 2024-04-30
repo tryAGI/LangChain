@@ -26,7 +26,7 @@ public class OpenAiEmbeddingModel(
         {
             return Usage.Empty;
         }
-        
+
         var tokens = response.Usage.PromptTokens ?? 0;
         var priceInUsd = EmbeddingModels
             .ById(Id)?
@@ -46,7 +46,7 @@ public class OpenAiEmbeddingModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
 
         var index = 0;
@@ -56,7 +56,7 @@ public class OpenAiEmbeddingModel(
             batches.Add(request.Strings.Skip(index).Take(EmbeddingBatchSize).ToArray());
             index += EmbeddingBatchSize;
         }
-        
+
         var usedSettings = OpenAiEmbeddingSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
@@ -69,14 +69,14 @@ public class OpenAiEmbeddingModel(
                     model: Id,
                     user: usedSettings.User!),
                 cancellationToken).ConfigureAwait(false);
-            
+
             var usage = GetUsage(response) with
             {
                 Time = watch.Elapsed,
             };
             AddUsage(usage);
             provider.AddUsage(usage);
-            
+
             return response.Data
                 .Select(static x => x.Embedding
                     .Select(static x => (float)x)

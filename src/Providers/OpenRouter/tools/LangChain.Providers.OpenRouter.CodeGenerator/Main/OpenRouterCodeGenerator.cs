@@ -23,7 +23,7 @@ public static class OpenRouterCodeGenerator
     public static async Task GenerateCodesAsync(GenerationOptions options)
     {
         options = options ?? throw new ArgumentNullException(nameof(options));
-        
+
         //Initialize fields.
         var list = new List<ModelInfo>();
 
@@ -85,7 +85,7 @@ public static class OpenRouterCodeGenerator
         HashSet<string?> keys = new HashSet<string?>();
         foreach (var item in sorted)
         {
-            if(!keys.Add(item.EnumMemberName))
+            if (!keys.Add(item.EnumMemberName))
                 continue;
 
             if (first)
@@ -232,7 +232,7 @@ public static class OpenRouterCodeGenerator
         sb2.AppendLine($"/// {description.Replace("&", "and", StringComparison.OrdinalIgnoreCase).Replace("<", "less ", StringComparison.OrdinalIgnoreCase).Replace("less br/>", "<br/>", StringComparison.OrdinalIgnoreCase)}");
         sb2.AppendLine("/// </summary>");
         sb2.AppendLine($"{enumMemberName},");
-        
+
         return sb2.ToString();
     }
 
@@ -293,13 +293,13 @@ public static class OpenRouterCodeGenerator
         var url = $"https://openrouter.ai{href}";
 
         Console.WriteLine($"{i - 1} Fetching doc from {url}...");
-        
+
         var path = Path.Combine("cache", href.Replace('/', '_') + ".html");
         if (File.Exists(path))
         {
             return await File.ReadAllTextAsync(path).ConfigureAwait(false);
         }
-        
+
         var str = await GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
         lbb.DocumentText = str;
@@ -330,11 +330,11 @@ public static class OpenRouterCodeGenerator
         }
 
         var html = sb.ToString().Trim();
-        
+
         Directory.CreateDirectory("cache");
-        
+
         await File.WriteAllTextAsync(path, html).ConfigureAwait(false);
-        
+
         return html;
     }
 
@@ -356,7 +356,7 @@ public static class OpenRouterCodeGenerator
 
         using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(5));
-        
+
         while (!cancellationToken.IsCancellationRequested)
         {
             try
@@ -368,7 +368,7 @@ public static class OpenRouterCodeGenerator
                 await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
             }
         }
-        
+
         throw new TaskCanceledException();
     }
 

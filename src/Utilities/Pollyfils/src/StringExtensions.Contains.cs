@@ -8,7 +8,7 @@ public static partial class PolyfillStringExtensions
     public static bool Contains(this string text, string value, StringComparison comparisonType)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
-        
+
         switch (comparisonType)
         {
             case StringComparison.CurrentCulture:

@@ -12,12 +12,12 @@ public class ChatSettings
         User = string.Empty,
         UseStreaming = false,
     };
-    
+
     /// <summary>
     /// Unique user identifier.
     /// </summary>
     public string? User { get; init; }
-    
+
     /// <summary>
     /// Defines the stop sequences for the model.
     /// Up to 4 sequences where the API will stop generating further tokens. <br/>
@@ -47,19 +47,19 @@ public class ChatSettings
     {
         return new ChatSettings
         {
-            StopSequences = 
+            StopSequences =
                 requestSettings?.StopSequences ??
                 modelSettings?.StopSequences ??
                 providerSettings?.StopSequences ??
                 Default.StopSequences ??
                 throw new InvalidOperationException("Default StopSequences is not set."),
-            User = 
+            User =
                 requestSettings?.User ??
                 modelSettings?.User ??
                 providerSettings?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
-            UseStreaming = 
+            UseStreaming =
                 requestSettings?.UseStreaming ??
                 modelSettings?.UseStreaming ??
                 providerSettings?.UseStreaming ??

@@ -11,7 +11,7 @@ public class DeepInfraTests
         var apiKey =
             Environment.GetEnvironmentVariable("Deep_Infra_Key") ??
             throw new InvalidOperationException("Deep_Infra_Key is not set");
-        
+
         var model = new Wizardlm27BModel(new DeepInfraProvider(apiKey));
 
         var result = await model.GenerateAsync("Write a Poem".AsHumanMessage());
@@ -26,8 +26,8 @@ public class DeepInfraTests
         var apiKey =
             Environment.GetEnvironmentVariable("Deep_Infra_Key", EnvironmentVariableTarget.User) ??
             throw new InvalidOperationException("Deep_Infra_Key is not set");
-        
-        var model = new DeepInfraModel(new DeepInfraProvider(apiKey),DeepInfraModelIds.Wizardlm27B);
+
+        var model = new DeepInfraModel(new DeepInfraProvider(apiKey), DeepInfraModelIds.Wizardlm27B);
 
         var result = await model.GenerateAsync("Write a Poem".AsHumanMessage());
 

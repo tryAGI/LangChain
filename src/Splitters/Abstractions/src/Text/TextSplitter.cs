@@ -67,7 +67,7 @@ public abstract class TextSplitter : ITextSplitter
     protected IReadOnlyList<string> MergeSplits(IEnumerable<string> splits, string separator)
     {
         splits = splits ?? throw new ArgumentNullException(nameof(splits));
-        
+
         var separatorLen = _lengthFunction(separator);
         var docs = new List<string>(); // result of chunks
         var currentDoc = new List<string>(); // documents of current chunk

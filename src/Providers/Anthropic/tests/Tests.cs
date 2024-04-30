@@ -21,7 +21,7 @@ public class GeneralTests
 
         var service = new BookStoreService();
         model.AddGlobalTools(service.AsAnthropicTools(), service.AsAnthropicCalls());
-       
+
         var response = await model.GenerateAsync(
             new[]
             {
@@ -51,7 +51,7 @@ public class GeneralTests
         Console.WriteLine(response.Messages.AsHistory());
     }
 
-    
+
 
     [Test]
     public void SerializeToolsToXml()
@@ -63,7 +63,7 @@ public class GeneralTests
             Parameters =
             [
                 new AnthropicToolParameter()
-                    { Description = "Parameter Description", Name = "Name property", Type = "type property" }
+                { Description = "Parameter Description", Name = "Name property", Type = "type property" }
             ]
         };
 

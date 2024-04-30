@@ -11,8 +11,8 @@ public class GeneralTests
         var apiKey =
             Environment.GetEnvironmentVariable("Gemini_API_Key", EnvironmentVariableTarget.User) ??
             throw new InvalidOperationException("Gemini_API_Key is not set");
-       
-     
+
+
         var model = new GoogleChatModel(apiKey, GoogleAIModels.GeminiPro);
 
         var service = new WeatherService();
@@ -36,16 +36,16 @@ public class GeneralTests
             Environment.GetEnvironmentVariable("Gemini_API_Key", EnvironmentVariableTarget.User) ??
             throw new InconclusiveException("Gemini_API_Key environment variable is not found.");
 
-        var model = new GoogleChatModel(apiKey,GoogleAIModels.GeminiPro);
+        var model = new GoogleChatModel(apiKey, GoogleAIModels.GeminiPro);
         model.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         model.PartialResponseGenerated += (_, delta) => Console.Write(delta);
         model.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
-        
+
         var response = await model.GenerateAsync("This is a test");
 
         response.LastMessageContent.Should().NotBeNull();
     }
-    
+
     [Test]
     public async Task StreamingTest()
     {
@@ -60,11 +60,11 @@ public class GeneralTests
                 UseStreaming = true
             }
         }, GoogleAIModels.GeminiPro);
-       
+
         model.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         model.PartialResponseGenerated += (_, delta) => Console.WriteLine(delta);
         model.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
-        
+
         var response = await model.GenerateAsync("This is a test");
 
         response.LastMessageContent.Should().NotBeNull();

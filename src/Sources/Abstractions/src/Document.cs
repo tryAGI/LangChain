@@ -36,7 +36,7 @@ public class Document
     /// 
     /// </summary>
     public string PageContent { get; init; } = string.Empty;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -51,7 +51,7 @@ public class Document
     {
         return PageContent.Split(Separator, StringSplitOptions.None).ToList();
     }
-    
+
     /// <summary>
     /// Summary of the page (the first paragraph)
     /// </summary>

@@ -7,7 +7,7 @@ namespace LangChain.Providers;
 public class TextToMusicRequest
 {
     public required string Prompt { get; init; }
-    
+
     /// <inheritdoc cref="ToTextToMusicRequest(string)"/>
     public static implicit operator TextToMusicRequest(string message)
     {

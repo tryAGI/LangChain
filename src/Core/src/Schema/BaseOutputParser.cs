@@ -58,7 +58,7 @@ public abstract class BaseOutputParser<T> : BaseLlmOutputParser<T>
     public override Task<T> ParseResult(IReadOnlyList<Generation> result, bool partial = false)
     {
         result = result ?? throw new ArgumentNullException(nameof(result));
-        
+
         return Parse(result[0].Text);
     }
 

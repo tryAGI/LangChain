@@ -9,7 +9,7 @@ public class PromptTemplateInput(
 {
     /// <inheritdoc/>
     public string Template { get; private set; } = template;
-    
+
     /// <inheritdoc/>
     public TemplateFormatOptions? TemplateFormat { get; set; }
 

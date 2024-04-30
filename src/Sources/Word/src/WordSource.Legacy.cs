@@ -10,16 +10,16 @@ public sealed partial class WordSource
         CancellationToken cancellationToken = default)
     {
         var source = new WordSource(stream);
-        
+
         return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
     }
-    
+
     public static async Task<IReadOnlyCollection<Document>> LoadDocumentsFromUriAsync(
         Uri uri,
         CancellationToken cancellationToken = default)
     {
         var source = await CreateFromUriAsync(uri, cancellationToken).ConfigureAwait(false);
-        
+
         return await source.LoadAsync(cancellationToken).ConfigureAwait(false);
     }
 

@@ -13,10 +13,10 @@ public abstract class Model(string id) : IModel
 
     /// <inheritdoc/>
     public string Id { get; } = id ?? throw new ArgumentNullException(nameof(id));
-    
+
     /// <inheritdoc/>
     public Usage Usage { get; protected set; }
-    
+
     #endregion
 
     #region Methods

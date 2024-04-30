@@ -20,22 +20,22 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     /// 
     /// </summary>
     public BasePromptTemplate Prompt { get; } = fields.Prompt;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public IChatModel Llm { get; } = fields.Llm;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public BaseMemory? Memory { get; } = fields.Memory;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string OutputKey { get; set; } = fields.OutputKey;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -56,19 +56,19 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 
     /// <inheritdoc/>
     public bool Verbose { get; set; }
-    
+
     /// <inheritdoc/>
     public ICallbacks? Callbacks { get; set; }
-    
+
     /// <inheritdoc/>
     public List<string> Tags { get; set; } = new();
-    
+
     /// <inheritdoc/>
     public Dictionary<string, object> Metadata { get; set; } = new();
 
     /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => Prompt.InputVariables.ToArray();
-    
+
     /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };
 
@@ -86,7 +86,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         CallbackManagerForChainRun? runManager = null)
     {
         generations = generations ?? throw new ArgumentNullException(nameof(generations));
-        
+
         return Task.FromResult<object?>(generations[0].Text);
     }
 
@@ -100,7 +100,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         List<string> stop;
         if (values.Value.TryGetValue("stop", out var value) && value is IEnumerable<string> stopList)
         {
@@ -124,9 +124,9 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             {
                 Messages = chatMessages,
             }, new ChatSettings
-        {
-            StopSequences = stop,
-        }, cancellationToken).ConfigureAwait(false);
+            {
+                StopSequences = stop,
+            }, cancellationToken).ConfigureAwait(false);
         if (Verbose)
         {
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));

@@ -9,12 +9,12 @@ public interface IVectorCollection
     /// Id of the collection.
     /// </summary>
     string Id { get; }
-    
+
     /// <summary>
     /// Name of the collection.
     /// </summary>
     string Name { get; }
-    
+
     /// <summary>
     /// Adds a collection of vectors to the store.
     /// </summary>

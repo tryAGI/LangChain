@@ -39,11 +39,11 @@ public partial class DatabaseTests
 
         return mock;
     }
-    
+
     internal static Dictionary<string, float[]> LoadEmbeddings()
     {
         var dict = new Dictionary<string, float[]>();
-        foreach (var resource in new []
+        foreach (var resource in new[]
         {
             H.Resources.apple_json,
             H.Resources.banana_json,
@@ -64,10 +64,10 @@ public partial class DatabaseTests
                 JsonSerializer.Deserialize<Dictionary<string, float[]>>(resource.AsString()) ??
                 throw new InvalidOperationException("json is null");
             var (key, value) = json.First();
-            
+
             dict.Add(key, value);
         }
-        
+
         return dict;
     }
 }

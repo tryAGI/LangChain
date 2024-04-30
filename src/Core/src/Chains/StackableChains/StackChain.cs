@@ -13,7 +13,7 @@ public class StackChain(
     /// 
     /// </summary>
     public IReadOnlyList<string> IsolatedInputKeys { get; set; } = Array.Empty<string>();
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -46,7 +46,7 @@ public class StackChain(
     {
         if (inputKey != null) IsolatedInputKeys = new[] { inputKey };
         if (outputKey != null) IsolatedOutputKeys = new[] { outputKey };
-        
+
         return this;
     }
 
@@ -80,7 +80,7 @@ public class StackChain(
         {
             hook?.LinkEnter(a, stackableChainValues);
         }
-        
+
         await a.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         if (a is not StackChain &&
@@ -93,7 +93,7 @@ public class StackChain(
         {
             hook?.LinkEnter(b, stackableChainValues);
         }
-        
+
         await b.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         if (b is not StackChain &&
@@ -109,17 +109,17 @@ public class StackChain(
                 originalValues.Value[key] = values.Value[key];
             }
         }
-        
+
         return originalValues;
     }
 
     /// <summary>
     /// Represents a stack chain.
     /// </summary>
-    public static StackChain operator >> (StackChain a, BaseStackableChain b)
+    public static StackChain operator >>(StackChain a, BaseStackableChain b)
     {
         a = a ?? throw new ArgumentNullException(nameof(a));
-        
+
         return a.AsIsolated(outputKey: a.OutputKeys[^1]) | b;
     }
 

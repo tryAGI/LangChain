@@ -7,9 +7,9 @@ namespace LangChain.Providers;
 public class TextToSpeechResponse
 {
     public required byte[] Bytes { get; init; }
-    
+
     public Usage Usage { get; init; } = Usage.Empty;
-    
+
     public void Deconstruct(
         out byte[] values,
         out Usage usage)
@@ -17,12 +17,12 @@ public class TextToSpeechResponse
         values = Bytes;
         usage = Usage;
     }
-    
+
     public static implicit operator byte[](TextToSpeechResponse response)
     {
         return response?.ToByteArray() ?? [];
     }
-    
+
     public static implicit operator Stream(TextToSpeechResponse response)
     {
         return response?.ToStream() ?? Stream.Null;

@@ -7,9 +7,9 @@ namespace LangChain.Providers;
 public class ModerationResponse
 {
     public required bool IsValid { get; init; }
-    
+
     public Usage Usage { get; init; } = Usage.Empty;
-    
+
     public void Deconstruct(
         out bool isValid,
         out Usage usage)
@@ -17,7 +17,7 @@ public class ModerationResponse
         isValid = IsValid;
         usage = Usage;
     }
-    
+
     public static implicit operator bool(ModerationResponse response)
     {
         return response?.ToBoolean() ?? false;

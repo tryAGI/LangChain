@@ -30,7 +30,7 @@ public class ConversationalRetrievalChain(ConversationalRetrievalChainInput fiel
 {
     /// <inheritdoc/>
     public override string ChainType() => "conversational_retrieval";
-    
+
     /// <inheritdoc/>
     protected override async Task<List<Document>> GetDocsAsync(
         string question,

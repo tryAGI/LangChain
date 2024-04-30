@@ -16,7 +16,7 @@ public class SerializedBasePromptTemplate
     public List<string> InputVariables { get; set; } = new List<string>();
 
     //public TemplateFormat TemplateFormat { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>

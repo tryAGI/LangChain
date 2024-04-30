@@ -34,7 +34,7 @@ public class WikiTests
 
         await chain.RunAsync();
     }
-    
+
     [Test]
     public async Task AgentWithOllamaReact()
     {
@@ -47,7 +47,7 @@ public class WikiTests
             }).UseConsoleForDebug();
 
         // create a google search tool
-        var searchTool = new GoogleCustomSearchTool(key: "<your key>",cx: "<your cx>",resultsLimit:1);
+        var searchTool = new GoogleCustomSearchTool(key: "<your key>", cx: "<your cx>", resultsLimit: 1);
 
         var chain =
             Set("What is tryAGI/LangChain?")
@@ -56,7 +56,7 @@ public class WikiTests
 
         await chain.RunAsync();
     }
-    
+
     [Test]
     public async Task BuildingChatWithOpenAi()
     {
@@ -80,11 +80,11 @@ AI:";
         // build chain. Notice that we don't set input key here. It will be set in the loop
         var chain =
             // load history. at first it will be empty, but UpdateMemory will update it every iteration
-            LoadMemory(conversationBufferMemory, outputKey: "history")                      
+            LoadMemory(conversationBufferMemory, outputKey: "history")
             | Template(template)
             | LLM(model)
             // update memory with new request from Human and response from AI
-            | UpdateMemory(conversationBufferMemory,requestKey:"input",responseKey:"text"); 
+            | UpdateMemory(conversationBufferMemory, requestKey: "input", responseKey: "text");
 
         // run an endless loop of conversation
         while (true)
@@ -95,9 +95,9 @@ AI:";
                 break;
 
             // build a new chain using previous chain but with new input every time
-            var chatChain = Set(input, "input") 
-                            |chain;
-    
+            var chatChain = Set(input, "input")
+                            | chain;
+
             // get response from AI
             var res = await chatChain.RunAsync("text", CancellationToken.None);
 
@@ -125,9 +125,9 @@ You are an AI assistant that greets the world.
 World: Hello, Assistant!
 Assistant:";
 
-        var chain = 
-            Set(prompt, outputKey:"prompt")
-            | LLM(model, inputKey:"prompt");
+        var chain =
+            Set(prompt, outputKey: "prompt")
+            | LLM(model, inputKey: "prompt");
 
         await chain.RunAsync();
     }
@@ -137,8 +137,8 @@ Assistant:";
     {
         var model = new Gpt35TurboModel("your_openAI_key");
         var chain =
-            Set("Hello!", outputKey:"request")          // set context variable `request` to "Hello"
-            |LLM(model,inputKey:"request",outputKey:"text"); // get text from context variable `request`, pass it to the model and put result into `text`
+            Set("Hello!", outputKey: "request")          // set context variable `request` to "Hello"
+            | LLM(model, inputKey: "request", outputKey: "text"); // get text from context variable `request`, pass it to the model and put result into `text`
 
         var result = await chain.RunAsync("text", CancellationToken.None);  // execute chain and get `text` context variable
         Console.WriteLine(result);
@@ -165,19 +165,19 @@ Assistant:";
                 Stop = new[] { "\n" },
                 Temperature = 0
             }).UseConsoleForDebug();
-        
+
         var sdmodel = new Automatic1111Model
         {
             Settings = new Automatic1111ModelSettings
             {
                 NegativePrompt = "bad quality, blured, watermark, text, naked, nsfw",
                 Seed = 42, // for results repeatability
-                CfgScale = 6.0f, 
+                CfgScale = 6.0f,
                 Width = 512,
                 Height = 768,
             },
         };
-        
+
         var template =
     @"[INST]Transcript of a dialog, where the User interacts with an Assistant named Stablediffy. Stablediffy knows much about prompt engineering for stable diffusion (an open-source image generation software). The User asks Stablediffy about prompts for stable diffusion Image Generation. 
 
@@ -239,8 +239,8 @@ ASSISTANT:";
                     chunkOverlap: 50));
         }
 
-string promptText =
-    @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
+        string promptText =
+            @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
 
 {context}
 
@@ -256,7 +256,7 @@ Helpful Answer:";
             | LLM(model);                                                                       // send the result to the language model
 
         var result = await chain.RunAsync("text", CancellationToken.None);                                        // get chain result
-        
+
         Console.WriteLine(result);
     }
 
@@ -278,9 +278,9 @@ You are an AI assistant that greets the world.
 World: Hello, Assistant!
 Assistant:";
 
-        var chain = 
-            Set(prompt, outputKey:"prompt")
-            | LLM(model, inputKey:"prompt", outputKey: "result");
+        var chain =
+            Set(prompt, outputKey: "prompt")
+            | LLM(model, inputKey: "prompt", outputKey: "result");
 
         var result = await chain.RunAsync("result", CancellationToken.None);
         Console.WriteLine("---");

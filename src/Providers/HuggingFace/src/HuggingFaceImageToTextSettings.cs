@@ -34,10 +34,10 @@ public class HuggingFaceImageToTextSettings : ImageToTextSettings
         var requestSettingsCasted = requestSettings as HuggingFaceImageToTextSettings;
         var modelSettingsCasted = modelSettings as HuggingFaceImageToTextSettings;
         var providerSettingsCasted = providerSettings as HuggingFaceImageToTextSettings;
-        
+
         return new HuggingFaceImageToTextSettings
         {
-            User = 
+            User =
                 requestSettings?.User ??
                 modelSettings?.User ??
                 providerSettings?.User ??

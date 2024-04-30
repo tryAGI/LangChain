@@ -26,7 +26,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
 
     /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { _inputKey };
-    
+
     /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => new[] { _outputKey };
 
@@ -34,7 +34,7 @@ public class AnalyzeDocumentChain(AnalyzeDocumentsChainInput fields) : BaseChain
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var documents = values.Value[_inputKey];
         var docs = _textSplitter.SplitDocuments(documents as List<Document> ?? new List<Document>()).ToList();
 

@@ -19,7 +19,7 @@ public class PromptedAgent : AgentExecutorChain
     {
         return Chain.Set(system, "system")
                | Chain.Template(Template)
-               | Chain.LLM(model,outputKey: outputKey);
+               | Chain.LLM(model, outputKey: outputKey);
     }
 
     /// <summary>
@@ -34,8 +34,8 @@ public class PromptedAgent : AgentExecutorChain
         string prompt,
         IChatModel model,
         string outputKey = "final_answer")
-        : base(MakeChain(name,prompt,model, outputKey), name, "history", outputKey)
+        : base(MakeChain(name, prompt, model, outputKey), name, "history", outputKey)
     {
-        
+
     }
 }

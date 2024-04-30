@@ -35,7 +35,7 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
             .FirstOrDefault(static x => x.AttributeClass?.Name == nameof(DescriptionAttribute))?
             .ConstructorArguments.First().Value?.ToString() ?? string.Empty;
     }
-    
+
     private static InterfaceData PrepareData(
         (SemanticModel SemanticModel, AttributeData AttributeData, InterfaceDeclarationSyntax InterfaceSyntax, INamedTypeSymbol InterfaceSymbol) tuple)
     {
@@ -65,7 +65,7 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
             Methods: methods);
     }
-    
+
     private static ParameterData ToParameterData(ITypeSymbol typeSymbol, string? name = null, string? description = null, bool isRequired = true)
     {
         string schemaType;
@@ -77,7 +77,7 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
             case TypeKind.Enum:
                 schemaType = "string";
                 break;
-            
+
             case TypeKind.Structure:
                 switch (typeSymbol.SpecialType)
                 {
@@ -85,31 +85,31 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
                         schemaType = "integer";
                         format = "int32";
                         break;
-                    
+
                     case SpecialType.System_Int64:
                         schemaType = "integer";
                         format = "int64";
                         break;
-                    
+
                     case SpecialType.System_Single:
                         schemaType = "number";
                         format = "double";
                         break;
-                    
+
                     case SpecialType.System_Double:
                         schemaType = "number";
                         format = "float";
                         break;
-                    
+
                     case SpecialType.System_DateTime:
                         schemaType = "string";
                         format = "date-time";
                         break;
-                    
+
                     case SpecialType.System_Boolean:
                         schemaType = "boolean";
                         break;
-                    
+
                     case SpecialType.None:
                         switch (typeSymbol.Name)
                         {
@@ -117,25 +117,25 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
                                 schemaType = "string";
                                 format = "date";
                                 break;
-                            
+
                             default:
                                 throw new NotImplementedException($"{typeSymbol.Name} is not implemented.");
                         }
                         break;
-                    
+
                     default:
                         throw new NotImplementedException($"{typeSymbol.SpecialType} is not implemented.");
                 }
                 break;
-            
+
             case TypeKind.Class:
                 switch (typeSymbol.SpecialType)
                 {
                     case SpecialType.System_String:
                         schemaType = "string";
                         break;
-                    
-                    
+
+
                     case SpecialType.None:
                         schemaType = "object";
                         properties = typeSymbol.GetMembers()
@@ -147,28 +147,28 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
                                 isRequired: true))
                             .ToArray();
                         break;
-                    
+
                     default:
                         throw new NotImplementedException($"{typeSymbol.SpecialType} is not implemented.");
                 }
                 break;
-            
+
             case TypeKind.Interface when typeSymbol.MetadataName == "IReadOnlyCollection`1":
                 schemaType = "array";
                 arrayItem = (typeSymbol as INamedTypeSymbol)?.TypeArguments
                     .Select(static y => ToParameterData(y))
                     .FirstOrDefault();
                 break;
-            
+
             case TypeKind.Array:
                 schemaType = "array";
                 arrayItem = ToParameterData((typeSymbol as IArrayTypeSymbol)?.ElementType!);
                 break;
-            
+
             default:
                 throw new NotImplementedException($"{typeSymbol.TypeKind} is not implemented.");
         }
-        
+
         return new ParameterData(
             Name: !string.IsNullOrWhiteSpace(name)
                 ? name!
@@ -182,7 +182,7 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
             Format: format,
             Properties: properties,
             ArrayItem: arrayItem != null
-                ? new []{ arrayItem.Value }
+                ? new[] { arrayItem.Value }
                 : Array.Empty<ParameterData>(),
             EnumValues: typeSymbol.TypeKind == TypeKind.Enum
                 ? typeSymbol
@@ -194,7 +194,7 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
             IsNullable: IsNullable(typeSymbol),
             IsRequired: isRequired);
     }
-    
+
     private static bool IsNullable(ITypeSymbol typeSymbol)
     {
         if (typeSymbol.TypeKind == TypeKind.Enum)
@@ -212,19 +212,19 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
             _ => true,
         };
     }
-    
+
     private static string GetDefaultValue(ITypeSymbol typeSymbol)
     {
         switch (typeSymbol.SpecialType)
         {
             case SpecialType.System_String:
                 return "string.Empty";
-                    
+
             default:
                 return string.Empty;
         }
     }
-    
+
     private static FileWithName GetClientSourceCode(InterfaceData @interface)
     {
         return new FileWithName(

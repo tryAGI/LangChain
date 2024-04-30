@@ -19,7 +19,7 @@ public static class MemoryExtensions
         BaseMemory? memory)
     {
         messages = messages ?? throw new ArgumentNullException(nameof(messages));
-        
+
         if (memory == null)
         {
             return messages;

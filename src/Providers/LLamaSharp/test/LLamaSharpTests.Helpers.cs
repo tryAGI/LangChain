@@ -29,7 +29,7 @@ public partial class LLamaSharpTests
         return model;
 
     }
-    
+
     private IChatModel CreateChatModel()
     {
         var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
@@ -39,7 +39,7 @@ public partial class LLamaSharpTests
         });
         return model;
     }
-    
+
     private static async Task<IVectorCollection> CreateVectorStoreIndex(IEmbeddingModel embeddings, string[] texts)
     {
         var vectorDatabase = new InMemoryVectorCollection();
@@ -47,7 +47,7 @@ public partial class LLamaSharpTests
             embeddings,
             texts.ToDocuments(),
             new CharacterTextSplitter());
-        
+
         return vectorDatabase;
     }
 

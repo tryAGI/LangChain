@@ -27,8 +27,8 @@ public static class File2
         }
 #endif
     }
-    
-    
+
+
     public static
 #if NET6_0_OR_GREATER
         async
@@ -50,7 +50,7 @@ public static class File2
         }
 #endif
     }
-    
+
     public static
 #if NET6_0_OR_GREATER
         async
@@ -72,7 +72,7 @@ public static class File2
         }
 #endif
     }
-    
+
     public static
 #if NET6_0_OR_GREATER
         async

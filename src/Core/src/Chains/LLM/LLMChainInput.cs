@@ -19,13 +19,13 @@ public class LlmChainInput(
 {
     /// <inheritdoc/>
     public BasePromptTemplate Prompt { get; set; } = prompt;
-    
+
     /// <inheritdoc/>
     public IChatModel Llm { get; set; } = llm;
-    
+
     /// <inheritdoc/>
     public string OutputKey { get; set; } = "text";
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -35,5 +35,5 @@ public class LlmChainInput(
     /// Whether to return only the final parsed result. Defaults to True.
     /// If false, will return a bunch of extra information about the generation.
     /// </summary>
-    public bool ReturnFinalOnly { get; set;} = true;
+    public bool ReturnFinalOnly { get; set; } = true;
 }

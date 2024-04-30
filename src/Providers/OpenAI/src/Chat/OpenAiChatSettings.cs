@@ -29,7 +29,7 @@ public class OpenAiChatSettings : ChatSettings
     /// Defaults to 1. <br/>
     /// </summary>
     public double? Temperature { get; init; }
-    
+
     /// <summary>
     /// The maximum number of tokens to generate in the chat completion. <br/>
     /// The total length of input tokens and generated tokens is limited by the model's context length. <br/>
@@ -103,28 +103,28 @@ public class OpenAiChatSettings : ChatSettings
         var requestSettingsCasted = requestSettings as OpenAiChatSettings;
         var modelSettingsCasted = modelSettings as OpenAiChatSettings;
         var providerSettingsCasted = providerSettings as OpenAiChatSettings;
-        
+
         return new OpenAiChatSettings
         {
-            StopSequences = 
+            StopSequences =
                 requestSettings?.StopSequences ??
                 modelSettings?.StopSequences ??
                 providerSettings?.StopSequences ??
                 Default.StopSequences ??
                 throw new InvalidOperationException("Default StopSequences is not set."),
-            User = 
+            User =
                 requestSettings?.User ??
                 modelSettings?.User ??
                 providerSettings?.User ??
                 Default.User ??
                 throw new InvalidOperationException("Default User is not set."),
-            UseStreaming = 
+            UseStreaming =
                 requestSettings?.UseStreaming ??
                 modelSettings?.UseStreaming ??
                 providerSettings?.UseStreaming ??
                 Default.UseStreaming ??
                 throw new InvalidOperationException("Default UseStreaming is not set."),
-            Temperature = 
+            Temperature =
                 requestSettingsCasted?.Temperature ??
                 modelSettingsCasted?.Temperature ??
                 providerSettingsCasted?.Temperature ??
@@ -139,7 +139,7 @@ public class OpenAiChatSettings : ChatSettings
                 modelSettingsCasted?.TopP ??
                 providerSettingsCasted?.TopP ??
                 Default.TopP,
-            Seed = 
+            Seed =
                 requestSettingsCasted?.Seed ??
                 modelSettingsCasted?.Seed ??
                 providerSettingsCasted?.Seed ??

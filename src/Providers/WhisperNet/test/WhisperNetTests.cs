@@ -11,8 +11,8 @@ public class WhisperNetTests
     public async Task TestWhisperSTT()
     {
         var modelPath =
-           await  WhisperNetModelDownloader.DownloadModel(GgmlType.Base, QuantizationType.NoQuantization, false, "./whisper");
-        var model = WhisperNetSpeechToTextModel.FromPath(modelPath, new ()
+           await WhisperNetModelDownloader.DownloadModel(GgmlType.Base, QuantizationType.NoQuantization, false, "./whisper");
+        var model = WhisperNetSpeechToTextModel.FromPath(modelPath, new()
         {
             Language = "en",
             Prompt = "I am Kennedy"

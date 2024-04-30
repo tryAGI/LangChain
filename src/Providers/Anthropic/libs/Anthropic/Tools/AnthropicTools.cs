@@ -8,7 +8,7 @@ namespace LangChain.Providers.Anthropic.Tools;
 public class AnthropicTools
 {
     [XmlArrayItem("tool_description")] public List<AnthropicTool> Tools { get; set; } = [];
-    
+
     [RequiresUnreferencedCode("Members from serialized types may be trimmed if not referenced directly")]
     public string ToXml()
     {

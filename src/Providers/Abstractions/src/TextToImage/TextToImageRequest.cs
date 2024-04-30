@@ -7,7 +7,7 @@ namespace LangChain.Providers;
 public class TextToImageRequest
 {
     public required string Prompt { get; init; }
-    
+
     /// <inheritdoc cref="ToTextToImageRequest(string)"/>
     public static implicit operator TextToImageRequest(string message)
     {

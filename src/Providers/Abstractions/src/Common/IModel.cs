@@ -9,7 +9,7 @@ public interface IModel
     /// Id of the model.
     /// </summary>
     public string Id { get; }
-    
+
     /// <summary>
     /// Total usage of current model/provider.
     /// </summary>

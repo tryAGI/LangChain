@@ -25,7 +25,7 @@ public class ChromaVectorDatabase : IVectorDatabase
         try
         {
             var collection = await _client.GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Collection not found");
-        
+
             return new ChromaVectorCollection(
                 _store,
                 name: collection.Name,

@@ -17,7 +17,7 @@ public class OpenSearchVectorCollection(
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
-        
+
         var bulkDescriptor = new BulkDescriptor()
             .Refresh(Refresh.WaitFor);
 
@@ -50,7 +50,7 @@ public class OpenSearchVectorCollection(
         {
             throw new InvalidOperationException($"Failed to add items to collection '{Name}'. DebugInformation: {response.DebugInformation}");
         }
-        
+
         return response.Items
             .Select(i => i.Id)
             .ToArray();
@@ -58,7 +58,7 @@ public class OpenSearchVectorCollection(
 
     /// <inheritdoc />
     public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
-    {        
+    {
         var response = await client.GetAsync<VectorRecord>(
             request: new GetRequest(Name, id),
             ct: cancellationToken).ConfigureAwait(false);
@@ -98,7 +98,7 @@ public class OpenSearchVectorCollection(
         CancellationToken cancellationToken = default)
     {
         settings ??= new VectorSearchSettings();
-        
+
         var response = await client.SearchAsync<VectorRecord>(s => s
             .Index(Name)
             .Query(q => q
@@ -112,7 +112,7 @@ public class OpenSearchVectorCollection(
         {
             throw new InvalidOperationException($"Failed to search collection '{Name}'. DebugInformation: {response.DebugInformation}");
         }
-        
+
         return new VectorSearchResponse
         {
             Items = response.Documents

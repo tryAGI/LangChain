@@ -33,7 +33,7 @@ public class ImageGenerationChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var prompt =
             values.Value[InputKeys[0]].ToString() ??
             throw new InvalidOperationException("Input key is null");

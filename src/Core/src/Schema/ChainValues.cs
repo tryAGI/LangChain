@@ -47,7 +47,7 @@ public class ChainValues : IChainValues
     public ChainValues(ChainValues value)
     {
         value = value ?? throw new ArgumentNullException(nameof(value));
-        
+
         Value = value.Value;
     }
 

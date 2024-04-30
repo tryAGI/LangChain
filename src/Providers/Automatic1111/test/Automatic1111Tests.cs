@@ -10,13 +10,13 @@ public class Automatic1111Tests
     public async Task InstructionTest()
     {
         var model = new Automatic1111Model();
-        var tempPath= Path.Combine(Path.GetTempPath(), "test.png");
+        var tempPath = Path.Combine(Path.GetTempPath(), "test.png");
 
         var chain =
             Set("Car", outputKey: "prompt")
             | GenerateImage(model, inputKey: "prompt", outputKey: "image")
             | SaveIntoFile(path: tempPath, inputKey: "image");
-            
+
         await chain.RunAsync();
     }
 }

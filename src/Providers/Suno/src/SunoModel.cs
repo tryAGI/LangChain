@@ -16,7 +16,7 @@ public class SunoModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         OnPromptSent(request.Prompt);
 
         var createResponse = await provider.HttpClient.GenerateV2Async(
@@ -32,7 +32,7 @@ public class SunoModel(
                 ContinueAt = 0,
             },
             cancellationToken).ConfigureAwait(false);
-        
+
         var completedClips = createResponse.Clips
             .Where(x => x.Status == "complete")
             .ToList();
@@ -44,17 +44,17 @@ public class SunoModel(
             var clips = await provider.HttpClient.GetFeedAsync(
                 ids: nonCompletedClips.Select(x => x.Id).ToArray(),
                 cancellationToken).ConfigureAwait(false);
-            
+
             nonCompletedClips = clips
                 .Where(x => x.Status != "complete")
                 .ToList();
             completedClips.AddRange(clips
                 .Where(x => x.Status == "complete")
                 .ToList());
-            
+
             await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken).ConfigureAwait(false);
         }
-        
+
         return new TextToMusicResponse
         {
             Images = await Task.WhenAll(completedClips
@@ -69,6 +69,6 @@ public class SunoModel(
             UsedSettings = settings ?? TextToMusicSettings.Default,
         };
     }
-    
+
     #endregion
 }

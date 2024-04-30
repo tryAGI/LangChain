@@ -21,7 +21,7 @@ public static class CreatableExtensions
 
         return memoryStream;
     }
-    
+
 #if NET7_0_OR_GREATER
     
     /// <summary>
@@ -88,5 +88,5 @@ public static class CreatableExtensions
         return T.CreateFromStream(memoryStream);
     }
     
-    #endif
+#endif
 }

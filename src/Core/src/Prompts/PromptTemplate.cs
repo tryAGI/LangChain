@@ -15,12 +15,12 @@ public class PromptTemplate : BaseStringPromptTemplate
     /// 
     /// </summary>
     public string Template { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public TemplateFormatOptions TemplateFormat { get; set; } = TemplateFormatOptions.FString;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -36,7 +36,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         : base(input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         Template = input.Template;
         TemplateFormat = input.TemplateFormat ?? TemplateFormatOptions.FString;
         ValidateTemplate = input.ValidateTemplate ?? true;
@@ -120,7 +120,7 @@ public class PromptTemplate : BaseStringPromptTemplate
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var promptDict = new PromptTemplateInput(Template, InputVariables
             .Where(iv => !values.Value.ContainsKey(iv))
             .ToList(), PartialVariables)
@@ -181,7 +181,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     /// 
     /// </summary>
     public delegate string Interpolator(string template, Dictionary<string, object> inputValues);
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -253,7 +253,7 @@ public class PromptTemplate : BaseStringPromptTemplate
             return res + (node as LiteralNode)?.Text;
         });
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -334,7 +334,7 @@ public class PromptTemplate : BaseStringPromptTemplate
     {
         return DefaultFormatterMapping[templateFormat](template, inputValues);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>

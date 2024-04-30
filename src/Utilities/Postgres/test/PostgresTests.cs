@@ -86,7 +86,7 @@ VALUES
         result.Should().HaveCount(2);
         result.Should().Contain("kids");
         result.Should().Contain("pets");
-        
+
     }
 
     [Test]
@@ -133,9 +133,9 @@ id	name	type	owner_id
     [Test]
     public async Task GetTableInfos_Include_Ok()
     {
-        var db = new PostgresDatabase(_ownerConnectionString, includeTables: new []{ "kids" });
+        var db = new PostgresDatabase(_ownerConnectionString, includeTables: new[] { "kids" });
         var result = await db.GetTableInfoAsync();
-        
+
         result.Should().NotBeNullOrEmpty();
         result.Should().BeEquivalentTo(@"CREATE TABLE kids (
 id	bigint NOT NULL,
@@ -158,9 +158,9 @@ id	name	age
     [Test]
     public async Task GetTableInfos_Ignore_Ok()
     {
-        var db = new PostgresDatabase(_ownerConnectionString, ignoreTables: new []{ "pets" });
+        var db = new PostgresDatabase(_ownerConnectionString, ignoreTables: new[] { "pets" });
         var result = await db.GetTableInfoAsync();
-        
+
         result.Should().NotBeNullOrEmpty();
         result.Should().BeEquivalentTo(@"CREATE TABLE kids (
 id	bigint NOT NULL,
@@ -185,14 +185,14 @@ id	name	age
     {
         var db = new PostgresDatabase(
             _ownerConnectionString,
-            includeTables: new []{ "kids" },
+            includeTables: new[] { "kids" },
             customTableInfo: new Dictionary<string, string>
             {
                 ["kids"] = "custom kids table info"
             });
 
         var result = await db.GetTableInfoAsync();
-        
+
         result.Should().NotBeNullOrEmpty();
         result.Should().BeEquivalentTo(@"custom kids table info
 ");
@@ -213,7 +213,7 @@ id	name	age
     {
         var db = new PostgresDatabase(_ownerConnectionString);
         var result = await db.RunAsync("SELECT name FROM kids ORDER BY id", SqlRunFetchType.All);
-        
+
         result.Should().NotBeNullOrEmpty();
         result.Should().BeEquivalentTo("[(jack), (nancy), (jimmy)]");
     }

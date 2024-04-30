@@ -15,7 +15,7 @@ public static class Utils
     {
         vector1 = vector1 ?? throw new ArgumentNullException(nameof(vector1));
         vector2 = vector2 ?? throw new ArgumentNullException(nameof(vector2));
-            
+
         double sum = 0.0;
         for (int i = 0; i < vector1.Length; i++)
         {

@@ -9,17 +9,17 @@ public class VectorSearchSettings
     /// 
     /// </summary>
     public VectorSearchType Type { get; set; } = VectorSearchType.Similarity;
-    
+
     /// <summary>
     /// Number of Documents to return. Defaults to 4.
     /// </summary>
     public int NumberOfResults { get; set; } = 4;
-    
+
     /// <summary>
     /// Number of Documents to fetch to pass to MMR algorithm.
     /// </summary>
     public int FetchK { get; set; } = 20;
-    
+
     /// <summary>
     /// Applied only to the MMR algorithm.
     /// Number between 0 and 1 that determines the degree
@@ -30,7 +30,7 @@ public class VectorSearchSettings
     public float LambdaMult { get; set; } = 0.5f;
 
     public DistanceStrategy DistanceStrategy { get; set; } = DistanceStrategy.Cosine;
-    
+
     /// <summary>
     /// The 'correct' relevance function
     /// may differ depending on a few things, including:
@@ -40,14 +40,14 @@ public class VectorSearchSettings
     /// - etc.
     /// </summary>
     public Func<float, float>? RelevanceScoreFunc { get; set; }
-    
+
     /// <summary>
     /// A floating point value between 0 to 1 to filter the resulting set of retrieved docs.
     /// Will only return docs with a similarity score greater or equal than this value.
     /// Ignored by default.
     /// </summary>
     public float? ScoreThreshold { get; set; }
-    
+
     public VectorSearchSettings()
     {
         RelevanceScoreFunc = RelevanceScoreFunctions.Get(DistanceStrategy);

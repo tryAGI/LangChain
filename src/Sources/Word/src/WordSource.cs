@@ -16,11 +16,11 @@ public sealed partial class WordSource : ISource
     {
         return new WordSource(stream);
     }
-    
+
     public string FilePath { get; init; } = string.Empty;
-    
+
     public Stream? Stream { get; }
-    
+
     public WordSource(string path)
     {
         FilePath = path;
@@ -30,7 +30,7 @@ public sealed partial class WordSource : ISource
     {
         Stream = stream;
     }
-    
+
     /// <inheritdoc/>
     public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
     {
@@ -49,7 +49,7 @@ public sealed partial class WordSource : ISource
                 {
                     paragraphText.Append(run.InnerText);
                 }
-                
+
                 if (paragraphText.Length > 0)
                 {
                     documents.Add(paragraphText.ToString());

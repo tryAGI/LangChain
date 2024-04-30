@@ -41,7 +41,7 @@ public class TTSChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var text = (string)values.Value[_inputKey];
 
         if (_useCache)
@@ -80,7 +80,7 @@ public class TTSChain : BaseStackableChain
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
-    public TTSChain UseCache(bool enabled=true)
+    public TTSChain UseCache(bool enabled = true)
     {
         _useCache = enabled;
         return this;

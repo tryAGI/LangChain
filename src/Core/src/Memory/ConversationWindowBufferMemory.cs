@@ -9,7 +9,7 @@ namespace LangChain.Memory;
 /// NOTE: LangChain's buffer property is not implemented here
 /// </summary>
 public class ConversationWindowBufferMemory : BaseChatMemory
-{   
+{
     public MessageFormatter Formatter { get; set; } = new MessageFormatter();
 
     public string MemoryKey { get; set; } = "history";

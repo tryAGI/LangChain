@@ -19,7 +19,7 @@ public class Automatic1111Model(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         OnPromptSent(request.Prompt);
 
         var usedSettings = Automatic1111ModelSettings.Calculate(

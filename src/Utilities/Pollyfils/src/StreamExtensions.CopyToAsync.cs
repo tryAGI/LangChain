@@ -11,7 +11,7 @@ public static partial class PolyfillStreamExtensions
         CancellationToken cancellationToken)
     {
         stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        
+
         return stream.CopyToAsync(destination, bufferSize: 81920, cancellationToken);
     }
 }

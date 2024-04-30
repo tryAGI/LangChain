@@ -22,7 +22,7 @@ public class ChatMessageHistory : BaseChatMessageHistory
 
     /// <inheritdoc/>
     public override Task AddMessage(Message message)
-    { 
+    {
         if (IsMessageAccepted(message))
         {
             _messages.Add(message);

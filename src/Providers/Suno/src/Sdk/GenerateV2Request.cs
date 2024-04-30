@@ -15,7 +15,7 @@ public class GenerateV2Request
 
     [JsonPropertyName("make_instrumental")]
     public bool MakeInstrumental { get; set; }
-    
+
     [JsonPropertyName("tags")]
     public string Tags { get; set; } = string.Empty;
 

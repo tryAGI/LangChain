@@ -17,12 +17,12 @@ public class AgentTask(
     /// 
     /// </summary>
     public CrewAgent Agent { get; set; } = agent;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public List<CrewAgentTool> Tools { get; set; } = tools ?? new List<CrewAgentTool>();
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -40,7 +40,7 @@ public class AgentTask(
     {
         Agent.AddTools(Tools);
         Agent.Context = context;
-        var chain = Chain.Set(Description, "task") 
+        var chain = Chain.Set(Description, "task")
                     | Agent;
         var res = await chain.RunAsync("result", cancellationToken: cancellationToken).ConfigureAwait(false) ?? string.Empty;
         return res;

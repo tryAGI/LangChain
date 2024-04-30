@@ -20,7 +20,7 @@ public partial class OpenAiChatModel(
     #region Properties
 
     private ChatModels ChatModel { get; } = chatModel;
-    
+
     /// <inheritdoc/>
     public override int ContextLength => ChatModel.ContextLength;
 
@@ -42,7 +42,7 @@ public partial class OpenAiChatModel(
     #endregion
 
     #region Methods
-    
+
     protected virtual async Task CallFunctionsAsync(
         global::OpenAI.Chat.Message message,
         IList<Message> messages,
@@ -50,7 +50,7 @@ public partial class OpenAiChatModel(
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
         messages = messages ?? throw new ArgumentNullException(nameof(messages));
-        
+
         foreach (var tool in message.ToolCalls ?? [])
         {
             var func = Calls[tool.Function.Name];
@@ -74,34 +74,34 @@ public partial class OpenAiChatModel(
                         MessageRole.Ai => Role.Assistant,
                         MessageRole.Human => Role.User,
                         _ => Role.User,
-                        
+
                     },
                     content: message.Content);
             case MessageRole.FunctionCall:
                 return new global::OpenAI.Chat.Message(
                     role: Role.Assistant, string.Empty, message.ToToolCalls());
             case MessageRole.FunctionResult:
-                return new global::OpenAI.Chat.Message(message.GetTool(),message.Content);
+                return new global::OpenAI.Chat.Message(message.GetTool(), message.Content);
         }
 
         return new global::OpenAI.Chat.Message();
     }
-    
+
     protected virtual Message ToMessage(global::OpenAI.Chat.Message message)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
-        
+
         var role = message.Role switch
         {
             Role.System => MessageRole.System,
             Role.User => MessageRole.Human,
-            Role.Assistant when message.ToolCalls != null && message.ToolCalls.Count>0 => MessageRole.FunctionCall,
+            Role.Assistant when message.ToolCalls != null && message.ToolCalls.Count > 0 => MessageRole.FunctionCall,
             Role.Assistant => MessageRole.Ai,
             Role.Tool => MessageRole.FunctionResult,
             _ => MessageRole.Human,
         };
-        
-        var content= message.Content;
+
+        var content = message.Content;
         // fix: message contains json element instead of string
         if (content is JsonElement { ValueKind: JsonValueKind.String } element)
         {
@@ -138,10 +138,10 @@ public partial class OpenAiChatModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
-        
+
         OnPromptSent(request.Messages.AsHistory());
 
         var usedSettings = OpenAiChatSettings.Calculate(
@@ -189,20 +189,20 @@ public partial class OpenAiChatModel(
             await foreach (var response in enumerable)
             {
                 var delta = response.Choices.ElementAt(0).Delta.Content;
-                
+
                 OnPartialResponseGenerated(delta);
                 stringBuilder.Append(delta);
             }
             OnPartialResponseGenerated(Environment.NewLine);
             stringBuilder.Append(Environment.NewLine);
-            
+
             var newMessage = new Message(
                 Content: stringBuilder.ToString(),
                 Role: MessageRole.Ai);
             messages.Add(newMessage);
 
             OnCompletedResponseGenerated(newMessage.Content);
-        
+
             var usage = Usage.Empty with
             {
                 Time = watch.Elapsed,
@@ -229,7 +229,7 @@ public partial class OpenAiChatModel(
             OnPartialResponseGenerated(newMessage.Content);
             OnPartialResponseGenerated(Environment.NewLine);
             OnCompletedResponseGenerated(newMessage.Content);
-        
+
             var usage = GetUsage(response) with
             {
                 Time = watch.Elapsed,
@@ -238,10 +238,10 @@ public partial class OpenAiChatModel(
             provider.AddUsage(usage);
 
 
-            while (CallToolsAutomatically && message.ToolCalls != null && message.ToolCalls.Count>0)
+            while (CallToolsAutomatically && message.ToolCalls != null && message.ToolCalls.Count > 0)
             {
                 await CallFunctionsAsync(message, messages, cancellationToken).ConfigureAwait(false);
-        
+
                 if (ReplyToToolCallsAutomatically)
                 {
                     chatRequest = new global::OpenAI.Chat.ChatRequest(
@@ -265,7 +265,7 @@ public partial class OpenAiChatModel(
                     OnPartialResponseGenerated(newMessage.Content);
                     OnPartialResponseGenerated(Environment.NewLine);
                     OnCompletedResponseGenerated(newMessage.Content);
-        
+
                     usage = GetUsage(response) with
                     {
                         Time = watch.Elapsed,
@@ -274,7 +274,7 @@ public partial class OpenAiChatModel(
                     provider.AddUsage(usage);
                 }
             }
-            
+
             return new ChatResponse
             {
                 Messages = messages,
@@ -284,7 +284,7 @@ public partial class OpenAiChatModel(
         }
     }
 
-    
+
 
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
@@ -302,6 +302,6 @@ public partial class OpenAiChatModel(
                 outputTokens: outputTokens,
                 inputTokens: inputTokens);
     }
-    
+
     #endregion
 }

@@ -241,7 +241,7 @@ public static class TogetherAiCodeGenerator
         sb2.AppendLine($"/// {description}");
         sb2.AppendLine("/// </summary>");
         sb2.AppendLine($"{enumMemberName},");
-        
+
         return sb2.ToString();
     }
 

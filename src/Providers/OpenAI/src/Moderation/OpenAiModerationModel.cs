@@ -18,7 +18,7 @@ public class OpenAiModerationModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var response = await provider.Api.ModerationsEndpoint.CreateModerationAsync(
             new ModerationsRequest(
                 input: request.Prompt,

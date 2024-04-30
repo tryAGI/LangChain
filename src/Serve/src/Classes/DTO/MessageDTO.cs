@@ -15,7 +15,7 @@ public class MessageDto
     public static MessageDto FromStoredMessage(StoredMessage message, string modelName)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
-        
+
         return new MessageDto
         {
             ConversationId = message.ConversationId,
@@ -27,7 +27,7 @@ public class MessageDto
         };
     }
 
-    
 
-    
+
+
 }

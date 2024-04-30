@@ -17,7 +17,7 @@ public class VectorStoreRetriever : BaseRetriever
     public IVectorCollection VectorCollection { get; init; }
 
     private VectorSearchType SearchType { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -57,7 +57,7 @@ public class VectorStoreRetriever : BaseRetriever
             NumberOfResults = K,
             ScoreThreshold = ScoreThreshold,
         }, cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         return response.ToDocuments();
     }
 

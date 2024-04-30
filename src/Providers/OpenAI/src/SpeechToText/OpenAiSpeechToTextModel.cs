@@ -22,7 +22,7 @@ public class OpenAiSpeechToTextModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         try
         {
             var usedSettings = OpenAiSpeechToTextSettings.Calculate(

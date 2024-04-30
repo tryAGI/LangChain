@@ -9,7 +9,7 @@ public enum ELLamaSharpModelMode
     /// 
     /// </summary>
     Instruction,
-    
+
     /// <summary>
     /// 
     /// </summary>

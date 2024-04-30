@@ -37,7 +37,7 @@ public class LLamaSharpModelChat : LLamaSharpModelBase
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var prompt = ToPrompt(request.Messages);
 
         var watch = Stopwatch.StartNew();

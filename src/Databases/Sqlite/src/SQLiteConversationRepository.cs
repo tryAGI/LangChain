@@ -98,7 +98,7 @@ public sealed class SqLiteConversationRepository : IConversationRepository, IDis
     public async Task AddMessage(StoredMessage message)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
-        
+
         var insertCommand = _connection.CreateCommand();
         insertCommand.CommandText = "INSERT INTO Messages (MessageId, ConversationId, Text, Author) VALUES (@MessageId, @ConversationId, @Text, @Author)";
         insertCommand.Parameters.AddWithValue("@MessageId", message.MessageId.ToString());
@@ -123,7 +123,7 @@ public sealed class SqLiteConversationRepository : IConversationRepository, IDis
                 MessageId = Guid.Parse(reader.GetString(0)),
                 ConversationId = Guid.Parse(reader.GetString(1)),
                 Content = reader.GetString(2),
-                Author = (MessageAuthor)Enum.Parse(typeof(MessageAuthor),reader.GetString(3)) 
+                Author = (MessageAuthor)Enum.Parse(typeof(MessageAuthor), reader.GetString(3))
             });
         }
 

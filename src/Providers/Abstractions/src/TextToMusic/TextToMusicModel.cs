@@ -6,7 +6,7 @@ public abstract class TextToMusicModel(string id) : Model<TextToMusicSettings>(i
 
     /// <inheritdoc cref="IChatModel.PromptSent"/>
     public event EventHandler<string>? PromptSent;
-    
+
     protected void OnPromptSent(string prompt)
     {
         PromptSent?.Invoke(this, prompt);

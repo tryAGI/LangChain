@@ -19,7 +19,7 @@ public class HuggingFaceImageToTextModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
 
         var usedSettings = HuggingFaceImageToTextSettings.Calculate(

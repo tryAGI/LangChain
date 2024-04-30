@@ -27,15 +27,15 @@ public abstract class BaseCombineDocumentsChain(
     /// 
     /// </summary>
     public string InputKey { get; } = fields.InputKey;
-    
+
     /// <summary>
     /// 
     /// </summary>
-    public string OutputKey { get; }  = fields.OutputKey;
+    public string OutputKey { get; } = fields.OutputKey;
 
     /// <inheritdoc/>
     public override IReadOnlyList<string> InputKeys => new[] { InputKey };
-    
+
     /// <inheritdoc/>
     public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };
 
@@ -49,7 +49,7 @@ public abstract class BaseCombineDocumentsChain(
     protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var docs = values.Value["input_documents"];
 
         //Other keys are assumed to be needed for LLM prediction

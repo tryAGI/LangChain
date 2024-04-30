@@ -21,19 +21,19 @@ public class ChatRequest
     {
         return ToChatRequest(message);
     }
-    
+
     /// <inheritdoc cref="ToChatRequest(Message)"/>
     public static implicit operator ChatRequest(Message message)
     {
         return ToChatRequest(message);
     }
-    
+
     /// <inheritdoc cref="ToChatRequest(string)"/>
     public static implicit operator ChatRequest(Message[] messages)
     {
         return ToChatRequest(messages);
     }
-    
+
     /// <summary>
     /// Explicitly converts a string to a <see cref="ChatRequest"/>. <br/>
     /// Will be converted to a <see cref="ChatRequest"/>
@@ -46,7 +46,7 @@ public class ChatRequest
     {
         return ToChatRequest(message.AsHumanMessage());
     }
-    
+
     /// <summary>
     /// Explicitly converts a string to a <see cref="ChatRequest"/>.
     /// </summary>
@@ -56,7 +56,7 @@ public class ChatRequest
     {
         return ToChatRequest([message]);
     }
-    
+
     /// <summary>
     /// Explicitly converts a string to a <see cref="ChatRequest"/>.
     /// </summary>

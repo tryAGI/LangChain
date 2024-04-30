@@ -24,7 +24,7 @@ public abstract class CohereEmbeddingModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var watch = Stopwatch.StartNew();
 
         var usedSettings = CohereEmbeddingSettings.Calculate(

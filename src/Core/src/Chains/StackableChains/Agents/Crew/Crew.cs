@@ -19,10 +19,10 @@ public class Crew(
     public async Task<string> RunAsync(CancellationToken cancellationToken = default)
     {
         string? context = null;
-        
+
         foreach (var task in tasks)
         {
-            task.Tools.Add(new AskQuestionTool(agents.Except(new []{task.Agent})));
+            task.Tools.Add(new AskQuestionTool(agents.Except(new[] { task.Agent })));
             task.Tools.Add(new DelegateWorkTool(agents.Except(new[] { task.Agent })));
             var res = await task.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
             context = res;
