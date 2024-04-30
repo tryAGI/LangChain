@@ -25,7 +25,7 @@ Generated code:", outputKey:"prompt")
                     | ExtractCode("code","data")
                     | SaveIntoFile("main.py")
                     | RunCodeInDocker(attachVolume:"./", outputKey:"result");
-        var result = await chain.Run();
+        var result = await chain.RunAsync();
 
         result.Value["result"].ToString()?.Trim().Should().Be("Hello world");
     }

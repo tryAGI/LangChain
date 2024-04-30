@@ -38,8 +38,9 @@ public class StuffDocumentsChainTests
 
         llmChain
             .Verify(
-                m => m.Predict(
-                    It.Is<ChainValues>(x => x.Value["documents_content"].ToString() == "First page text\n\nSecond page different text")),
+                m => m.PredictAsync(
+                    It.Is<ChainValues>(x => x.Value["documents_content"].ToString() == "First page text\n\nSecond page different text"),
+                    It.IsAny<CancellationToken>()),
                 Times.Once());
     }
 
@@ -77,10 +78,11 @@ public class StuffDocumentsChainTests
 
         llmChain
             .Verify(
-                m => m.Predict(
+                m => m.PredictAsync(
                     It.Is<ChainValues>(x =>
                         x.Value[documentVariableName].ToString() == "Page=1.Content=First+Page=2.Content=Second" &&
-                        x.Value[otherKey].ToString() == "hello!")),
+                        x.Value[otherKey].ToString() == "hello!"),
+                    It.IsAny<CancellationToken>()),
                 Times.Once());
     }
 
@@ -89,8 +91,8 @@ public class StuffDocumentsChainTests
         var mock = new Mock<ILlmChain>();
 
         mock.Setup(x => x
-                .Predict(It.IsAny<ChainValues>()))
-            .Returns<ChainValues>(_ => Task.FromResult((object)"predict response"));
+                .PredictAsync(It.IsAny<ChainValues>(), It.IsAny<CancellationToken>()))
+            .Returns<ChainValues, CancellationToken>((_, _) => Task.FromResult((object)"predict response"));
         
         mock.Setup(x => x.InputKeys)
             .Returns(Array.Empty<string>());

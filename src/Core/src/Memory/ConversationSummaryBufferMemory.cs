@@ -9,7 +9,6 @@ namespace LangChain.Memory;
 public class ConversationSummaryBufferMemory : BaseChatMemory
 {
     private IChatModelWithTokenCounting Model { get; }
-    private MessageSummarizer Summarizer { get; }
 
     private string SummaryText { get; set; } = string.Empty;
 
@@ -29,7 +28,6 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
         : base()
     {
         Model = model ?? throw new ArgumentNullException(nameof(model));
-        Summarizer = new MessageSummarizer(model);
     }
 
     /// <summary>
@@ -42,7 +40,6 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
         : base(chatHistory)
     {
         Model = model ?? throw new ArgumentNullException(nameof(model));
-        Summarizer = new MessageSummarizer(model);
     }
 
     /// <inheritdoc />
@@ -89,7 +86,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
                 tokenCount = Model.CountTokens(queue);
             }
 
-            SummaryText = await Summarizer.Summarize(prunedMessages, SummaryText).ConfigureAwait(false);
+            SummaryText = await Model.SummarizeAsync(prunedMessages, SummaryText).ConfigureAwait(false);
 
             await ChatHistory.SetMessages(queue).ConfigureAwait(false);
         }

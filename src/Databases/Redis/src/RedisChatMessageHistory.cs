@@ -13,9 +13,10 @@ namespace LangChain.Databases;
 [RequiresUnreferencedCode("Requires unreferenced code.")]
 public class RedisChatMessageHistory : BaseChatMessageHistory
 {
+    public TimeSpan? Ttl { get; set; }
+    
     private readonly string _sessionId;
     private readonly string _keyPrefix;
-    private readonly TimeSpan? _ttl;
     private readonly Lazy<ConnectionMultiplexer> _multiplexer;
 
     /// <inheritdoc />
@@ -27,7 +28,7 @@ public class RedisChatMessageHistory : BaseChatMessageHistory
     {
         _sessionId = sessionId;
         _keyPrefix = keyPrefix;
-        _ttl = ttl;
+        Ttl = ttl;
 
         _multiplexer = new Lazy<ConnectionMultiplexer>(
             () =>
@@ -67,9 +68,9 @@ public class RedisChatMessageHistory : BaseChatMessageHistory
     {
         var database = _multiplexer.Value.GetDatabase();
         await database.ListLeftPushAsync(Key, JsonSerializer.Serialize(message)).ConfigureAwait(false);
-        if (_ttl.HasValue)
+        if (Ttl.HasValue)
         {
-            await database.KeyExpireAsync(Key, _ttl).ConfigureAwait(false);
+            await database.KeyExpireAsync(Key, Ttl).ConfigureAwait(false);
         }
     }
 

@@ -1,3 +1,5 @@
+LangChain.Providers.EmbeddingResponse.Dimensions.get -> int
+LangChain.Providers.EmbeddingResponse.Dimensions.init -> void
 LangChain.Providers.ITextToMusicModel
 LangChain.Providers.ITextToMusicModel.GenerateMusicAsync(LangChain.Providers.TextToMusicRequest! request, LangChain.Providers.TextToMusicSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.TextToMusicResponse!>!
 LangChain.Providers.ITextToMusicModel.PromptSent -> System.EventHandler<string!>?

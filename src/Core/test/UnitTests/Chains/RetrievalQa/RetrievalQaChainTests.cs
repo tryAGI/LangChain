@@ -19,7 +19,7 @@ public class RetrievalQaChainTests
         var input = new RetrievalQaChainInput(combineDocumentsMock.Object, retrieverMock.Object);
         var chain = new RetrievalQaChain(input);
 
-        var result = await chain.Run("question?");
+        var result = await chain.RunAsync("question?");
 
         result.Should().BeEquivalentTo("answer");
 
@@ -31,17 +31,19 @@ public class RetrievalQaChainTests
                     It.IsAny<ICallbacks?>(),
                     It.IsAny<bool>(),
                     It.IsAny<List<string>>(),
-                    It.IsAny<Dictionary<string, object>>()),
+                    It.IsAny<Dictionary<string, object>>(),
+                    It.IsAny<CancellationToken>()),
                 Times.Once());
 
         combineDocumentsMock
-            .Verify(m => m.Run(
+            .Verify(m => m.RunAsync(
                     It.Is<Dictionary<string, object>>(x =>
                         x["input_documents"].As<List<Document>>()
                             .Select(doc => doc.PageContent)
                             .Intersect(new string[] { "first", "second", "third" })
                             .Count() == 3),
-                    It.IsAny<ICallbacks?>()),
+                    It.IsAny<ICallbacks?>(),
+                    It.IsAny<CancellationToken>()),
                 Times.Once());
     }
 
@@ -56,8 +58,9 @@ public class RetrievalQaChainTests
                     It.IsAny<ICallbacks>(),
                     It.IsAny<bool>(),
                     It.IsAny<List<string>>(),
-                    It.IsAny<Dictionary<string, object>>()))
-            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>>((query, _, _, _, _, _) =>
+                    It.IsAny<Dictionary<string, object>>(),
+                    It.IsAny<CancellationToken>()))
+            .Returns<string, string, ICallbacks, bool, List<string>, Dictionary<string, object>, CancellationToken>((query, _, _, _, _, _, _) =>
             {
                 var docs = new List<Document>
                 {
@@ -77,8 +80,8 @@ public class RetrievalQaChainTests
         var mock = new Mock<BaseCombineDocumentsChain>(new Mock<BaseCombineDocumentsChainInput>().Object);
 
         mock.Setup(x => x
-                .Run(It.IsAny<Dictionary<string, object>>(), It.IsAny<ICallbacks?>()))
-            .Returns<Dictionary<string, object>, ICallbacks>((input, _) => Task.FromResult("answer"));
+                .RunAsync(It.IsAny<Dictionary<string, object>>(), It.IsAny<ICallbacks?>(), It.IsAny<CancellationToken>()))
+            .Returns<Dictionary<string, object>, ICallbacks, CancellationToken>((input, _, _) => Task.FromResult("answer"));
 
         return mock;
     }

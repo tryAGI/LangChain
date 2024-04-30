@@ -22,7 +22,7 @@ Console.WriteLine(result.Value["text"]);
 
 // Since the LLMChain is a single-input, single-output chain, we can also call it with `run`.
 // This takes in a string and returns the `text` property.
-var result2 = await chain.Run("colourful socks");
+var result2 = await chain.RunAsync("colourful socks");
 
 Console.WriteLine(result2);
 

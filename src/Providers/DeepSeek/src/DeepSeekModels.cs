@@ -16,6 +16,7 @@ public static class DeepSeekModels
     /// </summary>
     public const string DeepSeekCoder = "deepseek-coder";
 
+    [CLSCompliant(false)]
     public static ChatModels GetModelById(string id)
     {
         switch (id)

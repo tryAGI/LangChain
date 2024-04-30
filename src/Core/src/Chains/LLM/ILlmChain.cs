@@ -13,13 +13,15 @@ public interface ILlmChain : IChain, ILlmChainInput
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<object> Predict(ChainValues values);
-    
+    Task<object> PredictAsync(ChainValues values, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="inputs"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs);
+    Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs, CancellationToken cancellationToken = default);
 }

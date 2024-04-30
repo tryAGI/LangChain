@@ -8,6 +8,11 @@ public class GoogleProvider : Provider
 
     public static implicit operator GoogleProvider(string message)
     {
+        return ToGoogleProvider(message);
+    }
+
+    public static GoogleProvider ToGoogleProvider(string message)
+    {
         return new GoogleProvider(message, new HttpClient());
     }
 

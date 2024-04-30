@@ -29,11 +29,13 @@ public class ImageToTextGenerationChain : BaseStackableChain
     }
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
 
-        var text = await _model.GenerateTextFromImageAsync(new ImageToTextRequest { Image = _image }).ConfigureAwait(false);
+        var text = await _model.GenerateTextFromImageAsync(new ImageToTextRequest { Image = _image }, cancellationToken: cancellationToken).ConfigureAwait(false);
         values.Value[OutputKeys[0]] = text;
         return values;
     }

@@ -12,6 +12,7 @@ public static class OpenRouterModelProvider
         {{DicAdd}}
     };
 
+    [CLSCompliant(false)]
     public static ChatModels GetModelById(OpenRouterModelIds modelId)
     {
         if (Models.TryGetValue(modelId, out var id))

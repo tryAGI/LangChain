@@ -9,16 +9,23 @@ public interface IWebSearch
     /// 
     /// </summary>
     /// <param name="query"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string> RunAsync(string query);
-    
+    Task<string> RunAsync(
+        string query,
+        CancellationToken cancellationToken = default);
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="query"></param>
     /// <param name="numResults"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<WebSearchResult>> ResultsAsync(string query, int numResults);
+    Task<List<WebSearchResult>> ResultsAsync(
+        string query,
+        int numResults,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>

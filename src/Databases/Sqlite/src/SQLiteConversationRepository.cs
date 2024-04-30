@@ -1,16 +1,14 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Data;
-using System.Text.Json;
 using LangChain.Serve.Abstractions;
 using LangChain.Serve.Abstractions.Repository;
 
-namespace LangChain.Databases;
+namespace LangChain.Databases.Sqlite;
 
-public class SQLiteConversationRepository : IConversationRepository
+public sealed class SqLiteConversationRepository : IConversationRepository, IDisposable
 {
     private readonly SqliteConnection _connection;
 
-    public SQLiteConversationRepository(string connectionString)
+    public SqLiteConversationRepository(string connectionString)
     {
         _connection = new SqliteConnection(connectionString);
         _connection.Open();
@@ -60,7 +58,7 @@ public class SQLiteConversationRepository : IConversationRepository
             {
                 ConversationId = Guid.Parse(reader.GetString(0)),
                 ModelName = reader.GetString(1),
-                ConversationName = reader.IsDBNull(2) ? null : reader.GetString(2),
+                ConversationName = await reader.IsDBNullAsync(2).ConfigureAwait(false) ? null : reader.GetString(2),
                 CreatedAt = reader.GetDateTime(3)
             };
         }
@@ -89,7 +87,7 @@ public class SQLiteConversationRepository : IConversationRepository
             {
                 ConversationId = Guid.Parse(reader.GetString(0)),
                 ModelName = reader.GetString(1),
-                ConversationName = reader.IsDBNull(2) ? null : reader.GetString(2),
+                ConversationName = await reader.IsDBNullAsync(2).ConfigureAwait(false) ? null : reader.GetString(2),
                 CreatedAt = reader.GetDateTime(3)
             });
         }
@@ -99,6 +97,8 @@ public class SQLiteConversationRepository : IConversationRepository
 
     public async Task AddMessage(StoredMessage message)
     {
+        message = message ?? throw new ArgumentNullException(nameof(message));
+        
         var insertCommand = _connection.CreateCommand();
         insertCommand.CommandText = "INSERT INTO Messages (MessageId, ConversationId, Text, Author) VALUES (@MessageId, @ConversationId, @Text, @Author)";
         insertCommand.Parameters.AddWithValue("@MessageId", message.MessageId.ToString());
@@ -139,5 +139,10 @@ public class SQLiteConversationRepository : IConversationRepository
         var createMessagesTableCommand = _connection.CreateCommand();
         createMessagesTableCommand.CommandText = "CREATE TABLE IF NOT EXISTS Messages (MessageId TEXT PRIMARY KEY, ConversationId TEXT, Text TEXT, Author TEXT)";
         createMessagesTableCommand.ExecuteNonQuery();
+    }
+
+    public void Dispose()
+    {
+        _connection.Dispose();
     }
 }

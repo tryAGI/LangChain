@@ -23,17 +23,19 @@ public class SaveIntoFileChain : BaseStackableChain
     }
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
 
         if (values.Value[InputKeys[0]] is byte[] data)
         {
-            await File2.WriteAllBytesAsync(_filename, data).ConfigureAwait(false);
+            await File2.WriteAllBytesAsync(_filename, data, cancellationToken).ConfigureAwait(false);
         }
         else if (values.Value[InputKeys[0]] is string text)
         {
-            await File2.WriteAllTextAsync(_filename, text).ConfigureAwait(false);
+            await File2.WriteAllTextAsync(_filename, text, cancellationToken).ConfigureAwait(false);
         }
         else
         {

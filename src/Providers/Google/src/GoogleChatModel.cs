@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using GenerativeAI.Models;
-using GenerativeAI.Tools;
 using GenerativeAI.Types;
 using LangChain.Providers.Google.Extensions;
 
@@ -40,8 +39,8 @@ public partial class GoogleChatModel(
             MessageRole.Ai => message.Content.AsModelContent(),
             MessageRole.Human => message.Content.AsUserContent(),
             MessageRole.Chat => message.Content.AsUserContent(),
-            MessageRole.FunctionCall => message.Content.AsFunctionCallContent(message.FunctionName),
-            MessageRole.FunctionResult => message.Content.AsFunctionResultContent(message.FunctionName),
+            MessageRole.FunctionCall => message.Content.AsFunctionCallContent(message.FunctionName ?? string.Empty),
+            MessageRole.FunctionResult => message.Content.AsFunctionResultContent(message.FunctionName ?? string.Empty),
             _ => throw new NotImplementedException()
         };
     }
@@ -52,8 +51,8 @@ public partial class GoogleChatModel(
         {
             var function = message.GetFunction();
 
-            return new Message(function.Arguments.GetString(),
-                MessageRole.FunctionCall, function.Name);
+            return new Message(function?.Arguments.GetString() ?? string.Empty,
+                MessageRole.FunctionCall, function?.Name);
         }
 
         return new Message(
@@ -68,7 +67,7 @@ public partial class GoogleChatModel(
         var request = new GenerateContentRequest
         {
             Contents = messages.Select(ToRequestMessage).ToArray(),
-            Tools = GlobalFunctions?.ToGenerativeAiTools() ?? new GenerativeAITools()
+            Tools = GlobalFunctions.ToGenerativeAiTools()
         };
 
 
@@ -135,9 +134,9 @@ public partial class GoogleChatModel(
             var message = ToMessage(response);
             messages.Add(message);
 
-            OnPartialResponseGenerated(response.Text());
+            OnPartialResponseGenerated(response.Text() ?? string.Empty);
             OnPartialResponseGenerated(Environment.NewLine);
-            OnCompletedResponseGenerated(response.Text());
+            OnCompletedResponseGenerated(response.Text() ?? string.Empty);
 
             // Unsupported
             var usage2 = Usage.Empty with
@@ -151,14 +150,13 @@ public partial class GoogleChatModel(
             while (ReplyToToolCallsAutomatically && response.IsFunctionCall())
             {
                 var function = response.GetFunction();
-                var name = function.Name ?? string.Empty;
-                var jsonResult = "";
+                var name = function?.Name ?? string.Empty;
 
                 if (Calls.TryGetValue(name, out var func))
                 {
-                    var args = function.Arguments.GetString();
+                    var args = function?.Arguments.GetString() ?? string.Empty;
 
-                    jsonResult = await func(args, cancellationToken).ConfigureAwait(false);
+                    var jsonResult = await func(args, cancellationToken).ConfigureAwait(false);
                     messages.Add(jsonResult.AsFunctionResultMessage(name));
                 }
                 else
@@ -208,7 +206,7 @@ public partial class GoogleChatModel(
         };
     }
 
-    private Message ToFunctionCallMessage(string jsonResult, string functionName)
+    private static Message ToFunctionCallMessage(string jsonResult, string functionName)
     {
         //var result = JsonSerializer.Deserialize<JsonNode>(jsonResult, SerializerOptions);
         //var content = new Content()

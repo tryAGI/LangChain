@@ -18,13 +18,16 @@ public class DoChain : BaseStackableChain
     {
         _func = func;
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected override Task<IChainValues> InternalCall(IChainValues values)
+    protected override Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         

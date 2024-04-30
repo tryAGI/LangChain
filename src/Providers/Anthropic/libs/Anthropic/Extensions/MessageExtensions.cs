@@ -4,6 +4,6 @@ public static class MessageExtensions
 {
     public static bool IsToolMessage(this Message message)
     {
-        return message.Content.Contains("<function_calls>");
+        return message.Content.Contains("<function_calls>", StringComparison.OrdinalIgnoreCase);
     }
 }

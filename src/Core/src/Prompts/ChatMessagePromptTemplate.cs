@@ -16,9 +16,11 @@ public class ChatMessagePromptTemplate(
     public string Role { get; set; } = role;
 
     /// <inheritdoc/>
-    public override async Task<Message> Format(InputValues values)
+    public override async Task<Message> FormatAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        return (await this.Prompt.Format(values).ConfigureAwait(false)).AsChatMessage();
+        return (await Prompt.FormatAsync(values, cancellationToken).ConfigureAwait(false)).AsChatMessage();
     }
 
     /// <summary>

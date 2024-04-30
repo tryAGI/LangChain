@@ -66,11 +66,11 @@ public static class EnumerableExtensions
     {
         extension = extension ?? throw new ArgumentNullException(nameof(extension));
 
-        if (extension.StartsWith(".", StringComparison.InvariantCultureIgnoreCase) == false)
+        if (extension.StartsWith('.') == false)
         {
             extension = "." + extension;
         }
 
-        return Mappings.TryGetValue(extension, out var mime) ? mime : "application/octet-stream";
+        return Mappings.GetValueOrDefault(extension, "application/octet-stream");
     }
 }

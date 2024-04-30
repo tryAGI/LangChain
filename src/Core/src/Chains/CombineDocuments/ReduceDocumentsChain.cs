@@ -37,9 +37,10 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     public override string ChainType() => "reduce_documents_chain";
 
     /// <inheritdoc/>
-    public override Task<int?> PromptLength(
+    public override Task<int?> PromptLengthAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys)
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
         return Task.FromResult<int?>(null);
     }
@@ -49,20 +50,22 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     /// </summary>
     /// <param name="docs">List of documents to combine, assumed that each one is less than <see cref="ReduceDocumentsChainInput.TokenMax"/>.</param>
     /// <param name="otherKeys">additional parameters to be passed to LLM calls (like other input variables besides the documents)</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>
     /// The first element returned is the single string output.
     /// The second element returned is a dictionary of other keys to return.
     /// </returns>
     public override async Task<(string Output, Dictionary<string, object> OtherKeys)> CombineDocsAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object> otherKeys)
+        IReadOnlyDictionary<string, object> otherKeys,
+        CancellationToken cancellationToken = default)
     {
         otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
         
         var tokenMax = otherKeys.TryGetValue("token_max", out var key) ? (int?)key : null;
-        var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax).ConfigureAwait(false);
+        var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax, cancellationToken).ConfigureAwait(false);
 
-        var result = await _input.CombineDocumentsChain.CombineDocsAsync(resultDocs, otherKeys).ConfigureAwait(false);
+        var result = await _input.CombineDocumentsChain.CombineDocsAsync(resultDocs, otherKeys, cancellationToken).ConfigureAwait(false);
 
         return result;
     }
@@ -70,10 +73,11 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     private async Task<(List<Document>, Dictionary<string, object>)> CollapseAsync(
         IReadOnlyList<Document> docs,
         IReadOnlyDictionary<string, object> otherKeys,
-        int? tokenMax = null)
+        int? tokenMax = null,
+        CancellationToken cancellationToken = default)
     {
         var resultDocs = docs.ToList();
-        var numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys).ConfigureAwait(false);
+        var numTokens = await _input.CombineDocumentsChain.PromptLengthAsync(resultDocs, otherKeys, cancellationToken).ConfigureAwait(false);
 
         tokenMax ??= _input.TokenMax;
 
@@ -83,11 +87,11 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
             resultDocs = new List<Document>();
             foreach (var list in newResultDocList)
             {
-                var newDoc = await CollapseDocsAsync(list, otherKeys).ConfigureAwait(false);
+                var newDoc = await CollapseDocsAsync(list, otherKeys, cancellationToken).ConfigureAwait(false);
                 resultDocs.Add(newDoc);
             }
 
-            numTokens = await _input.CombineDocumentsChain.PromptLength(resultDocs, otherKeys).ConfigureAwait(false);
+            numTokens = await _input.CombineDocumentsChain.PromptLengthAsync(resultDocs, otherKeys, cancellationToken).ConfigureAwait(false);
         }
 
         return (resultDocs, new Dictionary<string, object>());
@@ -113,7 +117,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         foreach (var doc in docs)
         {
             subResultDocs.Add(doc);
-            var numTokens = await _input.CombineDocumentsChain.PromptLength(subResultDocs, otherKeys).ConfigureAwait(false);
+            var numTokens = await _input.CombineDocumentsChain.PromptLengthAsync(subResultDocs, otherKeys).ConfigureAwait(false);
             if (numTokens > tokenMax)
             {
                 if (subResultDocs.Count == 1)
@@ -137,6 +141,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     /// </summary>
     /// <param name="docs">A list of Documents to combine.</param>
     /// <param name="otherKeys">Arbitrary additional keyword params to pass to each call of the combine_document_func.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>
     /// A single Document with the output of combine_document_func for the page content
     /// and the combined metadata's of all the input documents. All metadata values
@@ -145,7 +150,8 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     /// </returns>
     private async Task<Document> CollapseDocsAsync(
         IReadOnlyList<Document> docs,
-        IReadOnlyDictionary<string, object>? otherKeys = null)
+        IReadOnlyDictionary<string, object>? otherKeys = null,
+        CancellationToken cancellationToken = default)
     {
         var dictionary = new Dictionary<string, object>
         {
@@ -155,7 +161,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         dictionary.TryAddKeyValues(otherKeys ?? new Dictionary<string, object>());
 
         var collapseChain = _input.CollapseDocumentsChain ?? _input.CombineDocumentsChain;
-        var result = await collapseChain.Run(dictionary).ConfigureAwait(false);
+        var result = await collapseChain.RunAsync(dictionary, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var combinedMetadata = docs[0].Metadata.ToDictionary(
             kv => kv.Key,

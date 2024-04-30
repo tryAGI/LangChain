@@ -41,8 +41,7 @@ public static class TogetherAiCodeGenerator
         int count = 0;
         for (var i = 0; i < models.Count; i++)
         {
-            var item = await ParseModelInfo(count, (JObject)models[i]!, options)
-                .ConfigureAwait(false);
+            var item = ParseModelInfo(count, (JObject)models[i], options);
 
             if (item != null && duplicateSet.Add(item.EnumMemberCode))
             {
@@ -176,7 +175,7 @@ public static class TogetherAiCodeGenerator
     /// <param name="modelToken"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    private static async Task<ModelInfo?> ParseModelInfo(int i, JObject? modelToken, GenerationOptions options)
+    private static ModelInfo? ParseModelInfo(int i, JObject? modelToken, GenerationOptions options)
     {
         if (modelToken == null)
             return null;
@@ -208,7 +207,7 @@ public static class TogetherAiCodeGenerator
         var completionCost = (double)(modelToken.SelectToken("pricing.output") ?? 0) * 0.004;
 
         var description =
-            $"Name: {(string)modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>";
+            FormattableString.Invariant($"Name: {(string)modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string?)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>");
 
         //Enum Member code with doc
         var enumMemberCode = GetEnumMemberCode(enumMemberName, description);
@@ -260,7 +259,7 @@ public static class TogetherAiCodeGenerator
         double completionCost)
     {
         return "{ " +
-               $"TogetherAiModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})" +
+               FormattableString.Invariant($"TogetherAiModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
                "},";
     }
 
@@ -297,7 +296,7 @@ public static class TogetherAiCodeGenerator
         CancellationToken cancellationToken = default)
     {
         using var handler = new HttpClientHandler();
-        //handler.CheckCertificateRevocationList = true;
+        handler.CheckCertificateRevocationList = true;
         handler.AutomaticDecompression =
             DecompressionMethods.Deflate | DecompressionMethods.Brotli | DecompressionMethods.GZip;
         using var client = new HttpClient(handler);

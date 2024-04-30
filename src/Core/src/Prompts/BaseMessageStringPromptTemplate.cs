@@ -21,12 +21,17 @@ public abstract class BaseMessageStringPromptTemplate(
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<Message> Format(InputValues values);
+    public abstract Task<Message> FormatAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default);
 
     /// <inheritdoc/>
-    public override async Task<List<Message>> FormatMessages(InputValues values)
+    public override async Task<List<Message>> FormatMessagesAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        return new List<Message> { await this.Format(values).ConfigureAwait(false) };
+        return [await FormatAsync(values, cancellationToken).ConfigureAwait(false)];
     }
 }

@@ -17,22 +17,24 @@ public interface IChain
     /// 
     /// </summary>
     IReadOnlyList<string> OutputKeys { get; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="input"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string?> Run(string input);
-    
+    Task<string?> RunAsync(string input, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="input"></param>
     /// <param name="callbacks"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string> Run(Dictionary<string, object> input, ICallbacks? callbacks = null);
-    
+    Task<string> RunAsync(Dictionary<string, object> input, ICallbacks? callbacks = null, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// 
     /// </summary>
@@ -40,9 +42,12 @@ public interface IChain
     /// <param name="callbacks"></param>
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IChainValues> CallAsync(IChainValues values,
+    Task<IChainValues> CallAsync(
+        IChainValues values,
         ICallbacks? callbacks = null,
         IReadOnlyList<string>? tags = null,
-        IReadOnlyDictionary<string, object>? metadata = null);
+        IReadOnlyDictionary<string, object>? metadata = null,
+        CancellationToken cancellationToken = default);
 }

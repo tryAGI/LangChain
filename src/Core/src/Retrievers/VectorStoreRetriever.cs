@@ -14,7 +14,7 @@ public class VectorStoreRetriever : BaseRetriever
     /// <summary>
     /// 
     /// </summary>
-    public IVectorDatabase VectorDatabase { get; init; }
+    public IVectorCollection VectorCollection { get; init; }
 
     private VectorSearchType SearchType { get; init; }
     
@@ -29,7 +29,7 @@ public class VectorStoreRetriever : BaseRetriever
 
     /// <inheritdoc/>
     public VectorStoreRetriever(
-        IVectorDatabase vectorDatabase,
+        IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         VectorSearchType searchType = VectorSearchType.Similarity,
         float? scoreThreshold = null)
@@ -40,7 +40,7 @@ public class VectorStoreRetriever : BaseRetriever
             throw new ArgumentException($"ScoreThreshold required for {SearchType}");
 
         EmbeddingModel = embeddingModel;
-        VectorDatabase = vectorDatabase;
+        VectorCollection = vectorCollection;
         SearchType = searchType;
         ScoreThreshold = scoreThreshold;
     }
@@ -48,14 +48,15 @@ public class VectorStoreRetriever : BaseRetriever
     /// <inheritdoc/>
     protected override async Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,
-        CallbackManagerForRetrieverRun? runManager = null)
+        CallbackManagerForRetrieverRun? runManager = null,
+        CancellationToken cancellationToken = default)
     {
-        var response = await VectorDatabase.SearchAsync(EmbeddingModel, query, searchSettings: new VectorSearchSettings
+        var response = await VectorCollection.SearchAsync(EmbeddingModel, query, searchSettings: new VectorSearchSettings
         {
             Type = SearchType,
             NumberOfResults = K,
             ScoreThreshold = ScoreThreshold,
-        }).ConfigureAwait(false);
+        }, cancellationToken: cancellationToken).ConfigureAwait(false);
         
         return response.ToDocuments();
     }
@@ -67,6 +68,6 @@ public class VectorStoreRetriever : BaseRetriever
     /// <returns></returns>
     public Task<IReadOnlyCollection<string>> AddDocumentsAsync(IReadOnlyCollection<Document> documents)
     {
-        return VectorDatabase.AddDocumentsAsync(EmbeddingModel, documents);
+        return VectorCollection.AddDocumentsAsync(EmbeddingModel, documents);
     }
 }

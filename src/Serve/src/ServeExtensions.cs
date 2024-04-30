@@ -1,4 +1,5 @@
-﻿using LangChain.Serve.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using LangChain.Serve.Abstractions;
 using LangChain.Serve.Abstractions.Repository;
 using LangChain.Serve.Classes.DTO;
 using LangChain.Serve.Services;
@@ -17,12 +18,14 @@ public static class ServeExtensions
         return services;
     }
 
-    public static IServiceCollection AddCustomNameGenerator(this IServiceCollection services,Func<List<StoredMessage>,Task<string>> generator)
+    public static IServiceCollection AddCustomNameGenerator(this IServiceCollection services,Func<IReadOnlyCollection<StoredMessage>,Task<string>> generator)
     {
         services.AddSingleton<IConversationNameProvider>(new CustomNameProvider(generator));
         return services;
     }
-
+    
+    [RequiresUnreferencedCode("This API may perform reflection on the supplied delegate and its parameters. These types may be trimmed if not directly referenced.")]
+    [RequiresDynamicCode("This API may perform reflection on the supplied delegate and its parameters. These types may require generated code and aren't compatible with native AOT applications.")]
     [CLSCompliant(false)]
     public static WebApplication UseLangChainServe(this WebApplication app, Action<ServeOptions> options)
     {

@@ -18,6 +18,7 @@ public class AnthropicToolsGenerator : IIncrementalGenerator
 
     #region Methods
 
+    [CLSCompliant(false)]
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.SyntaxProvider

@@ -5,9 +5,10 @@ namespace LangChain.Providers.Anthropic.Tests
 {
     public class GetAuthorBook
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
+    
     [AnthropicTools]
     public interface IBookStoreService
     {
@@ -18,21 +19,21 @@ namespace LangChain.Providers.Anthropic.Tests
         public Task<string> GetBookPageContentAsync([Description("Book Name")] string bookName, [Description("Book Page Number")] int bookPageNumber, CancellationToken cancellationToken = default);
 
     }
-    public class BookStoreService:IBookStoreService
+    public class BookStoreService : IBookStoreService
     {
-        public async Task<List<GetAuthorBook>> GetAuthorBooksAsync(string authorName, CancellationToken cancellationToken = default)
+        public Task<List<GetAuthorBook>> GetAuthorBooksAsync(string authorName, CancellationToken cancellationToken = default)
         {
-            return new List<GetAuthorBook>([
-                new GetAuthorBook()
+            return Task.FromResult(new List<GetAuthorBook>([
+                new GetAuthorBook
                     { Title = "Five point someone", Description = "This book is about 3 college friends" },
-                new GetAuthorBook()
+                new GetAuthorBook
                     { Title = "Two States", Description = "This book is about intercast marriage in India" }
-            ]);
+            ]));
         }
 
-        public async Task<string> GetBookPageContentAsync(string bookName, int bookPageNumber, CancellationToken cancellationToken = default)
+        public Task<string> GetBookPageContentAsync(string bookName, int bookPageNumber, CancellationToken cancellationToken = default)
         {
-            return "this is a cool weather out there, and I am stuck at home.";
+            return Task.FromResult("this is a cool weather out there, and I am stuck at home.");
         }
     }
 }

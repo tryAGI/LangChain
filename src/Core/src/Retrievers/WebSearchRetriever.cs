@@ -13,9 +13,10 @@ public sealed class WebSearchRetriever(
     /// <inheritdoc/>
     protected override async Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,
-        CallbackManagerForRetrieverRun? runManager = null)
+        CallbackManagerForRetrieverRun? runManager = null,
+        CancellationToken cancellationToken = default)
     {
-        var searchResult = await webSearch.ResultsAsync(query, k).ConfigureAwait(false);
+        var searchResult = await webSearch.ResultsAsync(query, k, cancellationToken).ConfigureAwait(false);
 
         return searchResult.Select(v => new Document(
             v.Body,

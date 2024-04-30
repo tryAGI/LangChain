@@ -53,7 +53,9 @@ public class STTChain : BaseStackableChain
     }
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -70,7 +72,7 @@ public class STTChain : BaseStackableChain
             }
         }
 
-        string text = await _model.TranscribeAsync(audio, _settings).ConfigureAwait(false);
+        string text = await _model.TranscribeAsync(audio, _settings, cancellationToken).ConfigureAwait(false);
         
         if(_useCache)
             SaveCachedAnswer(audio, text);

@@ -12,6 +12,7 @@ public static class TogetherAiModelProvider
         {{DicAdd}}
     };
 
+    [CLSCompliant(false)]
     public static ChatModels GetModelById(TogetherAiModelIds modelId)
     {
         if (Models.TryGetValue(modelId, out var id))

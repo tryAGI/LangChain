@@ -58,7 +58,7 @@ SQL Query: ";
     public override string ChainType() => "sql_database_chain";
 
     /// <inheritdoc />
-    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager)
+    protected override async Task<IChainValues> CallAsync(IChainValues values, CallbackManagerForChainRun? runManager, CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         runManager ??= BaseRunManager.GetNoopManager<CallbackManagerForChainRun>();
@@ -88,7 +88,7 @@ SQL Query: ";
         {
             intermediateSteps.Add(llmInputs);
 
-            var sqlCmdRaw = await _fields.LlmChain.Predict(new ChainValues(llmInputs)).ConfigureAwait(false);
+            var sqlCmdRaw = await _fields.LlmChain.PredictAsync(new ChainValues(llmInputs), cancellationToken).ConfigureAwait(false);
             var sqlCmd = ((string)sqlCmdRaw).Trim();
 
             if (_fields.ReturnSql)
@@ -115,7 +115,7 @@ SQL Query: ";
                 };
 
                 var checkedSqlCommandRaw = await queryCheckerChain
-                    .Predict(new ChainValues(queryCheckerInputs))
+                    .PredictAsync(new ChainValues(queryCheckerInputs), cancellationToken)
                     .ConfigureAwait(false);
 
                 var checkedSqlCommand = ((string)checkedSqlCommandRaw).Trim();
@@ -146,7 +146,7 @@ SQL Query: ";
                 inputText += $"{sqlCmd}\nSQLResult: {result}\nAnswer:";
                 llmInputs["input"] = inputText;
                 intermediateSteps.Add(llmInputs);
-                var finalResultRaw = await _fields.LlmChain.Predict(new ChainValues(llmInputs)).ConfigureAwait(false);
+                var finalResultRaw = await _fields.LlmChain.PredictAsync(new ChainValues(llmInputs), cancellationToken).ConfigureAwait(false);
                 finalResult = ((string)finalResultRaw).Trim();
                 intermediateSteps.Add(new Dictionary<string, object> { ["final_result"] = finalResult });
 

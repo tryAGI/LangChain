@@ -6,11 +6,11 @@ namespace LangChain.Providers.Anthropic.Tools;
 public class AnthropicTool
 {
     [XmlElement(ElementName = "description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     [XmlElement(ElementName = "tool_name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [XmlArrayItem(ElementName = "parameter")]
-    public List<AnthropicToolParameter> Parameters { get; set; }
+    public List<AnthropicToolParameter> Parameters { get; set; } = [];
 }

@@ -19,6 +19,7 @@ public class OpenAiProvider : Provider
 
     #region Constructors
 
+    [CLSCompliant(false)]
     public OpenAiProvider(OpenAIClient openAiClient)
         : base(id: OpenAiConfiguration.SectionName)
     {
@@ -46,13 +47,13 @@ public class OpenAiProvider : Provider
     
     public OpenAiProvider(
         string apiKey,
-        string? customEndpoint = null)
+        string? customEndpoint = null, string? apiVersion = "v1")
         : base(id: OpenAiConfiguration.SectionName)
     {
         apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
 
         Api = customEndpoint != null
-            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: customEndpoint))
+            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: customEndpoint, apiVersion: apiVersion!))
             : new OpenAIClient(apiKey);
     }
 

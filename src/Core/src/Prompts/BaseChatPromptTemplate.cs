@@ -14,19 +14,26 @@ public abstract class BaseChatPromptTemplate : BasePromptTemplate
     /// 
     /// </summary>
     /// <param name="values"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<IReadOnlyCollection<Message>> FormatMessages(InputValues values);
+    public abstract Task<IReadOnlyCollection<Message>> FormatMessagesAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default);
 
     /// <inheritdoc/>
-    public override async Task<string> Format(InputValues values)
+    public override async Task<string> FormatAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        return (await this.FormatPromptValue(values).ConfigureAwait(false)).ToString();
+        return (await FormatPromptValueAsync(values, cancellationToken).ConfigureAwait(false)).ToString();
     }
 
     /// <inheritdoc/>
-    public override async Task<BasePromptValue> FormatPromptValue(InputValues values)
+    public override async Task<BasePromptValue> FormatPromptValueAsync(
+        InputValues values,
+        CancellationToken cancellationToken = default)
     {
-        var resultMessages = await this.FormatMessages(values).ConfigureAwait(false);
+        var resultMessages = await FormatMessagesAsync(values, cancellationToken).ConfigureAwait(false);
         return new ChatPromptValue(resultMessages);
     }
 }

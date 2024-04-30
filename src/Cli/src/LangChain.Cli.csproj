@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);</NoWarn>
+    <NoWarn>$(NoWarn);CA1724</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">

@@ -36,7 +36,9 @@ public class TTSChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
         
@@ -52,7 +54,7 @@ public class TTSChain : BaseStackableChain
             }
         }
 
-        var data = await _model.GenerateSpeechAsync(text, _settings).ConfigureAwait(false);
+        var data = await _model.GenerateSpeechAsync(text, _settings, cancellationToken).ConfigureAwait(false);
 
         if (_useCache)
         {

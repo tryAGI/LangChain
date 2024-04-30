@@ -3,20 +3,28 @@
 namespace LangChain.Providers;
 
 /// <summary>
-/// 
+/// The response containing the embeddings.
 /// </summary>
 public class EmbeddingResponse
 {
     /// <summary>
-    /// 
+    /// The embeddings.
     /// </summary>
     public required float[][] Values { get; init; }
     
     /// <summary>
-    /// 
+    /// Used settings for the embeddings.
     /// </summary>
     public required EmbeddingSettings UsedSettings { get; init; }
     
+    /// <summary>
+    /// Dimensions of the embeddings.
+    /// </summary>
+    public int Dimensions { get; init; }
+    
+    /// <summary>
+    /// Usage information.
+    /// </summary>
     public Usage Usage { get; init; } = Usage.Empty;
     
     public void Deconstruct(

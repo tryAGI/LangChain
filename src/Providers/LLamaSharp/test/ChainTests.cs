@@ -1,6 +1,5 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Indexes;
 using LangChain.Sources;
 using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
@@ -13,21 +12,21 @@ public class ChainTests
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
 
     [Test]
-    public void PromptTest()
+    public async Task PromptTest()
     {
         var chain =
             Set("World", outputKey: "var2")
             | Set("Hello", outputKey: "var1")
             | Template("{var1}, {var2}", outputKey: "prompt");
 
-        var res = chain.Run(resultKey: "prompt").Result;
+        var res = await chain.RunAsync(resultKey: "prompt", CancellationToken.None);
 
         res.Should().Be("Hello, World");
     }
 
     [Test]
     [Explicit]
-    public void LlmChainTest()
+    public async Task LlmChainTest()
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var promptText =
@@ -44,7 +43,7 @@ The pet name is
             | Template(promptText, outputKey: "prompt")
             | LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var res = chain.Run(resultKey: "text").Result;
+        var res = await chain.RunAsync(resultKey: "text", CancellationToken.None);
 
         res.Should().Be("Bob");
     }
@@ -55,7 +54,7 @@ The pet name is
     {
         var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
         var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
-        var vectorStore = new InMemoryVectorStore();
+        var vectorStore = new InMemoryVectorCollection();
         await vectorStore
             .AddDocumentsAsync(embeddings, new[]
             {
@@ -99,7 +98,7 @@ Answer: ";
             | LLM(llm, inputKey: "prompt", outputKey: "text");
 
 
-        var res = chainFilter.Run(resultKey: "text").Result;
+        var res = await chainFilter.RunAsync(resultKey: "text", CancellationToken.None);
         res.Should().Be("Bob");
     }
 }

@@ -11,7 +11,7 @@ public class ChatTests
     {
         var testPrompt = GenerateTestPromptTemplate();
 
-        var messages = await testPrompt.FormatPromptValue(new InputValues(new Dictionary<string, object>(3)
+        var messages = await testPrompt.FormatPromptValueAsync(new InputValues(new Dictionary<string, object>(3)
         {
             { "context", "This is the context" },
             { "foo", "Foo" },
@@ -33,7 +33,7 @@ public class ChatTests
     {
         var testPrompt = GenerateTestPromptTemplate();
 
-        await testPrompt.Invoking(static x => x.FormatPromptValue(new InputValues(
+        await testPrompt.Invoking(static x => x.FormatPromptValueAsync(new InputValues(
             new Dictionary<string, object>(3)
             {
                 { "context", "This is the context" },
@@ -80,7 +80,7 @@ public class ChatTests
             new HumanMessagePromptTemplate(userPrompt)
         });
 
-        var messages = await testPrompt.FormatPromptValue(new InputValues(new Dictionary<string, object>(3)
+        var messages = await testPrompt.FormatPromptValueAsync(new InputValues(new Dictionary<string, object>(3)
         {
             { "context", "This is the context" },
             { "foo", "Foo" },
@@ -115,7 +115,7 @@ public class ChatTests
             AiMessagePromptTemplate.FromTemplate("I'm an AI. I'm {foo}. I'm {bar}.")
         });
 
-        var messages = await testPrompt.FormatPromptValue(new InputValues(new Dictionary<string, object>(3)
+        var messages = await testPrompt.FormatPromptValueAsync(new InputValues(new Dictionary<string, object>(3)
         {
             { "context", "This is the context" },
             { "foo", "Foo" },

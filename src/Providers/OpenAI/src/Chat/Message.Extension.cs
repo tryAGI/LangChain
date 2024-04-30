@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
-public static class MessageExtensions
+internal static class MessageExtensions
 {
     private static readonly char[] Separator = [':'];
 

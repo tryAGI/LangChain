@@ -16,7 +16,6 @@ namespace LangChain.Databases.Postgres;
 public class PostgresDbClient
 {
     private readonly NpgsqlDataSource _dataSource;
-    private readonly int _vectorSize;
     private readonly string _schema;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
@@ -25,15 +24,23 @@ public class PostgresDbClient
     /// </summary>
     /// <param name="connectionString">connection string</param>
     /// <param name="schema">schema name</param>
-    /// <param name="vectorSize">embeddings size</param>
-    public PostgresDbClient(string connectionString, string schema, int vectorSize)
+    public PostgresDbClient(string connectionString, string schema)
     {
+        var dataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
+        var connection = dataSource.OpenConnection();
+        using (connection)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = "CREATE EXTENSION IF NOT EXISTS vector";
+
+            command.ExecuteNonQuery();
+        }
+        
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         dataSourceBuilder.UseVector();
 
         _dataSource = dataSourceBuilder.Build();
         _schema = schema;
-        _vectorSize = vectorSize;
 
         _jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -72,8 +79,9 @@ public class PostgresDbClient
     /// Create table for documents with embeddings
     /// </summary>
     /// <param name="tableName">name of the table</param>
+    /// <param name="dimensions"></param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-    public async Task CreateEmbeddingTableAsync(string tableName, CancellationToken cancellationToken = default)
+    public async Task CreateEmbeddingTableAsync(string tableName, int dimensions, CancellationToken cancellationToken = default)
     {
         var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -88,7 +96,7 @@ CREATE TABLE IF NOT EXISTS {name}
     id TEXT NOT NULL,
     content TEXT,
     metadata JSONB,
-    embedding vector({_vectorSize}),
+    embedding vector({dimensions}),
     timestamp TIMESTAMP WITH TIME ZONE,
     PRIMARY KEY (id)
 );";
@@ -154,7 +162,7 @@ DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timest
                 : (object)DBNull.Value;
             cmd.Parameters.AddWithValue("@metadata", NpgsqlDbType.Jsonb, metadataString);
 
-            var vector = embedding != null ? new Vector(embedding.Value) : (object)DBNull.Value;
+            var vector = embedding != null ? new Pgvector.Vector(embedding.Value) : (object)DBNull.Value;
             cmd.Parameters.AddWithValue("@embedding", vector);
             cmd.Parameters.AddWithValue("@timestamp", NpgsqlDbType.TimestampTz, timestamp ?? (object)DBNull.Value);
 
@@ -251,7 +259,7 @@ WHERE score >= @min_relevance_score
 ORDER BY score DESC
 LIMIT @limit";
 
-            cmd.Parameters.AddWithValue("@embedding", new Vector(embedding));
+            cmd.Parameters.AddWithValue("@embedding", new Pgvector.Vector(embedding));
             cmd.Parameters.AddWithValue("@collection", tableName);
             cmd.Parameters.AddWithValue("@min_relevance_score", minRelevanceScore);
             cmd.Parameters.AddWithValue("@limit", limit);
@@ -441,11 +449,11 @@ WHERE id = ANY(@ids)";
             .GetFieldValueAsync<DateTime?>(dataReader.GetOrdinal("timestamp"), cancellationToken)
             .ConfigureAwait(false);
 
-        Vector? embedding = null;
+        Pgvector.Vector? embedding = null;
         if (withEmbeddings)
         {
             embedding = await dataReader
-                .GetFieldValueAsync<Vector>(dataReader.GetOrdinal("embedding"), cancellationToken)
+                .GetFieldValueAsync<Pgvector.Vector>(dataReader.GetOrdinal("embedding"), cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -468,5 +476,5 @@ public record EmbeddingTableRecord(
     string Id,
     string Content,
     Dictionary<string, object>? Metadata,
-    Vector? Embedding,
+    Pgvector.Vector? Embedding,
     DateTime? DateTime);

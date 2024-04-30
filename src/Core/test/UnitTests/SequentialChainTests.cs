@@ -97,8 +97,9 @@ public class SequentialChainTests
                 It.IsAny<IChainValues>(),
                 It.IsAny<ICallbacks?>(),
                 It.IsAny<List<string>>(),
-                It.IsAny<Dictionary<string, object>>()))
-            .Returns<IChainValues, CallbackManager?, List<string>, Dictionary<string, object>>((chainValues, _, _, _) =>
+                It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<CancellationToken>()))
+            .Returns<IChainValues, CallbackManager?, List<string>, Dictionary<string, object>, CancellationToken>((chainValues, _, _, _, _) =>
             {
                 var output = new ChainValues();
 

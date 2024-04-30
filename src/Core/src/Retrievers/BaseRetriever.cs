@@ -35,10 +35,12 @@ public abstract class BaseRetriever
     /// </summary>
     /// <param name="query"></param>
     /// <param name="runManager"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     protected abstract Task<IEnumerable<Document>> GetRelevantDocumentsCoreAsync(
         string query,
-        CallbackManagerForRetrieverRun? runManager = null);
+        CallbackManagerForRetrieverRun? runManager = null,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieve documents relevant to a query.
@@ -49,6 +51,7 @@ public abstract class BaseRetriever
     /// <param name="verbose"></param>
     /// <param name="tags"></param>
     /// <param name="metadata"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>Relevant documents</returns>
     public virtual async Task<IReadOnlyCollection<Document>> GetRelevantDocumentsAsync(
         string query,
@@ -56,7 +59,8 @@ public abstract class BaseRetriever
         ICallbacks? callbacks = null,
         bool verbose = false,
         List<string>? tags = null,
-        Dictionary<string, object>? metadata = null)
+        Dictionary<string, object>? metadata = null,
+        CancellationToken cancellationToken = default)
     {
         var callbackManager = await CallbackManager.Configure(
             callbacks,
@@ -70,7 +74,7 @@ public abstract class BaseRetriever
         var runManager = await callbackManager.HandleRetrieverStart(this, query, runId).ConfigureAwait(false);
         try
         {
-            var docs = await GetRelevantDocumentsCoreAsync(query, runManager).ConfigureAwait(false);
+            var docs = await GetRelevantDocumentsCoreAsync(query, runManager, cancellationToken).ConfigureAwait(false);
             var docsList = docs.ToList();
             await runManager.HandleRetrieverEndAsync(query, docsList).ConfigureAwait(false);
 

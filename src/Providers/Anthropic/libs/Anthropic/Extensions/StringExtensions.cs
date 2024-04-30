@@ -9,15 +9,8 @@ namespace LangChain.Providers.Anthropic.Extensions;
 
 /// <summary>
 /// </summary>
-public static class StringExtensions
+internal static class StringExtensions
 {
-    private static JsonSerializerOptions SerializerOptions => new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        Converters = { new JsonStringEnumConverter() },
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-    };
-
     /// <summary>
     /// </summary>
     /// <param name="content"></param>
@@ -63,15 +56,22 @@ public static class StringExtensions
     public static AnthropicToolCall ToAnthropicToolCall(this string content, IEnumerable<AnthropicTool> tools)
     {
         var toolCallXml = TextHelper.GetTextBetweenDelimiters(content, "<function_calls>", "</function_calls>");
-        var doc = new XmlDocument();
-        doc.LoadXml(toolCallXml);
+        var doc = new XmlDocument
+        {
+            XmlResolver = null
+        };
+        {
+            using var stringReader = new StringReader(toolCallXml);
+            using var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null });
+            doc.Load(reader);
+        }
 
         var toolCall = new AnthropicToolCall();
         var toolNames = doc.GetElementsByTagName("tool_name");
         if (toolNames.Count > 0)
         {
             var name = toolNames[0];
-            toolCall.FunctionName = name.InnerText;
+            toolCall.FunctionName = name?.InnerText ?? string.Empty;
         }
 
         var parameters = doc.GetElementsByTagName("parameters");
@@ -79,10 +79,10 @@ public static class StringExtensions
         if (parameters.Count > 0)
         {
             var @params = new Dictionary<string, object>();
-            foreach (XmlNode node in parameters[0].ChildNodes)
+            foreach (XmlNode node in parameters[0]?.ChildNodes.OfType<XmlNode>() ?? [])
                 @params.Add(node.Name, ToolCallParamParser.ParseData(node.Name, tool, node.InnerText));
 
-            toolCall.Arguments = JsonSerializer.Serialize(@params, SerializerOptions);
+            toolCall.Arguments = JsonSerializer.Serialize(@params, SourceGenerationContext.Default.DictionaryStringObject);
         }
 
         return toolCall;
@@ -96,3 +96,10 @@ public static class StringExtensions
         return new Message(res, MessageRole.Human);
     }
 }
+
+[JsonSourceGenerationOptions(
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    Converters = [typeof(JsonStringEnumConverter)])]
+[JsonSerializable(typeof(Dictionary<string, object>))]
+internal sealed partial class SourceGenerationContext : JsonSerializerContext;

@@ -21,6 +21,7 @@ public class BedrockProvider : Provider
     /// Initializes a new instance of the <see cref="BedrockProvider"/> class with the specified region.
     /// </summary>
     /// <param name="region">The region endpoint for the Amazon Bedrock service.</param>
+    [CLSCompliant(false)]
     public BedrockProvider(RegionEndpoint region) : base(DefaultProviderId)
     {
         Api = new AmazonBedrockRuntimeClient(region);
@@ -32,6 +33,7 @@ public class BedrockProvider : Provider
     /// <param name="accessKeyId">The access key ID for the Amazon Bedrock service.</param>
     /// <param name="secretAccessKey">The secret access key for the Amazon Bedrock service.</param>
     /// <param name="region">The region endpoint for the Amazon Bedrock service. Defaults to US East 1.</param>
+    [CLSCompliant(false)]
     public BedrockProvider(string accessKeyId, string secretAccessKey, RegionEndpoint? region = null)
         : base(DefaultProviderId)
     {

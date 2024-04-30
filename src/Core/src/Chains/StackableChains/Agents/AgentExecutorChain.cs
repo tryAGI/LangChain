@@ -51,13 +51,15 @@ public class AgentExecutorChain : BaseStackableChain
     }
 
     /// <inheritdoc/>
-    protected override async Task<IChainValues> InternalCall(IChainValues values)
+    protected override async Task<IChainValues> InternalCallAsync(
+        IChainValues values,
+        CancellationToken cancellationToken = default)
     {
         if (_chainWithHistory == null)
         {
             throw new InvalidOperationException("History is not set");
         }
         
-        return await _chainWithHistory.CallAsync(values).ConfigureAwait(false);
+        return await _chainWithHistory.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

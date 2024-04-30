@@ -7,12 +7,6 @@ public enum OpenRouterModelIds
 {
 
         /// <summary>
-        /// Soliloquy-L3 is a fast, highly capable roleplaying model designed for immersive, dynamic experiences. Trained on over 250 million tokens of roleplaying data, Soliloquy-L3 has a vast knowledge base, rich literary expression, and support for up to 24k context length. It outperforms existing ~13B models, delivering enhanced roleplaying capabilities.  <br/>
-        /// Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
-        /// </summary>
-        LynnLlama3Soliloquy8B,
-        
-        /// <summary>
         /// The Capybara series is a collection of datasets and models made by fine-tuning on data created by Nous, mostly in-house.  <br/>
         /// V1.9 uses unalignment techniques for more consistent and dynamic control. It also leverages a significantly better foundation model, Mistral 7B.  <br/>
         /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
@@ -144,7 +138,7 @@ public enum OpenRouterModelIds
         Mythomax13BExtended,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// Note: this is an extended-context version of this model. It may have higher prices and different outputs.  <br/>
@@ -227,7 +221,7 @@ public enum OpenRouterModelIds
         
         /// <summary>
         /// Nous Hermes 2 Yi 34B was trained on 1,000,000 entries of primarily GPT-4 generated data, as well as other high quality data from open datasets across the AI landscape.  <br/>
-        /// Nous-Hermes 2 on Yi 34B outperforms all Nous-Hermes & Open-Hermes models of the past, achieving new heights in all benchmarks for a Nous Research LLM as well as surpassing many popular finetunes.  <br/>
+        /// Nous-Hermes 2 on Yi 34B outperforms all Nous-Hermes and Open-Hermes models of the past, achieving new heights in all benchmarks for a Nous Research LLM as well as surpassing many popular finetunes.  <br/>
         /// </summary>
         NousHermes2Yi34B,
         
@@ -245,7 +239,7 @@ public enum OpenRouterModelIds
         NousHermes2Mistral7BDpo,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// </summary>
@@ -259,7 +253,7 @@ public enum OpenRouterModelIds
         Mixtral8X7BInstructNitro,
         
         /// <summary>
-        /// A fine-tune of Mistral using the OpenOrca dataset. First 7B model to beat all other models <30B.  <br/>
+        /// A fine-tune of Mistral using the OpenOrca dataset. First 7B model to beat all other models less 30B.  <br/>
         /// </summary>
         MistralOpenOrca7B,
         
@@ -444,14 +438,9 @@ public enum OpenRouterModelIds
         AnthropicClaude3Haiku,
         
         /// <summary>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// Claude 2 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
         /// </summary>
         AnthropicClaudeV2,
-        
-        /// <summary>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV21,
         
         /// <summary>
         /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
@@ -459,14 +448,14 @@ public enum OpenRouterModelIds
         AnthropicClaudeV20,
         
         /// <summary>
-        /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
+        /// Claude 2 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
         /// </summary>
-        AnthropicClaudeInstantV1,
+        AnthropicClaudeV21,
         
         /// <summary>
         /// Anthropic's model for low-latency, high throughput text generation. Supports hundreds of pages of text.  <br/>
         /// </summary>
-        AnthropicClaudeInstantV12,
+        AnthropicClaudeInstantV1,
         
         /// <summary>
         /// This is a lower-latency version of Claude 3 Opus, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
@@ -495,21 +484,21 @@ public enum OpenRouterModelIds
         
         /// <summary>
         /// This is a lower-latency version of Claude v2, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// Claude 2 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
         /// </summary>
         AnthropicClaudeV2SelfModerated,
-        
-        /// <summary>
-        /// This is a lower-latency version of Claude v2.1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
-        /// Claude 2.1 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
-        /// </summary>
-        AnthropicClaudeV21SelfModerated,
         
         /// <summary>
         /// This is a lower-latency version of Claude v2.0, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
         /// Anthropic's flagship model. Superior performance on tasks that require complex reasoning. Supports hundreds of pages of text.  <br/>
         /// </summary>
         AnthropicClaudeV20SelfModerated,
+        
+        /// <summary>
+        /// This is a lower-latency version of Claude v2.1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
+        /// Claude 2 delivers advancements in key capabilities for enterprises—including an industry-leading 200K token context window, significant reductions in rates of model hallucination, system prompts and a new beta feature: tool use.  <br/>
+        /// </summary>
+        AnthropicClaudeV21SelfModerated,
         
         /// <summary>
         /// This is a lower-latency version of Claude Instant v1, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the model's side instead of OpenRouter's. It's in beta, and may change in the future.  <br/>
@@ -662,7 +651,7 @@ public enum OpenRouterModelIds
         Zephyr141BA35b,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// </summary>
@@ -700,6 +689,12 @@ public enum OpenRouterModelIds
         /// #moe  <br/>
         /// </summary>
         MistralMixtral8X22bInstruct,
+        
+        /// <summary>
+        /// Soliloquy-L3 is a fast, highly capable roleplaying model designed for immersive, dynamic experiences. Trained on over 250 million tokens of roleplaying data, Soliloquy-L3 has a vast knowledge base, rich literary expression, and support for up to 24k context length. It outperforms existing ~13B models, delivering enhanced roleplaying capabilities.  <br/>
+        /// Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
+        /// </summary>
+        LynnLlama3Soliloquy8B,
         
         /// <summary>
         /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
@@ -756,7 +751,7 @@ public enum OpenRouterModelIds
         Wizardlm28X22bNitro,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
@@ -764,7 +759,7 @@ public enum OpenRouterModelIds
         MetaLlama38BInstructNitro,
         
         /// <summary>
-        /// Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+        /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
         /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
         /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
         /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>

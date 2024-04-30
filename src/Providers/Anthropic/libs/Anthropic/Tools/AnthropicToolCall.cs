@@ -4,6 +4,6 @@ namespace LangChain.Providers.Anthropic.Tools;
 
 public class AnthropicToolCall
 {
-    public string FunctionName { get; set; }
+    public string FunctionName { get; set; } = string.Empty;
     public JsonNode? Arguments { get; set; }
 }

@@ -71,8 +71,9 @@ public class ReduceDocumentsChainTests
     {
         mock
             .Verify(
-                m => m.Predict(
-                    It.Is<ChainValues>(x => x.Value[valueKey].ToString() == content)),
+                m => m.PredictAsync(
+                    It.Is<ChainValues>(x => x.Value[valueKey].ToString() == content),
+                    It.IsAny<CancellationToken>()),
                 Times.Once());
     }
 
@@ -83,8 +84,8 @@ public class ReduceDocumentsChainTests
         var mock = new Mock<ILlmChain>();
 
         mock.Setup(x => x
-                .Predict(It.IsAny<ChainValues>()))
-            .Returns<ChainValues>(value => Task.FromResult((object)predict(value)));
+                .PredictAsync(It.IsAny<ChainValues>(), It.IsAny<CancellationToken>()))
+            .Returns<ChainValues, CancellationToken>((value, _) => Task.FromResult((object)predict(value)));
 
         mock.Setup(x => x.Prompt)
             .Returns(promptTemplate);

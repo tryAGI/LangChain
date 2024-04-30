@@ -37,9 +37,10 @@ public class MapReduceDocumentsChainTests
         reduceDocumentsChain.Setup(x => x
                 .CombineDocsAsync(
                     It.IsAny<IReadOnlyList<Document>>(),
-                    It.IsAny<IReadOnlyDictionary<string, object>>()))
-            .Returns<IReadOnlyList<Document>, IReadOnlyDictionary<string, object>>(
-                (docs, otherKeys) =>
+                    It.IsAny<IReadOnlyDictionary<string, object>>(),
+                    It.IsAny<CancellationToken>()))
+            .Returns<IReadOnlyList<Document>, IReadOnlyDictionary<string, object>, CancellationToken>(
+                (docs, otherKeys, _) =>
                     Task.FromResult(("mapreduced", new Dictionary<string, object>())));
 
         var input = new MapReduceDocumentsChainInput
@@ -82,7 +83,8 @@ public class MapReduceDocumentsChainTests
                         x.Count == 2 &&
                         x[0].PageContent == theme1.Mapped &&
                         x[1].PageContent == theme2.Mapped),
-                    It.Is<IReadOnlyDictionary<string, object>>(x => !x.Any())),
+                    It.Is<IReadOnlyDictionary<string, object>>(x => !x.Any()),
+                    It.IsAny<CancellationToken>()),
                 Times.Once());
     }
     
@@ -91,8 +93,8 @@ public class MapReduceDocumentsChainTests
         var mock = new Mock<ILlmChain>();
 
         mock.Setup(x => x
-                .ApplyAsync(It.IsAny<IReadOnlyList<ChainValues>>()))
-            .Returns<IReadOnlyList<ChainValues>>(values =>
+                .ApplyAsync(It.IsAny<IReadOnlyList<ChainValues>>(), It.IsAny<CancellationToken>()))
+            .Returns<IReadOnlyList<ChainValues>, CancellationToken>((values, _) =>
             {
                 var result = values
                     .Select(value => new ChainValues(outputKey, predict(value)))
