@@ -16,7 +16,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
 
     /// <inheritdoc />
     public override string Name => "console_callback_handler";
-    
+
     /// <inheritdoc />
     protected override Task PersistRun(Run run) => Task.CompletedTask;
 
@@ -24,7 +24,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleLlmStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         object inputs = run.Inputs.TryGetValue("prompts", out var input)
             ? new Dictionary<string, List<string>>
@@ -37,13 +37,13 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[llm/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering LLM run with input:", ConsoleFormats.Bold)}\n" +
             $"{JsonSerializeOrDefault(inputs, "[inputs]")}"
         );
-        
+
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
     protected override Task HandleLlmNewTokenAsync(Run run, string token)
-    { 
+    {
         return Task.CompletedTask;
     }
 
@@ -51,13 +51,13 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleLlmErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
 
         Print($"{GetColoredText("[llm/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] LLM run errored with error:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Error, "[error]")}"
         );
-        
+
         return Task.CompletedTask;
     }
 
@@ -65,13 +65,13 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleLlmEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
 
         Print($"{GetColoredText("[llm/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting LLM run with output:", ConsoleFormats.Bold)}\n" +
               $"{JsonSerializeOrDefault(run.Outputs, "[response]")}"
             );
-        
+
         return Task.CompletedTask;
     }
 
@@ -85,7 +85,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleChainStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var input = JsonSerializeOrDefault(run.Inputs, "[inputs]");
@@ -94,7 +94,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering {runType} run with input:", ConsoleFormats.Bold)}\n" +
             $"{input}"
         );
-        
+
         return Task.CompletedTask;
     }
 
@@ -102,7 +102,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleChainErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var error = JsonSerializeOrDefault(run.Error, "[error]");
@@ -110,7 +110,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] {runType} run errored with error:", ConsoleFormats.Bold)}\n" +
             $"{error}"
         );
-        
+
         return Task.CompletedTask;
     }
 
@@ -118,7 +118,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleChainEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         var runType = run.RunType.Capitalize();
         var outputs = JsonSerializeOrDefault(run.Outputs, "[outputs]");
@@ -127,7 +127,7 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
             $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting {runType} run with output:", ConsoleFormats.Bold)}\n" +
             $"{outputs}"
         );
-        
+
         return Task.CompletedTask;
     }
 
@@ -135,13 +135,13 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleToolStartAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/start]", ConsoleFormats.Green)} {GetColoredText($"[{crumbs}] Entering Tool run with input:", ConsoleFormats.Bold)}\n" +
             $"{run.Inputs["input"].ToString()?.Trim()}"
         );
-        
+
         return Task.CompletedTask;
     }
 
@@ -149,13 +149,13 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleToolErrorAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         Print(
             $"{GetColoredText("[chain/error]", ConsoleFormats.Red)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Tool run errored with error:", ConsoleFormats.Bold)}\n" +
             $"{run.Error}"
         );
-        
+
         return Task.CompletedTask;
     }
 
@@ -163,14 +163,14 @@ public class ConsoleCallbackHandler(ConsoleCallbackHandlerInput fields) : BaseTr
     protected override Task HandleToolEndAsync(Run run)
     {
         run = run ?? throw new ArgumentNullException(nameof(run));
-        
+
         var crumbs = GetBreadcrumbs(run);
         if (run.Outputs.Count != 0)
             Print(
                 $"{GetColoredText("[chain/end]", ConsoleFormats.Blue)} {GetColoredText($"[{crumbs}] [{Elapsed(run)}] Exiting Tool run with output:", ConsoleFormats.Bold)}\n" +
                 $"{run.Outputs["output"].ToString()?.Trim()}"
             );
-        
+
         return Task.CompletedTask;
     }
 

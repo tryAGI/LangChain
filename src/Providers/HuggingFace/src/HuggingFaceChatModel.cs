@@ -67,7 +67,7 @@ public class HuggingFaceChatModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
         var response = await CreateChatCompletionAsync(messages, cancellationToken).ConfigureAwait(false);

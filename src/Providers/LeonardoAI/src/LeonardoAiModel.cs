@@ -14,9 +14,9 @@ public class LeonardoAiModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         OnPromptSent(request.Prompt);
-        
+
         var createResponse = await provider.Api.CreateGenerationAsync(new Body
         {
             Prompt = request.Prompt,
@@ -39,10 +39,10 @@ public class LeonardoAiModel(
                     throw new InvalidOperationException("Generated_images is null.");
                 break;
             }
-            
+
             await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
         }
-        
+
         return new TextToImageResponse
         {
             Images = await Task.WhenAll(images
@@ -57,6 +57,6 @@ public class LeonardoAiModel(
             UsedSettings = settings ?? TextToImageSettings.Default,
         };
     }
-    
+
     #endregion
 }

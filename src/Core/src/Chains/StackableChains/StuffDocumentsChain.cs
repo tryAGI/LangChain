@@ -17,7 +17,7 @@ public class StuffDocumentsChain : BaseStackableChain
     /// 
     /// </summary>
     public string Format { get; set; } = "{document}";
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -62,7 +62,7 @@ public class StuffDocumentsChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var documentsObject = values.Value[InputKeys[0]];
         if (documentsObject is not List<Document> docs)
         {

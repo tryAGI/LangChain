@@ -38,7 +38,7 @@ some text
         var res = splitter.SplitText(md);
         res.Count.Should().Be(2);
         res[0].Split("\n")[0].Should().Be("Header 1");
-        
+
 
     }
 

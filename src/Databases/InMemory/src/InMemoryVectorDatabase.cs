@@ -24,7 +24,7 @@ public class InMemoryVectorDatabase : IVectorDatabase
     {
         return Task.FromResult(_collections.GetOrAdd(collectionName, _ => new InMemoryVectorCollection(collectionName)));
     }
-    
+
     public Task<IVectorCollection> GetOrCreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(_collections.GetOrAdd(collectionName, _ => new InMemoryVectorCollection(collectionName)));

@@ -70,7 +70,7 @@ public class FileChatMessageHistory : BaseChatMessageHistory
                     _messages = JsonSerializer.Deserialize<List<Message>>(json) ?? new List<Message>();
                 }
             }
-            
+
             return Task.CompletedTask;
         }
         catch (Exception ex)

@@ -11,7 +11,7 @@ public partial class ServeTests
     public async Task Test1()
     {
         IConversationRepository repository = new SqLiteConversationRepository("Data Source=:memory:;");
-            
+
         // setup
         var conversation = await repository.CreateConversation("test");
         await repository.AddMessage(new StoredMessage

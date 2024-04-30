@@ -3,7 +3,7 @@ namespace LangChain.Providers.Amazon.Bedrock;
 
 public class AmazonEmbeddingSettings : BedrockEmbeddingSettings
 {
-    public new static AmazonEmbeddingSettings Default { get; } = new ()
+    public new static AmazonEmbeddingSettings Default { get; } = new()
     {
         Dimensions = 1536,
         MaximumInputLength = 10_000

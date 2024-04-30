@@ -4,8 +4,8 @@ namespace LangChain.Serve;
 
 public class ServeOptions
 {
-    private readonly Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>> _models = new ();
-    
+    private readonly Dictionary<string, Func<List<StoredMessage>, Task<StoredMessage>>> _models = new();
+
     public ServeOptions RegisterModel(string name, Func<List<StoredMessage>, Task<StoredMessage>> messageProcessor)
     {
         _models[name] = messageProcessor;

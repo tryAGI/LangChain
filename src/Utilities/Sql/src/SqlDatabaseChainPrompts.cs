@@ -32,8 +32,8 @@ Answer: Final answer here
 
 ";
 
-    private static readonly string[] _defaultPromptInputVariables = {"input", "table_info", "dialect", "top_k"};
-    
+    private static readonly string[] _defaultPromptInputVariables = { "input", "table_info", "dialect", "top_k" };
+
     /// <summary>
     /// SqlDatabaseChain default prompt 
     /// </summary>
@@ -68,6 +68,5 @@ Answer: Final answer here
             PostgresPromptText + PromptSuffixText,
             _postgresPromptInputVariables));
 
-    
+
 }
-    

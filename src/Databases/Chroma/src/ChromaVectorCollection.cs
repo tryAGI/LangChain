@@ -79,12 +79,12 @@ public class ChromaVectorCollection(
         CancellationToken cancellationToken = default)
     {
         items = items ?? throw new ArgumentNullException(nameof(items));
-        
+
         var records = new MemoryRecord[items.Count];
         for (var index = 0; index < items.Count; index++)
         {
             var item = items.ElementAt(index);
-            
+
             // TODO: check: description, externalSourceName, key
             records[index] = new MemoryRecord
             (
@@ -120,9 +120,9 @@ public class ChromaVectorCollection(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
-        
+
         settings.RelevanceScoreFunc ??= SelectRelevanceScoreFn;
-        
+
         var matches = await store
             .GetNearestMatchesAsync(
                 collectionName: Name,

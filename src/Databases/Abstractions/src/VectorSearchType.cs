@@ -9,12 +9,12 @@ public enum VectorSearchType
     /// 
     /// </summary>
     Similarity,
-    
+
     /// <summary>
     /// 
     /// </summary>
     SimilarityScoreThreshold,
-    
+
     /// <summary>
     /// Maximal marginal relevance optimizes for similarity to query and diversity among selected documents.
     /// </summary>

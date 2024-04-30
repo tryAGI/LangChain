@@ -18,14 +18,14 @@ public readonly record struct Message(
     /// <param name="content"></param>
     /// <returns></returns>
     public static Message Human(string content) => new(content, MessageRole.Human);
-    
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="content"></param>
     /// <returns></returns>
     public static Message Ai(string content) => new(content, MessageRole.Ai);
-    
+
     /// <summary>
     /// 
     /// </summary>

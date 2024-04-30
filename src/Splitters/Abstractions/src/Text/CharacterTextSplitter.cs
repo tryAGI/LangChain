@@ -14,7 +14,7 @@ public class CharacterTextSplitter(
     public override IReadOnlyList<string> SplitText(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
-        
+
         List<string> splits;
         if (separator != null)
         {
@@ -24,7 +24,7 @@ public class CharacterTextSplitter(
         {
             splits = new List<string> { text };
         }
-        
+
         return this.MergeSplits(splits, separator ?? string.Empty);
     }
 }

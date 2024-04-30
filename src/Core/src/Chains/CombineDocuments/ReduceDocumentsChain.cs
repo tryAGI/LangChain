@@ -32,7 +32,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     {
         _input = input;
     }
-    
+
     /// <inheritdoc/>
     public override string ChainType() => "reduce_documents_chain";
 
@@ -61,7 +61,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         CancellationToken cancellationToken = default)
     {
         otherKeys = otherKeys ?? throw new ArgumentNullException(nameof(otherKeys));
-        
+
         var tokenMax = otherKeys.TryGetValue("token_max", out var key) ? (int?)key : null;
         var (resultDocs, _) = await CollapseAsync(docs, otherKeys, tokenMax, cancellationToken).ConfigureAwait(false);
 
@@ -110,10 +110,10 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
         IReadOnlyDictionary<string, object>? otherKeys = null)
     {
         otherKeys ??= new Dictionary<string, object>();
-        
+
         var newResultDocList = new List<List<Document>>();
         var subResultDocs = new List<Document>();
-        
+
         foreach (var doc in docs)
         {
             subResultDocs.Add(doc);

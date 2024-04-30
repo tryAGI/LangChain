@@ -31,7 +31,7 @@ public class GoogleCustomSearchTool(
     {
         using var sha256 = SHA256.Create();
         var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(prompt));
-        
+
         return hash.Aggregate("", (current, b) => current + $"{b:x2}");
     }
 
@@ -56,7 +56,7 @@ public class GoogleCustomSearchTool(
     public override async Task<string> ToolTask(string input, CancellationToken cancellationToken = default)
     {
         string? responseString;
-        if (!useCache||(responseString = GetCachedAnswer(input))==null)
+        if (!useCache || (responseString = GetCachedAnswer(input)) == null)
         {
             using var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://www.googleapis.com");
@@ -65,7 +65,7 @@ public class GoogleCustomSearchTool(
             response.EnsureSuccessStatusCode();
             responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
-        
+
         var results = JsonSerializer.Deserialize<GoogleResult>(responseString!)!;
 
         var stringBuilder = new StringBuilder();
@@ -88,7 +88,7 @@ public class GoogleCustomSearchTool(
 
         if (useCache)
             SaveCachedAnswer(input, responseString);
-        
+
         return stringBuilder.ToString();
     }
 }

@@ -38,7 +38,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
                 var vecB = JsonSerializer.Deserialize(b, Sqlite.SourceGenerationContext.Default.SingleArray);
                 if (vecA == null || vecB == null)
                     return 0f;
-                
+
                 return distanceFunction(vecA, vecB);
             });
     }
@@ -58,7 +58,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         {
             throw new InvalidOperationException($"Collection '{collectionName}' does not exist.");
         }
-        
+
         return new SqLiteVectorCollection(_connection, collectionName);
     }
 
@@ -66,7 +66,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
     {
         var command = _connection.CreateCommand();
         command.CommandText = $"DROP TABLE IF EXISTS {collectionName}";
-        
+
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
@@ -85,7 +85,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         var command = _connection.CreateCommand();
         command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{collectionName}'";
         var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
-        
+
         return result != null;
     }
 
@@ -93,7 +93,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
     {
         var command = _connection.CreateCommand();
         command.CommandText = $"CREATE TABLE IF NOT EXISTS {collectionName} (id TEXT PRIMARY KEY, vector BLOB, document TEXT)";
-        
+
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 }

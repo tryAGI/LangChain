@@ -41,12 +41,12 @@ public class GeneralTests
         model.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         model.PartialResponseGenerated += (_, delta) => Console.Write(delta);
         model.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
-        
+
         var response = await model.GenerateAsync("This is a test");
 
         response.LastMessageContent.Should().NotBeNull();
     }
-    
+
     [Test]
     public async Task StreamingTest()
     {
@@ -64,7 +64,7 @@ public class GeneralTests
         model.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         model.PartialResponseGenerated += (_, delta) => Console.WriteLine(delta);
         model.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
-        
+
         var response = await model.GenerateAsync("This is a test");
 
         response.LastMessageContent.Should().NotBeNull();

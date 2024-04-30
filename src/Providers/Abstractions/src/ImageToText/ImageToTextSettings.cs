@@ -10,7 +10,7 @@ public class ImageToTextSettings
     {
         User = string.Empty,
     };
-    
+
     /// <summary>
     /// Unique user identifier.
     /// </summary>
@@ -32,7 +32,7 @@ public class ImageToTextSettings
     {
         return new ImageToTextSettings
         {
-            User = 
+            User =
                 requestSettings?.User ??
                 modelSettings?.User ??
                 providerSettings?.User ??

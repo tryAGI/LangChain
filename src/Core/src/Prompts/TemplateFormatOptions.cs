@@ -9,7 +9,7 @@ public enum TemplateFormatOptions
     /// 
     /// </summary>
     FString,
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -123,7 +123,7 @@ public static class Chain
     {
         return new RetrieveDocumentsChain(vectorCollection, embeddingModel, inputKey, outputKey, amount);
     }
-    
+
     /// <inheritdoc cref="CombineDocuments"/>
     public static StuffDocumentsChain StuffDocuments(
         string inputKey = "docs",

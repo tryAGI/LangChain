@@ -14,8 +14,8 @@ public class ReActParserChain : BaseStackableChain
     /// <param name="inputKey"></param>
     /// <param name="outputText"></param>
     public ReActParserChain(
-        string inputKey="text",
-        string outputText="answer")
+        string inputKey = "text",
+        string outputText = "answer")
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputText };
@@ -35,7 +35,7 @@ public class ReActParserChain : BaseStackableChain
     public object Parse(string text)
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
-        
+
         bool includesAnswer = text.Contains(FinalAnswerAction);
         string regex = @"Action\s*\d*\s*:[\s]*(.*?)[\s]*Action\s*\d*\s*Input\s*\d*\s*:[\s]*(.*)";
         Match actionMatch = Regex.Match(text, regex, RegexOptions.Singleline);
@@ -76,7 +76,7 @@ public class ReActParserChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         values.Value[OutputKeys[0]] = Parse(values.Value[InputKeys[0]].ToString()!);
         return Task.FromResult(values);
     }
@@ -94,12 +94,12 @@ public class AgentAction(string action, string actionInput, string text)
     /// 
     /// </summary>
     public string Action => action;
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string ActionInput => actionInput;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -108,7 +108,7 @@ public class AgentAction(string action, string actionInput, string text)
     /// <inheritdoc/>
     public override string ToString()
     {
-       return $"Action: {action}, Action Input: {actionInput}";
+        return $"Action: {action}, Action Input: {actionInput}";
     }
 }
 
@@ -123,7 +123,7 @@ public class AgentFinish(string output, string text)
     /// 
     /// </summary>
     public string Output => output;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -132,7 +132,7 @@ public class AgentFinish(string output, string text)
     /// <inheritdoc/>
     public override string ToString()
     {
-         return $"Final Answer: {output}";
+        return $"Final Answer: {output}";
     }
 }
 

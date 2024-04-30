@@ -56,7 +56,7 @@ Final Answer: [your response here. should be a simple sentence without explanati
     /// 
     /// </summary>
     public static string TaskExecutionWithMemory => string.Join("\n", Role, Tools, Memory, Task, Scratchpad);
-    
+
     /// <summary>
     /// 
     /// </summary>

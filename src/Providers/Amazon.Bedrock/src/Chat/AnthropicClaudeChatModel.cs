@@ -81,7 +81,7 @@ public class AnthropicClaudeChatModel(
             messages.Add(generatedText.AsAiMessage());
             OnCompletedResponseGenerated(generatedText);
         }
-          
+
         var usage = Usage.Empty with
         {
             Time = watch.Elapsed,

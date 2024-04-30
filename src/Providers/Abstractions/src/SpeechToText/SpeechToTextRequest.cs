@@ -7,9 +7,9 @@ namespace LangChain.Providers;
 public class SpeechToTextRequest : IDisposable
 {
     public required Stream Stream { get; init; }
-    
+
     public bool OwnsStream { get; init; } = true;
-    
+
     /// <inheritdoc cref="ToSpeechToTextRequest(System.IO.Stream)"/>
     public static implicit operator SpeechToTextRequest(Stream stream)
     {
@@ -27,7 +27,7 @@ public class SpeechToTextRequest : IDisposable
     {
         return ToSpeechToTextRequest(path);
     }
-    
+
     /// <summary>
     /// Explicitly converts a string to a <see cref="SpeechToTextRequest"/>. <br/>
     /// Will be converted to a <see cref="SpeechToTextRequest"/>

@@ -19,7 +19,7 @@ var model = new OllamaChatModel(new OllamaProvider(options: new OllamaOptions
 {
     Temperature = 0,
     Stop = ["User:"],
-}),"mistral:latest");
+}), "mistral:latest");
 
 
 // 3. Optional. Add custom name generator
@@ -36,7 +36,7 @@ Your name: ";
     var chain = LoadMemory(conversationBufferMemory, "chat_history")
                 | Template(template)
                 | LLM(model);
-    
+
     return await chain.RunAsync("text", CancellationToken.None) ?? string.Empty;
 });
 
@@ -94,8 +94,8 @@ async Task<ConversationBufferMemory> ConvertToConversationBuffer(IReadOnlyCollec
     List<Message> converted = list
         .Select(x => new Message(x.Content, x.Author == MessageAuthor.User ? MessageRole.Human : MessageRole.Ai))
         .ToList();
-    
+
     await conversationBufferMemory.ChatHistory.AddMessages(converted);
-    
+
     return conversationBufferMemory;
 }

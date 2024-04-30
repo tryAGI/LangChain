@@ -33,7 +33,7 @@ public partial class DatabaseTests
         await using var environment = await SetupImageTestsAsync();
         var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
-        string[] extensions = { ".bmp",".gif", ".jpg", ".jpeg", ".png", ".tiff" };
+        string[] extensions = { ".bmp", ".gif", ".jpg", ".jpeg", ".png", ".tiff" };
         var files = Directory.EnumerateFiles(@"[images directory]", "*.*", SearchOption.AllDirectories)
             .Where(s => extensions.Any(ext => ext == Path.GetExtension(s)));
 
@@ -72,7 +72,7 @@ public partial class DatabaseTests
     {
         await using var environment = await SetupImageTestsAsync();
         var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
-      
+
         var path = Path.Combine(Path.GetTempPath(), "test_image.jpg");
         var imageData = await File.ReadAllBytesAsync(path);
         var binaryData = new BinaryData(imageData, "image/jpg");
@@ -137,7 +137,7 @@ Helpful Answer:";
 
         return environment;
     }
-    
+
     [Test]
     [Explicit]
     public async Task index_test_documents()

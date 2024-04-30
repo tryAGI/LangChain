@@ -14,7 +14,7 @@ public interface IProvider : IModel
     /// If not set, the model will use default settings for specific provider. <br/>
     /// </summary>
     public ChatSettings? ChatSettings { get; init; }
-    
+
     /// <summary>
     /// Defines the settings for the provider. <br/>
     /// These settings will be used as default settings for requests,
@@ -22,7 +22,7 @@ public interface IProvider : IModel
     /// If not set, the model will use default settings for specific provider. <br/>
     /// </summary>
     public EmbeddingSettings? EmbeddingSettings { get; init; }
-    
+
     /// <summary>
     /// Defines the settings for the provider. <br/>
     /// These settings will be used as default settings for requests,
@@ -30,7 +30,7 @@ public interface IProvider : IModel
     /// If not set, the model will use default settings for specific provider. <br/>
     /// </summary>
     public TextToImageSettings? TextToImageSettings { get; init; }
-    
+
     /// <summary>
     /// Defines the settings for the provider. <br/>
     /// These settings will be used as default settings for requests,
@@ -38,7 +38,7 @@ public interface IProvider : IModel
     /// If not set, the model will use default settings for specific provider. <br/>
     /// </summary>
     public ModerationSettings? ModerationSettings { get; init; }
-    
+
     /// <summary>
     /// Defines the settings for the provider. <br/>
     /// These settings will be used as default settings for requests,
@@ -46,7 +46,7 @@ public interface IProvider : IModel
     /// If not set, the model will use default settings for specific provider. <br/>
     /// </summary>
     public SpeechToTextSettings? SpeechToTextSettings { get; init; }
-    
+
     /// <summary>
     /// Defines the settings for the provider. <br/>
     /// These settings will be used as default settings for requests,

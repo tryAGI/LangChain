@@ -15,7 +15,7 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 public partial class LLamaSharpTests
 {
     string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-    
+
     [Test]
     [Explicit]
     public async Task PrepromptTest()

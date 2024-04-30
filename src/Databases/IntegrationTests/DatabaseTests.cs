@@ -17,30 +17,30 @@ public partial class DatabaseTests
 
         var exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
-        
+
         // ReSharper disable once AccessToDisposedClosure
         await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
             .Should().ThrowAsync<InvalidOperationException>();
-        
+
         var actual = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
         actual.Should().NotBeNull();
         actual.Id.Should().NotBeEmpty();
         actual.Name.Should().BeEquivalentTo(environment.CollectionName);
-        
+
         exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeTrue();
 
         await vectorDatabase.DeleteCollectionAsync(environment.CollectionName);
-        
+
         // ReSharper disable once AccessToDisposedClosure
         await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
             .Should().ThrowAsync<InvalidOperationException>();
-        
+
         exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]
@@ -84,7 +84,7 @@ public partial class DatabaseTests
         actualSecondDocument!.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
         actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(documents[1].Metadata["color"]);
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]
@@ -169,7 +169,7 @@ public partial class DatabaseTests
         actualFist.Should().BeNull();
         actualSecond.Should().BeNull();
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]
@@ -200,7 +200,7 @@ public partial class DatabaseTests
         similarTexts.Should().Contain("banana");
         similarTexts.Should().Contain("apple");
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]
@@ -227,7 +227,7 @@ public partial class DatabaseTests
         similarTexts.Should().Contain("banana");
         similarTexts.Should().Contain("apple");
     }
-    
+
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]

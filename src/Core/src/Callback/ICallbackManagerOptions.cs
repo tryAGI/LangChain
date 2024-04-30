@@ -9,7 +9,7 @@ public interface ICallbackManagerOptions
     /// 
     /// </summary>
     bool Verbose { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>

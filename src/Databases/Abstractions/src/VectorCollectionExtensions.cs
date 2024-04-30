@@ -58,7 +58,7 @@ public static class VectorCollectionExtensions
             Embeddings = [response.ToSingleArray()],
         }, searchSettings, cancellationToken).ConfigureAwait(false);
     }
-    
+
     /// <summary>
     /// Return similar documents to the given document.
     /// </summary>
@@ -82,7 +82,7 @@ public static class VectorCollectionExtensions
         CancellationToken cancellationToken = default)
     {
         var results = await vectorCollection.SearchAsync(
-            embeddingModel: embeddingModel, 
+            embeddingModel: embeddingModel,
             embeddingRequest: request,
             embeddingSettings: embeddingSettings,
             searchSettings: new VectorSearchSettings
@@ -92,10 +92,10 @@ public static class VectorCollectionExtensions
                 ScoreThreshold = scoreThreshold
             },
             cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         return results.ToDocuments();
     }
-    
+
     public static async Task<IReadOnlyCollection<string>> AddDocumentsAsync(
         this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
@@ -105,29 +105,29 @@ public static class VectorCollectionExtensions
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
+
         return await vectorCollection.AddTextsAsync(
             embeddingModel: embeddingModel,
-            texts: documents.Select(x => x.PageContent).ToArray(), 
+            texts: documents.Select(x => x.PageContent).ToArray(),
             metadatas: documents.Select(x => x.Metadata).ToArray(),
             embeddingSettings: embeddingSettings,
             cancellationToken).ConfigureAwait(false);
     }
-    
+
     public static async Task<Document?> GetDocumentByIdAsync(
         this IVectorCollection vectorCollection,
         string id,
         CancellationToken cancellationToken = default)
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
-        
+
         var item = await vectorCollection.GetAsync(id, cancellationToken).ConfigureAwait(false);
-        
+
         return item == null
             ? null
             : new Document(item.Text, item.Metadata);
     }
-    
+
     public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
         this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
@@ -138,7 +138,7 @@ public static class VectorCollectionExtensions
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
+
         var embeddingRequest = new EmbeddingRequest
         {
             Strings = texts.ToArray(),
@@ -150,7 +150,7 @@ public static class VectorCollectionExtensions
                 .Select(x => Data.FromBytes(x!.ToArray()))
                 .ToArray() ?? [],
         };
-        
+
         float[][] embeddings = await embeddingModel
             .CreateEmbeddingsAsync(embeddingRequest, embeddingSettings, cancellationToken)
             .ConfigureAwait(false);
@@ -187,14 +187,14 @@ public static class VectorCollectionExtensions
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
         embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        
+
         var response = await vectorCollection.SearchAsync(
             embeddingModel: embeddingModel,
             embeddingRequest: embeddingRequest,
             embeddingSettings: embeddingSettings,
             searchSettings: searchSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         var relevanceScoreFunc = searchSettings?.RelevanceScoreFunc ?? RelevanceScoreFunctions.Euclidean;
         foreach (var item in response.Items)
         {

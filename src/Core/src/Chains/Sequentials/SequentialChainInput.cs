@@ -31,13 +31,13 @@ public class SequentialChainInput : IChainInputs
 
     /// <inheritdoc/>
     public bool Verbose { get; set; }
-    
+
     /// <inheritdoc/>
     public ICallbacks? Callbacks { get; set; }
-    
+
     /// <inheritdoc/>
     public List<string> Tags { get; set; } = new();
-    
+
     /// <inheritdoc/>
     public Dictionary<string, object> Metadata { get; set; } = new();
 

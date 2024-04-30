@@ -17,27 +17,27 @@ public abstract class BaseCallbackHandler : IBaseCallbackHandler
     /// 
     /// </summary>
     public bool IgnoreLlm { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool IgnoreRetry { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool IgnoreChain { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool IgnoreAgent { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public bool IgnoreRetriever { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>

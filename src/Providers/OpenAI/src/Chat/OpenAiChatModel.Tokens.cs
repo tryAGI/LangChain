@@ -35,7 +35,7 @@ public partial class OpenAiChatModel
     public int CountTokens(ChatRequest request)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         return CountTokens(request.Messages);
     }
 

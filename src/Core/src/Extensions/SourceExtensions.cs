@@ -19,7 +19,7 @@ public static class SourceExtensions
     {
         source = source ?? throw new ArgumentNullException(nameof(source));
         textSplitter ??= new RecursiveCharacterTextSplitter();
-        
+
         var documents = await source.LoadAsync(cancellationToken).ConfigureAwait(false);
         return textSplitter.SplitDocuments(documents);
     }

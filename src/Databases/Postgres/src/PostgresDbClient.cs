@@ -35,7 +35,7 @@ public class PostgresDbClient
 
             command.ExecuteNonQuery();
         }
-        
+
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         dataSourceBuilder.UseVector();
 
@@ -338,7 +338,7 @@ LIMIT @limit";
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
-        
+
         if (ids.Count == 0)
         {
             yield break;
@@ -401,7 +401,7 @@ WHERE id = ANY(@ids)";
         CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
-        
+
         if (ids.Count == 0)
         {
             return;
@@ -471,7 +471,7 @@ WHERE id = ANY(@ids)";
 /// <summary>
 /// Document with embedding db record
 /// </summary>
-[CLSCompliant(false)] 
+[CLSCompliant(false)]
 public record EmbeddingTableRecord(
     string Id,
     string Content,

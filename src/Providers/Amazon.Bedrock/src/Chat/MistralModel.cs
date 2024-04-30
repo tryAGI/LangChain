@@ -112,7 +112,7 @@ public abstract class MistralModel(
             ["max_tokens"] = usedSettings.MaxTokens!.Value,
             ["temperature"] = usedSettings.Temperature!.Value,
             ["top_p"] = usedSettings.TopP!.Value,
-           // ["top_k"] = usedSettings.TopK!.Value
+            // ["top_k"] = usedSettings.TopK!.Value
         };
         return bodyJson;
     }

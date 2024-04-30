@@ -58,7 +58,7 @@ public class STTChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var audio = (byte[])values.Value[_inputKey];
 
         if (_useCache)
@@ -66,18 +66,18 @@ public class STTChain : BaseStackableChain
             var cached = GetCachedAnswer(audio);
             if (cached != null)
             {
-     
+
                 values.Value[_outputKey] = cached;
                 return values;
             }
         }
 
         string text = await _model.TranscribeAsync(audio, _settings, cancellationToken).ConfigureAwait(false);
-        
-        if(_useCache)
+
+        if (_useCache)
             SaveCachedAnswer(audio, text);
         values.Value[_outputKey] = text;
-        
+
         return values;
     }
 
@@ -86,7 +86,7 @@ public class STTChain : BaseStackableChain
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
-    public STTChain UseCache(bool enabled=true)
+    public STTChain UseCache(bool enabled = true)
     {
         _useCache = enabled;
         return this;

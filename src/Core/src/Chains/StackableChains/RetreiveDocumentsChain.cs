@@ -32,7 +32,7 @@ public class RetrieveDocumentsChain : BaseStackableChain
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;
         var results = await _vectorCollection.GetSimilarDocuments(
             _embeddingModel,

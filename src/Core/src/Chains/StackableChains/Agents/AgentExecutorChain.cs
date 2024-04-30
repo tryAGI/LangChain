@@ -12,9 +12,9 @@ public class AgentExecutorChain : BaseStackableChain
     /// 
     /// </summary>
     public string HistoryKey { get; }
-    
+
     private readonly BaseStackableChain _originalChain;
-    
+
     private BaseStackableChain? _chainWithHistory;
 
     /// <summary>
@@ -26,13 +26,13 @@ public class AgentExecutorChain : BaseStackableChain
     public AgentExecutorChain(
         BaseStackableChain originalChain,
         string name,
-        string historyKey = "history", 
+        string historyKey = "history",
         string outputKey = "final_answer")
     {
         Name = name;
         HistoryKey = historyKey;
         _originalChain = originalChain;
-        
+
         InputKeys = new[] { historyKey };
         OutputKeys = new[] { outputKey };
 
@@ -59,7 +59,7 @@ public class AgentExecutorChain : BaseStackableChain
         {
             throw new InvalidOperationException("History is not set");
         }
-        
+
         return await _chainWithHistory.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

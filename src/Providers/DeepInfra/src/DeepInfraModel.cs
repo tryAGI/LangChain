@@ -20,5 +20,5 @@ public class DeepInfraModel(DeepInfraProvider provider, ChatModels model) : Open
     {
     }
 
-   
+
 }

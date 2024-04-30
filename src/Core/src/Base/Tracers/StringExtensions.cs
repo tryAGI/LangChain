@@ -13,7 +13,7 @@ public static class StringExtensions
     public static string Capitalize(this string word)
     {
         word = word ?? throw new ArgumentNullException(nameof(word));
-        
+
         if (word.Length == 1)
         {
             return word.ToUpper(System.Globalization.CultureInfo.CurrentCulture);

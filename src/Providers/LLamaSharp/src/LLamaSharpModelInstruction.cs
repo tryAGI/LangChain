@@ -33,7 +33,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
     public LLamaSharpModelInstruction(LLamaSharpConfiguration configuration) : base(configuration)
     {
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -45,7 +45,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
             .Replace("\n>", string.Empty)
             .Trim();
     }
-    
+
     /// <inheritdoc />
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
@@ -53,7 +53,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var prompt = ToPrompt(request.Messages);
 
         var watch = Stopwatch.StartNew();
@@ -71,7 +71,7 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
         };
 
         OnPromptSent(prompt);
-        
+
         var buf = "";
         await foreach (var text in ex.InferAsync(prompt,
                            inferenceParams, cancellationToken))
@@ -85,13 +85,13 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
                     break;
                 }
             }
-            
+
             OnPartialResponseGenerated(text);
         }
 
         buf = SanitizeOutput(buf);
         OnCompletedResponseGenerated(buf);
-        
+
         var result = request.Messages.ToList();
         result.Add(buf.AsAiMessage());
 

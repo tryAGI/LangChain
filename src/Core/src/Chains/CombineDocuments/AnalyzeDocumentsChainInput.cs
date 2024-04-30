@@ -11,7 +11,7 @@ public class AnalyzeDocumentsChainInput(
     /// 
     /// </summary>
     public BaseCombineDocumentsChain CombineDocumentsChain { get; set; } = combineDocumentsChain;
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -34,17 +34,17 @@ public class CrewChain(
         CancellationToken cancellationToken = default)
     {
         values = values ?? throw new ArgumentNullException(nameof(values));
-        
+
         var taskText = values.Value[inputKey].ToString() ?? string.Empty;
         var task = new AgentTask(manager, taskText);
 
         // add delegation tools
-        if (allAgents.Count()>1)
+        if (allAgents.Count() > 1)
         {
             task.Tools.Add(new AskQuestionTool(allAgents.Except(new[] { task.Agent })));
             task.Tools.Add(new DelegateWorkTool(allAgents.Except(new[] { task.Agent })));
         }
-        
+
         var res = await task.ExecuteAsync(Context, cancellationToken).ConfigureAwait(false);
         Context = res;
 

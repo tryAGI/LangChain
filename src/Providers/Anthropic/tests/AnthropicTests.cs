@@ -13,7 +13,7 @@ public class AnthropicTests
         var apiKey =
             Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") ??
             throw new InvalidOperationException("ANTHROPIC_API_KEY is not set");
-        
+
         var model = new Claude3Haiku(new AnthropicProvider(apiKey));
 
         var result = await model.GenerateAsync("Write a Poem".AsHumanMessage());

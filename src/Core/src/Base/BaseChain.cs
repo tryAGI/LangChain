@@ -74,7 +74,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     public virtual async Task<string> RunAsync(Dictionary<string, object> input, ICallbacks? callbacks = null, CancellationToken cancellationToken = default)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         var keysLengthDifferent = InputKeys.Count != input.Count;
 
         if (keysLengthDifferent)
@@ -145,7 +145,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// </summary>
     public virtual async Task<List<IChainValues>> ApplyAsync(IReadOnlyList<ChainValues> inputs, CancellationToken cancellationToken = default)
     {
-        var tasks = inputs.Select(input=> CallAsync(input, cancellationToken: cancellationToken));
+        var tasks = inputs.Select(input => CallAsync(input, cancellationToken: cancellationToken));
         var results = await Task.WhenAll(tasks).ConfigureAwait(false);
 
         return results.ToList();
@@ -161,7 +161,7 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     public static async Task<BaseChain> Deserialize(SerializedBaseChain data, LoadValues? values = null)
     {
         data = data ?? throw new ArgumentNullException(nameof(data));
-        
+
         switch (data.Type)
         {
             case "llm_chain":

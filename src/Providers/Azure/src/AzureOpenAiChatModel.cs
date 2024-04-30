@@ -15,7 +15,7 @@ public class AzureOpenAiChatModel(
     public override int ContextLength => provider.Configurations.ContextSize;
 
     #region Methods
-    
+
     /// <inheritdoc/>
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
@@ -23,7 +23,7 @@ public class AzureOpenAiChatModel(
         CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var messages = request.Messages.ToList();
         var watch = Stopwatch.StartNew();
         var response = await provider.Client.GetChatCompletionsAsync(
@@ -34,7 +34,7 @@ public class AzureOpenAiChatModel(
                 Temperature = provider.Configurations.Temperature,
             },
             cancellationToken).ConfigureAwait(false);
-        
+
         messages.Add(ToMessage(response.Value));
 
         watch.Stop();
@@ -82,6 +82,6 @@ public class AzureOpenAiChatModel(
             OutputTokens = usage.CompletionTokens
         };
     }
-    
+
     #endregion
 }

@@ -23,7 +23,7 @@ public static class VectorStoreIndexCreator
         CancellationToken cancellationToken = default)
     {
         sources = sources ?? throw new ArgumentNullException(nameof(sources));
-        
+
         var documents = new List<Document>();
         foreach (var source in sources)
         {
@@ -43,9 +43,9 @@ public static class VectorStoreIndexCreator
         ITextSplitter? textSplitter = null)
     {
         textSplitter ??= new CharacterTextSplitter();
-        
+
         var splitDocuments = textSplitter.SplitDocuments(documents);
-        
+
         return await vectorCollection.AddDocumentsAsync(embeddingModel, splitDocuments).ConfigureAwait(false);
     }
 }

@@ -14,7 +14,7 @@ namespace LangChain.Databases;
 public class RedisChatMessageHistory : BaseChatMessageHistory
 {
     public TimeSpan? Ttl { get; set; }
-    
+
     private readonly string _sessionId;
     private readonly string _keyPrefix;
     private readonly Lazy<ConnectionMultiplexer> _multiplexer;

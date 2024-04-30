@@ -12,7 +12,7 @@ public class GeneralTests
         var apiKey =
             Environment.GetEnvironmentVariable("Deep_Infra_Key") ??
             throw new InvalidOperationException("Deep_Infra_Key environment variable is not found.");
-        
+
         var model = new Mixtral8X7BInstructV01Model(new DeepInfraProvider(apiKey));
 
         var service = new WeatherService();

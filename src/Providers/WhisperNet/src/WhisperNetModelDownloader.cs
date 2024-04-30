@@ -12,7 +12,7 @@ public sealed class WhisperNetModelDownloader
     public static string DefaultStoragePath =>
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "LangChain", "CSharp", "Models", "WhisperNet");
-    
+
     public static async Task<string> DownloadModel(GgmlType type, QuantizationType quantizationType, bool usingCoreMl = false, string? storagePath = null, CancellationToken cancellationToken = default(CancellationToken))
     {
         storagePath ??= DefaultStoragePath;
@@ -27,9 +27,9 @@ public sealed class WhisperNetModelDownloader
                 .ExtractToPath(storagePath)
                 .ConfigureAwait(false);
         }
-        
+
         using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(type, quantizationType, cancellationToken).ConfigureAwait(false);
-        
+
 #pragma warning disable CA1308
         var fileName = $"gglm-{type.ToString().ToLowerInvariant()}";
         if (quantizationType != QuantizationType.NoQuantization)

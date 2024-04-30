@@ -7,7 +7,7 @@ namespace LangChain.Providers;
 public class TextToSpeechRequest
 {
     public required string Prompt { get; init; }
-    
+
     /// <inheritdoc cref="ToTextToSpeechRequest(string)"/>
     public static implicit operator TextToSpeechRequest(string message)
     {

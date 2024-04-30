@@ -5,7 +5,7 @@ namespace LangChain.Serve.Services;
 
 public class InMemoryRepository : IConversationRepository
 {
-    private readonly List<StoredConversation> _conversations = new ();
+    private readonly List<StoredConversation> _conversations = new();
     private readonly List<StoredMessage> _messages = new();
 
     public Task<StoredConversation> CreateConversation(string modelName)
@@ -18,7 +18,7 @@ public class InMemoryRepository : IConversationRepository
             CreatedAt = DateTime.UtcNow
         };
 
-        _conversations.Insert(0,conversation);
+        _conversations.Insert(0, conversation);
         return Task.FromResult(conversation);
     }
 

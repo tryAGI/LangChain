@@ -8,13 +8,13 @@ namespace LangChain.Providers.Anthropic.Tests
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
     }
-    
+
     [AnthropicTools]
     public interface IBookStoreService
     {
         [Description("Get books written by some author")]
         public Task<List<GetAuthorBook>> GetAuthorBooksAsync([Description("Author name")] string authorName, CancellationToken cancellationToken = default);
-        
+
         [Description("Get book page content")]
         public Task<string> GetBookPageContentAsync([Description("Book Name")] string bookName, [Description("Book Page Number")] int bookPageNumber, CancellationToken cancellationToken = default);
 
@@ -25,9 +25,9 @@ namespace LangChain.Providers.Anthropic.Tests
         {
             return Task.FromResult(new List<GetAuthorBook>([
                 new GetAuthorBook
-                    { Title = "Five point someone", Description = "This book is about 3 college friends" },
+                { Title = "Five point someone", Description = "This book is about 3 college friends" },
                 new GetAuthorBook
-                    { Title = "Two States", Description = "This book is about intercast marriage in India" }
+                { Title = "Two States", Description = "This book is about intercast marriage in India" }
             ]));
         }
 

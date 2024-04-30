@@ -18,18 +18,18 @@ public class FileSource : ISource
     public FileSource()
     {
     }
-    
+
     [SetsRequiredMembers]
     public FileSource(string filePath)
     {
         FilePath = filePath;
     }
-    
+
     /// <inheritdoc/>
     public async Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
     {
         var content = await File2.ReadAllTextAsync(FilePath, Encoding, cancellationToken).ConfigureAwait(false);
-        
+
         // It makes sense for agents, but we need tests for this
         // if (AutoDetectEncoding)
         // {
@@ -49,7 +49,7 @@ public class FileSource : ISource
         //         }
         //     }
         // }
-        
+
         return [new Document(content, metadata: new Dictionary<string, object>
         {
             ["source"] = FilePath,

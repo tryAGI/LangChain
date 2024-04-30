@@ -12,8 +12,8 @@ public class BedrockTextModelTests
     {
         var srcDir = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\..\";
         var predefined = @"src\Predefined\";
-        var predefinedDir = Path.Combine(srcDir, predefined); 
-        
+        var predefinedDir = Path.Combine(srcDir, predefined);
+
         var assembly = Assembly.GetAssembly(typeof(BedrockProvider));
         var allTypes = assembly?.GetTypes().ToList() ??
                        throw new InvalidOperationException("Assembly not found");

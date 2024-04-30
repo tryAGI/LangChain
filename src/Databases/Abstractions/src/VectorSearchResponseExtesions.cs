@@ -11,7 +11,7 @@ public static class VectorSearchResponseExtensions
         this VectorSearchResponse vectorSearchResponse)
     {
         vectorSearchResponse = vectorSearchResponse ?? throw new ArgumentNullException(nameof(vectorSearchResponse));
-        
+
         return vectorSearchResponse.Items
             .Select(static x => new Document(x.Text, x.Metadata))
             .ToArray();

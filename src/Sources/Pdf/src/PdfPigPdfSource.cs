@@ -19,7 +19,7 @@ public sealed partial class PdfPigPdfSource : ISource, IDisposable
     /// 
     /// </summary>
     public string Path { get; } = string.Empty;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -42,7 +42,7 @@ public sealed partial class PdfPigPdfSource : ISource, IDisposable
     {
         Stream = stream;
     }
-    
+
     /// <inheritdoc/>
     public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
     {

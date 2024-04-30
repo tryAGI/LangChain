@@ -28,28 +28,28 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
     /// </summary>
     [CLSCompliant(false)]
     public SpeechToTextModels? Model { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string? AudioName { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public string? Prompt { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
     public AudioResponseFormat? ResponseFormat { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>
     public float? Temperature { get; init; }
-    
+
     /// <summary>
     /// 
     /// </summary>

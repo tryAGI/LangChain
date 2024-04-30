@@ -11,22 +11,22 @@ public class EmbeddingResponse
     /// The embeddings.
     /// </summary>
     public required float[][] Values { get; init; }
-    
+
     /// <summary>
     /// Used settings for the embeddings.
     /// </summary>
     public required EmbeddingSettings UsedSettings { get; init; }
-    
+
     /// <summary>
     /// Dimensions of the embeddings.
     /// </summary>
     public int Dimensions { get; init; }
-    
+
     /// <summary>
     /// Usage information.
     /// </summary>
     public Usage Usage { get; init; } = Usage.Empty;
-    
+
     public void Deconstruct(
         out float[] values,
         out Usage usage)
@@ -34,7 +34,7 @@ public class EmbeddingResponse
         values = Values.FirstOrDefault() ?? [];
         usage = Usage;
     }
-    
+
     public void Deconstruct(
         out float[] values,
         out Usage usage,
@@ -44,7 +44,7 @@ public class EmbeddingResponse
         usage = Usage;
         usedSettings = UsedSettings;
     }
-    
+
     public static implicit operator float[](EmbeddingResponse response)
     {
         return response?.ToSingleArray() ?? [];
@@ -54,7 +54,7 @@ public class EmbeddingResponse
     {
         return response?.Values ?? [];
     }
-    
+
     public float[] ToSingleArray()
     {
         return Values.FirstOrDefault() ?? [];

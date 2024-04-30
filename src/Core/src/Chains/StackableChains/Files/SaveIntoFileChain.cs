@@ -15,7 +15,7 @@ public class SaveIntoFileChain : BaseStackableChain
     /// </summary>
     /// <param name="filename"></param>
     /// <param name="inputKey"></param>
-    public SaveIntoFileChain(string filename, string inputKey="data")
+    public SaveIntoFileChain(string filename, string inputKey = "data")
     {
         _filename = filename;
         InputKeys = new[] { inputKey };
@@ -41,7 +41,7 @@ public class SaveIntoFileChain : BaseStackableChain
         {
             throw new InvalidOperationException($"Input key {InputKeys[0]} must be byte[] or string");
         }
-        
+
         return values;
     }
 }

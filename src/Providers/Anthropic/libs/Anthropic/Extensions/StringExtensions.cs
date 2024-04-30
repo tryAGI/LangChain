@@ -17,10 +17,14 @@ internal static class StringExtensions
     /// <returns></returns>
     public static global::Anthropic.SDK.Messaging.Message AsHumanMessage(this string content)
     {
-        return new global::Anthropic.SDK.Messaging.Message { Content = [new TextContent
+        return new global::Anthropic.SDK.Messaging.Message
         {
-            Text = content,
-        }], Role = RoleType.User };
+            Content = [new TextContent
+            {
+                Text = content,
+            }],
+            Role = RoleType.User
+        };
     }
 
     /// <summary>
@@ -29,10 +33,14 @@ internal static class StringExtensions
     /// <returns></returns>
     public static global::Anthropic.SDK.Messaging.Message AsAssistantMessage(this string content)
     {
-        return new global::Anthropic.SDK.Messaging.Message { Content = [new TextContent
+        return new global::Anthropic.SDK.Messaging.Message
         {
-            Text = content,
-        }], Role = RoleType.Assistant };
+            Content = [new TextContent
+            {
+                Text = content,
+            }],
+            Role = RoleType.Assistant
+        };
     }
 
     /// <summary>

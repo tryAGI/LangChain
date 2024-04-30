@@ -25,13 +25,13 @@ public static class DeepInfraCodeGenerator
     public static async Task GenerateCodesAsync(GenerationOptions options)
     {
         options = options ?? throw new ArgumentNullException(nameof(options));
-        
-        
+
+
         //Load Deep Infra Docs Page...
         Console.WriteLine("Loading Models...");
         var models = await GetModelsAsync(options).ConfigureAwait(false);
 
-        
+
         Console.WriteLine($"{models.Count} Models Found...");
 
 
@@ -81,7 +81,7 @@ public static class DeepInfraCodeGenerator
                     list.Add(modelInfo);
                 }
             }
-            
+
             var nextPage = lbb.FindNode("a", "aria-label", "next page", true);
             if (nextPage != null)
             {
@@ -113,7 +113,7 @@ public static class DeepInfraCodeGenerator
         HashSet<string?> keys = new HashSet<string?>();
         foreach (var item in sorted)
         {
-            if(!keys.Add(item.EnumMemberName))
+            if (!keys.Add(item.EnumMemberName))
                 continue;
 
             if (first)
@@ -196,7 +196,7 @@ public static class DeepInfraCodeGenerator
         if (modelToken == null)
             return null;
 
-       
+
         //Modal Name
         var modelName = (string)modelToken["name"]!;
 
@@ -210,11 +210,11 @@ public static class DeepInfraCodeGenerator
         var enumMemberName = GetModelIdsEnumMemberFromName(modelId, modelName, options);
 
 
-        
+
         var contextLength = (int)(modelToken["max_tokens"] ?? 0);
         var tokenLength = contextLength.ToString();
-        var promptCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_input_token") ?? 0) * 10000,2);
-        var completionCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_output_token") ?? 0) * 10000,2);
+        var promptCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_input_token") ?? 0) * 10000, 2);
+        var completionCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_output_token") ?? 0) * 10000, 2);
 
         var description =
             FormattableString.Invariant($"Name: {modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string?)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>");
@@ -309,13 +309,13 @@ public static class DeepInfraCodeGenerator
         var url = $"https://DeepInfra.ai{href}";
 
         Console.WriteLine($"{i - 1} Fetching doc from {url}...");
-        
+
         var path = Path.Combine("cache", href.Replace('/', '_') + ".html");
         if (File.Exists(path))
         {
             return await File.ReadAllTextAsync(path).ConfigureAwait(false);
         }
-        
+
         var str = await GetStringAsync(new Uri(url)).ConfigureAwait(false);
 
         lbb.DocumentText = str ?? string.Empty;
@@ -346,11 +346,11 @@ public static class DeepInfraCodeGenerator
         }
 
         var html = sb.ToString().Trim();
-        
+
         Directory.CreateDirectory("cache");
-        
+
         await File.WriteAllTextAsync(path, html).ConfigureAwait(false);
-        
+
         return html;
     }
 
@@ -372,7 +372,7 @@ public static class DeepInfraCodeGenerator
 
         using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(5));
-        
+
         while (!cancellationToken.IsCancellationRequested)
         {
             try
@@ -388,7 +388,7 @@ public static class DeepInfraCodeGenerator
                 await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
             }
         }
-        
+
         throw new TaskCanceledException();
     }
 

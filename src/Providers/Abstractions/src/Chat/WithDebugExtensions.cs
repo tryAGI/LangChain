@@ -12,7 +12,7 @@ public static class WithDebugExtensions
         {
             Console.Write(text);
         };
-        
+
         return model;
     }
 }

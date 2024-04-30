@@ -12,7 +12,7 @@ public class GeneralTests
         var apiKey =
             Environment.GetEnvironmentVariable("Open_Router_Key") ??
             throw new InvalidOperationException("Open_Router_Key environment variable is not found.");
-        
+
         var model = new OpenAiGpt35Turbo16KModel(new OpenRouterProvider(apiKey));
 
         var service = new WeatherService();

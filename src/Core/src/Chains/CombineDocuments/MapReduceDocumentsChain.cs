@@ -49,7 +49,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
     public MapReduceDocumentsChain(MapReduceDocumentsChainInput input) : base(input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         LlmChain = input.LlmChain;
         ReduceDocumentsChain = input.ReduceDocumentsChain;
         ReturnIntermediateSteps = input.ReturnIntermediateSteps;
@@ -71,7 +71,7 @@ public class MapReduceDocumentsChain : BaseCombineDocumentsChain
         {
             string documentKey;
             var inputVariable = input.DocumentVariableName;
-  
+
             if (String.IsNullOrEmpty(inputVariable))
             {
                 var llmChainVariables = input.LlmChain.InputKeys;

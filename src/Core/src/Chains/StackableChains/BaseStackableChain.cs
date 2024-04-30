@@ -14,7 +14,7 @@ public abstract class BaseStackableChain : IChain
     /// 
     /// </summary>
     public string Name { get; set; } = string.Empty;
-    
+
     /// <inheritdoc/>
     public virtual IReadOnlyList<string> InputKeys { get; protected set; } = Array.Empty<string>();
     /// <inheritdoc/>
@@ -26,7 +26,7 @@ public abstract class BaseStackableChain : IChain
     protected BaseStackableChain()
     {
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -34,12 +34,12 @@ public abstract class BaseStackableChain : IChain
     protected BaseStackableChain(BaseStackableChain lastChild)
     {
         lastChild = lastChild ?? throw new ArgumentNullException(nameof(lastChild));
-        
+
         Name = lastChild.Name;
         InputKeys = lastChild.InputKeys;
         OutputKeys = lastChild.OutputKeys;
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -100,7 +100,7 @@ public abstract class BaseStackableChain : IChain
         try
         {
             var res = InternalCallAsync(values, cancellationToken);
-            if (_hook!=null)
+            if (_hook != null)
             {
                 _hook(values);
             }
@@ -120,7 +120,7 @@ public abstract class BaseStackableChain : IChain
 
             throw new StackableChainException(message, ex);
         }
-        
+
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public abstract class BaseStackableChain : IChain
     {
         return new StackChain(a, b);
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -186,7 +186,7 @@ public abstract class BaseStackableChain : IChain
         {
             Hook = hook,
         }, cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         return values.Value[resultKey].ToString();
     }
 
@@ -207,7 +207,7 @@ public abstract class BaseStackableChain : IChain
         {
             Hook = hook,
         }, cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         return (T)values.Value[resultKey];
     }
 

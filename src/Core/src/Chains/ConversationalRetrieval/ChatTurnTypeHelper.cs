@@ -17,7 +17,7 @@ public static class ChatTurnTypeHelper
     public static string GetChatHistory(IReadOnlyList<Message> chatHistory)
     {
         chatHistory = chatHistory ?? throw new ArgumentNullException(nameof(chatHistory));
-        
+
         var buffer = new StringBuilder();
 
         foreach (var message in chatHistory)

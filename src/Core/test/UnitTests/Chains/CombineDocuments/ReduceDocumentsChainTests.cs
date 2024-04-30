@@ -43,7 +43,7 @@ public class ReduceDocumentsChainTests
         };
 
         var chain = new ReduceDocumentsChain(input);
-        
+
         chain.InputKeys.Should().HaveCount(1);
         chain.InputKeys[0].Should().BeEquivalentTo("input_documents");
 
@@ -52,7 +52,7 @@ public class ReduceDocumentsChainTests
 
         chain.ChainType().Should().BeEquivalentTo("reduce_documents_chain");
 
-        var result = await chain.CombineDocsAsync(new []
+        var result = await chain.CombineDocsAsync(new[]
         {
             document1,
             document2,
@@ -89,7 +89,7 @@ public class ReduceDocumentsChainTests
 
         mock.Setup(x => x.Prompt)
             .Returns(promptTemplate);
-        
+
         mock.Setup(x => x.InputKeys)
             .Returns(Array.Empty<string>());
 

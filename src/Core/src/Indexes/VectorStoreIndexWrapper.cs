@@ -39,7 +39,7 @@ public static class VectorStoreIndexWrapper
                 OutputKey = outputKey,
             }
         );
-        
+
         return chain.RunAsync(question, cancellationToken);
     }
 }

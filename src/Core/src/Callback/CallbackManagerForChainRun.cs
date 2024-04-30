@@ -34,7 +34,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
         output = output ?? throw new ArgumentNullException(nameof(output));
-        
+
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreChain)
@@ -64,7 +64,7 @@ public class CallbackManagerForChainRun : ParentRunManager, IRunManagerImplement
     public async Task HandleChainErrorAsync(Exception error, IChainValues input)
     {
         input = input ?? throw new ArgumentNullException(nameof(input));
-        
+
         foreach (var handler in Handlers)
         {
             if (!handler.IgnoreLlm)
