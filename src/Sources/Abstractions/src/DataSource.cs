@@ -56,6 +56,17 @@ public sealed class DataSource
             Stream = stream,
         };
     }
+
+    public static DataSource FromBytes(byte[] bytes)
+    {
+        bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
+        
+        return new DataSource
+        {
+            Type = DataSourceType.Stream,
+            Stream = new MemoryStream(bytes),
+        };
+    }
     
     public async Task<Stream> GetStreamAsync(CancellationToken cancellationToken = default)
     {
