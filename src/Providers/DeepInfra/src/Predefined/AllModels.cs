@@ -25,11 +25,6 @@ public class Wizardlm28X22bModel(DeepInfraProvider provider) : DeepInfraModel(pr
 public class Wizardlm27BModel(DeepInfraProvider provider) : DeepInfraModel(provider, DeepInfraModelIds.Wizardlm27B);
 
 
-/// <inheritdoc cref="DeepInfraModelIds.ZephyrOrpo141BA35bV01"/>
-/// <param name="provider">Deep Infra Provider Instance</param>
-public class ZephyrOrpo141BA35bV01Model(DeepInfraProvider provider) : DeepInfraModel(provider, DeepInfraModelIds.ZephyrOrpo141BA35bV01);
-
-
 /// <inheritdoc cref="DeepInfraModelIds.Gemma117BIt"/>
 /// <param name="provider">Deep Infra Provider Instance</param>
 public class Gemma117BItModel(DeepInfraProvider provider) : DeepInfraModel(provider, DeepInfraModelIds.Gemma117BIt);
@@ -98,6 +93,11 @@ public class ChronosHermes13BV2Model(DeepInfraProvider provider) : DeepInfraMode
 /// <inheritdoc cref="DeepInfraModelIds.MythomaxL213B"/>
 /// <param name="provider">Deep Infra Provider Instance</param>
 public class MythomaxL213BModel(DeepInfraProvider provider) : DeepInfraModel(provider, DeepInfraModelIds.MythomaxL213B);
+
+
+/// <inheritdoc cref="DeepInfraModelIds.ZephyrOrpo141BA35bV01"/>
+/// <param name="provider">Deep Infra Provider Instance</param>
+public class ZephyrOrpo141BA35bV01Model(DeepInfraProvider provider) : DeepInfraModel(provider, DeepInfraModelIds.ZephyrOrpo141BA35bV01);
 
 
 /// <inheritdoc cref="DeepInfraModelIds.PhindCodellama34BV2"/>
