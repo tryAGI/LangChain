@@ -689,6 +689,17 @@ public enum TogetherAiModelIds
     _01AiYiChat34B,
 
     /// <summary>
+    /// Name: Llama3 8B Chat HF INT4 <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.2/MTok <br/>
+    /// Completion Cost: $0.2/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/Llama-3-8b-chat-hf-int4">https://huggingface.co/togethercomputer/Llama-3-8b-chat-hf-int4</a>
+    /// </summary>
+    Llama38BChatHfInt4,
+
+    /// <summary>
     /// Name: Togethercomputer Llama3 8B Instruct Int8 <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
