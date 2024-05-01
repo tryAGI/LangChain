@@ -223,21 +223,15 @@ ASSISTANT:";
             Temperature = 0.0f,
         }).UseConsoleForDebug();
 
-
-        var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync("harry-potter", dimensions: 1536);
-        if (await vectorCollection.IsEmptyAsync())
-        {
-            var pdfSource = new PdfPigPdfSource("E:\\AI\\Datasets\\Books\\Harry-Potter-Book-1.pdf");
-            var documents = await pdfSource.LoadAsync();
-
-            await vectorCollection.AddSplitDocumentsAsync(
-                embeddingModel,
-                documents,
-                textSplitter: new RecursiveCharacterTextSplitter(
-                    chunkSize: 200,
-                    chunkOverlap: 50));
-        }
+        using var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
+        var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
+            embeddingModel,
+            dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
+            dataSource: DataSource.FromPath("E:\\AI\\Datasets\\Books\\Harry-Potter-Book-1.pdf"),
+            collectionName: "harry-potter",
+            textSplitter: new RecursiveCharacterTextSplitter(
+                chunkSize: 200,
+                chunkOverlap: 50));
 
         string promptText =
             @"Use the following pieces of context to answer the question at the end. If the answer is not in context then just say that you don't know, don't try to make up an answer. Keep the answer as short as possible.
