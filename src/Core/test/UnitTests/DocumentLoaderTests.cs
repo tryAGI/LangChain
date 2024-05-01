@@ -9,8 +9,8 @@ public class DocumentLoaderTests
     public async Task TextLoaderTest()
     {
         var filepath = Path.Combine(@"Resources", "state_of_the_union.txt");
-        var loader = new FileSource(filepath);
-        var documents = await loader.LoadAsync();
+        var loader = new FileLoader();
+        var documents = await loader.LoadAsync(DataSource.FromPath(filepath));
 
         documents.Count.Should().Be(1);
         documents.First().PageContent.Should().NotBeNullOrEmpty();

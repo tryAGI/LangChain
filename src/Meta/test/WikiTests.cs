@@ -1,7 +1,7 @@
 ﻿using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
 using LangChain.Databases;
 using LangChain.Databases.Sqlite;
-using LangChain.Indexes;
+using LangChain.Extensions;
 using LangChain.Memory;
 using LangChain.Providers;
 using LangChain.Providers.Automatic1111;

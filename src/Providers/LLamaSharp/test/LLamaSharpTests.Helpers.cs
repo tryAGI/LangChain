@@ -1,7 +1,7 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
 using LangChain.Sources;
-using LangChain.Indexes;
+using LangChain.Extensions;
 using LangChain.Prompts;
 using LangChain.Splitters.Text;
 

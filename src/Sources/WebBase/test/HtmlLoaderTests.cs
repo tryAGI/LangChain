@@ -1,17 +1,14 @@
 ﻿namespace LangChain.Sources.WebBase.IntegrationTests;
 
 [TestFixture]
-public class WebBaseSourceTests
+public class HtmlLoaderTests
 {
     [Test]
-    public async Task CheckText()
+    public async Task LoadWikipedia()
     {
-        var loader = new WebBaseSource
-        {
-            Url = "https://en.wikipedia.org/wiki/Web_scraping"
-        };
+        var loader = new HtmlLoader();
 
-        var documents = await loader.LoadAsync();
+        var documents = await loader.LoadAsync(DataSource.FromUrl("https://en.wikipedia.org/wiki/Web_scraping"));
 
         documents.Should().NotBeEmpty();
         var first = documents.First();

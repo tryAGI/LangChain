@@ -1,7 +1,7 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
 using LangChain.Databases.Sqlite;
-using LangChain.Indexes;
+using LangChain.Extensions;
 using LangChain.Sources;
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
