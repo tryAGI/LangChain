@@ -246,6 +246,12 @@ public enum OpenRouterModelIds
     MetaLlama370BInstruct,
 
     /// <summary>
+    /// Arctic is a dense-MoE Hybrid transformer architecture pre-trained from scratch by the Snowflake AI Research Team. Arctic combines a 10B dense transformer model with a residual 128x3.66B MoE MLP resulting in 480B total and 17B active parameters chosen using a top-2 gating.  <br/>
+    /// To read more about this model's release, click here.  <br/>
+    /// </summary>
+    SnowflakeArcticInstruct,
+
+    /// <summary>
     /// A pretrained generative Sparse Mixture of Experts, by Mistral AI, for chat and instruction use. Incorporates 8 experts (feed-forward networks) for a total of 47 billion parameters.  <br/>
     /// Instruct model fine-tuned by Mistral. #moe  <br/>
     /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
