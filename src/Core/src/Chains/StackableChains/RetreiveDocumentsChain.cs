@@ -1,5 +1,6 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Databases;
+using LangChain.Extensions;
 using LangChain.Providers;
 
 namespace LangChain.Chains.HelperChains;

@@ -1,3 +1,4 @@
+using LangChain.Extensions;
 using LangChain.Sources;
 
 namespace LangChain.Databases.IntegrationTests;

@@ -1,5 +1,6 @@
 using LangChain.Callback;
 using LangChain.Databases;
+using LangChain.Extensions;
 using LangChain.Providers;
 using LangChain.Sources;
 

@@ -1,4 +1,5 @@
-﻿using LangChain.Providers;
+﻿using LangChain.Extensions;
+using LangChain.Providers;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
@@ -155,7 +156,7 @@ Helpful Answer:";
         }.ToDocuments();
 
         var pages = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
-        Console.WriteLine("pages: " + pages.Count());
+        Console.WriteLine("pages: " + pages.Count);
     }
 
     [Test]
