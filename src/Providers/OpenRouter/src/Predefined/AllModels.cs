@@ -505,11 +505,6 @@ public class GoogleGemma7BModel(OpenRouterProvider provider) : OpenRouterModel(p
 public class DatabricksDbrx132BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.DatabricksDbrx132BInstruct);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.Zephyr141BA35b"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Zephyr141BA35bModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Zephyr141BA35b);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.MetaLlama38BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlama38BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlama38BInstruct);
