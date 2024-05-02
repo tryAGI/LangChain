@@ -64,7 +64,6 @@ public class MongoDBAtlasVectorCollection(
         {
             Items = results.Select(result =>
             {
-
                 var output = BsonSerializer.Deserialize<Vector>(result);
                 output.Distance = (float)result["score"].ToDouble();
                 return output;
