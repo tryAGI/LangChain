@@ -6,7 +6,10 @@ namespace LangChain.Sources;
 public class FileLoader : IDocumentLoader
 {
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Document>> LoadAsync(
+        DataSource dataSource,
+        DocumentLoaderSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
 
@@ -32,11 +35,8 @@ public class FileLoader : IDocumentLoader
         //     }
         // }
 
-        return [new Document(content, metadata: new Dictionary<string, object>
-        {
-            ["encoding"] = dataSource.Encoding.EncodingName,
-            ["path"] = dataSource.Value ?? string.Empty,
-            ["type"] = dataSource.Type.ToString(),
-        })];
+        var metadata = settings.CollectMetadata(dataSource);
+        
+        return [new Document(content, metadata: metadata)];
     }
 }

@@ -11,19 +11,24 @@ public static class SourceExtensions
     /// <param name="documentLoader"></param>
     /// <param name="dataSource"></param>
     /// <param name="textSplitter"></param>
+    /// <param name="loaderSettings"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static async Task<IReadOnlyList<Document>> LoadAndSplit(
         this IDocumentLoader documentLoader,
         DataSource dataSource,
         ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
         CancellationToken cancellationToken = default)
     {
         documentLoader = documentLoader ?? throw new ArgumentNullException(nameof(documentLoader));
         dataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
         textSplitter ??= new RecursiveCharacterTextSplitter();
 
-        var documents = await documentLoader.LoadAsync(dataSource, cancellationToken).ConfigureAwait(false);
+        var documents = await documentLoader.LoadAsync(
+            dataSource: dataSource,
+            settings: loaderSettings,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return textSplitter.SplitDocuments(documents);
     }

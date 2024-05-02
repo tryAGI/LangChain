@@ -18,6 +18,7 @@ public static class VectorDatabaseExtensions
     /// <param name="dataSource"></param>
     /// <param name="collectionName"></param>
     /// <param name="textSplitter"></param>
+    /// <param name="loaderSettings"></param>
     /// <param name="embeddingSettings"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -29,6 +30,7 @@ public static class VectorDatabaseExtensions
         DataSource dataSource,
         string collectionName = VectorCollection.DefaultName,
         ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
         EmbeddingSettings? embeddingSettings = null,
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
@@ -44,6 +46,7 @@ public static class VectorDatabaseExtensions
             embeddingModel: embeddingModel,
             dataSource: dataSource,
             textSplitter: textSplitter,
+            loaderSettings: loaderSettings,
             embeddingSettings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
@@ -58,6 +61,7 @@ public static class VectorDatabaseExtensions
     /// <param name="embeddingModel"></param>
     /// <param name="dataSource"></param>
     /// <param name="textSplitter"></param>
+    /// <param name="loaderSettings"></param>
     /// <param name="embeddingSettings"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -66,6 +70,7 @@ public static class VectorDatabaseExtensions
         IEmbeddingModel embeddingModel,
         DataSource dataSource,
         ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
         EmbeddingSettings? embeddingSettings = null,
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
@@ -73,6 +78,7 @@ public static class VectorDatabaseExtensions
         var loader = new TLoader();
         var documents = await loader.LoadAsync(
             dataSource: dataSource,
+            settings: loaderSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return await vectorCollection.AddSplitDocumentsAsync(

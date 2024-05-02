@@ -8,7 +8,9 @@ namespace LangChain.Sources;
 public sealed class PdfPigPdfLoader : IDocumentLoader
 {
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource,
+    public async Task<IReadOnlyCollection<Document>> LoadAsync(
+        DataSource dataSource,
+        DocumentLoaderSettings? settings = null,
         CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
@@ -16,14 +18,14 @@ public sealed class PdfPigPdfLoader : IDocumentLoader
         using var stream = await dataSource.GetStreamAsync(cancellationToken).ConfigureAwait(false);
         using var document = PdfDocument.Open(stream, new ParsingOptions());
 
+        var metadata = settings.CollectMetadata(dataSource);
+
         return document
             .GetPages()
-            .Select(page => new Document(page.Text, new Dictionary<string, object>
+            .Select(page => new Document(page.Text, metadata.With(new Dictionary<string, object>
             {
-                { "path", dataSource.Value ?? string.Empty },
-                { "type", dataSource.Type.ToString() },
                 { "page", page.Number },
-            }))
+            })))
             .ToArray();
     }
 }

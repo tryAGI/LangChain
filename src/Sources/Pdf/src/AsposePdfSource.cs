@@ -8,7 +8,10 @@ namespace LangChain.Sources;
 public sealed class AsposePdfLoader : IDocumentLoader
 {
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Document>> LoadAsync(
+        DataSource dataSource,
+        DocumentLoaderSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
 
@@ -17,14 +20,8 @@ public sealed class AsposePdfLoader : IDocumentLoader
         var textAbsorber = new TextAbsorber();
         pdfDocument.Pages.Accept(textAbsorber);
 
-        var documents = new Document[]
-        {
-            new(textAbsorber.Text, new Dictionary<string, object>
-            {
-                { "path", dataSource.Value ?? string.Empty },
-                { "type", dataSource.Type.ToString() },
-            })
-        };
-        return documents;
+        var metadata = settings.CollectMetadata(dataSource);
+        
+        return [new Document(textAbsorber.Text, metadata: metadata)];
     }
 }

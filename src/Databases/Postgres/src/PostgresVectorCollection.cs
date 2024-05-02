@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace LangChain.Databases.Postgres;
 
 /// <summary>
@@ -8,8 +6,6 @@ namespace LangChain.Databases.Postgres;
 /// required: CREATE EXTENSION IF NOT EXISTS vector
 /// </remarks>
 /// </summary>
-[RequiresDynamicCode("Requires dynamic code.")]
-[RequiresUnreferencedCode("Requires unreferenced code.")]
 public class PostgresVectorCollection(
     PostgresDbClient client,
     string name = VectorCollection.DefaultName,
