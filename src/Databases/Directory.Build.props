@@ -3,7 +3,7 @@
     <Import Project="..\Directory.Build.props" />
 
     <PropertyGroup>
-        <NoWarn>$(NoWarn);NU5104</NoWarn>
+        <NoWarn>$(NoWarn);NU5104;CA1711</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet" Condition="'$(IsLibraryProject)' == 'true'">
