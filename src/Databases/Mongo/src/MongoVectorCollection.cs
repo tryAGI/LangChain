@@ -11,32 +11,31 @@ public class MongoVectorCollection(
     string? id = null)
 : VectorCollection(name, id), IVectorCollection
 {
-    protected IMongoContext MongoContext { get; } = mongoContext;
-    protected IMongoCollection<Vector> mongoCollection => MongoContext.GetCollection<Vector>(Name);
+    private IMongoCollection<Vector> _mongoCollection = mongoContext.GetCollection<Vector>(name);
 
     public async Task<IReadOnlyCollection<string>> AddAsync(IReadOnlyCollection<Vector> items, CancellationToken cancellationToken = default)
     {
-        await mongoCollection.InsertManyAsync(items, cancellationToken: cancellationToken).ConfigureAwait(false);
+        await _mongoCollection.InsertManyAsync(items, cancellationToken: cancellationToken).ConfigureAwait(false);
         return items.Select(i => i.Id).ToList();
     }
 
     public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
         var filter = Builders<Vector>.Filter.In(i => i.Id, ids);
-        var result = await mongoCollection.DeleteManyAsync(filter, cancellationToken).ConfigureAwait(false);
+        var result = await _mongoCollection.DeleteManyAsync(filter, cancellationToken).ConfigureAwait(false);
         return result.IsAcknowledged;
     }
 
     public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
         var filter = Builders<Vector>.Filter.Eq(i => i.Id, id);
-        var result = await mongoCollection.FindAsync(filter, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var result = await _mongoCollection.FindAsync(filter, cancellationToken: cancellationToken).ConfigureAwait(false);
         return result.FirstOrDefault(cancellationToken: cancellationToken);
     }
     
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
-        return await mongoCollection.CountDocumentsAsync(FilterDefinition<Vector>.Empty, cancellationToken: cancellationToken).ConfigureAwait(false) == 0;
+        return await _mongoCollection.CountDocumentsAsync(FilterDefinition<Vector>.Empty, cancellationToken: cancellationToken).ConfigureAwait(false) == 0;
     }
 
     public async Task<VectorSearchResponse> SearchAsync(VectorSearchRequest request, VectorSearchSettings? settings = null, CancellationToken cancellationToken = default)
@@ -53,7 +52,7 @@ public class MongoVectorCollection(
                          .Exclude(a => a.Distance)
                          .Meta("score", "vectorSearchScore");
 
-        var results = await mongoCollection.Aggregate()
+        var results = await _mongoCollection.Aggregate()
                    .VectorSearch(nameof(Vector.Embedding), request.Embeddings.First(), settings.NumberOfResults, options)
                    .Project(projectionDefinition)
                    .ToListAsync(cancellationToken)
