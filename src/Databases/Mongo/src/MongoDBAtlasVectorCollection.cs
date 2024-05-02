@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace LangChain.Databases.Mongo;
 
-public class MongoDBAtlasVectorCollection(
+public class MongoVectorCollection(
     IMongoContext mongoContext,
     string indexName,
     string name = VectorCollection.DefaultName,
