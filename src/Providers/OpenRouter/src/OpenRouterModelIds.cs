@@ -416,8 +416,8 @@ public enum OpenRouterModelIds
     PerplexitySonar8X7BOnline,
 
     /// <summary>
-    /// The first commercially permissive OSS LLaVA model.  <br/>
-    /// This vision-language model was trained entirely on OSS LLM generated instruction following data.  <br/>
+    /// A blazing fast vision-language model, FireLLaVA quickly understands both text and images. It achieves impressive chat skills in tests, and was designed to mimic multimodal GPT-4.  <br/>
+    /// The first commercially permissive open source LLaVA model, trained entirely on open source LLM generated instruction following data.  <br/>
     /// </summary>
     Firellava13B,
 
@@ -648,13 +648,6 @@ public enum OpenRouterModelIds
     /// #moe  <br/>
     /// </summary>
     DatabricksDbrx132BInstruct,
-
-    /// <summary>
-    /// Zephyr 141B-A35B is A Mixture of Experts (MoE) model with 141B total parameters and 35B active parameters. Fine-tuned on a mix of publicly available, synthetic datasets.  <br/>
-    /// It is an instruct finetune of Mixtral 8x22B.  <br/>
-    /// #moe  <br/>
-    /// </summary>
-    Zephyr141BA35b,
 
     /// <summary>
     /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
