@@ -35,7 +35,7 @@ public class MongoVectorCollection(
     
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
-        return await _mongoCollection.CountDocumentsAsync(FilterDefinition<Vector>.Empty, cancellationToken: cancellationToken).ConfigureAwait(false) == 0;
+        return await _mongoCollection.EstimatedDocumentCountAsync(cancellationToken: cancellationToken).ConfigureAwait(false) == 0;
     }
 
     public async Task<VectorSearchResponse> SearchAsync(VectorSearchRequest request, VectorSearchSettings? settings = null, CancellationToken cancellationToken = default)
