@@ -31,7 +31,7 @@ public class MongoVectorCollection(
     {
         var filter = Builders<Vector>.Filter.Eq(i => i.Id, id);
         var result = await mongoCollection.FindAsync(filter, cancellationToken: cancellationToken).ConfigureAwait(false);
-        return result.First(cancellationToken: cancellationToken);
+        return result.FirstOrDefault(cancellationToken: cancellationToken);
     }
     
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
