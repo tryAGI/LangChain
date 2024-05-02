@@ -34,7 +34,7 @@ public static class VectorDatabaseExtensions
         where TLoader : IDocumentLoader, new()
     {
         vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(paramName: nameof(vectorDatabase));
-        
+
         var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(
             collectionName: collectionName,
             dimensions: dimensions,
@@ -74,7 +74,7 @@ public static class VectorDatabaseExtensions
         var documents = await loader.LoadAsync(
             dataSource: dataSource,
             cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         return await vectorCollection.AddSplitDocumentsAsync(
             embeddingModel: embeddingModel,
             documents: documents,
@@ -82,7 +82,7 @@ public static class VectorDatabaseExtensions
             embeddingSettings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
     }
-    
+
     /// <summary>
     /// Create a VectorDatabase table from documents.
     /// </summary>

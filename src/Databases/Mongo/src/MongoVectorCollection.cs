@@ -32,7 +32,7 @@ public class MongoVectorCollection(
         var result = await _mongoCollection.FindAsync(filter, cancellationToken: cancellationToken).ConfigureAwait(false);
         return result.FirstOrDefault(cancellationToken: cancellationToken);
     }
-    
+
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         return await _mongoCollection.EstimatedDocumentCountAsync(cancellationToken: cancellationToken).ConfigureAwait(false) == 0;

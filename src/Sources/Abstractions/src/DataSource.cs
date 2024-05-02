@@ -12,22 +12,22 @@ public sealed class DataSource
     public string? Value { get; init; }
     public Stream? Stream { get; init; }
     public Encoding Encoding { get; init; } = Encoding.UTF8;
-    
+
     public static DataSource FromPath(string path)
     {
         path = path ?? throw new ArgumentNullException(nameof(path));
-        
+
         return new DataSource
         {
             Type = DataSourceType.Path,
             Value = path,
         };
     }
-    
+
     public static DataSource FromUri(Uri uri)
     {
         uri = uri ?? throw new ArgumentNullException(nameof(uri));
-        
+
         return new DataSource
         {
             Type = DataSourceType.Uri,
@@ -38,7 +38,7 @@ public sealed class DataSource
     public static DataSource FromUrl(string url)
     {
         url = url ?? throw new ArgumentNullException(nameof(url));
-        
+
         return new DataSource
         {
             Type = DataSourceType.Uri,
@@ -49,7 +49,7 @@ public sealed class DataSource
     public static DataSource FromStream(Stream stream)
     {
         stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        
+
         return new DataSource
         {
             Type = DataSourceType.Stream,
@@ -60,14 +60,14 @@ public sealed class DataSource
     public static DataSource FromBytes(byte[] bytes)
     {
         bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
-        
+
         return new DataSource
         {
             Type = DataSourceType.Stream,
             Stream = new MemoryStream(bytes),
         };
     }
-    
+
     public async Task<Stream> GetStreamAsync(CancellationToken cancellationToken = default)
     {
         if (Stream is not null)
@@ -86,7 +86,7 @@ public sealed class DataSource
             _ => new MemoryStream(Encoding.GetBytes(Value!)),
         };
     }
-    
+
     private static async Task<MemoryStream> DownloadAsMemoryStreamAsync(
         Uri uri,
         CancellationToken cancellationToken = default)

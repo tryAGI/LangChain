@@ -9,7 +9,7 @@ public class FileLoader : IDocumentLoader
     public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
-        
+
         var content = await File2.ReadAllTextAsync(dataSource.Value!, dataSource.Encoding, cancellationToken).ConfigureAwait(false);
 
         // It makes sense for agents, but we need tests for this
