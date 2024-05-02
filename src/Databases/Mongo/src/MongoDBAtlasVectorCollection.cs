@@ -12,7 +12,7 @@ public class MongoDBAtlasVectorCollection(
 : VectorCollection(name, id), IVectorCollection
 {
     protected IMongoContext MongoContext { get; } = mongoContext;
-    protected IMongoCollection<Vector> mongoCollection => mongoContext.GetCollection<Vector>(Name);
+    protected IMongoCollection<Vector> mongoCollection => MongoContext.GetCollection<Vector>(Name);
 
     public async Task<IReadOnlyCollection<string>> AddAsync(IReadOnlyCollection<Vector> items, CancellationToken cancellationToken = default)
     {
