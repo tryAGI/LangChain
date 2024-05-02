@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
-        <NoWarn>$(NoWarn);CA1031</NoWarn>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
+        <NoWarn>$(NoWarn);CA1031;CA1054</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">

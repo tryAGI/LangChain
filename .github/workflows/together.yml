@@ -34,6 +34,11 @@ jobs:
           cd src/Providers/TogetherAI/tools/LangChain.Providers.TogetherAi.CodeGenerator
           dotnet run --output ../../src --key ${{ secrets.TOGETHER_AI_API_KEY }}
 
+      - name: Format code
+        run: |
+          dotnet format LangChain.sln
+          dotnet format LangChain.sln analyzers --diagnostics=RS0016
+
       - name: Check for changes
         id: changes
         run: |

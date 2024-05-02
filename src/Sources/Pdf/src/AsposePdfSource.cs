@@ -5,28 +5,26 @@ namespace LangChain.Sources;
 /// <summary>
 /// 
 /// </summary>
-public class AsposePdfSource : ISource
+public sealed class AsposePdfLoader : IDocumentLoader
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public required string Path { get; init; }
-
     /// <inheritdoc/>
-    public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            using var pdfDocument = new Aspose.Pdf.Document(Path);
-            var textAbsorber = new TextAbsorber();
-            pdfDocument.Pages.Accept(textAbsorber);
+        dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
+        
+        using var stream = await dataSource.GetStreamAsync(cancellationToken).ConfigureAwait(false);
+        using var pdfDocument = new Aspose.Pdf.Document(stream);
+        var textAbsorber = new TextAbsorber();
+        pdfDocument.Pages.Accept(textAbsorber);
 
-            var documents = new Document[] { new(textAbsorber.Text, new Dictionary<string, object> { { "path", Path } }) };
-            return Task.FromResult<IReadOnlyCollection<Document>>(documents);
-        }
-        catch (Exception exception)
+        var documents = new Document[]
         {
-            return Task.FromException<IReadOnlyCollection<Document>>(exception);
-        }
+            new(textAbsorber.Text, new Dictionary<string, object>
+            {
+                { "path", dataSource.Value ?? string.Empty },
+                { "type", dataSource.Type.ToString() },
+            })
+        };
+        return documents;
     }
 }

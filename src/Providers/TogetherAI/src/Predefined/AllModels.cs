@@ -310,6 +310,11 @@ public class UpstageSolarInstructV111BModel(TogetherAiProvider provider) : Toget
 public class _01AiYiChat34BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds._01AiYiChat34B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.Llama38BChatHfInt4"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Llama38BChatHfInt4Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama38BChatHfInt4);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.TogethercomputerLlama38BInstructInt8"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class TogethercomputerLlama38BInstructInt8Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.TogethercomputerLlama38BInstructInt8);

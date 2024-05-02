@@ -3,7 +3,7 @@ using LangChain.Chains.RetrievalQA;
 using LangChain.Databases;
 using LangChain.Providers;
 
-namespace LangChain.Indexes;
+namespace LangChain.Extensions;
 
 /// <summary>
 /// 

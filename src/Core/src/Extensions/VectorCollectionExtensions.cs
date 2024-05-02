@@ -1,7 +1,8 @@
+using LangChain.Databases;
 using LangChain.Providers;
 using LangChain.Sources;
 
-namespace LangChain.Databases;
+namespace LangChain.Extensions;
 
 /// <summary>
 /// 

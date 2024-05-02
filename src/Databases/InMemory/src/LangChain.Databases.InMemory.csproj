@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
 		<NoWarn>$(NoWarn);CA1711</NoWarn>
 	</PropertyGroup>
 
@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
 	  <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
 	</ItemGroup>
 

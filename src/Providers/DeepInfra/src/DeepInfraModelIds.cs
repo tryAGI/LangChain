@@ -62,17 +62,6 @@ public enum DeepInfraModelIds
     Wizardlm27B,
 
     /// <summary>
-    /// Name: zephyr-orpo-141b-A35b-v0.1 <br/>
-    /// Organization: HuggingFaceH4 <br/>
-    /// Context Length: 65536 <br/>
-    /// Prompt Cost: $0.65/MTok <br/>
-    /// Completion Cost: $0.65/MTok <br/>
-    /// Description: Zephyr 141B-A35B is an instruction-tuned (assistant) version of Mixtral-8x22B. It was fine-tuned on a mix of publicly available, synthetic datasets. It achieves strong performance on chat benchmarks. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1">https://huggingface.co/HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1</a> 
-    /// </summary>
-    ZephyrOrpo141BA35bV01,
-
-    /// <summary>
     /// Name: gemma-1.1-7b-it <br/>
     /// Organization: google <br/>
     /// Context Length: 8192 <br/>
@@ -225,6 +214,17 @@ public enum DeepInfraModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/Gryphe/MythoMax-L2-13b">https://huggingface.co/Gryphe/MythoMax-L2-13b</a> 
     /// </summary>
     MythomaxL213B,
+
+    /// <summary>
+    /// Name: zephyr-orpo-141b-A35b-v0.1 <br/>
+    /// Organization: HuggingFaceH4 <br/>
+    /// Context Length: 65536 <br/>
+    /// Prompt Cost: $0.65/MTok <br/>
+    /// Completion Cost: $0.65/MTok <br/>
+    /// Description: Zephyr 141B-A35B is an instruction-tuned (assistant) version of Mixtral-8x22B. It was fine-tuned on a mix of publicly available, synthetic datasets. It achieves strong performance on chat benchmarks. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1">https://huggingface.co/HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1</a> 
+    /// </summary>
+    ZephyrOrpo141BA35bV01,
 
     /// <summary>
     /// Name: Phind-CodeLlama-34B-v2 <br/>
