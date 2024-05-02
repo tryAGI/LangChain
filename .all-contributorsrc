@@ -167,6 +167,17 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "ceejeeb",
+      "name": "ceejeeb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11246686?v=4",
+      "profile": "https://github.com/ceejeeb",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
