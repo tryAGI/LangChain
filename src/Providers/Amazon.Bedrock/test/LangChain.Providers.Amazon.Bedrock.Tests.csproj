@@ -15,7 +15,7 @@
     <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
     <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
     <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
-    <ProjectReference Include="..\..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+    <ProjectReference Include="..\..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
     <ProjectReference Include="..\..\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
     <ProjectReference Include="..\src\LangChain.Providers.Amazon.Bedrock.csproj" />
   </ItemGroup>

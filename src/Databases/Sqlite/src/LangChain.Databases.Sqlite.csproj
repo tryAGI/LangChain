@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Sources\Abstractions\src\LangChain.Sources.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\DocumentLoaders\Abstractions\src\LangChain.DocumentLoaders.Abstractions.csproj" />
         <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\Serve\Abstractions\LangChain.Serve.Abstractions\LangChain.Serve.Abstractions.csproj" />
     </ItemGroup>

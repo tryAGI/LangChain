@@ -28,7 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
     <ProjectReference Include="..\..\Databases\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Sources\Abstractions\src\LangChain.Sources.Abstractions.csproj" />
+    <ProjectReference Include="..\..\DocumentLoaders\Abstractions\src\LangChain.DocumentLoaders.Abstractions.csproj" />
     <ProjectReference Include="..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
     <ProjectReference Include="..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
   </ItemGroup>

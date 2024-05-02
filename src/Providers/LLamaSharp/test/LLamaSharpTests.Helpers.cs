@@ -1,6 +1,6 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Extensions;
 using LangChain.Prompts;
 using LangChain.Splitters.Text;

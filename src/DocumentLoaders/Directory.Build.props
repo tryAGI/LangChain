@@ -1,0 +1,13 @@
+<Project>
+
+    <Import Project="..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <RootNamespace>LangChain.DocumentLoaders</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <PackageTags>$(PackageTags);documentloaders;loaders;documents</PackageTags>
+    </PropertyGroup>
+
+</Project>

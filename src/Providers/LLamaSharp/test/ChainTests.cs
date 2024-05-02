@@ -1,6 +1,6 @@
 ﻿using LangChain.Databases.InMemory;
 using LangChain.Extensions;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Providers.HuggingFace.Downloader;
 using static LangChain.Chains.Chain;
 

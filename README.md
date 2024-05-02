@@ -27,7 +27,7 @@ Also see [examples](./examples) for example usage or [tests](./src/tests/LangCha
 ```csharp
 // Price to run from zero(create embeddings and request to LLM): 0,015$
 // Price to re-run if database is exists: 0,0004$
-// Dependencies: LangChain, LangChain.Databases.Sqlite, LangChain.Sources.Pdf
+// Dependencies: LangChain, LangChain.Databases.Sqlite, LangChain.DocumentLoaders.Pdf
 
 // Initialize models
 var provider = new OpenAiProvider(

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LangChain.Databases.JsonConverters;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using Microsoft.Data.Sqlite;
 
 namespace LangChain.Databases.Sqlite;

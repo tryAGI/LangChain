@@ -1,6 +1,6 @@
 using LangChain.Chains.LLM;
 using LangChain.Common;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Schema;
 
 namespace LangChain.Chains.CombineDocuments;

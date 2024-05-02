@@ -2,7 +2,7 @@ using LangChain.Callback;
 using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.ConversationalRetrieval;
 using LangChain.Chains.LLM;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Prompts;
 using LangChain.Providers;
 using LangChain.Retrievers;

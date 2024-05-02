@@ -3,7 +3,7 @@ using LangChain.Providers;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Databases.IntegrationTests;

@@ -11,7 +11,7 @@
         <ProjectReference Include="..\..\Providers\Automatic1111\src\LangChain.Providers.Automatic1111.csproj" />
         <ProjectReference Include="..\..\Providers\LLamaSharp\src\LangChain.Providers.LLamaSharp.csproj" />
         <ProjectReference Include="..\..\Providers\Ollama\src\LangChain.Providers.Ollama.csproj" />
-        <ProjectReference Include="..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+        <ProjectReference Include="..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
         <ProjectReference Include="..\src\LangChain.csproj" />
     </ItemGroup>
 

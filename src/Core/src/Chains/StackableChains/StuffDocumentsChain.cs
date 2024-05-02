@@ -1,6 +1,6 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Callback;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Prompts;
 
 namespace LangChain.Chains.HelperChains;

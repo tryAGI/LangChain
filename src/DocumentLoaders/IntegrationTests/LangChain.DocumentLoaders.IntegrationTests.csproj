@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>LangChain.DocumentLoaders.IntegrationTests</RootNamespace>
+        <NoWarn>$(NoWarn)</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
+      <ProjectReference Include="..\WebBase\src\LangChain.DocumentLoaders.Html.csproj" />
+      <ProjectReference Include="..\Word\src\LangChain.DocumentLoaders.Word.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -7,7 +7,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Providers\Amazon.Bedrock\src\LangChain.Providers.Amazon.Bedrock.csproj" />
-      <ProjectReference Include="..\..\Sources\Pdf\src\LangChain.Sources.Pdf.csproj" />
+      <ProjectReference Include="..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
       <ProjectReference Include="..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
       <ProjectReference Include="..\AzureCognitiveSearch\src\LangChain.Databases.AzureCognitiveSearch.csproj" />
       <ProjectReference Include="..\AzureSearch\src\LangChain.Databases.AzureSearch.csproj" />

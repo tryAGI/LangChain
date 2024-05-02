@@ -2,7 +2,7 @@ using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
 using LangChain.Common;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Providers;
 using LangChain.Schema;
 

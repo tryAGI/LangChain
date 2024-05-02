@@ -1,6 +1,6 @@
 using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Prompts;
 using LangChain.Schema;
 using Moq;

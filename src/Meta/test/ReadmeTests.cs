@@ -2,7 +2,7 @@
 using LangChain.Databases.InMemory;
 using LangChain.Databases.Sqlite;
 using LangChain.Extensions;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;

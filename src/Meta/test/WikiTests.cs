@@ -8,7 +8,7 @@ using LangChain.Providers.Automatic1111;
 using LangChain.Providers.HuggingFace.Downloader;
 using LangChain.Providers.LLamaSharp;
 using LangChain.Providers.OpenAI.Predefined;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
 

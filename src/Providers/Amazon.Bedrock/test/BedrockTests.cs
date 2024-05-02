@@ -5,7 +5,7 @@ using LangChain.Chains.Sequentials;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
 using LangChain.Databases.Sqlite;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Extensions;
 using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;

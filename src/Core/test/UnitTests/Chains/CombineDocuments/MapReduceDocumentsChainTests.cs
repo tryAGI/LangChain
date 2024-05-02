@@ -1,7 +1,7 @@
 using LangChain.Abstractions.Schema;
 using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
-using LangChain.Sources;
+using LangChain.DocumentLoaders;
 using LangChain.Prompts;
 using LangChain.Providers;
 using LangChain.Schema;
