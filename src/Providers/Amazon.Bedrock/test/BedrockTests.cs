@@ -13,11 +13,11 @@ using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Cohere;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Meta;
+using LangChain.Providers.Amazon.Bedrock.Predefined.Mistral;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Stability;
 using LangChain.Schema;
 using LangChain.Splitters.Text;
 using static LangChain.Chains.Chain;
-using Microsoft.SemanticKernel.AI.Embeddings;
 
 namespace LangChain.Providers.Amazon.Bedrock.Tests;
 
@@ -31,7 +31,7 @@ public class BedrockTests
         //var llm = new Jurassic2MidModel(provider);
         //var llm = new ClaudeV21Model(provider);
         //var llm = new Mistral7BInstruct(provider);
-        var llm = new Claude3SonnetModel(provider);
+        var llm = new CommandRModel(provider);
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -271,7 +271,7 @@ Helpful Answer:";
     public async Task SimpleTest(bool useStreaming, bool useChatSettings)
     {
         var provider = new BedrockProvider();
-        var llm = new CommandLightTextV14Model(provider);
+        var llm = new CommandRModel(provider);
 
         llm.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         llm.PartialResponseGenerated += (_, delta) => Console.Write(delta);
@@ -290,6 +290,7 @@ question: who are 10 of the most popular superheros and what are their powers?";
         {
             var response = await llm.GenerateAsync(prompt);
             response.LastMessageContent.Should().NotBeNull();
+            Console.WriteLine(response.LastMessageContent);
         }
     }
 

@@ -14,6 +14,10 @@ public class TitanEmbedTextV1Model(BedrockProvider provider)
     : AmazonTitanEmbeddingModel(provider, id: "amazon.titan-embed-text-v1");
 
 /// <inheritdoc />
+public class TitanEmbedTextV2Model(BedrockProvider provider)
+    : AmazonTitanEmbeddingV2Model(provider, id: "amazon.titan-embed-text-v2:0");
+
+/// <inheritdoc />
 public class TitanEmbedImageV1Model(BedrockProvider provider)
     : AmazonTitanImageEmbeddingModel(provider, id: "amazon.titan-embed-image-v1");
 

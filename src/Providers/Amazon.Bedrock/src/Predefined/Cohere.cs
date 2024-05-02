@@ -16,3 +16,11 @@ public class EmbedEnglishV3Model(BedrockProvider provider)
 /// <inheritdoc />
 public class EmbedMultilingualV3Model(BedrockProvider provider)
     : CohereEmbeddingModel(provider, id: "cohere.embed-multilingual-v3");
+
+/// <inheritdoc />
+public class CommandRPlusModel(BedrockProvider provider)
+    : CohereCommandRModel(provider, id: "cohere.command-r-plus-v1:0");
+
+/// <inheritdoc />
+public class CommandRModel(BedrockProvider provider)
+    : CohereCommandRModel(provider, id: "cohere.command-r-v1:0");
