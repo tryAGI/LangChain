@@ -9,7 +9,7 @@ public class MetaLlama2ChatSettings : BedrockChatSettings
         User = ChatSettings.Default.User,
         UseStreaming = false,
         Temperature = 0.5,
-        MaxTokens = 4000,
+        MaxTokens = 2048,
         TopP = 0.9,
         TopK = 0.0
     };

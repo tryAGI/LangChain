@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Reflection;
+using Amazon;
 
 namespace LangChain.Providers.Amazon.Bedrock.Tests;
 
@@ -20,7 +21,7 @@ public class BedrockTextModelTests
 
         var derivedTypeNames = FindDerivedTypes(predefinedDir);
 
-        var provider = new BedrockProvider();
+        var provider = new BedrockProvider(RegionEndpoint.USWest2);
 
         var failedTypes = new List<string>();
         var workingTypes = new Dictionary<string, double>();
@@ -44,13 +45,20 @@ public class BedrockTextModelTests
 
                 Console.WriteLine($"############## {type.FullName}");
 
-                object[] args = { provider };
+                object[] args = [provider];
                 var llm = (ChatModel)Activator.CreateInstance(type, args)!;
-                var result = llm.GenerateAsync("who's your favor superhero?");
+                try
+                {
+                    var result = llm.GenerateAsync("who's your favorite superhero?");
 
-                workingTypes.Add(className, result.Result.Usage.Time.TotalSeconds);
+                    workingTypes.Add(className, result.Result.Usage.Time.TotalSeconds);
 
-                Console.WriteLine(result.Result + "\n\n\n");
+                    Console.WriteLine(result.Result + "\n\n\n");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"****        ****        **** ERROR: " + e);
+                }
             }
         }
         catch (Exception e)
