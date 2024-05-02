@@ -8,7 +8,10 @@ namespace LangChain.Sources;
 public class HtmlLoader : IDocumentLoader
 {
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Document>> LoadAsync(
+        DataSource dataSource,
+        DocumentLoaderSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
 
@@ -30,9 +33,8 @@ public class HtmlLoader : IDocumentLoader
             document.QuerySelector("html") ??
             throw new NotSupportedException("Not supported for pages without <html> tag");
 
-        return new Document[] { new(html.TextContent, new Dictionary<string, object>
-        {
-            { "url", dataSource.Value! },
-        }) };
+        var metadata = settings.CollectMetadata(dataSource);
+
+        return [new Document(html.TextContent, metadata: metadata)];
     }
 }

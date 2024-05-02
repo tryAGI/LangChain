@@ -10,7 +10,10 @@ namespace LangChain.Sources;
 public sealed class WordLoader : IDocumentLoader
 {
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Document>> LoadAsync(
+        DataSource dataSource,
+        DocumentLoaderSettings? settings = null,
+        CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
 
@@ -32,12 +35,10 @@ public sealed class WordLoader : IDocumentLoader
             }
         }
 
+        var metadata = settings.CollectMetadata(dataSource);
+
         return documents
-            .Select(text => new Document(text, metadata: new Dictionary<string, object>
-            {
-                ["path"] = dataSource.Value ?? string.Empty,
-                ["type"] = dataSource.Type.ToString(),
-            }))
+            .Select(text => new Document(text, metadata: metadata))
             .ToList();
     }
 }
