@@ -11,7 +11,7 @@ public sealed class AsposePdfLoader : IDocumentLoader
     public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
-        
+
         using var stream = await dataSource.GetStreamAsync(cancellationToken).ConfigureAwait(false);
         using var pdfDocument = new Aspose.Pdf.Document(stream);
         var textAbsorber = new TextAbsorber();

@@ -24,7 +24,7 @@ public static class SourceExtensions
         textSplitter ??= new RecursiveCharacterTextSplitter();
 
         var documents = await documentLoader.LoadAsync(dataSource, cancellationToken).ConfigureAwait(false);
-        
+
         return textSplitter.SplitDocuments(documents);
     }
 }

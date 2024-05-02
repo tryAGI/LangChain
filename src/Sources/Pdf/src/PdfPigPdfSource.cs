@@ -12,10 +12,10 @@ public sealed class PdfPigPdfLoader : IDocumentLoader
         CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
-        
+
         using var stream = await dataSource.GetStreamAsync(cancellationToken).ConfigureAwait(false);
         using var document = PdfDocument.Open(stream, new ParsingOptions());
-        
+
         return document
             .GetPages()
             .Select(page => new Document(page.Text, new Dictionary<string, object>

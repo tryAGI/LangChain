@@ -13,10 +13,10 @@ public sealed class WordLoader : IDocumentLoader
     public async Task<IReadOnlyCollection<Document>> LoadAsync(DataSource dataSource, CancellationToken cancellationToken = default)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
-        
+
         using var stream = await dataSource.GetStreamAsync(cancellationToken).ConfigureAwait(false);
         using var wordDocument = WordprocessingDocument.Open(stream, isEditable: false);
-        
+
         var documents = new List<string>();
         foreach (var paragraph in wordDocument.MainDocumentPart?.Document.Body?.Elements<Paragraph>() ?? [])
         {
