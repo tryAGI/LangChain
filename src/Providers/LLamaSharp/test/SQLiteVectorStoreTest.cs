@@ -1,5 +1,6 @@
 ﻿using LangChain.Databases;
 using LangChain.Databases.Sqlite;
+using LangChain.Extensions;
 using LangChain.Sources;
 using LangChain.Providers.HuggingFace.Downloader;
 

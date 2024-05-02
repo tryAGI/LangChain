@@ -18,10 +18,10 @@ public static class TextSplitterExtensions
     /// <exception cref="ArgumentException">
     /// If the number of texts and metadata(when not null) are not equal, this method will throw an ArgumentException.
     /// </exception>
-    public static List<Document> CreateDocuments(
+    public static IReadOnlyList<Document> CreateDocuments(
         this ITextSplitter splitter,
-        List<string> texts,
-        List<IReadOnlyDictionary<string, object>>? metadatas = null)
+        IReadOnlyCollection<string> texts,
+        IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null)
     {
         splitter = splitter ?? throw new ArgumentNullException(nameof(splitter));
         texts = texts ?? throw new ArgumentNullException(nameof(texts));
@@ -36,12 +36,11 @@ public static class TextSplitterExtensions
             throw new ArgumentException("Number of texts and metadata must be equal.");
         }
 
-
         // each text is split into chunks, and each chunk is added to the list of documents
         for (int i = 0; i < texts.Count; i++)
         {
-            var text = texts[i];
-            var metadata = metadatas[i];
+            var text = texts.ElementAt(i);
+            var metadata = metadatas.ElementAt(i);
 
             foreach (var chunk in splitter.SplitText(text))
             {
@@ -58,7 +57,7 @@ public static class TextSplitterExtensions
     /// <param name="splitter"></param>
     /// <param name="documents"></param>
     /// <returns></returns>
-    public static List<Document> SplitDocuments(
+    public static IReadOnlyList<Document> SplitDocuments(
         this ITextSplitter splitter,
         IReadOnlyCollection<Document> documents)
     {

@@ -6,7 +6,7 @@ using LangChain.Databases;
 using LangChain.Databases.InMemory;
 using LangChain.Databases.Sqlite;
 using LangChain.Sources;
-using LangChain.Indexes;
+using LangChain.Extensions;
 using LangChain.Prompts;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Ai21Labs;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
@@ -177,8 +177,8 @@ Answer: ";
         var llm = new Claude3HaikuModel(provider);
         var embeddings = new TitanEmbedImageV1Model(provider);
 
-        PdfPigPdfSource pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
-        var documents = await pdfSource.LoadAsync();
+        var loader = new PdfPigPdfLoader();
+        var documents = await loader.LoadAsync(DataSource.FromPath("x:\\Harry-Potter-Book-1.pdf"));
 
         ITextSplitter textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
 

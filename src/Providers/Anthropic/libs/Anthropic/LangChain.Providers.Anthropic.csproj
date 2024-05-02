@@ -3,7 +3,7 @@
     <Sdk Name="ViHo.PackAsAnalyzer" Version="1.0.1" />
     
     <PropertyGroup>
-        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
         <NoWarn>$(NoWarn);CA2227;CA1002;CS3016;SYSLIB1034</NoWarn>
         <SignAssembly>false</SignAssembly>
     </PropertyGroup>

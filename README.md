@@ -37,16 +37,13 @@ var llm = new Gpt35TurboModel(provider);
 var embeddingModel = new TextEmbeddingV3SmallModel(provider);
 
 // Create vector database from Harry Potter book pdf
-var vectorDatabase = new SqLiteVectorDatabase(dataSource: "vectors.db");
-var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(collectionName: "harrypotter", dimensions: 1536); // Should be 1536 for TextEmbeddingV3SmallModel
-
-using (var source = await PdfPigPdfSource.CreateFromUriAsync(
-    new Uri("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf")))
-{
-    await vectorCollection.LoadAndSplitDocuments(
-        embeddingModel,
-        sources: new []{ source }).ConfigureAwait(false);
-}
+using var vectorDatabase = new SqLiteVectorDatabase(dataSource: "vectors.db");
+var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
+    embeddingModel, // Used to convert text to embeddings
+    dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
+    dataSource: DataSource.FromUrl("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"),
+    collectionName: "harry-potter", // Can be omitted, use if you want to have multiple collections
+    textSplitter: null); // Default is CharacterTextSplitter(ChunkSize = 4000, ChunkOverlap = 200)
 
 // Now we have two ways: use the async methods or use the chains
 // 1. Async methods

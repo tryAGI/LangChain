@@ -1,4 +1,5 @@
-﻿using LangChain.Providers;
+﻿using LangChain.Extensions;
+using LangChain.Providers;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Amazon;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
@@ -155,7 +156,7 @@ Helpful Answer:";
         }.ToDocuments();
 
         var pages = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
-        Console.WriteLine("pages: " + pages.Count());
+        Console.WriteLine("pages: " + pages.Count);
     }
 
     [Test]
@@ -199,8 +200,8 @@ Helpful Answer:";
         await using var environment = await SetupDocumentTestsAsync();
         var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(VectorCollection.DefaultName, environment.Dimensions);
 
-        var pdfSource = new PdfPigPdfSource("x:\\Harry-Potter-Book-1.pdf");
-        var documents = await pdfSource.LoadAsync();
+        var pdfSource = new PdfPigPdfLoader();
+        var documents = await pdfSource.LoadAsync(DataSource.FromPath("x:\\Harry-Potter-Book-1.pdf"));
 
         var pages = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
         Console.WriteLine("pages: " + pages.Count());

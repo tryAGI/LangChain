@@ -5,7 +5,7 @@ using LangChain.Chains.RetrievalQA;
 using LangChain.Chains.Sequentials;
 using LangChain.Databases;
 using LangChain.Databases.InMemory;
-using LangChain.Indexes;
+using LangChain.Extensions;
 using LangChain.Prompts;
 using LangChain.Providers.HuggingFace.Downloader;
 

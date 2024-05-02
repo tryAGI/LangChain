@@ -43,6 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\workflows\together.yml = .github\workflows\together.yml
 		.github\workflows\deep-infra.yml = .github\workflows\deep-infra.yml
+		.github\workflows\auto-format.yml = .github\workflows\auto-format.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
@@ -214,7 +215,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Utilities.Postgre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Utilities.Sql", "src\Utilities\Sql\src\LangChain.Utilities.Sql.csproj", "{5274E2AE-F7EC-4175-B849-821742122856}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{AD076803-F723-4C2E-8599-75C418A4A07F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentLoaders", "DocumentLoaders", "{AD076803-F723-4C2E-8599-75C418A4A07F}"
 	ProjectSection(SolutionItems) = preProject
 		src\Sources\Directory.Build.props = src\Sources\Directory.Build.props
 	EndProjectSection

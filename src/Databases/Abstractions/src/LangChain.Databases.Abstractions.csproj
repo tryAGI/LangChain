@@ -1,20 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
         <RootNamespace>LangChain.Databases</RootNamespace>
-        <NoWarn>$(NoWarn);CA1720;CA1819;CS3007;CA1711</NoWarn>
+        <NoWarn>$(NoWarn);CA1819;CS3007;CA1711</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
         <Description>LangChain Databases abstractions.</Description>
         <PackageTags>$(PackageTags);abstractions</PackageTags>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
-      <ProjectReference Include="..\..\..\Sources\Abstractions\src\LangChain.Sources.Abstractions.csproj" />
-      <ProjectReference Include="..\..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
-    </ItemGroup>
 
 </Project>
