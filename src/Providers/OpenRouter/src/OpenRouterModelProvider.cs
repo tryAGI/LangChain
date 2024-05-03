@@ -50,7 +50,6 @@ public static class OpenRouterModelProvider
         { OpenRouterModelIds.SnowflakeArcticInstruct, new ChatModels("snowflake/snowflake-arctic-instruct",4096,2.16E-06,2.16E-06)},
         { OpenRouterModelIds.Mixtral8X7BInstructNitro, new ChatModels("mistralai/mixtral-8x7b-instruct:nitro",32768,5.4E-07,5.4E-07)},
         { OpenRouterModelIds.MistralOpenOrca7B, new ChatModels("open-orca/mistral-7b-openorca",8192,1.4249999999999999E-07,1.4249999999999999E-07)},
-        { OpenRouterModelIds.HuggingFaceZephyr7B, new ChatModels("huggingfaceh4/zephyr-7b-beta",4096,1.4249999999999999E-07,1.4249999999999999E-07)},
         { OpenRouterModelIds.OpenAiGpt35Turbo, new ChatModels("openai/gpt-3.5-turbo",16385,5E-07,1.5E-06)},
         { OpenRouterModelIds.OpenAiGpt35Turbo16K0125, new ChatModels("openai/gpt-3.5-turbo-0125",16385,5E-07,1.5E-06)},
         { OpenRouterModelIds.OpenAiGpt35Turbo16K, new ChatModels("openai/gpt-3.5-turbo-16k",16385,3E-06,4E-06)},
