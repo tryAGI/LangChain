@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.AzureCognitiveSearch" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" />
     </ItemGroup>
 
 </Project>

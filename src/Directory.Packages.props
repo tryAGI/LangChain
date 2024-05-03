@@ -36,17 +36,16 @@
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.15.230531.5-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.AzureCognitiveSearch" Version="0.17.230711.7-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.AzureSearch" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Chroma" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.DuckDB" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Pinecone" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Postgres" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Qdrant" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Sqlite" Version="0.17.230718.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Weaviate" Version="0.17.230718.1-preview" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.10.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Chroma" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.DuckDB" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Pinecone" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Postgres" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.10.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.10.0-alpha" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />

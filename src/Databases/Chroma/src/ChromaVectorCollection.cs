@@ -1,8 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LangChain.Databases.JsonConverters;
-using Microsoft.SemanticKernel.AI.Embeddings;
-using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
+using Microsoft.SemanticKernel.Connectors.Chroma;
 using Microsoft.SemanticKernel.Memory;
 
 namespace LangChain.Databases.Chroma;
@@ -97,7 +96,7 @@ public class ChromaVectorCollection(
                     externalSourceName: string.Empty,
                     additionalMetadata: SerializeMetadata(item.Metadata ?? new Dictionary<string, object>())
                 ),
-                new Embedding<float>(item.Embedding ?? []),
+                new ReadOnlyMemory<float>(item.Embedding ?? []),
                 key: null
             );
         }
@@ -126,7 +125,7 @@ public class ChromaVectorCollection(
         var matches = await store
             .GetNearestMatchesAsync(
                 collectionName: Name,
-                embedding: new Embedding<float>(request.Embeddings.First()),
+                embedding: new System.ReadOnlyMemory<float>(request.Embeddings.First()),
                 limit: settings.NumberOfResults,
                 cancellationToken: cancellationToken)
             .ToListAsync(cancellationToken)
@@ -145,7 +144,7 @@ public class ChromaVectorCollection(
                         Id = record.Item1.Metadata.Id,
                         Text = text,
                         Metadata = metadata,
-                        Embedding = record.Item1.Embedding.Vector.ToArray(),
+                        Embedding = record.Item1.Embedding.ToArray(),
                         Distance = (float)record.Item2
                     };
                 })

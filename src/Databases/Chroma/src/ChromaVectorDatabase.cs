@@ -1,4 +1,4 @@
-using Microsoft.SemanticKernel.Connectors.Memory.Chroma;
+using Microsoft.SemanticKernel.Connectors.Chroma;
 
 namespace LangChain.Databases.Chroma;
 

@@ -22,7 +22,6 @@
       <ProjectReference Include="..\Qdrant\src\LangChain.Databases.Qdrant.csproj" />
       <ProjectReference Include="..\Redis\src\LangChain.Databases.Redis.csproj" />
       <ProjectReference Include="..\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
-      <ProjectReference Include="..\Weaviate\src\LangChain.Databases.Weaviate.csproj" />
     </ItemGroup>
 
     <ItemGroup>
