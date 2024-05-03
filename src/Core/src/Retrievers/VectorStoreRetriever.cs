@@ -36,14 +36,13 @@ public class VectorStoreRetriever : BaseRetriever
         float? scoreThreshold = null)
     {
         SearchType = searchType;
+        ScoreThreshold = scoreThreshold;
 
         if (SearchType == VectorSearchType.SimilarityScoreThreshold && ScoreThreshold == null)
             throw new ArgumentException($"ScoreThreshold required for {SearchType}");
 
         EmbeddingModel = embeddingModel;
         VectorCollection = vectorCollection;
-        SearchType = searchType;
-        ScoreThreshold = scoreThreshold;
     }
 
     /// <inheritdoc/>
