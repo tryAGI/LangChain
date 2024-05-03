@@ -264,11 +264,6 @@ public enum OpenRouterModelIds
     MistralOpenOrca7B,
 
     /// <summary>
-    /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
-    /// </summary>
-    HuggingFaceZephyr7B,
-
-    /// <summary>
     /// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.  <br/>
     /// Updated by OpenAI to point to the latest version of GPT-3.5. Training data up to Sep 2021.  <br/>
     /// </summary>

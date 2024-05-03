@@ -205,11 +205,6 @@ public class Mixtral8X7BInstructNitroModel(OpenRouterProvider provider) : OpenRo
 public class MistralOpenOrca7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MistralOpenOrca7B);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.HuggingFaceZephyr7B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class HuggingFaceZephyr7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.HuggingFaceZephyr7B);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.OpenAiGpt35Turbo"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class OpenAiGpt35TurboModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenAiGpt35Turbo);
