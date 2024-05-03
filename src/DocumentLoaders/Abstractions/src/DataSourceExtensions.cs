@@ -13,7 +13,7 @@ public static class DataSourceExtensions
     public static IReadOnlyDictionary<string, object> ToMetadata(this DataSource dataSource)
     {
         dataSource = dataSource ?? throw new ArgumentNullException(paramName: nameof(dataSource));
-        
+
         return new Dictionary<string, object>
         {
             ["encoding"] = dataSource.Encoding.EncodingName,
@@ -21,7 +21,7 @@ public static class DataSourceExtensions
             ["type"] = dataSource.Type.ToString(),
         };
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -36,7 +36,7 @@ public static class DataSourceExtensions
             ? dataSource.ToMetadata()
             : null;
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
