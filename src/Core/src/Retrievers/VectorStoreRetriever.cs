@@ -43,8 +43,6 @@ public class VectorStoreRetriever : BaseRetriever
 
         EmbeddingModel = embeddingModel;
         VectorCollection = vectorCollection;
-        SearchType = searchType;
-        ScoreThreshold = scoreThreshold;
     }
 
     /// <inheritdoc/>
