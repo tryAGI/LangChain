@@ -35,7 +35,7 @@ public sealed class WordLoader : IDocumentLoader
             }
         }
 
-        var metadata = settings.CollectMetadata(dataSource);
+        var metadata = settings.CollectMetadataIfRequired(dataSource);
 
         return documents
             .Select(text => new Document(text, metadata: metadata))

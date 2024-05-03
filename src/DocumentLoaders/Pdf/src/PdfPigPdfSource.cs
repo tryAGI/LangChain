@@ -18,11 +18,11 @@ public sealed class PdfPigPdfLoader : IDocumentLoader
         using var stream = await dataSource.GetStreamAsync(cancellationToken).ConfigureAwait(false);
         using var document = PdfDocument.Open(stream, new ParsingOptions());
 
-        var metadata = settings.CollectMetadata(dataSource);
+        var metadata = settings.CollectMetadataIfRequired(dataSource);
 
         return document
             .GetPages()
-            .Select(page => new Document(page.Text, metadata.With(new Dictionary<string, object>
+            .Select(page => new Document(page.Text, metadata?.With(new Dictionary<string, object>
             {
                 { "page", page.Number },
             })))

@@ -33,7 +33,7 @@ public class HtmlLoader : IDocumentLoader
             document.QuerySelector("html") ??
             throw new NotSupportedException("Not supported for pages without <html> tag");
 
-        var metadata = settings.CollectMetadata(dataSource);
+        var metadata = settings.CollectMetadataIfRequired(dataSource);
 
         return [new Document(html.TextContent, metadata: metadata)];
     }

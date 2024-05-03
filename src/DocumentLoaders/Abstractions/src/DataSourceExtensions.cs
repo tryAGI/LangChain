@@ -28,7 +28,7 @@ public static class DataSourceExtensions
     /// <param name="settings"></param>
     /// <param name="dataSource"></param>
     /// <returns></returns>
-    public static IReadOnlyDictionary<string, object>? CollectMetadata(
+    public static IReadOnlyDictionary<string, object>? CollectMetadataIfRequired(
         this DocumentLoaderSettings? settings,
         DataSource dataSource)
     {
@@ -43,11 +43,11 @@ public static class DataSourceExtensions
     /// <param name="metadata"></param>
     /// <param name="additionalMetadata"></param>
     /// <returns></returns>
-    public static IReadOnlyDictionary<string, object>? With(
-        this IReadOnlyDictionary<string, object>? metadata,
+    public static IReadOnlyDictionary<string, object> With(
+        this IReadOnlyDictionary<string, object> metadata,
         IReadOnlyDictionary<string, object> additionalMetadata)
     {
-        return metadata?
+        return metadata
             .Concat(additionalMetadata)
             .ToDictionary(pair => pair.Key, pair => pair.Value);
     }

@@ -20,8 +20,8 @@ public sealed class AsposePdfLoader : IDocumentLoader
         var textAbsorber = new TextAbsorber();
         pdfDocument.Pages.Accept(textAbsorber);
 
-        var metadata = settings.CollectMetadata(dataSource);
-
+        var metadata = settings.CollectMetadataIfRequired(dataSource);
+        
         return [new Document(textAbsorber.Text, metadata: metadata)];
     }
 }

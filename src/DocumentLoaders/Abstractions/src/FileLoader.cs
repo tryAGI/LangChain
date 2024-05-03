@@ -35,8 +35,8 @@ public class FileLoader : IDocumentLoader
         //     }
         // }
 
-        var metadata = settings.CollectMetadata(dataSource);
-
+        var metadata = settings.CollectMetadataIfRequired(dataSource);
+        
         return [new Document(content, metadata: metadata)];
     }
 }
