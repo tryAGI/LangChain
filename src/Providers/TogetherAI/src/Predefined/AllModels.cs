@@ -220,6 +220,11 @@ public class Llama2Chat70BModel(TogetherAiProvider provider) : TogetherAiModel(p
 public class Llama2Chat7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama2Chat7B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama370BInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama370BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BInstruct);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.MetaLlama38BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlama38BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama38BInstruct);
@@ -308,11 +313,6 @@ public class _01AiYiChat34BModel(TogetherAiProvider provider) : TogetherAiModel(
 /// <inheritdoc cref="TogetherAiModelIds.Llama38BChatHfInt4"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Llama38BChatHfInt4Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama38BChatHfInt4);
-
-
-/// <inheritdoc cref="TogetherAiModelIds.MetaLlama370BInstruct"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class MetaLlama370BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BInstruct);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.TogethercomputerLlama38BInstructInt8"/>

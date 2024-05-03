@@ -491,6 +491,17 @@ public enum TogetherAiModelIds
     Llama2Chat7B,
 
     /// <summary>
+    /// Name: Meta Llama 3 70B Instruct <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.9/MTok <br/>
+    /// Completion Cost: $0.9/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
+    /// </summary>
+    MetaLlama370BInstruct,
+
+    /// <summary>
     /// Name: Meta Llama 3 8B Instruct <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
@@ -687,17 +698,6 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/Llama-3-8b-chat-hf-int4">https://huggingface.co/togethercomputer/Llama-3-8b-chat-hf-int4</a>
     /// </summary>
     Llama38BChatHfInt4,
-
-    /// <summary>
-    /// Name: Meta Llama 3 70B Instruct <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.9/MTok <br/>
-    /// Completion Cost: $0.9/MTok <br/>
-    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
-    /// </summary>
-    MetaLlama370BInstruct,
 
     /// <summary>
     /// Name: Togethercomputer Llama3 8B Instruct Int8 <br/>
