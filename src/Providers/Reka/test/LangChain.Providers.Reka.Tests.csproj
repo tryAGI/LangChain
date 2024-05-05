@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+        <ProjectReference Include="..\src\LangChain.Providers.Reka.csproj" />
+    </ItemGroup>
+    
+</Project>

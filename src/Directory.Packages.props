@@ -20,6 +20,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageVersion Include="Google_GenerativeAI" Version="0.1.19" />
     <PackageVersion Include="H.Generators.Extensions" Version="1.22.0" />
+    <PackageVersion Include="H.NSwag.Generator" Version="13.19.0.74" />
     <PackageVersion Include="H.Resources.Generator" Version="1.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -64,6 +65,7 @@
     <PackageVersion Include="StackExchange.Redis" Version="2.7.33" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta4.22272.1" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageVersion Include="System.Memory.Data" Version="8.0.0" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Net.Http.Json" Version="8.0.0" />
