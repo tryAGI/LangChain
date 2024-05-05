@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<NoWarn>$(NoWarn);CA1002;CA1822;CS3003</NoWarn>
+	</PropertyGroup>
+	
+	<PropertyGroup Label="NuGet">
+		<Description>LangChain Serve as OpenAI sdk compatible API</Description>
+		<PackageTags>$(PackageTags);serve;openai;api;aspnet;proxy;wrapper</PackageTags>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" Version="2.1.34" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <PackageReference Include="tryAGI.OpenAI" />
+	</ItemGroup>
+	
+</Project>
