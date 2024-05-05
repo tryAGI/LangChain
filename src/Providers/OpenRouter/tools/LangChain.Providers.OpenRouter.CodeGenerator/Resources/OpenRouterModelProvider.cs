@@ -22,4 +22,13 @@ public static class OpenRouterModelProvider
 
         throw new ArgumentException($"Invalid Open Router Model {modelId}");
     }
+
+    [CLSCompliant(false)]
+    public static ChatModels GetModelById(string modelId)
+    {
+        var model = Models.Values.FirstOrDefault(s => s.Id == modelId);
+        if (model == null)
+            throw new KeyNotFoundException($"Model with ID {modelId} not found.");
+        return model;
+    }
 }
