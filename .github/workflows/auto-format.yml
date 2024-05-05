@@ -1,7 +1,7 @@
 name: Opens a new PR if there are format updates
 on:
   schedule:
-    - cron: '00 11 * * *'
+    - cron: '00 5 * * 1'
 
 permissions:
   contents: write

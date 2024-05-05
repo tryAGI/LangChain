@@ -1,7 +1,7 @@
 name: Opens a new PR if there are model updates
 on:
   schedule:
-    - cron: '15 12 * * *'
+    - cron: '15 6 * * 1'
 
 permissions:
   contents: write
