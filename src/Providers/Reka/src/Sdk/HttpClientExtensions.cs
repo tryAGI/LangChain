@@ -30,7 +30,7 @@ public static class HttpClientExtensions
     {
         httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         request = request ?? throw new ArgumentNullException(nameof(request));
-        
+
         var createResponseMessage = await httpClient.PostAsJsonAsync(
             new Uri(httpClient.BaseAddress ?? new Uri(DefaultBaseAddress), "chat"),
             request,

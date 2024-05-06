@@ -19,7 +19,7 @@ public class RekaTests
         string answer = await model.GenerateAsync("Generate some random name:");
 
         answer.Should().NotBeNull();
-        
+
         Console.WriteLine(answer);
     }
 }
