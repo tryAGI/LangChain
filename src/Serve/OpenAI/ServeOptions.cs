@@ -9,7 +9,7 @@ public class ServeOptions
     public ServeOptions RegisterModel(ChatModel chatModel, string? overrideId = null)
     {
         chatModel = chatModel ?? throw new ArgumentNullException(nameof(chatModel));
-        
+
         _models[overrideId ?? chatModel.Id] = chatModel;
         return this;
     }
