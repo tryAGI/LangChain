@@ -228,7 +228,7 @@ ASSISTANT:";
             embeddingModel,
             dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
             dataSource: DataSource.FromPath("E:\\AI\\Datasets\\Books\\Harry-Potter-Book-1.pdf"),
-            collectionName: "harry-potter",
+            collectionName: "harrypotter",
             textSplitter: new RecursiveCharacterTextSplitter(
                 chunkSize: 200,
                 chunkOverlap: 50));

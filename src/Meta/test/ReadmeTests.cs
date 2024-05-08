@@ -77,7 +77,7 @@ public class ReadmeTests
             embeddingModel, // Used to convert text to embeddings
             dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
             dataSource: DataSource.FromUrl("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"),
-            collectionName: "harry-potter", // Can be omitted, use if you want to have multiple collections
+            collectionName: "harrypotter", // Can be omitted, use if you want to have multiple collections
             textSplitter: null); // Default is CharacterTextSplitter(ChunkSize = 4000, ChunkOverlap = 200)
 
         // Now we have two ways: use the async methods or use the chains
