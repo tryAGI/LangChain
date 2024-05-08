@@ -6,6 +6,14 @@ namespace LangChain.Serve.OpenAI;
 public class ServeController(
     ServeOptions options)
 {
+    public ModelsList GetModel()
+    {
+        return new ModelsList
+        {
+            Models = options.ListModels().Select(static x => new Model(x, ownedBy: "OpenAI")).ToList()
+        };
+    }
+    
     public ModelsList ListModels()
     {
         return new ModelsList
