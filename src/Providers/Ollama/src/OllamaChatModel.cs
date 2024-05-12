@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Ollama;
 
 namespace LangChain.Providers.Ollama;
 
@@ -31,15 +32,15 @@ public class OllamaChatModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        var models = await Provider.Api.ListLocalModels().ConfigureAwait(false);
-        if (models.All(x => x.Name != Id))
+        var models = await Provider.Api.ListLocalModelsAsync(cancellationToken).ConfigureAwait(false);
+        if (models.All(x => x.Model != Id))
         {
-            await Provider.Api.PullModel(Id).ConfigureAwait(false);
+            await Provider.Api.PullModelAsync(Id, cancellationToken: cancellationToken).WaitAsync().ConfigureAwait(false);
         }
 
         var prompt = ToPrompt(request.Messages);
         var watch = Stopwatch.StartNew();
-        var response = Provider.Api.GenerateCompletion(new GenerateCompletionRequest()
+        var response = Provider.Api.GetCompletionAsync(new GenerateCompletionRequest
         {
             Prompt = prompt,
             Model = Id,
@@ -47,7 +48,7 @@ public class OllamaChatModel(
             Stream = true,
             Raw = true,
             Format = UseJson ? "json" : string.Empty,
-        });
+        }, cancellationToken);
 
         OnPromptSent(prompt);
 
@@ -55,7 +56,7 @@ public class OllamaChatModel(
         await foreach (var completion in response)
         {
             buf += completion.Response;
-            OnPartialResponseGenerated(completion.Response);
+            OnPartialResponseGenerated(completion.Response ?? string.Empty);
         }
 
         OnCompletedResponseGenerated(buf);

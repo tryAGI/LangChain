@@ -1,5 +1,4 @@
 ﻿using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
-using LangChain.Databases;
 using LangChain.Databases.Sqlite;
 using LangChain.Extensions;
 using LangChain.Memory;
@@ -9,7 +8,9 @@ using LangChain.Providers.HuggingFace.Downloader;
 using LangChain.Providers.LLamaSharp;
 using LangChain.Providers.OpenAI.Predefined;
 using LangChain.DocumentLoaders;
+using LangChain.Providers.Ollama;
 using LangChain.Splitters.Text;
+using Ollama;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -21,15 +22,16 @@ public class WikiTests
     [Test]
     public async Task AgentWithOllama()
     {
-        var model = new OllamaLanguageModelInstruction("mistral:latest",
-            "http://localhost:11434",
-            options: new OllamaLanguageModelOptions
+        var provider = new OllamaProvider(
+            // "http://172.16.50.107:11434",
+            options: new RequestOptions
             {
                 Temperature = 0,
-            }).UseConsoleForDebug();
+            });
+        var model = new OllamaChatModel(provider, id: "llama3").UseConsoleForDebug();
 
         var chain =
-            Set("What is tryAGI/LangChain?")
+            Set("What is tryAGI/LangChain? In 5 words")
             | LLM(model);
 
         await chain.RunAsync();
@@ -38,13 +40,13 @@ public class WikiTests
     [Test]
     public async Task AgentWithOllamaReact()
     {
-        var model = new OllamaLanguageModelInstruction("mistral:latest",
-            "http://localhost:11434",
-            options: new OllamaLanguageModelOptions()
+        var provider = new OllamaProvider(
+            options: new RequestOptions
             {
                 Stop = new[] { "Observation", "[END]" }, // add injection word `Observation` and `[END]` to stop the model(just as additional safety feature)
                 Temperature = 0
-            }).UseConsoleForDebug();
+            });
+        var model = new OllamaChatModel(provider, id: "mistral:latest").UseConsoleForDebug();
 
         // create a google search tool
         var searchTool = new GoogleCustomSearchTool(key: "<your key>", cx: "<your cx>", resultsLimit: 1);
@@ -158,13 +160,13 @@ Assistant:";
     [Test]
     public async Task ImageGenerationWithOllamaAndStableDiffusion()
     {
-        var olmodel = new OllamaLanguageModelInstruction("mistral:latest",
-            "http://localhost:11434",
-            options: new OllamaLanguageModelOptions()
+        var provider = new OllamaProvider(
+            options: new RequestOptions
             {
                 Stop = new[] { "\n" },
                 Temperature = 0
-            }).UseConsoleForDebug();
+            });
+        var llm = new OllamaChatModel(provider, id: "mistral:latest").UseConsoleForDebug();
 
         var sdmodel = new Automatic1111Model
         {
@@ -201,7 +203,7 @@ ASSISTANT:";
 
         var chain = Set("a cute girl cosplaying a cat")                                     // describe a desired image in simple words
                     | Template(template, outputKey: "prompt")                               // insert our description into the template
-                    | LLM(olmodel, inputKey: "prompt", outputKey: "image_prompt")           // ask ollama to generate a prompt for stable diffusion
+                    | LLM(llm, inputKey: "prompt", outputKey: "image_prompt")           // ask ollama to generate a prompt for stable diffusion
                     | GenerateImage(sdmodel, inputKey: "image_prompt", outputKey: "image")  // generate an image using stable diffusion
                     | SaveIntoFile("image.png", inputKey: "image");                     // save the image into a file
 
@@ -217,11 +219,13 @@ ASSISTANT:";
         var embeddingModel = new TextEmbeddingV3SmallModel(apiKey);
 
         // prepare Ollama with mistral model
-        var model = new OllamaLanguageModelInstruction("mistral:latest", options: new OllamaLanguageModelOptions
-        {
-            Stop = ["\n"],
-            Temperature = 0.0f,
-        }).UseConsoleForDebug();
+        var provider = new OllamaProvider(
+            options: new RequestOptions
+            {
+                Stop = ["\n"],
+                Temperature = 0.0f,
+            });
+        var llm = new OllamaChatModel(provider, id: "mistral:latest").UseConsoleForDebug();
 
         using var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
         var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
@@ -247,7 +251,7 @@ Helpful Answer:";
             | RetrieveDocuments(vectorCollection, embeddingModel, inputKey: "question", outputKey: "documents", amount: 5) // take 5 most similar documents
             | StuffDocuments(inputKey: "documents", outputKey: "context")                       // combine documents together and put them into context
             | Template(promptText)                                                              // replace context and question in the prompt with their values
-            | LLM(model);                                                                       // send the result to the language model
+            | LLM(llm);                                                                       // send the result to the language model
 
         var result = await chain.RunAsync("text", CancellationToken.None);                                        // get chain result
 

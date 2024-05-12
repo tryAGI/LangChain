@@ -1,4 +1,6 @@
-﻿namespace LangChain.Providers.Ollama;
+﻿using Ollama;
+
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 
@@ -7,7 +9,7 @@
 /// <param name="options"></param>
 public class OllamaProvider(
     string url = "http://localhost:11434",
-    OllamaOptions? options = null)
+    RequestOptions? options = null)
     : Provider(id: "ollama")
 {
     /// <summary>
@@ -18,5 +20,5 @@ public class OllamaProvider(
     /// <summary>
     /// 
     /// </summary>
-    public OllamaOptions Options { get; } = options ?? new OllamaOptions();
+    public RequestOptions Options { get; } = options ?? new RequestOptions();
 }

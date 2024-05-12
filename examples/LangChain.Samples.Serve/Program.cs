@@ -1,10 +1,11 @@
 using LangChain.Memory;
-using LangChain.Providers;
 using LangChain.Providers.Ollama;
 using LangChain.Serve;
 using LangChain.Serve.Abstractions.Repository;
+using Ollama;
 using static LangChain.Chains.Chain;
 using Message = LangChain.Providers.Message;
+using MessageRole = LangChain.Providers.MessageRole;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -15,7 +16,7 @@ var builder = WebApplication.CreateBuilder();
 builder.Services.AddLangChainServe();
 
 // 2. Create a model
-var model = new OllamaChatModel(new OllamaProvider(options: new OllamaOptions
+var model = new OllamaChatModel(new OllamaProvider(options: new RequestOptions
 {
     Temperature = 0,
     Stop = ["User:"],

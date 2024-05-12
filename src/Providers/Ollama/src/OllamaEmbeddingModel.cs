@@ -1,4 +1,6 @@
-﻿namespace LangChain.Providers.Ollama;
+﻿using Ollama;
+
+namespace LangChain.Providers.Ollama;
 
 /// <summary>
 /// 
@@ -23,17 +25,17 @@ public class OllamaEmbeddingModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        var results = new List<double[]>(capacity: request.Strings.Count);
+        var results = new List<IList<double>>(capacity: request.Strings.Count);
         foreach (var prompt in request.Strings)
         {
-            var response = await Provider.Api.GenerateEmbeddings(new GenerateEmbeddingRequest
+            var response = await Provider.Api.GenerateEmbeddingsAsync(new GenerateEmbeddingRequest
             {
                 Prompt = prompt,
                 Model = Id,
                 Options = Provider.Options,
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
-            results.Add(response.Embedding);
+            results.Add(response.Embedding ?? []);
         }
 
         return new EmbeddingResponse
@@ -42,7 +44,7 @@ public class OllamaEmbeddingModel(
                 .Select(x => x.Select(y => (float)y).ToArray())
                 .ToArray(),
             UsedSettings = EmbeddingSettings.Default,
-            Dimensions = results.FirstOrDefault()?.Length ?? 0,
+            Dimensions = results.FirstOrDefault()?.Count ?? 0,
         };
     }
 }
