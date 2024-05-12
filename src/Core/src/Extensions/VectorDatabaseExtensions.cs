@@ -20,6 +20,7 @@ public static class VectorDatabaseExtensions
     /// <param name="textSplitter"></param>
     /// <param name="loaderSettings"></param>
     /// <param name="embeddingSettings"></param>
+    /// <param name="behavior"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
@@ -32,11 +33,27 @@ public static class VectorDatabaseExtensions
         ITextSplitter? textSplitter = null,
         DocumentLoaderSettings? loaderSettings = null,
         EmbeddingSettings? embeddingSettings = null,
+        AddDocumentsToDatabaseBehavior behavior = AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists,
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
         vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(paramName: nameof(vectorDatabase));
 
+        if (behavior == AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists &&
+            await vectorDatabase.IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
+        {
+            return await vectorDatabase.GetCollectionAsync(
+                collectionName: collectionName,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        if (behavior == AddDocumentsToDatabaseBehavior.OverwriteExistingCollection &&
+            await vectorDatabase.IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
+        {
+            await vectorDatabase.DeleteCollectionAsync(
+                collectionName: collectionName,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        
         var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(
             collectionName: collectionName,
             dimensions: dimensions,
