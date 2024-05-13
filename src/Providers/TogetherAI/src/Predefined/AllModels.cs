@@ -65,6 +65,11 @@ public class Qwen15Chat05BModel(TogetherAiProvider provider) : TogetherAiModel(p
 public class Qwen15Chat18BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Qwen15Chat18B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.Qwen15Chat110B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen15Chat110BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Qwen15Chat110B);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.Qwen15Chat14B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Qwen15Chat14BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Qwen15Chat14B);
@@ -88,6 +93,11 @@ public class Qwen15Chat72BModel(TogetherAiProvider provider) : TogetherAiModel(p
 /// <inheritdoc cref="TogetherAiModelIds.Qwen15Chat7B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Qwen15Chat7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Qwen15Chat7B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.SnowflakeArcticInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class SnowflakeArcticInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.SnowflakeArcticInstruct);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.RemmSlerpL213B"/>
@@ -168,6 +178,11 @@ public class CodeLlamaPython7BModel(TogetherAiProvider provider) : TogetherAiMod
 /// <inheritdoc cref="TogetherAiModelIds.Dolphin25Mixtral8X7B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Dolphin25Mixtral8X7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Dolphin25Mixtral8X7B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.DbrxInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class DbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.DbrxInstruct);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.DeepseekCoderInstruct33B"/>
