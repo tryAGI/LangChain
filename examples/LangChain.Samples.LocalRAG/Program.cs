@@ -21,7 +21,7 @@ var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoade
     collectionName: "harrypotter", // Can be omitted, use if you want to have multiple collections
     textSplitter: null,
     behavior: AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists);
-     
+
 
 const string question = "What is Harry's Address?";
 var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingModel, question, amount: 5);
