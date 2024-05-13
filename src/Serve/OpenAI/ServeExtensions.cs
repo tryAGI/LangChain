@@ -32,7 +32,7 @@ public static class ServeExtensions
         app.MapPost("/v1/chat/completions", async (ChatRequest request) =>
         {
             var llm = serveMiddlewareOptions.GetModel(request.Model);
-            
+
             var response = await llm.GenerateAsync(new LangChain.Providers.ChatRequest
             {
                 Messages = request.Messages.Select(x => new LangChain.Providers.Message
@@ -47,7 +47,7 @@ public static class ServeExtensions
                     }
                 }).ToList(),
             }).ConfigureAwait(false);
-            
+
             return Results.Ok(new ChatResponse());
         });
 

@@ -53,7 +53,7 @@ public static class VectorDatabaseExtensions
                 collectionName: collectionName,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
-        
+
         var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(
             collectionName: collectionName,
             dimensions: dimensions,

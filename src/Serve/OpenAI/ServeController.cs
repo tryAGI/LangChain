@@ -13,7 +13,7 @@ public class ServeController(
             Models = options.ListModels().Select(static x => new Model(x, ownedBy: "OpenAI")).ToList()
         };
     }
-    
+
     public ModelsList ListModels()
     {
         return new ModelsList
