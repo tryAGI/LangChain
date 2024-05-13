@@ -150,6 +150,17 @@ public enum TogetherAiModelIds
     Qwen15Chat18B,
 
     /// <summary>
+    /// Name: Qwen 1.5 Chat (110B) <br/>
+    /// Organization: Qwen <br/>
+    /// Context Length: 32768 <br/>
+    /// Prompt Cost: $1.8/MTok <br/>
+    /// Completion Cost: $1.8/MTok <br/>
+    /// Description: Qwen1.5 is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/Qwen/Qwen1.5-110B-Chat">https://huggingface.co/Qwen/Qwen1.5-110B-Chat</a>
+    /// </summary>
+    Qwen15Chat110B,
+
+    /// <summary>
     /// Name: Qwen 1.5 Chat (14B) <br/>
     /// Organization: Qwen <br/>
     /// Context Length: 32768 <br/>
@@ -203,6 +214,17 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/Qwen/Qwen1.5-7B-Chat">https://huggingface.co/Qwen/Qwen1.5-7B-Chat</a>
     /// </summary>
     Qwen15Chat7B,
+
+    /// <summary>
+    /// Name: Snowflake Arctic Instruct <br/>
+    /// Organization: Snowflake <br/>
+    /// Context Length: 4096 <br/>
+    /// Prompt Cost: $2.4/MTok <br/>
+    /// Completion Cost: $2.4/MTok <br/>
+    /// Description: Arctic is a dense-MoE Hybrid transformer architecture pre-trained from scratch by the Snowflake AI Research Team. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/Snowflake/snowflake-arctic-instruct">https://huggingface.co/Snowflake/snowflake-arctic-instruct</a>
+    /// </summary>
+    SnowflakeArcticInstruct,
 
     /// <summary>
     /// Name: ReMM SLERP L2 (13B) <br/>
@@ -379,6 +401,17 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/cognitivecomputations/dolphin-2.5-mixtral-8x7b">https://huggingface.co/cognitivecomputations/dolphin-2.5-mixtral-8x7b</a>
     /// </summary>
     Dolphin25Mixtral8X7B,
+
+    /// <summary>
+    /// Name: DBRX Instruct <br/>
+    /// Organization: Databricks <br/>
+    /// Context Length: 32768 <br/>
+    /// Prompt Cost: $1.2/MTok <br/>
+    /// Completion Cost: $1.2/MTok <br/>
+    /// Description: DBRX Instruct is a mixture-of-experts (MoE) large language model trained from scratch by Databricks. DBRX Instruct specializes in few-turn interactions. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/databricks/dbrx-instruct">https://huggingface.co/databricks/dbrx-instruct</a>
+    /// </summary>
+    DbrxInstruct,
 
     /// <summary>
     /// Name: Deepseek Coder Instruct (33B) <br/>
