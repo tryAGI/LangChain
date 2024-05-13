@@ -35,6 +35,16 @@ public class Cinematika7BAlphaFreeModel(OpenRouterProvider provider) : OpenRoute
 public class GoogleGemma7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7BFree);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.MetaLlama38BInstructFree"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama38BInstructFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlama38BInstructFree);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Jetmoe8BFree"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Jetmoe8BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Jetmoe8BFree);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.PsyfighterV213B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class PsyfighterV213BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PsyfighterV213B);
@@ -45,9 +55,9 @@ public class PsyfighterV213BModel(OpenRouterProvider provider) : OpenRouterModel
 public class NeuralChat7BV31Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NeuralChat7BV31);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.Mythomax13B"/>
+/// <inheritdoc cref="OpenRouterModelIds.Mythomax13BNitro"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class Mythomax13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomax13B);
+public class Mythomax13BNitroModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomax13BNitro);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.PygmalionMythalion13B"/>
@@ -135,6 +145,11 @@ public class MetaCodellama70BInstructModel(OpenRouterProvider provider) : OpenRo
 public class PhindCodellama34BV2Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.PhindCodellama34BV2);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.MistralOpenOrca7B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MistralOpenOrca7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MistralOpenOrca7B);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.OpenHermes2Mistral7B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class OpenHermes2Mistral7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenHermes2Mistral7B);
@@ -195,9 +210,9 @@ public class NousHermes2Mixtral8X7BSftModel(OpenRouterProvider provider) : OpenR
 public class NousHermes2Mistral7BDpoModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.NousHermes2Mistral7BDpo);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.MetaLlama370BInstruct"/>
+/// <inheritdoc cref="OpenRouterModelIds.Olmo7BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class MetaLlama370BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlama370BInstruct);
+public class Olmo7BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Olmo7BInstruct);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.SnowflakeArcticInstruct"/>
@@ -205,14 +220,34 @@ public class MetaLlama370BInstructModel(OpenRouterProvider provider) : OpenRoute
 public class SnowflakeArcticInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.SnowflakeArcticInstruct);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.Qwen15110BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen15110BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen15110BChat);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Qwen1532BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen1532BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen1532BChat);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Qwen1514BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen1514BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen1514BChat);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Qwen157BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen157BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen157BChat);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Qwen154BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen154BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen154BChat);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.Mixtral8X7BInstructNitro"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Mixtral8X7BInstructNitroModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mixtral8X7BInstructNitro);
-
-
-/// <inheritdoc cref="OpenRouterModelIds.MistralOpenOrca7B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class MistralOpenOrca7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MistralOpenOrca7B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.OpenAiGpt35Turbo"/>
@@ -450,6 +485,16 @@ public class Mistral7BInstructModel(OpenRouterProvider provider) : OpenRouterMod
 public class OpenHermes25Mistral7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenHermes25Mistral7B);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.Mythomax13B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Mythomax13BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomax13B);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.HuggingFaceZephyr7B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class HuggingFaceZephyr7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.HuggingFaceZephyr7B);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.OpenChat35"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class OpenChat35Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenChat35);
@@ -468,11 +513,6 @@ public class Lzlv70BModel(OpenRouterProvider provider) : OpenRouterModel(provide
 /// <inheritdoc cref="OpenRouterModelIds.Mixtral8X7BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Mixtral8X7BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mixtral8X7BInstruct);
-
-
-/// <inheritdoc cref="OpenRouterModelIds.Dolphin26Mixtral8X7B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Dolphin26Mixtral8X7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Dolphin26Mixtral8X7B);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.NoromaidMixtral8X7BInstruct"/>
@@ -505,14 +545,14 @@ public class RwkvV5Eagle7BModel(OpenRouterProvider provider) : OpenRouterModel(p
 public class GoogleGemma7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.GoogleGemma7B);
 
 
-/// <inheritdoc cref="OpenRouterModelIds.DatabricksDbrx132BInstruct"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class DatabricksDbrx132BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.DatabricksDbrx132BInstruct);
-
-
 /// <inheritdoc cref="OpenRouterModelIds.MetaLlama38BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlama38BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlama38BInstruct);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.MetaLlama370BInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama370BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlama370BInstruct);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Wizardlm28X22b"/>
@@ -540,6 +580,31 @@ public class MistralMixtral8X22bInstructModel(OpenRouterProvider provider) : Ope
 public class LynnLlama3Soliloquy8BV2Model(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.LynnLlama3Soliloquy8BV2);
 
 
+/// <inheritdoc cref="OpenRouterModelIds.Dolphin26Mixtral8X7B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Dolphin26Mixtral8X7BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Dolphin26Mixtral8X7B);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.DatabricksDbrx132BInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class DatabricksDbrx132BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.DatabricksDbrx132BInstruct);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Jetmoe8B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Jetmoe8BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Jetmoe8B);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.LlavaV1634B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class LlavaV1634BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.LlavaV1634B);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Qwen1572BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen1572BChatModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen1572BChat);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.HuggingFaceZephyr7BFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class HuggingFaceZephyr7BFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.HuggingFaceZephyr7BFree);
@@ -548,11 +613,6 @@ public class HuggingFaceZephyr7BFreeModel(OpenRouterProvider provider) : OpenRou
 /// <inheritdoc cref="OpenRouterModelIds.MetaLlamaV270BChatNitro"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MetaLlamaV270BChatNitroModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MetaLlamaV270BChatNitro);
-
-
-/// <inheritdoc cref="OpenRouterModelIds.Mythomax13BNitro"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Mythomax13BNitroModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Mythomax13BNitro);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Mistral7BInstructNitro"/>

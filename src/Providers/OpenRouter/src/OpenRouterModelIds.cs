@@ -61,6 +61,21 @@ public enum OpenRouterModelIds
     GoogleGemma7BFree,
 
     /// <summary>
+    /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+    /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
+    /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
+    /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
+    /// </summary>
+    MetaLlama38BInstructFree,
+
+    /// <summary>
+    /// Coming from a broad set of teams, ranging from academic to industry veterans, Jet MoE is a combined effort from MIT, Princeton, IBM, Lepton, and MyShell.  <br/>
+    /// This model is fully open source and trained only on public datasets, making it well suited for uses in academia or public research.  <br/>
+    /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
+    /// </summary>
+    Jetmoe8BFree,
+
+    /// <summary>
     /// The v2 of Psyfighter - a merged model created by the KoboldAI community members Jeb Carter and TwistedShadows, made possible thanks to the KoboldAI merge request service.  <br/>
     /// The intent was to add medical data to supplement the model's fictional ability with more details on anatomy and mental states. This model should not be used for medical advice or therapy because of its high likelihood of pulling in fictional data.  <br/>
     /// It's a merge between:  <br/>
@@ -78,8 +93,9 @@ public enum OpenRouterModelIds
 
     /// <summary>
     /// One of the highest performing and most popular fine-tunes of Llama 2 13B, with rich descriptions and roleplay. #merge  <br/>
+    /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
     /// </summary>
-    Mythomax13B,
+    Mythomax13BNitro,
 
     /// <summary>
     /// A blend of the new Pygmalion-13b and MythoMax. #merge  <br/>
@@ -187,6 +203,11 @@ public enum OpenRouterModelIds
     PhindCodellama34BV2,
 
     /// <summary>
+    /// A fine-tune of Mistral using the OpenOrca dataset. First 7B model to beat all other models less 30B.  <br/>
+    /// </summary>
+    MistralOpenOrca7B,
+
+    /// <summary>
     /// Trained on 900k instructions, surpasses all previous versions of Hermes 13B and below, and matches 70B on some benchmarks. Hermes 2 has strong multiturn chat skills and system prompt capabilities.  <br/>
     /// </summary>
     OpenHermes2Mistral7B,
@@ -254,11 +275,16 @@ public enum OpenRouterModelIds
     NousHermes2Mistral7BDpo,
 
     /// <summary>
-    /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
-    /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
-    /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
+    /// OLMo 7B Instruct by the Allen Institute for AI is a model finetuned for question answering. It demonstrates notable performance across multiple benchmarks including TruthfulQA and ToxiGen.  <br/>
+    /// Open Source: The model, its code, checkpoints, logs are released under the Apache 2.0 license.  <br/>
+    /// Core repo (training, inference, fine-tuning etc.)  <br/>
+    /// Evaluation code  <br/>
+    /// Further fine-tuning code  <br/>
+    /// Paper  <br/>
+    /// Technical blog post  <br/>
+    /// WandB Logs  <br/>
     /// </summary>
-    MetaLlama370BInstruct,
+    Olmo7BInstruct,
 
     /// <summary>
     /// Arctic is a dense-MoE Hybrid transformer architecture pre-trained from scratch by the Snowflake AI Research Team. Arctic combines a 10B dense transformer model with a residual 128x3.66B MoE MLP resulting in 480B total and 17B active parameters chosen using a top-2 gating.  <br/>
@@ -267,16 +293,61 @@ public enum OpenRouterModelIds
     SnowflakeArcticInstruct,
 
     /// <summary>
+    /// Qwen1.5 110B is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen, the improvements include:  <br/>
+    /// Significant performance improvement in human preference for chat models  <br/>
+    /// Multilingual support of both base and chat models  <br/>
+    /// Stable support of 32K context length for models of all sizes  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen15110BChat,
+
+    /// <summary>
+    /// Qwen1.5 32B is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen, the improvements include:  <br/>
+    /// Significant performance improvement in human preference for chat models  <br/>
+    /// Multilingual support of both base and chat models  <br/>
+    /// Stable support of 32K context length for models of all sizes  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen1532BChat,
+
+    /// <summary>
+    /// Qwen1.5 14B is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen, the improvements include:  <br/>
+    /// Significant performance improvement in human preference for chat models  <br/>
+    /// Multilingual support of both base and chat models  <br/>
+    /// Stable support of 32K context length for models of all sizes  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen1514BChat,
+
+    /// <summary>
+    /// Qwen1.5 7B is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen, the improvements include:  <br/>
+    /// Significant performance improvement in human preference for chat models  <br/>
+    /// Multilingual support of both base and chat models  <br/>
+    /// Stable support of 32K context length for models of all sizes  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen157BChat,
+
+    /// <summary>
+    /// Qwen1.5 4B is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen, the improvements include:  <br/>
+    /// Significant performance improvement in human preference for chat models  <br/>
+    /// Multilingual support of both base and chat models  <br/>
+    /// Stable support of 32K context length for models of all sizes  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen154BChat,
+
+    /// <summary>
     /// A pretrained generative Sparse Mixture of Experts, by Mistral AI, for chat and instruction use. Incorporates 8 experts (feed-forward networks) for a total of 47 billion parameters.  <br/>
     /// Instruct model fine-tuned by Mistral. #moe  <br/>
     /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
     /// </summary>
     Mixtral8X7BInstructNitro,
-
-    /// <summary>
-    /// A fine-tune of Mistral using the OpenOrca dataset. First 7B model to beat all other models less 30B.  <br/>
-    /// </summary>
-    MistralOpenOrca7B,
 
     /// <summary>
     /// GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.  <br/>
@@ -567,6 +638,16 @@ public enum OpenRouterModelIds
     OpenHermes25Mistral7B,
 
     /// <summary>
+    /// One of the highest performing and most popular fine-tunes of Llama 2 13B, with rich descriptions and roleplay. #merge  <br/>
+    /// </summary>
+    Mythomax13B,
+
+    /// <summary>
+    /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
+    /// </summary>
+    HuggingFaceZephyr7B,
+
+    /// <summary>
     /// OpenChat is a library of open-source language models, fine-tuned with "C-RLFT (Conditioned Reinforcement Learning Fine-Tuning)" - a strategy inspired by offline reinforcement learning. It has been trained on mixed-quality data without preference labels.  <br/>
     /// </summary>
     OpenChat35,
@@ -595,13 +676,6 @@ public enum OpenRouterModelIds
     /// Instruct model fine-tuned by Mistral. #moe  <br/>
     /// </summary>
     Mixtral8X7BInstruct,
-
-    /// <summary>
-    /// This is a 16k context fine-tune of Mixtral-8x7b. It excels in coding tasks due to extensive training with coding data and is known for its obedience, although it lacks DPO tuning.  <br/>
-    /// The model is uncensored and is stripped of alignment and bias. It requires an external alignment layer for ethical use. Users are cautioned to use this highly compliant model responsibly, as detailed in a blog post about uncensored models at erichartford.com/uncensored-models.  <br/>
-    /// #moe #uncensored  <br/>
-    /// </summary>
-    Dolphin26Mixtral8X7B,
 
     /// <summary>
     /// This model was trained for 8h(v1) + 8h(v2) + 12h(v3) on customized modified datasets, focusing on RP, uncensoring, and a modified version of the Alpaca prompting (that was already used in LimaRP), which should be at the same conversational level as ChatLM or Llama2-Chat without adding any additional special tokens.  <br/>
@@ -652,19 +726,18 @@ public enum OpenRouterModelIds
     GoogleGemma7B,
 
     /// <summary>
-    /// DBRX is a new open source large language model developed by Databricks. At 132B, it outperforms existing open source LLMs like Llama 2 70B and Mixtral-8x7B on standard industry benchmarks for language understanding, programming, math, and logic.  <br/>
-    /// It uses a fine-grained mixture-of-experts (MoE) architecture. 36B parameters are active on any input. It was pre-trained on 12T tokens of text and code data. Compared to other open MoE models like Mixtral-8x7B and Grok-1, DBRX is fine-grained, meaning it uses a larger number of smaller experts.  <br/>
-    /// See the launch announcement and benchmark results here.  <br/>
-    /// #moe  <br/>
-    /// </summary>
-    DatabricksDbrx132BInstruct,
-
-    /// <summary>
     /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
     /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
     /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
     /// </summary>
     MetaLlama38BInstruct,
+
+    /// <summary>
+    /// Meta's latest class of model (Llama 3) launched with a variety of sizes and flavors. This 70B instruct-tuned version was optimized for high quality dialogue usecases.  <br/>
+    /// It has demonstrated strong performance compared to leading closed-source models in human evaluations.  <br/>
+    /// To read more about the model release, click here. Usage of this model is subject to Meta's Acceptable Use Policy.  <br/>
+    /// </summary>
+    MetaLlama370BInstruct,
 
     /// <summary>
     /// WizardLM-2 8x22B is Microsoft AI's most advanced Wizard model. It demonstrates highly competitive performance compared to leading proprietary models, and it consistently outperforms all existing state-of-the-art opensource models.  <br/>
@@ -706,6 +779,43 @@ public enum OpenRouterModelIds
     LynnLlama3Soliloquy8BV2,
 
     /// <summary>
+    /// This is a 16k context fine-tune of Mixtral-8x7b. It excels in coding tasks due to extensive training with coding data and is known for its obedience, although it lacks DPO tuning.  <br/>
+    /// The model is uncensored and is stripped of alignment and bias. It requires an external alignment layer for ethical use. Users are cautioned to use this highly compliant model responsibly, as detailed in a blog post about uncensored models at erichartford.com/uncensored-models.  <br/>
+    /// #moe #uncensored  <br/>
+    /// </summary>
+    Dolphin26Mixtral8X7B,
+
+    /// <summary>
+    /// DBRX is a new open source large language model developed by Databricks. At 132B, it outperforms existing open source LLMs like Llama 2 70B and Mixtral-8x7b on standard industry benchmarks for language understanding, programming, math, and logic.  <br/>
+    /// It uses a fine-grained mixture-of-experts (MoE) architecture. 36B parameters are active on any input. It was pre-trained on 12T tokens of text and code data. Compared to other open MoE models like Mixtral-8x7B and Grok-1, DBRX is fine-grained, meaning it uses a larger number of smaller experts.  <br/>
+    /// See the launch announcement and benchmark results here.  <br/>
+    /// #moe  <br/>
+    /// </summary>
+    DatabricksDbrx132BInstruct,
+
+    /// <summary>
+    /// Coming from a broad set of teams, ranging from academic to industry veterans, Jet MoE is a combined effort from MIT, Princeton, IBM, Lepton, and MyShell.  <br/>
+    /// This model is fully open source and trained only on public datasets, making it well suited for uses in academia or public research.  <br/>
+    /// </summary>
+    Jetmoe8B,
+
+    /// <summary>
+    /// LLaVA Yi 34B is an open-source model trained by fine-tuning LLM on multimodal instruction-following data. It is an auto-regressive language model, based on the transformer architecture. Base LLM: NousResearch/Nous-Hermes-2-Yi-34B  <br/>
+    /// It was trained in December 2023.  <br/>
+    /// </summary>
+    LlavaV1634B,
+
+    /// <summary>
+    /// Qwen1.5 72B is the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data. In comparison with the previous released Qwen, the improvements include:  <br/>
+    /// Significant performance improvement in human preference for chat models  <br/>
+    /// Multilingual support of both base and chat models  <br/>
+    /// Stable support of 32K context length for models of all sizes  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen1572BChat,
+
+    /// <summary>
     /// Zephyr is a series of language models that are trained to act as helpful assistants. Zephyr-7B-β is the second model in the series, and is a fine-tuned version of mistralai/Mistral-7B-v0.1 that was trained on a mix of publicly available, synthetic datasets using Direct Preference Optimization (DPO).  <br/>
     /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
     /// </summary>
@@ -716,12 +826,6 @@ public enum OpenRouterModelIds
     /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
     /// </summary>
     MetaLlamaV270BChatNitro,
-
-    /// <summary>
-    /// One of the highest performing and most popular fine-tunes of Llama 2 13B, with rich descriptions and roleplay. #merge  <br/>
-    /// Note: this is a higher-throughput version of this model, and may have higher prices and slightly different outputs.  <br/>
-    /// </summary>
-    Mythomax13BNitro,
 
     /// <summary>
     /// A 7.3B parameter model that outperforms Llama 2 13B on all benchmarks, with optimizations for speed and context length.  <br/>
