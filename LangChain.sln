@@ -352,6 +352,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Serve.OpenAI", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.Serve.OpenAI", "examples\LangChain.Samples.Serve.OpenAI\LangChain.Samples.Serve.OpenAI.csproj", "{B5D7CED5-EF1E-4539-9220-1ABBA2A70AE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Samples.LocalRAG", "examples\LangChain.Samples.LocalRAG\LangChain.Samples.LocalRAG.csproj", "{3BCE1801-0354-4062-94E1-A3AE9CF82874}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -714,6 +716,10 @@ Global
 		{B5D7CED5-EF1E-4539-9220-1ABBA2A70AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5D7CED5-EF1E-4539-9220-1ABBA2A70AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5D7CED5-EF1E-4539-9220-1ABBA2A70AE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BCE1801-0354-4062-94E1-A3AE9CF82874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BCE1801-0354-4062-94E1-A3AE9CF82874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BCE1801-0354-4062-94E1-A3AE9CF82874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BCE1801-0354-4062-94E1-A3AE9CF82874}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -854,6 +860,7 @@ Global
 		{ADB8BA40-F8AA-41C9-A56E-0550061A4D71} = {7CA5B2C7-37ED-47CA-92F2-E599370F0DCB}
 		{7538A00F-C5A1-4D74-A264-FA4E6861A19B} = {C5C6EB91-CF9B-48F8-A198-9D9065E65BD1}
 		{B5D7CED5-EF1E-4539-9220-1ABBA2A70AE4} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
+		{3BCE1801-0354-4062-94E1-A3AE9CF82874} = {F17A86AE-A174-4B6C-BAA7-9D9A9704BE85}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
