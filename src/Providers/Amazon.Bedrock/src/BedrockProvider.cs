@@ -1,4 +1,5 @@
 using Amazon;
+using Amazon.BedrockAgentRuntime;
 using Amazon.BedrockRuntime;
 
 namespace LangChain.Providers.Amazon.Bedrock;
@@ -25,6 +26,7 @@ public class BedrockProvider : Provider
     public BedrockProvider(RegionEndpoint region) : base(DefaultProviderId)
     {
         Api = new AmazonBedrockRuntimeClient(region);
+        AgentApi = new AmazonBedrockAgentRuntimeClient(region);
     }
 
     /// <summary>
@@ -38,12 +40,16 @@ public class BedrockProvider : Provider
         : base(DefaultProviderId)
     {
         Api = new AmazonBedrockRuntimeClient(accessKeyId, secretAccessKey, region ?? RegionEndpoint.USEast1);
+        AgentApi = new AmazonBedrockAgentRuntimeClient(accessKeyId, secretAccessKey, region ?? RegionEndpoint.USEast1);
     }
 
     #region Properties
 
     [CLSCompliant(false)]
     public AmazonBedrockRuntimeClient Api { get; }
+
+    [CLSCompliant(false)]
+    public AmazonBedrockAgentRuntimeClient AgentApi { get; }
 
     #endregion
 }
