@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
-		<NoWarn>$(NoWarn);CA1003;CA1307;CA1054;CA1711;CA1819;CA2234</NoWarn>
+		<NoWarn>$(NoWarn);CA1003;CA1307;CA1054;CA1711;CA1819;CA2234;CS3003</NoWarn>
 		<RootNamespace>LangChain.Providers.Amazon.Bedrock</RootNamespace>
 		<IsAotCompatible>false</IsAotCompatible>
 		<IsTrimmable>false</IsTrimmable>

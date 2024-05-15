@@ -47,4 +47,11 @@ public interface IVectorDatabase
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Lists all collections.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains a list of collection names.</returns>
+    Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default);
 }

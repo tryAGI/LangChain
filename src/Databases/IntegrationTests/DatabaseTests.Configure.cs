@@ -45,7 +45,7 @@ public partial class DatabaseTests
                 {
                     return new DatabaseTestEnvironment
                     {
-                        VectorDatabase = new SqLiteVectorDatabase("vectors.db"),
+                        VectorDatabase = new SqLiteVectorDatabase(dataSource: ":memory:"),
                     };
                 }
             // In order to run tests please run postgres with installed pgvector locally

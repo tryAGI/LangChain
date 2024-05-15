@@ -18,6 +18,9 @@ public partial class DatabaseTests
 
         var exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
+        
+        var collections = await vectorDatabase.ListCollectionsAsync();
+        collections.Should().BeEmpty();
 
         // ReSharper disable once AccessToDisposedClosure
         await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
@@ -31,6 +34,9 @@ public partial class DatabaseTests
 
         exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeTrue();
+        
+        collections = await vectorDatabase.ListCollectionsAsync();
+        collections.Should().BeEquivalentTo([environment.CollectionName]);
 
         await vectorDatabase.DeleteCollectionAsync(environment.CollectionName);
 
@@ -40,6 +46,9 @@ public partial class DatabaseTests
 
         exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
+        
+        collections = await vectorDatabase.ListCollectionsAsync();
+        collections.Should().BeEmpty();
     }
 
     [TestCase(SupportedDatabase.InMemory)]

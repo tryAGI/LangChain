@@ -43,15 +43,14 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
             });
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public void Dispose()
     {
         _connection.Close();
         _connection.Dispose();
     }
 
+    /// <inheritdoc />
     public async Task<IVectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         if (!await IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
@@ -62,6 +61,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         return new SqLiteVectorCollection(_connection, collectionName);
     }
 
+    /// <inheritdoc />
     public async Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         var command = _connection.CreateCommand();
@@ -70,6 +70,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     public async Task<IVectorCollection> GetOrCreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
         if (!await IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
@@ -80,6 +81,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         return await GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     public async Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         var command = _connection.CreateCommand();
@@ -89,11 +91,28 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         return result != null;
     }
 
+    /// <inheritdoc />
     public async Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
         var command = _connection.CreateCommand();
         command.CommandText = $"CREATE TABLE IF NOT EXISTS {collectionName} (id TEXT PRIMARY KEY, vector BLOB, document TEXT)";
 
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default)
+    {
+        var command = _connection.CreateCommand();
+        command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'vectors' AND name NOT LIKE 'sqlite_%';";
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        
+        var collections = new List<string>();
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+        {
+            collections.Add(reader["name"].ToString() ?? string.Empty);
+        }
+        
+        return collections;
     }
 }

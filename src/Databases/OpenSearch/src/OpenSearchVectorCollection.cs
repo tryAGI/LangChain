@@ -128,6 +128,7 @@ public class OpenSearchVectorCollection(
         };
     }
 
+    /// <inheritdoc />
     public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

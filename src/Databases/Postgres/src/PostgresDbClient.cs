@@ -1,3 +1,4 @@
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -68,13 +69,30 @@ public class PostgresDbClient
         await using (connection)
         {
             var tablesSchema = await connection
-                .GetSchemaAsync("TABLES", new[] { String.Empty, "public", tableName }, cancellationToken)
+                .GetSchemaAsync("TABLES", [string.Empty, "public", tableName], cancellationToken)
                 .ConfigureAwait(false);
 
             return tablesSchema.Rows.Count != 0;
         }
     }
 
+
+    public async Task<IReadOnlyList<string>> ListTablesAsync(CancellationToken cancellationToken = default)
+    {
+        var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+        await using (connection)
+        {
+            var tablesSchema = await connection
+                .GetSchemaAsync("TABLES", [string.Empty, "public"], cancellationToken)
+                .ConfigureAwait(false);
+
+            return tablesSchema.Rows.Cast<DataRow>()
+                .Select(row => row["TABLE_NAME"].ToString() ?? string.Empty)
+                .ToList();
+        }
+    }
+    
     /// <summary>
     /// Create table for documents with embeddings
     /// </summary>

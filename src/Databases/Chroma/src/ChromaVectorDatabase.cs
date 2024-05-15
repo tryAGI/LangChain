@@ -51,9 +51,16 @@ public class ChromaVectorDatabase : IVectorDatabase
         return false;
     }
 
+    /// <inheritdoc />
     public async Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
         await _client.CreateCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _client.ListCollectionsAsync(cancellationToken).ToListAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

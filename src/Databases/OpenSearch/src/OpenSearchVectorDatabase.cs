@@ -48,6 +48,17 @@ public class OpenSearchVectorDatabase : IVectorDatabase
     }
 
     /// <inheritdoc />
+    public async Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default)
+    {
+        var response = await _client.Indices.GetAsync(Indices.AllIndices, ct: cancellationToken).ConfigureAwait(false);
+            
+        return response.Indices.Keys
+            .Select(x => x.Name)
+            .Where(x => !x.StartsWith(".", StringComparison.Ordinal))
+            .ToList();
+    }
+
+    /// <inheritdoc />
     public async Task<IVectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         var response = await _client.Indices.GetAsync(

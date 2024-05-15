@@ -38,7 +38,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         return JsonSerializer.Serialize(vector, SourceGenerationContext.Default.SingleArray);
     }
 
-    async Task InsertDocument(string id, float[] vector, Document document)
+    private async Task InsertDocument(string id, float[] vector, Document document)
     {
         var insertCommand = _connection.CreateCommand();
         string query = $"INSERT INTO {Name} (id, vector, document) VALUES (@id, @vector, @document)";
@@ -50,7 +50,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
 
     }
 
-    async Task DeleteDocument(string id)
+    private async Task DeleteDocument(string id)
     {
         var deleteCommand = _connection.CreateCommand();
         string query = $"DELETE FROM {Name} WHERE id=@id";
@@ -59,7 +59,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
-    async Task<List<(Document, float)>> SearchByVector(float[] vector, int k)
+    private async Task<List<(Document, float)>> SearchByVector(float[] vector, int k)
     {
         var searchCommand = _connection.CreateCommand();
         string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {Name} ORDER BY d LIMIT @k";
@@ -139,12 +139,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         return count == null || Convert.ToInt32(count, CultureInfo.InvariantCulture) == 0;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ids"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));

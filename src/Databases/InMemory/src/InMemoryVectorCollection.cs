@@ -80,6 +80,7 @@ public class InMemoryVectorCollection(
         });
     }
 
+    /// <inheritdoc />
     public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         return Task.FromResult(_vectors.IsEmpty);

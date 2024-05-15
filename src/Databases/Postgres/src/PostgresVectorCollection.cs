@@ -118,6 +118,7 @@ public class PostgresVectorCollection(
         };
     }
 
+    /// <inheritdoc />
     public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

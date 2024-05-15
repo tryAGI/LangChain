@@ -31,7 +31,7 @@ public class AmazonKnowledgeBaseChatSettings : BedrockChatSettings
     /// <summary>
     /// Knowledge base response citations
     /// </summary>
-    public List<Citation>? Citations { get; set; }
+    public IReadOnlyList<Citation>? Citations { get; set; }
 
     /// <summary>
     /// Calculate the settings to use for the request.

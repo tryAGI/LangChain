@@ -19,6 +19,7 @@ public class PostgresVectorDatabase(
 
     private readonly PostgresDbClient _client = new(connectionString, schema);
 
+    /// <inheritdoc />
     public async Task<IVectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         if (!await IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
@@ -29,11 +30,13 @@ public class PostgresVectorDatabase(
         return new PostgresVectorCollection(_client, collectionName);
     }
 
+    /// <inheritdoc />
     public async Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         await _client.DropTableAsync(collectionName, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     public async Task<IVectorCollection> GetOrCreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
         if (!await IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
@@ -44,16 +47,24 @@ public class PostgresVectorDatabase(
         return await GetCollectionAsync(collectionName, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     public async Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default)
     {
         return await _client.IsTableExistsAsync(collectionName, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     public async Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
         await _client.CreateEmbeddingTableAsync(
             tableName: collectionName,
             dimensions: dimensions,
             cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default)
+    {
+        return _client.ListTablesAsync(cancellationToken);
     }
 }

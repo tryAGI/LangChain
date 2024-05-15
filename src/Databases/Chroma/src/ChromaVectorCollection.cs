@@ -19,9 +19,7 @@ public class ChromaVectorCollection(
     // TODO: SemanticKernel impl doesn't support collection metadata. Need changes when moved to another impl
     //private Dictionary<string, string> CollectionMetadata { get; } = [];
 
-    /// <summary>
-    /// Get collection
-    /// </summary>
+    /// <inheritdoc />
     public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
         var record = await store.GetAsync(Name, id, withEmbedding: true, cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -152,6 +150,7 @@ public class ChromaVectorCollection(
         };
     }
 
+    /// <inheritdoc />
     public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
