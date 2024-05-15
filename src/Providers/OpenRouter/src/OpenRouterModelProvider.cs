@@ -164,9 +164,6 @@ public static class OpenRouterModelProvider
     [CLSCompliant(false)]
     public static ChatModels GetModelById(string modelId)
     {
-        var model = Models.Values.FirstOrDefault(s => s.Id == modelId);
-        if (model == null)
-            throw new KeyNotFoundException($"Model with ID {modelId} not found.");
-        return model;
+        return Models.Values.First(s => s.Id == modelId);
     }
 }

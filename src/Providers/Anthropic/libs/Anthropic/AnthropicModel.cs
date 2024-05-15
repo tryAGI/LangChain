@@ -37,9 +37,9 @@ public partial class AnthropicModel(
     {
         switch (message.Role)
         {
-            case "user":
+            case RoleType.User:
                 return new Message(string.Join("\r\n", message.Content.Select(s => s is TextContent textContent ? textContent.Text : string.Empty)), MessageRole.Human);
-            case "assistant":
+            case RoleType.Assistant:
                 return new Message(string.Join("\r\n", message.Content.Select(s => s is TextContent textContent ? textContent.Text : string.Empty)), MessageRole.Ai);
         }
 

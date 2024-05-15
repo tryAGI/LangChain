@@ -57,7 +57,7 @@ public abstract class LLamaSharpModelBase
             Threads = configuration.Threads,
             BatchThreads = configuration.BatchThreads,
             BatchSize = configuration.BatchSize,
-            EmbeddingMode = configuration.EmbeddingMode
+            Embeddings = configuration.EmbeddingMode,
         };
         Model = LLamaWeights.LoadFromFile(Parameters);
         Configuration = configuration;
