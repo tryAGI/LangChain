@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="NUnit" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+		<ProjectReference Include="..\src\LangChain.Providers.GroqSharp.csproj" />
+	</ItemGroup>
+
+</Project>
