@@ -20,6 +20,7 @@
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageVersion Include="Google_GenerativeAI" Version="0.1.20" />
+    <PackageVersion Include="GroqSharp" Version="1.1.2" />
     <PackageVersion Include="H.Generators.Extensions" Version="1.22.0" />
     <PackageVersion Include="H.NSwag.Generator" Version="14.0.7.76">
       <PrivateAssets>all</PrivateAssets>
