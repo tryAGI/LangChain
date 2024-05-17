@@ -354,11 +354,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.Serve.Ope
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Samples.LocalRAG", "examples\LangChain.Samples.LocalRAG\LangChain.Samples.LocalRAG.csproj", "{3BCE1801-0354-4062-94E1-A3AE9CF82874}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.GroqSharp", "src\Providers\GroqSharp\src\LangChain.Providers.GroqSharp.csproj", "{FD0A56AD-AFB4-4A21-99C1-9BE5D074EB56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Groq", "src\Providers\Groq\src\LangChain.Providers.Groq.csproj", "{FD0A56AD-AFB4-4A21-99C1-9BE5D074EB56}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GroqSharp", "GroqSharp", "{5DEC2707-DD62-4DCD-AC5D-6670AC2A1B01}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Groq", "Groq", "{5DEC2707-DD62-4DCD-AC5D-6670AC2A1B01}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.GroqSharp.Test", "src\Providers\GroqSharp\test\LangChain.Providers.GroqSharp.Test.csproj", "{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Groq.Tests", "src\Providers\Groq\test\LangChain.Providers.Groq.Tests.csproj", "{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
