@@ -18,6 +18,7 @@ public class GroqChatModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         var prompt = ToPrompt(request.Messages);
+        Provider.Api.SetModel(Id);
         var watch = Stopwatch.StartNew();
         var response = await Provider.Api.CreateChatCompletionAsync(prompt).ConfigureAwait(false);
 
