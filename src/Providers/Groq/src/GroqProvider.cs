@@ -15,9 +15,8 @@ public class GroqProvider : Provider
     {
         configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         var apiKey = configuration.ApiKey ?? throw new ArgumentException("ApiKey is not defined", nameof(configuration));
-        var apiModel = configuration.ModelId ?? throw new ArgumentException("ModelId is not defined", nameof(configuration));
 
-        Api = new GroqClient(apiKey, apiModel)
+        Api = new GroqClient(apiKey, configuration.ModelId)
             .SetTemperature(configuration.Temperature)
             .SetMaxTokens(configuration.MaxTokens)
             .SetTopP(configuration.TopP)
