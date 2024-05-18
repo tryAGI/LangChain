@@ -1,10 +1,10 @@
-abstract LangChain.Splitters.Text.TextSplitter.SplitText(string text) -> System.Collections.Generic.IReadOnlyList<string>
+abstract LangChain.Splitters.Text.TextSplitter.SplitText(string! text) -> System.Collections.Generic.IReadOnlyList<string!>!
 LangChain.Splitters.Code.CodePart
 LangChain.Splitters.Code.CodePart.CodePart() -> void
-LangChain.Splitters.Code.CodePart.CodePart(string Name, string Content, LangChain.Splitters.Code.CodePartType Type = LangChain.Splitters.Code.CodePartType.Unknown) -> void
-LangChain.Splitters.Code.CodePart.Content.get -> string
+LangChain.Splitters.Code.CodePart.CodePart(string! Name, string! Content, LangChain.Splitters.Code.CodePartType Type = LangChain.Splitters.Code.CodePartType.Unknown) -> void
+LangChain.Splitters.Code.CodePart.Content.get -> string!
 LangChain.Splitters.Code.CodePart.Content.init -> void
-LangChain.Splitters.Code.CodePart.Name.get -> string
+LangChain.Splitters.Code.CodePart.Name.get -> string!
 LangChain.Splitters.Code.CodePart.Name.init -> void
 LangChain.Splitters.Code.CodePart.Type.get -> LangChain.Splitters.Code.CodePartType
 LangChain.Splitters.Code.CodePart.Type.init -> void
@@ -13,24 +13,24 @@ LangChain.Splitters.Code.CodePartType.Constructor = 2 -> LangChain.Splitters.Cod
 LangChain.Splitters.Code.CodePartType.Method = 1 -> LangChain.Splitters.Code.CodePartType
 LangChain.Splitters.Code.CodePartType.Unknown = 0 -> LangChain.Splitters.Code.CodePartType
 LangChain.Splitters.Code.ICodeCutter
-LangChain.Splitters.Code.ICodeCutter.CutAsync(string content, System.Collections.Generic.IReadOnlyCollection<string> requiredNames, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<string>
+LangChain.Splitters.Code.ICodeCutter.CutAsync(string! content, System.Collections.Generic.IReadOnlyCollection<string!>! requiredNames, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<string!>!
 LangChain.Splitters.Code.ICodeSplitter
-LangChain.Splitters.Code.ICodeSplitter.SplitAsync(string content, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<LangChain.Splitters.Code.CodePart>>
+LangChain.Splitters.Code.ICodeSplitter.SplitAsync(string! content, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<LangChain.Splitters.Code.CodePart>!>!
 LangChain.Splitters.Text.CharacterTextSplitter
-LangChain.Splitters.Text.CharacterTextSplitter.CharacterTextSplitter(string separator = "\n\n", int chunkSize = 4000, int chunkOverlap = 200, System.Func<string, int> lengthFunction = null) -> void
+LangChain.Splitters.Text.CharacterTextSplitter.CharacterTextSplitter(string? separator = "\n\n", int chunkSize = 4000, int chunkOverlap = 200, System.Func<string!, int>? lengthFunction = null) -> void
 LangChain.Splitters.Text.ITextSplitter
-LangChain.Splitters.Text.ITextSplitter.SplitText(string text) -> System.Collections.Generic.IReadOnlyList<string>
+LangChain.Splitters.Text.ITextSplitter.SplitText(string! text) -> System.Collections.Generic.IReadOnlyList<string!>!
 LangChain.Splitters.Text.MarkdownHeaderTextSplitter
-LangChain.Splitters.Text.MarkdownHeaderTextSplitter.MarkdownHeaderTextSplitter(string[] headersToSplitOn = null, bool includeHeaders = true) -> void
+LangChain.Splitters.Text.MarkdownHeaderTextSplitter.MarkdownHeaderTextSplitter(string![]? headersToSplitOn = null, bool includeHeaders = true) -> void
 LangChain.Splitters.Text.RecursiveCharacterTextSplitter
-LangChain.Splitters.Text.RecursiveCharacterTextSplitter.RecursiveCharacterTextSplitter(System.Collections.Generic.IReadOnlyList<string> separators = null, int chunkSize = 4000, int chunkOverlap = 200, System.Func<string, int> lengthFunction = null) -> void
+LangChain.Splitters.Text.RecursiveCharacterTextSplitter.RecursiveCharacterTextSplitter(System.Collections.Generic.IReadOnlyList<string!>? separators = null, int chunkSize = 4000, int chunkOverlap = 200, System.Func<string!, int>? lengthFunction = null) -> void
 LangChain.Splitters.Text.TextSplitter
 LangChain.Splitters.Text.TextSplitter.ChunkOverlap.get -> int
 LangChain.Splitters.Text.TextSplitter.ChunkSize.get -> int
-LangChain.Splitters.Text.TextSplitter.JoinDocs(System.Collections.Generic.IReadOnlyList<string> docs, string separator) -> string
-LangChain.Splitters.Text.TextSplitter.MergeSplits(System.Collections.Generic.IEnumerable<string> splits, string separator) -> System.Collections.Generic.IReadOnlyList<string>
-LangChain.Splitters.Text.TextSplitter.TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, System.Func<string, int> lengthFunction = null) -> void
-override LangChain.Splitters.Text.CharacterTextSplitter.SplitText(string text) -> System.Collections.Generic.IReadOnlyList<string>
-override LangChain.Splitters.Text.MarkdownHeaderTextSplitter.SplitText(string text) -> System.Collections.Generic.IReadOnlyList<string>
-override LangChain.Splitters.Text.RecursiveCharacterTextSplitter.SplitText(string text) -> System.Collections.Generic.IReadOnlyList<string>
+LangChain.Splitters.Text.TextSplitter.JoinDocs(System.Collections.Generic.IReadOnlyList<string!>! docs, string! separator) -> string?
+LangChain.Splitters.Text.TextSplitter.MergeSplits(System.Collections.Generic.IEnumerable<string!>! splits, string! separator) -> System.Collections.Generic.IReadOnlyList<string!>!
+LangChain.Splitters.Text.TextSplitter.TextSplitter(int chunkSize = 4000, int chunkOverlap = 200, System.Func<string!, int>? lengthFunction = null) -> void
+override LangChain.Splitters.Text.CharacterTextSplitter.SplitText(string! text) -> System.Collections.Generic.IReadOnlyList<string!>!
+override LangChain.Splitters.Text.MarkdownHeaderTextSplitter.SplitText(string! text) -> System.Collections.Generic.IReadOnlyList<string!>!
+override LangChain.Splitters.Text.RecursiveCharacterTextSplitter.SplitText(string! text) -> System.Collections.Generic.IReadOnlyList<string!>!
 static LangChain.Splitters.Code.CodePart.Empty.get -> LangChain.Splitters.Code.CodePart
