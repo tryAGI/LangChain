@@ -109,7 +109,7 @@ public partial class OpenAiChatModel(
         }
 
         return new Message(
-            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments.ToJsonString() ?? content,
+            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments.ToJsonString() ?? content ?? string.Empty,
             Role: role,
             FunctionName: $"{message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name}:{message.ToolCalls?.ElementAtOrDefault(0)?.Id}");
     }
