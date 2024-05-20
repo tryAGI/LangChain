@@ -10,7 +10,7 @@ public class GroqChatModel(
     : ChatModel(id), IChatModel
 {
     private GroqProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
-    
+
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,
