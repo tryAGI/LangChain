@@ -8,7 +8,7 @@
     <PackageVersion Include="Anthropic.SDK" Version="3.2.1" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.5.1" />
-    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.307.2" />
+    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.308" />
     <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.302.13" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.301.33" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
@@ -81,7 +81,7 @@
     <PackageVersion Include="Testcontainers.MongoDb" Version="3.8.0" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="3.8.0" />
     <PackageVersion Include="Testcontainers.Redis" Version="3.8.0" />
-    <PackageVersion Include="Tiktoken" Version="2.0.0" />
+    <PackageVersion Include="Tiktoken" Version="2.0.2" />
     <PackageVersion Include="tryAGI.OpenAI" Version="2.0.9" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
