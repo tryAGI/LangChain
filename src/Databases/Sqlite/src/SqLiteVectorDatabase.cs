@@ -106,13 +106,13 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
         var command = _connection.CreateCommand();
         command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'vectors' AND name NOT LIKE 'sqlite_%';";
         var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
-        
+
         var collections = new List<string>();
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             collections.Add(reader["name"].ToString() ?? string.Empty);
         }
-        
+
         return collections;
     }
 }

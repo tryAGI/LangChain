@@ -18,7 +18,7 @@ public partial class DatabaseTests
 
         var exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
-        
+
         var collections = await vectorDatabase.ListCollectionsAsync();
         collections.Should().BeEmpty();
 
@@ -34,7 +34,7 @@ public partial class DatabaseTests
 
         exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeTrue();
-        
+
         collections = await vectorDatabase.ListCollectionsAsync();
         collections.Should().BeEquivalentTo([environment.CollectionName]);
 
@@ -46,7 +46,7 @@ public partial class DatabaseTests
 
         exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
-        
+
         collections = await vectorDatabase.ListCollectionsAsync();
         collections.Should().BeEmpty();
     }

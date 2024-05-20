@@ -92,7 +92,7 @@ public class PostgresDbClient
                 .ToList();
         }
     }
-    
+
     /// <summary>
     /// Create table for documents with embeddings
     /// </summary>
