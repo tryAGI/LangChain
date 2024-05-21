@@ -15,11 +15,10 @@ public class OllamaProvider(
     /// <summary>
     /// 
     /// </summary>
-    public OllamaApiClient Api { get; } = new(new HttpClient
+    public OllamaApiClient Api { get; } = new(httpClient: new HttpClient
     {
         Timeout = TimeSpan.FromHours(1),
-        BaseAddress = new Uri(url),
-    });
+    }, baseUri: new Uri(url));
 
     /// <summary>
     /// 

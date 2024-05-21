@@ -32,15 +32,11 @@ public class OllamaChatModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        var models = await Provider.Api.ListLocalModelsAsync(cancellationToken).ConfigureAwait(false);
-        if (models.All(x => x.Model != Id))
-        {
-            await Provider.Api.PullModelAsync(Id, cancellationToken: cancellationToken).WaitAsync().ConfigureAwait(false);
-        }
+        await Provider.Api.PullModelAndEnsureSuccessAsync(Id, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var prompt = ToPrompt(request.Messages);
         var watch = Stopwatch.StartNew();
-        var response = Provider.Api.GetCompletionAsync(new GenerateCompletionRequest
+        var response = Provider.Api.GenerateCompletionAsync(new GenerateCompletionRequest
         {
             Prompt = prompt,
             Model = Id,
