@@ -16,7 +16,7 @@ var vectorDatabase = new SqLiteVectorDatabase(dataSource: "vectors.db");
 
 var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
     embeddingModel, // Used to convert text to embeddings
-    dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
+    dimensions: 384, // Should be 384 for all-minilm
     dataSource: DataSource.FromUrl("https://canonburyprimaryschool.co.uk/wp-content/uploads/2016/01/Joanne-K.-Rowling-Harry-Potter-Book-1-Harry-Potter-and-the-Philosophers-Stone-EnglishOnlineClub.com_.pdf"),
     collectionName: "harrypotter", // Can be omitted, use if you want to have multiple collections
     textSplitter: null,
