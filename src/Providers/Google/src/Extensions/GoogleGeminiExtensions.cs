@@ -27,7 +27,7 @@ internal static class GoogleGeminiExtensions
         if (arguments == null)
             return string.Empty;
 
-        return JsonSerializer.Serialize(arguments, SourceGenerationContext.Default.DictionaryStringObject);
+        return JsonSerializer.Serialize(arguments);
     }
 }
 
