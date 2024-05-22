@@ -1,4 +1,5 @@
 using GenerativeAI.Models;
+using GeminiProModel = LangChain.Providers.Google.Predefined.GeminiProModel;
 
 namespace LangChain.Providers.Google.Tests;
 
@@ -13,7 +14,7 @@ public class GeneralTests
             throw new InvalidOperationException("Gemini_API_Key is not set");
 
 
-        var model = new GoogleChatModel(apiKey, GoogleAIModels.GeminiPro);
+        var model = new GeminiProModel(apiKey);//, GoogleAIModels.GeminiPro);
 
         var service = new WeatherService();
         model.AddGlobalTools(service.AsGoogleFunctions(), service.AsGoogleCalls());
@@ -25,6 +26,9 @@ public class GeneralTests
                  "Sure! Could you please provide me with your location?".AsAiMessage(),
                  "Dubai, UAE".AsHumanMessage(),
             });
+        response.Usage.InputTokens.Should().BeGreaterThan(0);
+        response.Usage.OutputTokens.Should().BeGreaterThan(0);
+        response.Usage.PriceInUsd.Should().BeGreaterThan(0);
 
         Console.WriteLine(response.Messages.AsHistory());
     }
