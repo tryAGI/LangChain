@@ -61,6 +61,7 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.Wizardlm28X22b, new ChatModels("microsoft/WizardLM-2-8x22B",65536,1.2E-06,1.2E-06)},
         { TogetherAiModelIds.Mistral7BInstruct, new ChatModels("mistralai/Mistral-7B-Instruct-v0.1",4096,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Mistral7BInstructV02, new ChatModels("mistralai/Mistral-7B-Instruct-v0.2",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.Mistral7BInstructV03, new ChatModels("mistralai/Mistral-7B-Instruct-v0.3",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Mixtral8X22bInstructV01, new ChatModels("mistralai/Mixtral-8x22B-Instruct-v0.1",65536,1.2E-06,1.2E-06)},
         { TogetherAiModelIds.Mixtral8X7BInstructV01, new ChatModels("mistralai/Mixtral-8x7B-Instruct-v0.1",32768,6E-07,6E-07)},
         { TogetherAiModelIds.OpenChat35, new ChatModels("openchat/openchat-3.5-1210",8192,2.0000000000000002E-07,2.0000000000000002E-07)},

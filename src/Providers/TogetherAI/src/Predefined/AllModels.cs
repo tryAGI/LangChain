@@ -260,6 +260,11 @@ public class Mistral7BInstructModel(TogetherAiProvider provider) : TogetherAiMod
 public class Mistral7BInstructV02Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mistral7BInstructV02);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.Mistral7BInstructV03"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Mistral7BInstructV03Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mistral7BInstructV03);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.Mixtral8X22bInstructV01"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Mixtral8X22bInstructV01Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mixtral8X22bInstructV01);

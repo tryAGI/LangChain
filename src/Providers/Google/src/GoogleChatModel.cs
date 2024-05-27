@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using GenerativeAI.Models;
 using GenerativeAI.Types;
 using LangChain.Providers.Google.Extensions;
@@ -51,6 +53,8 @@ public partial class GoogleChatModel(
         };
     }
 
+    [RequiresDynamicCode("Calls LangChain.Providers.Google.Extensions.GoogleGeminiExtensions.GetString()")]
+    [RequiresUnreferencedCode("Calls LangChain.Providers.Google.Extensions.GoogleGeminiExtensions.GetString()")]
     private static Message ToMessage(EnhancedGenerateContentResponse message)
     {
         if (message.GetFunction() != null)
@@ -113,6 +117,8 @@ public partial class GoogleChatModel(
     }
 
     /// <inheritdoc />
+    [RequiresDynamicCode()]
+    [RequiresUnreferencedCode()]
     public override async Task<ChatResponse> GenerateAsync(
         ChatRequest request,
         ChatSettings? settings = null,

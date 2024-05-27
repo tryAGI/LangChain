@@ -579,6 +579,17 @@ public enum TogetherAiModelIds
     Mistral7BInstructV02,
 
     /// <summary>
+    /// Name: Mistral (7B) Instruct v0.3 <br/>
+    /// Organization: mistralai <br/>
+    /// Context Length: 32768 <br/>
+    /// Prompt Cost: $0.2/MTok <br/>
+    /// Completion Cost: $0.2/MTok <br/>
+    /// Description: The Mistral-7B-Instruct-v0.3 Large Language Model (LLM) is an instruct fine-tuned version of the Mistral-7B-v0.3. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3">https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3</a>
+    /// </summary>
+    Mistral7BInstructV03,
+
+    /// <summary>
     /// Name: Mixtral-8x22B Instruct v0.1 <br/>
     /// Organization: mistralai <br/>
     /// Context Length: 65536 <br/>
