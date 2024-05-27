@@ -144,7 +144,7 @@ public partial class GoogleChatModel(
             OnPartialResponseGenerated(Environment.NewLine);
             OnCompletedResponseGenerated(response.Text() ?? string.Empty);
 
-            
+
             var usage2 = GetUsage(response) with
             {
                 Time = watch.Elapsed
@@ -194,7 +194,7 @@ public partial class GoogleChatModel(
                 }
             }
         }
-        
+
         //Add Usage
         var usage = Usage.Empty with
         {
