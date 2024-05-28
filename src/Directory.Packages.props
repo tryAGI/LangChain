@@ -8,9 +8,9 @@
     <PackageVersion Include="Anthropic.SDK" Version="3.2.1" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.5.1" />
-    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.308.2" />
-    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.302.15" />
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.301.35" />
+    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.308.3" />
+    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.302.16" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.301.36" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
     <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
@@ -40,7 +40,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.6" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.10.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.10.0-alpha" />
