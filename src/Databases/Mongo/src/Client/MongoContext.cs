@@ -7,7 +7,7 @@ namespace LangChain.Databases.Mongo.Client;
 
 public class MongoContext : IMongoContext
 {
-    public readonly IMongoDatabase _mongoDatabase;
+    protected readonly IMongoDatabase _mongoDatabase;
 
     public MongoContext(IDatabaseConfiguration databaseConfiguration)
     {
