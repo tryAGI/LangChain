@@ -4,6 +4,8 @@ using LangChain.Databases.InMemory;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
 using LangChain.Databases.Sqlite;
+using LangChain.Databases.Mongo;
+using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
 
 namespace LangChain.Databases.IntegrationTests;
@@ -100,6 +102,24 @@ public partial class DatabaseTests
                         Container = container,
                         Port = port2,
                     };
+                }
+
+            case SupportedDatabase.Mongo:
+                {                  
+                    var port = Random.Shared.Next(49152, 65535);
+                    var container = new MongoDbBuilder()
+                        .WithImage("mongo")
+                        .WithPortBinding(hostPort: port, containerPort: 27017)
+                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(27017))                            
+                        .Build();                        
+
+                    await container.StartAsync(cancellationToken);                       
+
+                    return new DatabaseTestEnvironment
+                    {
+                        VectorDatabase = new MongoVectorDatabase(container.GetConnectionString()),
+                        Container = container,
+                    };                                       
                 }
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
