@@ -189,7 +189,6 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
-    
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -220,13 +219,13 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]    
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
         var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
-        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);       
+        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
 
         var similar = await vectorCollection.SearchAsync(Embeddings["lemon"], new VectorSearchSettings
         {
@@ -247,9 +246,9 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.Chroma)]
     [TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]    
+    [TestCase(SupportedDatabase.SqLite)]
     public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)
-    {       
+    {
         await using var environment = await StartEnvironmentForAsync(database);
         var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
 
