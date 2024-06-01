@@ -108,7 +108,10 @@ Thought:{history}";
             | Set(toolNames, "tool_names")
             | LoadMemory(_conversationBufferMemory, outputKey: "history")
             | Template(_reActPrompt)
-            | Chain.LLM(_model).UseCache(_useCache)
+            | Chain.LLM(_model, settings: new ChatSettings
+            {
+                StopSequences = ["Observation", "[END]"],
+            }).UseCache(_useCache)
             | UpdateMemory(_conversationBufferMemory, requestKey: "input", responseKey: "text")
             | ReActParser(inputKey: "text", outputKey: ReActAnswer);
 

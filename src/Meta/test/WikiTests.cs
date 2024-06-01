@@ -50,7 +50,7 @@ public class WikiTests
         var apiKey =
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InvalidOperationException("OpenAI API key is not set");
-        var llm = new Gpt35TurboModel(apiKey);
+        var llm = new Gpt35TurboModel(apiKey).UseConsoleForDebug();
 
         // create a google search 
         var searchApiKey =
