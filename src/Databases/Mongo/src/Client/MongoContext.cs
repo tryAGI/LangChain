@@ -22,7 +22,7 @@ public class MongoContext : IMongoContext
         name = name ?? throw new ArgumentNullException(nameof(name));
 
         return _mongoDatabase.GetCollection<T>(name);
-    }   
+    }
 
     public IMongoDatabase GetDatabase()
     {
@@ -32,9 +32,9 @@ public class MongoContext : IMongoContext
     public async Task<List<string>> GetCollections()
     {
         List<string> collectionNames = new List<string>();
-        var collections = await _mongoDatabase.ListCollectionsAsync();
+        var collections = await _mongoDatabase.ListCollectionsAsync().ConfigureAwait(false);
 
-        foreach (BsonDocument collection in await collections.ToListAsync<BsonDocument>())
+        foreach (BsonDocument collection in await collections.ToListAsync<BsonDocument>().ConfigureAwait(false))
         {
             string name = collection["name"].AsString;
             collectionNames.Add(name);

@@ -14,7 +14,7 @@ namespace LangChain.Databases.Mongo
     string schema = MongoVectorDatabase.DefaultSchema)
     : IVectorDatabase
     {
-        private const string DefaultSchema = "langchain";        
+        private const string DefaultSchema = "langchain";
 
         private readonly IMongoDbClient _client = new MongoDbClient(
             new MongoContext(
@@ -38,7 +38,7 @@ namespace LangChain.Databases.Mongo
                 DatabaseName = schema,
             });
 
-            return new MongoVectorCollection(context, "idx_"+collectionName, name: collectionName);
+            return new MongoVectorCollection(context, "idx_" + collectionName, name: collectionName);
         }
 
         /// <inheritdoc />
@@ -71,9 +71,9 @@ namespace LangChain.Databases.Mongo
             var indexName = await collection.Indexes.CreateOneAsync(new CreateIndexModel<Vector>(
                                    Builders<Vector>.IndexKeys.Ascending(v => v.Embedding)
                                                             .Ascending(v => v.Text), new CreateIndexOptions
-                                   {
-                                       Background = true,
-                                   }), cancellationToken: cancellationToken).ConfigureAwait(false);
+                                                            {
+                                                                Background = true,
+                                                            }), cancellationToken: cancellationToken).ConfigureAwait(false);
             return;
         }
 

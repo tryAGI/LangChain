@@ -105,21 +105,21 @@ public partial class DatabaseTests
                 }
 
             case SupportedDatabase.Mongo:
-                {                  
+                {
                     var port = Random.Shared.Next(49152, 65535);
                     var container = new MongoDbBuilder()
                         .WithImage("mongo")
                         .WithPortBinding(hostPort: port, containerPort: 27017)
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(27017))                            
-                        .Build();                        
+                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(27017))
+                        .Build();
 
-                    await container.StartAsync(cancellationToken);                       
+                    await container.StartAsync(cancellationToken);
 
                     return new DatabaseTestEnvironment
                     {
                         VectorDatabase = new MongoVectorDatabase(container.GetConnectionString()),
                         Container = container,
-                    };                                       
+                    };
                 }
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
