@@ -65,9 +65,9 @@ public class MongoVectorDatabase(
         var indexName = await collection.Indexes.CreateOneAsync(new CreateIndexModel<Vector>(
             Builders<Vector>.IndexKeys.Ascending(v => v.Embedding)
                 .Ascending(v => v.Text), new CreateIndexOptions
-            {
-                Background = true,
-            }), cancellationToken: cancellationToken).ConfigureAwait(false);
+                {
+                    Background = true,
+                }), cancellationToken: cancellationToken).ConfigureAwait(false);
         return;
     }
 

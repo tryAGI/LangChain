@@ -31,7 +31,7 @@ internal static class GoogleGeminiExtensions
         var dictionary = arguments.ToDictionary(
             x => x.Key,
             x => x.Value.ToString() ?? string.Empty);
-        
+
         return JsonSerializer.Serialize(dictionary, SourceGenerationContext.Default.DictionaryStringString);
     }
 }
