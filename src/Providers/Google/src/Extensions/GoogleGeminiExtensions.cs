@@ -23,14 +23,16 @@ internal static class GoogleGeminiExtensions
         ]);
     }
 
-    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.Serialize<TValue>(TValue, JsonSerializerOptions)")]
-    [RequiresDynamicCode("Calls System.Text.Json.JsonSerializer.Serialize<TValue>(TValue, JsonSerializerOptions)")]
     public static string GetString(this IDictionary<string, object>? arguments)
     {
         if (arguments == null)
             return string.Empty;
 
-        return JsonSerializer.Serialize(arguments);
+        var dictionary = arguments.ToDictionary(
+            x => x.Key,
+            x => x.Value.ToString() ?? string.Empty);
+        
+        return JsonSerializer.Serialize(dictionary, SourceGenerationContext.Default.DictionaryStringString);
     }
 }
 
@@ -38,5 +40,5 @@ internal static class GoogleGeminiExtensions
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     Converters = [typeof(JsonStringEnumConverter)])]
-[JsonSerializable(typeof(Dictionary<string, object>))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 internal sealed partial class SourceGenerationContext : JsonSerializerContext;

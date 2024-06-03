@@ -58,7 +58,8 @@ public static class StringExtensions
             {
                 FunctionCall = new ChatFunctionCall
                 {
-                    Arguments = JsonSerializer.Deserialize(args, SourceGenerationContext.Default.DictionaryStringObject),
+                    Arguments = JsonSerializer.Deserialize(args, SourceGenerationContext.Default.DictionaryStringString)?
+                        .ToDictionary(x => x.Key, x => (object)x.Value) ?? [],
                     Name = functionName
                 }
             }
