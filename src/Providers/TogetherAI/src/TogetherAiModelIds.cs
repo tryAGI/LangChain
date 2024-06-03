@@ -524,7 +524,7 @@ public enum TogetherAiModelIds
     Llama2Chat7B,
 
     /// <summary>
-    /// Name: Meta Llama 3 70B Instruct <br/>
+    /// Name: Meta Llama 3 70B Chat <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
     /// Prompt Cost: $0.9/MTok <br/>
@@ -532,10 +532,10 @@ public enum TogetherAiModelIds
     /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
     /// </summary>
-    MetaLlama370BInstruct,
+    MetaLlama370BChat,
 
     /// <summary>
-    /// Name: Meta Llama 3 8B Instruct <br/>
+    /// Name: Meta Llama 3 8B Chat <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
     /// Prompt Cost: $0.2/MTok <br/>
@@ -543,7 +543,7 @@ public enum TogetherAiModelIds
     /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-8b-chat-hf">https://huggingface.co/meta-llama/Llama-3-8b-chat-hf</a>
     /// </summary>
-    MetaLlama38BInstruct,
+    MetaLlama38BChat,
 
     /// <summary>
     /// Name: WizardLM-2 (8x22B) <br/>
@@ -577,6 +577,17 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2">https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2</a>
     /// </summary>
     Mistral7BInstructV02,
+
+    /// <summary>
+    /// Name: Mistral (7B) Instruct v0.3 <br/>
+    /// Organization: mistralai <br/>
+    /// Context Length: 32768 <br/>
+    /// Prompt Cost: $0.2/MTok <br/>
+    /// Completion Cost: $0.2/MTok <br/>
+    /// Description: The Mistral-7B-Instruct-v0.3 Large Language Model (LLM) is an instruct fine-tuned version of the Mistral-7B-v0.3. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3">https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3</a>
+    /// </summary>
+    Mistral7BInstructV03,
 
     /// <summary>
     /// Name: Mixtral-8x22B Instruct v0.1 <br/>
@@ -753,5 +764,27 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4">https://huggingface.co/togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4</a>
     /// </summary>
     UpstageSolarInstructV111BInt4,
+
+    /// <summary>
+    /// Name: Meta Llama 3 8B Instruct <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.2/MTok <br/>
+    /// Completion Cost: $0.2/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct</a>
+    /// </summary>
+    MetaLlama38BInstruct,
+
+    /// <summary>
+    /// Name: Meta Llama 3 70B Instruct <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.9/MTok <br/>
+    /// Completion Cost: $0.9/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct</a>
+    /// </summary>
+    MetaLlama370BInstruct,
 
 }

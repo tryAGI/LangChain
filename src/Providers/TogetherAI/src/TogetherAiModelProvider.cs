@@ -56,11 +56,12 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.Llama2Chat13B, new ChatModels("meta-llama/Llama-2-13b-chat-hf",4096,2.2E-07,2.2E-07)},
         { TogetherAiModelIds.Llama2Chat70B, new ChatModels("meta-llama/Llama-2-70b-chat-hf",4096,9.000000000000001E-07,9.000000000000001E-07)},
         { TogetherAiModelIds.Llama2Chat7B, new ChatModels("meta-llama/Llama-2-7b-chat-hf",4096,2.0000000000000002E-07,2.0000000000000002E-07)},
-        { TogetherAiModelIds.MetaLlama370BInstruct, new ChatModels("meta-llama/Llama-3-70b-chat-hf",8192,9.000000000000001E-07,9.000000000000001E-07)},
-        { TogetherAiModelIds.MetaLlama38BInstruct, new ChatModels("meta-llama/Llama-3-8b-chat-hf",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.MetaLlama370BChat, new ChatModels("meta-llama/Llama-3-70b-chat-hf",8192,9.000000000000001E-07,9.000000000000001E-07)},
+        { TogetherAiModelIds.MetaLlama38BChat, new ChatModels("meta-llama/Llama-3-8b-chat-hf",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Wizardlm28X22b, new ChatModels("microsoft/WizardLM-2-8x22B",65536,1.2E-06,1.2E-06)},
         { TogetherAiModelIds.Mistral7BInstruct, new ChatModels("mistralai/Mistral-7B-Instruct-v0.1",4096,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Mistral7BInstructV02, new ChatModels("mistralai/Mistral-7B-Instruct-v0.2",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.Mistral7BInstructV03, new ChatModels("mistralai/Mistral-7B-Instruct-v0.3",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Mixtral8X22bInstructV01, new ChatModels("mistralai/Mixtral-8x22B-Instruct-v0.1",65536,1.2E-06,1.2E-06)},
         { TogetherAiModelIds.Mixtral8X7BInstructV01, new ChatModels("mistralai/Mixtral-8x7B-Instruct-v0.1",32768,6E-07,6E-07)},
         { TogetherAiModelIds.OpenChat35, new ChatModels("openchat/openchat-3.5-1210",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
@@ -77,6 +78,8 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.Llama38BChatHfInt4, new ChatModels("togethercomputer/Llama-3-8b-chat-hf-int4",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.TogethercomputerLlama38BInstructInt8, new ChatModels("togethercomputer/Llama-3-8b-chat-hf-int8",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.UpstageSolarInstructV111BInt4, new ChatModels("togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4",4096,3E-07,3E-07)},
+        { TogetherAiModelIds.MetaLlama38BInstruct, new ChatModels("meta-llama/Meta-Llama-3-8B-Instruct",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.MetaLlama370BInstruct, new ChatModels("meta-llama/Meta-Llama-3-70B-Instruct",8192,9.000000000000001E-07,9.000000000000001E-07)},
 
     };
 
