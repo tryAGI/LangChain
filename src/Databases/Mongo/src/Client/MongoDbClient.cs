@@ -1,9 +1,7 @@
 ﻿using LangChain.Databases.Mongo.Model;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Configuration;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 
 namespace LangChain.Databases.Mongo.Client;
 
@@ -84,7 +82,7 @@ public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
     {
         await mongoContext.GetDatabase().CreateCollectionAsync(collectionName, new CreateCollectionOptions
         {
-            AutoIndexId = true
+            AutoIndexId = true,
         }).ConfigureAwait(false);
 
         var collection = mongoContext.GetCollection<T>(collectionName);

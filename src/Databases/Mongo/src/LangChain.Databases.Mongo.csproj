@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net4.7.2;netstandard2.0;netstandard2.1;net6.0;net8.0</TargetFrameworks>
         <SignAssembly>false</SignAssembly>
+        <NoWarn>$(NoWarn);CA1716;CS0618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">

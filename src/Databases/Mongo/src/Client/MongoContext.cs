@@ -1,13 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Authentication;
-using MongoDB.Driver.Core.Configuration;
 
 namespace LangChain.Databases.Mongo.Client;
 
 public class MongoContext : IMongoContext
 {
-    protected readonly IMongoDatabase _mongoDatabase;
+    private readonly IMongoDatabase _mongoDatabase;
 
     public MongoContext(IDatabaseConfiguration databaseConfiguration)
     {
