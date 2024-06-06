@@ -127,11 +127,16 @@ public partial class GoogleChatModel(
             settings,
             Settings,
             provider.ChatSettings);
+        var usage = Usage.Empty;
 
         if (usedSettings.UseStreaming == true)
         {
             var message = await StreamCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
             messages.Add(message);
+            usage += Usage.Empty with
+            {
+                Time = watch.Elapsed
+            };
         }
         else
         {
@@ -145,14 +150,14 @@ public partial class GoogleChatModel(
             OnCompletedResponseGenerated(response.Text() ?? string.Empty);
 
 
-            var usage2 = GetUsage(response) with
+            usage = GetUsage(response) with
             {
                 Time = watch.Elapsed
             };
 
             //Add Usage
-            AddUsage(usage2);
-            provider.AddUsage(usage2);
+            AddUsage(usage);
+            provider.AddUsage(usage);
 
             //Handle Function Call
             while (ReplyToToolCallsAutomatically && response.IsFunctionCall())
@@ -185,28 +190,21 @@ public partial class GoogleChatModel(
                     messages.Add(message);
 
                     //Add Usage
-                    usage2 = GetUsage(response) with
+                    var usage2 = GetUsage(response) with
                     {
                         Time = watch.Elapsed
                     };
                     AddUsage(usage2);
                     provider.AddUsage(usage2);
+                    usage += usage2;
                 }
             }
         }
-
-        //Add Usage
-        var usage = Usage.Empty with
-        {
-            Time = watch.Elapsed
-        };
-        AddUsage(usage);
-        provider.AddUsage(usage);
-
+        
         return new ChatResponse
         {
             Messages = messages,
-            Usage = Usage,
+            Usage = usage,
             UsedSettings = ChatSettings.Default
         };
     }

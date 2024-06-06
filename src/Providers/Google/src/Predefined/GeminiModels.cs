@@ -24,4 +24,4 @@ public class Gemini15FlashModel(GoogleProvider provider)
 public class Gemini15ProModel(GoogleProvider provider)
     : GoogleChatModel(
         provider,
-        GoogleAIModels.Gemini15Flash, 2 * 1024 * 1024, 3.5 * 0.000001, 10.50 * 0.000001, 7.0 * 0.000001, 21.00 * 0.000001);
+        GoogleAIModels.Gemini15Pro, 2 * 1024 * 1024, 3.5 * 0.000001, 10.50 * 0.000001, 7.0 * 0.000001, 21.00 * 0.000001);
