@@ -31,7 +31,7 @@ public static class OpenRouterCodeGenerator
 
         //Load Open Router Docs Page...
         Console.WriteLine("Loading Model Page...");
-        var str = await GetStringAsync(new Uri("https://openrouter.ai/docs")).ConfigureAwait(false);
+        var str = await GetStringAsync(new Uri("https://openrouter.ai/docs/models")).ConfigureAwait(false);
 
         //Parse Html
         lbb.DocumentText = str;
@@ -199,9 +199,9 @@ public static class OpenRouterCodeGenerator
             contextLengthNode.FirstChild.FirstChild.InnerText.Replace(",", "", StringComparison.InvariantCulture);
 
         //Calculate Cost per Token
-        if (double.TryParse(promptCostText, out var promptCost)) promptCost = promptCost / 1000;
+        if (double.TryParse(promptCostText, out var promptCost)) promptCost = promptCost / 1000000;
 
-        if (double.TryParse(completionCostText, out var completionCost)) completionCost = completionCost / 1000;
+        if (double.TryParse(completionCostText, out var completionCost)) completionCost = completionCost / 1000000;
 
 
         //Code for adding ChatModel into Dictionary<OpenRouterModelIds,ChatModels>() 
