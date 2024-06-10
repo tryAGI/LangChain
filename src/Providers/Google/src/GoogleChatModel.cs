@@ -200,7 +200,7 @@ public partial class GoogleChatModel(
                 }
             }
         }
-        
+
         return new ChatResponse
         {
             Messages = messages,
