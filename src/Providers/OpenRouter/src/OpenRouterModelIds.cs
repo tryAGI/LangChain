@@ -7,6 +7,32 @@ public enum OpenRouterModelIds
 {
 
     /// <summary>
+    /// Dolphin 2.9 is designed for instruction following, conversational, and coding. This model is a finetune of Mixtral 8x22B Instruct. It features a 64k context length and was fine-tuned with a 16k sequence length using ChatML templates.  <br/>
+    /// This model is a successor to Dolphin Mixtral 8x7B.  <br/>
+    /// The model is uncensored and is stripped of alignment and bias. It requires an external alignment layer for ethical use. Users are cautioned to use this highly compliant model responsibly, as detailed in a blog post about uncensored models at erichartford.com/uncensored-models.  <br/>
+    /// #moe #uncensored  <br/>
+    /// Note: This model is new and experimental, and may be removed if overall usage is too low.  <br/>
+    /// </summary>
+    Dolphin292Mixtral8X22b,
+
+    /// <summary>
+    /// Qwen2 72B is a transformer-based model that excels in language understanding, multilingual capabilities, coding, mathematics, and reasoning.  <br/>
+    /// It features SwiGLU activation, attention QKV bias, and group query attention. It is pretrained on extensive data with supervised finetuning and direct preference optimization.  <br/>
+    /// For more details, see this blog post and GitHub repo.  <br/>
+    /// Usage of this model is subject to Tongyi Qianwen LICENSE AGREEMENT.  <br/>
+    /// </summary>
+    Qwen272BInstruct,
+
+    /// <summary>
+    /// OpenChat 8B is a library of open-source language models, fine-tuned with "C-RLFT (Conditioned Reinforcement Learning Fine-Tuning)" - a strategy inspired by offline reinforcement learning. It has been trained on mixed-quality data without preference labels.  <br/>
+    /// It outperforms many similarly sized models including Llama 3 8B Instruct and various fine-tuned models. It excels in general conversation, coding assistance, and mathematical reasoning.  <br/>
+    /// For OpenChat fine-tuned on Mistral 7B, check out OpenChat 7B.  <br/>
+    /// For OpenChat fine-tuned on Llama 8B, check out OpenChat 8B.  <br/>
+    /// #open-source  <br/>
+    /// </summary>
+    OpenChat368B,
+
+    /// <summary>
     /// A high-performing, industry-standard 7.3B parameter model, with optimizations for speed and context length.  <br/>
     /// </summary>
     MistralMistral7BInstruct,
@@ -45,6 +71,12 @@ public enum OpenRouterModelIds
     /// Note: this is a free, rate-limited version of this model. Outputs may be cached. Read about rate limits here.  <br/>
     /// </summary>
     Phi3MediumInstructFree,
+
+    /// <summary>
+    /// Phi-3 Medium is a powerful 14-billion parameter model designed for advanced language understanding, reasoning, and instruction following. Optimized through supervised fine-tuning and preference adjustments, it excels in tasks involving common sense, mathematics, logical reasoning, and code processing.  <br/>
+    /// At time of release, Phi-3 Medium demonstrated state-of-the-art performance among lightweight models. In the MMLU-Pro eval, the model even comes close to a Llama3 70B level of performance.  <br/>
+    /// </summary>
+    Phi3MediumInstruct,
 
     /// <summary>
     /// The NeverSleep team is back, with a Llama 3 70B finetune trained on their curated roleplay data. Striking a balance between eRP and RP, Lumimaid was designed to be serious, yet uncensored when necessary.  <br/>
