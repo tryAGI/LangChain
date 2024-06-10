@@ -1,5 +1,20 @@
 namespace LangChain.Providers.OpenRouter.Predefined;
 
+/// <inheritdoc cref="OpenRouterModelIds.Dolphin292Mixtral8X22b"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Dolphin292Mixtral8X22bModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Dolphin292Mixtral8X22b);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Qwen272BInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Qwen272BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Qwen272BInstruct);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.OpenChat368B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class OpenChat368BModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.OpenChat368B);
+
+
 /// <inheritdoc cref="OpenRouterModelIds.MistralMistral7BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class MistralMistral7BInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.MistralMistral7BInstruct);
@@ -28,6 +43,11 @@ public class Phi3MiniInstructModel(OpenRouterProvider provider) : OpenRouterMode
 /// <inheritdoc cref="OpenRouterModelIds.Phi3MediumInstructFree"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Phi3MediumInstructFreeModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Phi3MediumInstructFree);
+
+
+/// <inheritdoc cref="OpenRouterModelIds.Phi3MediumInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Phi3MediumInstructModel(OpenRouterProvider provider) : OpenRouterModel(provider, OpenRouterModelIds.Phi3MediumInstruct);
 
 
 /// <inheritdoc cref="OpenRouterModelIds.Llama3Lumimaid70B"/>
