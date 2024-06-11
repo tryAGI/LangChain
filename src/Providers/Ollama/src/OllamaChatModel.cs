@@ -32,18 +32,18 @@ public class OllamaChatModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        await Provider.Api.PullModelAndEnsureSuccessAsync(Id, cancellationToken: cancellationToken).ConfigureAwait(false);
+        await Provider.Api.Models.PullModelAndEnsureSuccessAsync(Id, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var prompt = ToPrompt(request.Messages);
         var watch = Stopwatch.StartNew();
-        var response = Provider.Api.GenerateCompletionAsync(new GenerateCompletionRequest
+        var response = Provider.Api.Completions.GenerateCompletionAsync(new GenerateCompletionRequest
         {
             Prompt = prompt,
             Model = Id,
             Options = Provider.Options,
             Stream = true,
             Raw = true,
-            Format = UseJson ? "json" : string.Empty,
+            Format = UseJson ? GenerateCompletionRequestFormat.Json : null,
         }, cancellationToken);
 
         OnPromptSent(prompt);
