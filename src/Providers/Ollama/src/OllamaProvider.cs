@@ -8,7 +8,7 @@ namespace LangChain.Providers.Ollama;
 /// <param name="url"></param>
 /// <param name="options"></param>
 public class OllamaProvider(
-    string url = "http://localhost:11434",
+    string url = "http://localhost:11434/api",
     RequestOptions? options = null)
     : Provider(id: "ollama")
 {
