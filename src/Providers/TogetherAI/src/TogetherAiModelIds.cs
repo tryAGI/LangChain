@@ -480,6 +480,17 @@ public enum TogetherAiModelIds
     GemmaInstruct7B,
 
     /// <summary>
+    /// Name: Jedify - Llama 3 8B Chat <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0/MTok <br/>
+    /// Completion Cost: $0/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/jedify/Llama-3-8b-chat-hf">https://huggingface.co/jedify/Llama-3-8b-chat-hf</a>
+    /// </summary>
+    JedifyLlama38BChat,
+
+    /// <summary>
     /// Name: Vicuna v1.5 (13B) <br/>
     /// Organization: LM Sys <br/>
     /// Context Length: 4096 <br/>

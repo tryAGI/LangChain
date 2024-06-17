@@ -52,6 +52,7 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.Platypus2Instruct70B, new ChatModels("garage-bAInd/Platypus2-70B-instruct",4096,9.000000000000001E-07,9.000000000000001E-07)},
         { TogetherAiModelIds.GemmaInstruct2B, new ChatModels("google/gemma-2b-it",8192,1.0000000000000001E-07,1.0000000000000001E-07)},
         { TogetherAiModelIds.GemmaInstruct7B, new ChatModels("google/gemma-7b-it",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.JedifyLlama38BChat, new ChatModels("jedify/Llama-3-8b-chat-hf",8192,0,0)},
         { TogetherAiModelIds.VicunaV1513B, new ChatModels("lmsys/vicuna-13b-v1.5",4096,3E-07,3E-07)},
         { TogetherAiModelIds.VicunaV157B, new ChatModels("lmsys/vicuna-7b-v1.5",4096,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.ReservedDbrxInstruct, new ChatModels("medaltv/dbrx-instruct",0,1.2E-06,1.2E-06)},
