@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="AngleSharp" Version="1.1.2" />
     <PackageVersion Include="Anthropic" Version="0.3.1" />
-    <PackageVersion Include="Anthropic.SDK" Version="3.2.1" />
+    <PackageVersion Include="Anthropic.SDK" Version="3.2.2" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.5.1" />
     <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.308.12" />
@@ -77,10 +77,10 @@
     <PackageVersion Include="System.Net.Http.Json" Version="8.0.0" />
     <PackageVersion Include="System.Text.Json" Version="8.0.3" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
-    <PackageVersion Include="Testcontainers" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.MongoDb" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.PostgreSql" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.Redis" Version="3.8.0" />
+    <PackageVersion Include="Testcontainers" Version="3.9.0" />
+    <PackageVersion Include="Testcontainers.MongoDb" Version="3.9.0" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="3.9.0" />
+    <PackageVersion Include="Testcontainers.Redis" Version="3.9.0" />
     <PackageVersion Include="Tiktoken" Version="2.0.2" />
     <PackageVersion Include="tryAGI.OpenAI" Version="2.0.9" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
