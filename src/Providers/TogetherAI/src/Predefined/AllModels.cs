@@ -215,6 +215,11 @@ public class GemmaInstruct2BModel(TogetherAiProvider provider) : TogetherAiModel
 public class GemmaInstruct7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.GemmaInstruct7B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.JedifyLlama38BChat"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class JedifyLlama38BChatModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.JedifyLlama38BChat);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.VicunaV1513B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class VicunaV1513BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.VicunaV1513B);
