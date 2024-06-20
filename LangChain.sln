@@ -360,6 +360,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Groq", "Groq", "{5DEC2707-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Groq.Tests", "src\Providers\Groq\test\LangChain.Providers.Groq.Tests.csproj", "{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elasticsearch", "Elasticsearch", "{46A24203-9C28-4135-ACC6-484C4BE4A6F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Elasticsearch", "src\Databases\Elasticsearch\src\LangChain.Databases.Elasticsearch.csproj", "{12007C28-2F0A-4D51-8DF6-5ED41F1ACF44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -734,6 +738,10 @@ Global
 		{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12007C28-2F0A-4D51-8DF6-5ED41F1ACF44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12007C28-2F0A-4D51-8DF6-5ED41F1ACF44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12007C28-2F0A-4D51-8DF6-5ED41F1ACF44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12007C28-2F0A-4D51-8DF6-5ED41F1ACF44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -878,6 +886,8 @@ Global
 		{FD0A56AD-AFB4-4A21-99C1-9BE5D074EB56} = {5DEC2707-DD62-4DCD-AC5D-6670AC2A1B01}
 		{5DEC2707-DD62-4DCD-AC5D-6670AC2A1B01} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
 		{CC7F58F4-C824-4BED-8C4A-760C9AB8FC6E} = {5DEC2707-DD62-4DCD-AC5D-6670AC2A1B01}
+		{46A24203-9C28-4135-ACC6-484C4BE4A6F2} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
+		{12007C28-2F0A-4D51-8DF6-5ED41F1ACF44} = {46A24203-9C28-4135-ACC6-484C4BE4A6F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}
