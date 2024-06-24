@@ -260,17 +260,6 @@ public enum TogetherAiModelIds
     ToppyM7B,
 
     /// <summary>
-    /// Name: WizardCoder v1.0 (15B) <br/>
-    /// Organization: WizardLM <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.3/MTok <br/>
-    /// Completion Cost: $0.3/MTok <br/>
-    /// Description: This model empowers Code LLMs with complex instruction fine-tuning, by adapting the Evol-Instruct method to the domain of code. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/WizardLM/WizardCoder-15B-V1.0">https://huggingface.co/WizardLM/WizardCoder-15B-V1.0</a>
-    /// </summary>
-    WizardcoderV1015B,
-
-    /// <summary>
     /// Name: WizardCoder Python v1.0 (34B) <br/>
     /// Organization: WizardLM <br/>
     /// Context Length: 8192 <br/>
@@ -480,17 +469,6 @@ public enum TogetherAiModelIds
     GemmaInstruct7B,
 
     /// <summary>
-    /// Name: Jedify - Llama 3 8B Chat <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0/MTok <br/>
-    /// Completion Cost: $0/MTok <br/>
-    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/jedify/Llama-3-8b-chat-hf">https://huggingface.co/jedify/Llama-3-8b-chat-hf</a>
-    /// </summary>
-    JedifyLlama38BChat,
-
-    /// <summary>
     /// Name: Vicuna v1.5 (13B) <br/>
     /// Organization: LM Sys <br/>
     /// Context Length: 4096 <br/>
@@ -687,28 +665,6 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/Llama-2-7B-32K-Instruct">https://huggingface.co/togethercomputer/Llama-2-7B-32K-Instruct</a>
     /// </summary>
     Llama27B32KInstruct7B,
-
-    /// <summary>
-    /// Name: RedPajama-INCITE Chat (7B) <br/>
-    /// Organization: Together <br/>
-    /// Context Length: 2048 <br/>
-    /// Prompt Cost: $0.2/MTok <br/>
-    /// Completion Cost: $0.2/MTok <br/>
-    /// Description: Chat model fine-tuned using data from Dolly 2.0 and Open Assistant over the RedPajama-INCITE-Base-7B-v1 base model. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/RedPajama-INCITE-7B-Chat">https://huggingface.co/togethercomputer/RedPajama-INCITE-7B-Chat</a>
-    /// </summary>
-    RedpajamaInciteChat7B,
-
-    /// <summary>
-    /// Name: RedPajama-INCITE Chat (3B) <br/>
-    /// Organization: Together <br/>
-    /// Context Length: 2048 <br/>
-    /// Prompt Cost: $0.1/MTok <br/>
-    /// Completion Cost: $0.1/MTok <br/>
-    /// Description: Chat model fine-tuned using data from Dolly 2.0 and Open Assistant over the RedPajama-INCITE-Base-3B-v1 base model. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/RedPajama-INCITE-Chat-3B-v1">https://huggingface.co/togethercomputer/RedPajama-INCITE-Chat-3B-v1</a>
-    /// </summary>
-    RedpajamaInciteChat3B,
 
     /// <summary>
     /// Name: StripedHyena Nous (7B) <br/>

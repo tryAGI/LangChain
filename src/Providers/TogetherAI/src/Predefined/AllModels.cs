@@ -115,11 +115,6 @@ public class RemmSlerpL213BModel(TogetherAiProvider provider) : TogetherAiModel(
 public class ToppyM7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.ToppyM7B);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.WizardcoderV1015B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class WizardcoderV1015BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.WizardcoderV1015B);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.WizardcoderPythonV1034B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class WizardcoderPythonV1034BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.WizardcoderPythonV1034B);
@@ -215,11 +210,6 @@ public class GemmaInstruct2BModel(TogetherAiProvider provider) : TogetherAiModel
 public class GemmaInstruct7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.GemmaInstruct7B);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.JedifyLlama38BChat"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class JedifyLlama38BChatModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.JedifyLlama38BChat);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.VicunaV1513B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class VicunaV1513BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.VicunaV1513B);
@@ -308,16 +298,6 @@ public class OpenHermes25Mistral7BModel(TogetherAiProvider provider) : TogetherA
 /// <inheritdoc cref="TogetherAiModelIds.Llama27B32KInstruct7B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Llama27B32KInstruct7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama27B32KInstruct7B);
-
-
-/// <inheritdoc cref="TogetherAiModelIds.RedpajamaInciteChat7B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class RedpajamaInciteChat7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.RedpajamaInciteChat7B);
-
-
-/// <inheritdoc cref="TogetherAiModelIds.RedpajamaInciteChat3B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class RedpajamaInciteChat3BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.RedpajamaInciteChat3B);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.StripedhyenaNous7B"/>
