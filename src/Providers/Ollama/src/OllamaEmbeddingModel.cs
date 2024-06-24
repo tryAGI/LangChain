@@ -33,7 +33,7 @@ public class OllamaEmbeddingModel(
         {
             // Ignore
         }
-        
+
         var results = new List<IList<double>>(capacity: request.Strings.Count);
         foreach (var prompt in request.Strings)
         {
