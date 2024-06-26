@@ -25,10 +25,19 @@ public class OllamaEmbeddingModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
+        try
+        {
+            await Provider.Api.Models.PullModelAndEnsureSuccessAsync(Id, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        catch (HttpRequestException)
+        {
+            // Ignore
+        }
+
         var results = new List<IList<double>>(capacity: request.Strings.Count);
         foreach (var prompt in request.Strings)
         {
-            var response = await Provider.Api.GenerateEmbeddingsAsync(new GenerateEmbeddingRequest
+            var response = await Provider.Api.Embeddings.GenerateEmbeddingAsync(new GenerateEmbeddingRequest
             {
                 Prompt = prompt,
                 Model = Id,

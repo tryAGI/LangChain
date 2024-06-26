@@ -1,4 +1,5 @@
 ﻿using LangChain.Databases.Mongo.Model;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
@@ -6,6 +7,7 @@ namespace LangChain.Databases.Mongo.Client;
 
 public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
 {
+
     public async Task BatchDeactivate<T>(Expression<Func<T, bool>> filter) where T : BaseEntity
     {
         var entityIds = (await Get(filter, p => p.Id).ConfigureAwait(false)).ToList();
@@ -52,5 +54,43 @@ public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
         entity = entity ?? throw new ArgumentNullException(nameof(entity));
 
         await GetCollection<T>().InsertOneAsync(entity).ConfigureAwait(false);
+    }
+
+    public async Task<bool> CollectionExistsAsync(string collectionName)
+    {
+        var filter = new BsonDocument("name", collectionName);
+        var options = new ListCollectionNamesOptions { Filter = filter };
+
+        var collections = await mongoContext.GetDatabase().ListCollectionNamesAsync(options).ConfigureAwait(false);
+
+        return await collections.AnyAsync().ConfigureAwait(false);
+    }
+
+    public bool CollectionExists(string collectionName)
+    {
+        var filter = new BsonDocument("name", collectionName);
+        var options = new ListCollectionNamesOptions { Filter = filter };
+        return mongoContext.GetDatabase().ListCollectionNames(options).Any();
+    }
+
+    public async Task<List<string>> GetCollections()
+    {
+        return await mongoContext.GetCollections().ConfigureAwait(false);
+    }
+
+    public async Task<IMongoCollection<T>> CreateCollection<T>(string collectionName)
+    {
+        await mongoContext.GetDatabase().CreateCollectionAsync(collectionName, new CreateCollectionOptions
+        {
+            AutoIndexId = true,
+        }).ConfigureAwait(false);
+
+        var collection = mongoContext.GetCollection<T>(collectionName);
+        return collection;
+    }
+
+    public async Task DropCollectionAsync(string collectionName)
+    {
+        await mongoContext.GetDatabase().DropCollectionAsync(collectionName).ConfigureAwait(false);
     }
 }

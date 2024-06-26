@@ -3,7 +3,7 @@
 public class GroqProvider : Provider
 {
     public IGroqClient Api { get; private set; }
-    
+
     public GroqProvider(GroqClient groqClient)
         : base(id: GroqConfiguration.SectionName)
     {

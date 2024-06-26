@@ -10,6 +10,7 @@ public class LLMChain : BaseStackableChain
 {
     private readonly IChatModel _llm;
     private bool _useCache;
+    private ChatSettings _settings;
 
     private const string CACHE_DIR = "cache";
 
@@ -17,12 +18,14 @@ public class LLMChain : BaseStackableChain
     public LLMChain(
         IChatModel llm,
         string inputKey = "prompt",
-        string outputKey = "text"
+        string outputKey = "text",
+        ChatSettings? settings = null
         )
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
         _llm = llm;
+        _settings = settings ?? new ChatSettings();
     }
 
     string? GetCachedAnswer(string prompt)
@@ -63,7 +66,7 @@ public class LLMChain : BaseStackableChain
             }
         }
 
-        var response = await _llm.GenerateAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var response = await _llm.GenerateAsync(prompt, settings: _settings, cancellationToken: cancellationToken).ConfigureAwait(false);
         responseContent = response.Messages.Last().Content;
         if (_useCache)
             SaveCachedAnswer(prompt, responseContent);

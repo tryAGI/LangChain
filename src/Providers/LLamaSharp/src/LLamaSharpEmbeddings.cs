@@ -1,5 +1,5 @@
-﻿using LLama.Common;
-using LLama;
+﻿using LLama;
+using LLama.Common;
 
 namespace LangChain.Providers.LLamaSharp;
 
@@ -23,7 +23,8 @@ public sealed class LLamaSharpEmbeddings
         return new LLamaSharpEmbeddings(new LLamaSharpConfiguration
         {
             PathToModelFile = path,
-            Temperature = temperature
+            Temperature = temperature,
+            EmbeddingMode = true
         });
     }
 
@@ -43,6 +44,7 @@ public sealed class LLamaSharpEmbeddings
         {
             ContextSize = (uint)configuration.ContextSize,
             Seed = (uint)configuration.Seed,
+            Embeddings = configuration.EmbeddingMode
         };
         _model = LLamaWeights.LoadFromFile(parameters);
         _configuration = configuration;

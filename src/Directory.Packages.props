@@ -18,8 +18,8 @@
     <PackageVersion Include="DocumentFormat.OpenXml" Version="3.0.2" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
-    <PackageVersion Include="Google_GenerativeAI" Version="0.1.20" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
+    <PackageVersion Include="Google_GenerativeAI" Version="1.0.1" />
     <PackageVersion Include="GroqSharp" Version="1.1.2" />
     <PackageVersion Include="H.Generators.Extensions" Version="1.22.0" />
     <PackageVersion Include="H.NSwag.Generator" Version="14.0.7.76">
@@ -35,13 +35,13 @@
     <PackageVersion Include="IsExternalInit" Version="1.0.3" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
     <PackageVersion Include="LLamaSharp" Version="0.12.0" />
-    <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.12.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
+    <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.13.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.10.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.6" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.10.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.10.0-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Chroma" Version="1.10.0-alpha" />
@@ -57,7 +57,7 @@
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Npgsql" Version="8.0.3" />
-    <PackageVersion Include="Ollama" Version="1.0.0" />
+    <PackageVersion Include="Ollama" Version="1.3.2" />
     <PackageVersion Include="OpenSearch.Client" Version="1.7.1" />
     <PackageVersion Include="Pgvector" Version="0.2.0" />
     <PackageVersion Include="NUnit" Version="4.1.0" />
@@ -77,11 +77,11 @@
     <PackageVersion Include="System.Net.Http.Json" Version="8.0.0" />
     <PackageVersion Include="System.Text.Json" Version="8.0.3" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
-    <PackageVersion Include="Testcontainers" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.MongoDb" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.PostgreSql" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.Redis" Version="3.8.0" />
-    <PackageVersion Include="Tiktoken" Version="2.0.0" />
+    <PackageVersion Include="Testcontainers" Version="3.9.0" />
+    <PackageVersion Include="Testcontainers.MongoDb" Version="3.9.0" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="3.9.0" />
+    <PackageVersion Include="Testcontainers.Redis" Version="3.9.0" />
+    <PackageVersion Include="Tiktoken" Version="2.0.2" />
     <PackageVersion Include="tryAGI.OpenAI" Version="2.0.9" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />

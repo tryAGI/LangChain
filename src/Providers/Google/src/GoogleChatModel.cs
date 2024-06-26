@@ -9,13 +9,19 @@ namespace LangChain.Providers.Google;
 /// </summary>
 public partial class GoogleChatModel(
     GoogleProvider provider,
-    string id)
+    string id,
+    int contextLength = 0,
+    double inputTokenPriceUsd = 0,
+    double outputTokenPriceUsd = 0,
+    double secondaryInputTokenPrice = 0,
+    double secondaryOutputTokenPrice = 0)
     : ChatModel(id)
 {
     #region Properties
 
     /// <inheritdoc />
-    public override int ContextLength => 0;
+    public override int ContextLength => contextLength;
+
 
     private GenerativeModel Api { get; } = new(
         provider.ApiKey,
@@ -121,11 +127,16 @@ public partial class GoogleChatModel(
             settings,
             Settings,
             provider.ChatSettings);
+        var usage = Usage.Empty;
 
         if (usedSettings.UseStreaming == true)
         {
             var message = await StreamCompletionAsync(messages, cancellationToken).ConfigureAwait(false);
             messages.Add(message);
+            usage += Usage.Empty with
+            {
+                Time = watch.Elapsed
+            };
         }
         else
         {
@@ -138,13 +149,15 @@ public partial class GoogleChatModel(
             OnPartialResponseGenerated(Environment.NewLine);
             OnCompletedResponseGenerated(response.Text() ?? string.Empty);
 
-            // Unsupported
-            var usage2 = Usage.Empty with
+
+            usage = GetUsage(response) with
             {
                 Time = watch.Elapsed
             };
-            AddUsage(usage2);
-            provider.AddUsage(usage2);
+
+            //Add Usage
+            AddUsage(usage);
+            provider.AddUsage(usage);
 
             //Handle Function Call
             while (ReplyToToolCallsAutomatically && response.IsFunctionCall())
@@ -176,27 +189,17 @@ public partial class GoogleChatModel(
 
                     messages.Add(message);
 
-                    usage2 = Usage.Empty with
+                    //Add Usage
+                    var usage2 = GetUsage(response) with
                     {
                         Time = watch.Elapsed
                     };
                     AddUsage(usage2);
                     provider.AddUsage(usage2);
+                    usage += usage2;
                 }
             }
         }
-
-
-        //Function Call
-
-
-        // Unsupported
-        var usage = Usage.Empty with
-        {
-            Time = watch.Elapsed
-        };
-        AddUsage(usage);
-        provider.AddUsage(usage);
 
         return new ChatResponse
         {
@@ -205,7 +208,38 @@ public partial class GoogleChatModel(
             UsedSettings = ChatSettings.Default
         };
     }
+    private Usage GetUsage(EnhancedGenerateContentResponse response)
+    {
+        var outputTokens = response.UsageMetadata?.CandidatesTokenCount ?? 0;
+        var inputTokens = response.UsageMetadata?.PromptTokenCount ?? 0;
+        var priceInUsd = CalculatePriceInUsd(
+            outputTokens: outputTokens,
+            inputTokens: inputTokens);
 
+        return Usage.Empty with
+        {
+            InputTokens = inputTokens,
+            OutputTokens = outputTokens,
+            Messages = 1,
+            PriceInUsd = priceInUsd,
+        };
+    }
+    /// <inheritdoc/>
+    public double CalculatePriceInUsd(int inputTokens, int outputTokens)
+    {
+        if (inputTokens < 128 * 1024)
+        {
+            var inputCost = inputTokenPriceUsd * inputTokens;
+            var outputCost = outputTokenPriceUsd * outputTokens;
+            return inputCost + outputCost;
+        }
+        else
+        {
+            var inputCost = secondaryInputTokenPrice * inputTokens;
+            var outputCost = secondaryOutputTokenPrice * outputTokens;
+            return inputCost + outputCost;
+        }
+    }
     private static Message ToFunctionCallMessage(string jsonResult, string functionName)
     {
         //var result = JsonSerializer.Deserialize<JsonNode>(jsonResult, SerializerOptions);

@@ -8,18 +8,17 @@ namespace LangChain.Providers.Ollama;
 /// <param name="url"></param>
 /// <param name="options"></param>
 public class OllamaProvider(
-    string url = "http://localhost:11434",
+    string url = "http://localhost:11434/api",
     RequestOptions? options = null)
     : Provider(id: "ollama")
 {
     /// <summary>
     /// 
     /// </summary>
-    public OllamaApiClient Api { get; } = new(new HttpClient
+    public OllamaApiClient Api { get; } = new(httpClient: new HttpClient
     {
         Timeout = TimeSpan.FromHours(1),
-        BaseAddress = new Uri(url),
-    });
+    }, baseUri: new Uri(url));
 
     /// <summary>
     /// 

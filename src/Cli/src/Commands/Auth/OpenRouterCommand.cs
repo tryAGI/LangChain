@@ -13,7 +13,7 @@ public class OpenRouterCommand : Command
             description: "OpenRouter API key from https://openrouter.ai/keys");
         var modelOption = new Option<string>(
             aliases: ["--model", "-m"],
-            getDefaultValue: () => OpenRouterModelProvider.GetModelById(OpenRouterModelIds.Mistral7BInstructFree),
+            getDefaultValue: () => OpenRouterModelProvider.GetModelById(OpenRouterModelIds.OpenChat357B),
             description: "Model to use for commands");
         AddArgument(apiKeyArgument);
         AddOption(modelOption);
