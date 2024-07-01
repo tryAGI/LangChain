@@ -69,16 +69,17 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.OpenHermes2Mistral7B, new ChatModels("teknium/OpenHermes-2-Mistral-7B",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.OpenHermes25Mistral7B, new ChatModels("teknium/OpenHermes-2p5-Mistral-7B",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Llama27B32KInstruct7B, new ChatModels("togethercomputer/Llama-2-7B-32K-Instruct",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
-        { TogetherAiModelIds.StripedhyenaNous7B, new ChatModels("togethercomputer/StripedHyena-Nous-7B",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.Alpaca7B, new ChatModels("togethercomputer/alpaca-7b",2048,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.UpstageSolarInstructV111B, new ChatModels("upstage/SOLAR-10.7B-Instruct-v1.0",4096,3E-07,3E-07)},
         { TogetherAiModelIds._01AiYiChat34B, new ChatModels("zero-one-ai/Yi-34B-Chat",4096,8.000000000000001E-07,8.000000000000001E-07)},
-        { TogetherAiModelIds.MetaLlama370BChat, new ChatModels("meta-llama/Llama-3-70b-chat-hf",8192,9.000000000000001E-07,9.000000000000001E-07)},
         { TogetherAiModelIds.Llama38BChatHfInt4, new ChatModels("togethercomputer/Llama-3-8b-chat-hf-int4",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.StripedhyenaNous7B, new ChatModels("togethercomputer/StripedHyena-Nous-7B",32768,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.TogethercomputerLlama38BInstructInt8, new ChatModels("togethercomputer/Llama-3-8b-chat-hf-int8",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
+        { TogetherAiModelIds.MetaLlama370BChat, new ChatModels("meta-llama/Llama-3-70b-chat-hf",8192,9.000000000000001E-07,9.000000000000001E-07)},
         { TogetherAiModelIds.UpstageSolarInstructV111BInt4, new ChatModels("togethercomputer/SOLAR-10.7B-Instruct-v1.0-int4",4096,3E-07,3E-07)},
         { TogetherAiModelIds.MetaLlama38BInstruct, new ChatModels("meta-llama/Meta-Llama-3-8B-Instruct",8192,2.0000000000000002E-07,2.0000000000000002E-07)},
         { TogetherAiModelIds.MetaLlama370BInstruct, new ChatModels("meta-llama/Meta-Llama-3-70B-Instruct",8192,9.000000000000001E-07,9.000000000000001E-07)},
+        { TogetherAiModelIds.Gemma2Instruct9B, new ChatModels("google/gemma-2-9b-it",8192,3E-07,3E-07)},
 
     };
 
