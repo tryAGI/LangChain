@@ -667,17 +667,6 @@ public enum TogetherAiModelIds
     Llama27B32KInstruct7B,
 
     /// <summary>
-    /// Name: StripedHyena Nous (7B) <br/>
-    /// Organization: Together <br/>
-    /// Context Length: 32768 <br/>
-    /// Prompt Cost: $0.2/MTok <br/>
-    /// Completion Cost: $0.2/MTok <br/>
-    /// Description: A hybrid architecture composed of multi-head, grouped-query attention and gated convolutions arranged in Hyena blocks, different from traditional decoder-only Transformers <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/StripedHyena-Nous-7B">https://huggingface.co/togethercomputer/StripedHyena-Nous-7B</a>
-    /// </summary>
-    StripedhyenaNous7B,
-
-    /// <summary>
     /// Name: Alpaca (7B) <br/>
     /// Organization: Stanford <br/>
     /// Context Length: 2048 <br/>
@@ -711,17 +700,6 @@ public enum TogetherAiModelIds
     _01AiYiChat34B,
 
     /// <summary>
-    /// Name: Meta Llama 3 70B Chat <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.9/MTok <br/>
-    /// Completion Cost: $0.9/MTok <br/>
-    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
-    /// </summary>
-    MetaLlama370BChat,
-
-    /// <summary>
     /// Name: Llama3 8B Chat HF INT4 <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
@@ -733,6 +711,17 @@ public enum TogetherAiModelIds
     Llama38BChatHfInt4,
 
     /// <summary>
+    /// Name: StripedHyena Nous (7B) <br/>
+    /// Organization: Together <br/>
+    /// Context Length: 32768 <br/>
+    /// Prompt Cost: $0.2/MTok <br/>
+    /// Completion Cost: $0.2/MTok <br/>
+    /// Description: A hybrid architecture composed of multi-head, grouped-query attention and gated convolutions arranged in Hyena blocks, different from traditional decoder-only Transformers <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/StripedHyena-Nous-7B">https://huggingface.co/togethercomputer/StripedHyena-Nous-7B</a>
+    /// </summary>
+    StripedhyenaNous7B,
+
+    /// <summary>
     /// Name: Togethercomputer Llama3 8B Instruct Int8 <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
@@ -742,6 +731,17 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/togethercomputer/Llama-3-8b-chat-hf-int8">https://huggingface.co/togethercomputer/Llama-3-8b-chat-hf-int8</a>
     /// </summary>
     TogethercomputerLlama38BInstructInt8,
+
+    /// <summary>
+    /// Name: Meta Llama 3 70B Chat <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.9/MTok <br/>
+    /// Completion Cost: $0.9/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
+    /// </summary>
+    MetaLlama370BChat,
 
     /// <summary>
     /// Name: Upstage SOLAR Instruct v1 (11B)-Int4 <br/>
@@ -775,5 +775,16 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct</a>
     /// </summary>
     MetaLlama370BInstruct,
+
+    /// <summary>
+    /// Name: Gemma-2 Instruct (9B) <br/>
+    /// Organization: google <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.3/MTok <br/>
+    /// Completion Cost: $0.3/MTok <br/>
+    /// Description: Gemma is a family of lightweight, state-of-the-art open models from Google, built from the same research and technology used to create the Gemini models. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/google/gemma-2-9b-it">https://huggingface.co/google/gemma-2-9b-it</a>
+    /// </summary>
+    Gemma2Instruct9B,
 
 }
