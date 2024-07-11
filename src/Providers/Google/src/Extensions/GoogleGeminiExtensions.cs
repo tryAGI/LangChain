@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using GenerativeAI.Tools;
 using GenerativeAI.Types;
@@ -27,7 +28,11 @@ internal static class GoogleGeminiExtensions
         if (arguments == null)
             return string.Empty;
 
-        return JsonSerializer.Serialize(arguments, SourceGenerationContext.Default.DictionaryStringObject);
+        var dictionary = arguments.ToDictionary(
+            x => x.Key,
+            x => x.Value.ToString() ?? string.Empty);
+
+        return JsonSerializer.Serialize(dictionary, SourceGenerationContext.Default.DictionaryStringString);
     }
 }
 
@@ -35,5 +40,5 @@ internal static class GoogleGeminiExtensions
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     Converters = [typeof(JsonStringEnumConverter)])]
-[JsonSerializable(typeof(Dictionary<string, object>))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 internal sealed partial class SourceGenerationContext : JsonSerializerContext;

@@ -51,7 +51,7 @@ public class OpenSearchVectorDatabase : IVectorDatabase
     public async Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default)
     {
         var response = await _client.Indices.GetAsync(Indices.AllIndices, ct: cancellationToken).ConfigureAwait(false);
-            
+
         return response.Indices.Keys
             .Select(x => x.Name)
             .Where(x => !x.StartsWith(".", StringComparison.Ordinal))

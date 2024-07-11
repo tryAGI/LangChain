@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace LangChain.Databases.Mongo.Client;
 
@@ -20,4 +21,24 @@ public class MongoContext : IMongoContext
 
         return _mongoDatabase.GetCollection<T>(name);
     }
+
+    public IMongoDatabase GetDatabase()
+    {
+        return _mongoDatabase;
+    }
+
+    public async Task<List<string>> GetCollections()
+    {
+        List<string> collectionNames = new List<string>();
+        var collections = await _mongoDatabase.ListCollectionsAsync().ConfigureAwait(false);
+
+        foreach (BsonDocument collection in await collections.ToListAsync<BsonDocument>().ConfigureAwait(false))
+        {
+            string name = collection["name"].AsString;
+            collectionNames.Add(name);
+        }
+
+        return collectionNames;
+    }
+
 }

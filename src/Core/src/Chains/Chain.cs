@@ -75,13 +75,15 @@ public static class Chain
     /// <param name="llm"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
+    /// <param name="settings"></param>
     /// <returns></returns>
     public static LLMChain LLM(
         IChatModel llm,
         string inputKey = "text",
-        string outputKey = "text")
+        string outputKey = "text",
+        ChatSettings? settings = null)
     {
-        return new LLMChain(llm, inputKey, outputKey);
+        return new LLMChain(llm, inputKey, outputKey, settings);
     }
 
     /// <inheritdoc cref="LLM"/>

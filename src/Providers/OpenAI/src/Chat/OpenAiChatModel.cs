@@ -266,12 +266,13 @@ public partial class OpenAiChatModel(
                     OnPartialResponseGenerated(Environment.NewLine);
                     OnCompletedResponseGenerated(newMessage.Content);
 
-                    usage = GetUsage(response) with
+                    var usage2 = GetUsage(response) with
                     {
                         Time = watch.Elapsed,
                     };
-                    AddUsage(usage);
-                    provider.AddUsage(usage);
+                    AddUsage(usage2);
+                    provider.AddUsage(usage2);
+                    usage += usage2;
                 }
             }
 
