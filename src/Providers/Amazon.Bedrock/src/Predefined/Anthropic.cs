@@ -24,3 +24,7 @@ public class Claude3HaikuModel(BedrockProvider provider)
 /// <inheritdoc />
 public class Claude3OpusModel(BedrockProvider provider)
     : AnthropicClaude3ChatModel(provider, id: "anthropic.claude-3-opus-20240229-v1:0");
+
+/// <inheritdoc />
+public class Claude35SonnetModel(BedrockProvider provider)
+    : AnthropicClaude3ChatModel(provider, id: "anthropic.claude-3-5-sonnet-20240620-v1:0");

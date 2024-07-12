@@ -43,3 +43,11 @@ public class Claude3Sonnet(AnthropicProvider provider)
 [RequiresUnreferencedCode("Members from serialized types may be trimmed if not referenced directly")]
 public class Claude3Opus(AnthropicProvider provider)
     : AnthropicModel(provider, AnthropicModels.Claude3Opus);
+
+/// <summary>
+/// Ideal balance of intelligence and speed for enterprise workloads
+/// Max Tokens: 200K
+/// </summary>
+[RequiresUnreferencedCode("Members from serialized types may be trimmed if not referenced directly")]
+public class Claude35Sonnet(AnthropicProvider provider)
+    : AnthropicModel(provider, AnthropicModels.Claude35Sonnet);

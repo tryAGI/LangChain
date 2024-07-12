@@ -32,7 +32,14 @@ public class OllamaChatModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        await Provider.Api.Models.PullModelAndEnsureSuccessAsync(Id, cancellationToken: cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await Provider.Api.Models.PullModelAndEnsureSuccessAsync(Id, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        catch (HttpRequestException)
+        {
+            // Ignore
+        }
 
         var prompt = ToPrompt(request.Messages);
         var watch = Stopwatch.StartNew();
