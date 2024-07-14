@@ -1,0 +1,13 @@
+﻿using Google.Cloud.AIPlatform.V1;
+
+namespace LangChain.Providers.Google.VertexAI
+{
+    public class VertexAIConfiguration
+    {
+        public const string SectionName = "VertexAI";
+        public string Location { get; set; } = "us-central1";
+        public string Publisher { get; set; } = "google";
+        public required string ProjectId { get; set; }
+        public GenerationConfig? GenerationConfig { get; set; }
+    }
+}
