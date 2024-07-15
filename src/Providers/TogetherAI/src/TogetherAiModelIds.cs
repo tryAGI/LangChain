@@ -798,4 +798,15 @@ public enum TogetherAiModelIds
     /// </summary>
     Hermes2ThetaLlama370B,
 
+    /// <summary>
+    /// Name: Llama-3 70B Instruct Gradient 1048K <br/>
+    /// Organization: gradientai <br/>
+    /// Context Length: 1048576 <br/>
+    /// Prompt Cost: $0/MTok <br/>
+    /// Completion Cost: $0/MTok <br/>
+    /// Description: This model extends LLama-3 70B's context length from 8k to > 1048K <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/gradientai/Llama-3-70B-Instruct-Gradient-1048k">https://huggingface.co/gradientai/Llama-3-70B-Instruct-Gradient-1048k</a>
+    /// </summary>
+    Llama370BInstructGradient1048K,
+
 }

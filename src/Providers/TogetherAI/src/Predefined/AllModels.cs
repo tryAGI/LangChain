@@ -360,3 +360,8 @@ public class Gemma2Instruct9BModel(TogetherAiProvider provider) : TogetherAiMode
 public class Hermes2ThetaLlama370BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Hermes2ThetaLlama370B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.Llama370BInstructGradient1048K"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Llama370BInstructGradient1048KModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama370BInstructGradient1048K);
+
+

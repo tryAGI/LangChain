@@ -81,6 +81,7 @@ public static class TogetherAiModelProvider
         { TogetherAiModelIds.MetaLlama370BInstruct, new ChatModels("meta-llama/Meta-Llama-3-70B-Instruct",8192,9.000000000000001E-07,9.000000000000001E-07)},
         { TogetherAiModelIds.Gemma2Instruct9B, new ChatModels("google/gemma-2-9b-it",8192,3E-07,3E-07)},
         { TogetherAiModelIds.Hermes2ThetaLlama370B, new ChatModels("NousResearch/Hermes-2-Theta-Llama-3-70B",8192,0,0)},
+        { TogetherAiModelIds.Llama370BInstructGradient1048K, new ChatModels("gradientai/Llama-3-70B-Instruct-Gradient-1048k",1048576,0,0)},
 
     };
 
