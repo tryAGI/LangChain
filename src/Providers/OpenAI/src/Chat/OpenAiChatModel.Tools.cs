@@ -18,7 +18,7 @@ public partial class OpenAiChatModel
     public bool ReplyToToolCallsAutomatically { get; set; } = true;
 
     [CLSCompliant(false)]
-    protected List<Tool> GlobalTools { get; } = [];
+    protected List<ChatCompletionTool> GlobalTools { get; } = [];
     protected Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; } = [];
 
     #endregion
@@ -33,7 +33,7 @@ public partial class OpenAiChatModel
     /// <returns></returns>
     [CLSCompliant(false)]
     public void AddGlobalTools(
-        ICollection<Tool> tools,
+        ICollection<ChatCompletionTool> tools,
         IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> calls)
     {
         tools = tools ?? throw new ArgumentNullException(nameof(tools));

@@ -1,3 +1,6 @@
+using Tiktoken;
+using Tiktoken.Encodings;
+
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
@@ -10,8 +13,7 @@ public partial class OpenAiChatModel
     /// <summary>
     /// 
     /// </summary>
-    public Tiktoken.Encoding Encoding { get; } =
-        Tiktoken.Encoding.TryForModel(chatModel.Id) ?? Tiktoken.Encoding.Get(Tiktoken.Encodings.Cl100KBase);
+    public Encoder? Encoder { get; private set; }
 
     #endregion
 
@@ -20,7 +22,9 @@ public partial class OpenAiChatModel
     /// <inheritdoc/>
     public int CountTokens(string text)
     {
-        return Encoding.CountTokens(text);
+        Encoder ??= ModelToEncoder.TryFor(ChatModel) ?? new Encoder(new Cl100KBase());
+        
+        return Encoder.CountTokens(text);
     }
 
     /// <inheritdoc/>

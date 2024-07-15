@@ -1,8 +1,5 @@
 using System.Diagnostics;
 using System.Text;
-using System.Text.Json;
-using OpenAI;
-using OpenAI.Constants;
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
 
@@ -11,40 +8,32 @@ namespace LangChain.Providers.OpenAI;
 
 public partial class OpenAiChatModel(
     OpenAiProvider provider,
-    ChatModels chatModel)
-    : ChatModel(chatModel.Id),
+    string id)
+    : ChatModel(id),
         IChatModelWithTokenCounting,
         IPaidLargeLanguageModel,
         IChatModel<ChatRequest, ChatResponse, OpenAiChatSettings>
 {
-    #region Properties
-
-    private ChatModels ChatModel { get; } = chatModel;
-
-    /// <inheritdoc/>
-    public override int ContextLength => ChatModel.ContextLength;
-
-    #endregion
-
-    #region Constructors
-
     public OpenAiChatModel(
         OpenAiProvider provider,
-        string id)
-        : this(provider, ChatModels.ById(id) ?? new ChatModels(
-            Id: id,
-            ContextLength: 0,
-            PricePerOutputTokenInUsd: 0.0,
-            PricePerInputTokenInUsd: 0.0))
+        CreateChatCompletionRequestModel id)
+        : this(provider, id.ToValueString())
     {
     }
+
+    #region Properties
+
+    private string ChatModel { get; } = id;
+
+    /// <inheritdoc/>
+    public override int ContextLength => (int)(CreateChatCompletionRequestModelExtensions.ToEnum(ChatModel)?.GetContextLength() ?? 0);
 
     #endregion
 
     #region Methods
 
     protected virtual async Task CallFunctionsAsync(
-        global::OpenAI.Chat.Message message,
+        ChatCompletionResponseMessage message,
         IList<Message> messages,
         CancellationToken cancellationToken = default)
     {
@@ -54,70 +43,75 @@ public partial class OpenAiChatModel(
         foreach (var tool in message.ToolCalls ?? [])
         {
             var func = Calls[tool.Function.Name];
-            var json = await func(tool.Function.Arguments.ToString(), cancellationToken).ConfigureAwait(false);
+            var json = await func(tool.Function.Arguments, cancellationToken).ConfigureAwait(false);
             messages.Add(json.AsFunctionResultMessage(tool));
         }
     }
 
     [CLSCompliant(false)]
-    protected virtual global::OpenAI.Chat.Message ToRequestMessage(Message message)
+    protected virtual ChatCompletionRequestMessage ToRequestMessage(Message message)
     {
         switch (message.Role)
         {
             case MessageRole.System:
+                return new ChatCompletionRequestSystemMessage
+                {
+                    Role = ChatCompletionRequestSystemMessageRole.System,
+                    Content = message.Content,
+                };
             case MessageRole.Ai:
+                return new ChatCompletionRequestAssistantMessage
+                {
+                    Role = ChatCompletionRequestAssistantMessageRole.Assistant,
+                    Content = message.Content,
+                };
             case MessageRole.Human:
-                return new global::OpenAI.Chat.Message(
-                    role: message.Role switch
-                    {
-                        MessageRole.System => Role.System,
-                        MessageRole.Ai => Role.Assistant,
-                        MessageRole.Human => Role.User,
-                        _ => Role.User,
-
-                    },
-                    content: message.Content);
+                return new ChatCompletionRequestUserMessage
+                {
+                    Role = ChatCompletionRequestUserMessageRole.User,
+                    Content = message.Content,
+                };
             case MessageRole.FunctionCall:
-                return new global::OpenAI.Chat.Message(
-                    role: Role.Assistant, string.Empty, message.ToToolCalls());
+                return new ChatCompletionRequestAssistantMessage
+                {
+                    Role = ChatCompletionRequestAssistantMessageRole.Assistant,
+                    Content = message.Content,
+                    ToolCalls = message.ToToolCalls(),
+                };
             case MessageRole.FunctionResult:
-                return new global::OpenAI.Chat.Message(message.GetTool(), message.Content);
+                return new ChatCompletionRequestToolMessage
+                {
+                    Role = ChatCompletionRequestToolMessageRole.Tool,
+                    Content = message.Content,
+                    ToolCallId = message.FunctionName ?? string.Empty,
+                };
+            default:
+                throw new ArgumentOutOfRangeException(nameof(message));
         }
-
-        return new global::OpenAI.Chat.Message();
     }
 
-    protected virtual Message ToMessage(global::OpenAI.Chat.Message message)
+    protected virtual Message ToMessage(ChatCompletionResponseMessage message)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
 
         var role = message.Role switch
         {
-            Role.System => MessageRole.System,
-            Role.User => MessageRole.Human,
-            Role.Assistant when message.ToolCalls != null && message.ToolCalls.Count > 0 => MessageRole.FunctionCall,
-            Role.Assistant => MessageRole.Ai,
-            Role.Tool => MessageRole.FunctionResult,
-            _ => MessageRole.Human,
+            ChatCompletionResponseMessageRole.Assistant => MessageRole.Ai,
+            _ => MessageRole.Ai,
         };
 
         var content = message.Content;
-        // fix: message contains json element instead of string
-        if (content is JsonElement { ValueKind: JsonValueKind.String } element)
-        {
-            content = element.GetString();
-        }
 
         return new Message(
-            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments.ToJsonString() ?? content ?? string.Empty,
+            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments ?? content ?? string.Empty,
             Role: role,
             FunctionName: $"{message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name}:{message.ToolCalls?.ElementAtOrDefault(0)?.Id}");
     }
 
-    private Usage GetUsage(global::OpenAI.Chat.ChatResponse response)
+    private Usage GetUsage(CreateChatCompletionResponse response)
     {
-        var outputTokens = response.Usage.CompletionTokens ?? 0;
-        var inputTokens = response.Usage.PromptTokens ?? 0;
+        var outputTokens = response.Usage?.CompletionTokens ?? 0;
+        var inputTokens = response.Usage?.PromptTokens ?? 0;
         var priceInUsd = CalculatePriceInUsd(
             outputTokens: outputTokens,
             inputTokens: inputTokens);
@@ -148,47 +142,37 @@ public partial class OpenAiChatModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
-        var chatRequest = GlobalTools.Count == 0
-            ? new global::OpenAI.Chat.ChatRequest(
-                messages: request.Messages
-                    .Select(ToRequestMessage)
-                    .ToArray(),
-                model: Id,
-                seed: usedSettings.Seed,
-                stops: usedSettings.StopSequences!.ToArray(),
-                user: usedSettings.User ?? string.Empty,
-                temperature: usedSettings.Temperature,
-                frequencyPenalty: usedSettings.FrequencyPenalty,
-                number: usedSettings.Number,
-                maxTokens: usedSettings.MaxTokens,
-                topP: usedSettings.TopP,
-                presencePenalty: usedSettings.PresencePenalty,
-                logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>())
-            : new global::OpenAI.Chat.ChatRequest(
-                messages: request.Messages
-                    .Select(ToRequestMessage)
-                    .ToArray(),
-                tools: GlobalTools,
-                model: Id,
-                stops: usedSettings.StopSequences!.ToArray(),
-                user: usedSettings.User ?? string.Empty,
-                temperature: usedSettings.Temperature,
-                frequencyPenalty: usedSettings.FrequencyPenalty,
-                number: usedSettings.Number,
-                maxTokens: usedSettings.MaxTokens,
-                topP: usedSettings.TopP,
-                presencePenalty: usedSettings.PresencePenalty,
-                logitBias: usedSettings.LogitBias ?? new Dictionary<string, double>());
+        var chatRequest = new CreateChatCompletionRequest
+        {
+            Model = Id,
+            Messages = request.Messages
+                .Select(ToRequestMessage)
+                .ToArray(),
+            Seed = usedSettings.Seed,
+            Stop = usedSettings.StopSequences!.ToArray(),
+            User = usedSettings.User ?? string.Empty,
+            Temperature = usedSettings.Temperature,
+            FrequencyPenalty = usedSettings.FrequencyPenalty,
+            N = usedSettings.Number,
+            MaxTokens = usedSettings.MaxTokens,
+            TopP = usedSettings.TopP,
+            PresencePenalty = usedSettings.PresencePenalty,
+            LogitBias = usedSettings.LogitBias ?? new Dictionary<string, double>()
+        };
+        if (GlobalTools.Count > 0)
+        {
+            chatRequest.Tools = GlobalTools;
+        }
         if (usedSettings.UseStreaming == true)
         {
-            var enumerable = provider.Api.ChatEndpoint.StreamCompletionEnumerableAsync(
+            var enumerable = provider.Api.Chat.CreateChatCompletionAsStreamAsync(
                 chatRequest,
                 cancellationToken).ConfigureAwait(false);
 
             var stringBuilder = new StringBuilder(capacity: 1024);
             await foreach (var response in enumerable)
             {
-                var delta = response.Choices.ElementAt(0).Delta.Content;
+                var delta = response.Choices.ElementAt(0).Delta.Content ?? string.Empty;
 
                 OnPartialResponseGenerated(delta);
                 stringBuilder.Append(delta);
@@ -219,10 +203,10 @@ public partial class OpenAiChatModel(
         }
         else
         {
-            var response = await provider.Api.ChatEndpoint.GetCompletionAsync(
+            var response = await provider.Api.Chat.CreateChatCompletionAsync(
                 chatRequest,
                 cancellationToken).ConfigureAwait(false);
-            var message = response.GetFirstChoiceMessage();
+            var message = response.Choices.First().Message;
             var newMessage = ToMessage(message);
             messages.Add(newMessage);
 
@@ -244,21 +228,19 @@ public partial class OpenAiChatModel(
 
                 if (ReplyToToolCallsAutomatically)
                 {
-                    chatRequest = new global::OpenAI.Chat.ChatRequest(
+                    response = await provider.Api.Chat.CreateChatCompletionAsync(
                         messages: messages
                             .Select(ToRequestMessage)
                             .ToArray(),
                         model: Id,
-                        stops: usedSettings.StopSequences!.ToArray(),
+                        stop: usedSettings.StopSequences!.ToArray(),
                         user: usedSettings.User!,
                         temperature: usedSettings.Temperature,
                         tools: GlobalTools.Count == 0
                             ? null!
-                            : GlobalTools);
-                    response = await provider.Api.ChatEndpoint.GetCompletionAsync(
-                        chatRequest,
-                        cancellationToken).ConfigureAwait(false);
-                    message = response.GetFirstChoiceMessage();
+                            : GlobalTools,
+                        cancellationToken: cancellationToken).ConfigureAwait(false);
+                    message = response.Choices.First().Message;
                     newMessage = ToMessage(message);
                     messages.Add(newMessage);
 
@@ -298,10 +280,11 @@ public partial class OpenAiChatModel(
     /// <inheritdoc/>
     public double CalculatePriceInUsd(int inputTokens, int outputTokens)
     {
-        return ChatModel
+        return CreateChatCompletionRequestModelExtensions
+            .ToEnum(ChatModel)?
             .GetPriceInUsd(
                 outputTokens: outputTokens,
-                inputTokens: inputTokens);
+                inputTokens: inputTokens) ?? double.NaN;
     }
 
     #endregion

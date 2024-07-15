@@ -1,5 +1,3 @@
-using OpenAI.Moderations;
-
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
@@ -8,6 +6,14 @@ public class OpenAiModerationModel(
     string id)
     : Model(id), IModerationModel
 {
+    [CLSCompliant(false)]
+    public OpenAiModerationModel(
+        OpenAiProvider provider,
+        CreateModerationRequestModel id)
+        : this(provider, id.ToValueString())
+    {
+    }
+
     /// <inheritdoc/>
     public int RecommendedModerationChunkSize => 2_000;
 
@@ -19,10 +25,9 @@ public class OpenAiModerationModel(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
 
-        var response = await provider.Api.ModerationsEndpoint.CreateModerationAsync(
-            new ModerationsRequest(
-                input: request.Prompt,
-                model: Id),
+        var response = await provider.Api.Moderations.CreateModerationAsync(
+            input: request.Prompt,
+            model: Id,
             cancellationToken).ConfigureAwait(false);
 
         return new ModerationResponse

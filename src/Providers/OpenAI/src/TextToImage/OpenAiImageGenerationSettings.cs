@@ -1,6 +1,3 @@
-using OpenAI.Constants;
-using OpenAI.Images;
-
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers;
 
@@ -14,30 +11,37 @@ public class OpenAiTextToImageSettings : TextToImageSettings
     /// </summary>
     public static OpenAiTextToImageSettings GetDefaultSettings(string id)
     {
-        if (id == ImageModels.DallE2)
+        if (id == CreateImageRequestModel.DallE2.ToValueString())
         {
-            return new OpenAiTextToImageSettings()
+            return new OpenAiTextToImageSettings
             {
                 NumberOfResults = 1,
-                Quality = ImageQualities.Standard,
-                ResponseFormat = global::OpenAI.Images.ResponseFormat.B64_Json,
-                Resolution = ImageResolutions._256x256,
+                Quality = CreateImageRequestQuality.Standard,
+                ResponseFormat = CreateImageRequestResponseFormat.B64Json,
+                Size = CreateImageRequestSize._256x256,
                 User = string.Empty,
             };
         }
-        if (id == ImageModels.DallE3)
+        if (id == CreateImageRequestModel.DallE3.ToValueString())
         {
-            return new OpenAiTextToImageSettings()
+            return new OpenAiTextToImageSettings
             {
                 NumberOfResults = 1,
-                Quality = ImageQualities.Standard,
-                ResponseFormat = global::OpenAI.Images.ResponseFormat.B64_Json,
-                Resolution = ImageResolutions._1024x1024,
+                Quality = CreateImageRequestQuality.Standard,
+                ResponseFormat = CreateImageRequestResponseFormat.B64Json,
+                Size = CreateImageRequestSize._1024x1024,
                 User = string.Empty,
             };
         }
 
-        throw new NotSupportedException($"OpenAI model {id} is not supported");
+        return new OpenAiTextToImageSettings
+        {
+            NumberOfResults = 1,
+            Quality = CreateImageRequestQuality.Standard,
+            ResponseFormat = CreateImageRequestResponseFormat.B64Json,
+            Size = CreateImageRequestSize._1024x1024,
+            User = string.Empty,
+        };
     }
 
 
@@ -50,19 +54,25 @@ public class OpenAiTextToImageSettings : TextToImageSettings
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public ImageQualities? Quality { get; init; }
+    public CreateImageRequestQuality? Quality { get; init; }
 
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public ResponseFormat? ResponseFormat { get; init; }
+    public CreateImageRequestResponseFormat? ResponseFormat { get; init; }
 
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public ImageResolutions? Resolution { get; init; }
+    public CreateImageRequestSize? Size { get; init; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
+    public CreateImageRequestStyle? Style { get; init; }
 
     /// <summary>
     /// 
@@ -109,11 +119,11 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 providerSettingsCasted?.ResponseFormat ??
                 defaultSettingsCasted?.ResponseFormat ??
                 throw new InvalidOperationException("Default ResponseFormat is not set."),
-            Resolution =
-                requestSettingsCasted?.Resolution ??
-                modelSettingsCasted?.Resolution ??
-                providerSettingsCasted?.Resolution ??
-                defaultSettingsCasted?.Resolution ??
+            Size =
+                requestSettingsCasted?.Size ??
+                modelSettingsCasted?.Size ??
+                providerSettingsCasted?.Size ??
+                defaultSettingsCasted?.Size ??
                 throw new InvalidOperationException("Default Resolution is not set."),
             User =
                 requestSettingsCasted?.User ??
