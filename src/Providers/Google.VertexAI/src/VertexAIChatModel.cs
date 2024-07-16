@@ -1,5 +1,4 @@
 ﻿using Google.Cloud.AIPlatform.V1;
-using Google.Protobuf.Collections;
 using System.Diagnostics;
 
 namespace LangChain.Providers.Google.VertexAI
@@ -10,19 +9,17 @@ namespace LangChain.Providers.Google.VertexAI
         ) : ChatModel(id), IChatModel
     {
         private VertexAIProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
-        public override async Task<ChatResponse> GenerateAsync(ChatRequest request,
-            ChatSettings? settings = null,
-            CancellationToken cancellationToken = default)
+        public override async Task<ChatResponse> GenerateAsync(ChatRequest request, ChatSettings? settings = null, CancellationToken cancellationToken = default)
         {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
-            request = request ?? throw new ArgumentNullException(nameof(request));
             var prompt = ToPrompt(request.Messages);
 
             var watch = Stopwatch.StartNew();
             var response = await Provider.Api.GenerateContentAsync(prompt).ConfigureAwait(false);
 
-            var result = request.Messages.ToList();
-            result.Add(response.Candidates[0].Content.Parts[0].Text.AsAiMessage());
+            var result = request.Messages.Append(response.Candidates[0].Content.Parts[0].Text.AsAiMessage()).ToList();
 
             var usage = Usage.Empty with
             {
@@ -35,24 +32,17 @@ namespace LangChain.Providers.Google.VertexAI
             {
                 Messages = result,
                 Usage = usage,
-                UsedSettings = ChatSettings.Default,
+                UsedSettings = settings ?? ChatSettings.Default
             };
-
         }
 
         private GenerateContentRequest ToPrompt(IEnumerable<Message> messages)
         {
-            var contents = new RepeatedField<Content>();
-            foreach (var message in messages)
-            {
-                contents.Add(ConvertMessage(message));
-            }
-
             return new GenerateContentRequest
             {
-                Model = $"projects/{provider.Configuration.ProjectId}/locations/{provider.Configuration.Location}/publishers/{provider.Configuration.Publisher}/models/{Id}",
-                Contents = { contents },
-                GenerationConfig = provider.Configuration.GenerationConfig
+                Model = $"projects/{Provider.Configuration.ProjectId}/locations/{Provider.Configuration.Location}/publishers/{Provider.Configuration.Publisher}/models/{Id}",
+                Contents = { messages.Select(ConvertMessage) },
+                GenerationConfig = Provider.Configuration.GenerationConfig
             };
         }
 

@@ -1,11 +1,11 @@
 ﻿namespace LangChain.Providers.Google.VertexAI.Predefined
 {
-    public class Gemini15ProModel(VertexAIProvider provider)
+    public class Gemini15ProChatModel(VertexAIProvider provider)
     : VertexAIChatModel(provider, "gemini-1.5-pro");
 
-    public class Gemini15FlashModel(VertexAIProvider provider)
+    public class Gemini15FlashChatModel(VertexAIProvider provider)
     : VertexAIChatModel(provider, "gemini-1.5-flash");
 
-    public class Gemini1ProModel(VertexAIProvider provider)
+    public class Gemini1ProChatModel(VertexAIProvider provider)
     : VertexAIChatModel(provider, "gemini-1.0-pro");
 }
