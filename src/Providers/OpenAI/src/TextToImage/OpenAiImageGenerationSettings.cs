@@ -18,7 +18,7 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 NumberOfResults = 1,
                 Quality = CreateImageRequestQuality.Standard,
                 ResponseFormat = CreateImageRequestResponseFormat.B64Json,
-                Size = CreateImageRequestSize._256x256,
+                Size = CreateImageRequestSize.x256x256,
                 User = string.Empty,
             };
         }
@@ -29,7 +29,7 @@ public class OpenAiTextToImageSettings : TextToImageSettings
                 NumberOfResults = 1,
                 Quality = CreateImageRequestQuality.Standard,
                 ResponseFormat = CreateImageRequestResponseFormat.B64Json,
-                Size = CreateImageRequestSize._1024x1024,
+                Size = CreateImageRequestSize.x1024x1024,
                 User = string.Empty,
             };
         }
@@ -39,7 +39,7 @@ public class OpenAiTextToImageSettings : TextToImageSettings
             NumberOfResults = 1,
             Quality = CreateImageRequestQuality.Standard,
             ResponseFormat = CreateImageRequestResponseFormat.B64Json,
-            Size = CreateImageRequestSize._1024x1024,
+            Size = CreateImageRequestSize.x1024x1024,
             User = string.Empty,
         };
     }
