@@ -1,8 +1,7 @@
 ﻿using Azure;
 using Azure.AI.OpenAI;
-using OpenAI.Constants;
 using System.Diagnostics;
-using LangChain.Providers.OpenAI;
+using OpenAI;
 
 namespace LangChain.Providers.Azure;
 
@@ -14,11 +13,6 @@ public class AzureOpenAiEmbeddingModel(
     #region Properties
 
     /// <summary>
-    /// 
-    /// </summary>
-    public string EmbeddingModelId { get; init; } = EmbeddingModels.Ada002;
-
-    /// <summary>
     /// API has limit of 2048 elements in array per request
     /// so we need to split texts into batches
     /// https://platform.openai.com/docs/api-reference/embeddings
@@ -26,7 +20,7 @@ public class AzureOpenAiEmbeddingModel(
     public int EmbeddingBatchSize { get; init; } = 2048;
 
     /// <inheritdoc/>
-    public int MaximumInputLength => EmbeddingModels.ById(EmbeddingModelId)?.MaxInputTokens ?? 0;
+    public int MaximumInputLength => (int)(CreateEmbeddingRequestModelExtensions.ToEnum(Id)?.GetMaxInputTokens() ?? 0);
 
     #endregion
 
@@ -88,14 +82,10 @@ public class AzureOpenAiEmbeddingModel(
         }
 
         var tokens = response.Value?.Usage.PromptTokens ?? 0;
-        var priceInUsd = EmbeddingModels
-            .ById(EmbeddingModelId)?
-            .GetPriceInUsd(tokens: tokens) ?? 0.0D;
 
         return Usage.Empty with
         {
             InputTokens = tokens,
-            PriceInUsd = priceInUsd,
         };
     }
 
