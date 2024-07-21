@@ -1,6 +1,6 @@
 using LangChain.Providers.OpenAI;
 using LangChain.Serve.OpenAI;
-using OpenAI.Constants;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -9,7 +9,7 @@ builder.Services.AddLangChainServeOpenAi();
 
 // 2. Create a model
 var provider = new OpenAiProvider(Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "");
-var model = new OpenAiChatModel(provider, ChatModels.Gpt4Turbo);
+var model = new OpenAiChatModel(provider, CreateChatCompletionRequestModel.Gpt4Turbo);
 
 // 4. Optional. Add swagger to be able to test the API
 builder.Services.AddEndpointsApiExplorer();

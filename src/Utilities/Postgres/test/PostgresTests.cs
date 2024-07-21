@@ -3,7 +3,6 @@ using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Utilities.Sql;
 using Npgsql;
-using OpenAI.Constants;
 
 namespace LangChain.Utilities.Postgres.IntegrationTests;
 

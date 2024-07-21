@@ -1,5 +1,5 @@
 using System.CommandLine;
-using OpenAI.Constants;
+using OpenAI;
 
 namespace LangChain.Cli.Commands;
 
@@ -9,7 +9,7 @@ public class ModelCommand : Command
     {
         var model = new Argument<string>(
             name: "Model",
-            getDefaultValue: () => ChatModels.Gpt35Turbo,
+            getDefaultValue: () => CreateChatCompletionRequestModel.Gpt35Turbo.ToValueString(),
             description: "Model to use for commands");
         AddArgument(model);
 

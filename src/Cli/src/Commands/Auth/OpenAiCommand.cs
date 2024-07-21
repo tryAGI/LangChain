@@ -1,5 +1,5 @@
 using System.CommandLine;
-using OpenAI.Constants;
+using OpenAI;
 
 namespace LangChain.Cli.Commands.Auth;
 
@@ -12,7 +12,7 @@ public class OpenAiCommand : Command
             description: "OpenAI API key from https://platform.openai.com/account/api-keys");
         var modelOption = new Option<string>(
             aliases: ["--model", "-m"],
-            getDefaultValue: () => ChatModels.Gpt35Turbo,
+            getDefaultValue: () => CreateChatCompletionRequestModel.Gpt35Turbo.ToValueString(),
             description: "Model to use for commands");
         AddArgument(apiKeyArgument);
         AddOption(modelOption);
