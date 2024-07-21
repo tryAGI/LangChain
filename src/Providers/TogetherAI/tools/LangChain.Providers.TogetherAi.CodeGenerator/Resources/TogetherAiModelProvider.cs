@@ -1,4 +1,4 @@
-﻿using OpenAI.Constants;
+﻿using OpenAI;
 
 namespace LangChain.Providers.TogetherAi;
 
@@ -7,13 +7,24 @@ namespace LangChain.Providers.TogetherAi;
 /// </summary>
 public static class TogetherAiModelProvider
 {
-    private static Dictionary<TogetherAiModelIds, ChatModels> Models { get; set; } = new()
+    private static Dictionary<TogetherAiModelIds, ChatModelMetadata> Models { get; set; } = new()
     {
         {{DicAdd}}
     };
 
+    public static ChatModelMetadata ToMetadata(string? id, int? contextLength, double? pricePerInputTokenInUsd, double? pricePerOutputTokenInUsd)
+    {
+        return new ChatModelMetadata
+        {
+            Id = id,
+            ContextLength = contextLength,
+            PricePerInputTokenInUsd = pricePerInputTokenInUsd,
+            PricePerOutputTokenInUsd = pricePerOutputTokenInUsd,
+        };
+    }
+
     [CLSCompliant(false)]
-    public static ChatModels GetModelById(TogetherAiModelIds modelId)
+    public static ChatModelMetadata GetModelById(TogetherAiModelIds modelId)
     {
         if (Models.TryGetValue(modelId, out var id))
         {

@@ -159,7 +159,7 @@ public static class OpenRouterModelProvider
 
     };
 
-    public static ChatModelMetadata ToMetadata(string id, int contextLength, double pricePerInputTokenInUsd, double pricePerOutputTokenInUsd)
+    public static ChatModelMetadata ToMetadata(string? id, int? contextLength, double? pricePerInputTokenInUsd, double? pricePerOutputTokenInUsd)
     {
         return new ChatModelMetadata
         {
