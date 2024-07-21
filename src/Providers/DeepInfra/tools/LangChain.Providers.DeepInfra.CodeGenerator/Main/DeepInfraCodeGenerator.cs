@@ -198,23 +198,23 @@ public static class DeepInfraCodeGenerator
 
 
         //Modal Name
-        var modelName = (string)modelToken["name"]!;
+        var modelName = (string?)modelToken["name"];
 
         if (string.IsNullOrEmpty(modelName))
             return null;
 
         //Model Id
-        var modelId = (string)modelToken["full_name"]!;
+        var modelId = (string?)modelToken["full_name"];
 
-        var organization = (string)modelToken["owner"]!;
-        var enumMemberName = GetModelIdsEnumMemberFromName(modelId, modelName, options);
+        var organization = (string?)modelToken["owner"];
+        var enumMemberName = GetModelIdsEnumMemberFromName(modelId ?? string.Empty, modelName, options);
 
 
 
-        var contextLength = (int)(modelToken["max_tokens"] ?? 0);
-        var tokenLength = contextLength.ToString();
-        var promptCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_input_token") ?? 0) * 10000, 2);
-        var completionCost = Math.Round((double)(modelToken.SelectToken("pricing.cents_per_output_token") ?? 0) * 10000, 2);
+        var contextLength = (int?)modelToken["max_tokens"];
+        var tokenLength = contextLength?.ToString() ?? "null";
+        var promptCost = Math.Round(((double?)modelToken.SelectToken("pricing.cents_per_input_token") ?? 0) * 10000, 2);
+        var completionCost = Math.Round(((double?)modelToken.SelectToken("pricing.cents_per_output_token") ?? 0) * 10000, 2);
 
         var description =
             FormattableString.Invariant($"Name: {modelName} <br/>\r\n/// Organization: {organization} <br/>\r\n/// Context Length: {contextLength} <br/>\r\n/// Prompt Cost: ${promptCost}/MTok <br/>\r\n/// Completion Cost: ${promptCost}/MTok <br/>\r\n/// Description: {(string?)modelToken["description"]} <br/>\r\n/// HuggingFace Url: <a href=\"https://huggingface.co/{modelId}\">https://huggingface.co/{modelId}</a>");
@@ -223,7 +223,7 @@ public static class DeepInfraCodeGenerator
         var enumMemberCode = GetEnumMemberCode(enumMemberName, description);
 
         //Code for adding ChatModel into Dictionary<Together AiModelIds,ChatModels>() 
-        var dicAddCode = GetDicAddCode(enumMemberName, modelId, tokenLength, promptCost / (1000 * 1000),
+        var dicAddCode = GetDicAddCode(enumMemberName, modelId ?? string.Empty, tokenLength, promptCost / (1000 * 1000),
             completionCost / (1000 * 1000));
 
         //Code for Predefined Model Class
@@ -266,7 +266,7 @@ public static class DeepInfraCodeGenerator
         double completionCost)
     {
         return "{ " +
-               FormattableString.Invariant($"DeepInfraModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
+               FormattableString.Invariant($"DeepInfraModelIds.{enumMemberName}, ToMetadata(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
                "},";
     }
 

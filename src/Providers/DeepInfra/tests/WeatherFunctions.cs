@@ -1,4 +1,4 @@
-﻿using tryAGI.OpenAI;
+﻿using OpenAI;
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 namespace LangChain.Providers.DeepInfra.Tests;
