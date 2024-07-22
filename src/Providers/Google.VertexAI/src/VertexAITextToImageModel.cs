@@ -1,4 +1,5 @@
-﻿using Google.Cloud.AIPlatform.V1;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Cloud.AIPlatform.V1;
 using System.Diagnostics;
 using Value = Google.Protobuf.WellKnownTypes.Value;
 
@@ -14,10 +15,11 @@ namespace LangChain.Providers.Google.VertexAI
                 throw new ArgumentNullException(nameof(request));
 
             var watch = Stopwatch.StartNew();
+            var serviceAccountCredential = Provider.Configuration.GoogleCredential?.UnderlyingCredential as ServiceAccountCredential;
             var predictRequest = new PredictRequest
             {
                 EndpointAsEndpointName = EndpointName.FromProjectLocationPublisherModel(
-                    Provider.Configuration.ProjectId,
+                    serviceAccountCredential?.ProjectId,
                     Provider.Configuration.Location,
                     Provider.Configuration.Publisher, Id),
                 Instances =
