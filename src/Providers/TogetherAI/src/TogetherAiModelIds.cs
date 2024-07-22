@@ -480,6 +480,17 @@ public enum TogetherAiModelIds
     MythomaxL213B,
 
     /// <summary>
+    /// Name: Meta Llama 3 70B Reference <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.9/MTok <br/>
+    /// Completion Cost: $0.9/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
+    /// </summary>
+    MetaLlama370BReference,
+
+    /// <summary>
     /// Name: Mistral (7B) Instruct <br/>
     /// Organization: mistralai <br/>
     /// Context Length: 4096 <br/>
@@ -511,17 +522,6 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca">https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca</a>
     /// </summary>
     OpenOrcaMistral7B8K,
-
-    /// <summary>
-    /// Name: 01-ai Yi Chat (34B) <br/>
-    /// Organization: 01.AI <br/>
-    /// Context Length: 4096 <br/>
-    /// Prompt Cost: $0.8/MTok <br/>
-    /// Completion Cost: $0.8/MTok <br/>
-    /// Description: The Yi series models are large language models trained from scratch by developers at 01.AI <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/zero-one-ai/Yi-34B-Chat">https://huggingface.co/zero-one-ai/Yi-34B-Chat</a>
-    /// </summary>
-    _01AiYiChat34B,
 
     /// <summary>
     /// Name: Nous Hermes LLaMA-2 (7B) <br/>
@@ -645,7 +645,84 @@ public enum TogetherAiModelIds
     Llama2Chat13B,
 
     /// <summary>
-    /// Name: Meta Llama 3 8B Chat <br/>
+    /// Name: Gemma-2 Instruct (27B) <br/>
+    /// Organization: Google <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.8/MTok <br/>
+    /// Completion Cost: $0.8/MTok <br/>
+    /// Description: Gemma is a family of lightweight, state-of-the-art open models from Google, built from the same research and technology used to create the Gemini models. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/google/gemma-2-27b-it">https://huggingface.co/google/gemma-2-27b-it</a>
+    /// </summary>
+    Gemma2Instruct27B,
+
+    /// <summary>
+    /// Name: 01-ai Yi Chat (34B) <br/>
+    /// Organization: 01.AI <br/>
+    /// Context Length: 4096 <br/>
+    /// Prompt Cost: $0.8/MTok <br/>
+    /// Completion Cost: $0.8/MTok <br/>
+    /// Description: The Yi series models are large language models trained from scratch by developers at 01.AI <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/zero-one-ai/Yi-34B-Chat">https://huggingface.co/zero-one-ai/Yi-34B-Chat</a>
+    /// </summary>
+    _01AiYiChat34B,
+
+    /// <summary>
+    /// Name: Meta Llama 3 70B Instruct Turbo <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.88/MTok <br/>
+    /// Completion Cost: $0.88/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct-Turbo</a>
+    /// </summary>
+    MetaLlama370BInstructTurbo,
+
+    /// <summary>
+    /// Name: Meta Llama 3 8B Instruct Turbo <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.18/MTok <br/>
+    /// Completion Cost: $0.18/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct-Turbo</a>
+    /// </summary>
+    MetaLlama38BInstructTurbo,
+
+    /// <summary>
+    /// Name: Meta Llama 3 70B Instruct Lite <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.54/MTok <br/>
+    /// Completion Cost: $0.54/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct-Lite">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct-Lite</a>
+    /// </summary>
+    MetaLlama370BInstructLite,
+
+    /// <summary>
+    /// Name: Gemma-2 Instruct (9B) <br/>
+    /// Organization: google <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.3/MTok <br/>
+    /// Completion Cost: $0.3/MTok <br/>
+    /// Description: Gemma is a family of lightweight, state-of-the-art open models from Google, built from the same research and technology used to create the Gemini models. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/google/gemma-2-9b-it">https://huggingface.co/google/gemma-2-9b-it</a>
+    /// </summary>
+    Gemma2Instruct9B,
+
+    /// <summary>
+    /// Name: Meta Llama 3 8B Instruct Lite <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.1/MTok <br/>
+    /// Completion Cost: $0.1/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct-Lite">https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct-Lite</a>
+    /// </summary>
+    MetaLlama38BInstructLite,
+
+    /// <summary>
+    /// Name: Meta Llama 3 8B Reference <br/>
     /// Organization: Meta <br/>
     /// Context Length: 8192 <br/>
     /// Prompt Cost: $0.2/MTok <br/>
@@ -653,7 +730,7 @@ public enum TogetherAiModelIds
     /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-8b-chat-hf">https://huggingface.co/meta-llama/Llama-3-8b-chat-hf</a>
     /// </summary>
-    MetaLlama38BChat,
+    MetaLlama38BReference,
 
     /// <summary>
     /// Name: Mixtral-8x7B Instruct v0.1 <br/>
@@ -711,17 +788,6 @@ public enum TogetherAiModelIds
     CodeLlamaPython7B,
 
     /// <summary>
-    /// Name: Meta Llama 3 70B Chat <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.9/MTok <br/>
-    /// Completion Cost: $0.9/MTok <br/>
-    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
-    /// </summary>
-    MetaLlama370BChat,
-
-    /// <summary>
     /// Name: Reserved - DBRX Instruct <br/>
     /// Organization: Databricks <br/>
     /// Context Length: 0 <br/>
@@ -775,17 +841,6 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct</a>
     /// </summary>
     MetaLlama370BInstruct,
-
-    /// <summary>
-    /// Name: Gemma-2 Instruct (9B) <br/>
-    /// Organization: google <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.3/MTok <br/>
-    /// Completion Cost: $0.3/MTok <br/>
-    /// Description: Gemma is a family of lightweight, state-of-the-art open models from Google, built from the same research and technology used to create the Gemini models. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/google/gemma-2-9b-it">https://huggingface.co/google/gemma-2-9b-it</a>
-    /// </summary>
-    Gemma2Instruct9B,
 
     /// <summary>
     /// Name: Hermes 2 Theta Llama-3 70B <br/>
