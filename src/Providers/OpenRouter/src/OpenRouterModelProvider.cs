@@ -169,7 +169,7 @@ public static class OpenRouterModelProvider
             PricePerOutputTokenInUsd = pricePerOutputTokenInUsd,
         };
     }
-    
+
     [CLSCompliant(false)]
     public static ChatModelMetadata GetModelById(OpenRouterModelIds modelId)
     {

@@ -26,7 +26,7 @@ public static class OpenRouterCodeGenerator
 
         //Load Open Router Docs Page...
         Console.WriteLine("Loading Model Page...");
-        
+
         var html = await GetStringAsync(new Uri("https://openrouter.ai/docs/models")).ConfigureAwait(false);
 
         //Parse Html

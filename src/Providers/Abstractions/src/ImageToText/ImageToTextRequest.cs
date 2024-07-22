@@ -10,7 +10,7 @@ public class ImageToTextRequest
     /// Description of the image to generate.
     /// </summary>
     public string Prompt { get; init; } = string.Empty;
-    
+
     /// <summary>
     /// Image to upload.
     /// </summary>

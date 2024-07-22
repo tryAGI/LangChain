@@ -65,7 +65,7 @@ namespace LangChain.Providers.Google.VertexAI.Test
 
                 answer.Should().NotBeNull();
 
-                foreach(var img in answer.Images)
+                foreach (var img in answer.Images)
                 {
                     string outputFileName = $"dog_newspaper_{Guid.NewGuid()}.png";
                     File.WriteAllBytes(outputFileName, Convert.FromBase64String(img));
