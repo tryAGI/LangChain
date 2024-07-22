@@ -1,4 +1,5 @@
-﻿using Google.Cloud.AIPlatform.V1;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Cloud.AIPlatform.V1;
 using System.Diagnostics;
 
 namespace LangChain.Providers.Google.VertexAI
@@ -38,9 +39,10 @@ namespace LangChain.Providers.Google.VertexAI
 
         private GenerateContentRequest ToPrompt(IEnumerable<Message> messages)
         {
+            var serviceAccountCredential = Provider.Configuration.GoogleCredential?.UnderlyingCredential as ServiceAccountCredential;
             return new GenerateContentRequest
             {
-                Model = $"projects/{Provider.Configuration.ProjectId}/locations/{Provider.Configuration.Location}/publishers/{Provider.Configuration.Publisher}/models/{Id}",
+                Model = $"projects/{serviceAccountCredential?.ProjectId}/locations/{Provider.Configuration.Location}/publishers/{Provider.Configuration.Publisher}/models/{Id}",
                 Contents = { messages.Select(ConvertMessage) },
                 GenerationConfig = Provider.Configuration.GenerationConfig
             };
