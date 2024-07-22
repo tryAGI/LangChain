@@ -12,6 +12,7 @@ namespace LangChain.Providers.Google.VertexAI
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Api = new PredictionServiceClientBuilder
             {
+                GoogleCredential = Configuration.GoogleCredential,
                 Endpoint = $"{Configuration.Location}-aiplatform.googleapis.com"
             }.Build();
         }
