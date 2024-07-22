@@ -23,7 +23,7 @@ public partial class OpenAiChatModel
     public int CountTokens(string text)
     {
         Encoder ??= ModelToEncoder.TryFor(ChatModel) ?? new Encoder(new Cl100KBase());
-        
+
         return Encoder.CountTokens(text);
     }
 

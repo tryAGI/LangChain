@@ -40,10 +40,10 @@ internal static class MessageExtensions
     {
         var nameAndId = message.FunctionName?.Split(Separator, StringSplitOptions.RemoveEmptyEntries) ??
                         throw new ArgumentException("Invalid functionCall name and id string");
-        
+
         if (nameAndId.Length < 2)
             throw new ArgumentException("Invalid functionCall name and id string");
-        
+
         return new ChatCompletionTool
         {
             Type = ChatCompletionToolType.Function,

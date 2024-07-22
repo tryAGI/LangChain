@@ -18,7 +18,7 @@ public class OpenAiTextToSpeechModel(
         : this(provider, id.ToValueString())
     {
     }
-    
+
     /// <inheritdoc/>
     public async Task<TextToSpeechResponse> GenerateSpeechAsync(
         TextToSpeechRequest request,

@@ -38,7 +38,7 @@ public class OpenAiSpeechToTextModel(
             using var memoryStream = new MemoryStream();
             await request.Stream.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
             memoryStream.Position = 0;
-            
+
             var response = await provider.Api.Audio.CreateTranscriptionAsync(
                 file: memoryStream.ToArray(),
                 //audioName: usedSettings.AudioName!,
