@@ -8,7 +8,7 @@ namespace LangChain.Providers.Google.VertexAI
         public const string SectionName = "VertexAI";
         public string Location { get; set; } = "us-central1";
         public string Publisher { get; set; } = "google";
-        public GoogleCredential? GoogleCredential { get; set; } = GoogleCredential.GetApplicationDefault();
+        public GoogleCredential? GoogleCredential { get; set; }
         public GenerationConfig? GenerationConfig { get; set; }
     }
 }
