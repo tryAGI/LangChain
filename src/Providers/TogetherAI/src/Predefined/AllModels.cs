@@ -75,11 +75,6 @@ public class Qwen15Chat18BModel(TogetherAiProvider provider) : TogetherAiModel(p
 public class SnowflakeArcticInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.SnowflakeArcticInstruct);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.CodeLlamaInstruct70B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class CodeLlamaInstruct70BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaInstruct70B);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.CodeLlamaPython13B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class CodeLlamaPython13BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaPython13B);
@@ -90,19 +85,9 @@ public class CodeLlamaPython13BModel(TogetherAiProvider provider) : TogetherAiMo
 public class NousHermes2Mixtral8X7BSftModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.NousHermes2Mixtral8X7BSft);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.Dolphin25Mixtral8X7B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Dolphin25Mixtral8X7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Dolphin25Mixtral8X7B);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.NousHermes2Mixtral8X7BDpo"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class NousHermes2Mixtral8X7BDpoModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.NousHermes2Mixtral8X7BDpo);
-
-
-/// <inheritdoc cref="TogetherAiModelIds.Mixtral8X22bInstructV01"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Mixtral8X22bInstructV01Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mixtral8X22bInstructV01);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.DeepseekCoderInstruct33B"/>
@@ -130,14 +115,14 @@ public class VicunaV1513BModel(TogetherAiProvider provider) : TogetherAiModel(pr
 public class Qwen15Chat05BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Qwen15Chat05B);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.CodeLlamaInstruct7B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class CodeLlamaInstruct7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaInstruct7B);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.CodeLlamaPython70B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class CodeLlamaPython70BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaPython70B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.CodeLlamaInstruct7B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CodeLlamaInstruct7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaInstruct7B);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.NousHermes2Yi34B"/>
@@ -215,6 +200,11 @@ public class Qwen15Chat4BModel(TogetherAiProvider provider) : TogetherAiModel(pr
 public class MythomaxL213BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MythomaxL213B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama370BReference"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama370BReferenceModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BReference);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.Mistral7BInstruct"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Mistral7BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mistral7BInstruct);
@@ -228,11 +218,6 @@ public class Mistral7BInstructV02Model(TogetherAiProvider provider) : TogetherAi
 /// <inheritdoc cref="TogetherAiModelIds.OpenOrcaMistral7B8K"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class OpenOrcaMistral7B8KModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.OpenOrcaMistral7B8K);
-
-
-/// <inheritdoc cref="TogetherAiModelIds._01AiYiChat34B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class _01AiYiChat34BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds._01AiYiChat34B);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.NousHermesLlama27B"/>
@@ -290,14 +275,84 @@ public class Qwen15Chat110BModel(TogetherAiProvider provider) : TogetherAiModel(
 public class Llama2Chat13BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama2Chat13B);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.MetaLlama38BChat"/>
+/// <inheritdoc cref="TogetherAiModelIds.Gemma2Instruct27B"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class MetaLlama38BChatModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama38BChat);
+public class Gemma2Instruct27BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Gemma2Instruct27B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds._01AiYiChat34B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class _01AiYiChat34BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds._01AiYiChat34B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama370BInstructTurbo"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama370BInstructTurboModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BInstructTurbo);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama370BInstructLite"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama370BInstructLiteModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BInstructLite);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.Gemma2Instruct9B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Gemma2Instruct9BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Gemma2Instruct9B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama38BReference"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama38BReferenceModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama38BReference);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.Mixtral8X7BInstructV01"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Mixtral8X7BInstructV01Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mixtral8X7BInstructV01);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.CodeLlama70B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CodeLlama70BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlama70B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.ReservedDbrxInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class ReservedDbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.ReservedDbrxInstruct);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.DbrxInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class DbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.DbrxInstruct);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama318BInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama318BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama318BInstruct);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama38BInstructTurbo"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama38BInstructTurboModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama38BInstructTurbo);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.Dolphin25Mixtral8X7B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Dolphin25Mixtral8X7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Dolphin25Mixtral8X7B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.Mixtral8X22bInstructV01"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class Mixtral8X22bInstructV01Model(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Mixtral8X22bInstructV01);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.CodeLlamaInstruct70B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CodeLlamaInstruct70BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaInstruct70B);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama38BInstructLite"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama38BInstructLiteModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama38BInstructLite);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.Llama2Chat7B"/>
@@ -310,29 +365,24 @@ public class Llama2Chat7BModel(TogetherAiProvider provider) : TogetherAiModel(pr
 public class Llama2Chat70BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama2Chat70B);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.CodeLlama70B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class CodeLlama70BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlama70B);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.CodeLlamaPython7B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class CodeLlamaPython7BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CodeLlamaPython7B);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.MetaLlama370BChat"/>
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama318BInstructTurbo"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class MetaLlama370BChatModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BChat);
+public class MetaLlama318BInstructTurboModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama318BInstructTurbo);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.ReservedDbrxInstruct"/>
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama3170BInstructTurbo"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class ReservedDbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.ReservedDbrxInstruct);
+public class MetaLlama3170BInstructTurboModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama3170BInstructTurbo);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.DbrxInstruct"/>
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama31405BInstructTurbo"/>
 /// <param name="provider">Open Router Provider Instance</param>
-public class DbrxInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.DbrxInstruct);
+public class MetaLlama31405BInstructTurboModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama31405BInstructTurbo);
 
 
 /// <inheritdoc cref="TogetherAiModelIds.UpstageSolarInstructV111BInt4"/>
@@ -350,18 +400,43 @@ public class MetaLlama38BInstructModel(TogetherAiProvider provider) : TogetherAi
 public class MetaLlama370BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama370BInstruct);
 
 
-/// <inheritdoc cref="TogetherAiModelIds.Gemma2Instruct9B"/>
-/// <param name="provider">Open Router Provider Instance</param>
-public class Gemma2Instruct9BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Gemma2Instruct9B);
-
-
 /// <inheritdoc cref="TogetherAiModelIds.Hermes2ThetaLlama370B"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Hermes2ThetaLlama370BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Hermes2ThetaLlama370B);
 
 
+/// <inheritdoc cref="TogetherAiModelIds.CarsonMl318bit"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CarsonMl318bitModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CarsonMl318bit);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.CarsonMl31405bit"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CarsonMl31405bitModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CarsonMl31405bit);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.CarsonMl3170bit"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CarsonMl3170bitModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CarsonMl3170bit);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.CarsonMl318br"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class CarsonMl318brModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.CarsonMl318br);
+
+
 /// <inheritdoc cref="TogetherAiModelIds.Llama370BInstructGradient1048K"/>
 /// <param name="provider">Open Router Provider Instance</param>
 public class Llama370BInstructGradient1048KModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.Llama370BInstructGradient1048K);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama3170BInstruct"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama3170BInstructModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama3170BInstruct);
+
+
+/// <inheritdoc cref="TogetherAiModelIds.MetaLlama3170B"/>
+/// <param name="provider">Open Router Provider Instance</param>
+public class MetaLlama3170BModel(TogetherAiProvider provider) : TogetherAiModel(provider, TogetherAiModelIds.MetaLlama3170B);
 
 
