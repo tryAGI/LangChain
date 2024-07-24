@@ -150,14 +150,14 @@ public partial class OpenAiChatModel(
                 .ToArray(),
             Seed = usedSettings.Seed,
             Stop = usedSettings.StopSequences!.ToArray(),
-            User = usedSettings.User ?? string.Empty,
+            User = usedSettings.User,
             Temperature = usedSettings.Temperature,
             FrequencyPenalty = usedSettings.FrequencyPenalty,
             N = usedSettings.Number,
             MaxTokens = usedSettings.MaxTokens,
             TopP = usedSettings.TopP,
             PresencePenalty = usedSettings.PresencePenalty,
-            LogitBias = usedSettings.LogitBias ?? new Dictionary<string, double>()
+            LogitBias = usedSettings.LogitBias,
         };
         if (GlobalTools.Count > 0)
         {
