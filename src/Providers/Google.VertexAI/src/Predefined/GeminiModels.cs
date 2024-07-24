@@ -8,4 +8,10 @@
 
     public class Gemini1ProChatModel(VertexAIProvider provider)
     : VertexAIChatModel(provider, "gemini-1.0-pro");
+
+    public class Gemini15ProImageToTextModel(VertexAIProvider provider)
+        : VertexAIImageToTextModel(provider, "gemini-1.5-pro");
+
+    public class Gemini15FlashImageToTextModel(VertexAIProvider provider)
+    : VertexAIImageToTextModel(provider, "gemini-1.5-flash");
 }
