@@ -5,4 +5,5 @@ public enum ProviderType
     OpenAi,
     Together,
     Anyscale,
+    Fireworks,
 }

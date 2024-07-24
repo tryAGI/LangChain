@@ -14,53 +14,54 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Git user
-        run: |
-          git config --local user.email "open-router-bot@langchain.com"
-          git config --local user.name "github-actions[bot]"
-
-      - name: Generate branch name
-        id: branch
-        run: echo "branch_name=bot/update-open-router_$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
-
-      - name: Create branch
-        run: |
-          git checkout -b ${{ steps.branch.outputs.branch_name }} origin/main
-          git rebase main
-
-      - name: Generate code
-        run: |
-          cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
-          dotnet run --output ../../src
-
-      - name: Format code
-        run: |
-          dotnet format LangChain.sln
-          dotnet format LangChain.sln analyzers --diagnostics=RS0016
-
-      - name: Check for changes
-        id: changes
-        run: |
-          CHANGED=$(git diff --name-only)
-          if [ -z "$CHANGED" ]; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Push changes
-        if: steps.changes.outputs.has_changes == 'true'
-        run: |
-          git add .
-          git commit -m "feat: Updated OpenRouter models"
-          git push --force-with-lease -u origin ${{ steps.branch.outputs.branch_name }}
-
-      - name: Wait for 15 seconds
-        run: sleep 15
-      
-      - name: Create pull request
-        if: steps.changes.outputs.has_changes == 'true'
-        run: gh pr create -B main -H ${{ steps.branch.outputs.branch_name }} --title 'feat:Updated OpenRouter models' --body 'Created by Github Actions'
-        env:
-          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+# Now it uses javascript and it's not possible to parse using base HttpClient
+#
+#      - name: Setup Git user
+#        run: |
+#          git config --local user.email "open-router-bot@langchain.com"
+#          git config --local user.name "github-actions[bot]"
+#
+#      - name: Generate branch name
+#        id: branch
+#        run: echo "branch_name=bot/update-open-router_$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+#
+#      - name: Create branch
+#        run: |
+#          git checkout -b ${{ steps.branch.outputs.branch_name }} origin/main
+#          git rebase main
+#
+#      - name: Generate code
+#        run: |
+#          cd src/Providers/OpenRouter/tools/LangChain.Providers.OpenRouter.CodeGenerator
+#          dotnet run --output ../../src
+#
+#      - name: Format code
+#        run: |
+#          dotnet format LangChain.sln
+#          dotnet format LangChain.sln analyzers --diagnostics=RS0016
+#
+#      - name: Check for changes
+#        id: changes
+#        run: |
+#          CHANGED=$(git diff --name-only)
+#          if [ -z "$CHANGED" ]; then
+#            echo "has_changes=false" >> $GITHUB_OUTPUT
+#          else
+#            echo "has_changes=true" >> $GITHUB_OUTPUT
+#          fi
+#
+#      - name: Push changes
+#        if: steps.changes.outputs.has_changes == 'true'
+#        run: |
+#          git add .
+#          git commit -m "feat: Updated OpenRouter models"
+#          git push --force-with-lease -u origin ${{ steps.branch.outputs.branch_name }}
+#
+#      - name: Wait for 15 seconds
+#        run: sleep 15
+#      
+#      - name: Create pull request
+#        if: steps.changes.outputs.has_changes == 'true'
+#        run: gh pr create -B main -H ${{ steps.branch.outputs.branch_name }} --title 'feat:Updated OpenRouter models' --body 'Created by Github Actions'
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}

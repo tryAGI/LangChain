@@ -1,5 +1,4 @@
-using OpenAI.Audio;
-using OpenAI.Constants;
+using OpenAI;
 
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
@@ -12,9 +11,9 @@ public class OpenAiTextToSpeechSettings : TextToSpeechSettings
     /// <inheritdoc cref="OpenAiTextToSpeechSettings"/>
     public new static OpenAiTextToSpeechSettings Default { get; } = new()
     {
-        Model = TextToSpeechModels.Tts1,
-        Voice = SpeechVoice.Alloy,
-        ResponseFormat = SpeechResponseFormat.MP3,
+        Model = CreateSpeechRequestModel.Tts1,
+        Voice = CreateSpeechRequestVoice.Alloy,
+        ResponseFormat = CreateSpeechRequestResponseFormat.Mp3,
         Speed = 1.0F,
     };
 
@@ -22,19 +21,19 @@ public class OpenAiTextToSpeechSettings : TextToSpeechSettings
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public TextToSpeechModels? Model { get; init; }
+    public AnyOf<string, CreateSpeechRequestModel>? Model { get; init; }
 
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public SpeechVoice? Voice { get; init; }
+    public CreateSpeechRequestVoice? Voice { get; init; }
 
     /// <summary>
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public SpeechResponseFormat? ResponseFormat { get; init; }
+    public CreateSpeechRequestResponseFormat? ResponseFormat { get; init; }
 
     /// <summary>
     /// 

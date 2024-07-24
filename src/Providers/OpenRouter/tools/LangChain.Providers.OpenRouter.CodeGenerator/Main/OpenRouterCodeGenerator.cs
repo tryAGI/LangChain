@@ -16,7 +16,7 @@ public static class OpenRouterCodeGenerator
     #region Public Methods
 
     /// <summary>
-    ///     Generate Models and Enum files
+    /// Generate Models and Enum files
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
@@ -24,23 +24,23 @@ public static class OpenRouterCodeGenerator
     {
         options = options ?? throw new ArgumentNullException(nameof(options));
 
-        //Initialize fields.
-        var list = new List<ModelInfo>();
-
-        var lbb = new DocumentHelper();
-
         //Load Open Router Docs Page...
         Console.WriteLine("Loading Model Page...");
-        var str = await GetStringAsync(new Uri("https://openrouter.ai/docs/models")).ConfigureAwait(false);
+
+        var html = await GetStringAsync(new Uri("https://openrouter.ai/docs/models")).ConfigureAwait(false);
 
         //Parse Html
-        lbb.DocumentText = str;
+        var lbb = new DocumentHelper
+        {
+            DocumentText = html
+        };
 
         //Get Models Table on https://openrouter.ai/docs#models
         var trs = lbb.Document.DocumentNode.Descendants("tr").ToArray();
         Console.WriteLine($"{trs.Length - 2} Models Found...");
 
         //Run Parallel loop for each model
+        var list = new List<ModelInfo>();
         await Parallel.ForAsync(2, trs.Length, new ParallelOptions { MaxDegreeOfParallelism = 8 },
             async (i, _) =>
             {
@@ -249,9 +249,15 @@ public static class OpenRouterCodeGenerator
     private static string GetDicAddCode(string enumMemberName, string modelId, string tokenLength, double promptCost,
         double completionCost)
     {
-        return "{ " +
-               FormattableString.Invariant($"OpenRouterModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
-               "},";
+        return FormattableString.Invariant($@"
+        [OpenRouterModelIds.{enumMemberName}] = new ChatModelMetadata
+        {{
+            Id = ""{modelId}"",
+            ContextLength = {tokenLength},
+            PricePerInputTokenInUsd = {promptCost},
+            PricePerOutputTokenInUsd = {completionCost},
+        }},
+");
     }
 
     /// <summary>

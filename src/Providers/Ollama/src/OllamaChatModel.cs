@@ -50,7 +50,7 @@ public class OllamaChatModel(
             Options = Provider.Options,
             Stream = true,
             Raw = true,
-            Format = UseJson ? GenerateCompletionRequestFormat.Json : null,
+            Format = UseJson ? ResponseFormat.Json : null,
         }, cancellationToken);
 
         OnPromptSent(prompt);

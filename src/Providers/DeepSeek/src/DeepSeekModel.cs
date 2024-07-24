@@ -7,4 +7,8 @@ namespace LangChain.Providers.DeepSeek;
 public class DeepSeekModel(
     DeepSeekProvider provider,
     string id)
-    : OpenAiChatModel(provider, DeepSeekModels.GetModelById(id));
+    : OpenAiChatModel(provider, id)
+{
+    /// <inheritdoc/>
+    public override int ContextLength => 16_000;
+}

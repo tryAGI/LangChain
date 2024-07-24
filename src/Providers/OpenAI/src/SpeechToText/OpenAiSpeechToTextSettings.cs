@@ -1,6 +1,3 @@
-using OpenAI.Audio;
-using OpenAI.Constants;
-
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
@@ -15,10 +12,10 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
     /// </summary>
     public new static OpenAiSpeechToTextSettings Default { get; } = new()
     {
-        Model = SpeechToTextModels.Whisper1,
+        Model = CreateTranscriptionRequestModel.Whisper1,
         AudioName = string.Empty,
         Prompt = string.Empty,
-        ResponseFormat = AudioResponseFormat.Json,
+        ResponseFormat = null,
         Temperature = 0,
         Language = string.Empty,
     };
@@ -27,7 +24,7 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public SpeechToTextModels? Model { get; init; }
+    public CreateTranscriptionRequestModel? Model { get; init; }
 
     /// <summary>
     /// 
@@ -43,7 +40,7 @@ public class OpenAiSpeechToTextSettings : SpeechToTextSettings
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public AudioResponseFormat? ResponseFormat { get; init; }
+    public CreateTranscriptionRequestResponseFormat? ResponseFormat { get; init; }
 
     /// <summary>
     /// 

@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup Label="Usings">
-        <Using Include="tryAGI.OpenAI" />
+        <Using Include="OpenAI" />
         <Using Include="System.Net.Http" />
     </ItemGroup>
 

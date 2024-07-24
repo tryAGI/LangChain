@@ -1,6 +1,6 @@
 using LangChain.Providers.OpenAI;
 using Microsoft.AspNetCore.Mvc;
-using OpenAI.Constants;
+using OpenAI;
 
 namespace LangChain.Samples.AspNet.Controllers;
 
@@ -22,7 +22,7 @@ public class OpenAiSampleController : ControllerBase
     [HttpGet(Name = "GetOpenAiResponse")]
     public async Task<string> Get()
     {
-        var llm = new OpenAiChatModel(_openAi, id: ChatModels.Gpt35Turbo);
+        var llm = new OpenAiChatModel(_openAi, id: CreateChatCompletionRequestModel.Gpt35Turbo);
         var response = await llm.GenerateAsync("What is a good name for a company that sells colourful socks?");
 
         return response.LastMessageContent;

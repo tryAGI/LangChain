@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
+using LangChain.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
-using OpenAI.Chat;
 
 namespace LangChain.Serve.OpenAI;
 
@@ -29,26 +29,49 @@ public static class ServeExtensions
         var controller = new ServeController(serveMiddlewareOptions);
 
         app.MapGet("/v1/models", () => Results.Ok(controller.ListModels()));
-        app.MapPost("/v1/chat/completions", async (ChatRequest request) =>
+        app.MapPost("/v1/chat/completions", async (CreateChatCompletionRequest request) =>
         {
-            var llm = serveMiddlewareOptions.GetModel(request.Model);
+            var llm = serveMiddlewareOptions.GetModel(request.Model.Value1 ?? request.Model.Value2.ToValueString());
 
-            var response = await llm.GenerateAsync(new LangChain.Providers.ChatRequest
+            var response = await llm.GenerateAsync(new ChatRequest
             {
-                Messages = request.Messages.Select(x => new LangChain.Providers.Message
+                Messages = request.Messages.Select(x => new Message
                 {
-                    Content = x.Content,
-                    Role = x.Role switch
+                    Content = x.User?.Content.Value1 ?? x.Assistant?.Content ?? x.System?.Content ?? string.Empty,
+                    Role = x.Object switch
                     {
-                        Role.Assistant => Providers.MessageRole.Ai,
-                        Role.System => Providers.MessageRole.System,
-                        Role.User => Providers.MessageRole.Human,
+                        ChatCompletionRequestAssistantMessage => MessageRole.Ai,
+                        ChatCompletionRequestSystemMessage => MessageRole.System,
+                        ChatCompletionRequestUserMessage => MessageRole.Human,
                         _ => throw new NotImplementedException(),
                     }
                 }).ToList(),
             }).ConfigureAwait(false);
 
-            return Results.Ok(new ChatResponse());
+            return Results.Ok(new CreateChatCompletionResponse
+            {
+                Id = Guid.NewGuid().ToString(),
+                Created = 0,
+                Model = request.Model.Value1 ?? request.Model.Value2.ToValueString(),
+                Object = CreateChatCompletionResponseObject.ChatCompletion,
+                Choices =
+                [
+                    new CreateChatCompletionResponseChoices
+                    {
+                        Message = new ChatCompletionResponseMessage
+                        {
+                            Content = response.Messages.Last().Content,
+                            Role = ChatCompletionResponseMessageRole.Assistant,
+                        },
+                        Index = 0,
+                        Logprobs = new CreateChatCompletionResponseChoicesLogprobs
+                        {
+                            Content = [],
+                        },
+                        FinishReason = CreateChatCompletionResponseChoicesFinishReason.Stop,
+                    }
+                ],
+            });
         });
 
         return app;
