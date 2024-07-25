@@ -5,7 +5,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\src\LangChain.Providers.Google.VertexAI.csproj"/>
+		<ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+		<ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
+		<ProjectReference Include="..\..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
+		<ProjectReference Include="..\src\LangChain.Providers.Google.VertexAI.csproj" />
+		<ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
 	</ItemGroup>
 
 </Project>
