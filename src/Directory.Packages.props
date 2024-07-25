@@ -62,7 +62,7 @@
     <PackageVersion Include="OpenSearch.Client" Version="1.7.1" />
     <PackageVersion Include="Pgvector" Version="0.2.0" />
     <PackageVersion Include="NUnit" Version="4.1.0" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageVersion Include="PdfPig" Version="0.1.8" />
     <PackageVersion Include="PolySharp" Version="1.14.1">
       <PrivateAssets>all</PrivateAssets>
@@ -83,7 +83,7 @@
     <PackageVersion Include="Testcontainers.PostgreSql" Version="3.9.0" />
     <PackageVersion Include="Testcontainers.Redis" Version="3.9.0" />
     <PackageVersion Include="Tiktoken" Version="2.0.3" />
-    <PackageVersion Include="tryAGI.OpenAI" Version="3.0.4-dev.8" />
+    <PackageVersion Include="tryAGI.OpenAI" Version="3.0.4-dev.9" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
