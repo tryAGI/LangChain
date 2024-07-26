@@ -9,7 +9,7 @@
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.7.0" />
     <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.400" />
-    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.400" />
+    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.401" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
