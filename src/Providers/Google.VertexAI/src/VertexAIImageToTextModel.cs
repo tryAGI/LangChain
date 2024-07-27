@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace LangChain.Providers.Google.VertexAI
 {
-    public class VertexAIImageToTextModel(VertexAIProvider provider, string id) : ImageToTextModel(id), IImageToTextModel
+    public class VertexAIImageToTextModel(VertexAIProvider provider, string id, string mimeType = "image/png") : ImageToTextModel(id), IImageToTextModel
     {
         private VertexAIProvider Provider { get; } = provider ?? throw new ArgumentNullException(nameof(provider));
         public override async Task<ImageToTextResponse> GenerateTextFromImageAsync(ImageToTextRequest request, ImageToTextSettings? settings = null, CancellationToken cancellationToken = default)
@@ -26,7 +26,7 @@ namespace LangChain.Providers.Google.VertexAI
                         Parts =
                         {
                             new Part { Text = request.Prompt },
-                            new Part { InlineData = new() { MimeType = "image/png", Data = ByteString.CopyFrom(request.Image.ToArray()) } }
+                            new Part { InlineData = new() { MimeType = mimeType, Data = ByteString.CopyFrom(request.Image.ToArray()) } }
                         }
                     }
                 }
