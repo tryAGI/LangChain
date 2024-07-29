@@ -51,20 +51,20 @@ public static class Helpers
                     return (llm, embeddings);
                 }
             case ProviderType.Fireworks:
-            {
-                // https://fireworks.ai/account/api-keys
-                var provider = new FireworksProvider(
-                    apiKey: Environment.GetEnvironmentVariable("FIREWORKS_API_KEY") ??
-                            throw new InconclusiveException("FIREWORKS_API_KEY is not set"));
-                var llm = new FireworksModel(provider, id: "accounts/fireworks/models/llama-v3p1-8b-instruct");
+                {
+                    // https://fireworks.ai/account/api-keys
+                    var provider = new FireworksProvider(
+                        apiKey: Environment.GetEnvironmentVariable("FIREWORKS_API_KEY") ??
+                                throw new InconclusiveException("FIREWORKS_API_KEY is not set"));
+                    var llm = new FireworksModel(provider, id: "accounts/fireworks/models/llama-v3p1-8b-instruct");
 
-                // Use OpenAI embeddings for now because Anyscale doesn't have embeddings yet
-                var embeddings = new TextEmbeddingV3SmallModel(
-                    Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
-                    throw new InconclusiveException("OPENAI_API_KEY is not set"));
+                    // Use OpenAI embeddings for now because Anyscale doesn't have embeddings yet
+                    var embeddings = new TextEmbeddingV3SmallModel(
+                        Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+                        throw new InconclusiveException("OPENAI_API_KEY is not set"));
 
-                return (llm, embeddings);
-            }
+                    return (llm, embeddings);
+                }
 
             default:
                 throw new ArgumentOutOfRangeException();

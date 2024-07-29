@@ -11,7 +11,7 @@ public class FireworksConfiguration : OpenAiConfiguration
     /// 
     /// </summary>
     public new const string SectionName = "Fireworks";
-    
+
     /// <summary>
     /// 
     /// </summary>
