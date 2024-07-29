@@ -7,15 +7,37 @@ public enum DeepInfraModelIds
 {
 
     /// <summary>
-    /// Name: Meta-Llama-3-70B-Instruct <br/>
+    /// Name: Meta-Llama-3.1-405B-Instruct <br/>
     /// Organization: meta-llama <br/>
-    /// Context Length: 8192 <br/>
+    /// Context Length: 32768 <br/>
+    /// Prompt Cost: $2.7/MTok <br/>
+    /// Completion Cost: $2.7/MTok <br/>
+    /// Description: Meta developed and released the Meta Llama 3.1 family of large language models (LLMs), a collection of pretrained and instruction tuned generative text models in 8B, 70B and 405B sizes <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct</a> 
+    /// </summary>
+    MetaLlama31405BInstruct,
+
+    /// <summary>
+    /// Name: Meta-Llama-3.1-70B-Instruct <br/>
+    /// Organization: meta-llama <br/>
+    /// Context Length: 131072 <br/>
     /// Prompt Cost: $0.52/MTok <br/>
     /// Completion Cost: $0.52/MTok <br/>
-    /// Description: Model Details Meta developed and released the Meta Llama 3 family of large language models (LLMs), a collection of pretrained and instruction tuned generative text models in 8 and 70B sizes. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct</a> 
+    /// Description: Meta developed and released the Meta Llama 3.1 family of large language models (LLMs), a collection of pretrained and instruction tuned generative text models in 8B, 70B and 405B sizes <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct</a> 
     /// </summary>
-    MetaLlama370BInstruct,
+    MetaLlama3170BInstruct,
+
+    /// <summary>
+    /// Name: Meta-Llama-3.1-8B-Instruct <br/>
+    /// Organization: meta-llama <br/>
+    /// Context Length: 131072 <br/>
+    /// Prompt Cost: $0.06/MTok <br/>
+    /// Completion Cost: $0.06/MTok <br/>
+    /// Description: Meta developed and released the Meta Llama 3.1 family of large language models (LLMs), a collection of pretrained and instruction tuned generative text models in 8B, 70B and 405B sizes <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct</a> 
+    /// </summary>
+    MetaLlama318BInstruct,
 
     /// <summary>
     /// Name: gemma-2-27b-it <br/>
@@ -62,15 +84,15 @@ public enum DeepInfraModelIds
     L370BEuryaleV21,
 
     /// <summary>
-    /// Name: Nemotron-4-340B-Instruct <br/>
-    /// Organization: nvidia <br/>
-    /// Context Length: 4096 <br/>
-    /// Prompt Cost: $4.2/MTok <br/>
-    /// Completion Cost: $4.2/MTok <br/>
-    /// Description: Nemotron-4-340B-Instruct is a chat model intended for use for the English language, designed for Synthetic Data Generation <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/nvidia/Nemotron-4-340B-Instruct">https://huggingface.co/nvidia/Nemotron-4-340B-Instruct</a> 
+    /// Name: Meta-Llama-3-70B-Instruct <br/>
+    /// Organization: meta-llama <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.52/MTok <br/>
+    /// Completion Cost: $0.52/MTok <br/>
+    /// Description: Model Details Meta developed and released the Meta Llama 3 family of large language models (LLMs), a collection of pretrained and instruction tuned generative text models in 8 and 70B sizes. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct</a> 
     /// </summary>
-    Nemotron4340BInstruct,
+    MetaLlama370BInstruct,
 
     /// <summary>
     /// Name: Qwen2-72B-Instruct <br/>
@@ -159,17 +181,6 @@ public enum DeepInfraModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/microsoft/WizardLM-2-7B">https://huggingface.co/microsoft/WizardLM-2-7B</a> 
     /// </summary>
     Wizardlm27B,
-
-    /// <summary>
-    /// Name: gemma-1.1-7b-it <br/>
-    /// Organization: google <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.07/MTok <br/>
-    /// Completion Cost: $0.07/MTok <br/>
-    /// Description: Gemma is an open-source model designed by Google. This is Gemma 1.1 7B (IT), an update over the original instruction-tuned Gemma release. Gemma 1.1 was trained using a novel RLHF method, leading to substantial gains on quality, coding capabilities, factuality, instruction following and multi-turn conversation quality. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/google/gemma-1.1-7b-it">https://huggingface.co/google/gemma-1.1-7b-it</a> 
-    /// </summary>
-    Gemma117BIt,
 
     /// <summary>
     /// Name: Mixtral-8x7B-Instruct-v0.1 <br/>
@@ -370,6 +381,17 @@ public enum DeepInfraModelIds
     Codegemma7BIt,
 
     /// <summary>
+    /// Name: gemma-1.1-7b-it <br/>
+    /// Organization: google <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.07/MTok <br/>
+    /// Completion Cost: $0.07/MTok <br/>
+    /// Description: Gemma is an open-source model designed by Google. This is Gemma 1.1 7B (IT), an update over the original instruction-tuned Gemma release. Gemma 1.1 was trained using a novel RLHF method, leading to substantial gains on quality, coding capabilities, factuality, instruction following and multi-turn conversation quality. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/google/gemma-1.1-7b-it">https://huggingface.co/google/gemma-1.1-7b-it</a> 
+    /// </summary>
+    Gemma117BIt,
+
+    /// <summary>
     /// Name: Llama-2-13b-chat-hf <br/>
     /// Organization: meta-llama <br/>
     /// Context Length: 4096 <br/>
@@ -401,17 +423,6 @@ public enum DeepInfraModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf">https://huggingface.co/meta-llama/Llama-2-7b-chat-hf</a> 
     /// </summary>
     Llama27BChatHf,
-
-    /// <summary>
-    /// Name: Meta-Llama-3-405B-Instruct <br/>
-    /// Organization: meta-llama <br/>
-    /// Context Length:  <br/>
-    /// Prompt Cost: $0/MTok <br/>
-    /// Completion Cost: $0/MTok <br/>
-    /// Description: The highly anticipated 405 billion parameter LLaMa-3 is coming soon! <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3-405B-Instruct">https://huggingface.co/meta-llama/Meta-Llama-3-405B-Instruct</a> 
-    /// </summary>
-    MetaLlama3405BInstruct,
 
     /// <summary>
     /// Name: Mistral-7B-Instruct-v0.1 <br/>
@@ -447,11 +458,22 @@ public enum DeepInfraModelIds
     Mixtral8X22bV01,
 
     /// <summary>
+    /// Name: Nemotron-4-340B-Instruct <br/>
+    /// Organization: nvidia <br/>
+    /// Context Length: 4096 <br/>
+    /// Prompt Cost: $4.2/MTok <br/>
+    /// Completion Cost: $4.2/MTok <br/>
+    /// Description: Nemotron-4-340B-Instruct is a chat model intended for use for the English language, designed for Synthetic Data Generation <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/nvidia/Nemotron-4-340B-Instruct">https://huggingface.co/nvidia/Nemotron-4-340B-Instruct</a> 
+    /// </summary>
+    Nemotron4340BInstruct,
+
+    /// <summary>
     /// Name: openchat_3.5 <br/>
     /// Organization: openchat <br/>
     /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.07/MTok <br/>
-    /// Completion Cost: $0.07/MTok <br/>
+    /// Prompt Cost: $0.06/MTok <br/>
+    /// Completion Cost: $0.06/MTok <br/>
     /// Description: OpenChat is a library of open-source language models that have been fine-tuned with C-RLFT, a strategy inspired by offline reinforcement learning. These models can learn from mixed-quality data without preference labels and have achieved exceptional performance comparable to ChatGPT. The developers of OpenChat are dedicated to creating a high-performance, commercially viable, open-source large language model and are continuously making progress towards this goal. <br/>
     /// HuggingFace Url: <a href="https://huggingface.co/openchat/openchat_3.5">https://huggingface.co/openchat/openchat_3.5</a> 
     /// </summary>
