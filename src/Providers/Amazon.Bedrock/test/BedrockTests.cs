@@ -29,9 +29,9 @@ public class BedrockTests
     {
         var provider = new BedrockProvider();
         //var llm = new Jurassic2MidModel(provider);
-        //var llm = new ClaudeV21Model(provider);
+        var llm = new Claude35SonnetModel(provider);
         //var llm = new Mistral7BInstruct(provider);
-        var llm = new JambaInstructModel(provider);
+        //var llm = new JambaInstructModel(provider);
 
         var template = "What is a good name for a company that makes {product}?";
         var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
