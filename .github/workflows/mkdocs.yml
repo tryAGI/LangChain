@@ -6,6 +6,7 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - 'examples/**'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -31,6 +32,9 @@ jobs:
 
       - name: Install dependencies
         run: pip install mkdocs-material
+        
+      - name: Generate docs
+        run: dotnet run --project src/Helpers/GenerateDocs/GenerateDocs.csproj .
 
       - name: Build with MkDocs
         run: mkdocs build -d ./_site

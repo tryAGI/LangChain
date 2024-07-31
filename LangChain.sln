@@ -379,6 +379,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{20D58A8D-D
 		docs\media\icon128.png = docs\media\icon128.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDocs", "src\Helpers\GenerateDocs\GenerateDocs.csproj", "{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -765,6 +767,10 @@ Global
 		{90BC5243-139D-4CB2-8B68-3794070C1955}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90BC5243-139D-4CB2-8B68-3794070C1955}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90BC5243-139D-4CB2-8B68-3794070C1955}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -915,6 +921,7 @@ Global
 		{2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
 		{90BC5243-139D-4CB2-8B68-3794070C1955} = {2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B}
 		{20D58A8D-DB93-47AC-956B-9EB89EA75928} = {23506EB8-1B27-4FD0-B570-2F5EF2C33034}
+		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0} = {1325D29E-D42F-423F-A6AC-5E880BE2AB68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

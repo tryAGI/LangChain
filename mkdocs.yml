@@ -1,6 +1,8 @@
 site_name: LangChain .NET Documentation
-#nav:
-#  - Overview: index.md
+nav:
+- Overview: index.md
+# EXAMPLES #
+
 #  - Quick Start: QuickStart.md
 #  - Architecture: Architecture.md
 #  - FAQ: FAQ.md
