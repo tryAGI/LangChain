@@ -44,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\open-router.yml = .github\workflows\open-router.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\workflows\together.yml = .github\workflows\together.yml
+		.github\workflows\mkdocs.yml = .github\workflows\mkdocs.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
@@ -369,6 +370,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fireworks", "Fireworks", "{2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Fireworks", "src\Providers\Fireworks\src\LangChain.Providers.Fireworks.csproj", "{90BC5243-139D-4CB2-8B68-3794070C1955}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{20D58A8D-DB93-47AC-956B-9EB89EA75928}"
+	ProjectSection(SolutionItems) = preProject
+		mkdocs.yml = mkdocs.yml
+		docs\index.md = docs\index.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -905,6 +912,7 @@ Global
 		{EFD4C813-47A1-4B40-8A23-D660B82B8938} = {1F6C3FD4-959B-4A6E-ACCA-C0466149EC05}
 		{2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B} = {E2B9833C-0397-4FAF-A3A8-116E58749750}
 		{90BC5243-139D-4CB2-8B68-3794070C1955} = {2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B}
+		{20D58A8D-DB93-47AC-956B-9EB89EA75928} = {23506EB8-1B27-4FD0-B570-2F5EF2C33034}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

@@ -123,7 +123,7 @@ AI:";
     public async Task GettingStarted()
     {
         // get model path
-        var modelPath = await HuggingFaceModelDownloader.Instance.GetModel(
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
             repository: "TheBloke/Thespis-13B-v0.5-GGUF",
             fileName: "thespis-13b-v0.5.Q2_K.gguf",
             version: "main");
@@ -272,7 +272,7 @@ Helpful Answer:";
     public async Task UsingChainOutput()
     {
         // get model path
-        var modelPath = await HuggingFaceModelDownloader.Instance.GetModel(
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
             repository: "TheBloke/Thespis-13B-v0.5-GGUF",
             fileName: "thespis-13b-v0.5.Q2_K.gguf",
             version: "main");

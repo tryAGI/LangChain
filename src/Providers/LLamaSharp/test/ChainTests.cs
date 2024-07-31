@@ -9,8 +9,6 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 [TestFixture]
 public class ChainTests
 {
-    string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-
     [Test]
     public async Task PromptTest()
     {
@@ -25,10 +23,29 @@ public class ChainTests
     }
 
     [Test]
+    public async Task FiveWords()
+    {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
+        var llm = LLamaSharpModelChat.FromPath(modelPath);
+        string response = await llm.GenerateAsync("Write 5 random words.");
+        
+        Console.WriteLine(response);
+
+        response.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Test]
     [Explicit]
     public async Task LlmChainTest()
     {
-        var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
+        var llm = LLamaSharpModelInstruction.FromPath(modelPath);
         var promptText =
             @"You will be provided with information about pet. Your goal is to extract the pet name.
 
@@ -52,8 +69,12 @@ The pet name is
     [Explicit]
     public async Task RetrievalChainTest()
     {
-        var llm = LLamaSharpModelInstruction.FromPath(ModelPath);
-        var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
+        var llm = LLamaSharpModelInstruction.FromPath(modelPath);
+        var embeddings = LLamaSharpEmbeddings.FromPath(modelPath);
         var vectorStore = new InMemoryVectorCollection();
         await vectorStore
             .AddDocumentsAsync(embeddings, new[]

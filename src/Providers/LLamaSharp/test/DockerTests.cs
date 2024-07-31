@@ -11,11 +11,11 @@ public class DockerTests
     [Explicit]
     public async Task SimpleHelloWorldTest()
     {
-        var path = await HuggingFaceModelDownloader.Instance.GetModel(
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
             repository: "TheBloke/Thespis-13B-v0.5-GGUF",
             fileName: "thespis-13b-v0.5.Q2_K.gguf",
             version: "main");
-        var model = LLamaSharpModelInstruction.FromPath(path);
+        var model = LLamaSharpModelInstruction.FromPath(modelPath);
         model.Configuration.AntiPrompts = new[] { "[END]" };
 
         var chain = Template(@"Generate a python program that prints ""Hello world"" do not explain or comment the code. I expect only generated code from you. Print [END] after you are done.

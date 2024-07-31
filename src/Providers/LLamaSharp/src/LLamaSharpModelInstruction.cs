@@ -23,7 +23,6 @@ public class LLamaSharpModelInstruction : LLamaSharpModelBase, IChatModel
             PathToModelFile = path,
             Temperature = temperature
         });
-
     }
 
     /// <summary>
