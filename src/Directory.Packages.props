@@ -8,14 +8,14 @@
     <PackageVersion Include="Anthropic.SDK" Version="3.3.0" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.7.0" />
-    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.400.1" />
-    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.401.1" />
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.1" />
+    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.400.2" />
+    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.401.2" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.2" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.37" />
     <PackageVersion Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
     <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
-    <PackageVersion Include="DocumentFormat.OpenXml" Version="3.0.2" />
+    <PackageVersion Include="DocumentFormat.OpenXml" Version="3.1.0" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.4" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
