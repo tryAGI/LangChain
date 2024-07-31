@@ -5,8 +5,10 @@ using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
 using LangChain.Databases.Sqlite;
 using LangChain.Databases.Mongo;
+using LangChain.Databases.DuckDb;
 using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
+using Microsoft.SemanticKernel.Connectors.DuckDB;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -121,6 +123,13 @@ public partial class DatabaseTests
                         Container = container,
                     };
                 }
+            case SupportedDatabase.DuckDb:
+                var store = await DuckDBMemoryStore.ConnectAsync("duckdb_test.db", cancellationToken);
+                return new DatabaseTestEnvironment
+                {
+                    VectorDatabase = new DuckDbVectorDatabase(store)
+                };
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
         }
