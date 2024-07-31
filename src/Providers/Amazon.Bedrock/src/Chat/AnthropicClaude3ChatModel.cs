@@ -115,6 +115,7 @@ public class AnthropicClaude3ChatModel(
 
         var bodyJson = new JsonObject
         {
+            ["anthropic_version"] = "bedrock-2023-05-31",
             ["max_tokens"] = usedSettings.MaxTokens!.Value,
             ["messages"] = new JsonArray
             {
