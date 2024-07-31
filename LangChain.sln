@@ -375,6 +375,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{20D58A8D-D
 	ProjectSection(SolutionItems) = preProject
 		mkdocs.yml = mkdocs.yml
 		docs\index.md = docs\index.md
+		docs\css\extra.css = docs\css\extra.css
+		docs\media\icon128.png = docs\media\icon128.png
 	EndProjectSection
 EndProject
 Global
