@@ -124,7 +124,7 @@ public partial class DatabaseTests
                     };
                 }
             case SupportedDatabase.DuckDb:
-                var store = await DuckDBMemoryStore.ConnectAsync("duckdb_test.db", cancellationToken);
+                var store = await DuckDBMemoryStore.ConnectAsync(cancellationToken);
                 return new DatabaseTestEnvironment
                 {
                     VectorDatabase = new DuckDbVectorDatabase(store)
