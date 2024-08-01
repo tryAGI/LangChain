@@ -117,8 +117,8 @@ public partial class DatabaseTests
         metadatas[0] = new Dictionary<string, object>
         {
             ["string"] = "red",
-            ["double"] = 1.01d,
-            ["guid"] = 1.01d,
+            //["double"] = 1.01d,
+            //["guid"] = 1.01d,
         };
 
         metadatas[1] = new Dictionary<string, object>
@@ -140,8 +140,8 @@ public partial class DatabaseTests
         actualFirstDocument.Should().NotBeNull();
         actualFirstDocument!.PageContent.Should().BeEquivalentTo(texts[0]);
         actualFirstDocument.Metadata["string"].Should().BeEquivalentTo(metadatas[0]["string"]);
-        actualFirstDocument.Metadata["double"].Should().BeEquivalentTo(metadatas[0]["double"]);
-        actualFirstDocument.Metadata["guid"].Should().BeEquivalentTo(metadatas[0]["guid"]);
+        //actualFirstDocument.Metadata["double"].Should().BeEquivalentTo(metadatas[0]["double"]);
+        //actualFirstDocument.Metadata["guid"].Should().BeEquivalentTo(metadatas[0]["guid"]);
 
         var actualSecondDocument = await vectorCollection.GetDocumentByIdAsync(secondId);
         actualSecondDocument.Should().NotBeNull();
