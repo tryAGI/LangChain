@@ -2,17 +2,13 @@
 
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
-        <NoWarn>$(NoWarn)</NoWarn>
+        <NoWarn>$(NoWarn);CS9113;CS1998</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
         <Description>Elasticsearch support for LangChain.</Description>
         <PackageTags>$(PackageTags);elasticsearch</PackageTags>
     </PropertyGroup>
-
-    <ItemGroup Label="Usings">
-        <Using Include="System.Net.Http" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Elastic.Clients.Elasticsearch" />
