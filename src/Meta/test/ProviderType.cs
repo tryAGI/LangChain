@@ -8,4 +8,5 @@ public enum ProviderType
     Fireworks,
     OpenRouter,
     DeepInfra,
+    Google,
 }

@@ -14,6 +14,7 @@ public class BaseTests
     [TestCase(ProviderType.OpenRouter)]
     [TestCase(ProviderType.DeepInfra)]
     //[TestCase(ProviderType.Fireworks)]
+    //[TestCase(ProviderType.Google)]
     public async Task FiveRandomWords(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -37,6 +38,7 @@ public class BaseTests
     //[TestCase(ProviderType.Fireworks)]
     //[TestCase(ProviderType.OpenRouter)]
     //[TestCase(ProviderType.DeepInfra)]
+    //[TestCase(ProviderType.Google)]
     public async Task Streaming(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -60,6 +62,7 @@ public class BaseTests
     //[TestCase(ProviderType.Fireworks)]
     //[TestCase(ProviderType.OpenRouter)]
     //[TestCase(ProviderType.DeepInfra)]
+    //[TestCase(ProviderType.Google)]
     public async Task SimpleChain(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -87,6 +90,7 @@ public class BaseTests
     //[TestCase(ProviderType.Fireworks)]
     //[TestCase(ProviderType.OpenRouter)]
     //[TestCase(ProviderType.DeepInfra)]
+    //[TestCase(ProviderType.Google)]
     public async Task Tools_Weather(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -100,6 +104,9 @@ public class BaseTests
                  "You are a helpful weather assistant.".AsSystemMessage(),
                  "What is the current temperature in Dubai, UAE in Celsius?".AsHumanMessage(),
             });
+        response.Usage.InputTokens.Should().BeGreaterThan(0);
+        response.Usage.OutputTokens.Should().BeGreaterThan(0);
+        response.Usage.PriceInUsd.Should().BeGreaterThan(0);
 
         Console.WriteLine(response.Messages.AsHistory());
     }

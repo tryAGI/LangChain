@@ -3,6 +3,8 @@ using LangChain.Providers.Anyscale;
 using LangChain.Providers.Anyscale.Predefined;
 using LangChain.Providers.DeepInfra;
 using LangChain.Providers.Fireworks;
+using LangChain.Providers.Google;
+using LangChain.Providers.Google.Predefined;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Providers.OpenRouter;
@@ -89,6 +91,21 @@ public static class Helpers
                 var llm = new Providers.DeepInfra.Predefined.MetaLlama318BInstructModel(provider);
 
                 // Use OpenAI embeddings for now because DeepInfra doesn't have embeddings yet
+                var embeddings = new TextEmbeddingV3SmallModel(
+                    Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+                    throw new InconclusiveException("OPENAI_API_KEY is not set"));
+
+                return (llm, embeddings);
+            }
+            case ProviderType.Google:
+            {
+                var provider = new GoogleProvider(
+                    apiKey: Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ??
+                            throw new InconclusiveException("GOOGLE_API_KEY is not set"),
+                    httpClient: new HttpClient());
+                var llm = new GeminiProModel(provider);
+
+                // Use OpenAI embeddings for now because Google doesn't have embeddings yet
                 var embeddings = new TextEmbeddingV3SmallModel(
                     Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
                     throw new InconclusiveException("OPENAI_API_KEY is not set"));
