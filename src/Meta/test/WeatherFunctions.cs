@@ -1,7 +1,7 @@
-﻿using OpenAI;
+﻿using LangChain.Providers;
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
-namespace LangChain.Providers.OpenAI.Tests;
+namespace LangChain.IntegrationTests;
 
 public enum Unit
 {
@@ -17,7 +17,7 @@ public class Weather
     public string Description { get; set; } = string.Empty;
 }
 
-[OpenAiFunctions]
+[LangChainTools]
 public interface IWeatherFunctions
 {
     [Description("Get the current weather in a given location")]
