@@ -6,7 +6,7 @@ using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Schema;
 
 using var httpClient = new HttpClient();
-var llm = new Gpt35TurboModel("api-key");
+var llm = new Gpt4OmniMiniModel("api-key");
 
 var firstTemplate = "What is a good name for a company that makes {product}?";
 var firstPrompt = new PromptTemplate(new PromptTemplateInput(firstTemplate, new List<string>(1) { "product" }));

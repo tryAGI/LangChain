@@ -9,7 +9,7 @@ public partial class WikiTests
     [Test]
     public async Task HowToUseOpenAiProviderSmaller()
     {
-        var model = new Gpt35TurboModel("your_openAI_key");
+        var model = new Gpt4OmniMiniModel("your_openAI_key");
         var chain =
             Set("Hello!")
             | LLM(model);

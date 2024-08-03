@@ -11,7 +11,7 @@ public partial class WikiTests
     public async Task BuildingChatWithOpenAi()
     {
         // we will use GPT-3.5 model, but you can use any other model
-        var model = new Gpt35TurboModel("your_key");
+        var model = new Gpt4OmniMiniModel("your_key");
 
 
         // create simple template for conversation for AI to know what piece of text it is looking at
