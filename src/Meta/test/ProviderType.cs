@@ -10,4 +10,7 @@ public enum ProviderType
     DeepInfra,
     Google,
     Anthropic,
+    Groq,
+    DeepSeek,
+    Azure,
 }
