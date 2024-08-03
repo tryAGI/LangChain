@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using OpenAI.Models;
+using OpenAI;
 
 namespace LangChain.Serve.OpenAI;
 
@@ -10,7 +10,13 @@ public class ServeController(
     {
         return new ModelsList
         {
-            Models = options.ListModels().Select(static x => new Model(x, ownedBy: "OpenAI")).ToList()
+            Models = options.ListModels().Select(static x => new Model
+            {
+                Object = ModelObject.Model,
+                Created = 0,
+                Id = x,
+                OwnedBy = "OpenAI",
+            }).ToList()
         };
     }
 
@@ -18,7 +24,13 @@ public class ServeController(
     {
         return new ModelsList
         {
-            Models = options.ListModels().Select(static x => new Model(x, ownedBy: "OpenAI")).ToList()
+            Models = options.ListModels().Select(static x => new Model
+            {
+                Object = ModelObject.Model,
+                Created = 0,
+                Id = x,
+                OwnedBy = "OpenAI",
+            }).ToList()
         };
     }
 }

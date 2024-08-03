@@ -9,13 +9,15 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 [TestFixture]
 public class SQLiteVectorStoreTest
 {
-    string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-
     [Test]
     [Explicit]
     public async Task SqliteTest()
     {
-        var embeddings = LLamaSharpEmbeddings.FromPath(ModelPath);
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
+        var embeddings = LLamaSharpEmbeddings.FromPath(modelPath);
 
         var dbExists = File.Exists("vectors.db");
         var vectorDatabase = new SqLiteVectorDatabase("vectors.db");

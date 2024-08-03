@@ -12,5 +12,5 @@ public interface IModel<TSettings> : IModel
     /// but you can override them in the request. <br/>
     /// If not set, the model will try to use the provider chat settings or default settings in other cases. <br/>
     /// </summary>
-    public TSettings? Settings { get; init; }
+    public TSettings? Settings { get; set; }
 }

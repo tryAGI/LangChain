@@ -1,37 +1,35 @@
-using OpenAI.Constants;
-
 namespace LangChain.Providers.OpenAI.Predefined;
 
 // Now we only predefine the models with alias.
 
-/// <inheritdoc cref="ChatModels.Gpt35Turbo" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt35Turbo" />
 public class Gpt35TurboModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt35Turbo);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt35Turbo);
 
-/// <inheritdoc cref="ChatModels.Gpt4" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4" />
 public class Gpt4Model(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt4);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4);
 
-/// <inheritdoc cref="ChatModels.Gpt4_32k" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt432k" />
 public class Gpt4With32KModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt4_32k);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt432k);
 
-/// <inheritdoc cref="ChatModels.Gpt35TurboInstruct" />
-public class Gpt35TurboInstructModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt35TurboInstruct);
-
-/// <inheritdoc cref="ChatModels.Gpt4TurboPreview" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4TurboPreview" />
 public class Gpt4TurboPreviewModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt4TurboPreview);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4TurboPreview);
 
-/// <inheritdoc cref="ChatModels.Gpt4VisionPreview" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4VisionPreview" />
 public class Gpt4VisionPreviewModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt4VisionPreview);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4VisionPreview);
 
-/// <inheritdoc cref="ChatModels.Gpt4Turbo" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4Turbo" />
 public class Gpt4TurboModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt4Turbo);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4Turbo);
 
-/// <inheritdoc cref="ChatModels.Gpt4o" />
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4o" />
 public class Gpt4OmniModel(OpenAiProvider provider)
-    : OpenAiChatModel(provider, id: ChatModels.Gpt4o);
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4o);
+
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4oMini" />
+public class Gpt4OmniMiniModel(OpenAiProvider provider)
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4oMini);

@@ -10,6 +10,15 @@ public interface IChatModel : IModel<ChatSettings>
     /// </summary>
     public int ContextLength { get; }
 
+    /// <summary>
+    /// Allows to call global tools automatically.
+    /// </summary>
+    public bool CallToolsAutomatically { get; set; }
+
+    /// <summary>
+    /// Allows to reply to tool calls automatically.
+    /// </summary>
+    public bool ReplyToToolCallsAutomatically { get; set; }
 
     /// <summary>
     /// Occurs when token generated in streaming mode.
@@ -38,4 +47,19 @@ public interface IChatModel : IModel<ChatSettings>
         ChatRequest request,
         ChatSettings? settings = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds user-defined OpenAI tools to each request to the model.
+    /// </summary>
+    /// <param name="tools"></param>
+    /// <param name="calls"></param>
+    /// <returns></returns>
+    void AddGlobalTools(
+        ICollection<OpenApiSchema> tools,
+        IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> calls);
+
+    /// <summary>
+    /// Clears all global tools.
+    /// </summary>
+    void ClearGlobalTools();
 }

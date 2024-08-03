@@ -8,7 +8,7 @@ public class AnyscaleProvider : OpenAiProvider
     {
     }
 
-    public AnyscaleProvider(string apiKey) : base(apiKey, customEndpoint: "api.endpoints.anyscale.com")
+    public AnyscaleProvider(string apiKey) : base(apiKey, customEndpoint: "https://api.endpoints.anyscale.com/v1")
     {
     }
 }

@@ -3,38 +3,51 @@ using LangChain.Databases.InMemory;
 using LangChain.DocumentLoaders;
 using LangChain.Extensions;
 using LangChain.Prompts;
+using LangChain.Providers.HuggingFace.Downloader;
 using LangChain.Splitters.Text;
 
 namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 
 public partial class LLamaSharpTests
 {
-    IEmbeddingModel CreateEmbeddings()
+    async Task<IEmbeddingModel> CreateEmbeddingsAsync()
     {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
         var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
         {
-            PathToModelFile = ModelPath,
+            PathToModelFile = modelPath,
             Temperature = 0
         });
         return embeddings;
     }
 
-    IChatModel CreateInstructionModel()
+    async Task<IChatModel> CreateInstructionModelAsync()
     {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
         var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
         {
-            PathToModelFile = ModelPath,
+            PathToModelFile = modelPath,
             Temperature = 0
         });
         return model;
 
     }
 
-    private IChatModel CreateChatModel()
+    private async Task<IChatModel> CreateChatModelAsync()
     {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
         var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
         {
-            PathToModelFile = ModelPath,
+            PathToModelFile = modelPath,
             Temperature = 0
         });
         return model;

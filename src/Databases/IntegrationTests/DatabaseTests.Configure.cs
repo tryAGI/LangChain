@@ -8,8 +8,10 @@ using LangChain.Databases.Postgres;
 using LangChain.Databases.Sqlite;
 using LangChain.Databases.Mongo;
 using Testcontainers.Elasticsearch;
+using LangChain.Databases.DuckDb;
 using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
+using Microsoft.SemanticKernel.Connectors.DuckDB;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -124,7 +126,12 @@ public partial class DatabaseTests
                         Container = container,
                     };
                 }
-
+            case SupportedDatabase.DuckDb:
+                var store = await DuckDBMemoryStore.ConnectAsync(cancellationToken);
+                return new DatabaseTestEnvironment
+                {
+                    VectorDatabase = new DuckDbVectorDatabase(store)
+                };
             case SupportedDatabase.Elasticsearch:
             {
                 var container = new ElasticsearchBuilder().Build();

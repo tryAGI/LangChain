@@ -1,4 +1,4 @@
-﻿using OpenAI.Constants;
+﻿using OpenAI;
 
 namespace LangChain.Providers.DeepInfra;
 
@@ -7,13 +7,24 @@ namespace LangChain.Providers.DeepInfra;
 /// </summary>
 public static class DeepInfraModelProvider
 {
-    private static Dictionary<DeepInfraModelIds, ChatModels> Models { get; set; } = new()
+    private static Dictionary<DeepInfraModelIds, ChatModelMetadata> Models { get; set; } = new()
     {
         {{DicAdd}}
     };
 
+    public static ChatModelMetadata ToMetadata(string? id, int? contextLength, double? pricePerInputTokenInUsd, double? pricePerOutputTokenInUsd)
+    {
+        return new ChatModelMetadata
+        {
+            Id = id,
+            ContextLength = contextLength,
+            PricePerInputTokenInUsd = pricePerInputTokenInUsd,
+            PricePerOutputTokenInUsd = pricePerOutputTokenInUsd,
+        };
+    }
+
     [CLSCompliant(false)]
-    public static ChatModels GetModelById(DeepInfraModelIds modelId)
+    public static ChatModelMetadata GetModelById(DeepInfraModelIds modelId)
     {
         if (Models.TryGetValue(modelId, out var id))
         {

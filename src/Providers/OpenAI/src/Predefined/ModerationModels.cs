@@ -1,11 +1,9 @@
-using OpenAI.Constants;
-
 namespace LangChain.Providers.OpenAI.Predefined;
 
-/// <inheritdoc cref="ModerationModels.Latest" />
+/// <inheritdoc cref="CreateModerationRequestModel.TextModerationLatest" />
 public class LatestModerationModel(OpenAiProvider provider)
-    : OpenAiModerationModel(provider, id: ModerationModels.Latest);
+    : OpenAiModerationModel(provider, id: CreateModerationRequestModel.TextModerationLatest);
 
-/// <inheritdoc cref="ModerationModels.Stable" />
+/// <inheritdoc cref="CreateModerationRequestModel.TextModerationStable" />
 public class StableModerationModel(OpenAiProvider provider)
-    : OpenAiModerationModel(provider, id: ModerationModels.Stable);
+    : OpenAiModerationModel(provider, id: CreateModerationRequestModel.TextModerationStable);

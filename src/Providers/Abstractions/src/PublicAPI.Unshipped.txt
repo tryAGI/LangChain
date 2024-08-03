@@ -1,30 +1,39 @@
-LangChain.Providers.EmbeddingResponse.Dimensions.get -> int
-LangChain.Providers.EmbeddingResponse.Dimensions.init -> void
-LangChain.Providers.ITextToMusicModel
-LangChain.Providers.ITextToMusicModel.GenerateMusicAsync(LangChain.Providers.TextToMusicRequest! request, LangChain.Providers.TextToMusicSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.TextToMusicResponse!>!
-LangChain.Providers.ITextToMusicModel.PromptSent -> System.EventHandler<string!>?
-LangChain.Providers.TextToMusicModel
-LangChain.Providers.TextToMusicModel.OnPromptSent(string! prompt) -> void
-LangChain.Providers.TextToMusicModel.PromptSent -> System.EventHandler<string!>?
-LangChain.Providers.TextToMusicModel.TextToMusicModel(string! id) -> void
-LangChain.Providers.TextToMusicRequest
-LangChain.Providers.TextToMusicRequest.Prompt.get -> string!
-LangChain.Providers.TextToMusicRequest.Prompt.init -> void
-LangChain.Providers.TextToMusicRequest.TextToMusicRequest() -> void
-LangChain.Providers.TextToMusicResponse
-LangChain.Providers.TextToMusicResponse.Deconstruct(out byte[]! values, out LangChain.Providers.Usage usage) -> void
-LangChain.Providers.TextToMusicResponse.Deconstruct(out byte[]! values, out LangChain.Providers.Usage usage, out LangChain.Providers.TextToMusicSettings! usedSettings) -> void
-LangChain.Providers.TextToMusicResponse.Images.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Data!>!
-LangChain.Providers.TextToMusicResponse.Images.init -> void
-LangChain.Providers.TextToMusicResponse.TextToMusicResponse() -> void
-LangChain.Providers.TextToMusicResponse.ToByteArray() -> byte[]!
-LangChain.Providers.TextToMusicResponse.Usage.get -> LangChain.Providers.Usage
-LangChain.Providers.TextToMusicResponse.Usage.init -> void
-LangChain.Providers.TextToMusicResponse.UsedSettings.get -> LangChain.Providers.TextToMusicSettings!
-LangChain.Providers.TextToMusicResponse.UsedSettings.init -> void
-LangChain.Providers.TextToMusicSettings
-LangChain.Providers.TextToMusicSettings.TextToMusicSettings() -> void
-static LangChain.Providers.TextToMusicRequest.implicit operator LangChain.Providers.TextToMusicRequest!(string! message) -> LangChain.Providers.TextToMusicRequest!
-static LangChain.Providers.TextToMusicRequest.ToTextToMusicRequest(string! message) -> LangChain.Providers.TextToMusicRequest!
-static LangChain.Providers.TextToMusicResponse.implicit operator byte[]!(LangChain.Providers.TextToMusicResponse! response) -> byte[]!
-static LangChain.Providers.TextToMusicSettings.Default.get -> LangChain.Providers.TextToMusicSettings!
+LangChain.Providers.ChatModel.AddGlobalTools(System.Collections.Generic.ICollection<LangChain.Providers.OpenApiSchema!>! tools, System.Collections.Generic.IReadOnlyDictionary<string!, System.Func<string!, System.Threading.CancellationToken, System.Threading.Tasks.Task<string!>!>!>! calls) -> void
+LangChain.Providers.ChatModel.Calls.get -> System.Collections.Generic.Dictionary<string!, System.Func<string!, System.Threading.CancellationToken, System.Threading.Tasks.Task<string!>!>!>!
+LangChain.Providers.ChatModel.CallToolsAutomatically.get -> bool
+LangChain.Providers.ChatModel.CallToolsAutomatically.set -> void
+LangChain.Providers.ChatModel.ClearGlobalTools() -> void
+LangChain.Providers.ChatModel.GlobalTools.get -> System.Collections.Generic.IList<LangChain.Providers.OpenApiSchema!>!
+LangChain.Providers.ChatModel.ReplyToToolCallsAutomatically.get -> bool
+LangChain.Providers.ChatModel.ReplyToToolCallsAutomatically.set -> void
+LangChain.Providers.ChatRequest.Tools.get -> System.Collections.Generic.IReadOnlyCollection<LangChain.Providers.OpenApiSchema!>!
+LangChain.Providers.ChatRequest.Tools.init -> void
+LangChain.Providers.ChatSettings.StopSequences.set -> void
+LangChain.Providers.ChatSettings.User.set -> void
+LangChain.Providers.ChatSettings.UseStreaming.set -> void
+LangChain.Providers.IChatModel.AddGlobalTools(System.Collections.Generic.ICollection<LangChain.Providers.OpenApiSchema!>! tools, System.Collections.Generic.IReadOnlyDictionary<string!, System.Func<string!, System.Threading.CancellationToken, System.Threading.Tasks.Task<string!>!>!>! calls) -> void
+LangChain.Providers.IChatModel.CallToolsAutomatically.get -> bool
+LangChain.Providers.IChatModel.CallToolsAutomatically.set -> void
+LangChain.Providers.IChatModel.ClearGlobalTools() -> void
+LangChain.Providers.IChatModel.ReplyToToolCallsAutomatically.get -> bool
+LangChain.Providers.IChatModel.ReplyToToolCallsAutomatically.set -> void
+LangChain.Providers.IModel<TSettings>.Settings.set -> void
+LangChain.Providers.LangChainToolsAttribute
+LangChain.Providers.LangChainToolsAttribute.LangChainToolsAttribute() -> void
+LangChain.Providers.Model<TSettings>.Settings.set -> void
+LangChain.Providers.OpenApiSchema
+LangChain.Providers.OpenApiSchema.Description.get -> string!
+LangChain.Providers.OpenApiSchema.Description.set -> void
+LangChain.Providers.OpenApiSchema.Enum.get -> System.Collections.Generic.IReadOnlyList<string!>!
+LangChain.Providers.OpenApiSchema.Enum.set -> void
+LangChain.Providers.OpenApiSchema.Format.get -> string?
+LangChain.Providers.OpenApiSchema.Format.set -> void
+LangChain.Providers.OpenApiSchema.Items.get -> LangChain.Providers.OpenApiSchema?
+LangChain.Providers.OpenApiSchema.Items.set -> void
+LangChain.Providers.OpenApiSchema.OpenApiSchema() -> void
+LangChain.Providers.OpenApiSchema.Properties.get -> System.Collections.Generic.IReadOnlyDictionary<string!, LangChain.Providers.OpenApiSchema!>!
+LangChain.Providers.OpenApiSchema.Properties.set -> void
+LangChain.Providers.OpenApiSchema.Required.get -> System.Collections.Generic.IReadOnlyList<string!>!
+LangChain.Providers.OpenApiSchema.Required.set -> void
+LangChain.Providers.OpenApiSchema.Type.get -> string!
+LangChain.Providers.OpenApiSchema.Type.set -> void

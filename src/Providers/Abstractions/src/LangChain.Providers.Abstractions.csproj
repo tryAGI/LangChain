@@ -1,4 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <Sdk Name="ViHo.PackAsAnalyzer" Version="1.0.1" />
 
   <PropertyGroup>
     <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
@@ -17,6 +19,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Memory.Data" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\generators\LangChain.Providers.Generators\LangChain.Providers.Generators.csproj" ReferenceOutputAssembly="false" PackAsAnalyzer="true" />
+    <None Include="..\generators\LangChain.Providers.Generators\bin\$(Configuration)\netstandard2.0\H.Generators.Extensions.dll" Pack="true" PackagePath="analyzers/dotnet" Visible="false" />
+    <None Include="..\generators\LangChain.Providers.Generators\bin\$(Configuration)\netstandard2.0\System.Collections.Immutable.dll" Pack="true" PackagePath="analyzers/dotnet" Visible="false" />
   </ItemGroup>
 
 </Project>

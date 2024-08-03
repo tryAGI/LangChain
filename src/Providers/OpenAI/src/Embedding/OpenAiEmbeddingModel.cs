@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using OpenAI.Constants;
-using OpenAI.Embeddings;
 
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
@@ -10,6 +8,14 @@ public class OpenAiEmbeddingModel(
     string id)
     : Model<EmbeddingSettings>(id), IEmbeddingModel
 {
+    [CLSCompliant(false)]
+    public OpenAiEmbeddingModel(
+        OpenAiProvider provider,
+        CreateEmbeddingRequestModel id)
+        : this(provider, id.ToValueString())
+    {
+    }
+
     /// <summary>
     /// API has limit of 2048 elements in array per request
     /// so we need to split texts into batches
@@ -18,19 +24,13 @@ public class OpenAiEmbeddingModel(
     public int EmbeddingBatchSize { get; init; } = 2048;
 
     /// <inheritdoc/>
-    public int MaximumInputLength => EmbeddingModels.ById(Id)?.MaxInputTokens ?? 0;
+    public int MaximumInputLength => (int)(CreateEmbeddingRequestModelExtensions.ToEnum(Id)?.GetMaxInputTokens() ?? 0);
 
-    private Usage GetUsage(EmbeddingsResponse response)
+    private Usage GetUsage(CreateEmbeddingResponse response)
     {
-        if (response.Usage == null!)
-        {
-            return Usage.Empty;
-        }
-
-        var tokens = response.Usage.PromptTokens ?? 0;
-        var priceInUsd = EmbeddingModels
-            .ById(Id)?
-            .GetPriceInUsd(tokens: tokens) ?? 0.0D;
+        var tokens = response.Usage.PromptTokens;
+        var priceInUsd = CreateEmbeddingRequestModelExtensions.ToEnum(Id)?
+            .GetPriceInUsd(tokens: tokens) ?? double.NaN;
 
         return Usage.Empty with
         {
@@ -63,12 +63,13 @@ public class OpenAiEmbeddingModel(
             providerSettings: provider.EmbeddingSettings);
         var results = await Task.WhenAll(batches.Select(async batch =>
         {
-            var response = await provider.Api.EmbeddingsEndpoint.CreateEmbeddingAsync(
-                request: new EmbeddingsRequest(
-                    input: batch,
-                    model: Id,
-                    user: usedSettings.User!),
-                cancellationToken).ConfigureAwait(false);
+            var response = await provider.Api.Embeddings.CreateEmbeddingAsync(
+                input: batch,
+                model: Id,
+                encodingFormat: CreateEmbeddingRequestEncodingFormat.Float,
+                dimensions: null,
+                user: usedSettings.User!,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var usage = GetUsage(response) with
             {
@@ -78,7 +79,7 @@ public class OpenAiEmbeddingModel(
             provider.AddUsage(usage);
 
             return response.Data
-                .Select(static x => x.Embedding
+                .Select(static x => x.Embedding1
                     .Select(static x => (float)x)
                     .ToArray())
                 .ToArray();

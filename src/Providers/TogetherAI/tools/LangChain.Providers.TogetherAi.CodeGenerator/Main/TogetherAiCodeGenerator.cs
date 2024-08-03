@@ -259,7 +259,7 @@ public static class TogetherAiCodeGenerator
         double completionCost)
     {
         return "{ " +
-               FormattableString.Invariant($"TogetherAiModelIds.{enumMemberName}, new ChatModels(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
+               FormattableString.Invariant($"TogetherAiModelIds.{enumMemberName}, ToMetadata(\"{modelId}\",{tokenLength},{promptCost},{completionCost})") +
                "},";
     }
 

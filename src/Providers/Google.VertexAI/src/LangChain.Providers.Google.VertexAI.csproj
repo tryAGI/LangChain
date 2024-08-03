@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<NoWarn>$(NoWarn);CS3003</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.AIPlatform.V1" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>

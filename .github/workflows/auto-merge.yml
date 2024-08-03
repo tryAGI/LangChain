@@ -16,7 +16,7 @@ jobs:
       - name: Dependabot metadata
         if: ${{ github.actor == 'dependabot[bot]' }}
         id: metadata
-        uses: dependabot/fetch-metadata@0fb21704c18a42ce5aa8d720ea4b912f5e6babef
+        uses: dependabot/fetch-metadata@v2.1.0
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           
@@ -27,12 +27,16 @@ jobs:
         run: echo ${{ github.triggering_actor }}
           
       - name: Approve a PR
+        # Only if version bump is not a major version change
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Enable auto-merge
+        # Only if version bump is not a major version change
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV' }}
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}

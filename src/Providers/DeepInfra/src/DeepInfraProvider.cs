@@ -9,7 +9,7 @@ public class DeepInfraProvider : OpenAiProvider
     {
     }
 
-    public DeepInfraProvider(string apiKey) : base(apiKey, "api.deepinfra.com", apiVersion: "v1/openai")
+    public DeepInfraProvider(string apiKey) : base(apiKey, "api.deepinfra.com")
     {
 
     }

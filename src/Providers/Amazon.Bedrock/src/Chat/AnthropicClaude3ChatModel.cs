@@ -60,7 +60,7 @@ public class AnthropicClaude3ChatModel(
                 }
                 if (type == "CONTENT_BLOCK_STOP")
                 {
-                    OnCompletedResponseGenerated(stringBuilder.ToString());
+                    break;
                 }
             }
 

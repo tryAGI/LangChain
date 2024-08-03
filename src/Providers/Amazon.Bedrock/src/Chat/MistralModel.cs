@@ -58,7 +58,7 @@ public abstract class MistralModel(
                 var finished = chunk?["completionReason"]?.GetValue<string>();
                 if (finished?.ToUpperInvariant() == "FINISH")
                 {
-                    OnCompletedResponseGenerated(stringBuilder.ToString());
+                    break;
                 }
             }
 

@@ -1,4 +1,4 @@
-﻿using OpenAI.Constants;
+﻿using OpenAI;
 
 namespace LangChain.Providers.OpenRouter;
 
@@ -7,13 +7,13 @@ namespace LangChain.Providers.OpenRouter;
 /// </summary>
 public static class OpenRouterModelProvider
 {
-    private static Dictionary<OpenRouterModelIds, ChatModels> Models { get; set; } = new()
+    private static Dictionary<OpenRouterModelIds, ChatModelMetadata> Models { get; set; } = new()
     {
         {{DicAdd}}
     };
 
     [CLSCompliant(false)]
-    public static ChatModels GetModelById(OpenRouterModelIds modelId)
+    public static ChatModelMetadata GetModelById(OpenRouterModelIds modelId)
     {
         if (Models.TryGetValue(modelId, out var id))
         {
@@ -24,7 +24,7 @@ public static class OpenRouterModelProvider
     }
 
     [CLSCompliant(false)]
-    public static ChatModels GetModelById(string modelId)
+    public static ChatModelMetadata GetModelById(string modelId)
     {
         return Models.Values.First(s => s.Id == modelId);
     }

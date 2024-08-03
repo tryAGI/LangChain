@@ -8,7 +8,7 @@ public class TogetherAiProvider : OpenAiProvider
     {
     }
 
-    public TogetherAiProvider(string apiKey) : base(apiKey, "api.together.xyz")
+    public TogetherAiProvider(string apiKey) : base(apiKey, "https://api.together.xyz/")
     {
     }
 }

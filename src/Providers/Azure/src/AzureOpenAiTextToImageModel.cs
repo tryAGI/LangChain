@@ -1,12 +1,11 @@
 ﻿using Azure.AI.OpenAI;
-using OpenAI.Constants;
+using OpenAI;
 
 namespace LangChain.Providers.Azure;
 
 public class AzureOpenAiTextToImageModel : TextToImageModel, ITextToImageModel
 {
     private readonly AzureOpenAiProvider _provider;
-    private readonly ImageModels _model;
 
     /// <summary>
     /// 
@@ -17,7 +16,6 @@ public class AzureOpenAiTextToImageModel : TextToImageModel, ITextToImageModel
         : base(id)
     {
         _provider = provider;
-        _model = new(id);
     }
 
     /// <summary>
@@ -48,26 +46,20 @@ public class AzureOpenAiTextToImageModel : TextToImageModel, ITextToImageModel
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: _provider.TextToImageSettings,
-            defaultSettings: OpenAiTextToImageSettings.GetDefaultSettings(_model));
+            defaultSettings: OpenAiTextToImageSettings.GetDefaultSettings(Id));
 
         var response = await _provider.Client.GetImageGenerationsAsync(GenerationOptions ?? new ImageGenerationOptions
         {
             DeploymentName = Id,
             ImageCount = 1, //currently hardcoded to 1
             Prompt = request.Prompt,
-            Quality = new ImageGenerationQuality(usedSettings.Quality!.Value),
-            Size = new ImageSize(usedSettings.Resolution!.Value), //DALL-E-3 supports only 3 sizes 1024x1024, 1792X1024 or 1024x1792
+            Quality = new ImageGenerationQuality(usedSettings.Quality!.Value.ToValueString()),
+            Size = new ImageSize(usedSettings.Size!.Value.ToValueString()), //DALL-E-3 supports only 3 sizes 1024x1024, 1792X1024 or 1024x1792
             Style = ImageGenerationStyle.Natural,
             User = usedSettings.User,
         }, cancellationToken).ConfigureAwait(false);
 
-        var usage = Usage.Empty with
-        {
-            //Todo: Usage might be off when setting different parameters in GenerationOptions
-            PriceInUsd = _model.GetPriceInUsd(
-                resolution: usedSettings.Resolution!.Value,
-                quality: usedSettings.Quality!.Value),
-        };
+        var usage = Usage.Empty;
         AddUsage(usage);
 
         RevisedPromptResult = response.Value.Data[0].RevisedPrompt;

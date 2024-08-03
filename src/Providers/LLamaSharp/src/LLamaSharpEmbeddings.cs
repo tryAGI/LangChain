@@ -9,9 +9,6 @@ namespace LangChain.Providers.LLamaSharp;
 public sealed class LLamaSharpEmbeddings
     : Model<EmbeddingSettings>, IEmbeddingModel, IDisposable
 {
-    /// <inheritdoc />
-    public int MaximumInputLength { get; }
-
     /// <summary>
     /// 
     /// </summary>
@@ -27,7 +24,7 @@ public sealed class LLamaSharpEmbeddings
             EmbeddingMode = true
         });
     }
-
+    
     private readonly LLamaSharpConfiguration _configuration;
     private readonly LLamaWeights _model;
     private readonly LLamaEmbedder _embedder;

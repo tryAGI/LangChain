@@ -1,26 +1,22 @@
-using OpenAI.Constants;
-using OpenAI.Images;
-using NotImplementedException = System.NotImplementedException;
-
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers.OpenAI;
 
-
-public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
+/// <summary>
+/// 
+/// </summary>
+/// <param name="provider"></param>
+/// <param name="id"></param>
+public class OpenAiTextToImageModel(
+    OpenAiProvider provider,
+    string id)
+    : TextToImageModel(id), ITextToImageModel
 {
-    private readonly OpenAiProvider _provider;
-    private readonly ImageModels _model;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="provider"></param>
-    /// <param name="id"></param>
-    public OpenAiTextToImageModel(OpenAiProvider provider, string id)
-        : base(id)
+    [CLSCompliant(false)]
+    public OpenAiTextToImageModel(
+        OpenAiProvider provider,
+        CreateImageRequestModel id)
+        : this(provider, id.ToValueString())
     {
-        _provider = provider;
-        _model = new(id);
     }
 
     /// <inheritdoc/>
@@ -36,38 +32,38 @@ public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
         var usedSettings = OpenAiTextToImageSettings.Calculate(
             requestSettings: settings,
             modelSettings: Settings,
-            providerSettings: _provider.TextToImageSettings,
-            defaultSettings: OpenAiTextToImageSettings.GetDefaultSettings(_model));
+            providerSettings: provider.TextToImageSettings,
+            defaultSettings: OpenAiTextToImageSettings.GetDefaultSettings(Id));
 
-        var response = await _provider.Api.ImagesEndPoint.GenerateImageAsync(
-            request: new ImageGenerationRequest(
-                prompt: request.Prompt,
-                model: new global::OpenAI.Models.Model(Id, "openai"),
-                numberOfResults: usedSettings.NumberOfResults!.Value,
-                quality: usedSettings.Quality!,
-                responseFormat: usedSettings.ResponseFormat!.Value,
-                size: usedSettings.Resolution!,
-                user: usedSettings.User!),
+        var response = await provider.Api.Images.CreateImageAsync(
+            prompt: request.Prompt,
+            model: Id,
+            n: usedSettings.NumberOfResults!.Value,
+            quality: usedSettings.Quality!,
+            responseFormat: usedSettings.ResponseFormat!.Value,
+            size: usedSettings.Size!,
+            style: usedSettings.Style!,
+            user: usedSettings.User!,
             cancellationToken).ConfigureAwait(false);
 
         var usage = Usage.Empty with
         {
-            PriceInUsd = _model.GetPriceInUsd(
-                resolution: usedSettings.Resolution!.Value,
-                quality: usedSettings.Quality),
+            PriceInUsd = CreateImageRequestModelExtensions.ToEnum(Id)?.GetPriceInUsd(
+                size: usedSettings.Size!.Value,
+                quality: usedSettings.Quality) ?? double.NaN,
         };
         AddUsage(usage);
-        _provider.AddUsage(usage);
+        provider.AddUsage(usage);
 
         switch (usedSettings.ResponseFormat)
         {
-            case ResponseFormat.Url:
+            case CreateImageRequestResponseFormat.Url:
                 {
                     using var client = new HttpClient();
-                    var images = await Task.WhenAll(response.Select(async x =>
+                    var images = await Task.WhenAll(response.Data.Select(async x =>
                     {
                         // ReSharper disable once AccessToDisposedClosure
-                        var bytes = await client.GetByteArrayAsync(new Uri(x.Url), cancellationToken).ConfigureAwait(false);
+                        var bytes = await client.GetByteArrayAsync(new Uri(x.Url!), cancellationToken).ConfigureAwait(false);
 
                         return Data.FromBytes(bytes);
                     })).ConfigureAwait(false);
@@ -80,12 +76,12 @@ public class OpenAiTextToImageModel : TextToImageModel, ITextToImageModel
                     };
                 }
 
-            case ResponseFormat.B64_Json:
+            case CreateImageRequestResponseFormat.B64Json:
                 return new TextToImageResponse
                 {
-                    Images = response
+                    Images = response.Data
                         .Select(static x =>
-                            Data.FromBase64(x.B64_Json ??
+                            Data.FromBase64(x.B64Json ??
                                             throw new InvalidOperationException("B64_json is null")))
                         .ToArray(),
                     Usage = usage,

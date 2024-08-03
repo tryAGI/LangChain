@@ -13,6 +13,19 @@ public class LLamaSharpModelChat : LLamaSharpModelBase
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static LLamaSharpModelChat FromPath(string path)
+    {
+        return new LLamaSharpModelChat(new LLamaSharpConfiguration
+        {
+            PathToModelFile = path,
+        });
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="configuration"></param>
     public LLamaSharpModelChat(LLamaSharpConfiguration configuration) : base(configuration)
     {

@@ -13,17 +13,17 @@ public class OpenAiProvider : Provider
     /// 
     /// </summary>
     [CLSCompliant(false)]
-    public OpenAIClient Api { get; private set; }
+    public OpenAiApi Api { get; private set; }
 
     #endregion
 
     #region Constructors
 
     [CLSCompliant(false)]
-    public OpenAiProvider(OpenAIClient openAiClient)
+    public OpenAiProvider(OpenAiApi openAiApi)
         : base(id: OpenAiConfiguration.SectionName)
     {
-        Api = openAiClient ?? throw new ArgumentNullException(nameof(openAiClient));
+        Api = openAiApi ?? throw new ArgumentNullException(nameof(openAiApi));
     }
 
     public OpenAiProvider(OpenAiConfiguration configuration)
@@ -34,8 +34,9 @@ public class OpenAiProvider : Provider
 
         Api = configuration.Endpoint != null &&
               !string.IsNullOrWhiteSpace(configuration.Endpoint)
-                ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: configuration.Endpoint))
-                : new OpenAIClient(apiKey);
+                ? new OpenAiApi(baseUri: new Uri(configuration.Endpoint))
+                : new OpenAiApi();
+        Api.AuthorizeUsingBearer(apiKey);
         ChatSettings = configuration.ChatSettings;
         EmbeddingSettings = configuration.EmbeddingSettings;
         TextToImageSettings = configuration.TextToImageSettings;
@@ -47,14 +48,15 @@ public class OpenAiProvider : Provider
 
     public OpenAiProvider(
         string apiKey,
-        string? customEndpoint = null, string? apiVersion = "v1")
+        string? customEndpoint = null)
         : base(id: OpenAiConfiguration.SectionName)
     {
         apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
 
         Api = customEndpoint != null
-            ? new OpenAIClient(apiKey, new OpenAIClientSettings(domain: customEndpoint, apiVersion: apiVersion!))
-            : new OpenAIClient(apiKey);
+            ? new OpenAiApi(baseUri: new Uri(customEndpoint))
+            : new OpenAiApi();
+        Api.AuthorizeUsingBearer(apiKey);
     }
 
     #endregion

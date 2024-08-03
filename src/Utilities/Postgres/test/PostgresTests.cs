@@ -3,7 +3,6 @@ using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Utilities.Sql;
 using Npgsql;
-using OpenAI.Constants;
 
 namespace LangChain.Utilities.Postgres.IntegrationTests;
 
@@ -222,7 +221,7 @@ id	name	age
     public async Task SqlDatabaseChain_Run_Ok()
     {
         var key = Environment.GetEnvironmentVariable("OPENAI_KEY") ?? throw new ArgumentException("OPENAI_KEY");
-        var llm = new Gpt35TurboModel(key)
+        var llm = new Gpt4OmniMiniModel(key)
         {
             Settings = new OpenAiChatSettings
             {

@@ -14,15 +14,17 @@ namespace LangChain.Providers.LLamaSharp.IntegrationTests;
 [TestFixture]
 public partial class LLamaSharpTests
 {
-    string ModelPath => HuggingFaceModelDownloader.Instance.GetModel("TheBloke/Thespis-13B-v0.5-GGUF", "thespis-13b-v0.5.Q2_K.gguf", "main").Result;
-
     [Test]
     [Explicit]
     public async Task PrepromptTest()
     {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
         var model = new LLamaSharpModelChat(new LLamaSharpConfiguration
         {
-            PathToModelFile = ModelPath,
+            PathToModelFile = modelPath,
         });
 
         var response = await model.GenerateAsync(new[] {
@@ -41,9 +43,13 @@ public partial class LLamaSharpTests
     [Explicit]
     public async Task InstructionTest()
     {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
         var model = new LLamaSharpModelInstruction(new LLamaSharpConfiguration
         {
-            PathToModelFile = ModelPath,
+            PathToModelFile = modelPath,
             Temperature = 0
         });
 
@@ -72,9 +78,13 @@ public partial class LLamaSharpTests
     [Explicit]
     public async Task EmbeddingsTestWithInMemory()
     {
+        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
+            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
+            fileName: "thespis-13b-v0.5.Q2_K.gguf",
+            version: "main");
         var embeddings = new LLamaSharpEmbeddings(new LLamaSharpConfiguration
         {
-            PathToModelFile = ModelPath,
+            PathToModelFile = modelPath,
             Temperature = 0,
         });
 
@@ -102,8 +112,8 @@ public partial class LLamaSharpTests
     public async Task DocumentsQuestionAnsweringTest()
     {
         // setup
-        var embeddings = CreateEmbeddings();
-        var model = CreateInstructionModel();
+        var embeddings = await CreateEmbeddingsAsync();
+        var model = await CreateInstructionModelAsync();
 
         string[] texts = new string[]
         {
@@ -176,8 +186,8 @@ public partial class LLamaSharpTests
     public async Task SequentialChainTest()
     {
         // setup
-        var embeddings = CreateEmbeddings();
-        var model = CreateInstructionModel();
+        var embeddings = await CreateEmbeddingsAsync();
+        var model = await CreateInstructionModelAsync();
 
         var chain1 = await CreateChain1(model, embeddings);
 
