@@ -29,3 +29,7 @@ public class Gpt4TurboModel(OpenAiProvider provider)
 /// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4o" />
 public class Gpt4OmniModel(OpenAiProvider provider)
     : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4o);
+
+/// <inheritdoc cref="CreateChatCompletionRequestModel.Gpt4oMini" />
+public class Gpt4OmniMiniModel(OpenAiProvider provider)
+    : OpenAiChatModel(provider, id: CreateChatCompletionRequestModel.Gpt4oMini);
