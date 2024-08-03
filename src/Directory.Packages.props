@@ -43,6 +43,7 @@
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.7" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Milvus" Version="1.16.2-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.10.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.15.1-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Chroma" Version="1.15.1-alpha" />

@@ -10,5 +10,6 @@ public enum SupportedDatabase
     Postgres,
     Redis,
     Mongo,
-    DuckDb
+    DuckDb,
+    Milvus
 }

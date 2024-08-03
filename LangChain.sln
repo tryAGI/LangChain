@@ -41,10 +41,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
+		.github\workflows\mkdocs.yml = .github\workflows\mkdocs.yml
 		.github\workflows\open-router.yml = .github\workflows\open-router.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\workflows\together.yml = .github\workflows\together.yml
-		.github\workflows\mkdocs.yml = .github\workflows\mkdocs.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
@@ -369,17 +369,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Google.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fireworks", "Fireworks", "{2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Fireworks", "src\Providers\Fireworks\src\LangChain.Providers.Fireworks.csproj", "{90BC5243-139D-4CB2-8B68-3794070C1955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Fireworks", "src\Providers\Fireworks\src\LangChain.Providers.Fireworks.csproj", "{90BC5243-139D-4CB2-8B68-3794070C1955}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{20D58A8D-DB93-47AC-956B-9EB89EA75928}"
 	ProjectSection(SolutionItems) = preProject
-		mkdocs.yml = mkdocs.yml
-		docs\index.md = docs\index.md
 		docs\css\extra.css = docs\css\extra.css
 		docs\media\icon128.png = docs\media\icon128.png
+		docs\index.md = docs\index.md
+		mkdocs.yml = mkdocs.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDocs", "src\Helpers\GenerateDocs\GenerateDocs.csproj", "{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateDocs", "src\Helpers\GenerateDocs\GenerateDocs.csproj", "{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Milvus", "Milvus", "{223AE753-7EDD-4CA6-A2DE-718B230F3FD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Milvus", "src\Databases\Milvus\src\LangChain.Databases.Milvus.csproj", "{240AB83E-AA80-493B-A25E-C26C340C57A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -771,6 +775,10 @@ Global
 		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{240AB83E-AA80-493B-A25E-C26C340C57A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{240AB83E-AA80-493B-A25E-C26C340C57A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{240AB83E-AA80-493B-A25E-C26C340C57A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{240AB83E-AA80-493B-A25E-C26C340C57A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -922,6 +930,8 @@ Global
 		{90BC5243-139D-4CB2-8B68-3794070C1955} = {2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B}
 		{20D58A8D-DB93-47AC-956B-9EB89EA75928} = {23506EB8-1B27-4FD0-B570-2F5EF2C33034}
 		{EFFC19CE-9519-492D-A5CC-E1C90EB410E0} = {1325D29E-D42F-423F-A6AC-5E880BE2AB68}
+		{223AE753-7EDD-4CA6-A2DE-718B230F3FD8} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
+		{240AB83E-AA80-493B-A25E-C26C340C57A7} = {223AE753-7EDD-4CA6-A2DE-718B230F3FD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

@@ -13,6 +13,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     [TestCase(SupportedDatabase.DuckDb)]
+    [TestCase(SupportedDatabase.Milvus)]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
