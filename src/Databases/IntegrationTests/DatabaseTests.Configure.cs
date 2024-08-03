@@ -1,10 +1,13 @@
 using DotNet.Testcontainers.Builders;
+using Elastic.Clients.Elasticsearch;
 using LangChain.Databases.Chroma;
+using LangChain.Databases.Elasticsearch;
 using LangChain.Databases.InMemory;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
 using LangChain.Databases.Sqlite;
 using LangChain.Databases.Mongo;
+using Testcontainers.Elasticsearch;
 using LangChain.Databases.DuckDb;
 using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
@@ -129,7 +132,19 @@ public partial class DatabaseTests
                 {
                     VectorDatabase = new DuckDbVectorDatabase(store)
                 };
+            case SupportedDatabase.Elasticsearch:
+            {
+                var container = new ElasticsearchBuilder().Build();
 
+                await container.StartAsync(cancellationToken);
+
+                var client = new ElasticsearchClient(new Uri($"http://localhost:{container.GetMappedPublicPort(9200)}"));
+                return new DatabaseTestEnvironment
+                {
+                    VectorDatabase = new ElasticsearchVectorDatabase(client),
+                    Container = container,
+                };
+            }
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
         }
