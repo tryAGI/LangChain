@@ -1,6 +1,7 @@
-﻿using LangChain.Providers;
-using LangChain.Providers.OpenAI;
-using LangChain.Providers.OpenAI.Predefined;
+﻿using LangChain.Chains.LLM;
+using LangChain.Prompts;
+using LangChain.Providers;
+using LangChain.Schema;
 
 namespace LangChain.IntegrationTests;
 
@@ -10,6 +11,8 @@ public class BaseTests
     [TestCase(ProviderType.OpenAi)]
     [TestCase(ProviderType.Anyscale)]
     [TestCase(ProviderType.Together)]
+    [TestCase(ProviderType.OpenRouter)]
+    [TestCase(ProviderType.DeepInfra)]
     //[TestCase(ProviderType.Fireworks)]
     public async Task FiveRandomWords(ProviderType providerType)
     {
@@ -32,6 +35,8 @@ public class BaseTests
     //[TestCase(ProviderType.Anyscale)]
     //[TestCase(ProviderType.Together)]
     //[TestCase(ProviderType.Fireworks)]
+    //[TestCase(ProviderType.OpenRouter)]
+    //[TestCase(ProviderType.DeepInfra)]
     public async Task Streaming(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -53,7 +58,36 @@ public class BaseTests
     //[TestCase(ProviderType.Anyscale)]
     //[TestCase(ProviderType.Together)]
     //[TestCase(ProviderType.Fireworks)]
-    public async Task GetWeather(ProviderType providerType)
+    //[TestCase(ProviderType.OpenRouter)]
+    //[TestCase(ProviderType.DeepInfra)]
+    public async Task SimpleChain(ProviderType providerType)
+    {
+        var (llm, _) = Helpers.GetModels(providerType);
+
+        const string template = "What is a good name for a company that makes {product}?";
+        var prompt = new PromptTemplate(new PromptTemplateInput(template, ["product"]));
+
+        var chain = new LlmChain(new LlmChainInput(llm, prompt));
+
+        var result = await chain.CallAsync(new ChainValues(new Dictionary<string, object>(1)
+        {
+            ["product"] = "colourful socks",
+        }));
+
+        // The result is an object with a `text` property.
+        result.Value["text"].ToString().Should().NotBeEmpty();
+
+        Console.WriteLine(result.Value["text"]);
+    }
+    
+    [TestCase(ProviderType.OpenAi)]
+    //[TestCase(ProviderType.Anyscale)]
+    [TestCase(ProviderType.Together)]
+    [TestCase(ProviderType.OpenRouter)]
+    //[TestCase(ProviderType.Fireworks)]
+    //[TestCase(ProviderType.OpenRouter)]
+    //[TestCase(ProviderType.DeepInfra)]
+    public async Task Tools_Weather(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
 
@@ -69,5 +103,4 @@ public class BaseTests
 
         Console.WriteLine(response.Messages.AsHistory());
     }
-
 }

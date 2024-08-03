@@ -6,4 +6,6 @@ public enum ProviderType
     Together,
     Anyscale,
     Fireworks,
+    OpenRouter,
+    DeepInfra,
 }

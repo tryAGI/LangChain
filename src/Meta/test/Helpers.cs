@@ -1,9 +1,11 @@
 ﻿using LangChain.Providers;
 using LangChain.Providers.Anyscale;
 using LangChain.Providers.Anyscale.Predefined;
+using LangChain.Providers.DeepInfra;
 using LangChain.Providers.Fireworks;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
+using LangChain.Providers.OpenRouter;
 using LangChain.Providers.TogetherAi;
 
 namespace LangChain.IntegrationTests;
@@ -32,7 +34,7 @@ public static class Helpers
                         throw new InconclusiveException("TOGETHER_API_KEY is not set"));
                     var llm = new TogetherAiModel(provider, id: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo");
                     var embeddings = new OpenAiEmbeddingModel(provider, id: "togethercomputer/m2-bert-80M-2k-retrieval");
-
+                    
                     return (llm, embeddings);
                 }
             case ProviderType.Anyscale:
@@ -65,6 +67,34 @@ public static class Helpers
 
                     return (llm, embeddings);
                 }
+            case ProviderType.OpenRouter:
+            {
+                var provider = new OpenRouterProvider(
+                    apiKey: Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
+                            throw new InconclusiveException("OPENROUTER_API_KEY is not set"));
+                var llm = new Providers.OpenRouter.Predefined.OpenAiGpt4OModel(provider);
+
+                // Use OpenAI embeddings for now because OpenRouter doesn't have embeddings yet
+                var embeddings = new TextEmbeddingV3SmallModel(
+                    Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+                    throw new InconclusiveException("OPENAI_API_KEY is not set"));
+
+                return (llm, embeddings);
+            }
+            case ProviderType.DeepInfra:
+            {
+                var provider = new DeepInfraProvider(
+                    apiKey: Environment.GetEnvironmentVariable("DEEPINFRA_API_KEY") ??
+                            throw new InconclusiveException("DEEPINFRA_API_KEY is not set"));
+                var llm = new Providers.DeepInfra.Predefined.MetaLlama318BInstructModel(provider);
+
+                // Use OpenAI embeddings for now because DeepInfra doesn't have embeddings yet
+                var embeddings = new TextEmbeddingV3SmallModel(
+                    Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+                    throw new InconclusiveException("OPENAI_API_KEY is not set"));
+
+                return (llm, embeddings);
+            }
 
             default:
                 throw new ArgumentOutOfRangeException();
