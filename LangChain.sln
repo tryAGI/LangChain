@@ -41,10 +41,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
+		.github\workflows\mkdocs.yml = .github\workflows\mkdocs.yml
 		.github\workflows\open-router.yml = .github\workflows\open-router.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 		.github\workflows\together.yml = .github\workflows\together.yml
-		.github\workflows\mkdocs.yml = .github\workflows\mkdocs.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{E2B9833C-0397-4FAF-A3A8-116E58749750}"
@@ -345,33 +345,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Google.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fireworks", "Fireworks", "{2DFDBF23-50E2-41DB-B2D5-CB2CC46D8C3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Fireworks", "src\Providers\Fireworks\src\LangChain.Providers.Fireworks.csproj", "{90BC5243-139D-4CB2-8B68-3794070C1955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Fireworks", "src\Providers\Fireworks\src\LangChain.Providers.Fireworks.csproj", "{90BC5243-139D-4CB2-8B68-3794070C1955}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{20D58A8D-DB93-47AC-956B-9EB89EA75928}"
 	ProjectSection(SolutionItems) = preProject
-		mkdocs.yml = mkdocs.yml
-		docs\index.md = docs\index.md
 		docs\css\extra.css = docs\css\extra.css
 		docs\media\icon128.png = docs\media\icon128.png
+		docs\index.md = docs\index.md
+		mkdocs.yml = mkdocs.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDocs", "src\Helpers\GenerateDocs\GenerateDocs.csproj", "{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateDocs", "src\Helpers\GenerateDocs\GenerateDocs.csproj", "{EFFC19CE-9519-492D-A5CC-E1C90EB410E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Generators", "src\Providers\Abstractions\generators\LangChain.Providers.Generators\LangChain.Providers.Generators.csproj", "{FCD9A4CB-C70A-499F-8179-A50836B809D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Generators", "src\Providers\Abstractions\generators\LangChain.Providers.Generators\LangChain.Providers.Generators.csproj", "{FCD9A4CB-C70A-499F-8179-A50836B809D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Generators.SnapshotTests", "src\Providers\Abstractions\test\LangChain.Providers.Generators.SnapshotTests\LangChain.Providers.Generators.SnapshotTests.csproj", "{F78D9189-24B8-4403-89D2-7FBBB5D83556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Generators.SnapshotTests", "src\Providers\Abstractions\test\LangChain.Providers.Generators.SnapshotTests\LangChain.Providers.Generators.SnapshotTests.csproj", "{F78D9189-24B8-4403-89D2-7FBBB5D83556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Providers.Anthropic", "src\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj", "{BD9AF0B6-15C5-4365-9B78-6EF0C9CC3E2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Providers.Anthropic", "src\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj", "{BD9AF0B6-15C5-4365-9B78-6EF0C9CC3E2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elasticsearch", "Elasticsearch", "{3FCA798D-2CBE-41E7-B5F7-65B4AF6EBC8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Elasticsearch", "src\Databases\Elasticsearch\src\LangChain.Databases.Elasticsearch.csproj", "{6C053245-EB8B-4C98-85AC-B00BA222ABBB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Milvus", "Milvus", "{911357BA-532A-43B8-9EA8-B32C0C2273EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Elasticsearch", "src\Databases\Elasticsearch\src\LangChain.Databases.Elasticsearch.csproj", "{6C053245-EB8B-4C98-85AC-B00BA222ABBB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Milvus", "Milvus", "{3CB20A37-5E76-40D1-91F6-47C96FA06AE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChain.Databases.Milvus", "src\Databases\Milvus\src\LangChain.Databases.Milvus.csproj", "{259C2E5D-6AA9-4384-8F55-24C4D4F1CF18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Milvus", "src\Databases\Milvus\src\LangChain.Databases.Milvus.csproj", "{259C2E5D-6AA9-4384-8F55-24C4D4F1CF18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{FB278634-1B3C-4AF1-BFC1-BCC7E07D1388}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangChain.Databases.Connectors", "src\Databases\Connectors\src\LangChain.Databases.Connectors.csproj", "{A7CF79E2-4DA4-417D-88AD-669B6FA717DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -735,6 +737,10 @@ Global
 		{259C2E5D-6AA9-4384-8F55-24C4D4F1CF18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{259C2E5D-6AA9-4384-8F55-24C4D4F1CF18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{259C2E5D-6AA9-4384-8F55-24C4D4F1CF18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CF79E2-4DA4-417D-88AD-669B6FA717DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CF79E2-4DA4-417D-88AD-669B6FA717DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CF79E2-4DA4-417D-88AD-669B6FA717DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CF79E2-4DA4-417D-88AD-669B6FA717DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -881,6 +887,8 @@ Global
 		{6C053245-EB8B-4C98-85AC-B00BA222ABBB} = {3FCA798D-2CBE-41E7-B5F7-65B4AF6EBC8A}
 		{3CB20A37-5E76-40D1-91F6-47C96FA06AE5} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
 		{259C2E5D-6AA9-4384-8F55-24C4D4F1CF18} = {3CB20A37-5E76-40D1-91F6-47C96FA06AE5}
+		{FB278634-1B3C-4AF1-BFC1-BCC7E07D1388} = {A098FF69-D8B5-4B2B-83D5-F777D3817F15}
+		{A7CF79E2-4DA4-417D-88AD-669B6FA717DB} = {FB278634-1B3C-4AF1-BFC1-BCC7E07D1388}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C00D0F1-6138-4ED9-846B-97E43D6DFF1C}

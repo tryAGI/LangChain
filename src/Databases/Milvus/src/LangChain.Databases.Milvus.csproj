@@ -6,13 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Milvus"/>
-        <PackageReference Include="System.Linq.Async"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj"/>
-        <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj"/>
+		<PackageReference Include="Microsoft.SemanticKernel.Connectors.Milvus" />
+        <ProjectReference Include="..\..\Connectors\src\LangChain.Databases.Connectors.csproj" />
     </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
+		<NoWarn>$(NoWarn);SKEXP0020;SKEXP0001;CS3001</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -10,7 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Weaviate" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.Weaviate" />
+	  <ProjectReference Include="..\..\Connectors\src\LangChain.Databases.Connectors.csproj" />
     </ItemGroup>
 
 </Project>

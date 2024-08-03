@@ -12,9 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.DuckDB" />
-        <PackageReference Include="System.Linq.Async" />
-		<ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
-		<ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Connectors\src\LangChain.Databases.Connectors.csproj" />
     </ItemGroup>
 
 </Project>

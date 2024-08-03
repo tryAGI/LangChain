@@ -1,10 +1,10 @@
 ﻿using LangChain.Databases.Connectors;
-using Microsoft.SemanticKernel.Connectors.DuckDB;
+using Microsoft.SemanticKernel.Connectors.Qdrant;
 
-namespace LangChain.Databases.DuckDb
+namespace LangChain.Databases.Qdrant
 {
-    public class DuckDbVectorCollection(
-        DuckDBMemoryStore store,
+    public class QdrantVectorCollection(
+        QdrantMemoryStore store,
         string name = VectorCollection.DefaultName,
         string? id = null) : SemanticKernelMemoryStoreCollection(store, name, id);
 }
