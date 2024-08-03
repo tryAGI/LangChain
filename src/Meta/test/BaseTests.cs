@@ -15,6 +15,7 @@ public class BaseTests
     [TestCase(ProviderType.DeepInfra)]
     //[TestCase(ProviderType.Fireworks)]
     //[TestCase(ProviderType.Google)]
+    //[TestCase(ProviderType.Anthropic)]
     public async Task FiveRandomWords(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -39,6 +40,7 @@ public class BaseTests
     //[TestCase(ProviderType.OpenRouter)]
     //[TestCase(ProviderType.DeepInfra)]
     //[TestCase(ProviderType.Google)]
+    //[TestCase(ProviderType.Anthropic)]
     public async Task Streaming(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -63,6 +65,7 @@ public class BaseTests
     //[TestCase(ProviderType.OpenRouter)]
     //[TestCase(ProviderType.DeepInfra)]
     //[TestCase(ProviderType.Google)]
+    //[TestCase(ProviderType.Anthropic)]
     public async Task SimpleChain(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -91,6 +94,7 @@ public class BaseTests
     //[TestCase(ProviderType.OpenRouter)]
     //[TestCase(ProviderType.DeepInfra)]
     //[TestCase(ProviderType.Google)]
+    //[TestCase(ProviderType.Anthropic)]
     public async Task Tools_Weather(ProviderType providerType)
     {
         var (llm, _) = Helpers.GetModels(providerType);
@@ -103,6 +107,34 @@ public class BaseTests
             {
                  "You are a helpful weather assistant.".AsSystemMessage(),
                  "What is the current temperature in Dubai, UAE in Celsius?".AsHumanMessage(),
+            });
+        response.Usage.InputTokens.Should().BeGreaterThan(0);
+        response.Usage.OutputTokens.Should().BeGreaterThan(0);
+        response.Usage.PriceInUsd.Should().BeGreaterThan(0);
+
+        Console.WriteLine(response.Messages.AsHistory());
+    }
+    
+    [TestCase(ProviderType.OpenAi)]
+    //[TestCase(ProviderType.Anyscale)]
+    //[TestCase(ProviderType.Together)]
+    //[TestCase(ProviderType.OpenRouter)]
+    //[TestCase(ProviderType.Fireworks)]
+    //[TestCase(ProviderType.OpenRouter)]
+    //[TestCase(ProviderType.DeepInfra)]
+    //[TestCase(ProviderType.Google)]
+    //[TestCase(ProviderType.Anthropic)]
+    public async Task Tools_Books(ProviderType providerType)
+    {
+        var (llm, _) = Helpers.GetModels(providerType);
+
+        var service = new BookStoreService();
+        llm.AddGlobalTools(service.AsTools(), service.AsCalls());
+
+        var response = await llm.GenerateAsync(
+            new[]
+            {
+                "what is written on page 35 in the book 'abracadabra'?".AsHumanMessage(),
             });
         response.Usage.InputTokens.Should().BeGreaterThan(0);
         response.Usage.OutputTokens.Should().BeGreaterThan(0);

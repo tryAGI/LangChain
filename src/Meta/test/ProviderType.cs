@@ -9,4 +9,5 @@ public enum ProviderType
     OpenRouter,
     DeepInfra,
     Google,
+    Anthropic,
 }

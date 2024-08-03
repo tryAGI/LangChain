@@ -1,4 +1,6 @@
 ﻿using LangChain.Providers;
+using LangChain.Providers.Anthropic;
+using LangChain.Providers.Anthropic.Predefined;
 using LangChain.Providers.Anyscale;
 using LangChain.Providers.Anyscale.Predefined;
 using LangChain.Providers.DeepInfra;
@@ -106,6 +108,20 @@ public static class Helpers
                 var llm = new GeminiProModel(provider);
 
                 // Use OpenAI embeddings for now because Google doesn't have embeddings yet
+                var embeddings = new TextEmbeddingV3SmallModel(
+                    Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+                    throw new InconclusiveException("OPENAI_API_KEY is not set"));
+
+                return (llm, embeddings);
+            }
+            case ProviderType.Anthropic:
+            {
+                var provider = new AnthropicProvider(
+                    apiKey: Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") ??
+                            throw new InconclusiveException("ANTHROPIC_API_KEY is not set"));
+                var llm = new Claude35Sonnet(provider);
+
+                // Use OpenAI embeddings for now because Anthropic doesn't have embeddings yet
                 var embeddings = new TextEmbeddingV3SmallModel(
                     Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
                     throw new InconclusiveException("OPENAI_API_KEY is not set"));

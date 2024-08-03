@@ -1,19 +1,15 @@
 namespace LangChain.Providers.Anthropic;
 
-/// <summary>
-/// </summary>
-public class AnthropicProvider(
-    string apiKey)
-    : Provider(AnthropicConfiguration.SectionName)
+/// <inheritdoc />
+public class AnthropicProvider : Provider
 {
-    #region Properties
+    public AnthropicApi Api { get; } = new();
 
-    [CLSCompliant(false)] public AnthropicClient Api { get; } = new(apiKey);
-
-    #endregion
-
-    #region Static methods
-
+    public AnthropicProvider(string apiKey) : base(id: AnthropicConfiguration.SectionName)
+    {
+        Api.AuthorizeUsingApiKey(apiKey);
+    }
+    
     /// <summary>
     /// </summary>
     /// <param name="configuration"></param>
@@ -25,6 +21,4 @@ public class AnthropicProvider(
 
         return new AnthropicProvider(configuration.ApiKey);
     }
-
-    #endregion
 }
