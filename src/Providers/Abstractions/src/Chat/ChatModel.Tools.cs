@@ -5,14 +5,10 @@ public partial class ChatModel
 {
     #region Properties
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public bool CallToolsAutomatically { get; set; } = true;
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public bool ReplyToToolCallsAutomatically { get; set; } = true;
 
     [CLSCompliant(false)]
@@ -23,13 +19,7 @@ public partial class ChatModel
 
     #region Methods
 
-    /// <summary>
-    /// Adds user-defined OpenAI tools to each request to the model.
-    /// </summary>
-    /// <param name="tools"></param>
-    /// <param name="calls"></param>
-    /// <returns></returns>
-    [CLSCompliant(false)]
+    /// <inheritdoc />
     public void AddGlobalTools(
         ICollection<OpenApiSchema> tools,
         IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> calls)
@@ -47,9 +37,7 @@ public partial class ChatModel
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public void ClearGlobalTools()
     {
         GlobalTools.Clear();

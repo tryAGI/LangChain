@@ -8,8 +8,19 @@ LangChain.Providers.ChatModel.ReplyToToolCallsAutomatically.get -> bool
 LangChain.Providers.ChatModel.ReplyToToolCallsAutomatically.set -> void
 LangChain.Providers.ChatRequest.Tools.get -> System.Collections.Generic.IReadOnlyCollection<LangChain.Providers.OpenApiSchema!>!
 LangChain.Providers.ChatRequest.Tools.init -> void
+LangChain.Providers.ChatSettings.StopSequences.set -> void
+LangChain.Providers.ChatSettings.User.set -> void
+LangChain.Providers.ChatSettings.UseStreaming.set -> void
+LangChain.Providers.IChatModel.AddGlobalTools(System.Collections.Generic.ICollection<LangChain.Providers.OpenApiSchema!>! tools, System.Collections.Generic.IReadOnlyDictionary<string!, System.Func<string!, System.Threading.CancellationToken, System.Threading.Tasks.Task<string!>!>!>! calls) -> void
+LangChain.Providers.IChatModel.CallToolsAutomatically.get -> bool
+LangChain.Providers.IChatModel.CallToolsAutomatically.set -> void
+LangChain.Providers.IChatModel.ClearGlobalTools() -> void
+LangChain.Providers.IChatModel.ReplyToToolCallsAutomatically.get -> bool
+LangChain.Providers.IChatModel.ReplyToToolCallsAutomatically.set -> void
+LangChain.Providers.IModel<TSettings>.Settings.set -> void
 LangChain.Providers.LangChainToolsAttribute
 LangChain.Providers.LangChainToolsAttribute.LangChainToolsAttribute() -> void
+LangChain.Providers.Model<TSettings>.Settings.set -> void
 LangChain.Providers.OpenApiSchema
 LangChain.Providers.OpenApiSchema.Description.get -> string!
 LangChain.Providers.OpenApiSchema.Description.set -> void
