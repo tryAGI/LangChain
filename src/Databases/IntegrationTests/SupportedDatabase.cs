@@ -11,5 +11,6 @@ public enum SupportedDatabase
     Redis,
     Mongo,
     Elasticsearch,
-    DuckDb
+    DuckDb,
+    Milvus,
 }

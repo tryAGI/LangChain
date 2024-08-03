@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <NoWarn>$(NoWarn);SKEXP0020;SKEXP0001;CS3001</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Milvus"/>
+        <PackageReference Include="System.Linq.Async"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj"/>
+        <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj"/>
+    </ItemGroup>
+
+</Project>
