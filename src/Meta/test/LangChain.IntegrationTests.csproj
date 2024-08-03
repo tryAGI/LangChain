@@ -7,12 +7,18 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+        <ProjectReference Include="..\..\Providers\Abstractions\generators\LangChain.Providers.Generators\LangChain.Providers.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\..\Providers\Amazon.Bedrock\src\LangChain.Providers.Amazon.Bedrock.csproj" />
+        <ProjectReference Include="..\..\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj" />
         <ProjectReference Include="..\..\Providers\Automatic1111\src\LangChain.Providers.Automatic1111.csproj" />
+        <ProjectReference Include="..\..\Providers\DeepInfra\src\LangChain.Providers.DeepInfra.csproj" />
+        <ProjectReference Include="..\..\Providers\DeepSeek\src\LangChain.Providers.DeepSeek.csproj" />
         <ProjectReference Include="..\..\Providers\Fireworks\src\LangChain.Providers.Fireworks.csproj" />
+        <ProjectReference Include="..\..\Providers\Groq\src\LangChain.Providers.Groq.csproj" />
         <ProjectReference Include="..\..\Providers\LLamaSharp\src\LangChain.Providers.LLamaSharp.csproj" />
         <ProjectReference Include="..\..\Providers\Ollama\src\LangChain.Providers.Ollama.csproj" />
         <ProjectReference Include="..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
+        <ProjectReference Include="..\..\Providers\OpenRouter\src\LangChain.Providers.OpenRouter.csproj" />
         <ProjectReference Include="..\..\Providers\TogetherAI\src\LangChain.Providers.TogetherAi.csproj" />
         <ProjectReference Include="..\src\LangChain.csproj" />
     </ItemGroup>

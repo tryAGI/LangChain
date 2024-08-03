@@ -68,7 +68,7 @@ public class ReadmeTests
         var provider = new OpenAiProvider(
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InconclusiveException("OPENAI_API_KEY is not set"));
-        var llm = new Gpt35TurboModel(provider);
+        var llm = new Gpt4OmniMiniModel(provider);
         var embeddingModel = new TextEmbeddingV3SmallModel(provider);
 
         // Create vector database from Harry Potter book pdf

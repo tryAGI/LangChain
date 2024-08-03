@@ -1,12 +1,15 @@
 using DotNet.Testcontainers.Builders;
+using Elastic.Clients.Elasticsearch;
 using LangChain.Databases.Chroma;
-using LangChain.Databases.DuckDb;
+using LangChain.Databases.Elasticsearch;
 using LangChain.Databases.InMemory;
 using LangChain.Databases.Milvus;
 using LangChain.Databases.Mongo;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
 using LangChain.Databases.Sqlite;
+using Testcontainers.Elasticsearch;
+using LangChain.Databases.DuckDb;
 using Microsoft.SemanticKernel.Connectors.DuckDB;
 using Microsoft.SemanticKernel.Connectors.Milvus;
 using Testcontainers.MongoDb;
@@ -126,13 +129,24 @@ public partial class DatabaseTests
                     };
                 }
             case SupportedDatabase.DuckDb:
+                var store = await DuckDBMemoryStore.ConnectAsync(cancellationToken);
+                return new DatabaseTestEnvironment
                 {
-                    var store = await DuckDBMemoryStore.ConnectAsync(cancellationToken);
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new DuckDbVectorDatabase(store)
-                    };
-                }
+                    VectorDatabase = new DuckDbVectorDatabase(store)
+                };
+            case SupportedDatabase.Elasticsearch:
+            {
+                var container = new ElasticsearchBuilder().Build();
+
+                await container.StartAsync(cancellationToken);
+
+                var client = new ElasticsearchClient(new Uri($"http://localhost:{container.GetMappedPublicPort(9200)}"));
+                return new DatabaseTestEnvironment
+                {
+                    VectorDatabase = new ElasticsearchVectorDatabase(client),
+                    Container = container,
+                };
+            }
             case SupportedDatabase.Milvus:
                 {
                     var network = new NetworkBuilder()
@@ -188,6 +202,7 @@ public partial class DatabaseTests
                         Container = milvusContainer,
                     };
                 }
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
         }

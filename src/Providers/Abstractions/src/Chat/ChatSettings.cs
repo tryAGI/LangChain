@@ -16,13 +16,13 @@ public class ChatSettings
     /// <summary>
     /// Unique user identifier.
     /// </summary>
-    public string? User { get; init; }
+    public string? User { get; set; }
 
     /// <summary>
     /// Defines the stop sequences for the model.
     /// Up to 4 sequences where the API will stop generating further tokens. <br/>
     /// </summary>
-    public IReadOnlyList<string>? StopSequences { get; init; }
+    public IReadOnlyList<string>? StopSequences { get; set; }
 
     /// <summary>
     /// If set, partial message deltas will be sent, like in ChatGPT. <br/>
@@ -30,7 +30,7 @@ public class ChatSettings
     /// Enabling disables tokenUsage reporting <br/>
     /// Defaults to false. <br/>
     /// </summary>
-    public bool? UseStreaming { get; init; }
+    public bool? UseStreaming { get; set; }
 
     /// <summary>
     /// Calculate the settings to use for the request.

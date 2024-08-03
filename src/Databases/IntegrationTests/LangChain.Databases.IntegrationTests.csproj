@@ -13,6 +13,7 @@
       <ProjectReference Include="..\AzureSearch\src\LangChain.Databases.AzureSearch.csproj" />
       <ProjectReference Include="..\Chroma\src\LangChain.Databases.Chroma.csproj" />
       <ProjectReference Include="..\DuckDb\src\LangChain.Databases.DuckDb.csproj" />
+      <ProjectReference Include="..\Elasticsearch\src\LangChain.Databases.Elasticsearch.csproj" />
       <ProjectReference Include="..\InMemory\src\LangChain.Databases.InMemory.csproj" />
       <ProjectReference Include="..\Kendra\src\LangChain.Databases.Kendra.csproj" />
       <ProjectReference Include="..\Mongo\src\LangChain.Databases.Mongo.csproj" />
@@ -27,6 +28,7 @@
 
     <ItemGroup>
       <PackageReference Include="Testcontainers" />
+      <PackageReference Include="Testcontainers.Elasticsearch" />
       <PackageReference Include="Testcontainers.PostgreSql" />
       <PackageReference Include="Testcontainers.MongoDb" />
       <PackageReference Include="Testcontainers.Redis" />

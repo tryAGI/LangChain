@@ -73,7 +73,7 @@ public partial class GoogleChatModel(
         var request = new GenerateContentRequest
         {
             Contents = messages.Select(ToRequestMessage).ToArray(),
-            Tools = GlobalFunctions.ToGenerativeAiTools()
+            Tools = GlobalTools.ToGenerativeAiTools()
         };
 
 

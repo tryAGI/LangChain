@@ -6,4 +6,11 @@ public enum ProviderType
     Together,
     Anyscale,
     Fireworks,
+    OpenRouter,
+    DeepInfra,
+    Google,
+    Anthropic,
+    Groq,
+    DeepSeek,
+    Azure,
 }

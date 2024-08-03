@@ -13,12 +13,17 @@ internal static class GoogleGeminiExtensions
         return response.GetFunction() != null;
     }
 
-    public static List<GenerativeAITool> ToGenerativeAiTools(this IEnumerable<ChatCompletionFunction> functions)
+    public static List<GenerativeAITool> ToGenerativeAiTools(this IEnumerable<OpenApiSchema> functions)
     {
         return new List<GenerativeAITool>([
             new GenerativeAITool
             {
-                FunctionDeclaration = [.. functions]
+                FunctionDeclaration = functions.Select(x => new ChatCompletionFunction
+                {
+                    Name = x.Type,
+                    Description = x.Description,
+                    Parameters = new ChatCompletionFunctionParameters(),
+                }).ToList(),
             }
         ]);
     }
