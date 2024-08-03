@@ -23,6 +23,7 @@
     <PackageVersion Include="Google_GenerativeAI" Version="1.0.2" />
     <PackageVersion Include="GroqSharp" Version="1.1.2" />
     <PackageVersion Include="H.Generators.Extensions" Version="1.22.0" />
+    <PackageVersion Include="H.Generators.Tests.Extensions" Version="1.22.0" />
     <PackageVersion Include="H.NSwag.Generator" Version="14.0.7.76">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -54,8 +55,11 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.15.1-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.15.1-alpha" />
     <PackageVersion Include="Moq" Version="4.20.70" />
-    <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
-    <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.5.0" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.5.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
+    <PackageVersion Include="Verify.MSTest" Version="26.1.5" />
+    <PackageVersion Include="Verify.SourceGenerators" Version="2.3.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Npgsql" Version="8.0.3" />
     <PackageVersion Include="Ollama" Version="1.4.3" />

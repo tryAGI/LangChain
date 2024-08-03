@@ -1,0 +1,20 @@
+LangChain.Providers.ChatRequest.Tools.get -> System.Collections.Generic.IReadOnlyCollection<LangChain.Providers.OpenApiSchema!>!
+LangChain.Providers.ChatRequest.Tools.init -> void
+LangChain.Providers.LangChainToolsAttribute
+LangChain.Providers.LangChainToolsAttribute.LangChainToolsAttribute() -> void
+LangChain.Providers.OpenApiSchema
+LangChain.Providers.OpenApiSchema.Description.get -> string!
+LangChain.Providers.OpenApiSchema.Description.set -> void
+LangChain.Providers.OpenApiSchema.Enum.get -> System.Collections.Generic.IReadOnlyList<string!>!
+LangChain.Providers.OpenApiSchema.Enum.set -> void
+LangChain.Providers.OpenApiSchema.Format.get -> string?
+LangChain.Providers.OpenApiSchema.Format.set -> void
+LangChain.Providers.OpenApiSchema.Items.get -> LangChain.Providers.OpenApiSchema?
+LangChain.Providers.OpenApiSchema.Items.set -> void
+LangChain.Providers.OpenApiSchema.OpenApiSchema() -> void
+LangChain.Providers.OpenApiSchema.Properties.get -> System.Collections.Generic.IReadOnlyDictionary<string!, LangChain.Providers.OpenApiSchema!>!
+LangChain.Providers.OpenApiSchema.Properties.set -> void
+LangChain.Providers.OpenApiSchema.Required.get -> System.Collections.Generic.IReadOnlyList<string!>!
+LangChain.Providers.OpenApiSchema.Required.set -> void
+LangChain.Providers.OpenApiSchema.Type.get -> string!
+LangChain.Providers.OpenApiSchema.Type.set -> void

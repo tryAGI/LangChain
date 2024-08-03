@@ -1,0 +1,17 @@
+﻿[
+  {
+    Id: CS8019,
+    Title: Unnecessary using directive,
+    Severity: Hidden,
+    WarningLevel: 1,
+    Location: LangChain.Providers.Generators/LangChain.Providers.Generators.LangChainToolsGenerator/IVariousTypesFunctions.Calls.generated.cs: (1,0)-(1,33),
+    HelpLink: https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS8019),
+    MessageFormat: Unnecessary using directive.,
+    Message: Unnecessary using directive.,
+    Category: Compiler,
+    CustomTags: [
+      Compiler,
+      Telemetry
+    ]
+  }
+]

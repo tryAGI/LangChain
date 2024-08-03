@@ -12,6 +12,11 @@ public class ChatRequest
     public required IReadOnlyCollection<Message> Messages { get; init; }
 
     /// <summary>
+    /// Defines the user's tools.
+    /// </summary>
+    public IReadOnlyCollection<OpenApiSchema> Tools { get; init; } = [];
+
+    /// <summary>
     /// Upload image
     /// </summary>
     public BinaryData? Image { get; set; }
