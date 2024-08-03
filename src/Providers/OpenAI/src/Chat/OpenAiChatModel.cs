@@ -191,6 +191,8 @@ public partial class OpenAiChatModel(
                 },
             })
             .ToArray();
+        tools = tools.Length > 0 ? tools : null;
+        
         var chatRequest = new CreateChatCompletionRequest
         {
             Model = Id,
@@ -218,10 +220,11 @@ public partial class OpenAiChatModel(
             var stringBuilder = new StringBuilder(capacity: 1024);
             await foreach (var response in enumerable)
             {
-                var delta = response.Choices.ElementAt(0).Delta.Content ?? string.Empty;
+                var delta = response.Choices.ElementAt(0).Delta;
+                var deltaContent = delta.Content ?? string.Empty;
 
-                OnPartialResponseGenerated(delta);
-                stringBuilder.Append(delta);
+                OnPartialResponseGenerated(deltaContent);
+                stringBuilder.Append(deltaContent);
             }
             OnPartialResponseGenerated(Environment.NewLine);
             stringBuilder.Append(Environment.NewLine);
