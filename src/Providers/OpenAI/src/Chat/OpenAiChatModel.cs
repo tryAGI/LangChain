@@ -90,7 +90,7 @@ public partial class OpenAiChatModel(
         }
     }
 
-    protected virtual Message ToMessage(ChatCompletionResponseMessage message)
+    protected static Message ToMessage(ChatCompletionResponseMessage message)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
 
@@ -106,6 +106,26 @@ public partial class OpenAiChatModel(
             Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments ?? content ?? string.Empty,
             Role: role,
             FunctionName: $"{message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name}:{message.ToolCalls?.ElementAtOrDefault(0)?.Id}");
+    }
+
+    protected static T ToTool<T>(OpenApiSchema schema) where T : global::OpenAI.OpenApiSchema, new()
+    {
+        schema = schema ?? throw new ArgumentNullException(nameof(schema));
+
+        return new T
+        {
+            Type = schema.Type,
+            Description = schema.Description,
+            Items = schema.Items != null
+                ? ToTool<global::OpenAI.OpenApiSchema>(schema.Items)
+                : null,
+            Properties = schema.Properties
+                .ToDictionary(
+                    x => x.Key,
+                    x => ToTool<global::OpenAI.OpenApiSchema>(x.Value)),
+            Required = schema.Required,
+            Enum = schema.Enum,
+        };
     }
 
     private Usage GetUsage(CreateChatCompletionResponse response)
@@ -158,6 +178,18 @@ public partial class OpenAiChatModel(
             TopP = usedSettings.TopP,
             PresencePenalty = usedSettings.PresencePenalty,
             LogitBias = usedSettings.LogitBias,
+            Tools = request.Tools.Select(x => new ChatCompletionTool
+            {
+                Type = ChatCompletionToolType.Function,
+                Function = new FunctionObject
+                {
+                    Name = x.Type,
+                    Description = x.Description,
+                    Parameters = x.Items != null
+                        ? ToTool<FunctionParameters>(x.Items)
+                        : new FunctionParameters(),
+                },
+            }).ToArray(),
         };
         if (GlobalTools.Count > 0)
         {
@@ -267,7 +299,7 @@ public partial class OpenAiChatModel(
         }
     }
 
-
+    
 
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
