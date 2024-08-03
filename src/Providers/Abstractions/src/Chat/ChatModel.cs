@@ -1,7 +1,7 @@
 // ReSharper disable once CheckNamespace
 namespace LangChain.Providers;
 
-public abstract class ChatModel(string id) : Model<ChatSettings>(id), IChatModel<ChatRequest, ChatResponse, ChatSettings>
+public abstract partial class ChatModel(string id) : Model<ChatSettings>(id), IChatModel<ChatRequest, ChatResponse, ChatSettings>
 {
     #region Events
 

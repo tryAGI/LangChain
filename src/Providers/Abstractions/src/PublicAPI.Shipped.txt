@@ -30,11 +30,8 @@ LangChain.Providers.ChatResponse.UsedSettings.init -> void
 LangChain.Providers.ChatSettings
 LangChain.Providers.ChatSettings.ChatSettings() -> void
 LangChain.Providers.ChatSettings.StopSequences.get -> System.Collections.Generic.IReadOnlyList<string!>?
-LangChain.Providers.ChatSettings.StopSequences.init -> void
 LangChain.Providers.ChatSettings.User.get -> string?
-LangChain.Providers.ChatSettings.User.init -> void
 LangChain.Providers.ChatSettings.UseStreaming.get -> bool?
-LangChain.Providers.ChatSettings.UseStreaming.init -> void
 LangChain.Providers.Data
 LangChain.Providers.Data.Data() -> void
 LangChain.Providers.Data.ToBase64() -> string!
@@ -100,7 +97,6 @@ LangChain.Providers.IModel.Id.get -> string!
 LangChain.Providers.IModel.Usage.get -> LangChain.Providers.Usage
 LangChain.Providers.IModel<TSettings>
 LangChain.Providers.IModel<TSettings>.Settings.get -> TSettings?
-LangChain.Providers.IModel<TSettings>.Settings.init -> void
 LangChain.Providers.IModerationModel
 LangChain.Providers.IModerationModel.CheckViolationAsync(LangChain.Providers.ModerationRequest! request, LangChain.Providers.ModerationSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Providers.ModerationResponse!>!
 LangChain.Providers.IModerationModel.RecommendedModerationChunkSize.get -> int
@@ -156,7 +152,6 @@ LangChain.Providers.Model.Usage.set -> void
 LangChain.Providers.Model<TSettings>
 LangChain.Providers.Model<TSettings>.Model(string! id) -> void
 LangChain.Providers.Model<TSettings>.Settings.get -> TSettings?
-LangChain.Providers.Model<TSettings>.Settings.init -> void
 LangChain.Providers.ModerationRequest
 LangChain.Providers.ModerationRequest.ModerationRequest() -> void
 LangChain.Providers.ModerationRequest.Prompt.get -> string!
