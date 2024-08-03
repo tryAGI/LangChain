@@ -42,12 +42,12 @@ public partial class AnthropicModel(
         switch (message.Role)
         {
             case global::Anthropic.MessageRole.User:
-                return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text.Text : string.Empty)), MessageRole.Human);
+                return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text!.Text : string.Empty)), MessageRole.Human);
             case global::Anthropic.MessageRole.Assistant:
-                return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text.Text : string.Empty)), MessageRole.Ai);
+                return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text!.Text : string.Empty)), MessageRole.Ai);
         }
         
-        return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text.Text : string.Empty)), MessageRole.Ai);
+        return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text!.Text : string.Empty)), MessageRole.Ai);
 
     }
 
@@ -142,9 +142,10 @@ public partial class AnthropicModel(
         };
     }
 
-    private async Task CallFunctionsAsync(Message newMessage, List<Message> messages,
+    private static Task CallFunctionsAsync(Message newMessage, List<Message> messages,
         CancellationToken cancellationToken = default)
     {
+        return Task.CompletedTask;
         // var function = newMessage.Content.ToAnthropicToolCall(GlobalTools);
         //
         // if (!string.IsNullOrEmpty(function.FunctionName))
