@@ -1,9 +1,7 @@
-using OpenAI;
-
 // ReSharper disable once CheckNamespace
-namespace LangChain.Providers.OpenAI;
+namespace LangChain.Providers;
 
-public partial class OpenAiChatModel
+public partial class ChatModel
 {
     #region Properties
 
@@ -18,7 +16,7 @@ public partial class OpenAiChatModel
     public bool ReplyToToolCallsAutomatically { get; set; } = true;
 
     [CLSCompliant(false)]
-    protected List<ChatCompletionTool> GlobalTools { get; } = [];
+    protected IList<OpenApiSchema> GlobalTools { get; } = [];
     protected Dictionary<string, Func<string, CancellationToken, Task<string>>> Calls { get; } = [];
 
     #endregion
@@ -33,13 +31,16 @@ public partial class OpenAiChatModel
     /// <returns></returns>
     [CLSCompliant(false)]
     public void AddGlobalTools(
-        ICollection<ChatCompletionTool> tools,
+        ICollection<OpenApiSchema> tools,
         IReadOnlyDictionary<string, Func<string, CancellationToken, Task<string>>> calls)
     {
         tools = tools ?? throw new ArgumentNullException(nameof(tools));
         calls = calls ?? throw new ArgumentNullException(nameof(calls));
 
-        GlobalTools.AddRange(tools);
+        foreach (var tool in tools)
+        {
+            GlobalTools.Add(tool);
+        }
         foreach (var call in calls)
         {
             Calls.Add(call.Key, call.Value);

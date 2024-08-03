@@ -26,7 +26,7 @@ public partial class OpenAiChatModel(
     private string ChatModel { get; } = id;
 
     /// <inheritdoc/>
-    public override int ContextLength => (int)(CreateChatCompletionRequestModelExtensions.ToEnum(ChatModel)?.GetContextLength() ?? 0);
+    public override int ContextLength => CreateChatCompletionRequestModelExtensions.ToEnum(ChatModel)?.GetContextLength() ?? 0;
 
     #endregion
 
@@ -79,18 +79,21 @@ public partial class OpenAiChatModel(
                     ToolCalls = message.ToToolCalls(),
                 };
             case MessageRole.FunctionResult:
+                var nameAndId = message.FunctionName?.Split(':') ??
+                    throw new ArgumentException("Invalid functionCall name and id string");
+                
                 return new ChatCompletionRequestToolMessage
                 {
                     Role = ChatCompletionRequestToolMessageRole.Tool,
                     Content = message.Content,
-                    ToolCallId = message.FunctionName ?? string.Empty,
+                    ToolCallId = nameAndId.ElementAtOrDefault(1) ?? string.Empty,
                 };
             default:
                 throw new ArgumentOutOfRangeException(nameof(message));
         }
     }
 
-    protected static Message ToMessage(ChatCompletionResponseMessage message)
+    protected static IReadOnlyCollection<Message> ToMessages(ChatCompletionResponseMessage message)
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
 
@@ -100,12 +103,23 @@ public partial class OpenAiChatModel(
             _ => MessageRole.Ai,
         };
 
-        var content = message.Content;
+        if (message.ToolCalls?.Count > 0)
+        {
+            var messages = new List<Message>();
+            foreach (var call in message.ToolCalls)
+            {
+                messages.Add(new Message(
+                    Content: call.Function.Arguments,
+                    Role: MessageRole.FunctionCall,
+                    FunctionName: $"{call.Function.Name}:{call.Id}"));
+            }
 
-        return new Message(
-            Content: message.ToolCalls?.ElementAtOrDefault(0)?.Function.Arguments ?? content ?? string.Empty,
-            Role: role,
-            FunctionName: $"{message.ToolCalls?.ElementAtOrDefault(0)?.Function.Name}:{message.ToolCalls?.ElementAtOrDefault(0)?.Id}");
+            return messages;
+        }
+        
+        return [new Message(
+            Content: message.Content ?? string.Empty,
+            Role: role)];
     }
 
     protected static T ToTool<T>(OpenApiSchema schema) where T : global::OpenAI.OpenApiSchema, new()
@@ -162,6 +176,21 @@ public partial class OpenAiChatModel(
             requestSettings: settings,
             modelSettings: Settings,
             providerSettings: provider.ChatSettings);
+        var tools = request.Tools
+            .Concat(GlobalTools)
+            .Select(x => new ChatCompletionTool
+            {
+                Type = ChatCompletionToolType.Function,
+                Function = new FunctionObject
+                {
+                    Name = x.Type,
+                    Description = x.Description,
+                    Parameters = x.Items != null
+                        ? ToTool<FunctionParameters>(x.Items)
+                        : new FunctionParameters(),
+                },
+            })
+            .ToArray();
         var chatRequest = new CreateChatCompletionRequest
         {
             Model = Id,
@@ -178,23 +207,8 @@ public partial class OpenAiChatModel(
             TopP = usedSettings.TopP,
             PresencePenalty = usedSettings.PresencePenalty,
             LogitBias = usedSettings.LogitBias,
-            Tools = request.Tools.Select(x => new ChatCompletionTool
-            {
-                Type = ChatCompletionToolType.Function,
-                Function = new FunctionObject
-                {
-                    Name = x.Type,
-                    Description = x.Description,
-                    Parameters = x.Items != null
-                        ? ToTool<FunctionParameters>(x.Items)
-                        : new FunctionParameters(),
-                },
-            }).ToArray(),
+            Tools = tools,
         };
-        if (GlobalTools.Count > 0)
-        {
-            chatRequest.Tools = GlobalTools;
-        }
         if (usedSettings.UseStreaming == true)
         {
             var enumerable = provider.Api.Chat.CreateChatCompletionAsStreamAsync(
@@ -239,12 +253,12 @@ public partial class OpenAiChatModel(
                 chatRequest,
                 cancellationToken).ConfigureAwait(false);
             var message = response.Choices.First().Message;
-            var newMessage = ToMessage(message);
-            messages.Add(newMessage);
+            var newMessages = ToMessages(message);
+            messages.AddRange(newMessages);
 
-            OnPartialResponseGenerated(newMessage.Content);
+            OnPartialResponseGenerated(newMessages.First().Content);
             OnPartialResponseGenerated(Environment.NewLine);
-            OnCompletedResponseGenerated(newMessage.Content);
+            OnCompletedResponseGenerated(newMessages.First().Content);
 
             var usage = GetUsage(response) with
             {
@@ -268,17 +282,15 @@ public partial class OpenAiChatModel(
                         stop: usedSettings.StopSequences!.ToArray(),
                         user: usedSettings.User!,
                         temperature: usedSettings.Temperature,
-                        tools: GlobalTools.Count == 0
-                            ? null!
-                            : GlobalTools,
+                        tools: tools,
                         cancellationToken: cancellationToken).ConfigureAwait(false);
                     message = response.Choices.First().Message;
-                    newMessage = ToMessage(message);
-                    messages.Add(newMessage);
+                    newMessages = ToMessages(message);
+                    messages.AddRange(newMessages);
 
-                    OnPartialResponseGenerated(newMessage.Content);
+                    OnPartialResponseGenerated(newMessages.First().Content);
                     OnPartialResponseGenerated(Environment.NewLine);
-                    OnCompletedResponseGenerated(newMessage.Content);
+                    OnCompletedResponseGenerated(newMessages.First().Content);
 
                     var usage2 = GetUsage(response) with
                     {

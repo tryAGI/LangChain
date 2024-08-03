@@ -1,3 +1,11 @@
+LangChain.Providers.ChatModel.AddGlobalTools(System.Collections.Generic.ICollection<LangChain.Providers.OpenApiSchema!>! tools, System.Collections.Generic.IReadOnlyDictionary<string!, System.Func<string!, System.Threading.CancellationToken, System.Threading.Tasks.Task<string!>!>!>! calls) -> void
+LangChain.Providers.ChatModel.Calls.get -> System.Collections.Generic.Dictionary<string!, System.Func<string!, System.Threading.CancellationToken, System.Threading.Tasks.Task<string!>!>!>!
+LangChain.Providers.ChatModel.CallToolsAutomatically.get -> bool
+LangChain.Providers.ChatModel.CallToolsAutomatically.set -> void
+LangChain.Providers.ChatModel.ClearGlobalTools() -> void
+LangChain.Providers.ChatModel.GlobalTools.get -> System.Collections.Generic.IList<LangChain.Providers.OpenApiSchema!>!
+LangChain.Providers.ChatModel.ReplyToToolCallsAutomatically.get -> bool
+LangChain.Providers.ChatModel.ReplyToToolCallsAutomatically.set -> void
 LangChain.Providers.ChatRequest.Tools.get -> System.Collections.Generic.IReadOnlyCollection<LangChain.Providers.OpenApiSchema!>!
 LangChain.Providers.ChatRequest.Tools.init -> void
 LangChain.Providers.LangChainToolsAttribute
