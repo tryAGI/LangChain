@@ -6,8 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-		<PackageReference Include="Microsoft.SemanticKernel.Connectors.Milvus" />
-        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Milvus"/>
+        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj"/>
     </ItemGroup>
 
 </Project>
