@@ -13,4 +13,5 @@ public enum SupportedDatabase
     Elasticsearch,
     DuckDb,
     Milvus,
+    Weaviate
 }

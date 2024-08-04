@@ -3,5 +3,5 @@ using Microsoft.SemanticKernel.Connectors.Pinecone;
 
 namespace LangChain.Databases.Pinecone
 {
-    public class MilvusVectorDatabase(PineconeMemoryStore store) : SemanticKernelMemoryDatabase(store);
+    public class PineconeVectorDatabase(PineconeMemoryStore store) : SemanticKernelMemoryDatabase(store);
 }

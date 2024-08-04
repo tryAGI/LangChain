@@ -18,7 +18,23 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
             //TODO: review way to map metadata
             if (item.Metadata != null)
                 metadata = string.Join("#", item.Metadata.Select(kv => kv.Key + "&" + kv.Value));
-            var record = MemoryRecord.LocalRecord(item.Id, item.Text, null, item.Embedding, metadata);
+
+            var record = new MemoryRecord
+            (
+                new MemoryRecordMetadata
+                (
+                    isReference: false,
+                    id: item.Id,
+                    text: item.Text,
+                    description: string.Empty,
+                    externalSourceName: item.Text,
+                    additionalMetadata: metadata ?? string.Empty
+                ),
+                item.Embedding,
+                null,
+                null
+            );
+
             var insert = await store.UpsertAsync(Name, record, cancellationToken).ConfigureAwait(false);
             list.Add(insert);
         }
@@ -42,7 +58,7 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
                 .Select(part => part.Split('&'))
                 .ToDictionary(split => split[0], split => (object)split[1]);
 
-        return record != null ? new Vector { Id = id, Text = record.Metadata.Text, Metadata = metadata } : null;
+        return record != null ? new Vector { Id = id, Text = record.Metadata.ExternalSourceName, Metadata = metadata } : null;
     }
 
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
@@ -57,6 +73,6 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
         settings ??= new VectorSearchSettings();
         var results = await store.GetNearestMatchesAsync(Name, request.Embeddings.First(), limit: settings.NumberOfResults, cancellationToken: cancellationToken)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
-        return new VectorSearchResponse { Items = results.Select(x => new Vector { Text = x.Item1.Metadata.Text }).ToList() };
+        return new VectorSearchResponse { Items = results.Select(x => new Vector { Text = x.Item1.Metadata.ExternalSourceName }).ToList() };
     }
 }

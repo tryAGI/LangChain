@@ -13,6 +13,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     [TestCase(SupportedDatabase.DuckDb)]
+    //[TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
@@ -62,6 +63,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     [TestCase(SupportedDatabase.DuckDb)]
+    [TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task AddDocuments_Ok(SupportedDatabase database)
@@ -110,6 +112,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     [TestCase(SupportedDatabase.DuckDb)]
+    [TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task AddTexts_Ok(SupportedDatabase database)
@@ -162,6 +165,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     [TestCase(SupportedDatabase.DuckDb)]
+    [TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task DeleteDocuments_Ok(SupportedDatabase database)
@@ -202,6 +206,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.DuckDb)]
+    //[TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
@@ -236,6 +241,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.DuckDb)]
+    //[TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
@@ -266,6 +272,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.DuckDb)]
+    //[TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
     //[TestCase(SupportedDatabase.Milvus)]
     public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)

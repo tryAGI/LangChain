@@ -14,6 +14,8 @@ using Microsoft.SemanticKernel.Connectors.DuckDB;
 using Microsoft.SemanticKernel.Connectors.Milvus;
 using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
+using LangChain.Databases.Weaviate;
+using Microsoft.SemanticKernel.Connectors.Weaviate;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -202,7 +204,22 @@ public partial class DatabaseTests
                         Container = milvusContainer,
                     };
                 }
-
+            case SupportedDatabase.Weaviate:
+                {
+                    var container = new ContainerBuilder()
+                        .WithImage("cr.weaviate.io/semitechnologies/weaviate:1.25.10")
+                        .WithPortBinding(hostPort: 8080, containerPort: 8080)
+                        .WithPortBinding(hostPort: 50051, containerPort: 50051)
+                        .WithEnvironment("AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED", "true")
+                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(50051))
+                        .Build();
+                    await container.StartAsync(cancellationToken);
+                    return new DatabaseTestEnvironment
+                    {
+                        VectorDatabase = new WeaviateVectorDatabase(new WeaviateMemoryStore($"http://localhost:8080")),
+                        Container = container
+                    };
+                }
             default:
                 throw new ArgumentOutOfRangeException(nameof(database), database, null);
         }
