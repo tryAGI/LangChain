@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
+        <NoWarn>$(NoWarn);SKEXP0020;SKEXP0001;CS3001</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -10,12 +11,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Redis" />
-        <PackageReference Include="StackExchange.Redis" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Redis"/>
+        <PackageReference Include="StackExchange.Redis"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
+        <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj"/>
+        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj"/>
     </ItemGroup>
 
 </Project>

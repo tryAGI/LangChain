@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-		<NoWarn>$(NoWarn);SKEXP0020;SKEXP0001;CS3001</NoWarn>
+        <NoWarn>$(NoWarn);SKEXP0020;SKEXP0001;CS3001</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
@@ -11,10 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.DuckDB" />
-        <PackageReference Include="System.Linq.Async" />
-		<ProjectReference Include="..\..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
-		<ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.DuckDB"/>
+        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj"/>
     </ItemGroup>
 
 </Project>
