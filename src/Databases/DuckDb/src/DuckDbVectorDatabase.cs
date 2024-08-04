@@ -1,4 +1,4 @@
-﻿using LangChain.Databases.Connectors;
+﻿using LangChain.Databases.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.DuckDB;
 
 namespace LangChain.Databases.DuckDb

@@ -12,7 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Pinecone" />
-		<ProjectReference Include="..\..\Connectors\src\LangChain.Databases.Connectors.csproj" />
+        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj" />
     </ItemGroup>
 
 </Project>
