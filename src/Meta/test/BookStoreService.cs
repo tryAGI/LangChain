@@ -25,9 +25,9 @@ public class BookStoreService : IBookStoreService
     {
         return Task.FromResult(new List<GetAuthorBook>([
             new GetAuthorBook
-                { Title = "Five point someone", Description = "This book is about 3 college friends" },
+            { Title = "Five point someone", Description = "This book is about 3 college friends" },
             new GetAuthorBook
-                { Title = "Two States", Description = "This book is about intercast marriage in India" }
+            { Title = "Two States", Description = "This book is about intercast marriage in India" }
         ]));
     }
 

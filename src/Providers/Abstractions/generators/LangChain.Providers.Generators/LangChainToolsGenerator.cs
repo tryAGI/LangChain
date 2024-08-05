@@ -23,7 +23,7 @@ public class LangChainToolsGenerator : IIncrementalGenerator
                 .ForAttributeWithMetadataName("LangChain.Providers.LangChainToolsAttribute")
                 .SelectManyAllAttributesOfCurrentInterfaceSyntax()
                 .SelectAndReportExceptions(PrepareData, context, Id);
-        
+
         attributes
             .SelectAndReportExceptions(AsTools, context, Id)
             .AddSource(context);
@@ -31,7 +31,7 @@ public class LangChainToolsGenerator : IIncrementalGenerator
             .SelectAndReportExceptions(AsCalls, context, Id)
             .AddSource(context);
     }
-    
+
     private static InterfaceData PrepareData(
         (SemanticModel SemanticModel, AttributeData AttributeData, InterfaceDeclarationSyntax InterfaceSyntax, INamedTypeSymbol InterfaceSymbol) tuple)
     {
@@ -39,14 +39,14 @@ public class LangChainToolsGenerator : IIncrementalGenerator
 
         return interfaceSymbol.PrepareData();
     }
-    
+
     private static FileWithName AsTools(InterfaceData @interface)
     {
         return new FileWithName(
             Name: $"{@interface.Name}.Tools.generated.cs",
             Text: Sources.GenerateClientImplementation(@interface));
     }
-    
+
     private static FileWithName AsCalls(InterfaceData @interface)
     {
         return new FileWithName(

@@ -7,7 +7,7 @@ internal static partial class Sources
     public static string GenerateCalls(InterfaceData @interface)
     {
         var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "Extensions";
-        
+
         return @$"
 using System.Collections.Generic;
 

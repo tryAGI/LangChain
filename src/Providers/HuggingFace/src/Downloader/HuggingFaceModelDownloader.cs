@@ -53,9 +53,9 @@ public static class HuggingFaceModelDownloader
             File.WriteAllText(downloadMarkerPath, "");
             File.Delete(modelPath);
             Console.WriteLine("No model file found. Downloading...");
-            
+
             await DownloadModelAsync(new Uri($"https://huggingface.co/{repository}/resolve/{version}/{fileName}"), modelPath).ConfigureAwait(false);
-            
+
             File.Delete(downloadMarkerPath);
         }
 

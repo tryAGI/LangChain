@@ -22,7 +22,7 @@ public class LLamaSharpModelChat : LLamaSharpModelBase
             PathToModelFile = path,
         });
     }
-    
+
     /// <summary>
     /// 
     /// </summary>

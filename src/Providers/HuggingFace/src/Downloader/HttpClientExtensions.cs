@@ -14,7 +14,7 @@ internal static class HttpClientExtensions
         var contentLength = response.Content.Headers.ContentLength;
 
         using var download = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-        
+
         // Ignore progress reporting when no progress reporter was 
         // passed or when the content length is unknown
         if (progress == null || !contentLength.HasValue)
