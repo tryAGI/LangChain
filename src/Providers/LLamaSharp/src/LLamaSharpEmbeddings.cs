@@ -24,7 +24,7 @@ public sealed class LLamaSharpEmbeddings
             EmbeddingMode = true
         });
     }
-    
+
     private readonly LLamaSharpConfiguration _configuration;
     private readonly LLamaWeights _model;
     private readonly LLamaEmbedder _embedder;

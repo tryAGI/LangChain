@@ -38,7 +38,7 @@ internal static partial class Sources
                                     .Select(static x => $"\"{x.Name}\""))} }},
 {indent}                    }}";
         }
-        
+
         if (parameter.EnumValues.Count != 0)
         {
             return $@"new {name}
@@ -48,7 +48,7 @@ internal static partial class Sources
 {indent}                        Enum = new string[] {{ {string.Join(", ", parameter.EnumValues.Select(static x => $"\"{x}\""))} }},
 {indent}                    }}";
         }
-        
+
         return $@"new {name}
 {indent}                    {{
 {indent}                        Type = ""{parameter.SchemaType}"",{(parameter.Format != null ? $@"
@@ -60,7 +60,7 @@ internal static partial class Sources
     public static string GenerateClientImplementation(InterfaceData @interface)
     {
         var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "Extensions";
-        
+
         return @$"
 #nullable enable
 

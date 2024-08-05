@@ -7,10 +7,10 @@ foreach (var path in Directory.EnumerateFiles(sampleDirectory, "Program.cs", Sea
 {
     var folder = Path.GetFileName(Path.GetDirectoryName(path) ?? string.Empty)?.Replace("LangChain.Samples.", string.Empty);
     var code = await File.ReadAllTextAsync(path);
-    
+
     var newDir = Path.Combine(solutionDirectory, "docs", "samples");
     Directory.CreateDirectory(newDir);
-    
+
     var newPath = Path.Combine(newDir, $"{folder}.md");
     await File.WriteAllTextAsync(newPath, $@"```csharp
 {code}

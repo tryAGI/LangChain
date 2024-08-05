@@ -26,7 +26,7 @@ public class BaseTests
         var answer = await llm.GenerateAsync(
             request: "Answer me five random words",
             cancellationToken: CancellationToken.None).ConfigureAwait(false);
-        
+
         Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
         Console.WriteLine($"LLM usage: {llm.Usage}");    // Print usage and price
 
@@ -47,7 +47,7 @@ public class BaseTests
         llm.PromptSent += (_, prompt) => Console.WriteLine($"Prompt: {prompt}");
         llm.PartialResponseGenerated += (_, delta) => Console.WriteLine(delta);
         llm.CompletedResponseGenerated += (_, prompt) => Console.WriteLine($"Completed response: {prompt}");
-        
+
         llm.Settings = new ChatSettings
         {
             UseStreaming = true,
@@ -57,7 +57,7 @@ public class BaseTests
 
         response.LastMessageContent.Should().NotBeNull();
     }
-    
+
     [TestCase(ProviderType.OpenAi)]
     //[TestCase(ProviderType.Anyscale)]
     //[TestCase(ProviderType.Together)]
@@ -85,7 +85,7 @@ public class BaseTests
 
         Console.WriteLine(result.Value["text"]);
     }
-    
+
     [TestCase(ProviderType.OpenAi)]
     //[TestCase(ProviderType.Anyscale)]
     [TestCase(ProviderType.Together)]
@@ -114,7 +114,7 @@ public class BaseTests
 
         Console.WriteLine(response.Messages.AsHistory());
     }
-    
+
     [TestCase(ProviderType.OpenAi)]
     //[TestCase(ProviderType.Anyscale)]
     //[TestCase(ProviderType.Together)]

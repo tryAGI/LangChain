@@ -34,7 +34,7 @@ public class ElasticsearchVectorCollection(
         CancellationToken cancellationToken = default)
     {
         ids = ids ?? throw new ArgumentNullException(nameof(ids));
-        
+
         throw new NotImplementedException();
         // foreach (var id in ids)
         // {
@@ -63,7 +63,7 @@ public class ElasticsearchVectorCollection(
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
-        
+
         throw new NotImplementedException();
         // var response = await client.SearchAsync<MyDoc>(s => s
         //     .Index("my_index")

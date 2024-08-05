@@ -137,18 +137,18 @@ public partial class DatabaseTests
                     VectorDatabase = new DuckDbVectorDatabase(store)
                 };
             case SupportedDatabase.Elasticsearch:
-            {
-                var container = new ElasticsearchBuilder().Build();
-
-                await container.StartAsync(cancellationToken);
-
-                var client = new ElasticsearchClient(new Uri($"http://localhost:{container.GetMappedPublicPort(9200)}"));
-                return new DatabaseTestEnvironment
                 {
-                    VectorDatabase = new ElasticsearchVectorDatabase(client),
-                    Container = container,
-                };
-            }
+                    var container = new ElasticsearchBuilder().Build();
+
+                    await container.StartAsync(cancellationToken);
+
+                    var client = new ElasticsearchClient(new Uri($"http://localhost:{container.GetMappedPublicPort(9200)}"));
+                    return new DatabaseTestEnvironment
+                    {
+                        VectorDatabase = new ElasticsearchVectorDatabase(client),
+                        Container = container,
+                    };
+                }
             case SupportedDatabase.Milvus:
                 {
                     var network = new NetworkBuilder()

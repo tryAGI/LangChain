@@ -9,7 +9,7 @@ public class AnthropicProvider : Provider
     {
         Api.AuthorizeUsingApiKey(apiKey);
     }
-    
+
     /// <summary>
     /// </summary>
     /// <param name="configuration"></param>

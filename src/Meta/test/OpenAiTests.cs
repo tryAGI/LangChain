@@ -20,7 +20,7 @@ public class OpenAiTests
         new Gpt4OmniMiniModel("sk-random").CountTokens(text).Should().Be(4300);
         new Gpt4Model("sk-random").CountTokens(text).Should().Be(4300);
     }
-    
+
     [Test]
     public async Task TestAudio()
     {

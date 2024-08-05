@@ -8,7 +8,7 @@ public class IpcGeneratorSnapshotTests : VerifyBase
     {
         return this.CheckSourceAsync(H.Resources.WeatherFunctions_cs.AsString());
     }
-    
+
     [TestMethod]
     public Task VariousTypes()
     {
