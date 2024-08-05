@@ -46,7 +46,7 @@ public partial class AnthropicModel(
             case global::Anthropic.MessageRole.Assistant:
                 return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text!.Text : string.Empty)), MessageRole.Ai);
         }
-        
+
         return new Message(string.Join("\r\n", message.Content.Value2!.Select(s => s.IsText ? s.Text!.Text : string.Empty)), MessageRole.Ai);
 
     }

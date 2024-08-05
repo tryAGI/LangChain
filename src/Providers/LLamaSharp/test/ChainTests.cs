@@ -31,7 +31,7 @@ public class ChainTests
             version: "main");
         var llm = LLamaSharpModelChat.FromPath(modelPath);
         string response = await llm.GenerateAsync("Write 5 random words.");
-        
+
         Console.WriteLine(response);
 
         response.Should().NotBeNullOrWhiteSpace();

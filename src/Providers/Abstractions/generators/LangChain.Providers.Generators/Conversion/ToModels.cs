@@ -9,7 +9,7 @@ public static class ToModels
         this INamedTypeSymbol interfaceSymbol)
     {
         interfaceSymbol = interfaceSymbol ?? throw new ArgumentNullException(nameof(interfaceSymbol));
-        
+
         var methods = interfaceSymbol
             .GetMembers()
             .OfType<IMethodSymbol>()
@@ -46,7 +46,7 @@ public static class ToModels
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
             Methods: methods);
     }
-    
+
     private static OpenApiSchema ToParameterData(ITypeSymbol typeSymbol, string? name = null, string? description = null, bool isRequired = true)
     {
         string schemaType;
@@ -58,7 +58,7 @@ public static class ToModels
             case TypeKind.Enum:
                 schemaType = "string";
                 break;
-            
+
             case TypeKind.Structure:
                 switch (typeSymbol.SpecialType)
                 {
@@ -66,31 +66,31 @@ public static class ToModels
                         schemaType = "integer";
                         format = "int32";
                         break;
-                    
+
                     case SpecialType.System_Int64:
                         schemaType = "integer";
                         format = "int64";
                         break;
-                    
+
                     case SpecialType.System_Single:
                         schemaType = "number";
                         format = "double";
                         break;
-                    
+
                     case SpecialType.System_Double:
                         schemaType = "number";
                         format = "float";
                         break;
-                    
+
                     case SpecialType.System_DateTime:
                         schemaType = "string";
                         format = "date-time";
                         break;
-                    
+
                     case SpecialType.System_Boolean:
                         schemaType = "boolean";
                         break;
-                    
+
                     case SpecialType.None:
                         switch (typeSymbol.Name)
                         {
@@ -98,25 +98,25 @@ public static class ToModels
                                 schemaType = "string";
                                 format = "date";
                                 break;
-                            
+
                             default:
                                 throw new NotImplementedException($"{typeSymbol.Name} is not implemented.");
                         }
                         break;
-                    
+
                     default:
                         throw new NotImplementedException($"{typeSymbol.SpecialType} is not implemented.");
                 }
                 break;
-            
+
             case TypeKind.Class:
                 switch (typeSymbol.SpecialType)
                 {
                     case SpecialType.System_String:
                         schemaType = "string";
                         break;
-                    
-                    
+
+
                     case SpecialType.None:
                         schemaType = "object";
                         properties = typeSymbol.GetMembers()
@@ -128,28 +128,28 @@ public static class ToModels
                                 isRequired: true))
                             .ToArray();
                         break;
-                    
+
                     default:
                         throw new NotImplementedException($"{typeSymbol.SpecialType} is not implemented.");
                 }
                 break;
-            
+
             case TypeKind.Interface when typeSymbol.MetadataName == "IReadOnlyCollection`1":
                 schemaType = "array";
                 arrayItem = (typeSymbol as INamedTypeSymbol)?.TypeArguments
                     .Select(static y => ToParameterData(y))
                     .FirstOrDefault();
                 break;
-            
+
             case TypeKind.Array:
                 schemaType = "array";
                 arrayItem = ToParameterData((typeSymbol as IArrayTypeSymbol)?.ElementType!);
                 break;
-            
+
             default:
                 throw new NotImplementedException($"{typeSymbol.TypeKind} is not implemented.");
         }
-        
+
         return new OpenApiSchema(
             Name: !string.IsNullOrWhiteSpace(name)
                 ? name!
@@ -173,7 +173,7 @@ public static class ToModels
             IsNullable: IsNullable(typeSymbol),
             IsRequired: isRequired);
     }
-    
+
     private static bool IsNullable(ITypeSymbol typeSymbol)
     {
         if (typeSymbol.TypeKind == TypeKind.Enum)
@@ -191,14 +191,14 @@ public static class ToModels
             _ => true,
         };
     }
-    
+
     private static string GetDefaultValue(ITypeSymbol typeSymbol)
     {
         switch (typeSymbol.SpecialType)
         {
             case SpecialType.System_String:
                 return "string.Empty";
-                    
+
             default:
                 return string.Empty;
         }

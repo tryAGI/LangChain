@@ -81,7 +81,7 @@ public partial class OpenAiChatModel(
             case MessageRole.FunctionResult:
                 var nameAndId = message.FunctionName?.Split(':') ??
                     throw new ArgumentException("Invalid functionCall name and id string");
-                
+
                 return new ChatCompletionRequestToolMessage
                 {
                     Role = ChatCompletionRequestToolMessageRole.Tool,
@@ -116,7 +116,7 @@ public partial class OpenAiChatModel(
 
             return messages;
         }
-        
+
         return [new Message(
             Content: message.Content ?? string.Empty,
             Role: role)];
@@ -192,7 +192,7 @@ public partial class OpenAiChatModel(
             })
             .ToArray();
         tools = tools.Length > 0 ? tools : null;
-        
+
         var chatRequest = new CreateChatCompletionRequest
         {
             Model = Id,
@@ -314,7 +314,7 @@ public partial class OpenAiChatModel(
         }
     }
 
-    
+
 
     public Task<ChatResponse> GenerateAsync(
         ChatRequest request,
