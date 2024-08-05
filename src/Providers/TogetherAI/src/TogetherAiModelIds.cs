@@ -40,6 +40,17 @@ public enum TogetherAiModelIds
     UpstageSolarInstructV111B,
 
     /// <summary>
+    /// Name: Meta Llama 3 70B Reference <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.9/MTok <br/>
+    /// Completion Cost: $0.9/MTok <br/>
+    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
+    /// </summary>
+    MetaLlama370BReference,
+
+    /// <summary>
     /// Name: OpenHermes-2-Mistral (7B) <br/>
     /// Organization: teknium <br/>
     /// Context Length: 8192 <br/>
@@ -315,6 +326,17 @@ public enum TogetherAiModelIds
     Llama38BChatHfInt4,
 
     /// <summary>
+    /// Name: Meta Llama 3.1 405B Instruct Turbo <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 4096 <br/>
+    /// Prompt Cost: $5/MTok <br/>
+    /// Completion Cost: $5/MTok <br/>
+    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo</a>
+    /// </summary>
+    MetaLlama31405BInstructTurbo,
+
+    /// <summary>
     /// Name: OpenHermes-2.5-Mistral (7B) <br/>
     /// Organization: teknium <br/>
     /// Context Length: 8192 <br/>
@@ -346,6 +368,28 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/WizardLM/WizardCoder-Python-34B-V1.0">https://huggingface.co/WizardLM/WizardCoder-Python-34B-V1.0</a>
     /// </summary>
     WizardcoderPythonV1034B,
+
+    /// <summary>
+    /// Name: Meta Llama 3.1 70B Instruct Turbo <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 131072 <br/>
+    /// Prompt Cost: $0.88/MTok <br/>
+    /// Completion Cost: $0.88/MTok <br/>
+    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo</a>
+    /// </summary>
+    MetaLlama3170BInstructTurbo,
+
+    /// <summary>
+    /// Name: Meta Llama 3.1 8B Instruct Turbo <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 131072 <br/>
+    /// Prompt Cost: $0.18/MTok <br/>
+    /// Completion Cost: $0.18/MTok <br/>
+    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo</a>
+    /// </summary>
+    MetaLlama318BInstructTurbo,
 
     /// <summary>
     /// Name: Nous Hermes 2 - Mistral DPO (7B) <br/>
@@ -447,17 +491,6 @@ public enum TogetherAiModelIds
     MythomaxL213B,
 
     /// <summary>
-    /// Name: Meta Llama 3 70B Reference <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 8192 <br/>
-    /// Prompt Cost: $0.9/MTok <br/>
-    /// Completion Cost: $0.9/MTok <br/>
-    /// Description: Llama 3 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Llama-3-70b-chat-hf">https://huggingface.co/meta-llama/Llama-3-70b-chat-hf</a>
-    /// </summary>
-    MetaLlama370BReference,
-
-    /// <summary>
     /// Name: Mistral (7B) Instruct <br/>
     /// Organization: mistralai <br/>
     /// Context Length: 4096 <br/>
@@ -478,17 +511,6 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2">https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2</a>
     /// </summary>
     Mistral7BInstructV02,
-
-    /// <summary>
-    /// Name: Meta Llama 3.1 8B Instruct Turbo <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 131072 <br/>
-    /// Prompt Cost: $0.18/MTok <br/>
-    /// Completion Cost: $0.18/MTok <br/>
-    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo</a>
-    /// </summary>
-    MetaLlama318BInstructTurbo,
 
     /// <summary>
     /// Name: OpenOrca Mistral (7B) 8K <br/>
@@ -522,28 +544,6 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/Qwen/Qwen1.5-32B-Chat">https://huggingface.co/Qwen/Qwen1.5-32B-Chat</a>
     /// </summary>
     Qwen15Chat32B,
-
-    /// <summary>
-    /// Name: Meta Llama 3.1 405B Instruct Turbo <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 4096 <br/>
-    /// Prompt Cost: $5/MTok <br/>
-    /// Completion Cost: $5/MTok <br/>
-    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo</a>
-    /// </summary>
-    MetaLlama31405BInstructTurbo,
-
-    /// <summary>
-    /// Name: Meta Llama 3.1 70B Instruct Turbo <br/>
-    /// Organization: Meta <br/>
-    /// Context Length: 131072 <br/>
-    /// Prompt Cost: $0.88/MTok <br/>
-    /// Completion Cost: $0.88/MTok <br/>
-    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo">https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo</a>
-    /// </summary>
-    MetaLlama3170BInstructTurbo,
 
     /// <summary>
     /// Name: Qwen 2 Instruct (72B) <br/>
@@ -887,17 +887,6 @@ public enum TogetherAiModelIds
     Qwen27B,
 
     /// <summary>
-    /// Name: Qwen 2 (1.5B) <br/>
-    /// Organization: Qwen <br/>
-    /// Context Length: 32768 <br/>
-    /// Prompt Cost: $0/MTok <br/>
-    /// Completion Cost: $0/MTok <br/>
-    /// Description: Qwen2 is the new series of Qwen large language models. For Qwen2, we release a number of base language models and instruction-tuned language models ranging from 0.5 to 72 billion parameters, including a Mixture-of-Experts model. <br/>
-    /// HuggingFace Url: <a href="https://huggingface.co/Qwen/Qwen2-1.5B">https://huggingface.co/Qwen/Qwen2-1.5B</a>
-    /// </summary>
-    Qwen215B,
-
-    /// <summary>
     /// Name: Upstage SOLAR Instruct v1 (11B)-Int4 <br/>
     /// Organization: upstage <br/>
     /// Context Length: 4096 <br/>
@@ -1006,5 +995,16 @@ public enum TogetherAiModelIds
     /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct-Reference">https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct-Reference</a>
     /// </summary>
     MetaLlama3170BInstruct,
+
+    /// <summary>
+    /// Name: Meta Llama 3.1 70B <br/>
+    /// Organization: Meta <br/>
+    /// Context Length: 8192 <br/>
+    /// Prompt Cost: $0.9/MTok <br/>
+    /// Completion Cost: $0.9/MTok <br/>
+    /// Description: Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety. <br/>
+    /// HuggingFace Url: <a href="https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Reference">https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Reference</a>
+    /// </summary>
+    MetaLlama3170B,
 
 }
