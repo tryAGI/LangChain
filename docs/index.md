@@ -33,7 +33,7 @@ Also see [examples](./examples) for example usage or [tests](./src/tests/LangCha
 var provider = new OpenAiProvider(
     Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
     throw new InconclusiveException("OPENAI_API_KEY is not set"));
-var llm = new Gpt4OmniMiniModel(provider);
+var llm = new OpenAiLatestFastChatModel(provider);
 var embeddingModel = new TextEmbeddingV3SmallModel(provider);
 
 // Create vector database from Harry Potter book pdf

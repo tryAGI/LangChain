@@ -21,7 +21,7 @@ public partial class WikiTests
         var apiKey =
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InvalidOperationException("OpenAI API key is not set");
-        var llm = new Gpt4OmniMiniModel(apiKey).UseConsoleForDebug();
+        var llm = new OpenAiLatestFastChatModel(apiKey).UseConsoleForDebug();
 
         // create a google search 
         var searchApiKey =

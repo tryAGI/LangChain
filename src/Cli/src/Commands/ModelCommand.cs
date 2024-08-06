@@ -1,5 +1,4 @@
 using System.CommandLine;
-using OpenAI;
 
 namespace LangChain.Cli.Commands;
 
@@ -9,8 +8,8 @@ public class ModelCommand : Command
     {
         var model = new Argument<string>(
             name: "Model",
-            getDefaultValue: () => CreateChatCompletionRequestModel.Gpt35Turbo.ToValueString(),
-            description: "Model to use for commands");
+            getDefaultValue: () => "latest-fast",
+            description: "Model to use for commands. You can use latest-smart or latest-fast or any specific model. Default is latest-fast.");
         AddArgument(model);
 
         this.SetHandler(HandleAsync, model);

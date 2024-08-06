@@ -5,7 +5,7 @@ using LangChain.Schema;
 
 const string apiKey = "API-KEY";
 using var httpClient = new HttpClient();
-var llm = new Gpt4OmniMiniModel(apiKey);
+var llm = new OpenAiLatestFastChatModel(apiKey);
 
 var template = "What is a good name for a company that makes {product}?";
 var prompt = new PromptTemplate(new PromptTemplateInput(template, new List<string>(1) { "product" }));
@@ -27,7 +27,7 @@ var result2 = await chain.RunAsync("colourful socks");
 Console.WriteLine(result2);
 
 // We can also construct an LLMChain from a ChatPromptTemplate and a chat model.
-var chat = new Gpt4OmniMiniModel(apiKey);
+var chat = new OpenAiLatestFastChatModel(apiKey);
 
 var chatPrompt = ChatPromptTemplate.FromPromptMessages(new List<BaseMessagePromptTemplate>(2)
 {

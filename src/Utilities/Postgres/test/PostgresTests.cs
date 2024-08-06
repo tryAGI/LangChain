@@ -221,7 +221,7 @@ id	name	age
     public async Task SqlDatabaseChain_Run_Ok()
     {
         var key = Environment.GetEnvironmentVariable("OPENAI_KEY") ?? throw new ArgumentException("OPENAI_KEY");
-        var llm = new Gpt4OmniMiniModel(key)
+        var llm = new OpenAiLatestFastChatModel(key)
         {
             Settings = new OpenAiChatSettings
             {

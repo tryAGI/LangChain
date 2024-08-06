@@ -12,7 +12,7 @@ internal class Program
             throw new InvalidOperationException("OPENAI_API_KEY environment variable is not found.");
 
         // Use a common, general-purpose LLM
-        var model = new Gpt4OmniMiniModel(apiKey);
+        var model = new OpenAiLatestFastChatModel(apiKey);
 
         // Create a simple prompt template for the conversation to help the AI
         var template = @"
