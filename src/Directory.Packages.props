@@ -7,7 +7,7 @@
     <PackageVersion Include="Anthropic" Version="1.0.0" />
     <PackageVersion Include="Anyscale" Version="1.0.2" />
     <PackageVersion Include="Aspose.PDF" Version="24.7.0" />
-    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.400.3" />
+    <PackageVersion Include="AWSSDK.BedrockAgentRuntime" Version="3.7.401" />
     <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.401.3" />
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.3" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.305.8" />
@@ -35,9 +35,9 @@
     <PackageVersion Include="HtmlAgilityPack" Version="1.11.62" />
     <PackageVersion Include="HuggingFace" Version="0.2.4" />
     <PackageVersion Include="IsExternalInit" Version="1.0.3" />
-    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.1-dev.77" />
-    <PackageVersion Include="LangChain.Databases.InMemory" Version="0.15.1-dev.77" />
-    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.1-dev.77" />
+    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.2" />
+    <PackageVersion Include="LangChain.Databases.InMemory" Version="0.15.2" />
+    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.2" />
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.1-dev.78" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.1-dev.78" />
     <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.15.1-dev.78" />
@@ -52,7 +52,7 @@
     <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.15.1-dev.78" />
     <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.15.1-dev.78" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
-    <PackageVersion Include="LLamaSharp" Version="0.14.0" />
+    <PackageVersion Include="LLamaSharp" Version="0.15.0" />
     <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.15.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.10.0" />
@@ -108,7 +108,7 @@
     <PackageVersion Include="Testcontainers.PostgreSql" Version="3.9.0" />
     <PackageVersion Include="Testcontainers.Redis" Version="3.9.0" />
     <PackageVersion Include="Tiktoken" Version="2.0.3" />
-    <PackageVersion Include="tryAGI.OpenAI" Version="3.2.1" />
+    <PackageVersion Include="tryAGI.OpenAI" Version="3.3.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
