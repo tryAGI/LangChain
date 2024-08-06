@@ -37,3 +37,5 @@ LangChain.Providers.OpenApiSchema.Required.get -> System.Collections.Generic.IRe
 LangChain.Providers.OpenApiSchema.Required.set -> void
 LangChain.Providers.OpenApiSchema.Type.get -> string!
 LangChain.Providers.OpenApiSchema.Type.set -> void
+LangChain.Providers.SpeechToTextRequest.Filename.get -> string?
+LangChain.Providers.SpeechToTextRequest.Filename.set -> void

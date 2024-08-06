@@ -41,6 +41,7 @@ public class OpenAiSpeechToTextModel(
 
             var response = await provider.Api.Audio.CreateTranscriptionAsync(
                 file: memoryStream.ToArray(),
+                filename: request.Filename ?? "file.wav",
                 //audioName: usedSettings.AudioName!,
                 model: usedSettings.Model ?? CreateTranscriptionRequestModel.Whisper1,
                 prompt: usedSettings.Prompt!,

@@ -7,6 +7,7 @@ namespace LangChain.Providers;
 public class SpeechToTextRequest : IDisposable
 {
     public required Stream Stream { get; init; }
+    public string? Filename { get; set; }
 
     public bool OwnsStream { get; init; } = true;
 
