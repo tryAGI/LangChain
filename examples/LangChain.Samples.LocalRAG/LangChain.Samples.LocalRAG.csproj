@@ -8,10 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
         <ProjectReference Include="..\..\src\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
         <ProjectReference Include="..\..\src\Meta\src\LangChain.csproj" />
         <ProjectReference Include="..\..\src\Providers\Ollama\src\LangChain.Providers.Ollama.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="LangChain.Databases.Sqlite" Version="0.15.1-dev.77" />
     </ItemGroup>
 
 </Project>

@@ -35,6 +35,9 @@
     <PackageVersion Include="HtmlAgilityPack" Version="1.11.62" />
     <PackageVersion Include="HuggingFace" Version="0.2.4" />
     <PackageVersion Include="IsExternalInit" Version="1.0.3" />
+    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.1-dev.77" />
+    <PackageVersion Include="LangChain.Databases.InMemory" Version="0.15.1-dev.77" />
+    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.1-dev.77" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
     <PackageVersion Include="LLamaSharp" Version="0.14.0" />
     <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.15.0" />

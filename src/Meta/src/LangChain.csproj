@@ -10,8 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="LangChain.Databases.InMemory" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\..\Core\src\LangChain.Core.csproj" />
-        <ProjectReference Include="..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
         <ProjectReference Include="..\..\Extensions\DependencyInjection\src\LangChain.Extensions.DependencyInjection.csproj" />
         <ProjectReference Include="..\..\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj" />
         <ProjectReference Include="..\..\Providers\Anyscale\src\LangChain.Providers.Anyscale.csproj" />

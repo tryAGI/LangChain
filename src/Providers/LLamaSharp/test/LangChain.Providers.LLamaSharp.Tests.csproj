@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LangChain.Databases.InMemory" />
+    <PackageReference Include="LangChain.Databases.Sqlite" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
-    <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
     <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
     <ProjectReference Include="..\..\..\Extensions\Docker\src\LangChain.Extensions.Docker.csproj" />
     <ProjectReference Include="..\..\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />

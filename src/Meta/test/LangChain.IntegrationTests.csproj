@@ -6,7 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+        <PackageReference Include="LangChain.Databases.Sqlite" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\..\Providers\Abstractions\generators\LangChain.Providers.Generators\LangChain.Providers.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\..\Providers\Amazon.Bedrock\src\LangChain.Providers.Amazon.Bedrock.csproj" />
         <ProjectReference Include="..\..\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj" />

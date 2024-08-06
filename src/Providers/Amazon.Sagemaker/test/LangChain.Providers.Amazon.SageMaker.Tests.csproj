@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
-    <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
+    <PackageReference Include="LangChain.Databases.InMemory" />
+    <PackageReference Include="LangChain.Databases.Sqlite" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
     <ProjectReference Include="..\..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
     <ProjectReference Include="..\src\LangChain.Providers.Amazon.SageMaker.csproj" />

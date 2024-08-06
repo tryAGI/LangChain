@@ -6,14 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LangChain.Databases.InMemory" />
+    <PackageReference Include="LangChain.Databases.Sqlite" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="System.Memory.Data" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Databases\Sqlite\src\LangChain.Databases.Sqlite.csproj" />
-    <ProjectReference Include="..\..\..\Databases\InMemory\src\LangChain.Databases.InMemory.csproj" />
     <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
     <ProjectReference Include="..\..\..\DocumentLoaders\Pdf\src\LangChain.DocumentLoaders.Pdf.csproj" />
     <ProjectReference Include="..\..\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
