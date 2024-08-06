@@ -13,3 +13,5 @@ updates:
       all:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: Microsoft.CodeAnalysis.CSharp
