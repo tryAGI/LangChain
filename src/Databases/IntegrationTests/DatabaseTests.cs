@@ -65,7 +65,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.DuckDb)]
     [TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
+    [TestCase(SupportedDatabase.Milvus)]
     public async Task AddDocuments_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);

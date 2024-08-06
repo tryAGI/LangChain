@@ -60,6 +60,7 @@
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.5.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
+    <PackageVersion Include="Testcontainers.Milvus" Version="3.9.0" />
     <PackageVersion Include="Verify.MSTest" Version="26.1.6" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.3.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />

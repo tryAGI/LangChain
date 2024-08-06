@@ -30,6 +30,7 @@
     <ItemGroup>
       <PackageReference Include="Testcontainers" />
       <PackageReference Include="Testcontainers.Elasticsearch" />
+      <PackageReference Include="Testcontainers.Milvus" />
       <PackageReference Include="Testcontainers.PostgreSql" />
       <PackageReference Include="Testcontainers.MongoDb" />
       <PackageReference Include="Testcontainers.Redis" />
