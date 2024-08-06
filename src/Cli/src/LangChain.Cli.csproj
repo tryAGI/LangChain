@@ -16,12 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LangChain.Providers.OpenRouter" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Meta\src\LangChain.csproj" />
-    <ProjectReference Include="..\..\Providers\OpenRouter\src\LangChain.Providers.OpenRouter.csproj" />
   </ItemGroup>
 
 </Project>

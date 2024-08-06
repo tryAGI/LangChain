@@ -6,11 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="LangChain.Providers.OpenAI" />
         <PackageReference Include="Npgsql" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Providers\OpenAI\src\LangChain.Providers.OpenAI.csproj" />
       <ProjectReference Include="..\src\LangChain.Utilities.Postgres.csproj" />
     </ItemGroup>
 

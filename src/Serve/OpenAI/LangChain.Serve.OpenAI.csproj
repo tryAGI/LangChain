@@ -17,10 +17,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
+	  <PackageReference Include="LangChain.Providers.Abstractions" />
 	  <PackageReference Include="tryAGI.OpenAI" />
 	</ItemGroup>
 	

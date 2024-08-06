@@ -9,13 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
     <ProjectReference Include="..\..\DocumentLoaders\Abstractions\src\LangChain.DocumentLoaders.Abstractions.csproj" />
     <ProjectReference Include="..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <TrimmerRootAssembly Include="LangChain.Providers.Abstractions" />
     <TrimmerRootAssembly Include="LangChain.DocumentLoaders.Abstractions" />
     <TrimmerRootAssembly Include="LangChain.Splitters.Abstractions" />
   </ItemGroup>

@@ -27,10 +27,10 @@
 
   <ItemGroup>
     <PackageReference Include="LangChain.Databases.Abstractions" />
+    <PackageReference Include="LangChain.Providers.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Providers\Abstractions\src\LangChain.Providers.Abstractions.csproj" />
     <ProjectReference Include="..\..\DocumentLoaders\Abstractions\src\LangChain.DocumentLoaders.Abstractions.csproj" />
     <ProjectReference Include="..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
     <ProjectReference Include="..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />

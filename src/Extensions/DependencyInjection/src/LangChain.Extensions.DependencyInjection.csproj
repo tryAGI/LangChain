@@ -15,16 +15,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="LangChain.Providers.Anthropic" />
+      <PackageReference Include="LangChain.Providers.Anyscale" />
+      <PackageReference Include="LangChain.Providers.HuggingFace" />
+      <PackageReference Include="LangChain.Providers.OpenAI" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
       <PackageReference Include="Microsoft.Extensions.Http" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj" />
-      <ProjectReference Include="..\..\..\Providers\Anyscale\src\LangChain.Providers.Anyscale.csproj" />
-      <ProjectReference Include="..\..\..\Providers\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
-      <ProjectReference Include="..\..\..\Providers\OpenAI\src\LangChain.Providers.OpenAI.csproj" />
     </ItemGroup>
 
 </Project>

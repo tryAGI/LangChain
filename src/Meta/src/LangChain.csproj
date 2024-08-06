@@ -11,17 +11,18 @@
 
     <ItemGroup>
         <PackageReference Include="LangChain.Databases.InMemory" />
+        <PackageReference Include="LangChain.Providers.Anthropic" />
+        <PackageReference Include="LangChain.Providers.Azure" />
+        <PackageReference Include="LangChain.Providers.DeepSeek" />
+        <PackageReference Include="LangChain.Providers.Google" />
+        <PackageReference Include="LangChain.Providers.HuggingFace" />
+        <PackageReference Include="LangChain.Providers.OpenAI" />
+        <PackageReference Include="LangChain.Providers.Ollama" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\Core\src\LangChain.Core.csproj" />
         <ProjectReference Include="..\..\Extensions\DependencyInjection\src\LangChain.Extensions.DependencyInjection.csproj" />
-        <ProjectReference Include="..\..\Providers\Anthropic\src\LangChain.Providers.Anthropic.csproj" />
-        <ProjectReference Include="..\..\Providers\Anyscale\src\LangChain.Providers.Anyscale.csproj" />
-        <ProjectReference Include="..\..\Providers\HuggingFace\src\LangChain.Providers.HuggingFace.csproj" />
-        <ProjectReference Include="..\..\Providers\OpenAI\src\LangChain.Providers.OpenAI.csproj" />
-        <ProjectReference Include="..\..\Providers\Azure\src\LangChain.Providers.Azure.csproj" />
-        <ProjectReference Include="..\..\Providers\Google\src\LangChain.Providers.Google.csproj" />
     </ItemGroup>
 
 </Project>

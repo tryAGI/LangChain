@@ -38,6 +38,19 @@
     <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.1-dev.77" />
     <PackageVersion Include="LangChain.Databases.InMemory" Version="0.15.1-dev.77" />
     <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.1-dev.77" />
+    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Anyscale" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Automatic1111" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Azure" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.DeepSeek" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Google" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.HuggingFace" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.LLamaSharp" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.Ollama" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.15.1-dev.78" />
+    <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.15.1-dev.78" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
     <PackageVersion Include="LLamaSharp" Version="0.14.0" />
     <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.15.0" />
