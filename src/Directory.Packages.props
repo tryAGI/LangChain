@@ -71,7 +71,7 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.16.2-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.15.1-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.16.2-alpha" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.16.2" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.17.0" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.5.1" />
