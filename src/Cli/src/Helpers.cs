@@ -81,7 +81,7 @@ public static class Helpers
                             modelId = ChatClient.LatestSmartModel.ToValueString();
                             break;
                     }
-                    
+
                     model = new OpenAiChatModel(provider, id: modelId);
                     break;
 
@@ -90,7 +90,7 @@ public static class Helpers
                 {
                     var provider = new OpenRouterProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt")).ConfigureAwait(false));
                     var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt")).ConfigureAwait(false);
-                    model = new OpenRouterModel(provider, id:modelId);
+                    model = new OpenRouterModel(provider, id: modelId);
                     break;
                 }
             default:
