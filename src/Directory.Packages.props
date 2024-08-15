@@ -30,7 +30,7 @@
     <PackageVersion Include="LangChain.Providers.Ollama" Version="0.15.1-dev.78" />
     <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.15.1-dev.78" />
     <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.15.1-dev.78" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.10.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Moq" Version="4.20.70" />
