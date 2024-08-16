@@ -18,6 +18,7 @@
   <ItemGroup>
     <PackageReference Include="LangChain.Providers.OpenRouter" />
     <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 
   <ItemGroup>
