@@ -17,7 +17,9 @@
 
     <ItemGroup>
       <PackageReference Include="Aspose.PDF" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
       <PackageReference Include="PdfPig" />
+      <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
     <ItemGroup>

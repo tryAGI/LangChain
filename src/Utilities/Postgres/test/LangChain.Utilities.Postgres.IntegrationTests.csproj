@@ -7,7 +7,9 @@
 
     <ItemGroup>
         <PackageReference Include="LangChain.Providers.OpenAI" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Npgsql" />
+        <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
     <ItemGroup>
