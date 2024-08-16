@@ -10,7 +10,7 @@ public class ServeController(
     {
         return new ModelsList
         {
-            Models = options.ListModels().Select(static x => new Model
+            Models = options.ListModels().Select(static x => new Model12
             {
                 Object = ModelObject.Model,
                 Created = 0,
@@ -24,7 +24,7 @@ public class ServeController(
     {
         return new ModelsList
         {
-            Models = options.ListModels().Select(static x => new Model
+            Models = options.ListModels().Select(static x => new Model12
             {
                 Object = ModelObject.Model,
                 Created = 0,
@@ -39,5 +39,5 @@ public sealed class ModelsList
 {
     [JsonInclude]
     [JsonPropertyName("data")]
-    public IReadOnlyCollection<Model> Models { get; set; } = [];
+    public IReadOnlyCollection<Model12> Models { get; set; } = [];
 }

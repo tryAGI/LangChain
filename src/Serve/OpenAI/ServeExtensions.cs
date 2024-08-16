@@ -31,13 +31,13 @@ public static class ServeExtensions
         app.MapGet("/v1/models", () => Results.Ok(controller.ListModels()));
         app.MapPost("/v1/chat/completions", async (CreateChatCompletionRequest request) =>
         {
-            var llm = serveMiddlewareOptions.GetModel(request.Model.Value1 ?? request.Model.Value2.ToValueString());
+            var llm = serveMiddlewareOptions.GetModel(request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty);
 
             var response = await llm.GenerateAsync(new ChatRequest
             {
                 Messages = request.Messages.Select(x => new Message
                 {
-                    Content = x.User?.Content.Value1 ?? x.Assistant?.Content ?? x.System?.Content ?? string.Empty,
+                    Content = x.User?.Content.Value1 ?? x.Assistant?.Content?.Value1 ?? x.System?.Content.Value1 ?? string.Empty,
                     Role = x.Object switch
                     {
                         ChatCompletionRequestAssistantMessage => MessageRole.Ai,
@@ -52,11 +52,11 @@ public static class ServeExtensions
             {
                 Id = Guid.NewGuid().ToString(),
                 Created = 0,
-                Model = request.Model.Value1 ?? request.Model.Value2.ToValueString(),
+                Model = request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty,
                 Object = CreateChatCompletionResponseObject.ChatCompletion,
                 Choices =
                 [
-                    new CreateChatCompletionResponseChoices
+                    new CreateChatCompletionResponseChoice
                     {
                         Message = new ChatCompletionResponseMessage
                         {
@@ -64,11 +64,12 @@ public static class ServeExtensions
                             Role = ChatCompletionResponseMessageRole.Assistant,
                         },
                         Index = 0,
-                        Logprobs = new CreateChatCompletionResponseChoicesLogprobs
+                        Logprobs = new CreateChatCompletionResponseChoiceLogprobs
                         {
                             Content = [],
+                            Refusal = [],
                         },
-                        FinishReason = CreateChatCompletionResponseChoicesFinishReason.Stop,
+                        FinishReason = CreateChatCompletionResponseChoiceFinishReason.Stop,
                     }
                 ],
             });
