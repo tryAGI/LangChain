@@ -25,14 +25,14 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
 
     var newDir = Path.Combine(solutionDirectory, "docs", "samples");
     Directory.CreateDirectory(newDir);
-    
+
     var start = code.IndexOf("\n    {", StringComparison.Ordinal);
     var end = code.IndexOf("\n    }", StringComparison.Ordinal);
     code = code.Substring(start + 4, end - start + 4);
-    
+
     var lines = code.Split('\n')[1..^2];
     code = string.Join('\n', lines.Select(x => x.Length > 8 ? x[8..] : string.Empty));
-    
+
     var newPath = Path.Combine(newDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
     await File.WriteAllTextAsync(newPath, $@"```csharp
 {code}
