@@ -19,6 +19,7 @@
     <PackageReference Include="LangChain.Providers.OpenRouter" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="tryAGI.OpenAI" />
   </ItemGroup>
 
   <ItemGroup>
