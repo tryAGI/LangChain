@@ -19,6 +19,7 @@
         <PackageReference Include="LangChain.Providers.OpenAI" />
         <PackageReference Include="LangChain.Providers.Ollama" />
         <PackageReference Include="System.Text.Json" />
+        <PackageReference Include="tryAGI.OpenAI" />
     </ItemGroup>
 
     <ItemGroup>
