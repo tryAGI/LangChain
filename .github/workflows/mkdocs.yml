@@ -7,6 +7,8 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - 'examples/**'
+      - 'src/Helpers/GenerateDocs/**'
+      - '.github/workflows/mkdocs.yml'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
