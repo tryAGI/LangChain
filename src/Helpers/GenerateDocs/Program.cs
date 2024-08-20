@@ -4,6 +4,8 @@ var mkDocsPath = Path.Combine(solutionDirectory, "mkdocs.yml");
 
 var samplesDocDir = Path.Combine(solutionDirectory, "docs", "samples");
 Directory.CreateDirectory(samplesDocDir);
+var wikiDocDir = Path.Combine(solutionDirectory, "docs", "wiki");
+Directory.CreateDirectory(wikiDocDir);
 
 File.Copy(
     Path.Combine(solutionDirectory, "README.md"),
@@ -99,15 +101,21 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
 {completeCode.Trim()}
 ```" : string.Empty;
 
-    var newPath = Path.Combine(samplesDocDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
+    var newPath = Path.Combine(wikiDocDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
     await File.WriteAllTextAsync(newPath, markdown);
 }
 
 var mkDocs = await File.ReadAllTextAsync(mkDocsPath);
+
 var newMkDocs = mkDocs.Replace(
     "# EXAMPLES #",
-    $"- Examples:{string.Concat(Directory.EnumerateFiles(Path.Combine(solutionDirectory, "docs", "samples"), "*.md")
+    $"- Examples:{string.Concat(Directory.EnumerateFiles(samplesDocDir, "*.md")
     .Select(x => $@"
-  - {Path.GetFileNameWithoutExtension(x)}: samples/{Path.GetFileNameWithoutExtension(x)}.md"))}");
+  - {Path.GetFileNameWithoutExtension(x)}: samples/{Path.GetFileNameWithoutExtension(x)}.md"))}").Replace(
+    "# WIKI #",
+    $"- Wiki:{string.Concat(Directory.EnumerateFiles(wikiDocDir, "*.md")
+        .Select(x => $@"
+  - {Path.GetFileNameWithoutExtension(x)}: wiki/{Path.GetFileNameWithoutExtension(x)}.md"))}");
+
 await File.WriteAllTextAsync(mkDocsPath, newMkDocs);
 
