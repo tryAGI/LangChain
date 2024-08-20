@@ -5,6 +5,15 @@ var mkDocsPath = Path.Combine(solutionDirectory, "mkdocs.yml");
 var samplesDocDir = Path.Combine(solutionDirectory, "docs", "samples");
 Directory.CreateDirectory(samplesDocDir);
 
+File.Copy(
+    Path.Combine(solutionDirectory, "README.md"),
+    Path.Combine(solutionDirectory, "docs", "index.md"),
+    overwrite: true);
+File.Copy(
+    Path.Combine(solutionDirectory, "src", "Cli", "README.md"),
+    Path.Combine(solutionDirectory, "docs", "cli.md"),
+    overwrite: true);
+
 Console.WriteLine($"Generating samples from {sampleDirectory}...");
 foreach (var path in Directory.EnumerateFiles(sampleDirectory, "Program.cs", SearchOption.AllDirectories))
 {

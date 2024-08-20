@@ -1,6 +1,7 @@
 site_name: LangChain .NET Documentation
 nav:
 - Overview: index.md
+- CLI: cli.md
 # EXAMPLES #
 
 #  - Quick Start: QuickStart.md
