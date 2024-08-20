@@ -2,16 +2,16 @@
 var sampleDirectory = Path.Combine(solutionDirectory, "examples");
 var mkDocsPath = Path.Combine(solutionDirectory, "mkdocs.yml");
 
+var samplesDocDir = Path.Combine(solutionDirectory, "docs", "samples");
+Directory.CreateDirectory(samplesDocDir);
+
 Console.WriteLine($"Generating samples from {sampleDirectory}...");
 foreach (var path in Directory.EnumerateFiles(sampleDirectory, "Program.cs", SearchOption.AllDirectories))
 {
     var folder = Path.GetFileName(Path.GetDirectoryName(path) ?? string.Empty)?.Replace("LangChain.Samples.", string.Empty);
     var code = await File.ReadAllTextAsync(path);
 
-    var newDir = Path.Combine(solutionDirectory, "docs", "samples");
-    Directory.CreateDirectory(newDir);
-
-    var newPath = Path.Combine(newDir, $"{folder}.md");
+    var newPath = Path.Combine(samplesDocDir, $"{folder}.md");
     await File.WriteAllTextAsync(newPath, $@"```csharp
 {code}
 ```");
@@ -23,20 +23,73 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
 {
     var code = await File.ReadAllTextAsync(path);
 
-    var newDir = Path.Combine(solutionDirectory, "docs", "samples");
-    Directory.CreateDirectory(newDir);
+    var lines = code.Split('\n').ToList();
+    if (lines.All(x => string.IsNullOrWhiteSpace(x) || x.StartsWith("//")))
+    {
+        continue;
+    }
+    
+    var usings = string.Join('\n', lines
+        .Where(x => x.StartsWith("using"))
+        .ToArray());
+    
+    var start = lines.IndexOf("    {");
+    var end = lines.IndexOf("    }");
+    lines = lines
+        .GetRange(start + 1, end - start - 1)
+        .Where(x => !x.Contains(".Should()"))
+        .Select(x => x.StartsWith("        ") ? x[8..] : x)
+        .ToList();
+    
+    const string commentPrefix = "//// ";
+    var markdown = string.Empty;
+    var completeCode = string.Join('\n', lines.Where(x => !x.StartsWith(commentPrefix)));
+    bool isFirstCode = true;
+    for (var i = 0; i < lines.Count;)
+    {
+        var startGroup = i;
+        if (lines[i].StartsWith(commentPrefix))
+        {
+            while (i < lines.Count && lines[i].StartsWith(commentPrefix))
+            {
+                i++;
+            }
+            
+            var comment = string.Join('\n', lines
+                .GetRange(startGroup, i - startGroup)
+                .Select(x => x[commentPrefix.Length..]));
+            markdown += comment + '\n';
+        }
+        else
+        {
+            while (i < lines.Count && !lines[i].StartsWith(commentPrefix))
+            {
+                i++;
+            }
 
-    var start = code.IndexOf("\n    {", StringComparison.Ordinal);
-    var end = code.IndexOf("\n    }", StringComparison.Ordinal);
-    code = code.Substring(start + 4, end - start + 4);
+            markdown += "```csharp";
+            if (isFirstCode)
+            {
+                isFirstCode = false;
+                markdown += Environment.NewLine + usings + Environment.NewLine;
+            }
+            
+            markdown += $@"
+{string.Join('\n', lines
+    .GetRange(startGroup, i - startGroup)).Trim()}
+```" + '\n';
+        }
+    }
+    
+    markdown += @$"
+# Complete code
 
-    var lines = code.Split('\n')[1..^2];
-    code = string.Join('\n', lines.Select(x => x.Length > 8 ? x[8..] : string.Empty));
+```csharp
+{completeCode.Trim()}
+```";
 
-    var newPath = Path.Combine(newDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
-    await File.WriteAllTextAsync(newPath, $@"```csharp
-{code}
-```");
+    var newPath = Path.Combine(samplesDocDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
+    await File.WriteAllTextAsync(newPath, markdown);
 }
 
 var mkDocs = await File.ReadAllTextAsync(mkDocsPath);
