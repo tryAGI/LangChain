@@ -53,7 +53,8 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
     const string commentPrefix = "//// ";
     var markdown = string.Empty;
     var completeCode = string.Join('\n', lines.Where(x => !x.StartsWith(commentPrefix)));
-    bool isFirstCode = true;
+    var isFirstCode = true;
+    var anyComment = lines.Any(x => x.StartsWith(commentPrefix));
     for (var i = 0; i < lines.Count;)
     {
         var startGroup = i;
@@ -90,12 +91,13 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
         }
     }
     
-    markdown += @$"
+    markdown += anyComment ? @$"
 # Complete code
-
 ```csharp
+{usings}
+
 {completeCode.Trim()}
-```";
+```" : string.Empty;
 
     var newPath = Path.Combine(samplesDocDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
     await File.WriteAllTextAsync(newPath, markdown);
