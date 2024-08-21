@@ -1,4 +1,6 @@
-﻿using LangChain.Providers.OpenAI.Predefined;
+﻿using LangChain.Providers.OpenAI;
+using LangChain.Providers.OpenAI.Predefined;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -20,6 +22,17 @@ public partial class WikiTests
         Console.WriteLine(result);
         // Hello! How can I assist you today?
         
-        //// `inputKey` and `outputKey` here is more for understanding of what goes where. They have default values and can be omitted. Also there is classes like `Gpt35TurboModel` for simplicity.   
+        //// `inputKey` and `outputKey` here is more for understanding of what goes where. They have default values and can be omitted. Also there is classes like `Gpt35TurboModel` for simplicity.
+
+        //// ## Additional options
+        //// You can pass custom HttpClient/HttpClientHandler by using `OpenAiProvider` constructor overload.
+        var httpClientHandler = new HttpClientHandler();
+        using var httpClient = new HttpClient(httpClientHandler, disposeHandler: true);
+        using var api = new OpenAiApi(
+            httpClient,
+            baseUri: new Uri("https://api.openai.com/v1/") // default value, can be omitted
+            );
+        var provider = new OpenAiProvider(api);
+        var tunedModel = new OpenAiLatestFastChatModel(provider);
     }
 }
