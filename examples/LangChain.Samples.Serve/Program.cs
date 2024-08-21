@@ -20,7 +20,7 @@ var model = new OllamaChatModel(new OllamaProvider(options: new RequestOptions
 {
     Temperature = 0,
     Stop = ["User:"],
-}), "mistral:latest");
+}), "llama3.1");
 
 
 // 3. Optional. Add custom name generator

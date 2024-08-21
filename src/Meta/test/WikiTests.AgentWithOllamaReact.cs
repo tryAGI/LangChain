@@ -34,7 +34,7 @@ public partial class WikiTests
         //         Stop = new[] { "Observation", "[END]" }, // add injection word `Observation` and `[END]` to stop the model(just as additional safety feature)
         //         Temperature = 0
         //     });
-        // var llm = new OllamaChatModel(provider, id: "mistral:latest").UseConsoleForDebug();
+        // var llm = new OllamaChatModel(provider, id: "llama3.1").UseConsoleForDebug();
         var apiKey =
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InvalidOperationException("OPENAI_API_KEY key is not set");

@@ -93,6 +93,8 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
         }
     }
     
+    markdown = anyComment ? @"`Scroll till the end of the page if you just want code`  
+" + markdown : markdown;
     markdown += anyComment ? @$"
 # Complete code
 ```csharp
