@@ -30,7 +30,7 @@ public partial class Tests
 
         var textSplitter = new CharacterTextSplitter(separator: "\n\n", chunkSize: 1000, chunkOverlap: 200);
         var text = H.Resources.state_of_the_union_txt.AsString();
-        var metadatas = new List<IReadOnlyDictionary<string, object>>
+        var metadatas = new List<IDictionary<string, object>>
         {
             new Dictionary<string, object>{{"document", 1}},
             new Dictionary<string, object>{{"document", 2}},

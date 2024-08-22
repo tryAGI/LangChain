@@ -126,14 +126,14 @@ public static class VectorCollectionExtensions
 
         return item == null
             ? null
-            : new Document(item.Text, item.Metadata);
+            : new Document(item.Text, item.Metadata?.ToDictionary(x => x.Key, x => x.Value));
     }
 
     public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
         this IVectorCollection vectorCollection,
         IEmbeddingModel embeddingModel,
         IReadOnlyCollection<string> texts,
-        IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null,
+        IReadOnlyCollection<IDictionary<string, object>>? metadatas = null,
         EmbeddingSettings? embeddingSettings = default,
         CancellationToken cancellationToken = default)
     {
@@ -160,7 +160,7 @@ public static class VectorCollectionExtensions
             items: texts.Select((text, i) => new Vector
             {
                 Text = text,
-                Metadata = metadatas?.ElementAt(i),
+                Metadata = metadatas?.ElementAt(i).ToDictionary(x => x.Key, x => x.Value),
                 Embedding = embeddings[i],
             }).ToArray(),
             cancellationToken).ConfigureAwait(false);

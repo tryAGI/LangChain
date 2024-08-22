@@ -21,7 +21,7 @@ public static class TextSplitterExtensions
     public static IReadOnlyList<Document> CreateDocuments(
         this ITextSplitter splitter,
         IReadOnlyCollection<string> texts,
-        IReadOnlyCollection<IReadOnlyDictionary<string, object>>? metadatas = null)
+        IReadOnlyCollection<IDictionary<string, object>>? metadatas = null)
     {
         splitter = splitter ?? throw new ArgumentNullException(nameof(splitter));
         texts = texts ?? throw new ArgumentNullException(nameof(texts));
@@ -29,7 +29,7 @@ public static class TextSplitterExtensions
         var documents = new List<Document>();
 
         // if no metadata is provided, create a list of empty dictionaries
-        metadatas ??= Enumerable.Repeat<IReadOnlyDictionary<string, object>>(new Dictionary<string, object>(), texts.Count).ToList();
+        metadatas ??= Enumerable.Repeat<IDictionary<string, object>>(new Dictionary<string, object>(), texts.Count).ToList();
 
         if (texts.Count != metadatas.Count)
         {
