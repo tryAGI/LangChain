@@ -1,12 +1,9 @@
-﻿using LangChain.DocumentLoaders;
+﻿namespace LangChain.DocumentLoaders.IntegrationTests;
 
-namespace LangChain.DocumentLoaders.IntegrationTests;
-
-[TestFixture]
-public class HtmlLoaderTests
+public partial class Tests
 {
     [Test]
-    public async Task LoadWikipedia()
+    public async Task Html()
     {
         var loader = new HtmlLoader();
 

@@ -1,12 +1,9 @@
-﻿using LangChain.DocumentLoaders;
+﻿namespace LangChain.DocumentLoaders.IntegrationTests;
 
-namespace LangChain.DocumentLoaders.IntegrationTests;
-
-[TestFixture]
-public class Tests
+public partial class Tests
 {
     [Test]
-    public async Task FileSample1MbDocx()
+    public async Task Word()
     {
         var loader = new WordLoader();
         var documents = await loader.LoadAsync(DataSource.FromStream(H.Resources.filesample_1MB_docx.AsStream()));

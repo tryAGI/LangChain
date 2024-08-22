@@ -6,6 +6,8 @@ var samplesDocDir = Path.Combine(solutionDirectory, "docs", "samples");
 Directory.CreateDirectory(samplesDocDir);
 var wikiDocDir = Path.Combine(solutionDirectory, "docs", "wiki");
 Directory.CreateDirectory(wikiDocDir);
+var documentLoadersDir = Path.Combine(solutionDirectory, "docs", "document-loaders");
+Directory.CreateDirectory(documentLoadersDir);
 
 File.Copy(
     Path.Combine(solutionDirectory, "README.md"),
@@ -29,15 +31,48 @@ foreach (var path in Directory.EnumerateFiles(sampleDirectory, "Program.cs", Sea
 }
 
 var metaTestsFolder = Path.Combine(solutionDirectory, "src", "Meta", "test");
-Console.WriteLine($"Generating samples from {metaTestsFolder}...");
-foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs", SearchOption.AllDirectories))
+await ConvertTestsToMarkdown(metaTestsFolder, wikiDocDir, "WikiTests.*.cs");
+
+var documentLoadersTestsFolder = Path.Combine(solutionDirectory, "src", "DocumentLoaders", "IntegrationTests");
+await ConvertTestsToMarkdown(documentLoadersTestsFolder, documentLoadersDir);
+
+var mkDocs = await File.ReadAllTextAsync(mkDocsPath);
+
+var newMkDocs = mkDocs.Replace(
+    "# EXAMPLES #",
+    $"- Examples:{string.Concat(Directory.EnumerateFiles(samplesDocDir, "*.md")
+    .Select(x => $@"
+  - {Path.GetFileNameWithoutExtension(x)}: samples/{Path.GetFileNameWithoutExtension(x)}.md"))}").Replace(
+    "# WIKI #",
+    $"- Wiki:{string.Concat(Directory.EnumerateFiles(wikiDocDir, "*.md")
+        .Select(x => $@"
+  - {Path.GetFileNameWithoutExtension(x)}: wiki/{Path.GetFileNameWithoutExtension(x)}.md"))}").Replace(
+    "# DOCUMENT_LOADERS #",
+    $"- Document Loaders:{string.Concat(Directory.EnumerateFiles(documentLoadersDir, "*.md")
+        .Select(x => $@"
+  - {Path.GetFileNameWithoutExtension(x)}: document-loaders/{Path.GetFileNameWithoutExtension(x)}.md"))}");
+
+
+await File.WriteAllTextAsync(mkDocsPath, newMkDocs);
+return;
+
+static async Task ConvertTestsToMarkdown(string inputFolder, string outputFolder, string pattern = "Tests.*.cs")
+{
+    Console.WriteLine($"Generating samples from {inputFolder}...");
+    foreach (var path in Directory.EnumerateFiles(inputFolder, pattern, SearchOption.AllDirectories))
+    {
+        await ConvertTestToMarkdown(path, outputFolder);
+    }
+}
+
+static async Task ConvertTestToMarkdown(string path, string outputFolder)
 {
     var code = await File.ReadAllTextAsync(path);
 
     var lines = code.Split('\n').ToList();
     if (lines.All(x => string.IsNullOrWhiteSpace(x) || x.StartsWith("//")))
     {
-        continue;
+        return;
     }
     
     var usings = string.Join('\n', lines
@@ -103,21 +138,6 @@ foreach (var path in Directory.EnumerateFiles(metaTestsFolder, "WikiTests.*.cs",
 {completeCode.Trim()}
 ```" : string.Empty;
 
-    var newPath = Path.Combine(wikiDocDir, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
+    var newPath = Path.Combine(outputFolder, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
     await File.WriteAllTextAsync(newPath, markdown);
 }
-
-var mkDocs = await File.ReadAllTextAsync(mkDocsPath);
-
-var newMkDocs = mkDocs.Replace(
-    "# EXAMPLES #",
-    $"- Examples:{string.Concat(Directory.EnumerateFiles(samplesDocDir, "*.md")
-    .Select(x => $@"
-  - {Path.GetFileNameWithoutExtension(x)}: samples/{Path.GetFileNameWithoutExtension(x)}.md"))}").Replace(
-    "# WIKI #",
-    $"- Wiki:{string.Concat(Directory.EnumerateFiles(wikiDocDir, "*.md")
-        .Select(x => $@"
-  - {Path.GetFileNameWithoutExtension(x)}: wiki/{Path.GetFileNameWithoutExtension(x)}.md"))}");
-
-await File.WriteAllTextAsync(mkDocsPath, newMkDocs);
-
