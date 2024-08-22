@@ -21,7 +21,7 @@ public class Document
     /// </summary>
     /// <param name="content"></param>
     /// <param name="metadata"></param>
-    public Document(string content, IReadOnlyDictionary<string, object>? metadata = null)
+    public Document(string content, IDictionary<string, object>? metadata = null)
     {
         PageContent = content;
         Metadata = metadata ?? new Dictionary<string, object>();
@@ -40,7 +40,7 @@ public class Document
     /// <summary>
     /// 
     /// </summary>
-    public IReadOnlyDictionary<string, object> Metadata { get; init; } = new Dictionary<string, object>();
+    public IDictionary<string, object> Metadata { get; init; } = new Dictionary<string, object>();
 
     private static readonly string[] Separator = ["\n\n"];
 

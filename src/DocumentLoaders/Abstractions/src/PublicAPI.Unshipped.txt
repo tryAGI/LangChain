@@ -16,8 +16,8 @@ LangChain.DocumentLoaders.DataSourceType.Stream = 2 -> LangChain.DocumentLoaders
 LangChain.DocumentLoaders.DataSourceType.Uri = 0 -> LangChain.DocumentLoaders.DataSourceType
 LangChain.DocumentLoaders.Document
 LangChain.DocumentLoaders.Document.Document() -> void
-LangChain.DocumentLoaders.Document.Document(string! content, System.Collections.Generic.IReadOnlyDictionary<string!, object!>? metadata = null) -> void
-LangChain.DocumentLoaders.Document.Metadata.get -> System.Collections.Generic.IReadOnlyDictionary<string!, object!>!
+LangChain.DocumentLoaders.Document.Document(string! content, System.Collections.Generic.IDictionary<string!, object!>? metadata = null) -> void
+LangChain.DocumentLoaders.Document.Metadata.get -> System.Collections.Generic.IDictionary<string!, object!>!
 LangChain.DocumentLoaders.Document.Metadata.init -> void
 LangChain.DocumentLoaders.Document.PageContent.get -> string!
 LangChain.DocumentLoaders.Document.PageContent.init -> void
@@ -40,9 +40,10 @@ static LangChain.DocumentLoaders.DataSource.FromPath(string! path) -> LangChain.
 static LangChain.DocumentLoaders.DataSource.FromStream(System.IO.Stream! stream) -> LangChain.DocumentLoaders.DataSource!
 static LangChain.DocumentLoaders.DataSource.FromUri(System.Uri! uri) -> LangChain.DocumentLoaders.DataSource!
 static LangChain.DocumentLoaders.DataSource.FromUrl(string! url) -> LangChain.DocumentLoaders.DataSource!
-static LangChain.DocumentLoaders.DataSourceExtensions.CollectMetadataIfRequired(this LangChain.DocumentLoaders.DocumentLoaderSettings? settings, LangChain.DocumentLoaders.DataSource! dataSource) -> System.Collections.Generic.IReadOnlyDictionary<string!, object!>?
-static LangChain.DocumentLoaders.DataSourceExtensions.ToMetadata(this LangChain.DocumentLoaders.DataSource! dataSource) -> System.Collections.Generic.IReadOnlyDictionary<string!, object!>!
-static LangChain.DocumentLoaders.DataSourceExtensions.With(this System.Collections.Generic.IReadOnlyDictionary<string!, object!>! metadata, System.Collections.Generic.IReadOnlyDictionary<string!, object!>! additionalMetadata) -> System.Collections.Generic.IReadOnlyDictionary<string!, object!>!
+static LangChain.DocumentLoaders.DataSourceExtensions.CollectMetadataIfRequired(this LangChain.DocumentLoaders.DocumentLoaderSettings? settings, LangChain.DocumentLoaders.DataSource! dataSource) -> System.Collections.Generic.IDictionary<string!, object!>?
+static LangChain.DocumentLoaders.DataSourceExtensions.ToMetadata(this LangChain.DocumentLoaders.DataSource! dataSource) -> System.Collections.Generic.IDictionary<string!, object!>!
+static LangChain.DocumentLoaders.DataSourceExtensions.With(this System.Collections.Generic.IDictionary<string!, object!>! metadata, string! key, object! value) -> System.Collections.Generic.IDictionary<string!, object!>!
+static LangChain.DocumentLoaders.DataSourceExtensions.With(this System.Collections.Generic.IDictionary<string!, object!>! metadata, System.Collections.Generic.IDictionary<string!, object!>! additionalMetadata) -> System.Collections.Generic.IDictionary<string!, object!>!
 static LangChain.DocumentLoaders.Document.Empty.get -> LangChain.DocumentLoaders.Document!
 static LangChain.DocumentLoaders.DocumentLookupExtensions.Lookup(this LangChain.DocumentLoaders.Document! document, string! searchString) -> System.Collections.Generic.IEnumerable<string!>!
 static LangChain.DocumentLoaders.EnumerableExtensions.GetMimeType(string! extension) -> string!
