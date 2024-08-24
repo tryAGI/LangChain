@@ -56,16 +56,24 @@ var newMkDocs = mkDocs.Replace(
 await File.WriteAllTextAsync(mkDocsPath, newMkDocs);
 return;
 
-static async Task ConvertTestsToMarkdown(string inputFolder, string outputFolder, string pattern = "Tests.*.cs")
+
+static async Task ConvertTestsToMarkdown(
+    string inputFolder,
+    string outputFolder,
+    string pattern = "Tests.*.cs",
+    Func<string, string>? formatOutput = null)
 {
     Console.WriteLine($"Generating samples from {inputFolder}...");
     foreach (var path in Directory.EnumerateFiles(inputFolder, pattern, SearchOption.AllDirectories))
     {
-        await ConvertTestToMarkdown(path, outputFolder);
+        await ConvertTestToMarkdown(path, outputFolder, formatOutput);
     }
 }
 
-static async Task ConvertTestToMarkdown(string path, string outputFolder)
+static async Task ConvertTestToMarkdown(
+    string path,
+    string outputFolder,
+    Func<string, string>? formatOutput = null)
 {
     var code = await File.ReadAllTextAsync(path);
 
@@ -74,11 +82,11 @@ static async Task ConvertTestToMarkdown(string path, string outputFolder)
     {
         return;
     }
-
+    
     var usings = string.Join('\n', lines
         .Where(x => x.StartsWith("using"))
         .ToArray());
-
+    
     var start = lines.IndexOf("    {");
     var end = lines.IndexOf("    }");
     lines = lines
@@ -86,12 +94,11 @@ static async Task ConvertTestToMarkdown(string path, string outputFolder)
         .Where(x => !x.Contains(".Should()"))
         .Select(x => x.StartsWith("        ") ? x[8..] : x)
         .ToList();
-
+    
     const string commentPrefix = "//// ";
-    var markdown = string.Empty;
     var completeCode = string.Join('\n', lines.Where(x => !x.StartsWith(commentPrefix)));
     var isFirstCode = true;
-    var anyComment = lines.Any(x => x.StartsWith(commentPrefix));
+    var blocks = new List<string>();
     for (var i = 0; i < lines.Count;)
     {
         var startGroup = i;
@@ -101,11 +108,11 @@ static async Task ConvertTestToMarkdown(string path, string outputFolder)
             {
                 i++;
             }
-
+            
             var comment = string.Join('\n', lines
                 .GetRange(startGroup, i - startGroup)
                 .Select(x => x[commentPrefix.Length..]));
-            markdown += comment + '\n';
+            blocks.Add(comment);
         }
         else
         {
@@ -114,29 +121,38 @@ static async Task ConvertTestToMarkdown(string path, string outputFolder)
                 i++;
             }
 
-            markdown += "```csharp";
+            var block = "```csharp";
             if (isFirstCode)
             {
                 isFirstCode = false;
-                markdown += Environment.NewLine + usings + Environment.NewLine;
+                block += Environment.NewLine + usings + Environment.NewLine;
             }
-
-            markdown += $@"
+            
+            block += $@"
 {string.Join('\n', lines
     .GetRange(startGroup, i - startGroup)).Trim()}
 ```" + '\n';
+            blocks.Add(block);
         }
     }
-
-    markdown = anyComment ? @"`Scroll till the end of the page if you just want code`  
+    
+    var markdown = string.Join('\n', blocks);
+    var anyCommentBetweenCode = blocks.Count > 3;
+    
+    markdown = anyCommentBetweenCode ? @"`Scroll till the end of the page if you just want code`  
 " + markdown : markdown;
-    markdown += anyComment ? @$"
+    markdown += anyCommentBetweenCode ? @$"
 # Complete code
 ```csharp
 {usings}
 
 {completeCode.Trim()}
 ```" : string.Empty;
+    
+    if (formatOutput != null)
+    {
+        markdown = formatOutput(markdown);
+    }
 
     var newPath = Path.Combine(outputFolder, $"{Path.GetExtension(Path.GetFileNameWithoutExtension(path)).TrimStart('.')}.md");
     await File.WriteAllTextAsync(newPath, markdown);
