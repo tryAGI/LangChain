@@ -60,7 +60,7 @@ AI:";
             Console.Write("AI: ");
             Console.WriteLine(res);
         }
-        
+
         //// Now you can run the program and try to chat with it.
         //// 
         //// The final output will look like this:

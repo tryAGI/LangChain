@@ -48,13 +48,13 @@ public partial class WikiTests
         //// ***
         //// 
         //// So, finally, let's write some code!
-        
+
         // get model path
         var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
             repository: "TheBloke/Thespis-13B-v0.5-GGUF",
             fileName: "thespis-13b-v0.5.Q2_K.gguf",
             version: "main");
-        
+
         //// This line will download the model and save it locally for future usage. After model is downloaded it will return path to the *.gguf file. 
         //// _**You can manually download any model you want and insert path to it directly. Without using HuggingFaceModelDownloader.**_
         //// 
@@ -62,13 +62,13 @@ public partial class WikiTests
 
         // load model
         var model = LLamaSharpModelInstruction.FromPath(modelPath).UseConsoleForDebug();
-        
+
         //// Now let's build a chain!
         //// 
         //// # Building a chain
         //// 
         //// This is minimal chain to make LLM work:
-        
+
         // building a chain
         var prompt = @"
 You are an AI assistant that greets the world.
@@ -80,7 +80,7 @@ Assistant:";
             | LLM(model, inputKey: "prompt");
 
         await chain.RunAsync();
-        
+
         //// We can see here 2 chains(or links) working together: Set and LLM.
         //// 
         //// * Set - setting value for the _chain context variable **prompt**_

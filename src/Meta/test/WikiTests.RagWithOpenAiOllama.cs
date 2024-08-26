@@ -54,14 +54,14 @@ public partial class WikiTests
         //// 
         //// ### OpenAI
         //// To use this chat and embedding model, you will need an API key from OpenAI.  This has non-zero cost.
-        
+
         // prepare OpenAI embedding model
         var provider = new OpenAiProvider(apiKey:
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InvalidOperationException("OPENAI_API_KEY key is not set"));
         var embeddingModel = new TextEmbeddingV3SmallModel(provider);
         var llm = new OpenAiLatestFastChatModel(provider);
-        
+
         //// ### Ollama
         //// To use this chat and embedding model, you will need an Ollama instance running.
         //// This is free, assuming it is running locally--this code assumes it is available at https://localhost:11434.
@@ -82,7 +82,7 @@ public partial class WikiTests
         var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
             embeddingModel,
             dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
-            // First, specify the source to index.
+                              // First, specify the source to index.
             dataSource: DataSource.FromPath("E:\\AI\\Datasets\\Books\\Harry-Potter-Book-1.pdf"),
             collectionName: "harrypotter",
             // Second, configure how to extract chunks from the bigger document.
@@ -131,7 +131,7 @@ Helpful Answer:";
         var result = await chain.RunAsync("text", CancellationToken.None);
 
         Console.WriteLine(result);
-        
+
         //// We are done! Since we previously registered for events on the completion model, the output will be printed automatically.
         //// 
         //// # Example
