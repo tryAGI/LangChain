@@ -34,10 +34,10 @@ public static class ExcelToMarkdown
             {
                 continue;
             }
-            
+
             var isFirstRow = true;
             var builder = new StringBuilder();
-            
+
             foreach (var row in (document.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart)?.Worksheet
                      .GetFirstChild<SheetData>()?
                      .Descendants<Row>() ?? [])
@@ -60,16 +60,16 @@ public static class ExcelToMarkdown
                         .ToList()) + " |");
                 }
             }
-            
+
             markdowns.Add(new KeyValuePair<string, string>(
-                sheet.Name?.Value  ?? $"Sheet{markdowns.Count}",
+                sheet.Name?.Value ?? $"Sheet{markdowns.Count}",
                 builder.ToString()));
         }
-        
-        
+
+
         return markdowns;
     }
-    
+
     private static string GetCellValue(SharedStringTable? table, Cell cell)
     {
         var value = cell.CellValue?.InnerText ?? string.Empty;
@@ -80,7 +80,7 @@ public static class ExcelToMarkdown
         {
             return table.ChildElements[index].InnerText;
         }
-        
+
         return value;
     }
 }

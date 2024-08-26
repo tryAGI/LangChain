@@ -27,7 +27,7 @@ public partial class WikiTests
         //// ## Using ReAct with Google search
         //// 
         //// Now you should have all necessary to connect your LLM to Google search
-        
+
         // var provider = new OllamaProvider(
         //     options: new RequestOptions
         //     {
@@ -55,7 +55,7 @@ public partial class WikiTests
                 .UseTool(searchTool); // add the google search tool
 
         await chain.RunAsync();
-        
+
         //// Lets run it and see the output:
         //// As you can see, instead of giving answer right away, the model starts to think on it
         //// ```

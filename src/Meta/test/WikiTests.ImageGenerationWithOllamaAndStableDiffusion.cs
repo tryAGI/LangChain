@@ -72,7 +72,7 @@ public partial class WikiTests
         //// I took it from [here](https://github.com/vicuna-tools/Stablediffy/blob/main/Stablediffy.txt) with some minor modifications.  
         //// Basically, we are showing some examples so model could understand a principle of prompt generation. You can play around with examples and instructions to better match your preferences.  
         //// Now let's build a chain!  
-        
+
         var template =
     @"[INST]Transcript of a dialog, where the User interacts with an Assistant named Stablediffy. Stablediffy knows much about prompt engineering for stable diffusion (an open-source image generation software). The User asks Stablediffy about prompts for stable diffusion Image Generation. 
 
@@ -102,7 +102,7 @@ ASSISTANT:";
 
         // run the chain
         await chain.RunAsync();
-        
+
         //// If everything done correctly - you should have `image.png` in your bin directory.
     }
 }
