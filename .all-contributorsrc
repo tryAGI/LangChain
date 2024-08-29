@@ -178,6 +178,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "vibeeshan025",
+      "name": "Vibeeshan Mahadeva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10608733?v=4",
+      "profile": "https://github.com/vibeeshan025",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

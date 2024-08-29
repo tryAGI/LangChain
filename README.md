@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/github/license/tryAGI/LangChain)](https://github.com/tryAGI/LangChain/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/1115206893015662663?label=Discord&logo=discord&logoColor=white&color=d82679)](https://discord.gg/Ca2xhfBf3v)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ⚡ Building applications with LLMs through composability ⚡  
@@ -119,6 +119,7 @@ Console.WriteLine($"Embedding model usage: {embeddingModel.Usage}");   // Print 
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/vikhyat90"><img src="https://avatars.githubusercontent.com/u/9795857?v=4?s=100" width="100px;" alt="vikhyat90"/><br /><sub><b>vikhyat90</b></sub></a><br /><a href="#infra-vikhyat90" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=vikhyat90" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=vikhyat90" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ceejeeb"><img src="https://avatars.githubusercontent.com/u/11246686?v=4?s=100" width="100px;" alt="ceejeeb"/><br /><sub><b>ceejeeb</b></sub></a><br /><a href="#infra-ceejeeb" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/tryAGI/LangChain/commits?author=ceejeeb" title="Tests">⚠️</a> <a href="https://github.com/tryAGI/LangChain/commits?author=ceejeeb" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vibeeshan025"><img src="https://avatars.githubusercontent.com/u/10608733?v=4?s=100" width="100px;" alt="Vibeeshan Mahadeva"/><br /><sub><b>Vibeeshan Mahadeva</b></sub></a><br /><a href="https://github.com/tryAGI/LangChain/commits?author=vibeeshan025" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
