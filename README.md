@@ -155,6 +155,6 @@ where code examples are changed to code examples for using this project.
 
 This project is supported by JetBrains through the [Open Source Support Program](https://jb.gg/OpenSourceSupport).
 
-![CodeRabbit logo](assets/coderabbit.svg)
+![CodeRabbit logo](https://opengraph.githubassets.com/1c51002d7d0bbe0c4fd72ff8f2e58192702f73a7037102f77e4dbb98ac00ea8f/marketplace/coderabbitai)
 
-This project is supported by CodeRabbit through the [Open Source Support Program](https://coderabbit.ai/pricing).
+This project is supported by CodeRabbit through the [Open Source Support Program](https://github.com/marketplace/coderabbitai).
