@@ -154,3 +154,7 @@ where code examples are changed to code examples for using this project.
 ![JetBrains logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png)
 
 This project is supported by JetBrains through the [Open Source Support Program](https://jb.gg/OpenSourceSupport).
+
+![CodeRabbit logo](assets/coderabbit.svg)
+
+This project is supported by CodeRabbit through the [Open Source Support Program](https://coderabbit.ai/pricing).
