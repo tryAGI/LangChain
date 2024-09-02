@@ -82,11 +82,11 @@ static async Task ConvertTestToMarkdown(
     {
         return;
     }
-    
+
     var usings = string.Join('\n', lines
         .Where(x => x.StartsWith("using"))
         .ToArray());
-    
+
     var start = lines.IndexOf("    {");
     var end = lines.IndexOf("    }");
     lines = lines
@@ -94,7 +94,7 @@ static async Task ConvertTestToMarkdown(
         .Where(x => !x.Contains(".Should()"))
         .Select(x => x.StartsWith("        ") ? x[8..] : x)
         .ToList();
-    
+
     const string commentPrefix = "//// ";
     var completeCode = string.Join('\n', lines.Where(x => !x.StartsWith(commentPrefix)));
     var isFirstCode = true;
@@ -108,7 +108,7 @@ static async Task ConvertTestToMarkdown(
             {
                 i++;
             }
-            
+
             var comment = string.Join('\n', lines
                 .GetRange(startGroup, i - startGroup)
                 .Select(x => x[commentPrefix.Length..]));
@@ -127,7 +127,7 @@ static async Task ConvertTestToMarkdown(
                 isFirstCode = false;
                 block += Environment.NewLine + usings + Environment.NewLine;
             }
-            
+
             block += $@"
 {string.Join('\n', lines
     .GetRange(startGroup, i - startGroup)).Trim()}
@@ -135,10 +135,10 @@ static async Task ConvertTestToMarkdown(
             blocks.Add(block);
         }
     }
-    
+
     var markdown = string.Join('\n', blocks);
     var anyCommentBetweenCode = blocks.Count > 3;
-    
+
     markdown = anyCommentBetweenCode ? @"`Scroll till the end of the page if you just want code`  
 " + markdown : markdown;
     markdown += anyCommentBetweenCode ? @$"
@@ -148,7 +148,7 @@ static async Task ConvertTestToMarkdown(
 
 {completeCode.Trim()}
 ```" : string.Empty;
-    
+
     if (formatOutput != null)
     {
         markdown = formatOutput(markdown);
