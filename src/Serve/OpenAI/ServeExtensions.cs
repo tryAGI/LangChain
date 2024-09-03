@@ -51,7 +51,7 @@ public static class ServeExtensions
             return Results.Ok(new CreateChatCompletionResponse
             {
                 Id = Guid.NewGuid().ToString(),
-                Created = 0,
+                Created = DateTimeOffset.UtcNow,
                 Model = request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty,
                 Object = CreateChatCompletionResponseObject.ChatCompletion,
                 Choices =

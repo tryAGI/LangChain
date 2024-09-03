@@ -13,7 +13,7 @@ public class ServeController(
             Models = options.ListModels().Select(static x => new Model12
             {
                 Object = ModelObject.Model,
-                Created = 0,
+                Created = DateTimeOffset.UtcNow,
                 Id = x,
                 OwnedBy = "OpenAI",
             }).ToList()
@@ -27,7 +27,7 @@ public class ServeController(
             Models = options.ListModels().Select(static x => new Model12
             {
                 Object = ModelObject.Model,
-                Created = 0,
+                Created = DateTimeOffset.UtcNow,
                 Id = x,
                 OwnedBy = "OpenAI",
             }).ToList()
