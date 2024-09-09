@@ -8,9 +8,9 @@
     <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
     <PackageVersion Include="DocumentFormat.OpenXml" Version="3.1.0" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.4" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
-    <PackageVersion Include="H.Resources.Generator" Version="1.6.0">
+    <PackageVersion Include="H.Resources.Generator" Version="1.6.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
@@ -33,7 +33,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageVersion Include="Moq" Version="4.20.71" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="tryAGI.OpenAI" Version="3.6.3" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.5.1" />
