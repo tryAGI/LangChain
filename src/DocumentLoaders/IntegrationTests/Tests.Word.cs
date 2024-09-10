@@ -6,7 +6,7 @@ public partial class Tests
     public async Task Word()
     {
         var loader = new WordLoader();
-        var documents = await loader.LoadAsync(DataSource.FromStream(H.Resources.filesample_1MB_docx.AsStream()));
+        var documents = await loader.LoadAsync(DataSource.FromStream(H.Resources.file_sample_1MB_docx.AsStream()));
 
         documents.Should().NotBeEmpty();
 
