@@ -38,7 +38,7 @@ Your name: ";
                 | Template(template)
                 | LLM(model);
 
-    return await chain.RunAsync("text", CancellationToken.None) ?? string.Empty;
+    return await chain.RunAsync("text") ?? string.Empty;
 });
 
 // 4. Optional. Add swagger to be able to test the API
@@ -64,7 +64,7 @@ Assistant:";
                     | LLM(model);
 
         // get response and send it as AI answer
-        var response = await chain.RunAsync("text", CancellationToken.None);
+        var response = await chain.RunAsync("text");
         return new StoredMessage
         {
             Author = MessageAuthor.Ai,

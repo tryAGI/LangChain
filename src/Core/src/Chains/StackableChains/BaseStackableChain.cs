@@ -214,17 +214,6 @@ public abstract class BaseStackableChain : IChain
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="resultKey"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public Task<string?> RunAsync(string resultKey, CancellationToken cancellationToken = default)
-    {
-        return RunAsync(resultKey, null, cancellationToken);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="input"></param>
     /// <param name="callbacks"></param>
     /// <param name="cancellationToken"></param>

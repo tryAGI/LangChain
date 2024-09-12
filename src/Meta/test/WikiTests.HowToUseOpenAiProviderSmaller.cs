@@ -14,6 +14,6 @@ public partial class WikiTests
             Set("Hello!")
             | LLM(model);
 
-        Console.WriteLine(await chain.RunAsync("text", CancellationToken.None));
+        Console.WriteLine(await chain.RunAsync("text"));
     }
 }

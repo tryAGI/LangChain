@@ -18,7 +18,7 @@ public partial class WikiTests
             Set("Hello!", outputKey: "request")          // set context variable `request` to "Hello"
             | LLM(model, inputKey: "request", outputKey: "text"); // get text from context variable `request`, pass it to the model and put result into `text`
 
-        var result = await chain.RunAsync("text", CancellationToken.None);  // execute chain and get `text` context variable
+        var result = await chain.RunAsync("text");  // execute chain and get `text` context variable
         Console.WriteLine(result);
         // Hello! How can I assist you today?
 

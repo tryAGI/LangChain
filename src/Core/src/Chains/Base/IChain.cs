@@ -1,5 +1,6 @@
 using LangChain.Abstractions.Schema;
 using LangChain.Callback;
+using LangChain.Chains.StackableChains.Context;
 
 namespace LangChain.Abstractions.Chains.Base;
 
@@ -22,9 +23,10 @@ public interface IChain
     /// 
     /// </summary>
     /// <param name="input"></param>
+    /// <param name="hook"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string?> RunAsync(string input, CancellationToken cancellationToken = default);
+    Task<string?> RunAsync(string input, StackableChainHook? hook = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 

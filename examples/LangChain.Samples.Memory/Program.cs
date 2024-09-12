@@ -57,7 +57,7 @@ AI: ";
                 | chain;
 
             // Get a response from the AI
-            var response = await currentChain.RunAsync("text", CancellationToken.None);
+            var response = await currentChain.RunAsync("text");
 
             Console.Write("AI: ");
             Console.WriteLine(response);

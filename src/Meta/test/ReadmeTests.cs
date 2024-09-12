@@ -51,7 +51,7 @@ public class ReadmeTests
                 """, outputKey: "prompt") |
             LLM(llm, inputKey: "prompt", outputKey: "text");
 
-        var result = await chain.RunAsync(resultKey: "text", CancellationToken.None);
+        var result = await chain.RunAsync(resultKey: "text");
         result.Should().Be("Bob");
     }
 
@@ -114,7 +114,7 @@ Helpful Answer:";
             | CombineDocuments(outputKey: "context")     // combine documents together and put them into context
             | Template(promptTemplate)                   // replace context and question in the prompt with their values
             | LLM(llm.UseConsoleForDebug());             // send the result to the language model
-        var chainAnswer = await chain.RunAsync("text", CancellationToken.None);  // get chain result
+        var chainAnswer = await chain.RunAsync("text");  // get chain result
 
         Console.WriteLine("Chain Answer:" + chainAnswer); // print the result
 

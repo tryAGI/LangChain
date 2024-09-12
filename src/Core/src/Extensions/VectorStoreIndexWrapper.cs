@@ -40,6 +40,6 @@ public static class VectorStoreIndexWrapper
             }
         );
 
-        return chain.RunAsync(question, cancellationToken);
+        return chain.RunAsync(question, cancellationToken: cancellationToken);
     }
 }

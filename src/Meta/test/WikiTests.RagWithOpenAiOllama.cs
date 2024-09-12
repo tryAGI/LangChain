@@ -128,7 +128,7 @@ Helpful Answer:";
             | LLM(llm);                                                         // send the result to the language model
 
         // get chain result
-        var result = await chain.RunAsync("text", CancellationToken.None);
+        var result = await chain.RunAsync("text");
 
         Console.WriteLine(result);
 

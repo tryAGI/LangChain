@@ -43,7 +43,7 @@ Assistant:";
         //// 
         //// `LLM` link also has output key argument. Let's use it to save the result of llm.
 
-        var result = await chain.RunAsync("result", CancellationToken.None);
+        var result = await chain.RunAsync("result");
 
         //// Now the `LLM` link saves it's result into "result" variable inside of chain context. But how do we extract it from there?
         //// 

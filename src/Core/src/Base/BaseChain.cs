@@ -2,6 +2,7 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Callback;
 using LangChain.Chains;
+using LangChain.Chains.StackableChains.Context;
 using LangChain.Schema;
 
 namespace LangChain.Base;
@@ -34,10 +35,14 @@ public abstract class BaseChain(IChainInputs fields) : IChain
     /// Run the chain using a simple input/output.
     /// </summary>
     /// <param name="input">The string input to use to execute the chain.</param>
+    /// <param name="hook"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>A text value containing the result of the chain.</returns>
     /// <exception cref="ArgumentException">If the type of chain used expects multiple inputs, this method will throw an ArgumentException.</exception>
-    public virtual async Task<string?> RunAsync(string input, CancellationToken cancellationToken = default)
+    public virtual async Task<string?> RunAsync(
+        string input,
+        StackableChainHook? hook = null,
+        CancellationToken cancellationToken = default)
     {
         var isKeylessInput = InputKeys.Count <= 1;
 
