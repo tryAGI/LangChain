@@ -12,7 +12,7 @@ public partial class WikiTests
     public async Task AgentWithOllamaReact()
     {
         //// # ReAct
-        //// But how we can fix that? If you know about [RAG](https://github.com/tryAGI/LangChain/wiki/RAG-with-OpenAI-and-Ollama) then you know that there is some tricks to bring new abilities to LLM. And one of those tricks is [ReAct](https://www.promptingguide.ai/techniques/react) prompting.
+        //// But how we can fix that? If you know about [RAG](https://tryagi.github.io/LangChain/wiki/RagWithOpenAiOllama/) then you know that there is some tricks to bring new abilities to LLM. And one of those tricks is [ReAct](https://www.promptingguide.ai/techniques/react) prompting.
         //// 
         //// In simple words ReAct is forcing LLM to reflect on your question and injects responses as if LLM figured them out by itself. This allows you to connect any datasource or `tool` tou your LLM.
         //// Let's try to use ReAct and connect Google search to your LLM.

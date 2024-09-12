@@ -21,7 +21,7 @@ I want to note:
 - I also respond quite quickly on Discord for any questions related to the project
 
 ## Usage
-You can use our wiki to get started: https://github.com/tryAGI/LangChain/wiki  
+You can use our wiki to get started: https://tryagi.github.io/LangChain/  
 If the wiki contains unupdated code, you can always take a look at [the tests for this](src/Meta/test/WikiTests.cs)  
 Also see [examples](./examples) for example usage or [tests](./src/tests/LangChain.IntegrationTests/ReadmeTests.cs).
 ```csharp
