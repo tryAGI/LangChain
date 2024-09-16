@@ -47,7 +47,7 @@ public partial class WikiTests
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "ping",
-                    Arguments = "-n 5 "+ addressParsed,
+                    Arguments = "-n 5 " + addressParsed,
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
@@ -58,7 +58,7 @@ public partial class WikiTests
             process.WaitForExit();
             return Task.FromResult(result);
         });
-        
+
         //// Nothing special here. We just parse ip-address and executing ping command with it.
         //// Then we are taking the results and returning them as an answer.
         //// 
@@ -68,31 +68,31 @@ public partial class WikiTests
         ////  - pinger - our `ping` command specialist. He came here to chew bubble gum and ping servers, and he's all out of bubble gum.  
 
         // controls agents
-        var manager = new CrewAgent(model,"manager","assign task to one of your co-workers and return the result");
+        var manager = new CrewAgent(model, "manager", "assign task to one of your co-workers and return the result");
 
         // the actual agent who does the job
-        var pinger = new CrewAgent(model,"pinger","checks the speed of internet connection",
+        var pinger = new CrewAgent(model, "pinger", "checks the speed of internet connection",
             "you using ping command and analyzing it's result. After this you print a single number as your final answer(the connection speed in milliseconds).");
-        
+
         //// Notice that we are giving a backstory to the `pinger` so he would understand his job better.
         //// 
         //// Now let's give a tool to out pinger.
-        
-        pinger.AddTools(new []{pingTool});
-        
+
+        pinger.AddTools(new[] { pingTool });
+
         //// Now this tool is assigned to pinger and only he has access to it.
         //// 
         //// ## Building a chain
         //// 
         //// As always we are finishing by building a chain:
-        
-        var chain = 
+
+        var chain =
             Set("What is my ping to google's main dns server?")
-            | Crew(new []{manager,pinger},manager);
+            | Crew(new[] { manager, pinger }, manager);
 
         var res = await chain.RunAsync("text");
         Console.WriteLine(res);
-        
+
         //// Crew chain requires a full list of agens(inluding manager) and manager agent specified separately.
         //// 
         //// # Lets run and test it:
