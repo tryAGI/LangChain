@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LangChain.Providers.OpenAI" Version="0.15.1-dev.78" />
+    <PackageReference Include="LangChain.Providers.OpenAI" Version="0.15.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.7.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.7.3" />
