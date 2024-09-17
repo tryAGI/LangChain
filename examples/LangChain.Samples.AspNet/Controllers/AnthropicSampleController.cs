@@ -8,11 +8,11 @@ namespace LangChain.Samples.AspNet.Controllers;
 [Route("[controller]")]
 public class AnthropicSampleController : ControllerBase
 {
-    private readonly AnthropicModel _anthropicModel;
+    private readonly AnthropicChatModel _anthropicModel;
     private readonly ILogger<AnthropicSampleController> _logger;
 
     public AnthropicSampleController(
-        AnthropicModel anthropicModel,
+        AnthropicChatModel anthropicModel,
         ILogger<AnthropicSampleController> logger)
     {
         _anthropicModel = anthropicModel;

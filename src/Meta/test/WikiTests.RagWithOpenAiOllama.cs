@@ -67,12 +67,7 @@ public partial class WikiTests
         //// This is free, assuming it is running locally--this code assumes it is available at https://localhost:11434.
 
         // prepare Ollama with mistral model
-        var providerOllama = new OllamaProvider(
-            options: new RequestOptions
-            {
-                Stop = ["\n"],
-                Temperature = 0.0f,
-            });
+        var providerOllama = new OllamaProvider();
         var embeddingModelOllama = new OllamaEmbeddingModel(providerOllama, id: "nomic-embed-text");
         var llmOllama = new OllamaChatModel(providerOllama, id: "llama3.1").UseConsoleForDebug();
 

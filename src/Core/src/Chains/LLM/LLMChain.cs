@@ -126,7 +126,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             }, new ChatSettings
             {
                 StopSequences = stop,
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
         if (Verbose)
         {
             Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
@@ -136,7 +136,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var returnDict = new Dictionary<string, object>();
 
         var outputKey = string.IsNullOrEmpty(OutputKey) ? "text" : OutputKey;
-        returnDict[outputKey] = response.Messages.Last().Content;
+        returnDict[outputKey] = response.LastMessageContent;
 
         returnDict.TryAddKeyValues(values.Value);
 
@@ -176,7 +176,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var (prompts, stop) = await PreparePromptsAsync(inputs, runManager, cancellationToken).ConfigureAwait(false);
 
         var responseTasks = prompts
-            .Select(prompt => Llm.GenerateAsync(
+            .Select(async prompt => await Llm.GenerateAsync(
                 request: new ChatRequest
                 {
                     Messages = prompt.ToChatMessages(),
@@ -194,7 +194,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
                 {
                     new()
                     {
-                        Text = response.Messages.Last().Content
+                        Text = response.LastMessageContent
                     }
                 })
             .ToArray();

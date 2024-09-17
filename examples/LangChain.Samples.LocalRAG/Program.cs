@@ -4,11 +4,7 @@ using LangChain.Providers.Ollama;
 using LangChain.Extensions;
 using Ollama;
 
-var provider = new OllamaProvider(options: new RequestOptions
-{
-    Stop = ["\n"],
-    Temperature = 0.0f,
-});
+var provider = new OllamaProvider();
 var embeddingModel = new OllamaEmbeddingModel(provider, id: "all-minilm");
 var llm = new OllamaChatModel(provider, id: "llama3");
 
@@ -36,6 +32,6 @@ var answer = await llm.GenerateAsync(
 
      Question: {question}
      Helpful Answer:
-     """).ConfigureAwait(false);
+     """);
 
 Console.WriteLine($"LLM answer: {answer}");

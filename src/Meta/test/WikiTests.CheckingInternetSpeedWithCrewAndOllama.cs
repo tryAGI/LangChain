@@ -29,10 +29,7 @@ public partial class WikiTests
 
         var provider = new OllamaProvider(
             // url: "http://172.16.50.107:11434", // if you have ollama running on different computer/port. Default is "http://localhost:11434/api"
-            options: new RequestOptions
-            {
-                Temperature = 0,
-            });
+            );
         var model = new OllamaChatModel(provider, id: "llama3.1").UseConsoleForDebug();
 
         //// ## Making a tool

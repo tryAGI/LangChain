@@ -56,15 +56,7 @@ public class ConversationalRetrievalChainTests
         var questionGeneratorLlmMock = new Mock<IChatModel>();
         questionGeneratorLlmMock
             .Setup(v => v.GenerateAsync(It.IsAny<ChatRequest>(), It.IsAny<ChatSettings>(), It.IsAny<CancellationToken>()))
-            .Returns<ChatRequest, ChatSettings, CancellationToken>((_, _, _) =>
-            {
-                return Task.FromResult(new ChatResponse
-                {
-                    Messages = new[] { Message.Ai("Bob's asking what is hist name") },
-                    Usage = Usage.Empty,
-                    UsedSettings = ChatSettings.Default,
-                });
-            });
+            .Returns<ChatRequest, ChatSettings, CancellationToken>((_, _, _) => GetChatResponses());
 
         var llmInput = new LlmChainInput(questionGeneratorLlmMock.Object, prompt);
         var questionGeneratorChain = new LlmChain(llmInput);
@@ -107,6 +99,20 @@ public class ConversationalRetrievalChainTests
                 It.Is<ChatRequest>(request => request.Messages.Count == 1),
                 It.IsAny<ChatSettings>(),
                 It.IsAny<CancellationToken>()));
+        return;
+
+        // Helper method to create IAsyncEnumerable<int>
+        async IAsyncEnumerable<ChatResponse> GetChatResponses()
+        {
+            await Task.CompletedTask;
+            
+            yield return new ChatResponse
+            {
+                Messages = new[] { Message.Ai("Bob's asking what is hist name") },
+                Usage = Usage.Empty,
+                UsedSettings = ChatSettings.Default,
+            };
+        }
     }
 
     [Test]

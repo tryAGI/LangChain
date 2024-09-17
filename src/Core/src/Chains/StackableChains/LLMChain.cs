@@ -66,8 +66,8 @@ public class LLMChain : BaseStackableChain
             }
         }
 
-        var response = await _llm.GenerateAsync(prompt, settings: _settings, cancellationToken: cancellationToken).ConfigureAwait(false);
-        responseContent = response.Messages.Last().Content;
+        var response = await _llm.GenerateAsync(prompt, settings: _settings, cancellationToken: cancellationToken);
+        responseContent = response.LastMessageContent;
         if (_useCache)
             SaveCachedAnswer(prompt, responseContent);
         values.Value[OutputKeys[0]] = responseContent;

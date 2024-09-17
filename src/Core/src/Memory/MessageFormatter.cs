@@ -24,10 +24,10 @@ public class MessageFormatter
             case MessageRole.Ai:
                 return AiPrefix;
 
-            case MessageRole.FunctionCall:
+            case MessageRole.ToolCall:
                 return FunctionCallPrefix;
 
-            case MessageRole.FunctionResult:
+            case MessageRole.ToolResult:
                 return FunctionResultPrefix;
 
             case MessageRole.Chat:

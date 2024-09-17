@@ -27,7 +27,7 @@ public static partial class ServiceCollectionExtensions
             .AddOptions<AnthropicConfiguration>()
             .BindConfiguration(configSectionPath: AnthropicConfiguration.SectionName);
         _ = services
-            .AddHttpClient<AnthropicModel>();
+            .AddHttpClient<AnthropicChatModel>();
         _ = services
             .AddScoped<AnthropicProvider>(static services => AnthropicProvider.FromConfiguration(
                 configuration: services.GetRequiredService<IOptions<AnthropicConfiguration>>().Value));

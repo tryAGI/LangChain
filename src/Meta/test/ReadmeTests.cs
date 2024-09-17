@@ -97,7 +97,7 @@ public class ReadmeTests
 
              Question: {question}
              Helpful Answer:
-             """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
+             """);
 
         Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
 
@@ -152,7 +152,7 @@ Helpful Answer:";
              Answer: Jerry
              Human: {similarDocuments.AsString()}
              Answer:
-             """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
+             """);
 
         Console.WriteLine($"LLM answer: {petNameResponse}");
         Console.WriteLine($"Total usage: {llm.Usage}");

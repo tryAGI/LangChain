@@ -63,7 +63,7 @@ var answer = await llm.GenerateAsync(
 
      Question: {question}
      Helpful Answer:
-     """, cancellationToken: CancellationToken.None).ConfigureAwait(false);
+     """);
 
 Console.WriteLine($"LLM answer: {answer}"); // The cloaked figure.
 
@@ -80,7 +80,7 @@ var chain =
     | CombineDocuments(outputKey: "context")     // combine documents together and put them into context
     | Template(promptTemplate)                   // replace context and question in the prompt with their values
     | LLM(llm.UseConsoleForDebug());             // send the result to the language model
-var chainAnswer = await chain.RunAsync("text", CancellationToken.None);  // get chain result
+var chainAnswer = await chain.RunAsync("text");  // get chain result
 
 Console.WriteLine("Chain Answer:"+ chainAnswer);       // print the result
         

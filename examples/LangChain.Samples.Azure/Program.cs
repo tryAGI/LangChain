@@ -1,4 +1,5 @@
-﻿using LangChain.Providers.Azure;
+﻿using LangChain.Providers;
+using LangChain.Providers.Azure;
 
 var provider = new AzureOpenAiProvider(apiKey: "AZURE_OPEN_AI_KEY", endpoint: "ENDPOINT");
 var llm = new AzureOpenAiChatModel(provider, id: "DEPLOYMENT_NAME");

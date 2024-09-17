@@ -16,12 +16,8 @@ var builder = WebApplication.CreateBuilder();
 builder.Services.AddLangChainServe();
 
 // 2. Create a model
-var model = new OllamaChatModel(new OllamaProvider(options: new RequestOptions
-{
-    Temperature = 0,
-    Stop = ["User:"],
-}), "llama3.1");
-
+var provider = new OllamaProvider();
+var model = new OllamaChatModel(provider, id: "llama3.1");
 
 // 3. Optional. Add custom name generator
 // After initiating conversation, this will generate a name for it

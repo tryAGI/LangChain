@@ -37,11 +37,7 @@ public partial class WikiTests
         //// ## Ollama model
         //// We will use latest version of `llama3.1` for our task. If you don't have mistral yet - it will be downloaded.
 
-        var provider = new OllamaProvider(
-            options: new RequestOptions
-            {
-                Temperature = 0,
-            });
+        var provider = new OllamaProvider();
         var llm = new OllamaChatModel(provider, id: "llama3.1").UseConsoleForDebug();
 
         //// Here we are stopping generation after `\n` symbol appears. Mistral will put a new line(`\n`) symbol after prompt is generated.

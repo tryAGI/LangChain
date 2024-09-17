@@ -46,7 +46,7 @@ public static class ServeExtensions
                         _ => throw new NotImplementedException(),
                     }
                 }).ToList(),
-            }).ConfigureAwait(false);
+            });
 
             return Results.Ok(new CreateChatCompletionResponse
             {
@@ -60,7 +60,7 @@ public static class ServeExtensions
                     {
                         Message = new ChatCompletionResponseMessage
                         {
-                            Content = response.Messages.Last().Content,
+                            Content = response.LastMessageContent,
                             Role = ChatCompletionResponseMessageRole.Assistant,
                         },
                         Index = 0,
