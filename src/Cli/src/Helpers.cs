@@ -61,42 +61,49 @@ public static class Helpers
         await SetModelAsync(model).ConfigureAwait(false);
     }
 
-    public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt)
+    public static async Task<ChatModel> GetChatModelAsync(CancellationToken cancellationToken = default)
     {
         var settingsFolder = GetSettingsFolder();
 
         ChatModel model;
-        switch (await File.ReadAllTextAsync(Path.Combine(settingsFolder, "provider.txt")).ConfigureAwait(false))
+        switch (await File.ReadAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), cancellationToken).ConfigureAwait(false))
         {
             case Providers.OpenAi:
+            {
+                var provider = new OpenAiProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), cancellationToken).ConfigureAwait(false));
+                var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
+                switch (modelId)
                 {
-                    var provider = new OpenAiProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt")).ConfigureAwait(false));
-                    var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt")).ConfigureAwait(false);
-                    switch (modelId)
-                    {
-                        case "latest-fast":
-                            modelId = ChatClient.LatestFastModel.ToValueString();
-                            break;
-                        case "latest-smart":
-                            modelId = ChatClient.LatestSmartModel.ToValueString();
-                            break;
-                    }
-
-                    model = new OpenAiChatModel(provider, id: modelId);
-                    break;
-
+                    case "latest-fast":
+                        modelId = ChatClient.LatestFastModel.ToValueString();
+                        break;
+                    case "latest-smart":
+                        modelId = ChatClient.LatestSmartModel.ToValueString();
+                        break;
                 }
+
+                model = new OpenAiChatModel(provider, id: modelId);
+                break;
+
+            }
             case Providers.OpenRouter:
-                {
-                    var provider = new OpenRouterProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt")).ConfigureAwait(false));
-                    var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt")).ConfigureAwait(false);
-                    model = new OpenRouterModel(provider, id: modelId);
-                    break;
-                }
+            {
+                var provider = new OpenRouterProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), cancellationToken).ConfigureAwait(false));
+                var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
+                model = new OpenRouterModel(provider, id: modelId);
+                break;
+            }
             default:
                 throw new NotSupportedException("Provider not supported.");
         }
 
-        return await model.GenerateAsync(prompt).ConfigureAwait(false);
+        return model;
+    }
+    
+    public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt, CancellationToken cancellationToken = default)
+    {
+        ChatModel model = await GetChatModelAsync(cancellationToken).ConfigureAwait(false);
+
+        return await model.GenerateAsync(prompt, cancellationToken: cancellationToken);
     }
 }
