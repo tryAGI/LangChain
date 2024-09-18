@@ -6,10 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="LangChain.Databases.OpenSearch" />
         <PackageReference Include="LangChain.Databases.Sqlite" />
         <PackageReference Include="LangChain.Providers.Amazon.Bedrock" />
         <PackageReference Include="LangChain.Providers.Automatic1111" />
         <PackageReference Include="LangChain.Providers.LLamaSharp" />
+        <PackageReference Include="Testcontainers" />
     </ItemGroup>
 
     <ItemGroup>
