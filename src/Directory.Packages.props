@@ -14,10 +14,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.3-dev.37" />
+    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.3" />
     <PackageVersion Include="LangChain.Databases.InMemory" Version="0.15.3-dev.37" />
-    <PackageVersion Include="LangChain.Databases.OpenSearch" Version="0.15.3-dev.37" />
-    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.3-dev.37" />
+    <PackageVersion Include="LangChain.Databases.OpenSearch" Version="0.15.3" />
+    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.3" />
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.2" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.2" />
     <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.15.2" />
