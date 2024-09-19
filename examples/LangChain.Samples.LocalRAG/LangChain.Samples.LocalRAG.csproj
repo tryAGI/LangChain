@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="LangChain.Databases.Sqlite" Version="0.15.3-dev.37" />
+      <PackageReference Include="LangChain.Databases.Sqlite" Version="0.15.3" />
       <PackageReference Include="LangChain.Providers.Abstractions" Version="0.15.2" />
       <PackageReference Include="System.Text.Json" Version="8.0.4" />
     </ItemGroup>
