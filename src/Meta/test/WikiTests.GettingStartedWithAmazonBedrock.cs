@@ -95,19 +95,19 @@ public partial class WikiTests
                 UseStreaming = true
             }
         };
-        
+
         llm.RequestSent += (_, request) => Console.WriteLine($"Prompt: {request.Messages.AsHistory()}");
         llm.DeltaReceived += (_, delta) => Console.Write(delta.Content);
         llm.ResponseReceived += (_, response) => Console.WriteLine($"Completed response: {response}");
-        
+
         var prompt = @"
             you are a comic book writer.  you will be given a question and you will answer it. 
             question: who are 10 of the most popular superheros and what are their powers?";
-        
+
         string response = await llm.GenerateAsync(prompt);
-        
+
         Console.WriteLine(response);
-        
+
         //// In conclusion, by following these steps, you can set up the AWS CLI,
         //// configure the Amazon Bedrock provider, and start using the supported foundation models in your code.
         //// With the AWS CLI and Bedrock provider properly configured,

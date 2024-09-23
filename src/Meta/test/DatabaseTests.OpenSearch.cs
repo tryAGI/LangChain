@@ -156,7 +156,7 @@ Helpful Answer:";
             Port = port2,
         };
     }
-    
+
     private static async Task<DatabaseTestEnvironment> SetupDocumentTestsAsync()
     {
         var environment = await StartEnvironmentAsync();
