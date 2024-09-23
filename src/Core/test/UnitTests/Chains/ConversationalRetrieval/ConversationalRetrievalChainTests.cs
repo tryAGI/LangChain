@@ -105,7 +105,7 @@ public class ConversationalRetrievalChainTests
         async IAsyncEnumerable<ChatResponse> GetChatResponses()
         {
             await Task.CompletedTask;
-            
+
             yield return new ChatResponse
             {
                 Messages = new[] { Message.Ai("Bob's asking what is hist name") },
