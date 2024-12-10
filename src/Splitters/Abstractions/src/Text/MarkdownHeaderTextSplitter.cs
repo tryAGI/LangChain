@@ -122,6 +122,8 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         len = 0;
         foreach (var header in _headersToSplitOn)
         {
+            if (line.Length <= header.Length + 1)
+                return false;//Empty lines starting with #s should not be considered as headers. Removing this line would result in exceptions in that conditions
             if (line.Trim().StartsWith(header, StringComparison.Ordinal) && line[header.Length] == ' ')
             {
                 len = header.Length;
