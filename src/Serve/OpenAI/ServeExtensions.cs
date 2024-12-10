@@ -26,9 +26,9 @@ public static class ServeExtensions
         options(serveMiddlewareOptions);
         // var repository = app.Services.GetRequiredService<IConversationRepository>();
         // var conversationNameProvider = app.Services.GetRequiredService<IConversationNameProvider>();
-        var controller = new ServeController(serveMiddlewareOptions);
+        //var controller = new ServeController(serveMiddlewareOptions);
 
-        app.MapGet("/v1/models", () => Results.Ok(controller.ListModels()));
+        //app.MapGet("/v1/models", () => Results.Ok(controller.ListModels()));
         app.MapPost("/v1/chat/completions", async (CreateChatCompletionRequest request) =>
         {
             var llm = serveMiddlewareOptions.GetModel(request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty);
