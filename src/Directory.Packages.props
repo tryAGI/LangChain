@@ -40,7 +40,7 @@
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.5.1" />
     <PackageVersion Include="Npgsql" Version="8.0.6" />
-    <PackageVersion Include="NUnit" Version="4.3.1" />
+    <PackageVersion Include="NUnit" Version="4.3.2" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageVersion Include="PdfPig" Version="0.1.9" />
     <PackageVersion Include="PolySharp" Version="1.15.0">
