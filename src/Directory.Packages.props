@@ -14,23 +14,23 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.15.3" />
-    <PackageVersion Include="LangChain.Databases.InMemory" Version="0.15.3-dev.37" />
-    <PackageVersion Include="LangChain.Databases.OpenSearch" Version="0.15.3" />
-    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.15.3" />
-    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Anyscale" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Automatic1111" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Azure" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.DeepSeek" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Google" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.HuggingFace" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.LLamaSharp" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.Ollama" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.15.2" />
+    <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Databases.InMemory" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Databases.OpenSearch" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Databases.Sqlite" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Anyscale" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Automatic1111" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Azure" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.DeepSeek" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Google" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.HuggingFace" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.LLamaSharp" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Ollama" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.16.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
@@ -57,8 +57,8 @@
     <PackageVersion Include="System.Text.Json" Version="9.0.0" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
     <PackageVersion Include="MinVer" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

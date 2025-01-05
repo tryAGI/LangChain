@@ -1,9 +1,9 @@
 using System.ComponentModel;
-using LangChain.Providers;
+using CSharpToJsonSchema;
 
 namespace LangChain.Cli.Commands;
 
-[LangChainTools]
+[GenerateJsonSchema]
 #pragma warning disable CA1515
 public partial interface IFileSystemService
 #pragma warning restore CA1515

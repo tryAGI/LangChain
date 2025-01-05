@@ -1,7 +1,7 @@
 ﻿using LangChain.Providers;
 using LangChain.Providers.Azure;
 
-var provider = new AzureOpenAiProvider(apiKey: "AZURE_OPEN_AI_KEY", endpoint: "ENDPOINT");
+var provider = new AzureOpenAiProvider(apiKey: "AZURE_OPEN_AI_KEY", endpoint: "ENDPOINT", deploymentID: "DEPLOYMENT_NAME");
 var llm = new AzureOpenAiChatModel(provider, id: "DEPLOYMENT_NAME");
 
 var result = await llm.GenerateAsync("What is a good name for a company that sells colourful socks?");

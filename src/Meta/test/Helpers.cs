@@ -86,9 +86,9 @@ public static class Helpers
 
                     var configuration = new AzureOpenAiConfiguration
                     {
-                        Id = deploymentName,
                         ApiKey = apiKey,
                         Endpoint = apiEndpoint,
+                        DeploymentID = deploymentName,
                     };
                     var provider = new AzureOpenAiProvider(configuration);
                     var llm = new AzureOpenAiChatModel(provider, deploymentName);

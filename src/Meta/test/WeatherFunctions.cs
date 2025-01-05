@@ -1,4 +1,5 @@
-﻿using LangChain.Providers;
+﻿using CSharpToJsonSchema;
+using LangChain.Providers;
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 namespace LangChain.IntegrationTests;
@@ -17,7 +18,7 @@ public class Weather
     public string Description { get; set; } = string.Empty;
 }
 
-[LangChainTools]
+[GenerateJsonSchema]
 public interface IWeatherFunctions
 {
     [Description("Get the current weather in a given location")]
