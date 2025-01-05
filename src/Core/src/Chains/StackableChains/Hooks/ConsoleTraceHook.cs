@@ -71,7 +71,9 @@ public class ConsoleTraceHook : StackableChainHook
         if (!_colorMap.TryGetValue(key, out var value))
         {
             var color = ConsoleColor.White;
+#pragma warning disable CA2263
             var colors = Enum.GetValues(typeof(ConsoleColor));
+#pragma warning restore CA2263
             foreach (ConsoleColor c in colors)
             {
                 if (c == ConsoleColor.Black || c == ConsoleColor.White)

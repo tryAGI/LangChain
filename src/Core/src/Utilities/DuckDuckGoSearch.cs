@@ -50,7 +50,7 @@ public sealed class DuckDuckGoSearch : IDisposable
     {
         var results = TextSearchApiAsync(keywords, region, safeSearch, timeLimit, maxResults, cancellationToken);
         var resultsCounter = 0;
-        await foreach (var result in results)
+        await foreach (var result in results.ConfigureAwait(false))
         {
             yield return result;
             resultsCounter += 1;

@@ -149,7 +149,7 @@ public class ReduceDocumentsChain : BaseCombineDocumentsChain
     /// values are joined by ", "
     /// </returns>
     private async Task<Document> CollapseDocsAsync(
-        IReadOnlyList<Document> docs,
+        List<Document> docs,
         IReadOnlyDictionary<string, object>? otherKeys = null,
         CancellationToken cancellationToken = default)
     {

@@ -299,7 +299,7 @@ public class PromptTemplate : BaseStringPromptTemplate
             {
                 var next = GetNextBracketPosition(ref chars, "{}", i);
                 var text = next < 0
-                    ? chars.Slice(i, chars.Length - i).ToString()
+                    ? chars.Slice(i).ToString()
                     : chars.Slice(i, next - i).ToString();
 
                 nodes.Add(new LiteralNode(text));

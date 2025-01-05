@@ -40,7 +40,7 @@ public sealed class DuckDuckGoSearchApiWrapper(
             timeLimit: time, cancellationToken: cancellationToken);
 
         var snippets = new List<string>();
-        await foreach (var result in results)
+        await foreach (var result in results.ConfigureAwait(false))
         {
             snippets.Add(result["body"]);
 
@@ -86,7 +86,7 @@ public sealed class DuckDuckGoSearchApiWrapper(
             maxResults: maxResults, cancellationToken: cancellationToken);
 
         var formattedResults = new List<WebSearchResult>();
-        await foreach (var result in results)
+        await foreach (var result in results.ConfigureAwait(false))
         {
             var formattedResult = new WebSearchResult(
                 Title: result["title"],
