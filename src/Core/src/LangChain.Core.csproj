@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net4.6.2;netstandard2.0;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net4.6.2;netstandard2.0;net8.0;net9.0</TargetFrameworks>
     <RootNamespace>LangChain</RootNamespace>
     <NoWarn>$(NoWarn);CA1031;CA1822;CA1307;CA1002;CA1303;CA1003;CA1724;CA1034;CA1849</NoWarn>
     <NoWarn>$(NoWarn);CA2227;CA2214;CA1040;CA1812;CA1720;CS9107</NoWarn>
