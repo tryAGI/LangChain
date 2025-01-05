@@ -32,14 +32,20 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Install dependencies
-        run: pip install mkdocs-material
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
         
       - name: Generate docs
         run: dotnet run --project src/Helpers/GenerateDocs/GenerateDocs.csproj .
 
       - name: Build with MkDocs
-        run: mkdocs build -d ./_site
+        run: |
+          python -m venv myenv
+          source myenv/bin/activate
+          pip install mkdocs-material
+          mkdocs build -d ./_site
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
