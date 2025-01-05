@@ -5,7 +5,7 @@ using OpenAI;
 
 namespace LangChain.Cli;
 
-public static class Helpers
+internal static class Helpers
 {
     public static string GetSettingsFolder()
     {

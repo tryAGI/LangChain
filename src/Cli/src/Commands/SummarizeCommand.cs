@@ -2,7 +2,7 @@ using System.CommandLine;
 
 namespace LangChain.Cli.Commands;
 
-public class SummarizeCommand : Command
+internal sealed class SummarizeCommand : Command
 {
     public SummarizeCommand() : base(name: "summarize", description: "Summarizes text using a provider.")
     {

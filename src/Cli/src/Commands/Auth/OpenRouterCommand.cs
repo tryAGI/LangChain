@@ -3,7 +3,7 @@ using LangChain.Providers.OpenRouter;
 
 namespace LangChain.Cli.Commands.Auth;
 
-public class OpenRouterCommand : Command
+internal sealed class OpenRouterCommand : Command
 {
     public OpenRouterCommand() : base(name: Providers.OpenRouter, description: "Authenticates OpenRouter provider.")
     {

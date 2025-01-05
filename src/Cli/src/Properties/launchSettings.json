@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FixOpenApiSpec": {
+      "commandName": "Project",
+      "commandLineArgs": "do --input \"Please show me path of FixOpenAPISpec project Program.cs which contains `openApiDocument.Paths` modification. Start from `/Users/havendv/GitHub/tryAGI/` dir. \""
+    }
+  }
+}

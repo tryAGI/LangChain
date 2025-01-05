@@ -2,7 +2,7 @@ using System.CommandLine;
 
 namespace LangChain.Cli.Commands.Auth;
 
-public class OpenAiCommand : Command
+internal sealed class OpenAiCommand : Command
 {
     public OpenAiCommand() : base(name: Providers.OpenAi, description: "Authenticates OpenAI provider.")
     {

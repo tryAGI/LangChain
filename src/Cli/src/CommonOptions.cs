@@ -2,7 +2,7 @@ using System.CommandLine;
 
 namespace LangChain.Cli;
 
-public static class CommonOptions
+internal static class CommonOptions
 {
     public static Option<string> Input => new(
         aliases: ["--input", "-i"],

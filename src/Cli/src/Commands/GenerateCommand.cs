@@ -2,7 +2,7 @@ using System.CommandLine;
 
 namespace LangChain.Cli.Commands;
 
-public class GenerateCommand : Command
+internal sealed class GenerateCommand : Command
 {
     public GenerateCommand() : base(name: "generate", description: "Generates text using a prompt.")
     {

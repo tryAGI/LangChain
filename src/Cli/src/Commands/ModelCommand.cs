@@ -2,7 +2,7 @@ using System.CommandLine;
 
 namespace LangChain.Cli.Commands;
 
-public class ModelCommand : Command
+internal sealed class ModelCommand : Command
 {
     public ModelCommand() : base(name: "model", description: "Sets model for provider.")
     {

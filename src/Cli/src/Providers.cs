@@ -1,6 +1,6 @@
 namespace LangChain.Cli;
 
-public static class Providers
+internal static class Providers
 {
     public const string OpenAi = "openai";
     public const string OpenRouter = "openrouter";
