@@ -34,7 +34,7 @@ internal sealed class FileSystemService : IFileSystemService
         CancellationToken cancellationToken = default)
     {
         var paths = new List<string>();
-        
+
         Console.WriteLine($"Searching for files in \"{directory}\" containing \"{content}\"...");
 
         foreach (var path in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
@@ -46,7 +46,7 @@ internal sealed class FileSystemService : IFileSystemService
                 {
                     continue;
                 }
-                
+
                 //FileInfo info = new FileInfo(path);
                 var text = await File.ReadAllTextAsync(path, cancellationToken).ConfigureAwait(false);
 
@@ -62,7 +62,7 @@ internal sealed class FileSystemService : IFileSystemService
                 // ignore
             }
         }
-        
+
         Console.WriteLine($"Found {paths.Count} files:");
         foreach (var path in paths)
         {
@@ -71,16 +71,16 @@ internal sealed class FileSystemService : IFileSystemService
 
         return paths;
     }
-    
+
     public async Task<string> ReadContentAsync(
         string path,
         CancellationToken cancellationToken = default)
     {
         Console.WriteLine($"Reading file at path: {path}");
-        
+
         return await File.ReadAllTextAsync(path, cancellationToken).ConfigureAwait(false);
     }
-    
+
     public async Task<string> WriteContentAsync(
         string path,
         string newContent,
@@ -101,11 +101,11 @@ NewContent: {newContent}");
                 break;
             }
         }
-        
+
         await File.WriteAllTextAsync(path, newContent, cancellationToken).ConfigureAwait(false);
-        
+
         Console.WriteLine("File written.");
-        
+
         return "File written.";
     }
 }
