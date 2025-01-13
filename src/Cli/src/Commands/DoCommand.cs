@@ -23,12 +23,12 @@ internal sealed class DoCommand : Command
         var llm = await Helpers.GetChatModelAsync().ConfigureAwait(false);
         llm.RequestSent += (_, request) => Console.WriteLine($"RequestSent: {request.Messages.AsHistory()}");
         llm.ResponseReceived += (_, response) => Console.WriteLine($"ResponseReceived: {response}");
-        
+
         var fileSystemService = new FileSystemService();
         llm.AddGlobalTools(fileSystemService.AsTools(), fileSystemService.AsCalls());
-        
+
         var response = await llm.GenerateAsync(inputText);
-        
+
         await Helpers.WriteOutputAsync(response, outputPath).ConfigureAwait(false);
     }
 }
