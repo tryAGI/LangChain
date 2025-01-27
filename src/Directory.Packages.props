@@ -36,7 +36,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Testcontainers" Version="4.1.0" />
-    <PackageVersion Include="tryAGI.OpenAI" Version="3.9.2" />
+    <PackageVersion Include="tryAGI.OpenAI" Version="4.0.0" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.5.1" />
     <PackageVersion Include="Npgsql" Version="9.0.2" />
