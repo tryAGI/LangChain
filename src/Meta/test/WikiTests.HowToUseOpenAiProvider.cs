@@ -1,6 +1,6 @@
 ﻿using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenAI.Predefined;
-using OpenAI;
+using tryAGI.OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -28,7 +28,7 @@ public partial class WikiTests
         //// You can pass custom HttpClient/HttpClientHandler by using `OpenAiProvider` constructor overload.
         var httpClientHandler = new HttpClientHandler();
         using var httpClient = new HttpClient(httpClientHandler, disposeHandler: true);
-        using var api = new OpenAiApi(
+        using var api = new OpenAiClient(
             httpClient,
             baseUri: new Uri("https://api.openai.com/v1/") // default value, can be omitted
             );

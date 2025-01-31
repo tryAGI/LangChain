@@ -1,7 +1,7 @@
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using LangChain.Providers.OpenRouter;
-using OpenAI;
+using tryAGI.OpenAI;
 
 namespace LangChain.Cli;
 

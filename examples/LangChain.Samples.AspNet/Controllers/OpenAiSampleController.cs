@@ -1,7 +1,7 @@
 using LangChain.Providers;
 using LangChain.Providers.OpenAI;
 using Microsoft.AspNetCore.Mvc;
-using OpenAI;
+using tryAGI.OpenAI;
 
 namespace LangChain.Samples.AspNet.Controllers;
 

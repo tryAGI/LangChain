@@ -3,7 +3,7 @@ using LangChain.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using OpenAI;
+using tryAGI.OpenAI;
 
 namespace LangChain.Serve.OpenAI;
 

@@ -1,8 +1,5 @@
-using LangChain.Chains.LLM;
-using LangChain.Prompts;
 using LangChain.Providers.OpenAI.Predefined;
-using LangChain.Schema;
-using OpenAI;
+using tryAGI.OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
