@@ -68,7 +68,8 @@ public abstract class BaseStackableChain : IChain
             {
                 res.Add($"{key} is expected but missing");
                 continue;
-            };
+            }
+            ;
             res.Add($"{key}={values.Value[key]}");
         }
         return string.Join(",\n", res);
