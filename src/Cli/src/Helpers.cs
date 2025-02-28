@@ -25,7 +25,12 @@ internal static class Helpers
         var inputText = input;
         if (!string.IsNullOrWhiteSpace(inputPath))
         {
-            inputText = await File.ReadAllTextAsync(inputPath, cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(inputText))
+            {
+                inputText += Environment.NewLine;
+            }
+            
+            inputText += await File.ReadAllTextAsync(inputPath, cancellationToken).ConfigureAwait(false);
         }
 
         return inputText;
