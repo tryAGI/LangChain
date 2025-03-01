@@ -23,6 +23,7 @@ internal sealed class SummarizeCommand : Command
         AddOption(inputFileOption);
         AddOption(outputFileOption);
         AddOption(wordCountOption);
+        AddOption(promptOption);
 
         this.SetHandler(HandleAsync, inputOption, inputFileOption, outputFileOption, promptOption, wordCountOption);
     }
