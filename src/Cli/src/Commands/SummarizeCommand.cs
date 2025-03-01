@@ -15,7 +15,7 @@ internal sealed class SummarizeCommand : Command
             getDefaultValue: () => 20,
             description: "Word count for summary");
         var promptOption = new Option<string>(
-            aliases: ["--prompt", "-w"],
+            aliases: ["--prompt", "-p"],
             getDefaultValue: () => "Please summarize the the following text in {wordCount} words or less",
             description: "Prompt for summarization");
 
