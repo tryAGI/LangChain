@@ -29,7 +29,7 @@ internal static class Helpers
             {
                 inputText += Environment.NewLine;
             }
-            
+
             inputText += await File.ReadAllTextAsync(inputPath, cancellationToken).ConfigureAwait(false);
         }
 
