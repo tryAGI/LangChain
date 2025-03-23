@@ -2,7 +2,7 @@
   "profiles": {
     "FixOpenApiSpec": {
       "commandName": "Project",
-      "commandLineArgs": "do --tools filesystem --directories \"/Users/havendv/GitHub/tryAGI/\" --format string[] --input \"Please show me path of FixOpenAPISpec project Program.cs which contains `openApiDocument.Paths` modification. Start from `/Users/havendv/GitHub/tryAGI/` dir. \""
+      "commandLineArgs": "do --tools filesystem --directories \"/Users/havendv/GitHub/tryAGI/\" --format markdown --input \"Please show me path of FixOpenAPISpec project Program.cs which contains `openApiDocument.Paths` modification. Start from `/Users/havendv/GitHub/tryAGI/` dir. \""
     }
   }
 }

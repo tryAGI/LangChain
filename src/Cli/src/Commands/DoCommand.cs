@@ -111,12 +111,10 @@ internal sealed class DoCommand : Command
                 ResponseFormat = format switch
                 {
                     "string" => ChatResponseFormat.Text,
-                    "string[]" => ChatResponseFormat.ForJsonSchema(
-                        JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(StringArraySchema), new JsonSchemaExporterOptions
-                        {
-                            // Marks root-level types as non-nullable
-                            TreatNullObliviousAsNonNullable = true,
-                        }).Deserialize<JsonElement>()),
+                    "string[]" => ChatResponseFormatForType<StringArraySchema>(),
+                    "markdown" => ChatResponseFormatForType<MarkdownSchema>(
+                        schemaName: "MarkdownSchema",
+                        schemaDescription: "Markdown schema. Use this schema to generate markdown."),
                     "json" => ChatResponseFormat.Json,
                     _ => throw new ArgumentException($"Unknown format: {format}"),
                 },
@@ -128,6 +126,12 @@ internal sealed class DoCommand : Command
             var value = JsonSerializer.Deserialize<StringArraySchema>(response.Text);
             
             output = string.Join(Environment.NewLine, value?.Value ?? []);
+        }
+        else if (format == "markdown")
+        {
+            var value = JsonSerializer.Deserialize<MarkdownSchema>(response.Text);
+            
+            output = value?.Markdown ?? string.Empty;
         }
         
         await Helpers.WriteOutputAsync(output, outputPath).ConfigureAwait(false);
@@ -178,9 +182,30 @@ internal sealed class DoCommand : Command
             return paths;
         }
     }
+
+    public static ChatResponseFormatJson ChatResponseFormatForType<T>(
+        string? schemaName = null,
+        string? schemaDescription = null)
+    {
+        return ChatResponseFormat.ForJsonSchema(
+            JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(T), new JsonSchemaExporterOptions
+            {
+                // Marks root-level types as non-nullable
+                TreatNullObliviousAsNonNullable = true,
+            }).Deserialize<JsonElement>(), schemaName, schemaDescription);
+    }
+    
+    public static ChatResponseFormatJson Markdown { get; } = ChatResponseFormatForType<MarkdownSchema>(
+        schemaName: "MarkdownSchema",
+        schemaDescription: "Markdown schema. Use this schema to generate markdown.");
 }
 
 internal sealed class StringArraySchema
 {
     public string[] Value { get; set; } = [];
+}
+
+internal sealed class MarkdownSchema
+{
+    public string Markdown { get; set; } = string.Empty;
 }
