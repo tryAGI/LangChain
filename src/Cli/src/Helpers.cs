@@ -1,7 +1,7 @@
-using LangChain.Providers;
-using LangChain.Providers.OpenAI;
-using LangChain.Providers.OpenRouter;
-using tryAGI.OpenAI;
+using System.ClientModel;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging;
+using OpenAI;
 
 namespace LangChain.Cli;
 
@@ -66,49 +66,61 @@ internal static class Helpers
         await SetModelAsync(model).ConfigureAwait(false);
     }
 
-    public static async Task<ChatModel> GetChatModelAsync(CancellationToken cancellationToken = default)
+    public static async Task<IChatClient> GetChatModelAsync(CancellationToken cancellationToken = default)
     {
         var settingsFolder = GetSettingsFolder();
 
-        ChatModel model;
-        switch (await File.ReadAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), cancellationToken).ConfigureAwait(false))
+        var provider = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), cancellationToken)
+            .ConfigureAwait(false);
+        var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
+        IChatClient chatClient;
+        Uri? endpoint = provider switch
         {
-            case Providers.OpenAi:
+            Providers.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
+            _ => null,
+        };
+        modelId = modelId switch
+        {
+            "latest-fast" => tryAGI.OpenAI.CreateChatCompletionRequestModelExtensions.ToValueString(tryAGI.OpenAI.ChatClient.LatestFastModel),
+            "latest-smart" => tryAGI.OpenAI.CreateChatCompletionRequestModelExtensions.ToValueString(tryAGI.OpenAI.ChatClient.LatestSmartModel),
+            _ => modelId,
+        };
+        
+        switch (provider)
+        {
+            case Providers.OpenAi or Providers.OpenRouter:
                 {
-                    var provider = new OpenAiProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), cancellationToken).ConfigureAwait(false));
-                    var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
-                    switch (modelId)
+                    var apiKey = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), cancellationToken).ConfigureAwait(false);
+                    var openAiClient = new OpenAIClient(new ApiKeyCredential(apiKey), new OpenAIClientOptions
                     {
-                        case "latest-fast":
-                            modelId = ChatClient.LatestFastModel.ToValueString();
-                            break;
-                        case "latest-smart":
-                            modelId = ChatClient.LatestSmartModel.ToValueString();
-                            break;
-                    }
+                        Endpoint = endpoint,
+                    });
 
-                    model = new OpenAiChatModel(provider, id: modelId);
-                    break;
-
-                }
-            case Providers.OpenRouter:
-                {
-                    var provider = new OpenRouterProvider(apiKey: await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), cancellationToken).ConfigureAwait(false));
-                    var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
-                    model = new OpenRouterModel(provider, id: modelId);
+                    chatClient = openAiClient.AsChatClient(modelId);
                     break;
                 }
             default:
                 throw new NotSupportedException("Provider not supported.");
         }
-
-        return model;
+        
+        using var factory = LoggerFactory.Create(builder => 
+            builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
+        var client = new ChatClientBuilder(chatClient)
+            // 👇🏼 Add logging to the chat client, wrapping the function invocation client 
+            .UseLogging(factory)
+            // 👇🏼 Add function invocation to the chat client, wrapping the Ollama client
+            .UseFunctionInvocation()
+            .Build();
+        
+        return client;
     }
 
     public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt, CancellationToken cancellationToken = default)
     {
-        ChatModel model = await GetChatModelAsync(cancellationToken).ConfigureAwait(false);
+        IChatClient model = await GetChatModelAsync(cancellationToken).ConfigureAwait(false);
 
-        return await model.GenerateAsync(prompt, cancellationToken: cancellationToken);
+        var response = await model.GetResponseAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
+        
+        return response.Text;
     }
 }

@@ -33,8 +33,14 @@
     <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.17.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
+    <PackageVersion Include="Microsoft.Extensions.AI" Version="9.3.0-preview.1.25161.3" />
+    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="9.3.0-preview.1.25161.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.1.25171.12" />
     <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="OpenAI" Version="2.2.0-beta.4" />
     <PackageVersion Include="Testcontainers" Version="4.3.0" />
     <PackageVersion Include="tryAGI.OpenAI" Version="4.2.0" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />

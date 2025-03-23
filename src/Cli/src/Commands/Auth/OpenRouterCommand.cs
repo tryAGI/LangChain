@@ -1,5 +1,4 @@
 using System.CommandLine;
-using LangChain.Providers.OpenRouter;
 
 namespace LangChain.Cli.Commands.Auth;
 
@@ -12,7 +11,7 @@ internal sealed class OpenRouterCommand : Command
             description: "OpenRouter API key from https://openrouter.ai/keys");
         var modelOption = new Option<string>(
             aliases: ["--model", "-m"],
-            getDefaultValue: () => OpenRouterModelProvider.GetModelById(OpenRouterModelIds.OpenChat357B).Id!,
+            getDefaultValue: () => string.Empty,
             description: "Model to use for commands");
         AddArgument(apiKeyArgument);
         AddOption(modelOption);
