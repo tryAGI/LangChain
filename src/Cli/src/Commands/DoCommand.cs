@@ -1,4 +1,5 @@
 using System.CommandLine;
+using System.ComponentModel;
 using System.Reflection;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
@@ -97,9 +98,63 @@ internal sealed class DoCommand : Command
             inputText,
             new ChatOptions
             {
-                Tools = [.. aiTools.SelectMany(x => x).ToArray()],
+                Tools = [
+                    .. aiTools.SelectMany(x => x).ToArray(),
+                    .. tools.Contains("filesystem")
+                        ? new [] { AIFunctionFactory.Create(
+                            FindFilePathsByContent,
+                            name: "FindFilePathsByContent",
+                            description: "Finds file paths by content.") }
+                        : [],
+                ],
             }).ConfigureAwait(false);
         
         await Helpers.WriteOutputAsync(response.Text, outputPath).ConfigureAwait(false);
+        
+        return;
+        
+        [Description("Finds file paths by content.")]
+        static async Task<IList<string>> FindFilePathsByContent(
+            [Description("The directory in which the search will be performed. Includes all subdirectories")] string directory,
+            [Description("The content to search for in the files. Ignores case.")] string content)
+        {
+            var paths = new List<string>();
+
+            Console.WriteLine($"Searching for files in \"{directory}\" containing \"{content}\"...");
+
+            foreach (var path in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var extension = Path.GetExtension(path);
+                    if (extension is not ".txt" and not ".md" and not ".json" and not ".cs" and not ".csproj" and not ".sln" and not ".sh" and not ".yml" and not ".yaml")
+                    {
+                        continue;
+                    }
+
+                    //FileInfo info = new FileInfo(path);
+                    var text = await File.ReadAllTextAsync(path).ConfigureAwait(false);
+
+                    if (text.Contains(content, StringComparison.OrdinalIgnoreCase))
+                    {
+                        paths.Add(path);
+                    }
+                }
+#pragma warning disable CA1031
+                catch (Exception)
+#pragma warning restore CA1031
+                {
+                    // ignore
+                }
+            }
+
+            Console.WriteLine($"Found {paths.Count} files:");
+            foreach (var path in paths)
+            {
+                Console.WriteLine(path);
+            }
+
+            return paths;
+        }
     }
 }
