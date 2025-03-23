@@ -1,6 +1,8 @@
 using System.CommandLine;
 using System.ComponentModel;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Schema;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Configuration;
@@ -24,25 +26,25 @@ internal sealed class DoCommand : Command
             aliases: ["--directories", "-d"],
             getDefaultValue: () => ["."],
             description: "Directories you want to use.");
+        var formatOption = new Option<string>(
+            aliases: ["--format", "-f"],
+            getDefaultValue: () => "string",
+            description: "Format of answer. Can be string or string[] or json.");
         AddOption(inputOption);
         AddOption(inputFileOption);
         AddOption(outputFileOption);
         AddOption(toolsOption);
         AddOption(directoriesOption);
+        AddOption(formatOption);
 
-        this.SetHandler(HandleAsync, inputOption, inputFileOption, outputFileOption, toolsOption, directoriesOption);
+        this.SetHandler(HandleAsync, inputOption, inputFileOption, outputFileOption, toolsOption, directoriesOption, formatOption);
     }
 
-    private static async Task HandleAsync(string input, string inputPath, string outputPath, string[] tools, string[] directories)
+    private static async Task HandleAsync(string input, string inputPath, string outputPath, string[] tools, string[] directories, string format)
     {
         var inputText = await Helpers.ReadInputAsync(input, inputPath).ConfigureAwait(false);
         var llm = await Helpers.GetChatModelAsync().ConfigureAwait(false);
-        // llm.RequestSent += (_, request) => Console.WriteLine($"RequestSent: {request.Messages.AsHistory()}");
-        // llm.ResponseReceived += (_, response) => Console.WriteLine($"ResponseReceived: {response}");
 
-        // var fileSystemService = new FileSystemService();
-        // llm.AddGlobalTools(fileSystemService.AsTools(), fileSystemService.AsCalls());
-        //
         var clients = await Task.WhenAll(tools.Select(async tool =>
         {
             return await McpClientFactory.CreateAsync(
@@ -93,7 +95,6 @@ internal sealed class DoCommand : Command
             Console.WriteLine($"  {aiTool.Description}");
         }
 
-        // Call the chat client using the tools.
         var response = await llm.GetResponseAsync(
             inputText,
             new ChatOptions
@@ -107,9 +108,29 @@ internal sealed class DoCommand : Command
                             description: "Finds file paths by content.") }
                         : [],
                 ],
+                ResponseFormat = format switch
+                {
+                    "string" => ChatResponseFormat.Text,
+                    "string[]" => ChatResponseFormat.ForJsonSchema(
+                        JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(StringArraySchema), new JsonSchemaExporterOptions
+                        {
+                            // Marks root-level types as non-nullable
+                            TreatNullObliviousAsNonNullable = true,
+                        }).Deserialize<JsonElement>()),
+                    "json" => ChatResponseFormat.Json,
+                    _ => throw new ArgumentException($"Unknown format: {format}"),
+                },
             }).ConfigureAwait(false);
+
+        var output = response.Text;
+        if (format == "string[]")
+        {
+            var value = JsonSerializer.Deserialize<StringArraySchema>(response.Text);
+            
+            output = string.Join(Environment.NewLine, value?.Value ?? []);
+        }
         
-        await Helpers.WriteOutputAsync(response.Text, outputPath).ConfigureAwait(false);
+        await Helpers.WriteOutputAsync(output, outputPath).ConfigureAwait(false);
         
         return;
         
@@ -157,4 +178,9 @@ internal sealed class DoCommand : Command
             return paths;
         }
     }
+}
+
+internal sealed class StringArraySchema
+{
+    public string[] Value { get; set; } = [];
 }
