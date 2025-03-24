@@ -85,7 +85,7 @@ internal static class Helpers
             "latest-smart" => tryAGI.OpenAI.CreateChatCompletionRequestModelExtensions.ToValueString(tryAGI.OpenAI.ChatClient.LatestSmartModel),
             _ => modelId,
         };
-        
+
         switch (provider)
         {
             case Providers.OpenAi or Providers.OpenRouter:
@@ -102,8 +102,8 @@ internal static class Helpers
             default:
                 throw new NotSupportedException("Provider not supported.");
         }
-        
-        using var factory = LoggerFactory.Create(builder => 
+
+        using var factory = LoggerFactory.Create(builder =>
             builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
         var client = new ChatClientBuilder(chatClient)
             // 👇🏼 Add logging to the chat client, wrapping the function invocation client 
@@ -111,7 +111,7 @@ internal static class Helpers
             // 👇🏼 Add function invocation to the chat client, wrapping the Ollama client
             .UseFunctionInvocation()
             .Build();
-        
+
         return client;
     }
 
@@ -120,7 +120,7 @@ internal static class Helpers
         IChatClient model = await GetChatModelAsync(cancellationToken).ConfigureAwait(false);
 
         var response = await model.GetResponseAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
-        
+
         return response.Text;
     }
 }
