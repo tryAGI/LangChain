@@ -83,11 +83,11 @@ internal sealed class DoCommand : Command
                     }
                 }).ConfigureAwait(false);
         })).ConfigureAwait(false);
-        
+
         var aiTools = await Task.WhenAll(clients
             .Select(async client => await client.GetAIFunctionsAsync().ConfigureAwait(false)))
             .ConfigureAwait(false);
-        
+
         Console.WriteLine($"Found {aiTools.Length} AI functions.");
         foreach (var aiTool in aiTools.SelectMany(x => x))
         {
@@ -124,20 +124,20 @@ internal sealed class DoCommand : Command
         if (format == "string[]")
         {
             var value = JsonSerializer.Deserialize<StringArraySchema>(response.Text);
-            
+
             output = string.Join(Environment.NewLine, value?.Value ?? []);
         }
         else if (format == "markdown")
         {
             var value = JsonSerializer.Deserialize<MarkdownSchema>(response.Text);
-            
+
             output = value?.Markdown ?? string.Empty;
         }
-        
+
         await Helpers.WriteOutputAsync(output, outputPath).ConfigureAwait(false);
-        
+
         return;
-        
+
         [Description("Finds file paths by content.")]
         static async Task<IList<string>> FindFilePathsByContent(
             [Description("The directory in which the search will be performed. Includes all subdirectories")] string directory,
@@ -194,7 +194,7 @@ internal sealed class DoCommand : Command
                 TreatNullObliviousAsNonNullable = true,
             }).Deserialize<JsonElement>(), schemaName, schemaDescription);
     }
-    
+
     public static ChatResponseFormatJson Markdown { get; } = ChatResponseFormatForType<MarkdownSchema>(
         schemaName: "MarkdownSchema",
         schemaDescription: "Markdown schema. Use this schema to generate markdown.");
