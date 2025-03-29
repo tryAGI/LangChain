@@ -85,7 +85,7 @@ internal sealed class DoCommand : Command
         })).ConfigureAwait(false);
 
         var aiTools = await Task.WhenAll(clients
-            .Select(async client => await client.GetAIFunctionsAsync().ConfigureAwait(false)))
+            .Select(async client => await client.ListToolsAsync().ConfigureAwait(false)))
             .ConfigureAwait(false);
 
         Console.WriteLine($"Found {aiTools.Length} AI functions.");
@@ -95,7 +95,7 @@ internal sealed class DoCommand : Command
             Console.WriteLine($"  {aiTool.Description}");
         }
 
-        var response = await llm.GetResponseAsync(
+        var response = await llm.GetResponseAsync<string>(
             inputText,
             new ChatOptions
             {
@@ -199,6 +199,8 @@ internal sealed class DoCommand : Command
         schemaName: "MarkdownSchema",
         schemaDescription: "Markdown schema. Use this schema to generate markdown.");
 }
+
+#pragma warning disable CA1812
 
 internal sealed class StringArraySchema
 {
