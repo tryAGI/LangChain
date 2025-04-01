@@ -66,13 +66,19 @@ internal static class Helpers
         await SetModelAsync(model).ConfigureAwait(false);
     }
 
-    public static async Task<IChatClient> GetChatModelAsync(CancellationToken cancellationToken = default)
+    public static async Task<IChatClient> GetChatModelAsync(string? model = null, bool debug = false, CancellationToken cancellationToken = default)
     {
         var settingsFolder = GetSettingsFolder();
 
         var provider = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), cancellationToken)
             .ConfigureAwait(false);
-        var modelId = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
+        var modelId = model ?? await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
+        if (debug)
+        {
+            Console.WriteLine("Using provider: " + provider);
+            Console.WriteLine("Using model: " + modelId);
+        }
+        
         IChatClient chatClient;
         Uri? endpoint = provider switch
         {
@@ -81,7 +87,7 @@ internal static class Helpers
         };
         modelId = modelId switch
         {
-            "latest-fast" => tryAGI.OpenAI.CreateChatCompletionRequestModelExtensions.ToValueString(tryAGI.OpenAI.ChatClient.LatestFastModel),
+            "latest-fast" => "o3-mini",
             "latest-smart" => tryAGI.OpenAI.CreateChatCompletionRequestModelExtensions.ToValueString(tryAGI.OpenAI.ChatClient.LatestSmartModel),
             _ => modelId,
         };
@@ -104,7 +110,16 @@ internal static class Helpers
         }
 
         using var factory = LoggerFactory.Create(builder =>
-            builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
+        {
+            if (debug)
+            {
+                builder.AddConsole().SetMinimumLevel(LogLevel.Trace);
+            }
+            else
+            {
+                builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
+            }
+        });
         var client = new ChatClientBuilder(chatClient)
             // 👇🏼 Add logging to the chat client, wrapping the function invocation client 
             .UseLogging(factory)
@@ -115,9 +130,9 @@ internal static class Helpers
         return client;
     }
 
-    public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt, CancellationToken cancellationToken = default)
+    public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt, bool debug = false, CancellationToken cancellationToken = default)
     {
-        IChatClient model = await GetChatModelAsync(cancellationToken).ConfigureAwait(false);
+        IChatClient model = await GetChatModelAsync(null, debug, cancellationToken).ConfigureAwait(false);
 
         var response = await model.GetResponseAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
 

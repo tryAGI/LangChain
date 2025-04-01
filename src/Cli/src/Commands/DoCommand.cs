@@ -19,6 +19,8 @@ internal sealed class DoCommand : Command
         var inputOption = CommonOptions.Input;
         var inputFileOption = CommonOptions.InputFile;
         var outputFileOption = CommonOptions.OutputFile;
+        var debugOption = CommonOptions.Debug;
+        var modelOption = CommonOptions.Model;
         var toolsOption = new Option<string[]>(
             aliases: ["--tools", "-t"],
             parseArgument: result => [.. result.Tokens.SelectMany(t => t.Value.Split(','))],
@@ -37,14 +39,16 @@ internal sealed class DoCommand : Command
         AddOption(toolsOption);
         AddOption(directoriesOption);
         AddOption(formatOption);
+        AddOption(debugOption);
+        AddOption(modelOption);
 
-        this.SetHandler(HandleAsync, inputOption, inputFileOption, outputFileOption, toolsOption, directoriesOption, formatOption);
+        this.SetHandler(HandleAsync, inputOption, inputFileOption, outputFileOption, toolsOption, directoriesOption, formatOption, debugOption, modelOption);
     }
 
-    private static async Task HandleAsync(string input, string inputPath, string outputPath, string[] tools, string[] directories, string format)
+    private static async Task HandleAsync(string input, string inputPath, string outputPath, string[] tools, string[] directories, string format, bool debug, string model)
     {
         var inputText = await Helpers.ReadInputAsync(input, inputPath).ConfigureAwait(false);
-        var llm = await Helpers.GetChatModelAsync().ConfigureAwait(false);
+        var llm = await Helpers.GetChatModelAsync(model, debug).ConfigureAwait(false);
 
         var clients = await Task.WhenAll(tools.Select(async tool =>
         {
@@ -96,7 +100,7 @@ internal sealed class DoCommand : Command
             Debug.WriteLine($"  {aiTool.Description}");
         }
 
-        var response = await llm.GetResponseAsync<string>(
+        var response = await llm.GetResponseAsync(
             inputText,
             new ChatOptions
             {

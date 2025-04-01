@@ -18,4 +18,14 @@ internal static class CommonOptions
         aliases: ["--output-file"],
         getDefaultValue: () => string.Empty,
         description: "Output file path");
+
+    public static Option<bool> Debug => new(
+        aliases: ["--debug"],
+        getDefaultValue: () => false,
+        description: "Show Debug Information");
+    
+    public static Option<string> Model => new(
+        aliases: ["--model"],
+        getDefaultValue: () => "o3-mini",
+        description: "Model to use for commands. Default is o3-mini.");
 }
