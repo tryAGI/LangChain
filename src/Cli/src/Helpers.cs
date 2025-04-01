@@ -104,7 +104,7 @@ internal static class Helpers
         }
 
         using var factory = LoggerFactory.Create(builder =>
-            builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
+            builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
         var client = new ChatClientBuilder(chatClient)
             // 👇🏼 Add logging to the chat client, wrapping the function invocation client 
             .UseLogging(factory)

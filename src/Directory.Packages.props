@@ -37,6 +37,7 @@
     <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="9.3.0-preview.1.25161.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.4" />
     <PackageVersion Include="Moq" Version="4.20.72" />

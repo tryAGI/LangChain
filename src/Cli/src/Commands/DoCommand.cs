@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Schema;
@@ -88,11 +89,11 @@ internal sealed class DoCommand : Command
             .Select(async client => await client.ListToolsAsync().ConfigureAwait(false)))
             .ConfigureAwait(false);
 
-        Console.WriteLine($"Found {aiTools.Length} AI functions.");
+        Debug.WriteLine($"Found {aiTools.Length} AI functions.");
         foreach (var aiTool in aiTools.SelectMany(x => x))
         {
-            Console.WriteLine($"  -- {aiTool.Name}");
-            Console.WriteLine($"  {aiTool.Description}");
+            Debug.WriteLine($"  -- {aiTool.Name}");
+            Debug.WriteLine($"  {aiTool.Description}");
         }
 
         var response = await llm.GetResponseAsync<string>(
@@ -145,7 +146,7 @@ internal sealed class DoCommand : Command
         {
             var paths = new List<string>();
 
-            Console.WriteLine($"Searching for files in \"{directory}\" containing \"{content}\"...");
+            Debug.WriteLine($"Searching for files in \"{directory}\" containing \"{content}\"...");
 
             foreach (var path in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
             {
@@ -173,10 +174,10 @@ internal sealed class DoCommand : Command
                 }
             }
 
-            Console.WriteLine($"Found {paths.Count} files:");
+            Debug.WriteLine($"Found {paths.Count} files:");
             foreach (var path in paths)
             {
-                Console.WriteLine(path);
+                Debug.WriteLine(path);
             }
 
             return paths;
