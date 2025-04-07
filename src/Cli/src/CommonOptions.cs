@@ -23,7 +23,7 @@ internal static class CommonOptions
         aliases: ["--debug"],
         getDefaultValue: () => false,
         description: "Show Debug Information");
-    
+
     public static Option<string> Model => new(
         aliases: ["--model"],
         getDefaultValue: () => "o3-mini",
