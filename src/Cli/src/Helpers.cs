@@ -78,7 +78,7 @@ internal static class Helpers
             Console.WriteLine("Using provider: " + provider);
             Console.WriteLine("Using model: " + modelId);
         }
-        
+
         IChatClient chatClient;
         Uri? endpoint = provider switch
         {
