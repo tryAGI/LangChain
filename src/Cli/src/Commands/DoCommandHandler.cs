@@ -25,15 +25,15 @@ internal sealed class DoCommandHandler : ICommandHandler
     public Option<string[]> ToolsOption { get; } = new(
         aliases: ["--tools", "-t"],
         parseArgument: result => result.Tokens.SelectMany(t => t.Value.Split(',')).ToArray(),
-        description: "Tools you want to use. Example: --tools=filesystem,fetch");
+        description: $"Tools you want to use. Example: --tools={string.Join(",", Formats.All)}");
     public Option<string[]> DirectoriesOption { get; } = new(
         aliases: ["--directories", "-d"],
-        getDefaultValue: () => new[] { "." },
-        description: "Directories you want to use.");
+        getDefaultValue: () => ["."],
+        description: "Directories you want to use for filesystem.");
     public Option<string> FormatOption { get; } = new(
         aliases: ["--format", "-f"],
-        getDefaultValue: () => "string",
-        description: "Format of answer. Can be string or string[] or json or conventional-commit.");
+        getDefaultValue: () => Formats.Text,
+        description: $"Format of answer. Can be {string.Join(" or ", Formats.All)}.");
 
     public int Invoke(InvocationContext context)
     {
@@ -60,7 +60,7 @@ internal sealed class DoCommandHandler : ICommandHandler
             return await McpClientFactory.CreateAsync(
                 tool switch
                 {
-                    "filesystem" => new McpServerConfig
+                    Tools.Filesystem => new McpServerConfig
                     {
                         Id = "Filesystem",
                         Name = "Filesystem",
@@ -71,7 +71,7 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"-y @modelcontextprotocol/server-filesystem {string.Join(' ', directories)}",
                         },
                     },
-                    "fetch" => new McpServerConfig
+                    Tools.Fetch => new McpServerConfig
                     {
                         Id = "Fetch",
                         Name = "Fetch",
@@ -80,6 +80,17 @@ internal sealed class DoCommandHandler : ICommandHandler
                         {
                             ["command"] = "python",
                             ["arguments"] = "-m mcp_server_fetch",
+                        },
+                    },
+                    Tools.GitHub => new McpServerConfig
+                    {
+                        Id = "Fetch",
+                        Name = "Fetch",
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "docker",
+                            ["arguments"] = $"run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} ghcr.io/github/github-mcp-server",
                         },
                     },
                     _ => throw new ArgumentException($"Unknown tool: {tool}"),
@@ -120,33 +131,33 @@ internal sealed class DoCommandHandler : ICommandHandler
                 ],
                 ResponseFormat = format switch
                 {
-                    "string" => ChatResponseFormat.Text,
-                    "string[]" => ChatResponseFormatForType<StringArraySchema>(),
-                    "conventional-commit" => ChatResponseFormatForType<ConventionalCommitSchema>(
+                    Formats.Text => ChatResponseFormat.Text,
+                    Formats.Lines => ChatResponseFormatForType<StringArraySchema>(),
+                    Formats.ConventionalCommit => ChatResponseFormatForType<ConventionalCommitSchema>(
                         schemaName: "ConventionalCommitSchema",
                         schemaDescription: "Conventional commit schema. Use this schema to generate conventional commits."),
-                    "markdown" => ChatResponseFormatForType<MarkdownSchema>(
+                    Formats.Markdown => ChatResponseFormatForType<MarkdownSchema>(
                         schemaName: "MarkdownSchema",
                         schemaDescription: "Markdown schema. Use this schema to generate markdown."),
-                    "json" => ChatResponseFormat.Json,
+                    Formats.Json => ChatResponseFormat.Json,
                     _ => throw new ArgumentException($"Unknown format: {format}"),
                 },
             }).ConfigureAwait(false);
 
         var output = response.Text;
-        if (format == "string[]")
+        if (format == Formats.Lines)
         {
             var value = JsonSerializer.Deserialize<StringArraySchema>(response.Text);
 
             output = string.Join(Environment.NewLine, value?.Value ?? []);
         }
-        else if (format == "markdown")
+        else if (format == Formats.Markdown)
         {
             var value = JsonSerializer.Deserialize<MarkdownSchema>(response.Text);
 
             output = value?.Markdown ?? string.Empty;
         }
-        else if (format == "conventional-commit")
+        else if (format == Formats.ConventionalCommit)
         {
             var value = JsonSerializer.Deserialize<ConventionalCommitSchema>(response.Text);
 
