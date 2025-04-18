@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Text;
 using LangChain.Cli.Commands;
 using LangChain.Cli.Commands.Auth;
 

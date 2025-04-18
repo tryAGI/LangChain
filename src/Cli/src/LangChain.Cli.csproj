@@ -1,36 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);CA1724;CA1303;IL3050;IL2026</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoWarn>$(NoWarn);CA1724;CA1303;IL3050;IL2026</NoWarn>
+        <SignAssembly>false</SignAssembly>
+    </PropertyGroup>
 
-  <PropertyGroup Label="NuGet">
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>langchain</ToolCommandName>
-    <Description>Command Line Interface to run some LangChain tasks.</Description>
-    <PackageTags>$(PackageTags);cli</PackageTags>
-  </PropertyGroup>
+    <PropertyGroup Label="NuGet">
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>langchain</ToolCommandName>
+        <Description>Command Line Interface to run some LangChain tasks.</Description>
+        <PackageTags>$(PackageTags);cli</PackageTags>
+    </PropertyGroup>
 
-  <ItemGroup>
-<!--    <PackageReference Include="LangChain.Providers.OpenRouter" />-->
-    <PackageReference Include="Microsoft.Extensions.AI" />
-    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" />
-    <PackageReference Include="Microsoft.Extensions.Logging" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-    <PackageReference Include="ModelContextProtocol" />
-    <PackageReference Include="OpenAI" />
-    <PackageReference Include="System.CommandLine" />
-    <PackageReference Include="System.Text.Json" />
-    <PackageReference Include="tryAGI.OpenAI" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.AI"/>
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI"/>
+        <PackageReference Include="Microsoft.Extensions.Logging"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug"/>
+        <PackageReference Include="ModelContextProtocol"/>
+        <PackageReference Include="OpenAI"/>
+        <PackageReference Include="System.CommandLine"/>
+        <PackageReference Include="System.Text.Json"/>
+        <PackageReference Include="tryAGI.OpenAI"/>
+    </ItemGroup>
 
-<!--  <ItemGroup>-->
-<!--    <ProjectReference Include="..\..\Meta\src\LangChain.csproj" />-->
-<!--  </ItemGroup>-->
+    <ItemGroup>
+        <InternalsVisibleTo Include="LangChain.Cli.IntegrationTests"/>
+    </ItemGroup>
 
 </Project>

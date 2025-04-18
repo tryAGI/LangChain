@@ -1,4 +1,6 @@
 using System.ClientModel;
+using System.CommandLine;
+using System.CommandLine.IO;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using OpenAI;
@@ -36,7 +38,7 @@ internal static class Helpers
         return inputText;
     }
 
-    public static async Task WriteOutputAsync(string outputText, string outputPath, CancellationToken cancellationToken = default)
+    public static async Task WriteOutputAsync(string outputText, string? outputPath, IConsole? console = null, CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(outputPath))
         {
@@ -44,7 +46,14 @@ internal static class Helpers
         }
         else
         {
-            Console.WriteLine(outputText);
+            if (console is not null)
+            {
+                console.Out.WriteLine(outputText);
+            }
+            else
+            {
+                Console.WriteLine(outputText);
+            }
         }
     }
 
