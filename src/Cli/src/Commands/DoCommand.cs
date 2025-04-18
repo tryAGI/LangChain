@@ -16,6 +16,7 @@ internal sealed class DoCommand : Command
         AddOption(handler.FormatOption);
         AddOption(handler.DebugOption);
         AddOption(handler.ModelOption);
+        AddOption(handler.ProviderOption);
         
         Handler = handler;
     }

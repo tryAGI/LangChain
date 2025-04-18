@@ -28,4 +28,9 @@ internal static class CommonOptions
         aliases: ["--model"],
         getDefaultValue: () => "o3-mini",
         description: "Model to use for commands. Default is o3-mini.");
+
+    public static Option<string> Provider => new(
+        aliases: ["--provider"],
+        getDefaultValue: () => Providers.OpenAi,
+        description: $"Provider to use for commands. Default is {Providers.OpenAi}.");
 }

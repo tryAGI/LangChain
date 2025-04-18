@@ -21,6 +21,7 @@ internal sealed class DoCommandHandler : ICommandHandler
     public Option<string> OutputFileOption { get; } = CommonOptions.OutputFile;
     public Option<bool> DebugOption { get; } = CommonOptions.Debug;
     public Option<string> ModelOption { get; } = CommonOptions.Model;
+    public Option<string> ProviderOption { get; } = CommonOptions.Provider;
     public Option<string[]> ToolsOption { get; } = new(
         aliases: ["--tools", "-t"],
         parseArgument: result => result.Tokens.SelectMany(t => t.Value.Split(',')).ToArray(),
@@ -46,12 +47,13 @@ internal sealed class DoCommandHandler : ICommandHandler
         var outputPath = context.ParseResult.GetValueForOption(OutputFileOption);
         var debug = context.ParseResult.GetValueForOption(DebugOption);
         var model = context.ParseResult.GetValueForOption(ModelOption);
+        var provider = context.ParseResult.GetValueForOption(ProviderOption);
         var tools = context.ParseResult.GetValueForOption(ToolsOption) ?? [];
         var directories = context.ParseResult.GetValueForOption(DirectoriesOption) ?? [];
         var format = context.ParseResult.GetValueForOption(FormatOption);
 
         var inputText = await Helpers.ReadInputAsync(input, inputPath).ConfigureAwait(false);
-        var llm = await Helpers.GetChatModelAsync(model, debug).ConfigureAwait(false);
+        var llm = Helpers.GetChatModel(model, provider, debug);
 
         var clients = await Task.WhenAll(tools.Select(async tool =>
         {

@@ -9,14 +9,6 @@ namespace LangChain.Cli;
 
 internal static class Helpers
 {
-    public static string GetSettingsFolder()
-    {
-        var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LangChainDotnet.Cli");
-        Directory.CreateDirectory(folder);
-
-        return folder;
-    }
-
     public static async Task<string> ReadInputAsync(string input, string inputPath, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(input) && string.IsNullOrWhiteSpace(inputPath))
@@ -57,35 +49,16 @@ internal static class Helpers
         }
     }
 
-    public static async Task SetModelAsync(string model)
+    public static IChatClient GetChatModel(
+        string? model = null,
+        string? provider = null,
+        bool debug = false,
+        CancellationToken cancellationToken = default)
     {
-        var settingsFolder = GetSettingsFolder();
-
-        await File.WriteAllTextAsync(Path.Combine(settingsFolder, "model.txt"), model).ConfigureAwait(false);
-
-        Console.WriteLine($"Model set to {model}");
-    }
-
-    public static async Task AuthenticateWithApiKeyAsync(string apiKey, string model, string provider)
-    {
-        var settingsFolder = GetSettingsFolder();
-
-        await File.WriteAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), provider).ConfigureAwait(false);
-        await File.WriteAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), apiKey).ConfigureAwait(false);
-        await SetModelAsync(model).ConfigureAwait(false);
-    }
-
-    public static async Task<IChatClient> GetChatModelAsync(string? model = null, bool debug = false, CancellationToken cancellationToken = default)
-    {
-        var settingsFolder = GetSettingsFolder();
-
-        var provider = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "provider.txt"), cancellationToken)
-            .ConfigureAwait(false);
-        var modelId = model ?? await File.ReadAllTextAsync(Path.Combine(settingsFolder, "model.txt"), cancellationToken).ConfigureAwait(false);
         if (debug)
         {
             Console.WriteLine("Using provider: " + provider);
-            Console.WriteLine("Using model: " + modelId);
+            Console.WriteLine("Using model: " + model);
         }
 
         IChatClient chatClient;
@@ -94,24 +67,32 @@ internal static class Helpers
             Providers.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
             _ => null,
         };
-        modelId = modelId switch
+        model = model switch
         {
-            "latest-fast" => "o3-mini",
-            "latest-smart" => tryAGI.OpenAI.CreateChatCompletionRequestModelExtensions.ToValueString(tryAGI.OpenAI.ChatClient.LatestSmartModel),
-            _ => modelId,
+            null => "o4-mini",
+            "latest-fast" => "o4-mini",
+            "latest-smart" => "o3",
+            _ => model,
+        };
+        var apiKey = provider switch
+        {
+            Providers.OpenAi or null => Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+                throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set."),
+            Providers.OpenRouter => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
+                throw new InvalidOperationException("OPENROUTER_API_KEY environment variable is not set."),
+            _ => throw new NotImplementedException(),
         };
 
         switch (provider)
         {
-            case Providers.OpenAi or Providers.OpenRouter:
+            case null or Providers.OpenAi or Providers.OpenRouter:
                 {
-                    var apiKey = await File.ReadAllTextAsync(Path.Combine(settingsFolder, "api_key.txt"), cancellationToken).ConfigureAwait(false);
                     var openAiClient = new OpenAIClient(new ApiKeyCredential(apiKey), new OpenAIClientOptions
                     {
                         Endpoint = endpoint,
                     });
 
-                    chatClient = openAiClient.AsChatClient(modelId);
+                    chatClient = openAiClient.AsChatClient(model);
                     break;
                 }
             default:
@@ -137,14 +118,5 @@ internal static class Helpers
             .Build();
 
         return client;
-    }
-
-    public static async Task<string> GenerateUsingAuthenticatedModelAsync(string prompt, bool debug = false, CancellationToken cancellationToken = default)
-    {
-        IChatClient model = await GetChatModelAsync(null, debug, cancellationToken).ConfigureAwait(false);
-
-        var response = await model.GetResponseAsync(prompt, cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        return response.Text;
     }
 }

@@ -25,4 +25,15 @@ public class CliTests
                "--input \"There was fixed a bug in FixOpenAPISpec project. Please show me the commit message.\"")
             .ShouldWork<DoCommand>();
     }
+    
+    [Test]
+    public async Task DoCommand_WithOpenRouterProvider_ShouldReturnValidOutput()
+    {
+        await ("do " +
+               "--format conventional-commit " +
+               "--provider openrouter " +
+               "--model google/gemini-2.0-flash-exp:free " +
+               "--input \"Please show me the commit message for the following text: There was fixed a bug in FixOpenAPISpec project.\"")
+            .ShouldWork<DoCommand>();
+    }
 }
