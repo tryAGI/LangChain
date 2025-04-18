@@ -52,8 +52,7 @@ internal static class Helpers
     public static IChatClient GetChatModel(
         string? model = null,
         string? provider = null,
-        bool debug = false,
-        CancellationToken cancellationToken = default)
+        bool debug = false)
     {
         if (debug)
         {
@@ -64,12 +63,14 @@ internal static class Helpers
         IChatClient chatClient;
         Uri? endpoint = provider switch
         {
-            Providers.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
+            Providers.Free or Providers.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
             _ => null,
         };
         model = model switch
         {
             null => "o4-mini",
+            "free" or "free-fast" => "google/gemini-2.0-flash-exp:free",
+            "free-smart" => "deepseek/deepseek-r1:free",
             "latest-fast" => "o4-mini",
             "latest-smart" => "o3",
             _ => model,
@@ -78,14 +79,14 @@ internal static class Helpers
         {
             Providers.OpenAi or null => Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
                 throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set."),
-            Providers.OpenRouter => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
+            Providers.OpenRouter or Providers.Free => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
                 throw new InvalidOperationException("OPENROUTER_API_KEY environment variable is not set."),
             _ => throw new NotImplementedException(),
         };
 
         switch (provider)
         {
-            case null or Providers.OpenAi or Providers.OpenRouter:
+            default:
                 {
                     var openAiClient = new OpenAIClient(new ApiKeyCredential(apiKey), new OpenAIClientOptions
                     {
@@ -95,8 +96,6 @@ internal static class Helpers
                     chatClient = openAiClient.AsChatClient(model);
                     break;
                 }
-            default:
-                throw new NotSupportedException("Provider not supported.");
         }
 
         using var factory = LoggerFactory.Create(builder =>
