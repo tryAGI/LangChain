@@ -36,4 +36,16 @@ public class CliTests
                "--input \"Please show me the commit message for the following text: There was fixed a bug in FixOpenAPISpec project.\"")
             .ShouldWork<DoCommand>();
     }
+    
+    [Test]
+    public async Task DoCommand_WithGitAndFileSystem_CreatesRepo_ShouldReturnValidOutput()
+    {
+        await ("do " +
+               "--tools filesystem,git " +
+               "--directories \"/Users/havendv/GitHub/tryAGI/\" " +
+               "--provider openrouter " +
+               "--model google/gemini-2.0-flash-exp:free " +
+               "--input \"Please create new repo with name `Do` in `/Users/havendv/GitHub/tryAGI/` dir and git init it.\"")
+            .ShouldWork<DoCommand>();
+    }
 }

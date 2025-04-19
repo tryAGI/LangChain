@@ -93,6 +93,17 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} ghcr.io/github/github-mcp-server",
                         },
                     },
+                    Tools.Git => new McpServerConfig
+                    {
+                        Id = "Git",
+                        Name = "Git",
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "docker",
+                            ["arguments"] = $"run -i --rm {string.Join(' ', directories.Select(x => $"--mount type=bind,src={x},dst={x} "))} mcp/git",
+                        },
+                    },
                     _ => throw new ArgumentException($"Unknown tool: {tool}"),
                 },
                 new McpClientOptions
@@ -101,7 +112,8 @@ internal sealed class DoCommandHandler : ICommandHandler
                     {
                         Name = "LangChain CLI DO client",
                         Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.0.0",
-                    }
+                    },
+                    InitializationTimeout = TimeSpan.FromMinutes(10),
                 }).ConfigureAwait(false);
         })).ConfigureAwait(false);
 
