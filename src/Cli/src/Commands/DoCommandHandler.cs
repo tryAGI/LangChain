@@ -62,8 +62,8 @@ internal sealed class DoCommandHandler : ICommandHandler
                 {
                     Tools.Filesystem => new McpServerConfig
                     {
-                        Id = "Filesystem",
-                        Name = "Filesystem",
+                        Id = Tools.Filesystem,
+                        Name = Tools.Filesystem,
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -73,19 +73,19 @@ internal sealed class DoCommandHandler : ICommandHandler
                     },
                     Tools.Fetch => new McpServerConfig
                     {
-                        Id = "Fetch",
-                        Name = "Fetch",
+                        Id = Tools.Fetch,
+                        Name = Tools.Fetch,
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
-                            ["command"] = "python",
-                            ["arguments"] = "-m mcp_server_fetch",
+                            ["command"] = "docker",
+                            ["arguments"] = "run -i --rm mcp/fetch",
                         },
                     },
                     Tools.GitHub => new McpServerConfig
                     {
-                        Id = "Fetch",
-                        Name = "Fetch",
+                        Id = Tools.GitHub,
+                        Name = Tools.GitHub,
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -95,13 +95,46 @@ internal sealed class DoCommandHandler : ICommandHandler
                     },
                     Tools.Git => new McpServerConfig
                     {
-                        Id = "Git",
-                        Name = "Git",
+                        Id = Tools.Git,
+                        Name = Tools.Git,
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
                             ["command"] = "docker",
                             ["arguments"] = $"run -i --rm {string.Join(' ', directories.Select(x => $"--mount type=bind,src={x},dst={x} "))} mcp/git",
+                        },
+                    },
+                    Tools.Puppeteer => new McpServerConfig
+                    {
+                        Id = Tools.Puppeteer,
+                        Name = Tools.Puppeteer,
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "docker",
+                            ["arguments"] = "run -i --rm --init -e DOCKER_CONTAINER=true mcp/puppeteer",
+                        },
+                    },
+                    Tools.SequentialThinking => new McpServerConfig
+                    {
+                        Id = Tools.SequentialThinking,
+                        Name = Tools.SequentialThinking,
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "docker",
+                            ["arguments"] = "run -i --rm mcp/sequentialthinking",
+                        },
+                    },
+                    Tools.Slack => new McpServerConfig
+                    {
+                        Id = Tools.Slack,
+                        Name = Tools.Slack,
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "docker",
+                            ["arguments"] = $"run -i --rm -e SLACK_BOT_TOKEN={Environment.GetEnvironmentVariable("SLACK_BOT_TOKEN")} -e SLACK_TEAM_ID={Environment.GetEnvironmentVariable("SLACK_TEAM_ID")} -e SLACK_CHANNEL_IDS={Environment.GetEnvironmentVariable("SLACK_CHANNEL_IDS")} mcp/slack",
                         },
                     },
                     _ => throw new ArgumentException($"Unknown tool: {tool}"),
