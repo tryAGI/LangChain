@@ -9,7 +9,7 @@ permissions:
   actions: write
 
 jobs:
-  together:
+  auto-format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -64,4 +64,4 @@ jobs:
         if: steps.changes.outputs.has_changes == 'true'
         run: gh pr create -B main -H ${{ steps.branch.outputs.branch_name }} --title 'style:Run dotnet format' --body 'Created by Github Actions'
         env:
-          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
