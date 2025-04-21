@@ -9,7 +9,7 @@ internal static class Tools
     public const string Puppeteer = "puppeteer";
     public const string SequentialThinking = "sequential-thinking";
     public const string Slack = "slack";
-    
+
     public static string[] All =>
     [
         Filesystem,

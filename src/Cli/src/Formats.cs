@@ -7,7 +7,7 @@ internal static class Formats
     public const string Json = "json";
     public const string Markdown = "markdown";
     public const string ConventionalCommit = "conventional-commit";
-    
+
     public static string[] All =>
     [
         Text,

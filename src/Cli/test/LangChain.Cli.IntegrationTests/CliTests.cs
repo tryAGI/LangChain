@@ -16,7 +16,7 @@ public class CliTests
             "--input \"Please show me path of FixOpenAPISpec project Program.cs which contains `openApiDocument.Paths` modification. Start from `/Users/havendv/GitHub/tryAGI/` dir. \"")
             .ShouldWork<DoCommand>();
     }
-    
+
     [Test]
     public async Task DoCommand_WithConventionalCommitFormat_ShouldReturnValidOutput()
     {
@@ -25,7 +25,7 @@ public class CliTests
                "--input \"There was fixed a bug in FixOpenAPISpec project. Please show me the commit message.\"")
             .ShouldWork<DoCommand>();
     }
-    
+
     [Test]
     public async Task DoCommand_WithOpenRouterProvider_ShouldReturnValidOutput()
     {
@@ -36,7 +36,7 @@ public class CliTests
                "--input \"Please show me the commit message for the following text: There was fixed a bug in FixOpenAPISpec project.\"")
             .ShouldWork<DoCommand>();
     }
-    
+
     [Test]
     public async Task DoCommand_WithGitAndFileSystem_CreatesRepo_ShouldReturnValidOutput()
     {
