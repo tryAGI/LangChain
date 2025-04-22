@@ -41,6 +41,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.4" />
     <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="Octokit" Version="14.0.0" />
     <PackageVersion Include="OpenAI" Version="2.2.0-beta.4" />
     <PackageVersion Include="Testcontainers" Version="4.4.0" />
     <PackageVersion Include="tryAGI.OpenAI" Version="4.2.0" />

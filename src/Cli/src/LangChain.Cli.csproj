@@ -23,6 +23,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug"/>
         <PackageReference Include="ModelContextProtocol"/>
+        <PackageReference Include="Octokit" />
         <PackageReference Include="OpenAI"/>
         <PackageReference Include="System.CommandLine"/>
         <PackageReference Include="System.Text.Json"/>

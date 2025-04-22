@@ -12,6 +12,7 @@ using ModelContextProtocol;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using ModelContextProtocol.Protocol.Types;
+using Octokit;
 using Tool = LangChain.Cli.Models.Tool;
 
 namespace LangChain.Cli.Commands;
@@ -188,6 +189,12 @@ internal sealed class DoCommandHandler : ICommandHandler
                             name: "FindFilePathsByContent",
                             description: "Finds file paths by content.") }
                         : [],
+                    .. tools.Contains(Tool.GitHub)
+                        ? new [] { AIFunctionFactory.Create(
+                            GetAvailableLabels,
+                            name: "GetAvailableLabelsForRepository",
+                            description: "Retrieves all available labels for a GitHub repository.") }
+                        : [],
                 ],
                 ResponseFormat = format switch
                 {
@@ -270,6 +277,17 @@ internal sealed class DoCommandHandler : ICommandHandler
             }
 
             return paths;
+        }
+        
+        [Description("Retrieves all available labels for a GitHub repository.")]
+        static async Task<IReadOnlyList<Label>> GetAvailableLabels(
+            [Description("The owner of the repository")] string owner,
+            [Description("The name of the repository")] string name)
+        {
+            var github = new GitHubClient(new ProductHeaderValue("LangChain DO MCP extension"));
+            var labels = await github.Issue.Labels.GetAllForRepository(owner, name).ConfigureAwait(false);
+            
+            return labels;
         }
     }
 
