@@ -25,9 +25,10 @@ internal sealed class DoCommandHandler : ICommandHandler
     public Option<bool> DebugOption { get; } = CommonOptions.Debug;
     public Option<string> ModelOption { get; } = CommonOptions.Model;
     public Option<Provider> ProviderOption { get; } = CommonOptions.Provider;
-    public Option<Tool[]> ToolsOption { get; } = new(
+    public Option<string[]> ToolsOption { get; } = new(
         aliases: ["--tools", "-t"],
-        description: $"Tools you want to use - {string.Join(", ", Enum.GetNames<Tool>())}.")
+        description: $"Tools you want to use - {string.Join(", ", Enum.GetNames<Tool>())}. " +
+                     "You can specify toolsets using square brackets, e.g., github[issues].")
     {
         AllowMultipleArgumentsPerToken = true,
     };
@@ -53,15 +54,28 @@ internal sealed class DoCommandHandler : ICommandHandler
         var debug = context.ParseResult.GetValueForOption(DebugOption);
         var model = context.ParseResult.GetValueForOption(ModelOption);
         var provider = context.ParseResult.GetValueForOption(ProviderOption);
-        var tools = context.ParseResult.GetValueForOption(ToolsOption) ?? [];
+        var toolStrings = context.ParseResult.GetValueForOption(ToolsOption) ?? [];
         var directories = context.ParseResult.GetValueForOption(DirectoriesOption) ?? [];
         var format = context.ParseResult.GetValueForOption(FormatOption);
+
+        // Parse tool strings into tools and toolsets
+        var toolsWithToolsets = toolStrings.Select(ToolExtensions.ParseTool).ToArray();
+        var tools = toolsWithToolsets.Select(t => t.Tool).Distinct().ToArray();
+
+        // Create a dictionary to store toolsets for each tool
+        var toolsetsByTool = toolsWithToolsets
+            .Where(t => t.Toolsets != null)
+            .GroupBy(t => t.Tool)
+            .ToDictionary(g => g.Key, g => g.SelectMany(t => t.Toolsets!).ToArray());
 
         var inputText = await Helpers.ReadInputAsync(input, inputPath).ConfigureAwait(false);
         var llm = Helpers.GetChatModel(model, provider, debug);
 
         var clients = await Task.WhenAll(tools.Select(async tool =>
         {
+            // Get toolsets for this tool if any
+            var toolsets = toolsetsByTool.GetValueOrDefault(tool) ?? [];
+
             return await McpClientFactory.CreateAsync(
                 tool switch
                 {
@@ -95,7 +109,13 @@ internal sealed class DoCommandHandler : ICommandHandler
                         TransportOptions = new Dictionary<string, string>
                         {
                             ["command"] = "docker",
-                            ["arguments"] = $"run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} ghcr.io/github/github-mcp-server",
+                            ["arguments"] = $"run -i --rm " +
+                                            $"-e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} " +
+                                            // $"-e GITHUB_DYNAMIC_TOOLSETS=1 " +
+                                            (toolsets.Length != 0 ? 
+                                                $"-e GITHUB_TOOLSETS={string.Join(',', toolsets)} "
+                                                : string.Empty) +
+                                            "ghcr.io/github/github-mcp-server",
                         },
                     },
                     Tool.Git => new McpServerConfig

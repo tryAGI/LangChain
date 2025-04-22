@@ -55,4 +55,16 @@ public class CliTests
                "--input \"Please create new repo with name `Do` in `/Users/havendv/GitHub/tryAGI/` dir and git init it.\"")
             .ShouldWork<DoCommand>();
     }
+    
+    [Test]
+    public async Task DoCommand_AutoLabeling_ShouldReturnValidOutput()
+    {
+        await ("do " +
+               "--tools github[issues] " +
+               "--provider openrouter " +
+               "--model free-fast " +
+               "--debug " +
+               "--input \"You work in the tryAGI/Replicate repository on the issue #97. Always retrieve issue body/comments and always retrieve available labels (because almost always there is custom labels), and always call `update_issue` tool to update the issue with suitable labels. Don't change body and other data.\"")
+            .ShouldWork<DoCommand>();
+    }
 }
