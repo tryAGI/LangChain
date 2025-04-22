@@ -141,6 +141,17 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"run -i --rm -e SLACK_BOT_TOKEN={Environment.GetEnvironmentVariable("SLACK_BOT_TOKEN")} -e SLACK_TEAM_ID={Environment.GetEnvironmentVariable("SLACK_TEAM_ID")} -e SLACK_CHANNEL_IDS={Environment.GetEnvironmentVariable("SLACK_CHANNEL_IDS")} mcp/slack",
                         },
                     },
+                    Tool.Figma => new McpServerConfig
+                    {
+                        Id = Tool.Figma.ToString(),
+                        Name = Tool.Figma.ToString(),
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "npx",
+                            ["arguments"] = $"-y figma-developer-mcp --figma-api-key={Environment.GetEnvironmentVariable("FIGMA_API_KEY")} --stdio",
+                        },
+                    },
                     _ => throw new ArgumentException($"Unknown tool: {tool}"),
                 },
                 new McpClientOptions

@@ -9,4 +9,5 @@ internal enum Tool
     Puppeteer,
     SequentialThinking,
     Slack,
+    Figma,
 }
