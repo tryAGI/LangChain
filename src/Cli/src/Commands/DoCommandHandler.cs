@@ -284,7 +284,11 @@ internal sealed class DoCommandHandler : ICommandHandler
             [Description("The owner of the repository")] string owner,
             [Description("The name of the repository")] string name)
         {
-            var github = new GitHubClient(new ProductHeaderValue("LangChain DO MCP extension"));
+            var github = new GitHubClient(new ProductHeaderValue("LangChain-DO-MCP-extension"))
+            {
+                Credentials = new Credentials(Environment.GetEnvironmentVariable("GITHUB_TOKEN") ??
+                                              throw new InvalidOperationException("GITHUB_TOKEN environment variable is not set."))
+            };
             var labels = await github.Issue.Labels.GetAllForRepository(owner, name).ConfigureAwait(false);
             
             return labels;
