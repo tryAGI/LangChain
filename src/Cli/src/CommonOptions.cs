@@ -1,4 +1,5 @@
 using System.CommandLine;
+using LangChain.Cli.Models;
 
 namespace LangChain.Cli;
 
@@ -9,14 +10,14 @@ internal static class CommonOptions
         getDefaultValue: () => string.Empty,
         description: "Input text");
 
-    public static Option<string> InputFile => new(
+    public static Option<FileInfo?> InputFile => new(
         aliases: ["--input-file"],
-        getDefaultValue: () => string.Empty,
+        getDefaultValue: () => null,
         description: "Input file path");
 
-    public static Option<string> OutputFile => new(
+    public static Option<FileInfo?> OutputFile => new(
         aliases: ["--output-file"],
-        getDefaultValue: () => string.Empty,
+        getDefaultValue: () => null,
         description: "Output file path");
 
     public static Option<bool> Debug => new(
@@ -27,10 +28,10 @@ internal static class CommonOptions
     public static Option<string> Model => new(
         aliases: ["--model"],
         getDefaultValue: () => "o3-mini",
-        description: "Model to use for commands. Default is o3-mini.");
+        description: "Model to use for commands.");
 
-    public static Option<string> Provider => new(
+    public static Option<Provider> Provider => new(
         aliases: ["--provider"],
-        getDefaultValue: () => Providers.OpenAi,
-        description: $"Provider to use for commands. Default is {Providers.OpenAi}.");
+        getDefaultValue: () => default,
+        description: $"Provider to use for commands.");
 }

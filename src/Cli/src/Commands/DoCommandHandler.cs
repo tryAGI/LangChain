@@ -6,34 +6,38 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Schema;
+using LangChain.Cli.Models;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using ModelContextProtocol.Protocol.Types;
+using Tool = LangChain.Cli.Models.Tool;
 
 namespace LangChain.Cli.Commands;
 
 internal sealed class DoCommandHandler : ICommandHandler
 {
     public Option<string> InputOption { get; } = CommonOptions.Input;
-    public Option<string> InputFileOption { get; } = CommonOptions.InputFile;
-    public Option<string> OutputFileOption { get; } = CommonOptions.OutputFile;
+    public Option<FileInfo?> InputFileOption { get; } = CommonOptions.InputFile;
+    public Option<FileInfo?> OutputFileOption { get; } = CommonOptions.OutputFile;
     public Option<bool> DebugOption { get; } = CommonOptions.Debug;
     public Option<string> ModelOption { get; } = CommonOptions.Model;
-    public Option<string> ProviderOption { get; } = CommonOptions.Provider;
-    public Option<string[]> ToolsOption { get; } = new(
+    public Option<Provider> ProviderOption { get; } = CommonOptions.Provider;
+    public Option<Tool[]> ToolsOption { get; } = new(
         aliases: ["--tools", "-t"],
-        parseArgument: result => result.Tokens.SelectMany(t => t.Value.Split(',')).ToArray(),
-        description: $"Tools you want to use. Example: --tools={string.Join(",", Formats.All)}");
-    public Option<string[]> DirectoriesOption { get; } = new(
+        description: $"Tools you want to use - {string.Join(", ", Enum.GetNames<Tool>())}.")
+    {
+        AllowMultipleArgumentsPerToken = true,
+    };
+    public Option<DirectoryInfo[]> DirectoriesOption { get; } = new(
         aliases: ["--directories", "-d"],
-        getDefaultValue: () => ["."],
+        getDefaultValue: () => [new DirectoryInfo(".")],
         description: "Directories you want to use for filesystem.");
-    public Option<string> FormatOption { get; } = new(
+    public Option<Format> FormatOption { get; } = new(
         aliases: ["--format", "-f"],
-        getDefaultValue: () => Formats.Text,
-        description: $"Format of answer. Can be {string.Join(" or ", Formats.All)}.");
+        getDefaultValue: () => Format.Text,
+        description: "Format of answer.");
 
     public int Invoke(InvocationContext context)
     {
@@ -43,7 +47,7 @@ internal sealed class DoCommandHandler : ICommandHandler
     public async Task<int> InvokeAsync(InvocationContext context)
     {
         var input = context.ParseResult.GetValueForOption(InputOption) ?? string.Empty;
-        var inputPath = context.ParseResult.GetValueForOption(InputFileOption) ?? string.Empty;
+        var inputPath = context.ParseResult.GetValueForOption(InputFileOption);
         var outputPath = context.ParseResult.GetValueForOption(OutputFileOption);
         var debug = context.ParseResult.GetValueForOption(DebugOption);
         var model = context.ParseResult.GetValueForOption(ModelOption);
@@ -60,21 +64,21 @@ internal sealed class DoCommandHandler : ICommandHandler
             return await McpClientFactory.CreateAsync(
                 tool switch
                 {
-                    Tools.Filesystem => new McpServerConfig
+                    Tool.Filesystem => new McpServerConfig
                     {
-                        Id = Tools.Filesystem,
-                        Name = Tools.Filesystem,
+                        Id = Tool.Filesystem.ToString(),
+                        Name = Tool.Filesystem.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
                             ["command"] = "npx",
-                            ["arguments"] = $"-y @modelcontextprotocol/server-filesystem {string.Join(' ', directories)}",
+                            ["arguments"] = $"-y @modelcontextprotocol/server-filesystem {string.Join(' ', directories.Select(x => x.FullName))}",
                         },
                     },
-                    Tools.Fetch => new McpServerConfig
+                    Tool.Fetch => new McpServerConfig
                     {
-                        Id = Tools.Fetch,
-                        Name = Tools.Fetch,
+                        Id = Tool.Fetch.ToString(),
+                        Name = Tool.Fetch.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -82,10 +86,10 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = "run -i --rm mcp/fetch",
                         },
                     },
-                    Tools.GitHub => new McpServerConfig
+                    Tool.GitHub => new McpServerConfig
                     {
-                        Id = Tools.GitHub,
-                        Name = Tools.GitHub,
+                        Id = Tool.GitHub.ToString(),
+                        Name = Tool.GitHub.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -93,10 +97,10 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} ghcr.io/github/github-mcp-server",
                         },
                     },
-                    Tools.Git => new McpServerConfig
+                    Tool.Git => new McpServerConfig
                     {
-                        Id = Tools.Git,
-                        Name = Tools.Git,
+                        Id = Tool.Git.ToString(),
+                        Name = Tool.Git.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -104,10 +108,10 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"run -i --rm {string.Join(' ', directories.Select(x => $"--mount type=bind,src={x},dst={x} "))} mcp/git",
                         },
                     },
-                    Tools.Puppeteer => new McpServerConfig
+                    Tool.Puppeteer => new McpServerConfig
                     {
-                        Id = Tools.Puppeteer,
-                        Name = Tools.Puppeteer,
+                        Id = Tool.Puppeteer.ToString(),
+                        Name = Tool.Puppeteer.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -115,10 +119,10 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = "run -i --rm --init -e DOCKER_CONTAINER=true mcp/puppeteer",
                         },
                     },
-                    Tools.SequentialThinking => new McpServerConfig
+                    Tool.SequentialThinking => new McpServerConfig
                     {
-                        Id = Tools.SequentialThinking,
-                        Name = Tools.SequentialThinking,
+                        Id = Tool.SequentialThinking.ToString(),
+                        Name = Tool.SequentialThinking.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -126,10 +130,10 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = "run -i --rm mcp/sequentialthinking",
                         },
                     },
-                    Tools.Slack => new McpServerConfig
+                    Tool.Slack => new McpServerConfig
                     {
-                        Id = Tools.Slack,
-                        Name = Tools.Slack,
+                        Id = Tool.Slack.ToString(),
+                        Name = Tool.Slack.ToString(),
                         TransportType = TransportTypes.StdIo,
                         TransportOptions = new Dictionary<string, string>
                         {
@@ -167,7 +171,7 @@ internal sealed class DoCommandHandler : ICommandHandler
             {
                 Tools = [
                     .. aiTools.SelectMany(x => x).ToArray(),
-                    .. tools.Contains("filesystem")
+                    .. tools.Contains(Tool.Filesystem)
                         ? new [] { AIFunctionFactory.Create(
                             FindFilePathsByContent,
                             name: "FindFilePathsByContent",
@@ -176,33 +180,33 @@ internal sealed class DoCommandHandler : ICommandHandler
                 ],
                 ResponseFormat = format switch
                 {
-                    Formats.Text => ChatResponseFormat.Text,
-                    Formats.Lines => ChatResponseFormatForType<StringArraySchema>(),
-                    Formats.ConventionalCommit => ChatResponseFormatForType<ConventionalCommitSchema>(
+                    Format.Text => ChatResponseFormat.Text,
+                    Format.Lines => ChatResponseFormatForType<StringArraySchema>(),
+                    Format.ConventionalCommit => ChatResponseFormatForType<ConventionalCommitSchema>(
                         schemaName: "ConventionalCommitSchema",
                         schemaDescription: "Conventional commit schema. Use this schema to generate conventional commits."),
-                    Formats.Markdown => ChatResponseFormatForType<MarkdownSchema>(
+                    Format.Markdown => ChatResponseFormatForType<MarkdownSchema>(
                         schemaName: "MarkdownSchema",
                         schemaDescription: "Markdown schema. Use this schema to generate markdown."),
-                    Formats.Json => ChatResponseFormat.Json,
+                    Format.Json => ChatResponseFormat.Json,
                     _ => throw new ArgumentException($"Unknown format: {format}"),
                 },
             }).ConfigureAwait(false);
 
         var output = response.Text;
-        if (format == Formats.Lines)
+        if (format == Format.Lines)
         {
             var value = JsonSerializer.Deserialize<StringArraySchema>(response.Text);
 
             output = string.Join(Environment.NewLine, value?.Value ?? []);
         }
-        else if (format == Formats.Markdown)
+        else if (format == Format.Markdown)
         {
             var value = JsonSerializer.Deserialize<MarkdownSchema>(response.Text);
 
             output = value?.Markdown ?? string.Empty;
         }
-        else if (format == Formats.ConventionalCommit)
+        else if (format == Format.ConventionalCommit)
         {
             var value = JsonSerializer.Deserialize<ConventionalCommitSchema>(response.Text);
 

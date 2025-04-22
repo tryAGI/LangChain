@@ -14,6 +14,7 @@ jobs:
       issue-number: ${{ github.event.issue.number }}
       model: free-fast
       provider: openrouter
+      instructions: 'if an issue looks simple and does not affect database, add one of aider labels to try to solve it automatically'
     secrets:
       personal-access-token: ${{ secrets.PERSONAL_TOKEN }}
       openrouter-api-key: ${{ secrets.OPENROUTER_API_KEY_FOR_PRS }}

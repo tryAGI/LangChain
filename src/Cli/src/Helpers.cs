@@ -1,6 +1,7 @@
 using System.ClientModel;
 using System.CommandLine;
 using System.CommandLine.IO;
+using LangChain.Cli.Models;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using OpenAI;
@@ -9,32 +10,32 @@ namespace LangChain.Cli;
 
 internal static class Helpers
 {
-    public static async Task<string> ReadInputAsync(string input, string inputPath, CancellationToken cancellationToken = default)
+    public static async Task<string> ReadInputAsync(string input, FileInfo? inputPath, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(input) && string.IsNullOrWhiteSpace(inputPath))
+        if (string.IsNullOrWhiteSpace(input) && inputPath is null)
         {
             throw new ArgumentException("Either input or input file must be provided.");
         }
 
         var inputText = input;
-        if (!string.IsNullOrWhiteSpace(inputPath))
+        if (inputPath is not null)
         {
             if (!string.IsNullOrWhiteSpace(inputText))
             {
                 inputText += Environment.NewLine;
             }
 
-            inputText += await File.ReadAllTextAsync(inputPath, cancellationToken).ConfigureAwait(false);
+            inputText += await File.ReadAllTextAsync(inputPath.FullName, cancellationToken).ConfigureAwait(false);
         }
 
         return inputText;
     }
 
-    public static async Task WriteOutputAsync(string outputText, string? outputPath, IConsole? console = null, CancellationToken cancellationToken = default)
+    public static async Task WriteOutputAsync(string outputText, FileInfo? outputPath, IConsole? console = null, CancellationToken cancellationToken = default)
     {
-        if (!string.IsNullOrWhiteSpace(outputPath))
+        if (outputPath is not null)
         {
-            await File.WriteAllTextAsync(outputPath, outputText, cancellationToken).ConfigureAwait(false);
+            await File.WriteAllTextAsync(outputPath.FullName, outputText, cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -51,7 +52,7 @@ internal static class Helpers
 
     public static IChatClient GetChatModel(
         string? model = null,
-        string? provider = null,
+        Provider? provider = null,
         bool debug = false)
     {
         if (debug)
@@ -63,7 +64,7 @@ internal static class Helpers
         IChatClient chatClient;
         Uri? endpoint = provider switch
         {
-            Providers.Free or Providers.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
+            Provider.Free or Provider.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
             _ => null,
         };
         model = model switch
@@ -77,9 +78,9 @@ internal static class Helpers
         };
         var apiKey = provider switch
         {
-            Providers.OpenAi or null => Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            Provider.OpenAi or null => Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
                 throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set."),
-            Providers.OpenRouter or Providers.Free => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
+            Provider.OpenRouter or Provider.Free => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
                 throw new InvalidOperationException("OPENROUTER_API_KEY environment variable is not set."),
             _ => throw new NotImplementedException(),
         };

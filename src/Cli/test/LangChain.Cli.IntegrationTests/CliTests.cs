@@ -7,6 +7,13 @@ namespace LangChain.Cli.IntegrationTests;
 public class CliTests
 {
     [Test]
+    public async Task DoCommand_WithHelp_ShouldReturnValidOutput()
+    {
+        await "do --help"
+            .ShouldWork<DoCommand>();
+    }
+    
+    [Test]
     public async Task DoCommand_WithFilesystemTool_ShouldReturnValidOutput()
     {
         await ("do " +
@@ -21,7 +28,7 @@ public class CliTests
     public async Task DoCommand_WithConventionalCommitFormat_ShouldReturnValidOutput()
     {
         await ("do " +
-               "--format conventional-commit " +
+               "--format ConventionalCommit " +
                "--input \"There was fixed a bug in FixOpenAPISpec project. Please show me the commit message.\"")
             .ShouldWork<DoCommand>();
     }
@@ -30,9 +37,9 @@ public class CliTests
     public async Task DoCommand_WithOpenRouterProvider_ShouldReturnValidOutput()
     {
         await ("do " +
-               "--format conventional-commit " +
+               "--format ConventionalCommit " +
                "--provider openrouter " +
-               "--model google/gemini-2.0-flash-exp:free " +
+               "--model free-fast " +
                "--input \"Please show me the commit message for the following text: There was fixed a bug in FixOpenAPISpec project.\"")
             .ShouldWork<DoCommand>();
     }
@@ -44,7 +51,7 @@ public class CliTests
                "--tools filesystem,git " +
                "--directories \"/Users/havendv/GitHub/tryAGI/\" " +
                "--provider openrouter " +
-               "--model google/gemini-2.0-flash-exp:free " +
+               "--model free-fast " +
                "--input \"Please create new repo with name `Do` in `/Users/havendv/GitHub/tryAGI/` dir and git init it.\"")
             .ShouldWork<DoCommand>();
     }
