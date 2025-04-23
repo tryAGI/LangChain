@@ -10,6 +10,7 @@ internal enum Tool
     SequentialThinking,
     Slack,
     Figma,
+    DocumentConversion,
 }
 
 // Extension class to handle tool parsing with optional toolsets

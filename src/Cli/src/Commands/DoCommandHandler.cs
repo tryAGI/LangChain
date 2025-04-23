@@ -173,6 +173,17 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"-y figma-developer-mcp --figma-api-key={Environment.GetEnvironmentVariable("FIGMA_API_KEY")} --stdio",
                         },
                     },
+                    Tool.DocumentConversion => new McpServerConfig
+                    {
+                        Id = Tool.DocumentConversion.ToString(),
+                        Name = Tool.DocumentConversion.ToString(),
+                        TransportType = TransportTypes.StdIo,
+                        TransportOptions = new Dictionary<string, string>
+                        {
+                            ["command"] = "uvx",
+                            ["arguments"] = "mcp-pandoc",
+                        },
+                    },
                     _ => throw new ArgumentException($"Unknown tool: {tool}"),
                 },
                 new McpClientOptions
