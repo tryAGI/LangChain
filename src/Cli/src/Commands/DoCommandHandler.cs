@@ -112,7 +112,7 @@ internal sealed class DoCommandHandler : ICommandHandler
                             ["arguments"] = $"run -i --rm " +
                                             $"-e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} " +
                                             // $"-e GITHUB_DYNAMIC_TOOLSETS=1 " +
-                                            (toolsets.Length != 0 ? 
+                                            (toolsets.Length != 0 ?
                                                 $"-e GITHUB_TOOLSETS={string.Join(',', toolsets)} "
                                                 : string.Empty) +
                                             "ghcr.io/github/github-mcp-server",
@@ -309,7 +309,7 @@ internal sealed class DoCommandHandler : ICommandHandler
 
             return paths;
         }
-        
+
         [Description("Retrieves all available labels for a GitHub repository.")]
         static async Task<IReadOnlyList<Label>> GetAvailableLabels(
             [Description("The owner of the repository")] string owner,
@@ -321,7 +321,7 @@ internal sealed class DoCommandHandler : ICommandHandler
                                               throw new InvalidOperationException("GITHUB_TOKEN environment variable is not set."))
             };
             var labels = await github.Issue.Labels.GetAllForRepository(owner, name).ConfigureAwait(false);
-            
+
             return labels;
         }
     }

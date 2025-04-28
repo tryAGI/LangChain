@@ -7,7 +7,7 @@ internal sealed class DoCommand : Command
     public DoCommand() : base(name: "do", description: "Generates text using a prompt.")
     {
         var handler = new DoCommandHandler();
-        
+
         AddOption(handler.InputOption);
         AddOption(handler.InputFileOption);
         AddOption(handler.OutputFileOption);
@@ -17,7 +17,7 @@ internal sealed class DoCommand : Command
         AddOption(handler.DebugOption);
         AddOption(handler.ModelOption);
         AddOption(handler.ProviderOption);
-        
+
         Handler = handler;
     }
 }
