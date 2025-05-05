@@ -67,7 +67,7 @@ public class CliTests
                "--input \"You work in the tryAGI/Replicate repository on the issue #98. Always retrieve issue body/comments and always retrieve available labels (because almost always there is custom labels), and always call `update_issue` tool to update the issue with suitable labels. Don't change body and other data.\"")
             .ShouldWork<DoCommand>();
     }
-    
+
     [Test]
     public async Task DoCommand_ExtractIssueToPullRequestData_ShouldReturnValidOutput()
     {
