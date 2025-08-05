@@ -76,7 +76,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 {
                     var existingHeader = currentHeader.Split('|');
 
-                    string prevHeader = string.Join("|", existingHeader.Take(existingHeader.Length - 1));
+                    string prevHeader = string.Join("|", existingHeader.Take(existingHeader.Length - (1 - hLen + currentHeaderLen)));
                     currentHeader = prevHeader + "|" + strippedLine.TrimStart('#').Trim();
                     currentHeaderLen = hLen;
                     continue;
