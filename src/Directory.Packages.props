@@ -62,7 +62,7 @@
     <PackageVersion Include="System.Memory.Data" Version="9.0.4" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Net.Http.Json" Version="8.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="9.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.8" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.1" />
