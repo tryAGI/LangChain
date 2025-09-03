@@ -13,9 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Aspose.PDF" Version="25.8.0" />
       <PackageReference Include="LangChain.Databases.Sqlite" Version="0.17.0" />
       <PackageReference Include="LangChain.Providers.Abstractions" Version="0.17.0" />
-      <PackageReference Include="System.Text.Json" Version="9.0.5" />
+    <PackageReference Include="PdfPig" Version="0.1.11" />
+      <PackageReference Include="System.Text.Json" Version="9.0.8" />
     </ItemGroup>
 
 </Project>
