@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Memory.Data" VersionOverride="9.0.9" />
     <ProjectReference Include="..\..\DocumentLoaders\Abstractions\src\LangChain.DocumentLoaders.Abstractions.csproj" />
     <ProjectReference Include="..\..\Splitters\Abstractions\src\LangChain.Splitters.Abstractions.csproj" />
     <ProjectReference Include="..\..\Utilities\Pollyfils\src\LangChain.Polyfills.csproj" />
