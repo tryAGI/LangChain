@@ -1,0 +1,106 @@
+<Solution>
+  <Folder Name="/Cli/">
+    <File Path="src/Cli/README.md" />
+    <Project Path="src/Cli/src/LangChain.Cli.csproj" />
+    <Project Path="src/Cli/test/LangChain.Cli.IntegrationTests/LangChain.Cli.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="src/Core/src/LangChain.Core.csproj" />
+    <Project Path="src/Core/test/UnitTests/LangChain.Core.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/DocumentLoaders/">
+    <File Path="src/DocumentLoaders/Directory.Build.props" />
+    <Project Path="src/DocumentLoaders/IntegrationTests/LangChain.DocumentLoaders.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/DocumentLoaders/Abstractions/">
+    <Project Path="src/DocumentLoaders/Abstractions/src/LangChain.DocumentLoaders.Abstractions.csproj" />
+  </Folder>
+  <Folder Name="/DocumentLoaders/Html/">
+    <Project Path="src/DocumentLoaders/WebBase/src/LangChain.DocumentLoaders.Html.csproj" />
+  </Folder>
+  <Folder Name="/DocumentLoaders/Pdf/">
+    <Project Path="src/DocumentLoaders/Pdf/src/LangChain.DocumentLoaders.Pdf.csproj" />
+  </Folder>
+  <Folder Name="/DocumentLoaders/Word/">
+    <Project Path="src/DocumentLoaders/Word/src/LangChain.DocumentLoaders.Word.csproj" />
+  </Folder>
+  <Folder Name="/Extensions/">
+    <File Path="src/Extensions/Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Extensions/DependencyInjection/">
+    <Project Path="src/Extensions/DependencyInjection/src/LangChain.Extensions.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/Extensions/Docker/">
+    <Project Path="src/Extensions/Docker/src/LangChain.Extensions.Docker.csproj" />
+  </Folder>
+  <Folder Name="/Helpers/">
+    <Project Path="src/Helpers/GenerateDocs/GenerateDocs.csproj" />
+    <Project Path="src/Helpers/TrimmingHelper/TrimmingHelper.csproj" />
+  </Folder>
+  <Folder Name="/Meta/">
+    <Project Path="src/Meta/src/LangChain.csproj" />
+    <Project Path="src/Meta/test/LangChain.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Misc/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Build.targets" />
+    <File Path="src/Directory.Packages.props" />
+    <File Path="src/Packaging.props" />
+    <File Path="src/Testing.props" />
+    <File Path="src/Testing.targets" />
+  </Folder>
+  <Folder Name="/Misc/docs/">
+    <File Path="docs/css/extra.css" />
+    <File Path="docs/index.md" />
+    <File Path="docs/media/icon128.png" />
+    <File Path="mkdocs.yml" />
+  </Folder>
+  <Folder Name="/Misc/workflows/">
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/auto-format.yml" />
+    <File Path=".github/workflows/auto-labeling.yml" />
+    <File Path=".github/workflows/auto-merge.yml" />
+    <File Path=".github/workflows/dotnet.yml" />
+    <File Path=".github/workflows/github-releases-to-discord.yml" />
+    <File Path=".github/workflows/mkdocs.yml" />
+    <File Path=".github/workflows/pull-request.yml" />
+  </Folder>
+  <Folder Name="/Samples/">
+    <Project Path="examples/LangChain.Samples.AspNet/LangChain.Samples.AspNet.csproj" />
+    <Project Path="examples/LangChain.Samples.Azure/LangChain.Samples.Azure.csproj" />
+    <Project Path="examples/LangChain.Samples.HuggingFace/LangChain.Samples.HuggingFace.csproj" />
+    <Project Path="examples/LangChain.Samples.LocalRAG/LangChain.Samples.LocalRAG.csproj" />
+    <Project Path="examples/LangChain.Samples.Memory/LangChain.Samples.Memory.csproj" />
+    <Project Path="examples/LangChain.Samples.OpenAI/LangChain.Samples.OpenAI.csproj" />
+    <Project Path="examples/LangChain.Samples.Prompts/LangChain.Samples.Prompts.csproj" />
+    <Project Path="examples/LangChain.Samples.SequentialChain/LangChain.Samples.SequentialChain.csproj" />
+    <Project Path="examples/LangChain.Samples.Serve.OpenAI/LangChain.Samples.Serve.OpenAI.csproj" />
+    <Project Path="examples/LangChain.Samples.Serve/LangChain.Samples.Serve.csproj" />
+  </Folder>
+  <Folder Name="/Serve/">
+    <Project Path="src/Serve/Abstractions/LangChain.Serve.Abstractions/LangChain.Serve.Abstractions.csproj" />
+    <Project Path="src/Serve/OpenAI/LangChain.Serve.OpenAI.csproj" />
+    <Project Path="src/Serve/src/LangChain.Serve.csproj" />
+  </Folder>
+  <Folder Name="/Splitters/">
+    <File Path="src/Splitters/Directory.Build.props" />
+    <Project Path="src/Splitters/Abstractions/src/LangChain.Splitters.Abstractions.csproj" />
+    <Project Path="src/Splitters/Abstractions/test/LangChain.Splitters.Abstractions.Tests.csproj" />
+    <Project Path="src/Splitters/CSharp/src/LangChain.Splitters.CSharp.csproj" />
+    <Project Path="src/Splitters/CSharp/test/LangChain.Splitters.CSharp.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Utilities/">
+    <File Path="src/Utilities/Directory.Build.props" />
+    <Project Path="src/Utilities/Pollyfils/src/LangChain.Polyfills.csproj" />
+  </Folder>
+  <Folder Name="/Utilities/Postgres/">
+    <Project Path="src/Utilities/Postgres/src/LangChain.Utilities.Postgres.csproj" />
+    <Project Path="src/Utilities/Postgres/test/LangChain.Utilities.Postgres.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Utilities/Sql/">
+    <Project Path="src/Utilities/Sql/src/LangChain.Utilities.Sql.csproj" />
+  </Folder>
+</Solution>
