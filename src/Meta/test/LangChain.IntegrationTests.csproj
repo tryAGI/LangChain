@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" />
         <PackageReference Include="LangChain.Databases.OpenSearch" />
         <PackageReference Include="LangChain.Databases.Sqlite" />
         <PackageReference Include="LangChain.Providers.Amazon.Bedrock" />

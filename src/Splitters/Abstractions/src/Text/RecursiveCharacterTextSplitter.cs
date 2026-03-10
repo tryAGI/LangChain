@@ -19,6 +19,8 @@ public class RecursiveCharacterTextSplitter(
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
 
+        text = text.Replace("\r", ""); // some people are using windows
+
         List<string> finalChunks = new List<string>();
         string separator = _separators[_separators.Count - 1];
 
