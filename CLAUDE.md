@@ -10,7 +10,7 @@ C# implementation of the LangChain framework for building applications with LLMs
 
 ```bash
 # Build the entire solution
-dotnet build LangChain.sln
+dotnet build LangChain.slnx
 
 # Run all integration tests
 dotnet test src/Meta/test/LangChain.IntegrationTests.csproj
