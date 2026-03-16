@@ -15,6 +15,8 @@ public class CharacterTextSplitter(
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
 
+        text = text.Replace("\r", ""); // some people are using windows
+
         List<string> splits;
         if (separator != null)
         {
