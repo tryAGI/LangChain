@@ -22,6 +22,6 @@ jobs:
     if: github.event.ref == 'refs/heads/main'
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: "actions/checkout@v6"
       - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v4"
+        uses: "alstr/todo-to-issue-action@v5"
