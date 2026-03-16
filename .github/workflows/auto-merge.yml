@@ -40,4 +40,6 @@ jobs:
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          # Use a non-GITHUB_TOKEN secret so the merge can trigger downstream workflows.
+          # For dependabot PRs there are the empty secrets.PERSONAL_TOKEN so we use fallback.
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN || secrets.GITHUB_TOKEN }}
