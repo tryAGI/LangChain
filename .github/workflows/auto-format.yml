@@ -36,8 +36,8 @@ jobs:
 
       - name: Format code
         run: |
-          dotnet format LangChain.sln
-          dotnet format LangChain.sln analyzers --diagnostics=RS0016
+          dotnet format LangChain.slnx
+          dotnet format LangChain.slnx analyzers --diagnostics=RS0016
 
       - name: Check for changes
         id: changes
