@@ -15,3 +15,12 @@ updates:
           - "*"
     ignore:
       - dependency-name: Microsoft.CodeAnalysis.CSharp
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
