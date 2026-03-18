@@ -24,8 +24,8 @@ dotnet test src/Splitters/Abstractions/test/LangChain.Splitters.Abstractions.Tes
 # Run a specific test
 dotnet test src/Meta/test/LangChain.IntegrationTests.csproj --filter "FullyQualifiedName~WikiTests"
 
-# Validate trimming/NativeAOT compatibility
-dotnet build src/Helpers/TrimmingHelper/TrimmingHelper.csproj
+# Validate trimming/NativeAOT compatibility (requires: dotnet tool install -g autosdk.cli --prerelease)
+autosdk trim src/libs/*//*.csproj
 ```
 
 Integration tests require API keys via environment variables (e.g., `OPENAI_API_KEY`). Tests skip (not fail) if keys are unset.
