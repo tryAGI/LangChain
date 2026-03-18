@@ -35,7 +35,6 @@
   </Folder>
   <Folder Name="/Helpers/">
     <Project Path="src/Helpers/GenerateDocs/GenerateDocs.csproj" />
-    <Project Path="src/Helpers/TrimmingHelper/TrimmingHelper.csproj" />
   </Folder>
   <Folder Name="/Meta/">
     <Project Path="src/Meta/src/LangChain.csproj" />

@@ -400,3 +400,6 @@ FodyWeavers.xsd
 
 # Tools cache
 **/cache/**
+
+# AutoSDK trimming check temp directory
+.autosdk-trim/
