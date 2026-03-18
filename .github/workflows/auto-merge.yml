@@ -11,12 +11,12 @@ permissions:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
+    if: ${{ github.event.pull_request.draft == false && (github.actor == 'dependabot[bot]' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
     steps:
       - name: Dependabot metadata
         if: ${{ github.actor == 'dependabot[bot]' }}
         id: metadata
-        uses: dependabot/fetch-metadata@v2.1.0
+        uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           
@@ -27,17 +27,13 @@ jobs:
         run: echo ${{ github.triggering_actor }}
           
       - name: Approve a PR
-        # Only if version bump is not a major version change
-        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Enable auto-merge
-        # Only if version bump is not a major version change
-        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV' }}
-        run: gh pr merge --auto --merge "$PR_URL"
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           # Use a non-GITHUB_TOKEN secret so the merge can trigger downstream workflows.
