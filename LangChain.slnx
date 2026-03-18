@@ -33,9 +33,6 @@
   <Folder Name="/Extensions/Docker/">
     <Project Path="src/Extensions/Docker/src/LangChain.Extensions.Docker.csproj" />
   </Folder>
-  <Folder Name="/Helpers/">
-    <Project Path="src/Helpers/GenerateDocs/GenerateDocs.csproj" />
-  </Folder>
   <Folder Name="/Meta/">
     <Project Path="src/Meta/src/LangChain.csproj" />
     <Project Path="src/Meta/test/LangChain.IntegrationTests.csproj" />
