@@ -11,3 +11,4 @@ permissions:
 jobs:
   auto-merge:
     uses: tryAGI/workflows/.github/workflows/auto-merge.yml@main
+    secrets: inherit
