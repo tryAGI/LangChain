@@ -132,8 +132,7 @@ Helpful Answer:";
 
         var port1 = Random.Shared.Next(49152, 65535);
         var port2 = Random.Shared.Next(49152, 65535);
-        var container = new ContainerBuilder()
-            .WithImage("opensearchproject/opensearch:latest")
+        var container = new ContainerBuilder("opensearchproject/opensearch:latest")
             .WithPortBinding(hostPort: port1, containerPort: 9600) // multiple ports can be not supported
             .WithPortBinding(hostPort: port2, containerPort: 9200) // multiple ports can be not supported
             .WithEnvironment("discovery.type", "single-node")
