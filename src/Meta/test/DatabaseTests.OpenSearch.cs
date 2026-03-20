@@ -139,7 +139,7 @@ Helpful Answer:";
             .WithEnvironment("discovery.type", "single-node")
             .WithEnvironment("plugins.security.disabled", "true")
             .WithEnvironment("OPENSEARCH_INITIAL_ADMIN_PASSWORD", password)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(9200))
             .Build();
 
         await container.StartAsync();

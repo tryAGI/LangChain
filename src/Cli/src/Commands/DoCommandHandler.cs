@@ -8,16 +8,14 @@ using System.Text.Json;
 using System.Text.Json.Schema;
 using LangChain.Cli.Models;
 using Microsoft.Extensions.AI;
-using ModelContextProtocol;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
-using ModelContextProtocol.Protocol.Types;
+using ModelContextProtocol.Protocol;
 using Octokit;
 using Tool = LangChain.Cli.Models.Tool;
 
 namespace LangChain.Cli.Commands;
 
-internal sealed class DoCommandHandler : ICommandHandler
+internal sealed class DoCommandHandler : AsynchronousCommandLineAction
 {
     public Option<string> InputOption { get; } = CommonOptions.Input;
     public Option<FileInfo?> InputFileOption { get; } = CommonOptions.InputFile;
@@ -25,38 +23,34 @@ internal sealed class DoCommandHandler : ICommandHandler
     public Option<bool> DebugOption { get; } = CommonOptions.Debug;
     public Option<string> ModelOption { get; } = CommonOptions.Model;
     public Option<Provider> ProviderOption { get; } = CommonOptions.Provider;
-    public Option<string[]> ToolsOption { get; } = new(
-        aliases: ["--tools", "-t"],
-        description: $"Tools you want to use - {string.Join(", ", Enum.GetNames<Tool>())}. " +
-                     "You can specify toolsets using square brackets, e.g., github[issues].")
+    public Option<string[]> ToolsOption { get; } = new("--tools", "-t")
     {
+        Description = $"Tools you want to use - {string.Join(", ", Enum.GetNames<Tool>())}. " +
+                      "You can specify toolsets using square brackets, e.g., github[issues].",
         AllowMultipleArgumentsPerToken = true,
     };
-    public Option<DirectoryInfo[]> DirectoriesOption { get; } = new(
-        aliases: ["--directories", "-d"],
-        getDefaultValue: () => [new DirectoryInfo(".")],
-        description: "Directories you want to use for filesystem.");
-    public Option<Format> FormatOption { get; } = new(
-        aliases: ["--format", "-f"],
-        getDefaultValue: () => Format.Text,
-        description: "Format of answer.");
-
-    public int Invoke(InvocationContext context)
+    public Option<DirectoryInfo[]> DirectoriesOption { get; } = new("--directories", "-d")
     {
-        throw new NotImplementedException();
-    }
-
-    public async Task<int> InvokeAsync(InvocationContext context)
+        Description = "Directories you want to use for filesystem.",
+        DefaultValueFactory = _ => [new DirectoryInfo(".")],
+    };
+    public Option<Format> FormatOption { get; } = new("--format", "-f")
     {
-        var input = context.ParseResult.GetValueForOption(InputOption) ?? string.Empty;
-        var inputPath = context.ParseResult.GetValueForOption(InputFileOption);
-        var outputPath = context.ParseResult.GetValueForOption(OutputFileOption);
-        var debug = context.ParseResult.GetValueForOption(DebugOption);
-        var model = context.ParseResult.GetValueForOption(ModelOption);
-        var provider = context.ParseResult.GetValueForOption(ProviderOption);
-        var toolStrings = context.ParseResult.GetValueForOption(ToolsOption) ?? [];
-        var directories = context.ParseResult.GetValueForOption(DirectoriesOption) ?? [];
-        var format = context.ParseResult.GetValueForOption(FormatOption);
+        Description = "Format of answer.",
+        DefaultValueFactory = _ => Format.Text,
+    };
+
+    public override async Task<int> InvokeAsync(ParseResult parseResult, CancellationToken cancellationToken = default)
+    {
+        var input = parseResult.GetValue(InputOption) ?? string.Empty;
+        var inputPath = parseResult.GetValue(InputFileOption);
+        var outputPath = parseResult.GetValue(OutputFileOption);
+        var debug = parseResult.GetValue(DebugOption);
+        var model = parseResult.GetValue(ModelOption);
+        var provider = parseResult.GetValue(ProviderOption);
+        var toolStrings = parseResult.GetValue(ToolsOption) ?? [];
+        var directories = parseResult.GetValue(DirectoriesOption) ?? [];
+        var format = parseResult.GetValue(FormatOption);
 
         // Parse tool strings into tools and toolsets
         var toolsWithToolsets = toolStrings.Select(ToolExtensions.ParseTool).ToArray();
@@ -76,116 +70,84 @@ internal sealed class DoCommandHandler : ICommandHandler
             // Get toolsets for this tool if any
             var toolsets = toolsetsByTool.GetValueOrDefault(tool) ?? [];
 
-            return await McpClientFactory.CreateAsync(
-                tool switch
+            var transport = tool switch
+            {
+                Tool.Filesystem => new StdioClientTransport(new StdioClientTransportOptions
                 {
-                    Tool.Filesystem => new McpServerConfig
-                    {
-                        Id = Tool.Filesystem.ToString(),
-                        Name = Tool.Filesystem.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "npx",
-                            ["arguments"] = $"-y @modelcontextprotocol/server-filesystem {string.Join(' ', directories.Select(x => x.FullName))}",
-                        },
-                    },
-                    Tool.Fetch => new McpServerConfig
-                    {
-                        Id = Tool.Fetch.ToString(),
-                        Name = Tool.Fetch.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "docker",
-                            ["arguments"] = "run -i --rm mcp/fetch",
-                        },
-                    },
-                    Tool.GitHub => new McpServerConfig
-                    {
-                        Id = Tool.GitHub.ToString(),
-                        Name = Tool.GitHub.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "docker",
-                            ["arguments"] = $"run -i --rm " +
-                                            $"-e GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")} " +
-                                            // $"-e GITHUB_DYNAMIC_TOOLSETS=1 " +
-                                            (toolsets.Length != 0 ?
-                                                $"-e GITHUB_TOOLSETS={string.Join(',', toolsets)} "
-                                                : string.Empty) +
-                                            "ghcr.io/github/github-mcp-server",
-                        },
-                    },
-                    Tool.Git => new McpServerConfig
-                    {
-                        Id = Tool.Git.ToString(),
-                        Name = Tool.Git.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "docker",
-                            ["arguments"] = $"run -i --rm {string.Join(' ', directories.Select(x => $"--mount type=bind,src={x},dst={x} "))} mcp/git",
-                        },
-                    },
-                    Tool.Puppeteer => new McpServerConfig
-                    {
-                        Id = Tool.Puppeteer.ToString(),
-                        Name = Tool.Puppeteer.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "docker",
-                            ["arguments"] = "run -i --rm --init -e DOCKER_CONTAINER=true mcp/puppeteer",
-                        },
-                    },
-                    Tool.SequentialThinking => new McpServerConfig
-                    {
-                        Id = Tool.SequentialThinking.ToString(),
-                        Name = Tool.SequentialThinking.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "docker",
-                            ["arguments"] = "run -i --rm mcp/sequentialthinking",
-                        },
-                    },
-                    Tool.Slack => new McpServerConfig
-                    {
-                        Id = Tool.Slack.ToString(),
-                        Name = Tool.Slack.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "docker",
-                            ["arguments"] = $"run -i --rm -e SLACK_BOT_TOKEN={Environment.GetEnvironmentVariable("SLACK_BOT_TOKEN")} -e SLACK_TEAM_ID={Environment.GetEnvironmentVariable("SLACK_TEAM_ID")} -e SLACK_CHANNEL_IDS={Environment.GetEnvironmentVariable("SLACK_CHANNEL_IDS")} mcp/slack",
-                        },
-                    },
-                    Tool.Figma => new McpServerConfig
-                    {
-                        Id = Tool.Figma.ToString(),
-                        Name = Tool.Figma.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "npx",
-                            ["arguments"] = $"-y figma-developer-mcp --figma-api-key={Environment.GetEnvironmentVariable("FIGMA_API_KEY")} --stdio",
-                        },
-                    },
-                    Tool.DocumentConversion => new McpServerConfig
-                    {
-                        Id = Tool.DocumentConversion.ToString(),
-                        Name = Tool.DocumentConversion.ToString(),
-                        TransportType = TransportTypes.StdIo,
-                        TransportOptions = new Dictionary<string, string>
-                        {
-                            ["command"] = "uvx",
-                            ["arguments"] = "mcp-pandoc",
-                        },
-                    },
-                    _ => throw new ArgumentException($"Unknown tool: {tool}"),
-                },
+                    Name = Tool.Filesystem.ToString(),
+                    Command = "npx",
+                    Arguments = ["-y", "@modelcontextprotocol/server-filesystem", .. directories.Select(x => x.FullName)],
+                }),
+                Tool.Fetch => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.Fetch.ToString(),
+                    Command = "docker",
+                    Arguments = ["run", "-i", "--rm", "mcp/fetch"],
+                }),
+                Tool.GitHub => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.GitHub.ToString(),
+                    Command = "docker",
+                    Arguments = [
+                        "run", "-i", "--rm",
+                        "-e", $"GITHUB_PERSONAL_ACCESS_TOKEN={Environment.GetEnvironmentVariable("GITHUB_TOKEN")}",
+                        .. (toolsets.Length != 0
+                            ? new[] { "-e", $"GITHUB_TOOLSETS={string.Join(',', toolsets)}" }
+                            : Array.Empty<string>()),
+                        "ghcr.io/github/github-mcp-server",
+                    ],
+                }),
+                Tool.Git => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.Git.ToString(),
+                    Command = "docker",
+                    Arguments = [
+                        "run", "-i", "--rm",
+                        .. directories.SelectMany(x => new[] { "--mount", $"type=bind,src={x},dst={x}" }),
+                        "mcp/git",
+                    ],
+                }),
+                Tool.Puppeteer => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.Puppeteer.ToString(),
+                    Command = "docker",
+                    Arguments = ["run", "-i", "--rm", "--init", "-e", "DOCKER_CONTAINER=true", "mcp/puppeteer"],
+                }),
+                Tool.SequentialThinking => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.SequentialThinking.ToString(),
+                    Command = "docker",
+                    Arguments = ["run", "-i", "--rm", "mcp/sequentialthinking"],
+                }),
+                Tool.Slack => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.Slack.ToString(),
+                    Command = "docker",
+                    Arguments = [
+                        "run", "-i", "--rm",
+                        "-e", $"SLACK_BOT_TOKEN={Environment.GetEnvironmentVariable("SLACK_BOT_TOKEN")}",
+                        "-e", $"SLACK_TEAM_ID={Environment.GetEnvironmentVariable("SLACK_TEAM_ID")}",
+                        "-e", $"SLACK_CHANNEL_IDS={Environment.GetEnvironmentVariable("SLACK_CHANNEL_IDS")}",
+                        "mcp/slack",
+                    ],
+                }),
+                Tool.Figma => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.Figma.ToString(),
+                    Command = "npx",
+                    Arguments = ["-y", "figma-developer-mcp", $"--figma-api-key={Environment.GetEnvironmentVariable("FIGMA_API_KEY")}", "--stdio"],
+                }),
+                Tool.DocumentConversion => new StdioClientTransport(new StdioClientTransportOptions
+                {
+                    Name = Tool.DocumentConversion.ToString(),
+                    Command = "uvx",
+                    Arguments = ["mcp-pandoc"],
+                }),
+                _ => throw new ArgumentException($"Unknown tool: {tool}"),
+            };
+
+            return await McpClient.CreateAsync(
+                transport,
                 new McpClientOptions
                 {
                     ClientInfo = new Implementation
@@ -194,7 +156,8 @@ internal sealed class DoCommandHandler : ICommandHandler
                         Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.0.0",
                     },
                     InitializationTimeout = TimeSpan.FromMinutes(10),
-                }).ConfigureAwait(false);
+                },
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         })).ConfigureAwait(false);
 
         var aiTools = await Task.WhenAll(clients
@@ -262,7 +225,7 @@ internal sealed class DoCommandHandler : ICommandHandler
             output = value?.ToString() ?? string.Empty;
         }
 
-        await Helpers.WriteOutputAsync(output, outputPath, context.Console).ConfigureAwait(false);
+        await Helpers.WriteOutputAsync(output, outputPath).ConfigureAwait(false);
 
         return 0;
 

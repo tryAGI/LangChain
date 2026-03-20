@@ -8,16 +8,16 @@ internal sealed class DoCommand : Command
     {
         var handler = new DoCommandHandler();
 
-        AddOption(handler.InputOption);
-        AddOption(handler.InputFileOption);
-        AddOption(handler.OutputFileOption);
-        AddOption(handler.ToolsOption);
-        AddOption(handler.DirectoriesOption);
-        AddOption(handler.FormatOption);
-        AddOption(handler.DebugOption);
-        AddOption(handler.ModelOption);
-        AddOption(handler.ProviderOption);
+        Add(handler.InputOption);
+        Add(handler.InputFileOption);
+        Add(handler.OutputFileOption);
+        Add(handler.ToolsOption);
+        Add(handler.DirectoriesOption);
+        Add(handler.FormatOption);
+        Add(handler.DebugOption);
+        Add(handler.ModelOption);
+        Add(handler.ProviderOption);
 
-        Handler = handler;
+        Action = handler;
     }
 }

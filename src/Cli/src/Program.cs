@@ -1,8 +1,10 @@
-﻿using System.CommandLine;
+using System.CommandLine;
+using System.CommandLine.Parsing;
 using LangChain.Cli.Commands;
 
 var rootCommand = new RootCommand(
     description: "CLI tool to use LangChain for common tasks");
-rootCommand.AddCommand(new DoCommand());
+rootCommand.Add(new DoCommand());
 
-return await rootCommand.InvokeAsync(args).ConfigureAwait(false);
+var parseResult = CommandLineParser.Parse(rootCommand, args, new ParserConfiguration());
+return await parseResult.InvokeAsync(new InvocationConfiguration(), CancellationToken.None).ConfigureAwait(false);
