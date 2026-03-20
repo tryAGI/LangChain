@@ -62,7 +62,7 @@ internal sealed class DoCommandHandler : AsynchronousCommandLineAction
             .GroupBy(t => t.Tool)
             .ToDictionary(g => g.Key, g => g.SelectMany(t => t.Toolsets!).ToArray());
 
-        var inputText = await Helpers.ReadInputAsync(input, inputPath).ConfigureAwait(false);
+        var inputText = await Helpers.ReadInputAsync(input, inputPath, cancellationToken).ConfigureAwait(false);
         var llm = Helpers.GetChatModel(model, provider, debug);
 
         var clients = await Task.WhenAll(tools.Select(async tool =>
@@ -161,7 +161,7 @@ internal sealed class DoCommandHandler : AsynchronousCommandLineAction
         })).ConfigureAwait(false);
 
         var aiTools = await Task.WhenAll(clients
-            .Select(async client => await client.ListToolsAsync().ConfigureAwait(false)))
+            .Select(async client => await client.ListToolsAsync(cancellationToken: cancellationToken).ConfigureAwait(false)))
             .ConfigureAwait(false);
 
         Debug.WriteLine($"Found {aiTools.Length} AI functions.");
@@ -203,7 +203,7 @@ internal sealed class DoCommandHandler : AsynchronousCommandLineAction
                     Format.Json => ChatResponseFormat.Json,
                     _ => throw new ArgumentException($"Unknown format: {format}"),
                 },
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
         var output = response.Text;
         if (format == Format.Lines)
@@ -225,7 +225,7 @@ internal sealed class DoCommandHandler : AsynchronousCommandLineAction
             output = value?.ToString() ?? string.Empty;
         }
 
-        await Helpers.WriteOutputAsync(output, outputPath).ConfigureAwait(false);
+        await Helpers.WriteOutputAsync(output, outputPath, cancellationToken).ConfigureAwait(false);
 
         return 0;
 
@@ -249,7 +249,7 @@ internal sealed class DoCommandHandler : AsynchronousCommandLineAction
                     }
 
                     //FileInfo info = new FileInfo(path);
-                    var text = await File.ReadAllTextAsync(path).ConfigureAwait(false);
+                    var text = await File.ReadAllTextAsync(path, CancellationToken.None).ConfigureAwait(false);
 
                     if (text.Contains(content, StringComparison.OrdinalIgnoreCase))
                     {
