@@ -35,6 +35,7 @@
   </Folder>
   <Folder Name="/Meta/">
     <Project Path="src/Meta/src/LangChain.csproj" />
+    <Project Path="src/Meta/test/LangChain.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/Misc/">
     <File Path=".gitignore" />

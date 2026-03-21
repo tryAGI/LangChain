@@ -5,8 +5,6 @@ using LangChain.Serve.Abstractions.Repository;
 using Microsoft.Extensions.AI;
 using OpenAI;
 using static LangChain.Chains.Chain;
-using Message = LangChain.Providers.Message;
-using MessageRole = LangChain.Providers.MessageRole;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -91,8 +89,10 @@ async Task<ConversationBufferMemory> ConvertToConversationBuffer(IReadOnlyCollec
             AiPrefix = "Assistant",
         }
     };
-    List<Message> converted = list
-        .Select(x => new Message(x.Content, x.Author == MessageAuthor.User ? MessageRole.Human : MessageRole.Ai))
+    var converted = list
+        .Select(x => new ChatMessage(
+            x.Author == MessageAuthor.User ? ChatRole.User : ChatRole.Assistant,
+            x.Content))
         .ToList();
 
     await conversationBufferMemory.ChatHistory.AddMessages(converted);

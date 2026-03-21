@@ -1,4 +1,3 @@
-using LangChain.Extensions;
 using LangChain.Schema;
 
 namespace LangChain.Memory;
@@ -37,7 +36,7 @@ public class ConversationBufferMemory : BaseChatMemory
     /// <inheritdoc />
     public override OutputValues LoadMemoryVariables(InputValues? inputValues)
     {
-        string bufferText = Formatter.Format(ChatHistory.Messages.ToChatMessages());
+        string bufferText = Formatter.Format(ChatHistory.Messages);
         return new OutputValues(new Dictionary<string, object> { { MemoryKey, bufferText } });
     }
 }

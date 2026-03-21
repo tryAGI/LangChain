@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Meta\src\LangChain.csproj" />
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.4.1" />
     </ItemGroup>
 
 </Project>

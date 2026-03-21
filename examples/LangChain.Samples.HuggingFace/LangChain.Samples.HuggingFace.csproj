@@ -8,11 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Meta\src\LangChain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="LangChain.Providers.HuggingFace" Version="0.17.1-dev.65" />
+        <PackageReference Include="HuggingFace" Version="0.4.1-dev.124" />
     </ItemGroup>
 
 </Project>

@@ -1,35 +1,34 @@
-﻿using LangChain.Chains.StackableChains.Agents.Crew;
+using LangChain.Chains.StackableChains.Agents.Crew;
 using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
-using LangChain.Providers.Amazon.Bedrock;
-using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
 using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
 
 [TestFixture]
-[Explicit("Bedrock models do not implement IChatClient (MEAI). TODO: Update when LangChain.Providers.Amazon.Bedrock adds MEAI support.")]
+[Explicit("Requires ANTHROPIC_API_KEY")]
 public class CrewTests
 {
-    // Helper to cast Bedrock models to IChatClient.
-    // Bedrock models don't implement IChatClient yet; this will throw InvalidCastException at runtime.
-    // TODO: Remove when Bedrock provider adds MEAI support.
-    private static IChatClient AsChatClient(object model) => (IChatClient)model;
+    private static IChatClient CreateChatClient()
+    {
+        var apiKey =
+            Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") is { Length: > 0 } key ? key :
+            throw new InconclusiveException("ANTHROPIC_API_KEY environment variable is not found.");
+
+        return new Anthropic.AnthropicClient(apiKey);
+    }
 
     [Test]
     public async Task can_test_crew()
     {
-        // example app https://www.youtube.com/watch?v=sPzc6hMg7So
-
-        var provider = new BedrockProvider();
-        var llm = new Claude3SonnetModel(provider);
+        IChatClient chatClient = CreateChatClient();
 
         const string origin = "New York";
         const string cities = "Kathmandu, Pokhara";
         const string dateRange = "May 13 to June 2, 2024";
         const string interests = "sight seeing, eating, tech";
 
-        var myAgents = new Agents(AsChatClient(llm));
+        var myAgents = new Agents(chatClient);
         var agents = new List<CrewAgent>
         {
             myAgents.TravelAgent,
@@ -51,9 +50,7 @@ public class CrewTests
     [Test]
     public async Task can_test_crewchain()
     {
-        var provider = new BedrockProvider();
-        var llm = new Claude3HaikuModel(provider);
-        IChatClient chatClient = AsChatClient(llm);
+        IChatClient chatClient = CreateChatClient();
 
         const string location = "Australia";
         const string cities = "Gold Coast, Sydney, Melbourne, Brisbane";
@@ -82,9 +79,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
     [Test]
     public async Task can_test_ReAct()
     {
-        var provider = new BedrockProvider();
-        var llm = new Claude3HaikuModel(provider);
-        IChatClient chatClient = AsChatClient(llm);
+        IChatClient chatClient = CreateChatClient();
 
         var googleKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? throw new InvalidOperationException("GOOGLE_API_KEY is not set");
         var googleCx = Environment.GetEnvironmentVariable("GOOGLE_API_CX") ?? throw new InvalidOperationException("GOOGLE_API_CX is not set");

@@ -8,9 +8,6 @@
     <ItemGroup>
         <PackageReference Include="LangChain.Databases.OpenSearch" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
-        <PackageReference Include="LangChain.Providers.Amazon.Bedrock" />
-        <PackageReference Include="LangChain.Providers.Automatic1111" />
-        <PackageReference Include="LangChain.Providers.LLamaSharp" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" />
         <PackageReference Include="Testcontainers" />
     </ItemGroup>

@@ -1,7 +1,5 @@
-using LangChain.Providers;
-using LangChain.Providers.OpenAI;
 using Microsoft.AspNetCore.Mvc;
-using tryAGI.OpenAI;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Samples.AspNet.Controllers;
 
@@ -9,23 +7,22 @@ namespace LangChain.Samples.AspNet.Controllers;
 [Route("[controller]")]
 public class OpenAiSampleController : ControllerBase
 {
-    private readonly OpenAiProvider _openAi;
+    private readonly IChatClient _chatClient;
     private readonly ILogger<OpenAiSampleController> _logger;
 
     public OpenAiSampleController(
-        OpenAiProvider openAi,
+        IChatClient chatClient,
         ILogger<OpenAiSampleController> logger)
     {
-        _openAi = openAi;
+        _chatClient = chatClient;
         _logger = logger;
     }
 
     [HttpGet(Name = "GetOpenAiResponse")]
     public async Task<string> Get()
     {
-        var llm = new OpenAiChatModel(_openAi, id: ChatClient.LatestFastModel);
-        var response = await llm.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        var response = await _chatClient.GetResponseAsync("What is a good name for a company that sells colourful socks?");
 
-        return response.LastMessageContent;
+        return response.Text;
     }
 }

@@ -1,4 +1,3 @@
-using LangChain.Extensions;
 using LangChain.Schema;
 using Microsoft.Extensions.AI;
 
@@ -57,7 +56,6 @@ public class ConversationWindowBufferMemory : BaseChatMemory
         return ChatHistory.Messages
             .Skip(ChatHistory.Messages.Count - numMessages)
             .Take(numMessages)
-            .ToChatMessages()
             .ToList();
     }
 }

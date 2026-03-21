@@ -1,12 +1,12 @@
-﻿using LangChain.Providers;
-using LangChain.Providers.OpenAI.Predefined;
+using Microsoft.Extensions.AI;
+using OpenAI;
 
 var apiKey =
     Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
     throw new InvalidOperationException("OPENAI_API_KEY environment variable is not found.");
-var model = new OpenAiLatestFastChatModel(apiKey);
 
-var result = await model.GenerateAsync("What is a good name for a company that sells colourful socks?");
+IChatClient chatClient = new OpenAIClient(apiKey).GetChatClient("gpt-4o-mini").AsIChatClient();
 
-Console.WriteLine(result);
+var result = await chatClient.GetResponseAsync("What is a good name for a company that sells colourful socks?");
 
+Console.WriteLine(result.Text);

@@ -6,6 +6,7 @@ using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Memory;
 using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 using System.Reflection;
 using LangChain.Chains.StackableChains.Agents.Tools;
 using Microsoft.Extensions.AI;
@@ -87,7 +88,7 @@ Thought:{history}";
         _chatMessageHistory = new ChatMessageHistory()
         {
             // Do not save human messages
-            IsMessageAccepted = x => (x.Role != MessageRole.Human)
+            IsMessageAccepted = x => (x.Role != ChatRole.User)
         };
 
         _conversationBufferMemory = new ConversationBufferMemory(_chatMessageHistory)
@@ -144,9 +145,9 @@ Thought:{history}";
                 var action = (AgentAction)res.Value[ReActAnswer];
                 var tool = _tools[action.Action.ToLower(CultureInfo.InvariantCulture)];
                 var toolRes = await tool.ToolTask(action.ActionInput, cancellationToken).ConfigureAwait(false);
-                await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + toolRes, MessageRole.System))
+                await _conversationBufferMemory.ChatHistory.AddMessage(new ChatMessage(ChatRole.System, "Observation: " + toolRes))
                     .ConfigureAwait(false);
-                await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Thought:", MessageRole.System))
+                await _conversationBufferMemory.ChatHistory.AddMessage(new ChatMessage(ChatRole.System, "Thought:"))
                     .ConfigureAwait(false);
                 continue;
             }

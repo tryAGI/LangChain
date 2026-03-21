@@ -1,5 +1,4 @@
-﻿using LangChain.Providers.HuggingFace.Downloader;
-using LangChain.Providers.LLamaSharp;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -8,23 +7,16 @@ namespace LangChain.IntegrationTests;
 public partial class WikiTests
 {
     [Test]
-    [Explicit("LLamaSharpModelInstruction does not implement IChatClient (MEAI). TODO: Update when LLamaSharp adds MEAI support.")]
+    [Explicit("Requires OPENAI_API_KEY")]
     public async Task UsingChainOutput()
     {
-        //// # Setup
-        //// We will take the code from [Getting started] tutorial as our starting point.
+        var apiKey =
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") is { Length: > 0 } key ? key :
+            throw new InconclusiveException("OPENAI_API_KEY environment variable is not found.");
 
-        // get model path
-        var modelPath = await HuggingFaceModelDownloader.GetModelAsync(
-            repository: "TheBloke/Thespis-13B-v0.5-GGUF",
-            fileName: "thespis-13b-v0.5.Q2_K.gguf",
-            version: "main");
-
-        // load model
-        // TODO: LLamaSharpModelInstruction does not implement IChatClient (MEAI).
-        // Update when LangChain.Providers.LLamaSharp adds MEAI support.
-        var model = LLamaSharpModelInstruction.FromPath(modelPath);
-        Microsoft.Extensions.AI.IChatClient chatClient = (Microsoft.Extensions.AI.IChatClient)(object)model; // will throw InvalidCastException at runtime if not supported
+        // Using OpenAI via MEAI IChatClient
+        var openAiClient = new OpenAI.OpenAIClient(apiKey);
+        IChatClient chatClient = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
 
         // building a chain
         var prompt = @"
@@ -32,32 +24,12 @@ You are an AI assistant that greets the world.
 World: Hello, Assistant!
 Assistant:";
 
-        //// # Getting the chain output
-        //// 
-        //// Almost every possible link in a chain are having having at least one input and output.
-        //// 
-        //// Look here:
-
         var chain =
             Set(prompt, outputKey: "prompt")
             | LLM(chatClient, inputKey: "prompt", outputKey: "result");
 
-        //// This means that, after link `Set` get executed, we are storring it's result into "prompt" variable inside of chain context.
-        //// In its turn, link `LLM` gets "prompt" variable from chain context and uses it's as input.
-        //// 
-        //// `LLM` link also has output key argument. Let's use it to save the result of llm.
-
         var result = await chain.RunAsync("result");
 
-        //// Now the `LLM` link saves it's result into "result" variable inside of chain context. But how do we extract it from there?
-        //// 
-        //// `chain.Run()` method has an optional argument "resultKey". This allows you to specify variable inside of chain context to return as a result.
-
         Console.WriteLine(result);
-
-        //// Output:
-        //// ```
-        //// Hello, World! How can I help you today?
-        //// ```
     }
 }

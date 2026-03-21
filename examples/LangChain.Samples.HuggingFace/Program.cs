@@ -1,28 +1,15 @@
-using LangChain.Providers;
-using LangChain.Providers.HuggingFace;
+using Microsoft.Extensions.AI;
 
-using var client = new HttpClient();
-var provider = new HuggingFaceProvider(apiKey: string.Empty, client);
-var model = new HuggingFaceChatModel(provider, id: "gpt2");
+var apiKey =
+    Environment.GetEnvironmentVariable("HUGGINGFACE_API_KEY") ??
+    throw new InvalidOperationException("HUGGINGFACE_API_KEY environment variable is not found.");
 
-var response = await model.GenerateAsync("What would be a good company name be for name a company that makes colorful socks?");
+using var client = new HuggingFace.HuggingFaceInferenceClient(apiKey);
+IChatClient chatClient = (IChatClient)client;
 
-Console.WriteLine("### GPT2 Response");
-Console.WriteLine(response);
+var response = await chatClient.GetResponseAsync(
+    "What would be a good company name for a company that makes colorful socks?",
+    new ChatOptions { ModelId = "meta-llama/Llama-3.3-70B-Instruct" });
 
-const string imageToTextModelId = "Salesforce/blip-image-captioning-base";
-var imageModel = new HuggingFaceImageToTextModel(provider, imageToTextModelId);
-
-var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
-var imageData = await File.ReadAllBytesAsync(path);
-var binaryData = new BinaryData(imageData, "image/jpg");
-
-var imageToTextResponse = await imageModel.GenerateTextFromImageAsync(new ImageToTextRequest
-{
-    Image = binaryData
-});
-
-Console.WriteLine("\n\n### ImageToText Response");
-Console.WriteLine(imageToTextResponse.Text);
-
-Console.ReadLine();
+Console.WriteLine("### HuggingFace Response");
+Console.WriteLine(response.Text);

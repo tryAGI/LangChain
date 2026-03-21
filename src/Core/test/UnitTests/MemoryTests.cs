@@ -1,5 +1,5 @@
 ﻿using LangChain.Memory;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.UnitTest;
 
@@ -13,8 +13,8 @@ public class MemoryTests
 
         inMemoryHistory.Messages.Should().HaveCount(2);
 
-        inMemoryHistory.Messages.FirstOrDefault(x => x.Content == "hi!").Role.Should().Be(MessageRole.Human);
-        inMemoryHistory.Messages.FirstOrDefault(x => x.Content == "whats up?").Role.Should().Be(MessageRole.Ai);
+        inMemoryHistory.Messages.FirstOrDefault(x => x.Text == "hi!")!.Role.Should().Be(ChatRole.User);
+        inMemoryHistory.Messages.FirstOrDefault(x => x.Text == "whats up?")!.Role.Should().Be(ChatRole.Assistant);
     }
 
     [Test]

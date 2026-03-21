@@ -1,4 +1,3 @@
-using LangChain.Extensions;
 using LangChain.Schema;
 using Microsoft.Extensions.AI;
 
@@ -92,10 +91,10 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
     {
         List<ChatMessage> prunedMessages = new List<ChatMessage>();
 
-        int tokenCount = CountTokens(ChatHistory.Messages.ToChatMessages());
+        int tokenCount = CountTokens(ChatHistory.Messages);
         if (tokenCount > MaxTokenCount)
         {
-            Queue<ChatMessage> queue = new Queue<ChatMessage>(ChatHistory.Messages.ToChatMessages());
+            Queue<ChatMessage> queue = new Queue<ChatMessage>(ChatHistory.Messages);
 
             while (tokenCount > MaxTokenCount)
             {
@@ -107,7 +106,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
 
             SummaryText = await ChatClient.SummarizeAsync(prunedMessages, SummaryText).ConfigureAwait(false);
 
-            await ChatHistory.SetMessages(queue.ToLangChainMessages()).ConfigureAwait(false);
+            await ChatHistory.SetMessages(queue).ConfigureAwait(false);
         }
     }
 
@@ -117,7 +116,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
         {
             new ChatMessage(ChatRole.System, SummaryText)
         };
-        messages.AddRange(ChatHistory.Messages.ToChatMessages());
+        messages.AddRange(ChatHistory.Messages);
 
         return messages;
     }

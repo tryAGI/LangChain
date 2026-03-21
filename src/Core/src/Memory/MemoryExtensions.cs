@@ -1,4 +1,5 @@
 using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Memory;
 
@@ -32,7 +33,7 @@ public static class MemoryExtensions
         {
             foreach (var chatMessage in msg.Messages)
             {
-                history += chatMessage.Content + "\n";
+                history += chatMessage.Text + "\n";
             }
         }
 

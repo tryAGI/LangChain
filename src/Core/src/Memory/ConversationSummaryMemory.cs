@@ -1,4 +1,3 @@
-using LangChain.Extensions;
 using LangChain.Schema;
 using Microsoft.Extensions.AI;
 
@@ -56,8 +55,7 @@ public class ConversationSummaryMemory : BaseChatMemory
         // Since we are in SaveContext, can assume there are at least two messages (human + ai)
         var newMessages = ChatHistory.Messages
             .Skip(ChatHistory.Messages.Count - 2)
-            .Take(2)
-            .ToChatMessages();
+            .Take(2);
 
         SummaryText = await ChatClient.SummarizeAsync(newMessages, SummaryText).ConfigureAwait(false);
     }

@@ -1,8 +1,7 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
-using LangChain.Extensions;
 using LangChain.Memory;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
@@ -59,7 +58,7 @@ public class GroupChat : BaseStackableChain
         _chatMessageHistory = new ChatMessageHistory()
         {
             // Do not save human messages
-            IsMessageAccepted = x => (x.Role != MessageRole.Human)
+            IsMessageAccepted = x => (x.Role != ChatRole.User)
         };
 
         InputKeys = new[] { inputKey };
@@ -70,7 +69,7 @@ public class GroupChat : BaseStackableChain
     /// 
     /// </summary>
     /// <returns></returns>
-    public IReadOnlyList<Message> History => _chatMessageHistory.Messages;
+    public IReadOnlyList<ChatMessage> History => _chatMessageHistory.Messages;
 
     /// <inheritdoc />
     protected override async Task<IChainValues> InternalCallAsync(
@@ -86,13 +85,13 @@ public class GroupChat : BaseStackableChain
         }
         var firstAgent = _agents[0];
         var firstAgentMessage = (string)values.Value[_inputKey];
-        await _chatMessageHistory.AddMessage(new Message($"{firstAgent.Name}: {firstAgentMessage}",
-            MessageRole.System)).ConfigureAwait(false);
+        await _chatMessageHistory.AddMessage(new ChatMessage(ChatRole.System,
+            $"{firstAgent.Name}: {firstAgentMessage}")).ConfigureAwait(false);
         int messagesCount = 1;
         while (messagesCount < _messagesLimit)
         {
             var agent = GetNextAgent();
-            string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages.ToChatMessages());
+            string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages);
             agent.SetHistory(bufferText + "\n" + $"{agent.Name}:");
             var res = await agent.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
             var message = (string)res.Value[agent.OutputKeys[0]];
@@ -103,8 +102,8 @@ public class GroupChat : BaseStackableChain
 
             if (!agent.IsObserver)
             {
-                await _chatMessageHistory.AddMessage(new Message($"{agent.Name}: {message}",
-                                       MessageRole.System)).ConfigureAwait(false);
+                await _chatMessageHistory.AddMessage(new ChatMessage(ChatRole.System,
+                                       $"{agent.Name}: {message}")).ConfigureAwait(false);
             }
         }
 
