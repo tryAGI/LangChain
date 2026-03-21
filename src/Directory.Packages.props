@@ -19,19 +19,14 @@
     <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.1.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.InMemory" Version="1.74.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.74.0-preview" />
-    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Anyscale" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Automatic1111" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Azure" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.DeepSeek" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Google" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.HuggingFace" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.LLamaSharp" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Ollama" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.OpenRouter" Version="0.17.0" />
+    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.1-dev.65" />
+    <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.17.1-dev.65" />
+    <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.17.1-dev.29" />
+    <PackageVersion Include="LangChain.Providers.Anyscale" Version="0.17.1-dev.65" />
+    <PackageVersion Include="LangChain.Providers.Automatic1111" Version="0.17.1-dev.65" />
+    <PackageVersion Include="LangChain.Providers.HuggingFace" Version="0.17.1-dev.65" />
+    <PackageVersion Include="LangChain.Providers.LLamaSharp" Version="0.17.1-dev.65" />
+    <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.17.1-dev.65" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Extensions.AI" Version="10.4.1" />

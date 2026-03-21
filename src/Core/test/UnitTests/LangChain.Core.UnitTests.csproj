@@ -9,6 +9,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.InMemory" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Update="Resources\state_of_the_union.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

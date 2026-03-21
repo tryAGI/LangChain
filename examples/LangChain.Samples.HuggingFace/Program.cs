@@ -1,24 +1,23 @@
-﻿using LangChain.Providers;
+using LangChain.Providers;
 using LangChain.Providers.HuggingFace;
-using LangChain.Providers.HuggingFace.Predefined;
 
 using var client = new HttpClient();
 var provider = new HuggingFaceProvider(apiKey: string.Empty, client);
-var gpt2Model = new Gpt2Model(provider);
+var model = new HuggingFaceChatModel(provider, id: "gpt2");
 
-var gp2ModelResponse = await gpt2Model.GenerateAsync("What would be a good company name be for name a company that makes colorful socks?");
+var response = await model.GenerateAsync("What would be a good company name be for name a company that makes colorful socks?");
 
-Console.WriteLine("### GP2 Response");
-Console.WriteLine(gp2ModelResponse);
+Console.WriteLine("### GPT2 Response");
+Console.WriteLine(response);
 
-const string imageToTextModel = "Salesforce/blip-image-captioning-base";
-var model = new HuggingFaceImageToTextModel(provider, imageToTextModel);
+const string imageToTextModelId = "Salesforce/blip-image-captioning-base";
+var imageModel = new HuggingFaceImageToTextModel(provider, imageToTextModelId);
 
 var path = Path.Combine(Path.GetTempPath(), "solar_system.png");
 var imageData = await File.ReadAllBytesAsync(path);
 var binaryData = new BinaryData(imageData, "image/jpg");
 
-var imageToTextResponse = await model.GenerateTextFromImageAsync(new ImageToTextRequest
+var imageToTextResponse = await imageModel.GenerateTextFromImageAsync(new ImageToTextRequest
 {
     Image = binaryData
 });

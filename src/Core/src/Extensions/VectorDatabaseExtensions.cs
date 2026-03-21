@@ -34,7 +34,7 @@ public static class VectorDatabaseExtensions
                 new VectorStoreKeyProperty("Id", typeof(string)),
                 new VectorStoreDataProperty("Text", typeof(string)),
                 new VectorStoreDataProperty("MetadataJson", typeof(string)),
-                new VectorStoreVectorProperty("Embedding", dimensions),
+                new VectorStoreVectorProperty("Embedding", dimensions) { Type = typeof(ReadOnlyMemory<float>) },
             ]
         };
 

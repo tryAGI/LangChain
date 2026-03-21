@@ -90,14 +90,36 @@ LangChain.Core depends on:
 - `LangChain.Providers.Abstractions` (NuGet) — non-MEAI provider interfaces (ITextToSpeechModel, ITextToImageModel, IImageToTextModel) and message types (Message, MessageRole)
 - `LangChain.Databases.Abstractions` (NuGet) — message history (BaseChatMessageHistory, ChatMessageHistory)
 - `Microsoft.Extensions.AI` (NuGet) — MEAI interfaces (IChatClient, IEmbeddingGenerator, ISpeechToTextClient)
-- `Microsoft.Extensions.VectorData.Abstractions` (NuGet) — vector store abstractions
+- `Microsoft.Extensions.VectorData.Abstractions` (NuGet) — MEVA vector store abstractions (`VectorStore`, `VectorStoreCollection<TKey, TRecord>`)
 - `LangChain.DocumentLoaders.Abstractions` (project reference)
 - `LangChain.Splitters.Abstractions` (project reference)
 
 The meta-package additionally references:
 - `tryAGI.OpenAI`, `tryAGI.Anthropic`, `Ollama` — SDK packages implementing MEAI interfaces natively
 - `Google_Gemini` — conditional on net10.0 (only TFM it supports)
-- `Microsoft.SemanticKernel.Connectors.InMemory` — in-memory vector store
+- `Microsoft.SemanticKernel.Connectors.InMemory` — in-memory MEVA vector store
+
+### Vector Store (MEVA) Architecture
+
+The project uses **Microsoft.Extensions.VectorData.Abstractions (MEVA)** for all vector store operations. The old `IVectorDatabase`/`IVectorCollection` interfaces from `LangChain.Databases` have been replaced.
+
+**Key types:**
+- `VectorStore` — abstract base for vector store providers (InMemory, SqliteVec, OpenSearch, etc.)
+- `VectorStoreCollection<string, LangChainDocumentRecord>` — typed collection for document storage and search
+- `LangChainDocumentRecord` (`src/Core/src/Schema/LangChainDocumentRecord.cs`) — MEVA-attributed record bridging LangChain's `Document` to MEVA:
+  - `Id` (string, `[VectorStoreKey]`) — auto-generated GUID
+  - `Text` (string?, `[VectorStoreData]`) — document content
+  - `MetadataJson` (string?, `[VectorStoreData]`) — JSON-serialized metadata dictionary
+  - `Embedding` (ReadOnlyMemory\<float\>, `[VectorStoreVector(1536)]`) — vector embedding
+
+**Extension methods** (`src/Core/src/Extensions/`):
+- `VectorCollectionExtensions` — `GetSimilarDocuments()`, `AddDocumentsAsync()`, `AddTextsAsync()`, `GetDocumentByIdAsync()`, `AsString()` on `VectorStoreCollection<string, LangChainDocumentRecord>`
+- `VectorDatabaseExtensions` — `AddDocumentsFromAsync<TLoader>()` on `VectorStore` (creates collection with runtime dimensions via `VectorStoreCollectionDefinition`)
+
+**Vector store providers used:**
+- `Microsoft.SemanticKernel.Connectors.InMemory` — in-memory (for tests and simple usage)
+- `Microsoft.SemanticKernel.Connectors.SqliteVec` — SQLite-based persistent storage
+- `LangChain.Databases.OpenSearch` — OpenSearch (uses MEVA v0.17.1+)
 
 ### Key Patterns
 
@@ -105,26 +127,34 @@ The meta-package additionally references:
 ```csharp
 var chain =
     Set("question text")
-    | RetrieveSimilarDocuments(vectorCollection, embeddingModel, amount: 5)
+    | RetrieveSimilarDocuments(vectorCollection, embeddingGenerator, amount: 5)
     | CombineDocuments(outputKey: "context")
     | Template(promptTemplate)
-    | LLM(llm);
+    | LLM(chatClient);
 var result = await chain.RunAsync("text");
 ```
 
 **MEAI Provider Pattern** — use tryAGI SDKs directly with MEAI interfaces:
 ```csharp
 var openAiClient = new OpenAIClient(apiKey);
-IChatClient llm = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
-IEmbeddingGenerator<string, Embedding<float>> embeddingModel = openAiClient.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
+IChatClient chatClient = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
+IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator = openAiClient.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 ```
 
-**RAG Pattern** — load documents, create embeddings, query with similarity search:
+**RAG Pattern** — load documents, create embeddings, query with similarity search (using MEVA):
 ```csharp
+// Option 1: Convenience method — creates collection + loads documents in one call
 var vectorStore = new InMemoryVectorStore();
 var vectorCollection = await vectorStore.AddDocumentsFromAsync<PdfPigPdfLoader>(
-    embeddingModel, dimensions: 1536, dataSource: DataSource.FromUrl(url));
-var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingModel, question);
+    embeddingGenerator, dimensions: 1536, dataSource: DataSource.FromUrl(url));
+var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingGenerator, question);
+
+// Option 2: Manual — create collection, add documents, then search
+var store = new InMemoryVectorStore();
+var collection = store.GetCollection<string, LangChainDocumentRecord>("my-collection");
+await collection.EnsureCollectionExistsAsync();
+await collection.AddDocumentsAsync(embeddingGenerator, documents);
+var results = await collection.GetSimilarDocuments(embeddingGenerator, question, amount: 5);
 ```
 
 ## Key Conventions
@@ -133,6 +163,6 @@ var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingModel
 - **Language:** C# preview, nullable reference types enabled, implicit usings
 - **Strong naming:** All assemblies signed with `src/key.snk`
 - **Versioning:** MinVer with `v` tag prefix
-- **Testing:** MSTest framework
+- **Testing:** NUnit framework with AwesomeAssertions
 - **Central package management:** `src/Directory.Packages.props`
 - Cross-project dependencies between LangChain ecosystem repos are via NuGet packages, not project references
