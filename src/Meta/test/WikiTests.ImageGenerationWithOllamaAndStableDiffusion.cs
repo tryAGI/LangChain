@@ -1,6 +1,5 @@
-﻿using LangChain.Providers;
-using LangChain.Providers.Automatic1111;
-using LangChain.Providers.Ollama;
+﻿using LangChain.Providers.Automatic1111;
+using Meai = Microsoft.Extensions.AI;
 using Ollama;
 using static LangChain.Chains.Chain;
 
@@ -16,29 +15,31 @@ public partial class WikiTests
         //// For this tutorial you would need Ollama and AUTOMATIC1111 locally installed. You can easily find instructions online how to do it for your system.
         //// I'm using Docker images for both of those.
         //// Also you would need about 32GB of RAM installed in your PC since two models are "eating" a lot of it.
-        //// 
+        ////
         //// # The problem
         //// Making a prompt for image generation models like Stable Diffusion is not a simple task. Instead of just asking what you need in simple sentence, you would need to describe all the small details about object and environment using quite big set of keywords.
-        //// 
+        ////
         //// Let's try to solve this problem!
-        //// 
+        ////
         //// # Setup
-        //// 
+        ////
         //// Create new console app and add nuget packages:
         //// ```
         //// LangChain.Core
         //// LangChain.Providers.Automatic1111
-        //// LangChain.Providers.Ollama
+        //// Ollama
         //// ```
         //// Now we are ready to code!
-        //// 
+        ////
         //// # Creating models
-        //// 
+        ////
         //// ## Ollama model
-        //// We will use latest version of `llama3.1` for our task. If you don't have mistral yet - it will be downloaded.
+        //// We will use latest version of `llama3.1` for our task. If you don't have it yet - it will be downloaded.
 
-        var provider = new OllamaProvider();
-        var llm = new OllamaChatModel(provider, id: "llama3.1").UseConsoleForDebug();
+        using var client = new OllamaApiClient();
+        // TODO: OllamaApiClient (Ollama NuGet 1.15.0) does not implement Microsoft.Extensions.AI.IChatClient.
+        // Update when Ollama NuGet adds MEAI support. This cast will throw InvalidCastException at runtime.
+        Meai.IChatClient llm = (Meai.IChatClient)(object)client;
 
         //// Here we are stopping generation after `\n` symbol appears. Mistral will put a new line(`\n`) symbol after prompt is generated.
         //// We are using Temperature of 0 to always have the same result for the same prompt.
@@ -92,7 +93,7 @@ ASSISTANT:";
 
         var chain = Set("a cute girl cosplaying a cat")                                     // describe a desired image in simple words
                     | Template(template, outputKey: "prompt")                               // insert our description into the template
-                    | LLM(llm, inputKey: "prompt", outputKey: "image_prompt")           // ask ollama to generate a prompt for stable diffusion
+                    | LLM(llm, inputKey: "prompt", outputKey: "image_prompt", options: new Meai.ChatOptions { ModelId = "llama3.1" }) // ask ollama to generate a prompt for stable diffusion
                     | GenerateImage(sdmodel, inputKey: "image_prompt", outputKey: "image")  // generate an image using stable diffusion
                     | SaveIntoFile("image.png", inputKey: "image");                     // save the image into a file
 

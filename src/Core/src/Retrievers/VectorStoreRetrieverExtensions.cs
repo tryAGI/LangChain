@@ -1,27 +1,22 @@
-using LangChain.Providers;
 using LangChain.Retrievers;
+using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
-namespace LangChain.Databases;
+namespace LangChain.Extensions;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class VectorStoreRetrieverExtensions
 {
     /// <summary>
     /// Return vector collection as retriever
     /// </summary>
-    /// <param name="vectorCollection">vector store</param>
-    /// <param name="embeddingModel"></param>
-    /// <param name="searchType">search type</param>
-    /// <param name="scoreThreshold">score threshold</param>
-    /// <returns></returns>
     public static VectorStoreRetriever AsRetriever(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
-        VectorSearchType searchType = VectorSearchType.Similarity,
-        float? scoreThreshold = null)
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator)
     {
-        return new VectorStoreRetriever(vectorCollection, embeddingModel, searchType, scoreThreshold);
+        return new VectorStoreRetriever(vectorCollection, embeddingGenerator);
     }
 }

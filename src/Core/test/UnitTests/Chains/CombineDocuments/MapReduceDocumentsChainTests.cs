@@ -5,6 +5,7 @@ using LangChain.DocumentLoaders;
 using LangChain.Prompts;
 using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 using Moq;
 
 namespace LangChain.Core.UnitTests.Chains.CombineDocuments;
@@ -113,16 +114,15 @@ public class MapReduceDocumentsChainTests
         mock.Setup(x => x.OutputKey)
             .Returns(outputKey);
 
-        var supportsCountTokensMock = new Mock<ISupportsCountTokens>();
+        var chatClientMock = new Mock<IChatClient>();
+        var supportsCountTokensMock = chatClientMock.As<ISupportsCountTokens>();
         supportsCountTokensMock
             .Setup(x => x.CountTokens(It.IsAny<string>()))
             .Returns<string>(text => text.Length);
 
-        var chatModelMock = supportsCountTokensMock.As<IChatModel>();
-
         mock
             .Setup(x => x.Llm)
-            .Returns(chatModelMock.Object);
+            .Returns(chatClientMock.Object);
 
         return mock;
     }

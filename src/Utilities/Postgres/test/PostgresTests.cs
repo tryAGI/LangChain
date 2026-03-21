@@ -1,8 +1,8 @@
 ﻿using LangChain.Chains.LLM;
-using LangChain.Providers.OpenAI;
-using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Utilities.Sql;
+using Microsoft.Extensions.AI;
 using Npgsql;
+using OpenAI;
 
 namespace LangChain.Utilities.Postgres.IntegrationTests;
 
@@ -221,13 +221,9 @@ id	name	age
     public async Task SqlDatabaseChain_Run_Ok()
     {
         var key = Environment.GetEnvironmentVariable("OPENAI_KEY") ?? throw new ArgumentException("OPENAI_KEY");
-        var llm = new OpenAiLatestFastChatModel(key)
-        {
-            Settings = new OpenAiChatSettings
-            {
-                Temperature = 0.1,
-            }
-        };
+        IChatClient llm = new OpenAIClient(key)
+            .GetChatClient("gpt-4o-mini")
+            .AsIChatClient();
 
         var llmInput = new LlmChainInput(llm, SqlDatabaseChainPrompts.PostgresPrompt);
         var llmChain = new LlmChain(llmInput);

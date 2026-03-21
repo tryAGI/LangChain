@@ -2,14 +2,20 @@
 using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
 using LangChain.Providers.Amazon.Bedrock;
 using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
 
 [TestFixture]
-[Explicit]
+[Explicit("Bedrock models do not implement IChatClient (MEAI). TODO: Update when LangChain.Providers.Amazon.Bedrock adds MEAI support.")]
 public class CrewTests
 {
+    // Helper to cast Bedrock models to IChatClient.
+    // Bedrock models don't implement IChatClient yet; this will throw InvalidCastException at runtime.
+    // TODO: Remove when Bedrock provider adds MEAI support.
+    private static IChatClient AsChatClient(object model) => (IChatClient)model;
+
     [Test]
     public async Task can_test_crew()
     {
@@ -23,7 +29,7 @@ public class CrewTests
         const string dateRange = "May 13 to June 2, 2024";
         const string interests = "sight seeing, eating, tech";
 
-        var myAgents = new Agents(llm);
+        var myAgents = new Agents(AsChatClient(llm));
         var agents = new List<CrewAgent>
         {
             myAgents.TravelAgent,
@@ -47,6 +53,7 @@ public class CrewTests
     {
         var provider = new BedrockProvider();
         var llm = new Claude3HaikuModel(provider);
+        IChatClient chatClient = AsChatClient(llm);
 
         const string location = "Australia";
         const string cities = "Gold Coast, Sydney, Melbourne, Brisbane";
@@ -57,7 +64,7 @@ public class CrewTests
 i plan on vacationing in {location} and visiting {cities} during the {dateRange}.  these are my interests: {interests}.
 ";
 
-        var myAgents = new Agents(llm);
+        var myAgents = new Agents(chatClient);
         var agents = new List<CrewAgent>
         {
             myAgents.CityExpert,
@@ -67,7 +74,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
         var chain =
             Set(prompt)
             | Crew(agents, myAgents.TravelAgent, inputKey: "text", outputKey: "text")
-            | LLM(llm);
+            | LLM(chatClient);
 
         Console.WriteLine(await chain.RunAsync("text"));
     }
@@ -77,6 +84,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
     {
         var provider = new BedrockProvider();
         var llm = new Claude3HaikuModel(provider);
+        IChatClient chatClient = AsChatClient(llm);
 
         var googleKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? throw new InvalidOperationException("GOOGLE_API_KEY is not set");
         var googleCx = Environment.GetEnvironmentVariable("GOOGLE_API_CX") ?? throw new InvalidOperationException("GOOGLE_API_CX is not set");
@@ -84,7 +92,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
 
         var chain =
             Set("What is tryAGI/LangChain?")
-            | ReActAgentExecutor(llm)
+            | ReActAgentExecutor(chatClient)
                 .UseTool(searchTool);
 
         Console.WriteLine(await chain.RunAsync("text"));

@@ -1,4 +1,5 @@
-﻿using LangChain.Providers.OpenAI.Predefined;
+using Microsoft.Extensions.AI;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -9,7 +10,7 @@ public partial class WikiTests
     [Test]
     public async Task HowToUseOpenAiProviderSmaller()
     {
-        var model = new OpenAiLatestFastChatModel("your_openAI_key");
+        IChatClient model = new OpenAIClient("your_openAI_key").GetChatClient("gpt-4o-mini").AsIChatClient();
         var chain =
             Set("Hello!")
             | LLM(model);

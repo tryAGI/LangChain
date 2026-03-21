@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <RootNamespace>LangChain.Utilities.PostresDatabases.IntegrationTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LangChain.Providers.OpenAI" />
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" />
+        <PackageReference Include="OpenAI" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Npgsql" />
         <PackageReference Include="System.Text.Json" />

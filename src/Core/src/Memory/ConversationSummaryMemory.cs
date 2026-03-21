@@ -1,5 +1,6 @@
 using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Memory;
 
@@ -15,29 +16,29 @@ public class ConversationSummaryMemory : BaseChatMemory
     /// <inheritdoc />
     public override List<string> MemoryVariables => new List<string> { MemoryKey };
 
-    private IChatModel Model { get; }
+    private IChatClient ChatClient { get; }
     private string SummaryText { get; set; } = string.Empty;
 
     /// <summary>
-    /// Initializes new summarizing memory instance with provided model
+    /// Initializes new summarizing memory instance with provided chat client
     /// </summary>
-    /// <param name="model">Model to use for summarization</param>
+    /// <param name="chatClient">Chat client to use for summarization</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ConversationSummaryMemory(IChatModel model)
+    public ConversationSummaryMemory(IChatClient chatClient)
     {
-        Model = model ?? throw new ArgumentNullException(nameof(model));
+        ChatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
     }
 
     /// <summary>
-    /// Initializes new summarizing memory instance with provided model and history store
+    /// Initializes new summarizing memory instance with provided chat client and history store
     /// </summary>
-    /// <param name="model">Model to use for summarization</param>
+    /// <param name="chatClient">Chat client to use for summarization</param>
     /// <param name="chatHistory">History backing store</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ConversationSummaryMemory(IChatModel model, BaseChatMessageHistory chatHistory)
+    public ConversationSummaryMemory(IChatClient chatClient, BaseChatMessageHistory chatHistory)
         : base(chatHistory)
     {
-        Model = model ?? throw new ArgumentNullException(nameof(model));
+        ChatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
     }
 
     /// <inheritdoc />
@@ -57,7 +58,7 @@ public class ConversationSummaryMemory : BaseChatMemory
             .Skip(ChatHistory.Messages.Count - 2)
             .Take(2);
 
-        SummaryText = await Model.SummarizeAsync(newMessages, SummaryText).ConfigureAwait(false);
+        SummaryText = await ChatClient.SummarizeAsync(newMessages, SummaryText).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

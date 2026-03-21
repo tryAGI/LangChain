@@ -1,64 +1,65 @@
-﻿using LangChain.Abstractions.Schema;
+using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains.Agents.Crew.Tools;
 using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Providers;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Chains.StackableChains.Agents.Crew;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class CrewAgent : BaseStackableChain
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public event Action<string> ReceivedTask = delegate { };
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public event Action<string, string> CalledAction = delegate { };
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public event Action<string> ActionResult = delegate { };
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public event Action<string> Answered = delegate { };
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string Role { get; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string Goal { get; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string Backstory { get; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public bool UseMemory { get; set; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public bool UseCache { get; set; }
 
 
-    private readonly IChatModel _model;
+    private readonly IChatClient _chatClient;
     private readonly List<string> _actionsHistory;
     private Dictionary<string, CrewAgentTool> _tools = new();
 
@@ -67,14 +68,14 @@ public class CrewAgent : BaseStackableChain
     private int _maxActions = 5;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="chatClient"></param>
     /// <param name="role"></param>
     /// <param name="goal"></param>
     /// <param name="backstory"></param>
     public CrewAgent(
-        IChatModel model,
+        IChatClient chatClient,
         string role,
         string goal,
         string? backstory = "")
@@ -82,7 +83,7 @@ public class CrewAgent : BaseStackableChain
         Role = role;
         Goal = goal;
         Backstory = backstory ?? string.Empty;
-        _model = model;
+        _chatClient = chatClient;
 
         InputKeys = new[] { "task" };
         OutputKeys = new[] { "result" };
@@ -92,7 +93,7 @@ public class CrewAgent : BaseStackableChain
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tools"></param>
     public void AddTools(IEnumerable<CrewAgentTool> tools)
@@ -104,12 +105,12 @@ public class CrewAgent : BaseStackableChain
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string? Context { get; set; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public int MaxActions
     {
@@ -150,7 +151,7 @@ public class CrewAgent : BaseStackableChain
                     | Set(() => string.Join("\n", _memory), "memory")
                     | Set(() => string.Join("\n", _actionsHistory), "actions_history")
                     | Template(prompt)
-                    | Chain.LLM(_model).UseCache(UseCache)
+                    | Chain.LLM(_chatClient).UseCache(UseCache)
                     | Do(x => _actionsHistory.Add(x["text"] as string ?? string.Empty))
                     | ReActParser(inputKey: "text", outputKey: OutputKeys[0])
                     | Do(AddToMemory);

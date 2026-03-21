@@ -1,4 +1,6 @@
+using LangChain.Extensions;
 using LangChain.Providers;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Memory;
@@ -29,7 +31,7 @@ New lines of conversation:
 New summary:";
 
     public static async Task<string> SummarizeAsync(
-        this IChatModel chatModel,
+        this IChatClient chatClient,
         IEnumerable<Message> newMessages,
         string existingSummary,
         MessageFormatter? formatter = null,
@@ -42,7 +44,7 @@ New summary:";
             Set(existingSummary, outputKey: "summary")
             | Set(newLines, outputKey: "new_lines")
             | Template(SummaryPrompt)
-            | LLM(chatModel);
+            | LLM(chatClient);
 
         return await chain.RunAsync("text", cancellationToken: cancellationToken).ConfigureAwait(false) ?? string.Empty;
     }

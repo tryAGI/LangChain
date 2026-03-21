@@ -1,8 +1,9 @@
+using System.ClientModel;
 using LangChain.Memory;
-using LangChain.Providers.Ollama;
 using LangChain.Serve;
 using LangChain.Serve.Abstractions.Repository;
-using Ollama;
+using Microsoft.Extensions.AI;
+using OpenAI;
 using static LangChain.Chains.Chain;
 using Message = LangChain.Providers.Message;
 using MessageRole = LangChain.Providers.MessageRole;
@@ -15,9 +16,11 @@ var builder = WebApplication.CreateBuilder();
 // 1. Add LangChainServe
 builder.Services.AddLangChainServe();
 
-// 2. Create a model
-var provider = new OllamaProvider();
-var model = new OllamaChatModel(provider, id: "llama3.1");
+// 2. Create a model via Ollama's OpenAI-compatible endpoint
+IChatClient model = new OpenAIClient(
+    new ApiKeyCredential("ollama"),
+    new OpenAIClientOptions { Endpoint = new Uri("http://localhost:11434/v1") })
+    .GetChatClient("llama3.1").AsIChatClient();
 
 // 3. Optional. Add custom name generator
 // After initiating conversation, this will generate a name for it

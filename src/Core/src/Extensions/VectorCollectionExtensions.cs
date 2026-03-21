@@ -1,20 +1,19 @@
-using LangChain.Databases;
-using LangChain.Providers;
+using System.Text.Json;
 using LangChain.DocumentLoaders;
+using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
 namespace LangChain.Extensions;
 
 /// <summary>
-/// 
+/// Extension methods for <see cref="VectorStoreCollection{TKey, TRecord}"/> with <see cref="LangChainDocumentRecord"/>.
 /// </summary>
 public static class VectorCollectionExtensions
 {
     /// <summary>
-    /// 
+    /// Converts a collection of documents to a single string.
     /// </summary>
-    /// <param name="documents"></param>
-    /// <param name="separator"></param>
-    /// <returns></returns>
     public static string AsString(
         this IEnumerable<Document> documents,
         string separator = "\n\n")
@@ -25,193 +24,118 @@ public static class VectorCollectionExtensions
     /// <summary>
     /// Return documents most similar to query.
     /// </summary>
-    /// <param name="vectorCollection"></param>
-    /// <param name="embeddingModel"></param>
-    /// <param name="embeddingRequest"></param>
-    /// <param name="embeddingSettings"></param>
-    /// <param name="searchSettings"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<VectorSearchResponse> SearchAsync(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
-        EmbeddingRequest embeddingRequest,
-        EmbeddingSettings? embeddingSettings = default,
-        VectorSearchSettings? searchSettings = default,
+    public static async Task<IReadOnlyCollection<Document>> GetSimilarDocuments(
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
+        string query,
+        int amount = 4,
         CancellationToken cancellationToken = default)
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-        searchSettings ??= new VectorSearchSettings();
+        embeddingGenerator = embeddingGenerator ?? throw new ArgumentNullException(nameof(embeddingGenerator));
 
-        if (searchSettings is { Type: VectorSearchType.SimilarityScoreThreshold, ScoreThreshold: null })
-        {
-            throw new ArgumentException($"ScoreThreshold required for {searchSettings.Type}");
-        }
-
-        var response = await embeddingModel.CreateEmbeddingsAsync(
-            request: embeddingRequest,
-            settings: embeddingSettings,
+        var result = await embeddingGenerator.GenerateAsync(
+            [query],
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        return await vectorCollection.SearchAsync(new VectorSearchRequest
+        var embedding = result[0].Vector;
+
+        var searchResults = vectorCollection.SearchAsync(
+            embedding,
+            amount,
+            cancellationToken: cancellationToken);
+
+        var documents = new List<Document>();
+        await foreach (var searchResult in searchResults.ConfigureAwait(false))
         {
-            Embeddings = [response.ToSingleArray()],
-        }, searchSettings, cancellationToken).ConfigureAwait(false);
+            documents.Add(RecordToDocument(searchResult.Record));
+        }
+
+        return documents;
     }
 
     /// <summary>
-    /// Return similar documents to the given document.
+    /// Add documents to the vector collection.
     /// </summary>
-    /// <param name="vectorCollection">vector store</param>
-    /// <param name="embeddingModel"></param>
-    /// <param name="request"></param>
-    /// <param name="amount"></param>
-    /// <param name="searchType">search type</param>
-    /// <param name="scoreThreshold">score threshold</param>
-    /// <param name="embeddingSettings"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<IReadOnlyCollection<Document>> GetSimilarDocuments(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
-        EmbeddingRequest request,
-        int amount = 4,
-        VectorSearchType searchType = VectorSearchType.Similarity,
-        float? scoreThreshold = null,
-        EmbeddingSettings? embeddingSettings = null,
-        CancellationToken cancellationToken = default)
-    {
-        var results = await vectorCollection.SearchAsync(
-            embeddingModel: embeddingModel,
-            embeddingRequest: request,
-            embeddingSettings: embeddingSettings,
-            searchSettings: new VectorSearchSettings
-            {
-                Type = searchType,
-                NumberOfResults = amount,
-                ScoreThreshold = scoreThreshold
-            },
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        return results.ToDocuments();
-    }
-
     public static async Task<IReadOnlyCollection<string>> AddDocumentsAsync(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         IReadOnlyCollection<Document> documents,
-        EmbeddingSettings? embeddingSettings = default,
         CancellationToken cancellationToken = default)
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
+        embeddingGenerator = embeddingGenerator ?? throw new ArgumentNullException(nameof(embeddingGenerator));
 
         return await vectorCollection.AddTextsAsync(
-            embeddingModel: embeddingModel,
+            embeddingGenerator: embeddingGenerator,
             texts: documents.Select(x => x.PageContent).ToArray(),
             metadatas: documents.Select(x => x.Metadata).ToArray(),
-            embeddingSettings: embeddingSettings,
             cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Get a document by its ID.
+    /// </summary>
     public static async Task<Document?> GetDocumentByIdAsync(
-        this IVectorCollection vectorCollection,
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
         string id,
         CancellationToken cancellationToken = default)
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
 
-        var item = await vectorCollection.GetAsync(id, cancellationToken).ConfigureAwait(false);
+        var item = await vectorCollection.GetAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return item == null
             ? null
-            : new Document(item.Text, item.Metadata?.ToDictionary(x => x.Key, x => x.Value));
-    }
-
-    public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
-        IReadOnlyCollection<string> texts,
-        IReadOnlyCollection<IDictionary<string, object>>? metadatas = null,
-        EmbeddingSettings? embeddingSettings = default,
-        CancellationToken cancellationToken = default)
-    {
-        vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
-
-        var embeddingRequest = new EmbeddingRequest
-        {
-            Strings = texts.ToArray(),
-            Images = metadatas?
-                .Select((metadata, i) => metadata.TryGetValue(texts.ElementAt(i), out object? result)
-                    ? result as BinaryData
-                    : null)
-                .Where(x => x != null)
-                .Select(x => Data.FromBytes(x!.ToArray()))
-                .ToArray() ?? [],
-        };
-
-        float[][] embeddings = await embeddingModel
-            .CreateEmbeddingsAsync(embeddingRequest, embeddingSettings, cancellationToken)
-            .ConfigureAwait(false);
-
-        return await vectorCollection.AddAsync(
-            items: texts.Select((text, i) => new Vector
-            {
-                Text = text,
-                Metadata = metadatas?.ElementAt(i).ToDictionary(x => x.Key, x => x.Value),
-                Embedding = embeddings[i],
-            }).ToArray(),
-            cancellationToken).ConfigureAwait(false);
+            : RecordToDocument(item);
     }
 
     /// <summary>
-    /// Default similarity search with relevance scores. Modify if necessary in subclass.
-    /// Return docs and relevance scores in the range [0, 1].
-    /// 0 is dissimilar, 1 is most similar.
+    /// Add texts with optional metadata to the vector collection.
     /// </summary>
-    /// <param name="embeddingModel"></param>
-    /// <param name="embeddingRequest">The query string(string will be converted implicitly) or embedding request.</param>
-    /// <param name="searchSettings"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="vectorCollection"></param>
-    /// <param name="embeddingSettings"></param>
-    /// <returns>A list of tuples containing the document and its relevance score.</returns>
-    public static async Task<VectorSearchResponse> SearchWithRelevanceScoresAsync(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
-        EmbeddingRequest embeddingRequest,
-        EmbeddingSettings? embeddingSettings = default,
-        VectorSearchSettings? searchSettings = default,
+    public static async Task<IReadOnlyCollection<string>> AddTextsAsync(
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
+        IReadOnlyCollection<string> texts,
+        IReadOnlyCollection<IDictionary<string, object>>? metadatas = null,
         CancellationToken cancellationToken = default)
     {
         vectorCollection = vectorCollection ?? throw new ArgumentNullException(nameof(vectorCollection));
-        embeddingModel = embeddingModel ?? throw new ArgumentNullException(nameof(embeddingModel));
+        embeddingGenerator = embeddingGenerator ?? throw new ArgumentNullException(nameof(embeddingGenerator));
 
-        var response = await vectorCollection.SearchAsync(
-            embeddingModel: embeddingModel,
-            embeddingRequest: embeddingRequest,
-            embeddingSettings: embeddingSettings,
-            searchSettings: searchSettings,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+        var result = await embeddingGenerator
+            .GenerateAsync(texts.ToList(), cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
-        var relevanceScoreFunc = searchSettings?.RelevanceScoreFunc ?? RelevanceScoreFunctions.Euclidean;
-        foreach (var item in response.Items)
+        var ids = new List<string>();
+        var index = 0;
+        foreach (var text in texts)
         {
-            item.RelevanceScore = Math.Max(0.0F, Math.Min(1.0F, relevanceScoreFunc(item.Distance)));
+            var record = new LangChainDocumentRecord
+            {
+                Text = text,
+                MetadataJson = metadatas?.ElementAt(index) is { } meta
+                    ? JsonSerializer.Serialize(meta)
+                    : null,
+                Embedding = result[index].Vector,
+            };
+
+            await vectorCollection.UpsertAsync(record, cancellationToken: cancellationToken).ConfigureAwait(false);
+            ids.Add(record.Id);
+            index++;
         }
 
-        if (searchSettings?.ScoreThreshold == null)
+        return ids;
+    }
+
+    private static Document RecordToDocument(LangChainDocumentRecord record)
+    {
+        Dictionary<string, object>? metadata = null;
+        if (record.MetadataJson is { Length: > 0 })
         {
-            return response;
+            metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(record.MetadataJson);
         }
 
-        return new VectorSearchResponse
-        {
-            Items = response.Items
-                .Where(x => x.RelevanceScore >= searchSettings.ScoreThreshold)
-                .ToArray(),
-        };
+        return new Document(record.Text ?? string.Empty, metadata);
     }
 }

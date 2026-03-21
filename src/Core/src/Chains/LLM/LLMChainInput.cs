@@ -1,18 +1,18 @@
 using LangChain.Base;
 using LangChain.Memory;
 using LangChain.Prompts.Base;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.LLM;
 
 /// <summary>
-/// 
+///
 /// </summary>
 /// <param name="llm"></param>
 /// <param name="prompt"></param>
 /// <param name="memory"></param>
 public class LlmChainInput(
-    IChatModel llm,
+    IChatClient llm,
     BasePromptTemplate prompt,
     BaseMemory? memory = null)
     : ChainInputs, ILlmChainInput
@@ -21,13 +21,13 @@ public class LlmChainInput(
     public BasePromptTemplate Prompt { get; set; } = prompt;
 
     /// <inheritdoc/>
-    public IChatModel Llm { get; set; } = llm;
+    public IChatClient Llm { get; set; } = llm;
 
     /// <inheritdoc/>
     public string OutputKey { get; set; } = "text";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public BaseMemory? Memory { get; set; } = memory;
 

@@ -1,27 +1,28 @@
-﻿using LangChain.Abstractions.Schema;
-using LangChain.Databases;
+using LangChain.Abstractions.Schema;
 using LangChain.Extensions;
-using LangChain.Providers;
+using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
 namespace LangChain.Chains.HelperChains;
 
 /// <inheritdoc/>
 public class RetrieveDocumentsChain : BaseStackableChain
 {
-    private readonly IVectorCollection _vectorCollection;
-    private readonly IEmbeddingModel _embeddingModel;
+    private readonly VectorStoreCollection<string, LangChainDocumentRecord> _vectorCollection;
+    private readonly IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator;
     private readonly int _amount;
 
     /// <inheritdoc/>
     public RetrieveDocumentsChain(
-        IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         string inputKey = "query",
         string outputKey = "documents",
         int amount = 4)
     {
         _vectorCollection = vectorCollection;
-        _embeddingModel = embeddingModel;
+        _embeddingGenerator = embeddingGenerator;
         _amount = amount;
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
@@ -36,7 +37,7 @@ public class RetrieveDocumentsChain : BaseStackableChain
 
         var query = values.Value[InputKeys[0]].ToString() ?? string.Empty;
         var results = await _vectorCollection.GetSimilarDocuments(
-            _embeddingModel,
+            _embeddingGenerator,
             query,
             amount: _amount,
             cancellationToken: cancellationToken).ConfigureAwait(false);

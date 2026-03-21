@@ -1,5 +1,6 @@
 using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Memory;
 
@@ -8,7 +9,9 @@ namespace LangChain.Memory;
 /// </summary>
 public class ConversationSummaryBufferMemory : BaseChatMemory
 {
-    private IChatModelWithTokenCounting Model { get; }
+    private IChatClient ChatClient { get; }
+
+    private Func<IEnumerable<Message>, int>? TokenCounter { get; }
 
     private string SummaryText { get; set; } = string.Empty;
 
@@ -20,26 +23,31 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
     public override List<string> MemoryVariables => new List<string> { MemoryKey };
 
     /// <summary>
-    /// Initializes new memory instance with provided model and a default history store
+    /// Initializes new memory instance with provided chat client and a default history store.
+    /// Uses a simple character-based token estimate (chars / 4) unless a custom tokenCounter is provided.
     /// </summary>
-    /// <param name="model">Model to use for summarization</param>
+    /// <param name="chatClient">Chat client to use for summarization</param>
+    /// <param name="tokenCounter">Optional custom token counter function</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ConversationSummaryBufferMemory(IChatModelWithTokenCounting model)
+    public ConversationSummaryBufferMemory(IChatClient chatClient, Func<IEnumerable<Message>, int>? tokenCounter = null)
         : base()
     {
-        Model = model ?? throw new ArgumentNullException(nameof(model));
+        ChatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
+        TokenCounter = tokenCounter;
     }
 
     /// <summary>
-    /// Initializes new memory instance with provided model and history store
+    /// Initializes new memory instance with provided chat client and history store
     /// </summary>
-    /// <param name="model">Model to use for summarization</param>
+    /// <param name="chatClient">Chat client to use for summarization</param>
     /// <param name="chatHistory">History backing store</param>
+    /// <param name="tokenCounter">Optional custom token counter function</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ConversationSummaryBufferMemory(IChatModelWithTokenCounting model, BaseChatMessageHistory chatHistory)
+    public ConversationSummaryBufferMemory(IChatClient chatClient, BaseChatMessageHistory chatHistory, Func<IEnumerable<Message>, int>? tokenCounter = null)
         : base(chatHistory)
     {
-        Model = model ?? throw new ArgumentNullException(nameof(model));
+        ChatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
+        TokenCounter = tokenCounter;
     }
 
     /// <inheritdoc />
@@ -65,6 +73,17 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
         SummaryText = string.Empty;
     }
 
+    private int CountTokens(IEnumerable<Message> messages)
+    {
+        if (TokenCounter != null)
+        {
+            return TokenCounter(messages);
+        }
+
+        // Simple character-based estimate: ~4 chars per token
+        return messages.Sum(m => (m.Content?.Length ?? 0)) / 4;
+    }
+
     /// <summary>
     /// Prune messages if they exceed the max token limit
     /// </summary>
@@ -73,7 +92,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
     {
         List<Message> prunedMessages = new List<Message>();
 
-        int tokenCount = Model.CountTokens(ChatHistory.Messages);
+        int tokenCount = CountTokens(ChatHistory.Messages);
         if (tokenCount > MaxTokenCount)
         {
             Queue<Message> queue = new Queue<Message>(ChatHistory.Messages);
@@ -83,10 +102,10 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
                 Message prunedMessage = queue.Dequeue();
                 prunedMessages.Add(prunedMessage);
 
-                tokenCount = Model.CountTokens(queue);
+                tokenCount = CountTokens(queue);
             }
 
-            SummaryText = await Model.SummarizeAsync(prunedMessages, SummaryText).ConfigureAwait(false);
+            SummaryText = await ChatClient.SummarizeAsync(prunedMessages, SummaryText).ConfigureAwait(false);
 
             await ChatHistory.SetMessages(queue).ConfigureAwait(false);
         }

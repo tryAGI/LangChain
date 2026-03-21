@@ -8,6 +8,7 @@ namespace LangChain.IntegrationTests;
 public partial class WikiTests
 {
     [Test]
+    [Explicit("LLamaSharpModelInstruction does not implement IChatClient (MEAI). TODO: Update when LLamaSharp adds MEAI support.")]
     public async Task UsingChainOutput()
     {
         //// # Setup
@@ -20,7 +21,10 @@ public partial class WikiTests
             version: "main");
 
         // load model
+        // TODO: LLamaSharpModelInstruction does not implement IChatClient (MEAI).
+        // Update when LangChain.Providers.LLamaSharp adds MEAI support.
         var model = LLamaSharpModelInstruction.FromPath(modelPath);
+        Microsoft.Extensions.AI.IChatClient chatClient = (Microsoft.Extensions.AI.IChatClient)(object)model; // will throw InvalidCastException at runtime if not supported
 
         // building a chain
         var prompt = @"
@@ -36,7 +40,7 @@ Assistant:";
 
         var chain =
             Set(prompt, outputKey: "prompt")
-            | LLM(model, inputKey: "prompt", outputKey: "result");
+            | LLM(chatClient, inputKey: "prompt", outputKey: "result");
 
         //// This means that, after link `Set` get executed, we are storring it's result into "prompt" variable inside of chain context.
         //// In its turn, link `LLM` gets "prompt" variable from chain context and uses it's as input.

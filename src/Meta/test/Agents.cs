@@ -1,13 +1,13 @@
 ﻿using LangChain.Chains.StackableChains.Agents.Crew;
 using LangChain.Chains.StackableChains.Agents.Crew.Tools;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.IntegrationTests;
 
 //Creating Agents Cheat Sheet:
 //- Think like a boss.Work backwards from the goal and think which employee
 //    you need to hire to get the job done.
-//- Define the Captain of the crew who orient the other agents towards the goal. 
+//- Define the Captain of the crew who orient the other agents towards the goal.
 //- Define which experts the captain needs to communicate with and delegate tasks to.
 //Build a top down structure of the crew.
 
@@ -31,13 +31,13 @@ namespace LangChain.IntegrationTests;
 
 public class Agents
 {
-    public Agents(IChatModel model)
+    public Agents(IChatClient chatClient)
     {
         var googleKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? throw new InvalidOperationException("GOOGLE_API_KEY is not set");
         var googleCx = Environment.GetEnvironmentVariable("GOOGLE_API_CX") ?? throw new InvalidOperationException("GOOGLE_API_CX is not set");
 
         TravelAgent = new CrewAgent(
-            model: model,
+            chatClient: chatClient,
             role: "Expert Travel Agent",
             goal: "Create a 7-day travel itinerary with detailed per-day plans, including budget, packing suggestions, and safety tips.",
             backstory: "I am a travel agent with a passion for exploring new destinations and sharing my knowledge with others.  " +
@@ -50,7 +50,7 @@ public class Agents
         });
 
         CityExpert = new CrewAgent(
-            model: model,
+            chatClient: chatClient,
             role: "City Selection Expert",
             goal: "Select the best cities based on weather, season, prices and travelers interests",
             backstory: "Expert at analyzing travel data to pick ideal destinations for travelers"
@@ -61,7 +61,7 @@ public class Agents
         });
 
         LocalTourGuide = new CrewAgent(
-            model: model,
+            chatClient: chatClient,
             role: "Local Tour Guide",
             goal: "Provide the BEST insights about the selected city and its attractions",
             backstory: "Knowledgeable local guide with extensive information\r\n about the city, it's attractions and customs"

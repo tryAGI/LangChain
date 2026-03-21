@@ -6,16 +6,18 @@ using LangChain.Chains.StackableChains.Files;
 using LangChain.Chains.StackableChains.ImageGeneration;
 using LangChain.Chains.StackableChains.ImageToTextGeneration;
 using LangChain.Chains.StackableChains.ReAct;
-using LangChain.Databases;
 using LangChain.Memory;
 using LangChain.Providers;
+using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
 // ReSharper disable InconsistentNaming
 
 namespace LangChain.Chains;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class Chain
 {
@@ -72,38 +74,38 @@ public static class Chain
     /// <summary>
     /// Executes the LLM model on the chain context.
     /// </summary>
-    /// <param name="llm"></param>
+    /// <param name="chatClient"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
-    /// <param name="settings"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
     public static LLMChain LLM(
-        IChatModel llm,
+        IChatClient chatClient,
         string inputKey = "text",
         string outputKey = "text",
-        ChatSettings? settings = null)
+        ChatOptions? options = null)
     {
-        return new LLMChain(llm, inputKey, outputKey, settings);
+        return new LLMChain(chatClient, inputKey, outputKey, options);
     }
 
     /// <inheritdoc cref="LLM"/>
     public static LLMChain LargeLanguageModel(
-        IChatModel llm,
+        IChatClient chatClient,
         string inputKey = "text",
         string outputKey = "text")
     {
-        return new LLMChain(llm, inputKey, outputKey);
+        return new LLMChain(chatClient, inputKey, outputKey);
     }
 
     /// <inheritdoc cref="RetrieveSimilarDocuments"/>
     public static RetrieveDocumentsChain RetrieveDocuments(
-        IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         int amount = 4,
         string inputKey = "text",
         string outputKey = "docs")
     {
-        return new RetrieveDocumentsChain(vectorCollection, embeddingModel, inputKey, outputKey, amount);
+        return new RetrieveDocumentsChain(vectorCollection, embeddingGenerator, inputKey, outputKey, amount);
     }
 
 
@@ -111,19 +113,19 @@ public static class Chain
     /// Takes most similar documents.
     /// </summary>
     /// <param name="vectorCollection"></param>
-    /// <param name="embeddingModel"></param>
+    /// <param name="embeddingGenerator"></param>
     /// <param name="amount"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static RetrieveDocumentsChain RetrieveSimilarDocuments(
-        IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         int amount = 4,
         string inputKey = "text",
         string outputKey = "docs")
     {
-        return new RetrieveDocumentsChain(vectorCollection, embeddingModel, inputKey, outputKey, amount);
+        return new RetrieveDocumentsChain(vectorCollection, embeddingGenerator, inputKey, outputKey, amount);
     }
 
     /// <inheritdoc cref="CombineDocuments"/>
@@ -195,40 +197,40 @@ public static class Chain
     }
 
     /// <summary>
-    /// Converts speech to text using the specified STT model.
+    /// Converts speech to text using the specified STT client.
     /// </summary>
-    /// <param name="model"></param>
-    /// <param name="settings"></param>
+    /// <param name="client"></param>
+    /// <param name="options"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static STTChain STT(
-        ISpeechToTextModel model,
-        SpeechToTextSettings? settings = null,
+        ISpeechToTextClient client,
+        SpeechToTextOptions? options = null,
         string inputKey = "audio",
         string outputKey = "text")
     {
-        return new STTChain(model, settings, inputKey, outputKey);
+        return new STTChain(client, options, inputKey, outputKey);
     }
 
     /// <summary>
     /// Uses ReAct technique to allow LLM to execute functions.
     /// <see cref="ReActAgentExecutorChain.UseTool"/> to add tools.
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="chatClient"></param>
     /// <param name="reActPrompt"></param>
     /// <param name="maxActions"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     /// <returns></returns>
     public static ReActAgentExecutorChain ReActAgentExecutor(
-        IChatModel model,
+        IChatClient chatClient,
         string? reActPrompt = null,
         int maxActions = 5,
         string inputKey = "text",
         string outputKey = "text")
     {
-        return new ReActAgentExecutorChain(model, reActPrompt, maxActions, inputKey, outputKey);
+        return new ReActAgentExecutorChain(chatClient, reActPrompt, maxActions, inputKey, outputKey);
     }
 
     /// <summary>

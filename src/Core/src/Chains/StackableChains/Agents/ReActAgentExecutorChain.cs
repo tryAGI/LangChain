@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
@@ -8,17 +8,18 @@ using LangChain.Providers;
 using LangChain.Schema;
 using System.Reflection;
 using LangChain.Chains.StackableChains.Agents.Tools;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class ReActAgentExecutorChain : BaseStackableChain
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public const string DefaultPrompt =
         @"Answer the following questions as best you can. You have access to the following tools:
@@ -46,7 +47,7 @@ Thought:{history}";
     private StackChain? _chain;
     private bool _useCache;
     Dictionary<string, AgentTool> _tools = new();
-    private readonly IChatModel _model;
+    private readonly IChatClient _chatClient;
     private readonly string _reActPrompt;
     private readonly int _maxActions;
     private readonly MessageFormatter _messageFormatter;
@@ -54,22 +55,22 @@ Thought:{history}";
     private readonly ConversationBufferMemory _conversationBufferMemory;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="chatClient"></param>
     /// <param name="reActPrompt"></param>
     /// <param name="maxActions"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     public ReActAgentExecutorChain(
-        IChatModel model,
+        IChatClient chatClient,
         string? reActPrompt = null,
         int maxActions = 5,
         string inputKey = "answer",
         string outputKey = "final_answer")
     {
         reActPrompt ??= DefaultPrompt;
-        _model = model;
+        _chatClient = chatClient;
         _reActPrompt = reActPrompt;
         _maxActions = maxActions;
 
@@ -108,7 +109,7 @@ Thought:{history}";
             | Set(toolNames, "tool_names")
             | LoadMemory(_conversationBufferMemory, outputKey: "history")
             | Template(_reActPrompt)
-            | Chain.LLM(_model, settings: new ChatSettings
+            | Chain.LLM(_chatClient, options: new ChatOptions
             {
                 StopSequences = ["Observation", "[END]"],
             }).UseCache(_useCache)
@@ -163,7 +164,7 @@ Thought:{history}";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
@@ -174,7 +175,7 @@ Thought:{history}";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tool"></param>
     /// <returns></returns>

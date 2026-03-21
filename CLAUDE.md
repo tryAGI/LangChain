@@ -87,14 +87,17 @@ examples/                      # Sample projects (OpenAI, Azure, Memory, Serve, 
 ### Dependencies
 
 LangChain.Core depends on:
-- `LangChain.Providers.Abstractions` (NuGet) — provider interfaces (IChatModel, IEmbeddingModel)
-- `LangChain.Databases.Abstractions` (NuGet) — database interfaces (IVectorDatabase, IVectorCollection)
+- `LangChain.Providers.Abstractions` (NuGet) — non-MEAI provider interfaces (ITextToSpeechModel, ITextToImageModel, IImageToTextModel) and message types (Message, MessageRole)
+- `LangChain.Databases.Abstractions` (NuGet) — message history (BaseChatMessageHistory, ChatMessageHistory)
+- `Microsoft.Extensions.AI` (NuGet) — MEAI interfaces (IChatClient, IEmbeddingGenerator, ISpeechToTextClient)
+- `Microsoft.Extensions.VectorData.Abstractions` (NuGet) — vector store abstractions
 - `LangChain.DocumentLoaders.Abstractions` (project reference)
 - `LangChain.Splitters.Abstractions` (project reference)
 
 The meta-package additionally references:
-- `LangChain.Providers.OpenAI`, `LangChain.Providers.Anthropic`, `LangChain.Providers.Google`, `LangChain.Providers.Ollama`, `LangChain.Providers.Azure`, `LangChain.Providers.DeepSeek`, `LangChain.Providers.HuggingFace`
-- `LangChain.Databases.InMemory`
+- `tryAGI.OpenAI`, `tryAGI.Anthropic`, `Ollama` — SDK packages implementing MEAI interfaces natively
+- `Google_Gemini` — conditional on net10.0 (only TFM it supports)
+- `Microsoft.SemanticKernel.Connectors.InMemory` — in-memory vector store
 
 ### Key Patterns
 
@@ -109,23 +112,24 @@ var chain =
 var result = await chain.RunAsync("text");
 ```
 
-**Provider/Model Pattern** — providers authenticate, models execute:
+**MEAI Provider Pattern** — use tryAGI SDKs directly with MEAI interfaces:
 ```csharp
-var provider = new OpenAiProvider(apiKey);
-var llm = new OpenAiLatestFastChatModel(provider);
-var embeddingModel = new TextEmbeddingV3SmallModel(provider);
+var openAiClient = new OpenAIClient(apiKey);
+IChatClient llm = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
+IEmbeddingGenerator<string, Embedding<float>> embeddingModel = openAiClient.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 ```
 
 **RAG Pattern** — load documents, create embeddings, query with similarity search:
 ```csharp
-var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
+var vectorStore = new InMemoryVectorStore();
+var vectorCollection = await vectorStore.AddDocumentsFromAsync<PdfPigPdfLoader>(
     embeddingModel, dimensions: 1536, dataSource: DataSource.FromUrl(url));
 var similarDocuments = await vectorCollection.GetSimilarDocuments(embeddingModel, question);
 ```
 
 ## Key Conventions
 
-- **Target frameworks:** `net4.6.2`, `netstandard2.0`, `net8.0`, `net9.0`
+- **Target frameworks:** `net4.6.2`, `netstandard2.0`, `net8.0`, `net9.0`, `net10.0`
 - **Language:** C# preview, nullable reference types enabled, implicit usings
 - **Strong naming:** All assemblies signed with `src/key.snk`
 - **Versioning:** MinVer with `v` tag prefix

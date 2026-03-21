@@ -1,94 +1,79 @@
-using LangChain.Databases;
-using LangChain.Providers;
 using LangChain.DocumentLoaders;
+using LangChain.Schema;
 using LangChain.Splitters.Text;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
 namespace LangChain.Extensions;
 
 public static class VectorDatabaseExtensions
 {
     /// <summary>
-    /// Adds documents loaded using <typeparamref name="TLoader"/> to the vector database. <br/>
+    /// Adds documents loaded using <typeparamref name="TLoader"/> to the vector store. <br/>
     /// If the collection does not exist, it will be created. <br/>
     /// Splitting the text into sentences is done using the default text splitter, but you can provide your own. <br/>
     /// </summary>
-    /// <param name="vectorDatabase"></param>
-    /// <param name="embeddingModel"></param>
-    /// <param name="dimensions"></param>
-    /// <param name="dataSource"></param>
-    /// <param name="collectionName"></param>
-    /// <param name="textSplitter"></param>
-    /// <param name="loaderSettings"></param>
-    /// <param name="embeddingSettings"></param>
-    /// <param name="behavior"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static async Task<IVectorCollection> AddDocumentsFromAsync<TLoader>(
-        this IVectorDatabase vectorDatabase,
-        IEmbeddingModel embeddingModel,
+    public static async Task<VectorStoreCollection<string, LangChainDocumentRecord>> AddDocumentsFromAsync<TLoader>(
+        this VectorStore vectorStore,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         int dimensions,
         DataSource dataSource,
-        string collectionName = VectorCollection.DefaultName,
+        string collectionName = "langchain",
         ITextSplitter? textSplitter = null,
         DocumentLoaderSettings? loaderSettings = null,
-        EmbeddingSettings? embeddingSettings = null,
         AddDocumentsToDatabaseBehavior behavior = AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists,
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
-        vectorDatabase = vectorDatabase ?? throw new ArgumentNullException(paramName: nameof(vectorDatabase));
+        vectorStore = vectorStore ?? throw new ArgumentNullException(paramName: nameof(vectorStore));
+
+        var definition = new VectorStoreCollectionDefinition
+        {
+            Properties =
+            [
+                new VectorStoreKeyProperty("Id", typeof(string)),
+                new VectorStoreDataProperty("Text", typeof(string)),
+                new VectorStoreDataProperty("MetadataJson", typeof(string)),
+                new VectorStoreVectorProperty("Embedding", dimensions),
+            ]
+        };
+
+        var collection = vectorStore.GetCollection<string, LangChainDocumentRecord>(collectionName, definition);
 
         if (behavior == AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists &&
-            await vectorDatabase.IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
+            await collection.CollectionExistsAsync(cancellationToken).ConfigureAwait(false))
         {
-            return await vectorDatabase.GetCollectionAsync(
-                collectionName: collectionName,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+            return collection;
         }
+
         if (behavior == AddDocumentsToDatabaseBehavior.OverwriteExistingCollection &&
-            await vectorDatabase.IsCollectionExistsAsync(collectionName, cancellationToken).ConfigureAwait(false))
+            await collection.CollectionExistsAsync(cancellationToken).ConfigureAwait(false))
         {
-            await vectorDatabase.DeleteCollectionAsync(
-                collectionName: collectionName,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+            await collection.EnsureCollectionDeletedAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(
-            collectionName: collectionName,
-            dimensions: dimensions,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+        await collection.EnsureCollectionExistsAsync(cancellationToken).ConfigureAwait(false);
 
-        await vectorCollection.AddDocumentsFromAsync<TLoader>(
-            embeddingModel: embeddingModel,
+        await collection.AddDocumentsFromAsync<TLoader>(
+            embeddingGenerator: embeddingGenerator,
             dataSource: dataSource,
             textSplitter: textSplitter,
             loaderSettings: loaderSettings,
-            embeddingSettings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        return vectorCollection;
+        return collection;
     }
 
     /// <summary>
     /// Adds documents loaded using <typeparamref name="TLoader"/> to the vector collection. <br/>
     /// Splitting the text into sentences is done using the default text splitter, but you can provide your own. <br/>
     /// </summary>
-    /// <param name="vectorCollection"></param>
-    /// <param name="embeddingModel"></param>
-    /// <param name="dataSource"></param>
-    /// <param name="textSplitter"></param>
-    /// <param name="loaderSettings"></param>
-    /// <param name="embeddingSettings"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     public static async Task<IReadOnlyCollection<string>> AddDocumentsFromAsync<TLoader>(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         DataSource dataSource,
         ITextSplitter? textSplitter = null,
         DocumentLoaderSettings? loaderSettings = null,
-        EmbeddingSettings? embeddingSettings = null,
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
@@ -99,22 +84,20 @@ public static class VectorDatabaseExtensions
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return await vectorCollection.AddSplitDocumentsAsync(
-            embeddingModel: embeddingModel,
+            embeddingGenerator: embeddingGenerator,
             documents: documents,
             textSplitter: textSplitter,
-            embeddingSettings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Create a VectorDatabase table from documents.
+    /// Split documents and add them to the vector collection.
     /// </summary>
     public static async Task<IReadOnlyCollection<string>> AddSplitDocumentsAsync(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         IReadOnlyCollection<Document> documents,
         ITextSplitter? textSplitter = null,
-        EmbeddingSettings? embeddingSettings = null,
         CancellationToken cancellationToken = default)
     {
         textSplitter ??= new CharacterTextSplitter();
@@ -122,9 +105,8 @@ public static class VectorDatabaseExtensions
         var splitDocuments = textSplitter.SplitDocuments(documents);
 
         return await vectorCollection.AddDocumentsAsync(
-            embeddingModel: embeddingModel,
+            embeddingGenerator: embeddingGenerator,
             documents: splitDocuments,
-            embeddingSettings: embeddingSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

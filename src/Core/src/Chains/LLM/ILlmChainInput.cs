@@ -1,6 +1,6 @@
 using LangChain.Base;
 using LangChain.Prompts.Base;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.LLM;
 
@@ -8,17 +8,17 @@ namespace LangChain.Chains.LLM;
 public interface ILlmChainInput : IChainInputs
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     BasePromptTemplate Prompt { get; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    IChatModel Llm { get; }
+    IChatClient Llm { get; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     string OutputKey { get; set; }
 }

@@ -7,6 +7,7 @@ using LangChain.Prompts;
 using LangChain.Providers;
 using LangChain.Retrievers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 using Moq;
 
 namespace LangChain.Core.UnitTests.Chains.ConversationalRetrieval;
@@ -53,10 +54,10 @@ public class ConversationalRetrievalChainTests
             "Combine the chat history and follow up question into a standalone question. Chat History: {chat_history}. Follow up question: {question}";
 
         var prompt = PromptTemplate.FromTemplate(template);
-        var questionGeneratorLlmMock = new Mock<IChatModel>();
+        var questionGeneratorLlmMock = new Mock<IChatClient>();
         questionGeneratorLlmMock
-            .Setup(v => v.GenerateAsync(It.IsAny<ChatRequest>(), It.IsAny<ChatSettings>(), It.IsAny<CancellationToken>()))
-            .Returns<ChatRequest, ChatSettings, CancellationToken>((_, _, _) => GetChatResponses());
+            .Setup(v => v.GetResponseAsync(It.IsAny<IList<ChatMessage>>(), It.IsAny<ChatOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Microsoft.Extensions.AI.ChatResponse(new ChatMessage(ChatRole.Assistant, "Bob's asking what is hist name")));
 
         var llmInput = new LlmChainInput(questionGeneratorLlmMock.Object, prompt);
         var questionGeneratorChain = new LlmChain(llmInput);
@@ -95,40 +96,25 @@ public class ConversationalRetrievalChainTests
         result.Value["generated_question"].Should().BeEquivalentTo("Bob's asking what is hist name");
 
         questionGeneratorLlmMock
-            .Verify(v => v.GenerateAsync(
-                It.Is<ChatRequest>(request => request.Messages.Count == 1),
-                It.IsAny<ChatSettings>(),
+            .Verify(v => v.GetResponseAsync(
+                It.IsAny<IList<ChatMessage>>(),
+                It.IsAny<ChatOptions>(),
                 It.IsAny<CancellationToken>()));
-        return;
-
-        // Helper method to create IAsyncEnumerable<int>
-        async IAsyncEnumerable<ChatResponse> GetChatResponses()
-        {
-            await Task.CompletedTask;
-
-            yield return new ChatResponse
-            {
-                Messages = new[] { Message.Ai("Bob's asking what is hist name") },
-                Usage = Usage.Empty,
-                UsedSettings = ChatSettings.Default,
-            };
-        }
     }
 
     [Test]
     public void ReduceTokensBelowLimit_Ok()
     {
-        var supportsCountTokensMock = new Mock<ISupportsCountTokens>();
+        var chatClientMock = new Mock<IChatClient>();
+        var supportsCountTokensMock = chatClientMock.As<ISupportsCountTokens>();
         supportsCountTokensMock
             .Setup(v => v.CountTokens(It.IsAny<string>()))
             .Returns<string>(input => input.Length);
 
-        var chatModelMock = supportsCountTokensMock.As<IChatModel>();
-
         var llmWithCounterMock = new Mock<ILlmChain>();
         llmWithCounterMock
             .SetupGet(v => v.Llm)
-            .Returns(chatModelMock.Object);
+            .Returns(chatClientMock.Object);
 
         var prompt = PromptTemplate.FromTemplate("{documents}");
         llmWithCounterMock

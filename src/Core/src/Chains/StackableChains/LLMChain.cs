@@ -1,36 +1,39 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using LangChain.Abstractions.Schema;
+using LangChain.Extensions;
 using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.HelperChains;
 
 /// <inheritdoc/>
 public class LLMChain : BaseStackableChain
 {
-    private readonly IChatModel _llm;
+    private readonly IChatClient _chatClient;
     private bool _useCache;
-    private ChatSettings _settings;
+    private ChatOptions _options;
 
     private const string CACHE_DIR = "cache";
 
     /// <inheritdoc/>
     public LLMChain(
-        IChatModel llm,
+        IChatClient chatClient,
         string inputKey = "prompt",
         string outputKey = "text",
-        ChatSettings? settings = null
+        ChatOptions? options = null
         )
     {
         InputKeys = new[] { inputKey };
         OutputKeys = new[] { outputKey };
-        _llm = llm;
-        _settings = settings ?? new ChatSettings();
+        _chatClient = chatClient;
+        _options = options ?? new ChatOptions();
     }
 
     string? GetCachedAnswer(string prompt)
     {
-        var file = Path.Combine(CACHE_DIR, $"{_llm.Id}.{Hash(prompt)}.llmcache");
+        var modelId = _chatClient.GetService<ChatClientMetadata>()?.DefaultModelId ?? "unknown";
+        var file = Path.Combine(CACHE_DIR, $"{modelId}.{Hash(prompt)}.llmcache");
         if (File.Exists(file))
         {
             return File.ReadAllText(file);
@@ -41,7 +44,8 @@ public class LLMChain : BaseStackableChain
     void SaveCachedAnswer(string prompt, string answer)
     {
         Directory.CreateDirectory(CACHE_DIR);
-        var file = Path.Combine(CACHE_DIR, $"{_llm.Id}.{Hash(prompt)}.llmcache");
+        var modelId = _chatClient.GetService<ChatClientMetadata>()?.DefaultModelId ?? "unknown";
+        var file = Path.Combine(CACHE_DIR, $"{modelId}.{Hash(prompt)}.llmcache");
         File.WriteAllText(file, answer);
     }
 
@@ -66,8 +70,12 @@ public class LLMChain : BaseStackableChain
             }
         }
 
-        var response = await _llm.GenerateAsync(prompt, settings: _settings, cancellationToken: cancellationToken);
-        responseContent = response.LastMessageContent;
+        var messages = new List<ChatMessage>
+        {
+            new(ChatRole.User, prompt),
+        };
+        var response = await _chatClient.GetResponseAsync(messages, _options, cancellationToken).ConfigureAwait(false);
+        responseContent = response.Text ?? string.Empty;
         if (_useCache)
             SaveCachedAnswer(prompt, responseContent);
         values.Value[OutputKeys[0]] = responseContent;
@@ -75,7 +83,7 @@ public class LLMChain : BaseStackableChain
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
