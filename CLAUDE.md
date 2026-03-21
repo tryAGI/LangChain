@@ -48,7 +48,6 @@ src/
 │   ├── Abstractions/          # LangChain.Splitters.Abstractions (CharacterTextSplitter, etc.)
 │   └── CSharp/                # LangChain.Splitters.CSharp
 ├── Extensions/
-│   ├── DependencyInjection/   # LangChain.Extensions.DependencyInjection
 │   └── Docker/                # LangChain.Extensions.Docker
 ├── Serve/
 │   ├── Abstractions/          # LangChain.Serve.Abstractions
@@ -59,7 +58,7 @@ src/
 │   ├── Sql/                   # LangChain.Utilities.Sql
 │   └── Postgres/              # LangChain.Utilities.Postgres
 ├── Cli/                       # LangChain.Cli
-└── Providers/Abstractions/    # Local copy of provider abstractions (mirrors LangChain.Providers)
+    # Note: Non-MEAI provider interfaces (TTS, Image, ImageToText) are in Core/src/Providers/
 examples/                      # Sample projects (OpenAI, Azure, Memory, Serve, LocalRAG, etc.)
 ```
 
@@ -87,12 +86,12 @@ examples/                      # Sample projects (OpenAI, Azure, Memory, Serve, 
 ### Dependencies
 
 LangChain.Core depends on:
-- `LangChain.Providers.Abstractions` (NuGet) — non-MEAI provider interfaces (ITextToSpeechModel, ITextToImageModel, IImageToTextModel) and message types (Message, MessageRole)
 - `LangChain.Databases.Abstractions` (NuGet) — message history (BaseChatMessageHistory, ChatMessageHistory)
-- `Microsoft.Extensions.AI` (NuGet) — MEAI interfaces (IChatClient, IEmbeddingGenerator, ISpeechToTextClient)
+- `Microsoft.Extensions.AI` (NuGet) — MEAI interfaces (IChatClient, IEmbeddingGenerator, ISpeechToTextClient, ChatMessage, ChatRole)
 - `Microsoft.Extensions.VectorData.Abstractions` (NuGet) — MEVA vector store abstractions (`VectorStore`, `VectorStoreCollection<TKey, TRecord>`)
 - `LangChain.DocumentLoaders.Abstractions` (project reference)
 - `LangChain.Splitters.Abstractions` (project reference)
+- Non-MEAI provider interfaces (ITextToSpeechModel, ITextToImageModel, IImageToTextModel) are defined locally in `src/Core/src/Providers/`
 
 The meta-package additionally references:
 - `tryAGI.OpenAI`, `tryAGI.Anthropic`, `Ollama` — SDK packages implementing MEAI interfaces natively

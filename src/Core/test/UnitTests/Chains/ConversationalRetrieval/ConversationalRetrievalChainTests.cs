@@ -73,10 +73,10 @@ public class ConversationalRetrievalChainTests
         var input = new ChainValues
         {
             ["question"] = "What is my name?",
-            ["chat_history"] = new List<Message>
+            ["chat_history"] = new List<ChatMessage>
             {
-                Message.Human("My name is Alice"),
-                Message.Ai("Hello Alice")
+                new ChatMessage(ChatRole.User, "My name is Alice"),
+                new ChatMessage(ChatRole.Assistant, "Hello Alice")
             }
         };
 

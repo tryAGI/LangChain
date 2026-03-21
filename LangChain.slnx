@@ -27,6 +27,9 @@
   <Folder Name="/Extensions/">
     <File Path="src/Extensions/Directory.Build.props" />
   </Folder>
+  <Folder Name="/Extensions/DependencyInjection/">
+    <Project Path="src/Extensions/DependencyInjection/src/LangChain.Extensions.DependencyInjection.csproj" />
+  </Folder>
   <Folder Name="/Extensions/Docker/">
     <Project Path="src/Extensions/Docker/src/LangChain.Extensions.Docker.csproj" />
   </Folder>

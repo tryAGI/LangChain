@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <PackageReference Include="LangChain.Databases.Abstractions" />
-    <PackageReference Include="LangChain.Providers.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.AI" />
     <PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" />
   </ItemGroup>
