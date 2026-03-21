@@ -1,11 +1,11 @@
-using LangChain.Providers;
+using LangChain.Extensions;
 using LangChain.Schema;
 
 namespace LangChain.Memory;
 
 /// <summary>
 /// Buffer for storing conversation memory.
-/// 
+///
 /// NOTE: LangChain's buffer property is not implemented here
 /// </summary>
 public class ConversationBufferMemory : BaseChatMemory
@@ -37,7 +37,7 @@ public class ConversationBufferMemory : BaseChatMemory
     /// <inheritdoc />
     public override OutputValues LoadMemoryVariables(InputValues? inputValues)
     {
-        string bufferText = Formatter.Format(ChatHistory.Messages);
+        string bufferText = Formatter.Format(ChatHistory.Messages.ToChatMessages());
         return new OutputValues(new Dictionary<string, object> { { MemoryKey, bufferText } });
     }
 }

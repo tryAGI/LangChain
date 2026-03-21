@@ -1,12 +1,10 @@
 using DotNet.Testcontainers.Containers;
-using LangChain.Providers;
 using Microsoft.Extensions.AI;
 
 namespace LangChain.Databases.IntegrationTests;
 
 public sealed class DatabaseTestEnvironment : IAsyncDisposable
 {
-    public IEmbeddingModel? EmbeddingModel { get; set; }
     public IEmbeddingGenerator<string, Embedding<float>>? EmbeddingGenerator { get; set; }
     public int Port { get; set; }
     public string CollectionName { get; set; } = "test" + Guid.NewGuid().ToString("N");

@@ -1,4 +1,4 @@
-using LangChain.Providers;
+using LangChain.Extensions;
 using LangChain.Schema;
 using Microsoft.Extensions.AI;
 
@@ -11,7 +11,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
 {
     private IChatClient ChatClient { get; }
 
-    private Func<IEnumerable<Message>, int>? TokenCounter { get; }
+    private Func<IEnumerable<ChatMessage>, int>? TokenCounter { get; }
 
     private string SummaryText { get; set; } = string.Empty;
 
@@ -29,7 +29,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
     /// <param name="chatClient">Chat client to use for summarization</param>
     /// <param name="tokenCounter">Optional custom token counter function</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ConversationSummaryBufferMemory(IChatClient chatClient, Func<IEnumerable<Message>, int>? tokenCounter = null)
+    public ConversationSummaryBufferMemory(IChatClient chatClient, Func<IEnumerable<ChatMessage>, int>? tokenCounter = null)
         : base()
     {
         ChatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
@@ -43,7 +43,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
     /// <param name="chatHistory">History backing store</param>
     /// <param name="tokenCounter">Optional custom token counter function</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ConversationSummaryBufferMemory(IChatClient chatClient, BaseChatMessageHistory chatHistory, Func<IEnumerable<Message>, int>? tokenCounter = null)
+    public ConversationSummaryBufferMemory(IChatClient chatClient, BaseChatMessageHistory chatHistory, Func<IEnumerable<ChatMessage>, int>? tokenCounter = null)
         : base(chatHistory)
     {
         ChatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
@@ -73,7 +73,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
         SummaryText = string.Empty;
     }
 
-    private int CountTokens(IEnumerable<Message> messages)
+    private int CountTokens(IEnumerable<ChatMessage> messages)
     {
         if (TokenCounter != null)
         {
@@ -81,7 +81,7 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
         }
 
         // Simple character-based estimate: ~4 chars per token
-        return messages.Sum(m => (m.Content?.Length ?? 0)) / 4;
+        return messages.Sum(m => (m.Text?.Length ?? 0)) / 4;
     }
 
     /// <summary>
@@ -90,16 +90,16 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
     /// <returns></returns>
     private async Task PruneMessages()
     {
-        List<Message> prunedMessages = new List<Message>();
+        List<ChatMessage> prunedMessages = new List<ChatMessage>();
 
-        int tokenCount = CountTokens(ChatHistory.Messages);
+        int tokenCount = CountTokens(ChatHistory.Messages.ToChatMessages());
         if (tokenCount > MaxTokenCount)
         {
-            Queue<Message> queue = new Queue<Message>(ChatHistory.Messages);
+            Queue<ChatMessage> queue = new Queue<ChatMessage>(ChatHistory.Messages.ToChatMessages());
 
             while (tokenCount > MaxTokenCount)
             {
-                Message prunedMessage = queue.Dequeue();
+                ChatMessage prunedMessage = queue.Dequeue();
                 prunedMessages.Add(prunedMessage);
 
                 tokenCount = CountTokens(queue);
@@ -107,17 +107,17 @@ public class ConversationSummaryBufferMemory : BaseChatMemory
 
             SummaryText = await ChatClient.SummarizeAsync(prunedMessages, SummaryText).ConfigureAwait(false);
 
-            await ChatHistory.SetMessages(queue).ConfigureAwait(false);
+            await ChatHistory.SetMessages(queue.ToLangChainMessages()).ConfigureAwait(false);
         }
     }
 
-    private List<Message> GetMessages()
+    private List<ChatMessage> GetMessages()
     {
-        List<Message> messages = new List<Message>
+        List<ChatMessage> messages = new List<ChatMessage>
         {
-            SummaryText.AsSystemMessage()
+            new ChatMessage(ChatRole.System, SummaryText)
         };
-        messages.AddRange(ChatHistory.Messages);
+        messages.AddRange(ChatHistory.Messages.ToChatMessages());
 
         return messages;
     }

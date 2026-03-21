@@ -1,5 +1,3 @@
-using LangChain.Extensions;
-using LangChain.Providers;
 using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
@@ -32,7 +30,7 @@ New summary:";
 
     public static async Task<string> SummarizeAsync(
         this IChatClient chatClient,
-        IEnumerable<Message> newMessages,
+        IEnumerable<ChatMessage> newMessages,
         string existingSummary,
         MessageFormatter? formatter = null,
         CancellationToken cancellationToken = default)

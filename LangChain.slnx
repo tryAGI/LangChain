@@ -35,7 +35,6 @@
   </Folder>
   <Folder Name="/Meta/">
     <Project Path="src/Meta/src/LangChain.csproj" />
-    <Project Path="src/Meta/test/LangChain.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/Misc/">
     <File Path=".gitignore" />
@@ -65,12 +64,9 @@
     <File Path=".github/workflows/pull-request.yml" />
   </Folder>
   <Folder Name="/Samples/">
-    <Project Path="examples/LangChain.Samples.AspNet/LangChain.Samples.AspNet.csproj" />
     <Project Path="examples/LangChain.Samples.Azure/LangChain.Samples.Azure.csproj" />
-    <Project Path="examples/LangChain.Samples.HuggingFace/LangChain.Samples.HuggingFace.csproj" />
     <Project Path="examples/LangChain.Samples.LocalRAG/LangChain.Samples.LocalRAG.csproj" />
     <Project Path="examples/LangChain.Samples.Memory/LangChain.Samples.Memory.csproj" />
-    <Project Path="examples/LangChain.Samples.OpenAI/LangChain.Samples.OpenAI.csproj" />
     <Project Path="examples/LangChain.Samples.Prompts/LangChain.Samples.Prompts.csproj" />
     <Project Path="examples/LangChain.Samples.SequentialChain/LangChain.Samples.SequentialChain.csproj" />
     <Project Path="examples/LangChain.Samples.Serve.OpenAI/LangChain.Samples.Serve.OpenAI.csproj" />

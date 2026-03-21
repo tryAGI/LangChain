@@ -3,12 +3,12 @@ using LangChain.Providers;
 namespace LangChain.Memory;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class MemoryExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="messages"></param>
     /// <param name="memory"></param>

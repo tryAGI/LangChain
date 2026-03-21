@@ -1,5 +1,6 @@
 ﻿using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
+using LangChain.Extensions;
 using LangChain.Memory;
 using LangChain.Providers;
 
@@ -91,7 +92,7 @@ public class GroupChat : BaseStackableChain
         while (messagesCount < _messagesLimit)
         {
             var agent = GetNextAgent();
-            string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages);
+            string bufferText = _messageFormatter.Format(_chatMessageHistory.Messages.ToChatMessages());
             agent.SetHistory(bufferText + "\n" + $"{agent.Name}:");
             var res = await agent.CallAsync(values, cancellationToken: cancellationToken).ConfigureAwait(false);
             var message = (string)res.Value[agent.OutputKeys[0]];
