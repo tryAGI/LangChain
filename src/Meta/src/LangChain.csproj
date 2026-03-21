@@ -23,7 +23,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Core\src\LangChain.Core.csproj" />
-        <ProjectReference Include="..\..\Extensions\DependencyInjection\src\LangChain.Extensions.DependencyInjection.csproj" />
     </ItemGroup>
 
 </Project>

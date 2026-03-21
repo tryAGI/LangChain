@@ -1,9 +1,9 @@
 using LangChain.Abstractions.Chains.Base;
 using LangChain.DocumentLoaders;
 using LangChain.LLMS;
-using LangChain.Providers;
 using LangChain.Retrievers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Base;
 
@@ -70,7 +70,7 @@ public interface IBaseCallbackHandler
     /// <param name="extraParams"></param>
     /// <returns></returns>
     public Task HandleChatModelStartAsync(BaseLlm llm,
-        IReadOnlyList<List<Message>> messages,
+        IReadOnlyList<List<ChatMessage>> messages,
         string runId,
         string? parentRunId = null,
         IReadOnlyDictionary<string, object>? extraParams = null);

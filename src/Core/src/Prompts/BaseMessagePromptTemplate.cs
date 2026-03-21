@@ -1,31 +1,31 @@
 using System.Text.Json;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Prompts;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public abstract class BaseMessagePromptTemplate
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public abstract IReadOnlyList<string> InputVariables { get; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="values"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<List<Message>> FormatMessagesAsync(
+    public abstract Task<List<ChatMessage>> FormatMessagesAsync(
         InputValues values,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     public SerializedMessagePromptTemplate Serialize()

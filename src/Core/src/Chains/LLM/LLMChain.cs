@@ -2,10 +2,8 @@ using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Callback;
 using LangChain.Common;
-using LangChain.Extensions;
 using LangChain.Memory;
 using LangChain.Prompts.Base;
-using LangChain.Providers;
 using LangChain.Schema;
 using Microsoft.Extensions.AI;
 using Generation = LangChain.Schema.Generation;
@@ -114,19 +112,17 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         }
 
         var promptValue = await Prompt.FormatPromptValueAsync(new InputValues(values.Value), cancellationToken).ConfigureAwait(false);
-        var langChainMessages = promptValue.ToChatMessages().WithHistory(Memory);
+        var chatMessages = promptValue.ToChatMessages().WithHistory(Memory);
         if (Verbose)
         {
-            Console.WriteLine(string.Join("\n\n", langChainMessages));
+            Console.WriteLine(string.Join("\n\n", chatMessages));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
         }
-
-        var chatMessages = langChainMessages.ToChatMessages();
         var options = new ChatOptions
         {
             StopSequences = stop.Count > 0 ? stop : null,
         };
-        var response = await Llm.GetResponseAsync(chatMessages, options, cancellationToken).ConfigureAwait(false);
+        var response = await Llm.GetResponseAsync(chatMessages.ToList(), options, cancellationToken).ConfigureAwait(false);
         if (Verbose)
         {
             Console.WriteLine(response.Text);
@@ -178,7 +174,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var responseTasks = prompts
             .Select(async prompt =>
             {
-                var chatMessages = prompt.ToChatMessages().ToChatMessages();
+                var chatMessages = prompt.ToChatMessages().ToList();
                 var options = new ChatOptions
                 {
                     StopSequences = stop is { Count: > 0 } ? stop : null,

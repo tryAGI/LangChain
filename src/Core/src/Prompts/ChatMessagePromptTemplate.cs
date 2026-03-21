@@ -1,6 +1,6 @@
 using LangChain.Prompts.Base;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Prompts;
 
@@ -11,20 +11,20 @@ public class ChatMessagePromptTemplate(
     : BaseMessageStringPromptTemplate(prompt)
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string Role { get; set; } = role;
 
     /// <inheritdoc/>
-    public override async Task<Message> FormatAsync(
+    public override async Task<ChatMessage> FormatAsync(
         InputValues values,
         CancellationToken cancellationToken = default)
     {
-        return (await Prompt.FormatAsync(values, cancellationToken).ConfigureAwait(false)).AsChatMessage();
+        return new ChatMessage(new ChatRole(Role), await Prompt.FormatAsync(values, cancellationToken).ConfigureAwait(false));
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="template"></param>
     /// <param name="role"></param>
