@@ -43,7 +43,7 @@ public static class ServeExtensions
                 x.User?.Content.Value1 ?? x.Assistant?.Content?.Value1 ?? x.System?.Content.Value1 ?? string.Empty
             )).ToList();
 
-            var chatResponse = await chatClient.GetResponseAsync(messages);
+            var chatResponse = await chatClient.GetResponseAsync(messages).ConfigureAwait(false);
             var responseContent = chatResponse.Text ?? string.Empty;
 
             return Results.Ok(new CreateChatCompletionResponse
