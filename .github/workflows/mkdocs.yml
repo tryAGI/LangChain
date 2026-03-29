@@ -36,7 +36,7 @@ jobs:
         run: |
           python -m venv myenv
           source myenv/bin/activate
-          pip install mkdocs-material
+          pip install mkdocs-material 'pygments<2.20'
           mkdocs build -d ./_site
 
       - name: Upload artifact
