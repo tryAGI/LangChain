@@ -23,32 +23,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: Build with MkDocs
-        run: |
-          python -m venv myenv
-          source myenv/bin/activate
-          pip install mkdocs-material 'pygments<2.20'
-          mkdocs build -d ./_site
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+    uses: tryAGI/workflows/.github/workflows/mkdocs-pages.yml@main
+    secrets: inherit
