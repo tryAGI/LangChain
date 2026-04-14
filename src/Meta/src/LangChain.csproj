@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="System.Text.Json" />
         <ProjectReference Include="..\..\Core\src\LangChain.Core.csproj" />
         <ProjectReference Include="..\..\Extensions\DependencyInjection\src\LangChain.Extensions.DependencyInjection.csproj" />
     </ItemGroup>
