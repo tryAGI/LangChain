@@ -16,7 +16,7 @@
     </PackageVersion>
     <PackageVersion Include="LangChain.Databases.Abstractions" Version="0.17.1-dev.46" />
     <PackageVersion Include="LangChain.Databases.OpenSearch" Version="0.17.1-dev.46" />
-    <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.1.0" />
+    <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.5.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.InMemory" Version="1.74.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.74.0-preview" />
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.1-dev.67" />
@@ -29,8 +29,8 @@
     <PackageVersion Include="LangChain.Providers.OpenAI" Version="0.17.1-dev.65" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
-    <PackageVersion Include="Microsoft.Extensions.AI" Version="10.4.1" />
-    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="10.4.1" />
+    <PackageVersion Include="Microsoft.Extensions.AI" Version="10.5.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="10.5.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.6" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.6" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.6" />
