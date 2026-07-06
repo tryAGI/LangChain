@@ -57,6 +57,7 @@ internal static class Helpers
         Uri? endpoint = provider switch
         {
             Provider.Free or Provider.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
+            Provider.Requesty => new Uri("https://router.requesty.ai/v1"),
             _ => null,
         };
         model = model switch
@@ -74,6 +75,8 @@ internal static class Helpers
                 throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set."),
             Provider.OpenRouter or Provider.Free => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
                 throw new InvalidOperationException("OPENROUTER_API_KEY environment variable is not set."),
+            Provider.Requesty => Environment.GetEnvironmentVariable("REQUESTY_API_KEY") ??
+                throw new InvalidOperationException("REQUESTY_API_KEY environment variable is not set."),
             _ => throw new NotImplementedException(),
         };
 
