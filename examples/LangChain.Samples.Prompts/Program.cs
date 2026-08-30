@@ -1,9 +1,13 @@
 ﻿using LangChain.Chains.LLM;
 using LangChain.Prompts;
-using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using OpenAI;
 
-var llm = new OpenAiLatestFastChatModel(Environment.GetEnvironmentVariable("OPENAI_API_KEY")!);
+var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+    throw new InvalidOperationException("OPENAI_API_KEY environment variable is not found.");
+
+IChatClient llm = new OpenAIClient(apiKey).GetChatClient("gpt-4o-mini").AsIChatClient();
 
 var prompt = new PromptTemplate(new PromptTemplateInput(
     template: "What is a good name for a company that makes {product}?",

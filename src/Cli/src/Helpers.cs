@@ -1,6 +1,5 @@
 using System.ClientModel;
 using System.CommandLine;
-using System.CommandLine.IO;
 using LangChain.Cli.Models;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,7 @@ internal static class Helpers
         return inputText;
     }
 
-    public static async Task WriteOutputAsync(string outputText, FileInfo? outputPath, IConsole? console = null, CancellationToken cancellationToken = default)
+    public static async Task WriteOutputAsync(string outputText, FileInfo? outputPath, CancellationToken cancellationToken = default)
     {
         if (outputPath is not null)
         {
@@ -39,14 +38,7 @@ internal static class Helpers
         }
         else
         {
-            if (console is not null)
-            {
-                console.Out.WriteLine(outputText);
-            }
-            else
-            {
-                Console.WriteLine(outputText);
-            }
+            Console.WriteLine(outputText);
         }
     }
 
@@ -94,7 +86,7 @@ internal static class Helpers
                         Endpoint = endpoint,
                     });
 
-                    chatClient = openAiClient.AsChatClient(model);
+                    chatClient = openAiClient.GetChatClient(model).AsIChatClient();
                     break;
                 }
         }
@@ -111,7 +103,7 @@ internal static class Helpers
             }
         });
         var client = new ChatClientBuilder(chatClient)
-            // 👇🏼 Add logging to the chat client, wrapping the function invocation client 
+            // 👇🏼 Add logging to the chat client, wrapping the function invocation client
             .UseLogging(factory)
             // 👇🏼 Add function invocation to the chat client, wrapping the Ollama client
             .UseFunctionInvocation()

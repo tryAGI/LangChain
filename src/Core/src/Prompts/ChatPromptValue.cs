@@ -1,18 +1,18 @@
 using System.Text.Json;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Prompts;
 
 /// <inheritdoc/>
 public class ChatPromptValue(
-    IReadOnlyCollection<Message> messages)
+    IReadOnlyCollection<ChatMessage> messages)
     : BasePromptValue
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public IReadOnlyCollection<Message> Messages { get; set; } = messages;
+    public IReadOnlyCollection<ChatMessage> Messages { get; set; } = messages;
 
     /// <inheritdoc/>
     public override string ToString()
@@ -21,7 +21,7 @@ public class ChatPromptValue(
     }
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Message> ToChatMessages()
+    public override IReadOnlyCollection<ChatMessage> ToChatMessages()
     {
         return this.Messages;
     }

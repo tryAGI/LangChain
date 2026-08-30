@@ -22,10 +22,10 @@ public class ChatTests
 
         chatMessages.Count.Should().Be(4);
 
-        chatMessages.ElementAt(0).Content.Should().Be("Here's some context: This is the context");
-        chatMessages.ElementAt(1).Content.Should().Be("Hello Foo, I'm Bar. Thanks for the This is the context");
-        chatMessages.ElementAt(2).Content.Should().Be("I'm an AI. I'm Foo. I'm Bar.");
-        chatMessages.ElementAt(3).Content.Should().Be("I'm a generic message. I'm Foo. I'm Bar.");
+        chatMessages.ElementAt(0).Text.Should().Be("Here's some context: This is the context");
+        chatMessages.ElementAt(1).Text.Should().Be("Hello Foo, I'm Bar. Thanks for the This is the context");
+        chatMessages.ElementAt(2).Text.Should().Be("I'm an AI. I'm Foo. I'm Bar.");
+        chatMessages.ElementAt(3).Text.Should().Be("I'm a generic message. I'm Foo. I'm Bar.");
     }
 
     [Test]
@@ -91,8 +91,8 @@ public class ChatTests
 
         chatMessages.Count.Should().Be(2);
 
-        chatMessages.ElementAt(0).Content.Should().Be("Here's some context: This is the context");
-        chatMessages.ElementAt(1).Content.Should().Be("Hello Foo, I'm Bar.");
+        chatMessages.ElementAt(0).Text.Should().Be("Here's some context: This is the context");
+        chatMessages.ElementAt(1).Text.Should().Be("Hello Foo, I'm Bar.");
     }
 
     [Test]
@@ -126,8 +126,8 @@ public class ChatTests
 
         chatMessages.Count.Should().Be(3);
 
-        chatMessages.ElementAt(0).Content.Should().Be("Here's some context: This is the context");
-        chatMessages.ElementAt(01).Content.Should().Be("Hello Foo, I'm Bar.");
+        chatMessages.ElementAt(0).Text.Should().Be("Here's some context: This is the context");
+        chatMessages.ElementAt(01).Text.Should().Be("Hello Foo, I'm Bar.");
     }
 
     private static ChatPromptTemplate GenerateTestPromptTemplate()

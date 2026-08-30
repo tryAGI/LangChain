@@ -3,8 +3,8 @@ using LangChain.Base;
 using LangChain.Callback;
 using LangChain.Common;
 using LangChain.DocumentLoaders;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.ConversationalRetrieval;
 
@@ -51,7 +51,7 @@ public abstract class BaseConversationalRetrievalChain(BaseConversationalRetriev
         var question = values.Value["question"].ToString();
 
         var getChatHistory = _fields.GetChatHistory;
-        var chatHistoryStr = getChatHistory(values.Value["chat_history"] as List<Message> ?? new List<Message>());
+        var chatHistoryStr = getChatHistory(values.Value["chat_history"] as List<ChatMessage> ?? new List<ChatMessage>());
 
         string newQuestion;
         if (chatHistoryStr != null)

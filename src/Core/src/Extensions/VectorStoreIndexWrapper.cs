@@ -1,29 +1,22 @@
-﻿using LangChain.Chains.CombineDocuments;
+using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.RetrievalQA;
-using LangChain.Databases;
-using LangChain.Providers;
+using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
 namespace LangChain.Extensions;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class VectorStoreIndexWrapper
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    /// <param name="vectorCollection"></param>
-    /// <param name="embeddingModel"></param>
-    /// <param name="question"></param>
-    /// <param name="llm"></param>
-    /// <param name="inputKey"></param>
-    /// <param name="outputKey"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     public static Task<string?> QueryAsync(
-        this IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
         string question,
         BaseCombineDocumentsChain llm,
         string inputKey = "question",
@@ -33,7 +26,7 @@ public static class VectorStoreIndexWrapper
         var chain = new RetrievalQaChain(
             new RetrievalQaChainInput(
                 llm,
-                vectorCollection.AsRetriever(embeddingModel))
+                vectorCollection.AsRetriever(embeddingGenerator))
             {
                 InputKey = inputKey,
                 OutputKey = outputKey,

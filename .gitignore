@@ -400,3 +400,11 @@ FodyWeavers.xsd
 
 # Tools cache
 **/cache/**
+
+# AutoSDK trimming check temp directory
+.autosdk-trim/
+
+# MkDocs local build outputs
+site/
+_site/
+docs/assets/

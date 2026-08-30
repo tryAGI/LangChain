@@ -1,6 +1,6 @@
 ﻿using LangChain.Memory;
-using LangChain.Providers;
-using LangChain.Providers.OpenAI.Predefined;
+using Microsoft.Extensions.AI;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 internal class Program
@@ -12,7 +12,7 @@ internal class Program
             throw new InvalidOperationException("OPENAI_API_KEY environment variable is not found.");
 
         // Use a common, general-purpose LLM
-        var model = new OpenAiLatestFastChatModel(apiKey);
+        IChatClient model = new OpenAIClient(apiKey).GetChatClient("gpt-4o-mini").AsIChatClient();
 
         // Create a simple prompt template for the conversation to help the AI
         var template = @"
@@ -64,7 +64,7 @@ AI: ";
         }
     }
 
-    private static BaseChatMemory PickMemoryStrategy(IChatModel model)
+    private static BaseChatMemory PickMemoryStrategy(IChatClient model)
     {
         // The memory will add prefixes to messages to indicate where they came from
         // The prefixes specified here should match those used in our prompt template
@@ -96,7 +96,7 @@ AI: ";
                 return GetConversationSummaryMemory(chatHistory, messageFormatter, model);
 
             case nameof(ConversationSummaryBufferMemory):
-                return GetConversationSummaryBufferMemory(chatHistory, messageFormatter, (IChatModelWithTokenCounting)model);
+                return GetConversationSummaryBufferMemory(chatHistory, messageFormatter, model);
 
             default:
                 throw new InvalidOperationException($"Unexpected memory class name: '{memoryClassName}'");
@@ -157,14 +157,14 @@ AI: ";
         };
     }
 
-    private static BaseChatMemory GetConversationSummaryMemory(BaseChatMessageHistory chatHistory, MessageFormatter messageFormatter, IChatModel model)
+    private static BaseChatMemory GetConversationSummaryMemory(BaseChatMessageHistory chatHistory, MessageFormatter messageFormatter, IChatClient model)
     {
         return new ConversationSummaryMemory(model, chatHistory)
         {
             Formatter = messageFormatter
         };
     }
-    private static BaseChatMemory GetConversationSummaryBufferMemory(BaseChatMessageHistory chatHistory, MessageFormatter messageFormatter, IChatModelWithTokenCounting model)
+    private static BaseChatMemory GetConversationSummaryBufferMemory(BaseChatMessageHistory chatHistory, MessageFormatter messageFormatter, IChatClient model)
     {
         return new ConversationSummaryBufferMemory(model, chatHistory)
         {

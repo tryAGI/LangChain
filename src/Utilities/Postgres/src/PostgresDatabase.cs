@@ -3,6 +3,7 @@ using System.Text;
 using LangChain.Utilities.Sql;
 using Npgsql;
 using Npgsql.PostgresTypes;
+using Npgsql.Schema;
 using NpgsqlTypes;
 
 namespace LangChain.Utilities.Postgres;
@@ -191,7 +192,7 @@ public sealed class PostgresDatabase : SqlDatabase
             var dataType = columnSchema.DataTypeName;
             var isNullable = columnSchema.AllowDBNull == true;
             string? comment = null;
-            if (columnSchema.PostgresType is PostgresEnumType postgresEnumType)
+            if (columnSchema is NpgsqlDbColumn { PostgresType: PostgresEnumType postgresEnumType })
             {
                 comment = $"possible values {String.Join(",", postgresEnumType.Labels)}";
             }

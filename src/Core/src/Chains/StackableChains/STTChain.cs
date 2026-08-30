@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.StackableChains;
 
@@ -11,8 +11,8 @@ namespace LangChain.Chains.StackableChains;
 /// </summary>
 public class STTChain : BaseStackableChain
 {
-    private readonly ISpeechToTextModel _model;
-    private readonly SpeechToTextSettings? _settings;
+    private readonly ISpeechToTextClient _client;
+    private readonly SpeechToTextOptions? _options;
     private readonly string _inputKey;
     private readonly string _outputKey;
     private bool _useCache;
@@ -21,13 +21,13 @@ public class STTChain : BaseStackableChain
 
     /// <inheritdoc />
     public STTChain(
-        ISpeechToTextModel model,
-        SpeechToTextSettings? settings = null,
+        ISpeechToTextClient client,
+        SpeechToTextOptions? options = null,
         string inputKey = "audio",
         string outputKey = "text")
     {
-        _model = model;
-        _settings = settings;
+        _client = client;
+        _options = options;
         _inputKey = inputKey;
         _outputKey = outputKey;
         InputKeys = new[] { inputKey };
@@ -72,7 +72,12 @@ public class STTChain : BaseStackableChain
             }
         }
 
-        string text = await _model.TranscribeAsync(audio, _settings, cancellationToken).ConfigureAwait(false);
+        using var stream = new MemoryStream(audio);
+        var response = await _client.GetTextAsync(
+            stream,
+            _options,
+            cancellationToken).ConfigureAwait(false);
+        string text = response.Text ?? string.Empty;
 
         if (_useCache)
             SaveCachedAnswer(audio, text);
@@ -82,7 +87,7 @@ public class STTChain : BaseStackableChain
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>

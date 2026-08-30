@@ -1,4 +1,4 @@
-using LangChain.Providers.OpenAI.Predefined;
+using Microsoft.Extensions.AI;
 using tryAGI.OpenAI;
 using static LangChain.Chains.Chain;
 
@@ -14,28 +14,23 @@ public class OpenAiTests
         var text = H.Resources.SocketIoClient_cs.AsString();
 
         Tiktoken.ModelToEncoder.For(CreateChatCompletionRequestModel.Gpt4.ToValueString()).CountTokens(text).Should().Be(4300);
-        new Gpt4OmniMiniModel("sk-random").CountTokens(text).Should().Be(4300);
-        new Gpt4Model("sk-random").CountTokens(text).Should().Be(4300);
     }
 
     [Test]
-    public async Task TestAudio()
+    [Explicit("Requires OPENAI_API_KEY")]
+    public async Task TestChat()
     {
         var apiKey =
-            Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY") is { Length: > 0 } key ? key :
             throw new InconclusiveException("OPENAI_API_KEY environment variable is not found.");
-        var tts = new Tts1Model(apiKey);
-        var stt = new Whisper1Model(apiKey);
 
-        const string messageText = "My name is Jimmy.";
+        var openAiClient = new OpenAI.OpenAIClient(apiKey);
+        Microsoft.Extensions.AI.IChatClient chatClient = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
+
         var chain =
-            Set(messageText, "message")
-            | TTS(tts, inputKey: "message", outputKey: "audio").UseCache()
-            | STT(stt, inputKey: "audio", outputKey: "text").UseCache();
+            Set("Say hello in one word.", "prompt")
+            | LLM(chatClient, inputKey: "prompt");
 
-        var result = await chain.RunAsync();
-        var text = result.Value["text"].ToString() ?? string.Empty;
-
-        messageText.ToLowerInvariant().Should().Be(text.ToLowerInvariant());
+        await chain.RunAsync();
     }
 }

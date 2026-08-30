@@ -1,6 +1,5 @@
-using LangChain.Providers;
-using LangChain.Providers.Anthropic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Samples.AspNet.Controllers;
 
@@ -8,22 +7,22 @@ namespace LangChain.Samples.AspNet.Controllers;
 [Route("[controller]")]
 public class AnthropicSampleController : ControllerBase
 {
-    private readonly AnthropicChatModel _anthropicModel;
+    private readonly IChatClient _chatClient;
     private readonly ILogger<AnthropicSampleController> _logger;
 
     public AnthropicSampleController(
-        AnthropicChatModel anthropicModel,
+        IChatClient chatClient,
         ILogger<AnthropicSampleController> logger)
     {
-        _anthropicModel = anthropicModel;
+        _chatClient = chatClient;
         _logger = logger;
     }
 
     [HttpGet(Name = "GetAnthropicResponse")]
     public async Task<string> Get()
     {
-        var response = await _anthropicModel.GenerateAsync("What is a good name for a company that sells colourful socks?");
+        var response = await _chatClient.GetResponseAsync("What is a good name for a company that sells colourful socks?");
 
-        return response.LastMessageContent;
+        return response.Text;
     }
 }

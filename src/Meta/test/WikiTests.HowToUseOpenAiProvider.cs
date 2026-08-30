@@ -1,6 +1,5 @@
-﻿using LangChain.Providers.OpenAI;
-using LangChain.Providers.OpenAI.Predefined;
-using tryAGI.OpenAI;
+using Microsoft.Extensions.AI;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -13,7 +12,7 @@ public partial class WikiTests
     {
         //// To use models like GPT-3.5 or GPT-4 you would need OpenAI api key and model name.
 
-        var model = new OpenAiLatestFastChatModel("your_openAI_key");
+        IChatClient model = new OpenAIClient("your_openAI_key").GetChatClient("gpt-4o-mini").AsIChatClient();
         var chain =
             Set("Hello!", outputKey: "request")          // set context variable `request` to "Hello"
             | LLM(model, inputKey: "request", outputKey: "text"); // get text from context variable `request`, pass it to the model and put result into `text`
@@ -25,14 +24,12 @@ public partial class WikiTests
         //// `inputKey` and `outputKey` here is more for understanding of what goes where. They have default values and can be omitted. Also there is classes like `Gpt35TurboModel` for simplicity.
 
         //// ## Additional options
-        //// You can pass custom HttpClient/HttpClientHandler by using `OpenAiProvider` constructor overload.
+        //// You can pass custom HttpClient/HttpClientHandler by using `OpenAIClient` constructor overload.
         var httpClientHandler = new HttpClientHandler();
         using var httpClient = new HttpClient(httpClientHandler, disposeHandler: true);
-        using var api = new OpenAiClient(
-            httpClient,
-            baseUri: new Uri("https://api.openai.com/v1/") // default value, can be omitted
-            );
-        var provider = new OpenAiProvider(api);
-        var tunedModel = new OpenAiLatestFastChatModel(provider);
+        var openAiClient = new OpenAIClient(
+            credential: new System.ClientModel.ApiKeyCredential("your_openAI_key"),
+            options: new OpenAIClientOptions { Transport = new System.ClientModel.Primitives.HttpClientPipelineTransport(httpClient) });
+        IChatClient tunedModel = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
     }
 }

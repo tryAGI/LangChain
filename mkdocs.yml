@@ -1,4 +1,9 @@
 site_name: LangChain .NET Documentation
+site_description: Documentation for the tryAGI .NET SDK for LangChain.
+site_url: https://tryagi.github.io/LangChain/
+repo_url: https://github.com/tryAGI/LangChain
+repo_name: tryAGI/LangChain
+edit_uri: edit/main/docs/
 nav:
 - Overview: index.md
 - CLI: cli.md
@@ -31,53 +36,21 @@ nav:
 #      - Bacthed executor - multi-output to one input: Examples/BatchedExecutorFork.md
 #      - Batched executor - basic guidance: Examples/BatchedExecutorGuidance.md
 #      - Batched executor - rewinding to an earlier state: Examples/BatchedExecutorRewind.md
-        
+
 theme:
-  name: material
-  static_templates:
-    - 404.html
-  language: 'en'
-  palette:
-    # Palette toggle for light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: white
-      accent: red
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to dark mode
-
-    # Palette toggle for dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: blue
-      accent: blue
-      toggle:
-        icon: material/weather-night
-        name: Switch to light mode
-  include_search_page: false
-  search_index_only: true
+  name: tryagi
   favicon: 'media/icon128.png'
-  icon:
-    logo: 'material/file-document'
-  features:
-    - content.action.edit
-    - navigation.instant
-  font:
-    text: 'Fira Sans'
-    code: 'Fira Mono'
 
-extra:
-  version:
-    provider: mike
-
-extra_css:
-  - 'css/extra.css?v=14'
+plugins:
+  - search
+  - copy-to-llm
 
 markdown_extensions:
   - admonition
+  - attr_list
   - def_list
   - footnotes
+  - md_in_html
   - meta
   - toc:
       permalink: ""

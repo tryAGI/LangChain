@@ -1,7 +1,7 @@
 using LangChain.Base;
 using LangChain.Chains.CombineDocuments;
 using LangChain.Chains.LLM;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.ConversationalRetrieval;
 
@@ -53,7 +53,7 @@ public class BaseConversationalRetrievalChainInput(
     /// An optional function to get a string of the chat history.
     /// If None is provided, will use a default.
     /// </summary>
-    public Func<IReadOnlyList<Message>, string?> GetChatHistory { get; set; } =
+    public Func<IReadOnlyList<ChatMessage>, string?> GetChatHistory { get; set; } =
         ChatTurnTypeHelper.GetChatHistory;
 
     /// <summary>

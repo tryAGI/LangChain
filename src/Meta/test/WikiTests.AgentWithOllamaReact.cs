@@ -1,6 +1,6 @@
-﻿using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
-using LangChain.Providers;
-using LangChain.Providers.OpenAI.Predefined;
+using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
+using Microsoft.Extensions.AI;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -13,19 +13,19 @@ public partial class WikiTests
     {
         //// # ReAct
         //// But how we can fix that? If you know about [RAG](https://tryagi.github.io/LangChain/wiki/RagWithOpenAiOllama/) then you know that there is some tricks to bring new abilities to LLM. And one of those tricks is [ReAct](https://www.promptingguide.ai/techniques/react) prompting.
-        //// 
+        ////
         //// In simple words ReAct is forcing LLM to reflect on your question and injects responses as if LLM figured them out by itself. This allows you to connect any datasource or `tool` tou your LLM.
         //// Let's try to use ReAct and connect Google search to your LLM.
-        //// 
+        ////
         //// ## Google custom search
-        //// 
+        ////
         //// LangChain has Google search built in. To use it you need to get `key` and `cx` from Google. Don't worry, it's free.
-        //// 
+        ////
         //// To get api `key` go here: https://developers.google.com/custom-search/v1/overview.
         //// You need to create Programmable Search Engine to get `cx`.
-        //// 
+        ////
         //// ## Using ReAct with Google search
-        //// 
+        ////
         //// Now you should have all necessary to connect your LLM to Google search
 
         // var provider = new OllamaProvider(
@@ -34,13 +34,13 @@ public partial class WikiTests
         //         Stop = new[] { "Observation", "[END]" }, // add injection word `Observation` and `[END]` to stop the model(just as additional safety feature)
         //         Temperature = 0
         //     });
-        // var llm = new OllamaChatModel(provider, id: "llama3.1").UseConsoleForDebug();
+        // var llm = new OllamaChatModel(provider, id: "llama3.1");
         var apiKey =
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
             throw new InvalidOperationException("OPENAI_API_KEY key is not set");
-        var llm = new OpenAiLatestFastChatModel(apiKey).UseConsoleForDebug();
+        IChatClient llm = new OpenAIClient(apiKey).GetChatClient("gpt-4o-mini").AsIChatClient();
 
-        // create a google search 
+        // create a google search
         var searchApiKey =
             Environment.GetEnvironmentVariable("GOOGLE_SEARCH_API_KEY") ??
             throw new InvalidOperationException("GOOGLE_SEARCH_API_KEY is not set");
@@ -63,7 +63,7 @@ public partial class WikiTests
         //// Thought: I don't know much about tryAGI or LangChain, so I need to search for more information.
         //// Action: google
         //// Action Input: tryAGI LangChain
-        //// 
+        ////
         //// Observation:
         //// ```
         //// Here is where magic occurs. The model stops vecause of the stop word and ReAct agent kicks in. It sees that model wants to use google and look for "tryAGI LangChain". So it does exactly this and puts search results back to the model:

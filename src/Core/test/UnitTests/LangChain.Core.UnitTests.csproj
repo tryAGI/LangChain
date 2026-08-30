@@ -1,11 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\LangChain.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.InMemory" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
     </ItemGroup>
 
     <ItemGroup>

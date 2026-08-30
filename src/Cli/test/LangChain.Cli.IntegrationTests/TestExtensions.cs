@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.IO;
+using System.CommandLine.Parsing;
 
 namespace LangChain.Cli.IntegrationTests;
 
@@ -8,24 +8,25 @@ public static class TestExtensions
     public static async Task ShouldWork<T>(this string arguments) where T : Command, new()
     {
         // Arrange
-        var console = new TestConsole();
-        var rootCommand = new RootCommand
-        {
-            new T(),
-        };
-
-        //var test = rootCommand.Parse(arguments);
-        //test.Errors.Should().BeEmpty();
+        var outputWriter = new StringWriter();
+        var errorWriter = new StringWriter();
+        var rootCommand = new RootCommand();
+        rootCommand.Add(new T());
 
         // Act
-        var result = await rootCommand.InvokeAsync(arguments, console);
+        var parseResult = CommandLineParser.Parse(rootCommand, arguments, new ParserConfiguration());
+        var result = await parseResult.InvokeAsync(new InvocationConfiguration
+        {
+            Output = outputWriter,
+            Error = errorWriter,
+        }, CancellationToken.None);
 
-        Console.WriteLine(console.Error.ToString());
-        Console.WriteLine(console.Out.ToString());
+        Console.WriteLine(errorWriter.ToString());
+        Console.WriteLine(outputWriter.ToString());
 
         // Assert
         result.Should().Be(0);
-        console.Error.ToString()?.Trim().Should().Be(string.Empty);
-        console.Out.ToString()?.Trim().Should().NotBeNullOrEmpty();
+        errorWriter.ToString().Trim().Should().Be(string.Empty);
+        outputWriter.ToString().Trim().Should().NotBeNullOrEmpty();
     }
 }

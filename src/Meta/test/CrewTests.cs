@@ -1,29 +1,34 @@
-﻿using LangChain.Chains.StackableChains.Agents.Crew;
+using LangChain.Chains.StackableChains.Agents.Crew;
 using LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
-using LangChain.Providers.Amazon.Bedrock;
-using LangChain.Providers.Amazon.Bedrock.Predefined.Anthropic;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
 
 [TestFixture]
-[Explicit]
+[Explicit("Requires ANTHROPIC_API_KEY")]
 public class CrewTests
 {
+    private static IChatClient CreateChatClient()
+    {
+        var apiKey =
+            Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") is { Length: > 0 } key ? key :
+            throw new InconclusiveException("ANTHROPIC_API_KEY environment variable is not found.");
+
+        return new Anthropic.AnthropicClient(apiKey);
+    }
+
     [Test]
     public async Task can_test_crew()
     {
-        // example app https://www.youtube.com/watch?v=sPzc6hMg7So
-
-        var provider = new BedrockProvider();
-        var llm = new Claude3SonnetModel(provider);
+        IChatClient chatClient = CreateChatClient();
 
         const string origin = "New York";
         const string cities = "Kathmandu, Pokhara";
         const string dateRange = "May 13 to June 2, 2024";
         const string interests = "sight seeing, eating, tech";
 
-        var myAgents = new Agents(llm);
+        var myAgents = new Agents(chatClient);
         var agents = new List<CrewAgent>
         {
             myAgents.TravelAgent,
@@ -45,8 +50,7 @@ public class CrewTests
     [Test]
     public async Task can_test_crewchain()
     {
-        var provider = new BedrockProvider();
-        var llm = new Claude3HaikuModel(provider);
+        IChatClient chatClient = CreateChatClient();
 
         const string location = "Australia";
         const string cities = "Gold Coast, Sydney, Melbourne, Brisbane";
@@ -57,7 +61,7 @@ public class CrewTests
 i plan on vacationing in {location} and visiting {cities} during the {dateRange}.  these are my interests: {interests}.
 ";
 
-        var myAgents = new Agents(llm);
+        var myAgents = new Agents(chatClient);
         var agents = new List<CrewAgent>
         {
             myAgents.CityExpert,
@@ -67,7 +71,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
         var chain =
             Set(prompt)
             | Crew(agents, myAgents.TravelAgent, inputKey: "text", outputKey: "text")
-            | LLM(llm);
+            | LLM(chatClient);
 
         Console.WriteLine(await chain.RunAsync("text"));
     }
@@ -75,8 +79,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
     [Test]
     public async Task can_test_ReAct()
     {
-        var provider = new BedrockProvider();
-        var llm = new Claude3HaikuModel(provider);
+        IChatClient chatClient = CreateChatClient();
 
         var googleKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? throw new InvalidOperationException("GOOGLE_API_KEY is not set");
         var googleCx = Environment.GetEnvironmentVariable("GOOGLE_API_CX") ?? throw new InvalidOperationException("GOOGLE_API_CX is not set");
@@ -84,7 +87,7 @@ i plan on vacationing in {location} and visiting {cities} during the {dateRange}
 
         var chain =
             Set("What is tryAGI/LangChain?")
-            | ReActAgentExecutor(llm)
+            | ReActAgentExecutor(chatClient)
                 .UseTool(searchTool);
 
         Console.WriteLine(await chain.RunAsync("text"));

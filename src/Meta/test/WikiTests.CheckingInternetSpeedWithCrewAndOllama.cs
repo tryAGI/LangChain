@@ -2,8 +2,7 @@
 using System.Net;
 using LangChain.Chains.StackableChains.Agents.Crew;
 using LangChain.Chains.StackableChains.Agents.Crew.Tools;
-using LangChain.Providers;
-using LangChain.Providers.Ollama;
+using Meai = Microsoft.Extensions.AI;
 using Ollama;
 using static LangChain.Chains.Chain;
 
@@ -17,20 +16,24 @@ public partial class WikiTests
         //// # Welcome to the crew
         //// Crew is a combination of different agents with different set of skills.
         //// This is usefull when making big and capable systems. Since one agent can't do everything,
-        //// the crew approach allows to distribure load across different agents.  
+        //// the crew approach allows to distribure load across different agents.
         //// Even if you are not building a complex system you can apply the crew approach to local models.
-        //// Since they are quite limited they are not able to perform more than one or two tasks sucessfully.  
-        //// 
+        //// Since they are quite limited they are not able to perform more than one or two tasks sucessfully.
+        ////
         //// ## The task
-        //// Lets take a simple task to get current internet speed using windows built-in ping tool.  
-        //// 
+        //// Lets take a simple task to get current internet speed using windows built-in ping tool.
+        ////
         //// # Setup
-        //// We will setup `mistral` ollama model, but you can easily switch to any other model or provider.
+        //// We will setup `llama3.1` ollama model, but you can easily switch to any other model or provider.
 
-        var provider = new OllamaProvider(
-            // url: "http://172.16.50.107:11434", // if you have ollama running on different computer/port. Default is "http://localhost:11434/api"
+        using var client = new OllamaApiClient(
+            // baseUri: new Uri("http://172.16.50.107:11434") // if you have ollama running on different computer/port. Default is "http://localhost:11434"
             );
-        var model = new OllamaChatModel(provider, id: "llama3.1").UseConsoleForDebug();
+        // TODO: OllamaApiClient (Ollama NuGet 1.15.0) does not implement Microsoft.Extensions.AI.IChatClient.
+        // Update when Ollama NuGet adds MEAI support. This cast will throw InvalidCastException at runtime.
+        Meai.IChatClient model = Meai.ConfigureOptionsChatClientBuilderExtensions
+            .ConfigureOptions(new Meai.ChatClientBuilder((Meai.IChatClient)(object)client), options => options.ModelId ??= "llama3.1")
+            .Build();
 
         //// ## Making a tool
         //// 

@@ -1,11 +1,10 @@
-using LangChain.Providers;
 using LangChain.Schema;
 
 namespace LangChain.Memory;
 
 /// <summary>
 /// Buffer for storing conversation memory.
-/// 
+///
 /// NOTE: LangChain's buffer property is not implemented here
 /// </summary>
 public class ConversationBufferMemory : BaseChatMemory
