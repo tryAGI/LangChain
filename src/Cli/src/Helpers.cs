@@ -54,12 +54,7 @@ internal static class Helpers
         }
 
         IChatClient chatClient;
-        Uri? endpoint = provider switch
-        {
-            Provider.Free or Provider.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
-            Provider.Requesty => new Uri("https://router.requesty.ai/v1"),
-            _ => null,
-        };
+        var endpoint = GetEndpoint(provider);
         model = model switch
         {
             null => "o4-mini",
@@ -69,16 +64,9 @@ internal static class Helpers
             "latest-smart" => "o3",
             _ => model,
         };
-        var apiKey = provider switch
-        {
-            Provider.OpenAi or null => Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
-                throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set."),
-            Provider.OpenRouter or Provider.Free => Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ??
-                throw new InvalidOperationException("OPENROUTER_API_KEY environment variable is not set."),
-            Provider.Requesty => Environment.GetEnvironmentVariable("REQUESTY_API_KEY") ??
-                throw new InvalidOperationException("REQUESTY_API_KEY environment variable is not set."),
-            _ => throw new NotImplementedException(),
-        };
+        var apiKeyEnvironmentVariable = GetApiKeyEnvironmentVariable(provider);
+        var apiKey = Environment.GetEnvironmentVariable(apiKeyEnvironmentVariable) ??
+            throw new InvalidOperationException($"{apiKeyEnvironmentVariable} environment variable is not set.");
 
         switch (provider)
         {
@@ -114,4 +102,19 @@ internal static class Helpers
 
         return client;
     }
+
+    internal static Uri? GetEndpoint(Provider? provider) => provider switch
+    {
+        Provider.Free or Provider.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
+        Provider.Requesty => new Uri("https://router.requesty.ai/v1"),
+        _ => null,
+    };
+
+    internal static string GetApiKeyEnvironmentVariable(Provider? provider) => provider switch
+    {
+        Provider.OpenAi or null => "OPENAI_API_KEY",
+        Provider.OpenRouter or Provider.Free => "OPENROUTER_API_KEY",
+        Provider.Requesty => "REQUESTY_API_KEY",
+        _ => throw new NotImplementedException(),
+    };
 }
