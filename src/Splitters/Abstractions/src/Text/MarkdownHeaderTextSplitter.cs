@@ -16,6 +16,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
     private const string _codeBlockseparator = "```";
     private readonly static string[] _defauldHeaders = { "#", "##", "###", "####", "#####", "######" };
     private readonly static string[] separator = { "\n" };
+    private static readonly char[] HeaderSeparator = { '|' };
 
     /// <inheritdoc/>
     public MarkdownHeaderTextSplitter(
@@ -73,9 +74,11 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 if (hLen <= currentHeaderLen)
                 {
                     var parentHeaders = currentHeader
-                        .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                        .Split(HeaderSeparator, StringSplitOptions.RemoveEmptyEntries)
                         .Take(hLen - 1);
-                    currentHeader = string.Join("|", parentHeaders.Append(strippedLine.TrimStart('#').Trim()));
+                    currentHeader = string.Join(
+                        "|",
+                        parentHeaders.Concat(new[] { strippedLine.TrimStart('#').Trim() }));
                     currentHeaderLen = hLen;
                     continue;
                 }

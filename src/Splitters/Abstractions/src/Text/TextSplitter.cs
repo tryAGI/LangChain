@@ -49,7 +49,7 @@ public abstract class TextSplitter : ITextSplitter
     /// Normalizes Windows and legacy Mac line endings before separator-based splitting.
     /// </summary>
     internal static string NormalizeLineEndings(string text) =>
-        text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
+        text.Replace("\r\n", "\n").Replace('\r', '\n');
 
     /// <summary>
     /// 
