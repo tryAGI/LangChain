@@ -1,31 +1,31 @@
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Serve.OpenAI;
 
 public class ServeOptions
 {
-    private readonly Dictionary<string, ChatModel> _models = new();
+    private readonly Dictionary<string, IChatClient> _chatClients = new();
 
-    public ServeOptions RegisterModel(ChatModel chatModel, string? overrideId = null)
+    public ServeOptions RegisterModel(string id, IChatClient chatClient)
     {
-        chatModel = chatModel ?? throw new ArgumentNullException(nameof(chatModel));
+        chatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
 
-        _models[overrideId ?? chatModel.Id] = chatModel;
+        _chatClients[id ?? throw new ArgumentNullException(nameof(id))] = chatClient;
         return this;
     }
 
-    public ChatModel GetModel(string modelName)
+    public IChatClient? GetChatClient(string modelName)
     {
-        return _models[modelName];
+        return _chatClients.GetValueOrDefault(modelName);
     }
 
     public List<string> ListModels()
     {
-        return _models.Keys.ToList();
+        return _chatClients.Keys.ToList();
     }
 
     public bool ModelExists(string modelName)
     {
-        return _models.ContainsKey(modelName);
+        return _chatClients.ContainsKey(modelName);
     }
 }

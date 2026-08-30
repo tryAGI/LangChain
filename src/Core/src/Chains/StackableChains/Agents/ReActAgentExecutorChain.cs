@@ -1,24 +1,25 @@
-﻿using System.Globalization;
+using System.Globalization;
 using LangChain.Abstractions.Chains.Base;
 using LangChain.Abstractions.Schema;
 using LangChain.Chains.HelperChains;
 using LangChain.Chains.StackableChains.ReAct;
 using LangChain.Memory;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 using System.Reflection;
 using LangChain.Chains.StackableChains.Agents.Tools;
+using Microsoft.Extensions.AI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.Chains.StackableChains.Agents;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class ReActAgentExecutorChain : BaseStackableChain
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public const string DefaultPrompt =
         @"Answer the following questions as best you can. You have access to the following tools:
@@ -46,7 +47,7 @@ Thought:{history}";
     private StackChain? _chain;
     private bool _useCache;
     Dictionary<string, AgentTool> _tools = new();
-    private readonly IChatModel _model;
+    private readonly IChatClient _chatClient;
     private readonly string _reActPrompt;
     private readonly int _maxActions;
     private readonly MessageFormatter _messageFormatter;
@@ -54,22 +55,22 @@ Thought:{history}";
     private readonly ConversationBufferMemory _conversationBufferMemory;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="chatClient"></param>
     /// <param name="reActPrompt"></param>
     /// <param name="maxActions"></param>
     /// <param name="inputKey"></param>
     /// <param name="outputKey"></param>
     public ReActAgentExecutorChain(
-        IChatModel model,
+        IChatClient chatClient,
         string? reActPrompt = null,
         int maxActions = 5,
         string inputKey = "answer",
         string outputKey = "final_answer")
     {
         reActPrompt ??= DefaultPrompt;
-        _model = model;
+        _chatClient = chatClient;
         _reActPrompt = reActPrompt;
         _maxActions = maxActions;
 
@@ -86,7 +87,7 @@ Thought:{history}";
         _chatMessageHistory = new ChatMessageHistory()
         {
             // Do not save human messages
-            IsMessageAccepted = x => (x.Role != MessageRole.Human)
+            IsMessageAccepted = x => (x.Role != ChatRole.User)
         };
 
         _conversationBufferMemory = new ConversationBufferMemory(_chatMessageHistory)
@@ -108,7 +109,7 @@ Thought:{history}";
             | Set(toolNames, "tool_names")
             | LoadMemory(_conversationBufferMemory, outputKey: "history")
             | Template(_reActPrompt)
-            | Chain.LLM(_model, settings: new ChatSettings
+            | Chain.LLM(_chatClient, options: new ChatOptions
             {
                 StopSequences = ["Observation", "[END]"],
             }).UseCache(_useCache)
@@ -143,9 +144,9 @@ Thought:{history}";
                 var action = (AgentAction)res.Value[ReActAnswer];
                 var tool = _tools[action.Action.ToLower(CultureInfo.InvariantCulture)];
                 var toolRes = await tool.ToolTask(action.ActionInput, cancellationToken).ConfigureAwait(false);
-                await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Observation: " + toolRes, MessageRole.System))
+                await _conversationBufferMemory.ChatHistory.AddMessage(new ChatMessage(ChatRole.System, "Observation: " + toolRes))
                     .ConfigureAwait(false);
-                await _conversationBufferMemory.ChatHistory.AddMessage(new Message("Thought:", MessageRole.System))
+                await _conversationBufferMemory.ChatHistory.AddMessage(new ChatMessage(ChatRole.System, "Thought:"))
                     .ConfigureAwait(false);
                 continue;
             }
@@ -163,7 +164,7 @@ Thought:{history}";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="enabled"></param>
     /// <returns></returns>
@@ -174,7 +175,7 @@ Thought:{history}";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tool"></param>
     /// <returns></returns>

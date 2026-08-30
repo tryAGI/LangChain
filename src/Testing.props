@@ -23,7 +23,7 @@
 
     <ItemGroup Label="GlobalUsings">
         <Using Include="NUnit.Framework" />
-        <Using Include="FluentAssertions" />
+        <Using Include="AwesomeAssertions" />
     </ItemGroup>
 
 </Project>

@@ -2,9 +2,9 @@ using LangChain.Abstractions.Chains.Base;
 using LangChain.Common;
 using LangChain.DocumentLoaders;
 using LangChain.LLMS;
-using LangChain.Providers;
 using LangChain.Retrievers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Base.Tracers;
 
@@ -161,7 +161,7 @@ public abstract class BaseTracer(IBaseCallbackHandlerInput input) : BaseCallback
     }
 
     /// <inheritdoc/>
-    public override Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<Message>> messages,
+    public override Task HandleChatModelStartAsync(BaseLlm llm, IReadOnlyList<List<ChatMessage>> messages,
         string runId,
         string? parentRunId = null,
         IReadOnlyDictionary<string, object>? extraParams = null)

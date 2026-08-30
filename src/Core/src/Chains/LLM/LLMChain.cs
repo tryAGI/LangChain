@@ -4,45 +4,45 @@ using LangChain.Callback;
 using LangChain.Common;
 using LangChain.Memory;
 using LangChain.Prompts.Base;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 using Generation = LangChain.Schema.Generation;
 
 namespace LangChain.Chains.LLM;
 
 /// <summary>
-/// 
+///
 /// </summary>
 /// <param name="fields"></param>
 public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public BasePromptTemplate Prompt { get; } = fields.Prompt;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public IChatModel Llm { get; } = fields.Llm;
+    public IChatClient Llm { get; } = fields.Llm;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public BaseMemory? Memory { get; } = fields.Memory;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string OutputKey { get; set; } = fields.OutputKey;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public bool ReturnFinalOnly { get; set; } = fields.ReturnFinalOnly;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public BaseLlmOutputParser<string> OutputParser { get; set; } = new StrOutputParser();
 
@@ -50,7 +50,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     public override string ChainType() => "llm_chain";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public CallbackManager? CallbackManager { get; set; }
 
@@ -73,7 +73,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
     public override IReadOnlyList<string> OutputKeys => new[] { OutputKey };
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="generations"></param>
     /// <param name="promptValue"></param>
@@ -118,25 +118,21 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
             Console.WriteLine(string.Join("\n\n", chatMessages));
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '>'));
         }
-
-        var response = await Llm.GenerateAsync(
-            new ChatRequest
-            {
-                Messages = chatMessages,
-            }, new ChatSettings
-            {
-                StopSequences = stop,
-            }, cancellationToken);
+        var options = new ChatOptions
+        {
+            StopSequences = stop.Count > 0 ? stop : null,
+        };
+        var response = await Llm.GetResponseAsync(chatMessages.ToList(), options, cancellationToken).ConfigureAwait(false);
         if (Verbose)
         {
-            Console.WriteLine(string.Join("\n\n", response.Messages.Except(chatMessages)));
+            Console.WriteLine(response.Text);
             Console.WriteLine("\n".PadLeft(Console.WindowWidth, '<'));
         }
 
         var returnDict = new Dictionary<string, object>();
 
         var outputKey = string.IsNullOrEmpty(OutputKey) ? "text" : OutputKey;
-        returnDict[outputKey] = response.LastMessageContent;
+        returnDict[outputKey] = response.Text ?? string.Empty;
 
         returnDict.TryAddKeyValues(values.Value);
 
@@ -176,15 +172,15 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
         var (prompts, stop) = await PreparePromptsAsync(inputs, runManager, cancellationToken).ConfigureAwait(false);
 
         var responseTasks = prompts
-            .Select(async prompt => await Llm.GenerateAsync(
-                request: new ChatRequest
+            .Select(async prompt =>
+            {
+                var chatMessages = prompt.ToChatMessages().ToList();
+                var options = new ChatOptions
                 {
-                    Messages = prompt.ToChatMessages(),
-                },
-                settings: new ChatSettings
-                {
-                    StopSequences = stop ?? [],
-                }, cancellationToken: cancellationToken))
+                    StopSequences = stop is { Count: > 0 } ? stop : null,
+                };
+                return await Llm.GetResponseAsync(chatMessages, options, cancellationToken).ConfigureAwait(false);
+            })
             .ToList();
 
         var responses = await Task.WhenAll(responseTasks).ConfigureAwait(false);
@@ -194,7 +190,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
                 {
                     new()
                     {
-                        Text = response.LastMessageContent
+                        Text = response.Text ?? string.Empty
                     }
                 })
             .ToArray();
@@ -279,7 +275,7 @@ public class LlmChain(LlmChainInput fields) : BaseChain(fields), ILlmChain
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="values"></param>
     /// <param name="cancellationToken"></param>

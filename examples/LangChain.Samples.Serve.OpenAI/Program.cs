@@ -1,29 +1,30 @@
-using LangChain.Providers.OpenAI;
-using LangChain.Providers.OpenAI.Predefined;
 using LangChain.Serve.OpenAI;
+using Microsoft.Extensions.AI;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder();
 
 // 1. Add LangChainServe
 builder.Services.AddLangChainServeOpenAi();
 
-// 2. Create a model
-var provider = new OpenAiProvider(Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "");
-var model = new OpenAiLatestSmartChatModel(provider);
+// 2. Create a model via MEAI IChatClient
+var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "";
+var openAiClient = new OpenAIClient(apiKey);
+IChatClient chatClient = openAiClient.GetChatClient("gpt-4o-mini").AsIChatClient();
 
-// 4. Optional. Add swagger to be able to test the API
+// 3. Optional. Add swagger to be able to test the API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 5. Configure LangChainServe
+// 4. Configure LangChainServe with IChatClient
 app.UseLangChainServeOpenAi(options =>
 {
-    options.RegisterModel(model);
+    options.RegisterModel("gpt-4o-mini", chatClient);
 });
 
-// 6. Optional. Add swagger middleware
+// 5. Optional. Add swagger middleware
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

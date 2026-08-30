@@ -1,12 +1,10 @@
-﻿using LangChain.Databases.Sqlite;
-using LangChain.Extensions;
-using LangChain.Providers;
-using LangChain.Providers.OpenAI.Predefined;
+﻿using LangChain.Extensions;
 using LangChain.DocumentLoaders;
-using LangChain.Providers.Ollama;
-using LangChain.Providers.OpenAI;
 using LangChain.Splitters.Text;
+using Meai = Microsoft.Extensions.AI;
+using Microsoft.SemanticKernel.Connectors.SqliteVec;
 using Ollama;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -39,7 +37,7 @@ public partial class WikiTests
         //// To get started, create a new console application and add the following nuget packages.  (Use the pre-release checkbox.)
         //// ```
         //// LangChain
-        //// LangChain.Providers.Ollama
+        //// Ollama
         //// LangChain.Databases.Sqlite
         //// LangChain.Sources.Pdf
         //// ```
@@ -56,25 +54,32 @@ public partial class WikiTests
         //// To use this chat and embedding model, you will need an API key from OpenAI.  This has non-zero cost.
 
         // prepare OpenAI embedding model
-        var provider = new OpenAiProvider(apiKey:
+        var apiKey =
             Environment.GetEnvironmentVariable("OPENAI_API_KEY") ??
-            throw new InvalidOperationException("OPENAI_API_KEY key is not set"));
-        var embeddingModel = new TextEmbeddingV3SmallModel(provider);
-        var llm = new OpenAiLatestFastChatModel(provider);
+            throw new InvalidOperationException("OPENAI_API_KEY key is not set");
+        var openAiClient = new OpenAIClient(apiKey);
+        Meai.IEmbeddingGenerator<string, Meai.Embedding<float>> embeddingModel = Meai.OpenAIClientExtensions.AsIEmbeddingGenerator(openAiClient.GetEmbeddingClient("text-embedding-3-small"));
+        Meai.IChatClient llm = Meai.OpenAIClientExtensions.AsIChatClient(openAiClient.GetChatClient("gpt-4o-mini"));
 
         //// ### Ollama
         //// To use this chat and embedding model, you will need an Ollama instance running.
         //// This is free, assuming it is running locally--this code assumes it is available at https://localhost:11434.
 
-        // prepare Ollama with mistral model
-        var providerOllama = new OllamaProvider();
-        var embeddingModelOllama = new OllamaEmbeddingModel(providerOllama, id: "nomic-embed-text");
-        var llmOllama = new OllamaChatModel(providerOllama, id: "llama3.1").UseConsoleForDebug();
+        // prepare Ollama with llama3.1 model
+        // TODO: OllamaApiClient (Ollama NuGet 1.15.0) does not implement Microsoft.Extensions.AI.IChatClient or IEmbeddingGenerator.
+        // Update when Ollama NuGet adds MEAI support. These casts will throw InvalidCastException at runtime.
+        using var ollamaClient = new OllamaApiClient();
+        Meai.IChatClient llmOllama = Meai.ConfigureOptionsChatClientBuilderExtensions
+            .ConfigureOptions(new Meai.ChatClientBuilder((Meai.IChatClient)(object)ollamaClient), options => options.ModelId ??= "llama3.1")
+            .Build();
+        Meai.IEmbeddingGenerator<string, Meai.Embedding<float>> embeddingModelOllama = Meai.ConfigureOptionsEmbeddingGeneratorBuilderExtensions
+            .ConfigureOptions(new Meai.EmbeddingGeneratorBuilder<string, Meai.Embedding<float>>((Meai.IEmbeddingGenerator<string, Meai.Embedding<float>>)(object)ollamaClient), options => options.ModelId ??= "nomic-embed-text")
+            .Build();
 
         //// Configure the vector database.
 
-        using var vectorDatabase = new SqLiteVectorDatabase("vectors.db");
-        var vectorCollection = await vectorDatabase.AddDocumentsFromAsync<PdfPigPdfLoader>(
+        var vectorStore = new SqliteVectorStore("Data Source=vectors.db");
+        var vectorCollection = await vectorStore.AddDocumentsFromAsync<PdfPigPdfLoader>(
             embeddingModel,
             dimensions: 1536, // Should be 1536 for TextEmbeddingV3SmallModel
                               // First, specify the source to index.

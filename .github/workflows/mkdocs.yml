@@ -1,5 +1,6 @@
 name: MKDocs Deploy
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -7,7 +8,6 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - 'examples/**'
-      - 'src/Helpers/GenerateDocs/**'
       - '.github/workflows/mkdocs.yml'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -23,40 +23,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-        
-      - name: Generate docs
-        run: dotnet run --project src/Helpers/GenerateDocs/GenerateDocs.csproj .
-
-      - name: Build with MkDocs
-        run: |
-          python -m venv myenv
-          source myenv/bin/activate
-          pip install mkdocs-material
-          mkdocs build -d ./_site
-          
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    uses: tryAGI/workflows/.github/workflows/mkdocs-pages.yml@main
+    secrets: inherit

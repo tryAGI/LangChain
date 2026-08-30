@@ -1,21 +1,21 @@
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Memory;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class MemoryExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="messages"></param>
     /// <param name="memory"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static IReadOnlyCollection<Message> WithHistory(
-        this IReadOnlyCollection<Message> messages,
+    public static IReadOnlyCollection<ChatMessage> WithHistory(
+        this IReadOnlyCollection<ChatMessage> messages,
         BaseMemory? memory)
     {
         messages = messages ?? throw new ArgumentNullException(nameof(messages));
@@ -32,12 +32,12 @@ public static class MemoryExtensions
         {
             foreach (var chatMessage in msg.Messages)
             {
-                history += chatMessage.Content + "\n";
+                history += chatMessage.Text + "\n";
             }
         }
 
-        var result = new Message[messages.Count + 1];
-        result[0] = history.AsHumanMessage();
+        var result = new ChatMessage[messages.Count + 1];
+        result[0] = new ChatMessage(ChatRole.User, history);
         messages.CopyTo(result, startIndex: 1);
 
         return result;

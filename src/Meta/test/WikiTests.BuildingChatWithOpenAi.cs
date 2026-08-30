@@ -1,5 +1,6 @@
-﻿using LangChain.Memory;
-using LangChain.Providers.OpenAI.Predefined;
+using LangChain.Memory;
+using Microsoft.Extensions.AI;
+using OpenAI;
 using static LangChain.Chains.Chain;
 
 namespace LangChain.IntegrationTests;
@@ -11,13 +12,13 @@ public partial class WikiTests
     public async Task BuildingChatWithOpenAi()
     {
         //// You would be supprised, but models like Chat-GPT do not remember your conversation. Every time you send a message to it - you, actully, send entire conversation and GPT predicts what AI answer would be.
-        //// 
+        ////
         //// Lets try to build similar application using chains.
-        //// 
+        ////
         //// you would need to install `LangChain` meta-package or **Core and OpenAI provider**
 
-        // we will use GPT-3.5 model, but you can use any other model
-        var model = new OpenAiLatestFastChatModel("your_key");
+        // we will use GPT-4o-mini model, but you can use any other model
+        IChatClient model = new OpenAIClient("your_key").GetChatClient("gpt-4o-mini").AsIChatClient();
 
         // create simple template for conversation for AI to know what piece of text it is looking at
         var template =
@@ -62,7 +63,7 @@ AI:";
         }
 
         //// Now you can run the program and try to chat with it.
-        //// 
+        ////
         //// The final output will look like this:
         //// ```
         //// Human: hello
@@ -72,7 +73,7 @@ AI:";
         //// Human: What is my name?
         //// AI: Your name is Anti.
         //// ```
-        //// 
+        ////
         //// As you can see, it remembers my name, so it sees previous messages.
     }
 }

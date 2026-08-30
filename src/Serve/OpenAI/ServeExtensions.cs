@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using LangChain.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using tryAGI.OpenAI;
 
@@ -24,35 +24,33 @@ public static class ServeExtensions
 
         var serveMiddlewareOptions = new ServeOptions();
         options(serveMiddlewareOptions);
-        // var repository = app.Services.GetRequiredService<IConversationRepository>();
-        // var conversationNameProvider = app.Services.GetRequiredService<IConversationNameProvider>();
-        //var controller = new ServeController(serveMiddlewareOptions);
 
-        //app.MapGet("/v1/models", () => Results.Ok(controller.ListModels()));
         app.MapPost("/v1/chat/completions", async (CreateChatCompletionRequest request) =>
         {
-            var llm = serveMiddlewareOptions.GetModel(request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty);
+            var modelId = request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty;
 
-            var response = await llm.GenerateAsync(new ChatRequest
-            {
-                Messages = request.Messages.Select(x => new Message
+            var chatClient = serveMiddlewareOptions.GetChatClient(modelId)
+                ?? throw new InvalidOperationException($"Model '{modelId}' is not registered.");
+
+            var messages = request.Messages.Select(x => new ChatMessage(
+                x.Object switch
                 {
-                    Content = x.User?.Content.Value1 ?? x.Assistant?.Content?.Value1 ?? x.System?.Content.Value1 ?? string.Empty,
-                    Role = x.Object switch
-                    {
-                        ChatCompletionRequestAssistantMessage => MessageRole.Ai,
-                        ChatCompletionRequestSystemMessage => MessageRole.System,
-                        ChatCompletionRequestUserMessage => MessageRole.Human,
-                        _ => throw new NotImplementedException(),
-                    }
-                }).ToList(),
-            });
+                    ChatCompletionRequestAssistantMessage => ChatRole.Assistant,
+                    ChatCompletionRequestSystemMessage => ChatRole.System,
+                    ChatCompletionRequestUserMessage => ChatRole.User,
+                    _ => ChatRole.User,
+                },
+                x.User?.Content.Value1 ?? x.Assistant?.Content?.Value1 ?? x.System?.Content.Value1 ?? string.Empty
+            )).ToList();
+
+            var chatResponse = await chatClient.GetResponseAsync(messages).ConfigureAwait(false);
+            var responseContent = chatResponse.Text ?? string.Empty;
 
             return Results.Ok(new CreateChatCompletionResponse
             {
                 Id = Guid.NewGuid().ToString(),
                 Created = DateTimeOffset.UtcNow,
-                Model = request.Model.Value1 ?? request.Model.Value2?.ToValueString() ?? string.Empty,
+                Model = modelId,
                 Object = CreateChatCompletionResponseObject.ChatCompletion,
                 Choices =
                 [
@@ -60,7 +58,7 @@ public static class ServeExtensions
                     {
                         Message = new ChatCompletionResponseMessage
                         {
-                            Content = response.LastMessageContent,
+                            Content = responseContent,
                             Role = ChatCompletionResponseMessageRole.Assistant,
                         },
                         Index = 0,

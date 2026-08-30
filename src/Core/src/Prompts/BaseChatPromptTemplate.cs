@@ -1,6 +1,6 @@
 using LangChain.Prompts.Base;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Prompts;
 
@@ -11,12 +11,12 @@ public abstract class BaseChatPromptTemplate : BasePromptTemplate
     protected BaseChatPromptTemplate(IBasePromptTemplateInput input) : base(input) { }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="values"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public abstract Task<IReadOnlyCollection<Message>> FormatMessagesAsync(
+    public abstract Task<IReadOnlyCollection<ChatMessage>> FormatMessagesAsync(
         InputValues values,
         CancellationToken cancellationToken = default);
 

@@ -1,20 +1,20 @@
 using System.Text;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Chains.ConversationalRetrieval;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static class ChatTurnTypeHelper
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="chatHistory"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static string GetChatHistory(IReadOnlyList<Message> chatHistory)
+    public static string GetChatHistory(IReadOnlyList<ChatMessage> chatHistory)
     {
         chatHistory = chatHistory ?? throw new ArgumentNullException(nameof(chatHistory));
 
@@ -22,14 +22,11 @@ public static class ChatTurnTypeHelper
 
         foreach (var message in chatHistory)
         {
-            var rolePrefix = message.Role switch
-            {
-                MessageRole.Human => "Human: ",
-                MessageRole.Ai => "Assistant: ",
-                _ => $"{message.Role}: "
-            };
+            var rolePrefix = message.Role == ChatRole.User ? "Human: "
+                : message.Role == ChatRole.Assistant ? "Assistant: "
+                : $"{message.Role}: ";
 
-            buffer.AppendLine($"{rolePrefix}{message.Content}");
+            buffer.AppendLine($"{rolePrefix}{message.Text}");
         }
 
         return buffer.ToString();

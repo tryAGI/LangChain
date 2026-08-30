@@ -1,8 +1,9 @@
 using LangChain.Callback;
-using LangChain.Databases;
 using LangChain.Extensions;
-using LangChain.Providers;
 using LangChain.DocumentLoaders;
+using LangChain.Schema;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
 
 namespace LangChain.Retrievers;
 
@@ -13,35 +14,23 @@ namespace LangChain.Retrievers;
 public class VectorStoreRetriever : BaseRetriever
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public IVectorCollection VectorCollection { get; init; }
-
-    private VectorSearchType SearchType { get; init; }
+    public VectorStoreCollection<string, LangChainDocumentRecord> VectorCollection { get; init; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public int K { get; set; } = 4;
 
-    private float? ScoreThreshold { get; init; }
-
-    private IEmbeddingModel EmbeddingModel { get; init; }
+    private IEmbeddingGenerator<string, Embedding<float>> EmbeddingGenerator { get; init; }
 
     /// <inheritdoc/>
     public VectorStoreRetriever(
-        IVectorCollection vectorCollection,
-        IEmbeddingModel embeddingModel,
-        VectorSearchType searchType = VectorSearchType.Similarity,
-        float? scoreThreshold = null)
+        VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator)
     {
-        SearchType = searchType;
-        ScoreThreshold = scoreThreshold;
-
-        if (SearchType == VectorSearchType.SimilarityScoreThreshold && ScoreThreshold == null)
-            throw new ArgumentException($"ScoreThreshold required for {SearchType}");
-
-        EmbeddingModel = embeddingModel;
+        EmbeddingGenerator = embeddingGenerator;
         VectorCollection = vectorCollection;
     }
 
@@ -51,23 +40,20 @@ public class VectorStoreRetriever : BaseRetriever
         CallbackManagerForRetrieverRun? runManager = null,
         CancellationToken cancellationToken = default)
     {
-        var response = await VectorCollection.SearchAsync(EmbeddingModel, query, searchSettings: new VectorSearchSettings
-        {
-            Type = SearchType,
-            NumberOfResults = K,
-            ScoreThreshold = ScoreThreshold,
-        }, cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        return response.ToDocuments();
+        return await VectorCollection.GetSimilarDocuments(
+            EmbeddingGenerator,
+            query,
+            amount: K,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="documents"></param>
     /// <returns></returns>
     public Task<IReadOnlyCollection<string>> AddDocumentsAsync(IReadOnlyCollection<Document> documents)
     {
-        return VectorCollection.AddDocumentsAsync(EmbeddingModel, documents);
+        return VectorCollection.AddDocumentsAsync(EmbeddingGenerator, documents);
     }
 }

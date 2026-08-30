@@ -1,5 +1,5 @@
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Prompts.Base;
 
@@ -7,14 +7,14 @@ namespace LangChain.Prompts.Base;
 public class StringPromptValue : BasePromptValue
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string Value { get; set; } = string.Empty;
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Message> ToChatMessages()
+    public override IReadOnlyCollection<ChatMessage> ToChatMessages()
     {
-        return new[] { Value.AsSystemMessage() };
+        return [new ChatMessage(ChatRole.System, Value)];
     }
 
     /// <inheritdoc/>

@@ -1,11 +1,11 @@
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Memory;
 
 /// <summary>
 /// Buffer for storing conversation memory.
-/// 
+///
 /// NOTE: LangChain's buffer property is not implemented here
 /// </summary>
 public class ConversationWindowBufferMemory : BaseChatMemory
@@ -16,7 +16,7 @@ public class ConversationWindowBufferMemory : BaseChatMemory
 
     /// <summary>
     /// Number of messages to store in buffer.
-    /// 
+    ///
     /// This is actually the number of Human+AI pairs of messages.
     /// This is the 'k' property in python langchain
     /// </summary>
@@ -49,7 +49,7 @@ public class ConversationWindowBufferMemory : BaseChatMemory
         return new OutputValues(new Dictionary<string, object> { { MemoryKey, bufferText } });
     }
 
-    private List<Message> GetMessages()
+    private List<ChatMessage> GetMessages()
     {
         int numMessages = Math.Min(ChatHistory.Messages.Count, WindowSize * 2);
 

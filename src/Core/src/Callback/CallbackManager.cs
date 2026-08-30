@@ -2,8 +2,8 @@ using LangChain.Abstractions.Schema;
 using LangChain.Base;
 using LangChain.Base.Tracers;
 using LangChain.LLMS;
-using LangChain.Providers;
 using LangChain.Retrievers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Callback;
 
@@ -201,7 +201,7 @@ public class CallbackManager
     /// <returns></returns>
     public async Task<CallbackManagerForLlmRun> HandleChatModelStart(
         BaseLlm llm,
-        IReadOnlyList<List<Message>> messages,
+        IReadOnlyList<List<ChatMessage>> messages,
         string? runId = null,
         string? parentRunId = null,
         IReadOnlyDictionary<string, object>? extraParams = null)

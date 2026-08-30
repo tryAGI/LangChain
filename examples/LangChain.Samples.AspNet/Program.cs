@@ -1,16 +1,17 @@
-using LangChain.Extensions.DependencyInjection;
+using Microsoft.Extensions.AI;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddOpenAi();
-builder.Services.AddAnthropic();
+// Register IChatClient via MEAI
+var apiKey = builder.Configuration["OpenAI:ApiKey"] ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "";
+builder.Services.AddSingleton<IChatClient>(
+    new OpenAIClient(apiKey).GetChatClient("gpt-4o-mini").AsIChatClient());
 
 var app = builder.Build();
 

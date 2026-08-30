@@ -1,6 +1,6 @@
 using LangChain.Prompts.Base;
-using LangChain.Providers;
 using LangChain.Schema;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Prompts;
 
@@ -8,12 +8,12 @@ namespace LangChain.Prompts;
 public class ChatPromptTemplate : BaseChatPromptTemplate
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public List<BaseMessagePromptTemplate> PromptMessages { get; private set; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public bool ValidateTemplate { get; private set; }
 
@@ -52,13 +52,13 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
     }
 
     /// <inheritdoc/>
-    public override async Task<IReadOnlyCollection<Message>> FormatMessagesAsync(
+    public override async Task<IReadOnlyCollection<ChatMessage>> FormatMessagesAsync(
         InputValues values,
         CancellationToken cancellationToken = default)
     {
         var allValues = await MergePartialAndUserVariablesAsync(values, cancellationToken).ConfigureAwait(false);
 
-        var resultMessages = new List<Message>();
+        var resultMessages = new List<ChatMessage>();
 
         foreach (var promptMessage in PromptMessages)
         {
@@ -82,7 +82,7 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="promptMessages"></param>
     /// <returns></returns>
@@ -131,4 +131,3 @@ public class ChatPromptTemplate : BaseChatPromptTemplate
         }
     }
 }
-
