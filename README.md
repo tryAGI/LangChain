@@ -9,10 +9,11 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ⚡ Building applications with LLMs through composability ⚡
+
 C# implementation of LangChain. We try to be as close to the original as possible in terms of abstractions, but are open to new entities.
 
-While the [SemanticKernel](https://github.com/microsoft/semantic-kernel/) is useful and we will use it wherever possible, we believe that it has several limitations and is based on Microsoft technologies.
-We proceed from the position of the maximum choice of available options and are open to using third-party libraries within individual implementations.
+While [Semantic Kernel](https://github.com/microsoft/semantic-kernel/) is useful and we use it wherever possible, it does not cover every scenario and is closely tied to the Microsoft ecosystem.
+We aim to offer the broadest practical choice of implementations and are open to using third-party libraries where appropriate.
 
 Maintainer notes:
 - I’m unlikely to be able to make serious progress alone, so my goal is to unite the efforts of C# developers to create a C# version of LangChain and control the quality of the final project
@@ -21,9 +22,13 @@ Maintainer notes:
 - I also respond quite quickly on Discord for any questions related to the project
 
 ## Usage
+
 You can use our wiki to get started: <https://tryagi.github.io/LangChain/>
+
 If the wiki contains outdated code, you can always take a look at [the tests for this](src/Meta/test/WikiTests.cs)
+
 Also see [examples](./examples) for example usage or [tests](./src/tests/LangChain.IntegrationTests/ReadmeTests.cs).
+
 ```csharp
 // Price to run from zero(create embeddings and request to LLM): 0,015$
 // Price to re-run if database is exists: 0,0004$
@@ -97,13 +102,15 @@ Console.WriteLine($"Embedding model usage: {embeddingModel.Usage}");   // Print 
 
 ## Support
 
-Priority place for bugs: https://github.com/tryAGI/LangChain/issues
-Priority place for ideas and general questions: https://github.com/tryAGI/LangChain/discussions
-Discord: https://discord.gg/Ca2xhfBf3v
+- Bugs: <https://github.com/tryAGI/LangChain/issues>
+- Ideas and general questions: <https://github.com/tryAGI/LangChain/discussions>
+- Discord: <https://discord.gg/Ca2xhfBf3v>
 
 ## Legal information and credits
+
 It's licensed under [the MIT license](LICENSE). We do not plan to change the license in any foreseeable future for this project,
 but projects based on this within the organization may have different licenses.
+
 Some documentation is based on documentation from [dotnet/docs](https://github.com/dotnet/docs/) repository
 under [CC BY 4.0 license](https://github.com/dotnet/docs/blob/main/LICENSE),
 where code examples are changed to code examples for using this project.
