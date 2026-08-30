@@ -126,4 +126,14 @@ Hi this is Joe
         res[17].Split("\n")[0].Should().Be("Header B: Header B.C: Header B.C.C");
         res[17].Split("\n")[1].Should().Be("Text B.C.C");
     }
+
+    [Test]
+    public void HeaderDepthJump_RemovesEveryExitedBreadcrumb()
+    {
+        const string markdown = "# A\r\n## B\r\n### C\r\n# D\r\nText";
+
+        var result = new MarkdownHeaderTextSplitter().SplitText(markdown);
+
+        result.Should().ContainSingle().Which.Should().Be("D\nText");
+    }
 }

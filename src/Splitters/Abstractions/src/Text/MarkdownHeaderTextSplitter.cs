@@ -35,9 +35,7 @@ public class MarkdownHeaderTextSplitter : TextSplitter
         text = text ?? throw new ArgumentNullException(nameof(text));
 
         // Split the input text by newline character ("\n").
-        var lines = text
-            .Replace("\r", "") // some people are using windows
-            .Split(separator, StringSplitOptions.None);
+        var lines = NormalizeLineEndings(text).Split(separator, StringSplitOptions.None);
 
 
         var content = new List<LineType>();
@@ -74,10 +72,10 @@ public class MarkdownHeaderTextSplitter : TextSplitter
             {
                 if (hLen <= currentHeaderLen)
                 {
-                    var existingHeader = currentHeader.Split('|');
-
-                    string prevHeader = string.Join("|", existingHeader.Take(existingHeader.Length - (1 - hLen + currentHeaderLen)));
-                    currentHeader = prevHeader + "|" + strippedLine.TrimStart('#').Trim();
+                    var parentHeaders = currentHeader
+                        .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                        .Take(hLen - 1);
+                    currentHeader = string.Join("|", parentHeaders.Append(strippedLine.TrimStart('#').Trim()));
                     currentHeaderLen = hLen;
                     continue;
                 }

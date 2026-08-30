@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" />
         <PackageReference Include="LangChain.Databases.OpenSearch" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" />

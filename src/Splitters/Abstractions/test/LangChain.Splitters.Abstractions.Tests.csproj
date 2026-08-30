@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentAssertions" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\..\Core\src\LangChain.Core.csproj" />
       <ProjectReference Include="..\src\LangChain.Splitters.Abstractions.csproj" />
     </ItemGroup>

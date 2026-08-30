@@ -46,6 +46,12 @@ public abstract class TextSplitter : ITextSplitter
     protected int ChunkOverlap => _chunkOverlap;
 
     /// <summary>
+    /// Normalizes Windows and legacy Mac line endings before separator-based splitting.
+    /// </summary>
+    internal static string NormalizeLineEndings(string text) =>
+        text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="text"></param>
