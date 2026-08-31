@@ -77,7 +77,7 @@ Hi this is Joe
 
         res[1].Split("\n")[0].Should().Be("Header A: Header A.A");
         res[1].Split("\n")[1].Should().Be("Text A.A");
-        
+
         res[2].Split("\n")[0].Should().Be("Header A: Header A.B");
         res[2].Split("\n")[1].Should().Be("Text A.B");
 
