@@ -6,6 +6,7 @@ using Microsoft.SemanticKernel.Connectors.SqliteVec;
 using OpenAI;
 
 // Connect to Ollama via its OpenAI-compatible endpoint
+// (llmman, https://github.com/llmmanorg/llmman, serves the same API on port 17434)
 var ollamaEndpoint = new Uri("http://localhost:11434/v1");
 var ollamaOptions = new OpenAIClientOptions { Endpoint = ollamaEndpoint };
 var ollamaApiKey = new ApiKeyCredential("ollama");

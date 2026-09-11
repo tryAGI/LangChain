@@ -66,6 +66,7 @@
   </Folder>
   <Folder Name="/Samples/">
     <Project Path="examples/LangChain.Samples.Azure/LangChain.Samples.Azure.csproj" />
+    <Project Path="examples/LangChain.Samples.Llmman/LangChain.Samples.Llmman.csproj" />
     <Project Path="examples/LangChain.Samples.LocalRAG/LangChain.Samples.LocalRAG.csproj" />
     <Project Path="examples/LangChain.Samples.Memory/LangChain.Samples.Memory.csproj" />
     <Project Path="examples/LangChain.Samples.Prompts/LangChain.Samples.Prompts.csproj" />

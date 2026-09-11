@@ -15,6 +15,8 @@ public class CharacterTextSplitter(
     {
         text = text ?? throw new ArgumentNullException(nameof(text));
 
+        text = NormalizeLineEndings(text);
+
         List<string> splits;
         if (separator != null)
         {
