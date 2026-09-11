@@ -1,8 +1,10 @@
 name: Auto-approve and auto-merge bot pull requests
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Test
+    types:
+      - completed
 
 permissions:
   contents: write
