@@ -107,6 +107,7 @@ internal static class Helpers
     {
         Provider.Free or Provider.OpenRouter => new Uri(tryAGI.OpenAI.CustomProviders.OpenRouterBaseUrl),
         Provider.Requesty => new Uri("https://router.requesty.ai/v1"),
+        Provider.Opper => new Uri("https://api.opper.ai/v3/compat"),
         _ => null,
     };
 
@@ -115,6 +116,7 @@ internal static class Helpers
         Provider.OpenAi or null => "OPENAI_API_KEY",
         Provider.OpenRouter or Provider.Free => "OPENROUTER_API_KEY",
         Provider.Requesty => "REQUESTY_API_KEY",
+        Provider.Opper => "OPPER_API_KEY",
         _ => throw new NotImplementedException(),
     };
 }
