@@ -6,6 +6,9 @@ on:
     tags:
       - v**
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     name: Publish
@@ -14,6 +17,16 @@ jobs:
       generate-build-number: false
       conventional-commits-publish-conditions: false
       additional-test-arguments: '--logger GitHubActions'
+    secrets:
+      nuget-key: ${{ secrets.NUGET_KEY }}
+
+  auto-stable-release:
+    needs: [publish]
+    if: github.ref == 'refs/heads/main'
+    uses: tryAGI/workflows/.github/workflows/auto-stable-release.yml@main
+    with:
+      project-path: LangChain.slnx
+      candidate-source: build
     secrets:
       nuget-key: ${{ secrets.NUGET_KEY }}
       
