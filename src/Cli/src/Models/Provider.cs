@@ -5,6 +5,7 @@ internal enum Provider
     OpenAi,
     OpenRouter,
     Requesty,
+    ApiRoute,
     Anthropic,
     Free,
 }
