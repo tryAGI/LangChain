@@ -18,4 +18,11 @@ public class HelpersTests
         Helpers.GetEndpoint(Provider.ApiRoute).Should().Be(new Uri("https://global.api-route.com/v1"));
         Helpers.GetApiKeyEnvironmentVariable(Provider.ApiRoute).Should().Be("API_ROUTE_API_KEY");
     }
+
+    [Test]
+    public void Opper_UsesExpectedEndpointAndApiKeyEnvironmentVariable()
+    {
+        Helpers.GetEndpoint(Provider.Opper).Should().Be(new Uri("https://api.opper.ai/v3/compat"));
+        Helpers.GetApiKeyEnvironmentVariable(Provider.Opper).Should().Be("OPPER_API_KEY");
+    }
 }

@@ -6,6 +6,7 @@ internal enum Provider
     OpenRouter,
     Requesty,
     ApiRoute,
+    Opper,
     Anthropic,
     Free,
 }
