@@ -4,14 +4,22 @@ on:
     types:
       - opened
 
+  workflow_dispatch:
+    inputs:
+      issue-number:
+        description: Existing issue number to label
+        required: true
+        type: number
+
 permissions:
+  contents: read
   issues: write
 
 jobs:
   auto-labeling:
     uses: oscoreio/ai-workflows/.github/workflows/auto-labeling.yml@main
     with:
-      issue-number: ${{ github.event.issue.number }}
+      issue-number: ${{ github.event.issue.number || inputs.issue-number }}
       model: free-fast
       provider: openrouter
       instructions: 'if an issue looks simple and does not affect database, add one of aider labels to try to solve it automatically'
