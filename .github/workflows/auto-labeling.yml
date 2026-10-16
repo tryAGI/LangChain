@@ -19,7 +19,7 @@ jobs:
   auto-labeling:
     uses: oscoreio/ai-workflows/.github/workflows/auto-labeling.yml@main
     with:
-      issue-number: ${{ github.event.issue.number || inputs.issue-number }}
+      issue-number: ${{ fromJSON(format('{0}', github.event.issue.number || inputs.issue-number)) }}
       model: free-fast
       provider: openrouter
       instructions: 'if an issue looks simple and does not affect database, add one of aider labels to try to solve it automatically'
