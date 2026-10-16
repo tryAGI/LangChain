@@ -20,9 +20,10 @@ jobs:
     uses: oscoreio/ai-workflows/.github/workflows/auto-labeling.yml@main
     with:
       issue-number: ${{ fromJSON(format('{0}', github.event.issue.number || inputs.issue-number)) }}
-      # The free-fast CLI alias points at a retired Gemini endpoint.
-      # The provider model catalog reports zero prompt/completion pricing.
-      model: openrouter/free
+      # The old free-fast alias targets a retired endpoint; the generic free
+      # router can select a model that ignores the required JSON schema.
+      # This catalog entry supports structured outputs with zero token pricing.
+      model: nvidia/nemotron-3-super-120b-a12b:free
       provider: openrouter
       instructions: 'if an issue looks simple and does not affect database, add one of aider labels to try to solve it automatically'
     secrets:
