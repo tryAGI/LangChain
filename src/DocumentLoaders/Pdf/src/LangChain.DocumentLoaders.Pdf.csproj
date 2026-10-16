@@ -19,6 +19,8 @@
       <PackageReference Include="Aspose.PDF" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
       <PackageReference Include="PdfPig" />
+      <!-- Aspose transitively selects vulnerable 8.0.0/9.0.0 versions. -->
+      <PackageReference Include="System.Security.Cryptography.Pkcs" />
       <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
