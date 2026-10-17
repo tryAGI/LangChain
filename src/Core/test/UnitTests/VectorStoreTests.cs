@@ -320,6 +320,24 @@ public class VectorStoreTests
         }
     }
 
+    [Test]
+    public async Task TypedCollection_AddTexts_PreservesInterfaceDictionaryMetadata()
+    {
+        using var store = new InMemoryVectorStore();
+        var collection = store.GetCollection<string, LangChainDocumentRecord>("interface-metadata");
+        await collection.EnsureCollectionExistsAsync();
+        IDictionary<string, object> nested = new System.Dynamic.ExpandoObject();
+        nested["category"] = "nested-dictionary";
+        IDictionary<string, object> metadata = new SortedDictionary<string, object>
+        {
+            ["payload"] = nested,
+        };
+        var ids = await collection.AddTextsAsync(new FakeEmbeddingGenerator(), ["text"], [metadata]);
+        var document = await collection.GetDocumentByIdAsync(ids.Single());
+        ((JsonElement)document!.Metadata["payload"]).GetProperty("category").GetString()
+            .Should().Be("nested-dictionary");
+    }
+
     #endregion
 
     #region SqliteVec

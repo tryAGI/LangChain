@@ -75,10 +75,13 @@ static async Task RunNativeAotSmokeAsync()
             behavior: AddDocumentsToDatabaseBehavior.OverwriteExistingCollection);
 
         const string text = "AOT metadata survives Chroma round trips.";
-        var metadata = new Dictionary<string, object>
+        IDictionary<string, object> nested = new System.Dynamic.ExpandoObject();
+        nested["kind"] = "generic-dictionary";
+        IDictionary<string, object> metadata = new SortedDictionary<string, object>
         {
             ["source"] = "nativeaot-smoke",
             ["page"] = 3,
+            ["nested"] = nested,
         };
         var ids = await collection.AddTextsAsync(embeddingGenerator, [text], [metadata]);
         var document = await collection.GetDocumentByIdAsync(ids.Single());
@@ -87,7 +90,9 @@ static async Task RunNativeAotSmokeAsync()
             document.Metadata["source"] is not JsonElement { ValueKind: JsonValueKind.String } source ||
             source.GetString() != "nativeaot-smoke" ||
             document.Metadata["page"] is not JsonElement { ValueKind: JsonValueKind.Number } page ||
-            page.GetInt32() != 3)
+            page.GetInt32() != 3 ||
+            document.Metadata["nested"] is not JsonElement { ValueKind: JsonValueKind.Object } nestedJson ||
+            nestedJson.GetProperty("kind").GetString() != "generic-dictionary")
         {
             throw new InvalidOperationException("Chroma did not preserve the native AOT document and metadata round trip.");
         }

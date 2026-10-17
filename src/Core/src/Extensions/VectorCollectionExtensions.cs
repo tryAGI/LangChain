@@ -237,7 +237,7 @@ public static class VectorCollectionExtensions
             {
                 Text = text,
                 MetadataJson = metadatas?.ElementAt(index) is { } meta
-                    ? JsonSerializer.Serialize(meta, LangChainJsonSerializerContext.Metadata.DictionaryStringObject)
+                    ? JsonSerializer.Serialize(meta, LangChainJsonSerializerContext.Metadata.IDictionaryStringObject)
                     : null,
                 Embedding = result[index].Vector,
             });

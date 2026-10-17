@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 namespace LangChain.Schema;
 
 [JsonSerializable(typeof(Dictionary<string, object>))]
+[JsonSerializable(typeof(IDictionary<string, object>))]
 internal sealed partial class LangChainJsonSerializerContext : JsonSerializerContext
 {
     internal static LangChainJsonSerializerContext Metadata { get; } = CreateMetadataContext();

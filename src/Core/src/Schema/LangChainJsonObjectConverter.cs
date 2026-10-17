@@ -15,7 +15,18 @@ internal sealed class LangChainJsonObjectConverter : JsonConverter<object>
 
     public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
     {
+        // Preserve the existing serializer's support for arbitrary metadata on managed runtimes.
+#if NET8_0_OR_GREATER
+        if (JsonSerializer.IsReflectionEnabledByDefault &&
+            System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        {
+            JsonSerializer.Serialize(writer, value, value.GetType());
+            return;
+        }
         WriteValue(writer, value);
+#else
+        JsonSerializer.Serialize(writer, value, value.GetType());
+#endif
     }
 
     private static void WriteValue(Utf8JsonWriter writer, object? value)
@@ -91,6 +102,12 @@ internal sealed class LangChainJsonObjectConverter : JsonConverter<object>
             case Enum enumValue:
                 WriteEnum(writer, enumValue);
                 return;
+            case IDictionary<string, object> dictionary:
+                WriteDictionary(writer, dictionary);
+                return;
+            case IReadOnlyDictionary<string, object> dictionary:
+                WriteDictionary(writer, dictionary);
+                return;
             case IDictionary dictionary:
                 writer.WriteStartObject();
                 foreach (DictionaryEntry entry in dictionary)
@@ -117,21 +134,20 @@ internal sealed class LangChainJsonObjectConverter : JsonConverter<object>
                 return;
         }
 
-#if NET8_0_OR_GREATER
-        if (JsonSerializer.IsReflectionEnabledByDefault &&
-            System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
-        {
-            JsonSerializer.Serialize(writer, value, value.GetType());
-            return;
-        }
-#else
-        JsonSerializer.Serialize(writer, value, value.GetType());
-        return;
-#endif
-
         throw new NotSupportedException(
             $"Metadata values of type '{value.GetType()}' require reflection-based JSON serialization, which is disabled. " +
             "Use JSON-compatible metadata values.");
+    }
+
+    private static void WriteDictionary(Utf8JsonWriter writer, IEnumerable<KeyValuePair<string, object>> dictionary)
+    {
+        writer.WriteStartObject();
+        foreach (var entry in dictionary)
+        {
+            writer.WritePropertyName(entry.Key);
+            WriteValue(writer, entry.Value);
+        }
+        writer.WriteEndObject();
     }
 
     private static void WriteEnum(Utf8JsonWriter writer, Enum value)
