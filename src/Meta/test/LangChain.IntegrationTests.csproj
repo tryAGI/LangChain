@@ -8,6 +8,7 @@
     <ItemGroup>
         <PackageReference Include="LangChain.Databases.OpenSearch" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
+        <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" />
         <PackageReference Include="Testcontainers" />
     </ItemGroup>

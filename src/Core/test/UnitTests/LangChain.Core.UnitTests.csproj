@@ -11,6 +11,7 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.SemanticKernel.Connectors.InMemory" />
       <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
+      <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />
     </ItemGroup>
 
     <ItemGroup>
