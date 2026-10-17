@@ -230,6 +230,96 @@ public class VectorStoreTests
         doc!.PageContent.Should().Be(string.Empty);
     }
 
+    [Test]
+    public async Task DynamicCollection_AddAndSearch_RoundTripsDocumentMetadata()
+    {
+        var filePath = Path.Combine(Path.GetTempPath(), $"langchain_test_{Guid.NewGuid():N}.txt");
+        VectorStoreCollection<object, Dictionary<string, object?>>? collection = null;
+        try
+        {
+            await File.WriteAllTextAsync(filePath, "Initial document for dynamic collection creation.");
+
+            var store = new InMemoryVectorStore();
+            var embeddingGenerator = new FakeEmbeddingGenerator();
+            collection = await store.AddDocumentsFromDynamicAsync<FileLoader>(
+                embeddingGenerator,
+                dimensions: 3,
+                dataSource: DataSource.FromPath(filePath),
+                collectionName: "dynamic-add-search-test",
+                behavior: AddDocumentsToDatabaseBehavior.OverwriteExistingCollection);
+
+            var document = new Document("Dynamic collection document", new Dictionary<string, object>
+            {
+                ["source"] = "unit-test",
+                ["page"] = 3,
+            });
+            var ids = await collection.AddDocumentsAsync(embeddingGenerator, [document]);
+
+            var retrieved = await collection.GetDocumentByIdAsync(ids.Single());
+            retrieved.Should().NotBeNull();
+            retrieved!.PageContent.Should().Be(document.PageContent);
+            ((JsonElement)retrieved.Metadata["source"]).GetString().Should().Be("unit-test");
+            ((JsonElement)retrieved.Metadata["page"]).GetInt32().Should().Be(3);
+
+            var similarDocuments = await collection.GetSimilarDocuments(
+                embeddingGenerator,
+                document.PageContent,
+                amount: 10);
+            similarDocuments.Should().Contain(item => item.PageContent == document.PageContent);
+            ((JsonElement)similarDocuments.Single(item => item.PageContent == document.PageContent).Metadata["source"])
+                .GetString().Should().Be("unit-test");
+        }
+        finally
+        {
+            if (collection is not null)
+            {
+                await collection.EnsureCollectionDeletedAsync();
+            }
+
+            File.Delete(filePath);
+        }
+    }
+
+    [Test]
+    public async Task TypedCollection_AddDocuments_PreservesPocoMetadataSerialization()
+    {
+        var filePath = Path.Combine(Path.GetTempPath(), $"langchain_test_{Guid.NewGuid():N}.txt");
+        VectorStoreCollection<string, LangChainDocumentRecord>? collection = null;
+        try
+        {
+            await File.WriteAllTextAsync(filePath, "Initial typed document.");
+
+            var store = new InMemoryVectorStore();
+            var embeddingGenerator = new FakeEmbeddingGenerator();
+            collection = await store.AddDocumentsFromAsync<FileLoader>(
+                embeddingGenerator,
+                dimensions: 3,
+                dataSource: DataSource.FromPath(filePath),
+                collectionName: $"typed-poco-metadata-{Guid.NewGuid():N}",
+                behavior: AddDocumentsToDatabaseBehavior.OverwriteExistingCollection);
+
+            var document = new Document("POCO metadata document", new Dictionary<string, object>
+            {
+                ["payload"] = new { category = "typed-api" },
+            });
+            var ids = await collection.AddDocumentsAsync(embeddingGenerator, [document]);
+
+            var record = await collection.GetAsync(ids.Single());
+            record.Should().NotBeNull();
+            var metadata = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(record!.MetadataJson!);
+            metadata!["payload"].GetProperty("category").GetString().Should().Be("typed-api");
+        }
+        finally
+        {
+            if (collection is not null)
+            {
+                await collection.EnsureCollectionDeletedAsync();
+            }
+
+            File.Delete(filePath);
+        }
+    }
+
     #endregion
 
     #region SqliteVec
