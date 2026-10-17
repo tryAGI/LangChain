@@ -19,6 +19,9 @@
     <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.1.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.InMemory" Version="1.74.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.74.0-preview" />
+    <!-- SqliteVec resolves SQLitePCLRaw.lib.e_sqlite3 2.1.10 via Microsoft.Data.Sqlite (GHSA-2m69-gcr7-jv3q, <= 2.1.11).
+         2.1.14 ships SQLite 3.54.0 natives; reference it directly wherever SqliteVec is used. -->
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.14" />
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.1-dev.67" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.17.1-dev.65" />
     <PackageVersion Include="LangChain.Providers.Anthropic" Version="0.17.1-dev.29" />
