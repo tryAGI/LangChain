@@ -57,11 +57,11 @@ internal static class Helpers
         var endpoint = GetEndpoint(provider);
         model = model switch
         {
-            null => "o4-mini",
+            null => "gpt-5.6-terra",
             // Free OpenRouter models that support the structured outputs the formats rely on
             "free" or "free-fast" => "nvidia/nemotron-3-super-120b-a12b:free",
             "free-smart" => "nvidia/nemotron-3.5-super-vl:free",
-            "latest-fast" => "o4-mini",
+            "latest-fast" => "gpt-5.6-terra",
             "latest-smart" => "o3",
             _ => model,
         };
