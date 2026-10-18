@@ -32,7 +32,7 @@ internal static class CommonOptions
     public static Option<string> Model => new("--model")
     {
         Description = "Model to use for commands.",
-        DefaultValueFactory = _ => "o3-mini",
+        DefaultValueFactory = _ => "gpt-5.6-sol",
     };
 
     public static Option<Provider> Provider => new("--provider")
