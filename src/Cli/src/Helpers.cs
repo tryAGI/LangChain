@@ -58,8 +58,9 @@ internal static class Helpers
         model = model switch
         {
             null => "o4-mini",
-            "free" or "free-fast" => "google/gemini-2.0-flash-exp:free",
-            "free-smart" => "deepseek/deepseek-r1:free",
+            // Free OpenRouter models that support the structured outputs the formats rely on
+            "free" or "free-fast" => "nvidia/nemotron-3-super-120b-a12b:free",
+            "free-smart" => "nvidia/nemotron-3.5-super-vl:free",
             "latest-fast" => "o4-mini",
             "latest-smart" => "o3",
             _ => model,
