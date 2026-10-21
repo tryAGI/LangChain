@@ -7,6 +7,7 @@ internal enum Provider
     Requesty,
     ApiRoute,
     Opper,
+    CheaperInference,
     Anthropic,
     Free,
 }

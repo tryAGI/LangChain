@@ -25,4 +25,11 @@ public class HelpersTests
         Helpers.GetEndpoint(Provider.Opper).Should().Be(new Uri("https://api.opper.ai/v3/compat"));
         Helpers.GetApiKeyEnvironmentVariable(Provider.Opper).Should().Be("OPPER_API_KEY");
     }
+
+    [Test]
+    public void CheaperInference_UsesExpectedEndpointAndApiKeyEnvironmentVariable()
+    {
+        Helpers.GetEndpoint(Provider.CheaperInference).Should().Be(new Uri("https://api.cheaperinference.com/v1"));
+        Helpers.GetApiKeyEnvironmentVariable(Provider.CheaperInference).Should().Be("CHEAPER_INFERENCE_API_KEY");
+    }
 }
