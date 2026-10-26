@@ -110,6 +110,7 @@ internal static class Helpers
         Provider.Requesty => new Uri("https://router.requesty.ai/v1"),
         Provider.ApiRoute => new Uri("https://global.api-route.com/v1"),
         Provider.Opper => new Uri("https://api.opper.ai/v3/compat"),
+        Provider.CheaperInference => new Uri("https://api.cheaperinference.com/v1"),
         _ => null,
     };
 
@@ -120,6 +121,7 @@ internal static class Helpers
         Provider.Requesty => "REQUESTY_API_KEY",
         Provider.ApiRoute => "API_ROUTE_API_KEY",
         Provider.Opper => "OPPER_API_KEY",
+        Provider.CheaperInference => "CHEAPER_INFERENCE_API_KEY",
         _ => throw new NotImplementedException(),
     };
 }
