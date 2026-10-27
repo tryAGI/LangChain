@@ -136,4 +136,27 @@ Hi this is Joe
 
         result.Should().ContainSingle().Which.Should().Be("D\nText");
     }
+
+    [Test]
+    public void CodeBlock_HashLinesAreNotTreatedAsHeaders()
+    {
+        const string markdown = "# Setup\nRun the script:\n```bash\n# install dependencies\npip install foo\n```\nDone.";
+
+        var result = new MarkdownHeaderTextSplitter().SplitText(markdown);
+
+        result.Should().ContainSingle().Which.Should().Be(
+            "Setup\nRun the script:\n```bash\n# install dependencies\npip install foo\n```\nDone.");
+    }
+
+    [Test]
+    public void CodeBlock_HeadersAfterClosingFenceAreDetected()
+    {
+        const string markdown = "# A\n```\n## not a header\n```\n# B\nText B";
+
+        var result = new MarkdownHeaderTextSplitter().SplitText(markdown);
+
+        result.Should().HaveCount(2);
+        result[0].Should().Be("A\n```\n## not a header\n```");
+        result[1].Should().Be("B\nText B");
+    }
 }
