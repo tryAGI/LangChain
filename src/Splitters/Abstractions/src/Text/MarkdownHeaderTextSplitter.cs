@@ -54,9 +54,16 @@ public class MarkdownHeaderTextSplitter : TextSplitter
                 continue;
             }
 
-            if (!inCodeBlock && strippedLine.StartsWith(_codeBlockseparator, StringComparison.InvariantCulture))
+            if (!inCodeBlock)
             {
-                inCodeBlock = strippedLine.Split(new[] { _codeBlockseparator }, StringSplitOptions.None).Length < 2;
+                // an opening fence contains exactly one separator (e.g. "```python")
+                inCodeBlock = strippedLine.StartsWith(_codeBlockseparator, StringComparison.InvariantCulture) &&
+                              strippedLine.Split(new[] { _codeBlockseparator }, StringSplitOptions.None).Length == 2;
+            }
+            else if (strippedLine.StartsWith(_codeBlockseparator, StringComparison.InvariantCulture))
+            {
+                // closing fence
+                inCodeBlock = false;
             }
 
             if (inCodeBlock)
