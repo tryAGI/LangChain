@@ -26,4 +26,27 @@ public partial class Tests
         var actual2 = texts[1].PageContent;
         actual2.Should().Be(expected2);
     }
+
+    [Test]
+    public void RecursiveCharacterTextSplitter_UsesLengthFunctionToDecideWhetherToSplitFurther()
+    {
+        // counts words, like a token counter would count tokens
+        static int CountWords(string text) => text.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
+
+        var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 10, chunkOverlap: 0, lengthFunction: CountWords);
+
+        var chunks = textSplitter.SplitText("one two three four\n\nfive six seven eight");
+
+        chunks.Should().ContainSingle().Which.Should().Be("one two three four\n\nfive six seven eight");
+    }
+
+    [Test]
+    public void RecursiveCharacterTextSplitter_DoesNotRecurseForeverOnSingleCharacters()
+    {
+        var textSplitter = new RecursiveCharacterTextSplitter(chunkSize: 1, chunkOverlap: 0);
+
+        var chunks = textSplitter.SplitText("abc");
+
+        chunks.Should().Equal("a", "b", "c");
+    }
 }

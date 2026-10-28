@@ -52,6 +52,11 @@ public abstract class TextSplitter : ITextSplitter
         text.Replace("\r\n", "\n").Replace('\r', '\n');
 
     /// <summary>
+    /// Measures text with the configured length function.
+    /// </summary>
+    internal int GetLength(string text) => _lengthFunction(text);
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="text"></param>
