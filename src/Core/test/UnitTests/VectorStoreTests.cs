@@ -553,6 +553,78 @@ public class VectorStoreTests
         }
     }
 
+    [Test]
+    public async Task AddDocumentsFromAsync_MultipleDataSources_AddsDocumentsFromAllSources()
+    {
+        var filePath1 = Path.Combine(Path.GetTempPath(), $"langchain_test_{Guid.NewGuid():N}.txt");
+        var filePath2 = Path.Combine(Path.GetTempPath(), $"langchain_test_{Guid.NewGuid():N}.txt");
+        try
+        {
+            await File.WriteAllTextAsync(filePath1, "The quick brown fox jumps over the lazy dog.");
+            await File.WriteAllTextAsync(filePath2, "A journey of a thousand miles begins with a single step.");
+
+            var store = new InMemoryVectorStore();
+            var embeddingGenerator = new FakeEmbeddingGenerator();
+
+            var collection = await store.AddDocumentsFromAsync<FileLoader>(
+                embeddingGenerator,
+                dimensions: 3,
+                dataSources: [DataSource.FromPath(filePath1), DataSource.FromPath(filePath2)],
+                collectionName: "test-multiple-sources");
+
+            var results = new List<VectorSearchResult<LangChainDocumentRecord>>();
+            var queryEmbedding = new ReadOnlyMemory<float>([1.0f, 0.0f, 0.0f]);
+            await foreach (var result in collection.SearchAsync(queryEmbedding, 10))
+            {
+                results.Add(result);
+            }
+
+            results.Should().HaveCount(2);
+            results.Should().Contain(r => r.Record.Text!.Contains("fox"));
+            results.Should().Contain(r => r.Record.Text!.Contains("thousand miles"));
+        }
+        finally
+        {
+            File.Delete(filePath1);
+            File.Delete(filePath2);
+        }
+    }
+
+    [Test]
+    public async Task AddDocumentsFromDynamicAsync_MultipleDataSources_AddsDocumentsFromAllSources()
+    {
+        var filePath1 = Path.Combine(Path.GetTempPath(), $"langchain_test_{Guid.NewGuid():N}.txt");
+        var filePath2 = Path.Combine(Path.GetTempPath(), $"langchain_test_{Guid.NewGuid():N}.txt");
+        try
+        {
+            await File.WriteAllTextAsync(filePath1, "The quick brown fox jumps over the lazy dog.");
+            await File.WriteAllTextAsync(filePath2, "A journey of a thousand miles begins with a single step.");
+
+            var store = new InMemoryVectorStore();
+            var embeddingGenerator = new FakeEmbeddingGenerator();
+
+            var collection = await store.AddDocumentsFromDynamicAsync<FileLoader>(
+                embeddingGenerator,
+                dimensions: 3,
+                dataSources: [DataSource.FromPath(filePath1), DataSource.FromPath(filePath2)],
+                collectionName: "dynamic-multiple-sources");
+
+            var similarDocuments = await collection.GetSimilarDocuments(
+                embeddingGenerator,
+                "query",
+                amount: 10);
+
+            similarDocuments.Should().HaveCount(2);
+            similarDocuments.Should().Contain(d => d.PageContent.Contains("fox"));
+            similarDocuments.Should().Contain(d => d.PageContent.Contains("thousand miles"));
+        }
+        finally
+        {
+            File.Delete(filePath1);
+            File.Delete(filePath2);
+        }
+    }
+
     /// <summary>
     /// A fake embedding generator that returns deterministic 3-dimensional embeddings for testing.
     /// </summary>
