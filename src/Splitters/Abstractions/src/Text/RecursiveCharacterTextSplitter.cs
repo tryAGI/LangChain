@@ -54,7 +54,8 @@ public class RecursiveCharacterTextSplitter(
 
         foreach (var s in splits)
         {
-            if (s.Length < ChunkSize)
+            // single characters (empty separator) cannot be split any further
+            if (separator.Length == 0 || GetLength(s) < ChunkSize)
             {
                 goodSplits.Add(s);
             }
