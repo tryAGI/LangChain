@@ -8,6 +8,7 @@ internal enum Provider
     ApiRoute,
     Opper,
     CheaperInference,
+    StandardCompute,
     Anthropic,
     Free,
 }
