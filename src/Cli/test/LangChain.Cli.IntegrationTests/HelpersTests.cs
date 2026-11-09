@@ -32,4 +32,11 @@ public class HelpersTests
         Helpers.GetEndpoint(Provider.CheaperInference).Should().Be(new Uri("https://api.cheaperinference.com/v1"));
         Helpers.GetApiKeyEnvironmentVariable(Provider.CheaperInference).Should().Be("CHEAPER_INFERENCE_API_KEY");
     }
+
+    [Test]
+    public void StandardCompute_UsesExpectedEndpointAndApiKeyEnvironmentVariable()
+    {
+        Helpers.GetEndpoint(Provider.StandardCompute).Should().Be(new Uri("https://api.stdcmpt.com/v1"));
+        Helpers.GetApiKeyEnvironmentVariable(Provider.StandardCompute).Should().Be("STANDARDCOMPUTE_API_KEY");
+    }
 }
