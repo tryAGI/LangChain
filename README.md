@@ -23,6 +23,8 @@ Maintainer notes:
 
 ## Usage
 
+For source-scoped RAG document updates, see [replace chunks for one data source](docs/source-scoped-document-replacement.md).
+
 You can use our wiki to get started: <https://tryagi.github.io/LangChain/>
 
 If the wiki contains outdated code, you can always take a look at [the tests for this](src/Meta/test/WikiTests.cs)
