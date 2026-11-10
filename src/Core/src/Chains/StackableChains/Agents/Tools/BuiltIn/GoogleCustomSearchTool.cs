@@ -16,11 +16,16 @@ namespace LangChain.Chains.StackableChains.Agents.Tools.BuiltIn;
 /// <param name="cx"></param>
 /// <param name="useCache"></param>
 /// <param name="resultsLimit"></param>
+/// <param name="baseAddress">
+/// Address of a Custom Search JSON API compatible endpoint. The request goes to {baseAddress}/customsearch/v1,
+/// so a path prefix in the address is kept.
+/// </param>
 public class GoogleCustomSearchTool(
     string key,
     string cx,
     bool useCache = true,
-    int resultsLimit = 3)
+    int resultsLimit = 3,
+    string baseAddress = "https://www.googleapis.com")
     : AgentTool(
         name: "google",
         description: "to search information on internet")
@@ -59,9 +64,9 @@ public class GoogleCustomSearchTool(
         if (!useCache || (responseString = GetCachedAnswer(input)) == null)
         {
             using var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://www.googleapis.com");
+            httpClient.BaseAddress = new Uri(baseAddress.TrimEnd('/') + "/");
             var response = await httpClient.GetAsync(
-                new Uri($"/customsearch/v1?key={key}&cx={cx}&q={input}", UriKind.Relative), cancellationToken).ConfigureAwait(false);
+                new Uri($"customsearch/v1?key={key}&cx={cx}&q={input}", UriKind.Relative), cancellationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
