@@ -35,6 +35,22 @@ jobs:
       - name: "TODO to Issue"
         uses: "alstr/todo-to-issue-action@v5"
 
+  # Fails in seconds when the nuget.org trusted-publishing policy is missing or no longer matches, rather
+  # than letting the whole build run and surfacing the mismatch as an HTTP 401 at the push. It declares no
+  # `needs`, so it runs beside the build instead of after it, and it has to stay in this workflow for the
+  # same reason the push does: nuget.org matches the policy against job_workflow_ref.
+  nuget-trusted-publish-check:
+    name: Check NuGet trusted publishing
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: tryAGI/workflows/.github/actions/nuget-trusted-publish-check@main
+        with:
+          user: havendv
+
   nuget-trusted-publish:
     name: NuGet trusted publishing
     needs: publish
