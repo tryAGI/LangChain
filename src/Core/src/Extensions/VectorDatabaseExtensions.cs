@@ -31,7 +31,39 @@ public static class VectorDatabaseExtensions
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
+        return await vectorStore.AddDocumentsFromAsync<TLoader>(
+            embeddingGenerator: embeddingGenerator,
+            dimensions: dimensions,
+            dataSources: new[] { dataSource },
+            collectionName: collectionName,
+            textSplitter: textSplitter,
+            loaderSettings: loaderSettings,
+            behavior: behavior,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Adds documents loaded using <typeparamref name="TLoader"/> from multiple data sources to the vector store. <br/>
+    /// If the collection does not exist, it will be created. <br/>
+    /// Splitting the text into sentences is done using the default text splitter, but you can provide your own. <br/>
+    /// </summary>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Typed vector collection mapping is not NativeAOT-compatible. Use AddDocumentsFromDynamicAsync instead.")]
+#endif
+    public static async Task<VectorStoreCollection<string, LangChainDocumentRecord>> AddDocumentsFromAsync<TLoader>(
+        this VectorStore vectorStore,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
+        int dimensions,
+        IEnumerable<DataSource> dataSources,
+        string collectionName = "langchain",
+        ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
+        AddDocumentsToDatabaseBehavior behavior = AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists,
+        CancellationToken cancellationToken = default)
+        where TLoader : IDocumentLoader, new()
+    {
         vectorStore = vectorStore ?? throw new ArgumentNullException(paramName: nameof(vectorStore));
+        dataSources = dataSources ?? throw new ArgumentNullException(paramName: nameof(dataSources));
 
         var collection = vectorStore.GetCollection<string, LangChainDocumentRecord>(
             collectionName,
@@ -53,7 +85,7 @@ public static class VectorDatabaseExtensions
 
         await collection.AddDocumentsFromAsync<TLoader>(
             embeddingGenerator: embeddingGenerator,
-            dataSource: dataSource,
+            dataSources: dataSources,
             textSplitter: textSplitter,
             loaderSettings: loaderSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -76,7 +108,34 @@ public static class VectorDatabaseExtensions
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
+        return await vectorStore.AddDocumentsFromDynamicAsync<TLoader>(
+            embeddingGenerator: embeddingGenerator,
+            dimensions: dimensions,
+            dataSources: new[] { dataSource },
+            collectionName: collectionName,
+            textSplitter: textSplitter,
+            loaderSettings: loaderSettings,
+            behavior: behavior,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Adds documents from multiple data sources to a vector store using dynamic record mapping for trimming and NativeAOT compatibility.
+    /// </summary>
+    public static async Task<VectorStoreCollection<object, Dictionary<string, object?>>> AddDocumentsFromDynamicAsync<TLoader>(
+        this VectorStore vectorStore,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
+        int dimensions,
+        IEnumerable<DataSource> dataSources,
+        string collectionName = "langchain",
+        ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
+        AddDocumentsToDatabaseBehavior behavior = AddDocumentsToDatabaseBehavior.JustReturnCollectionIfCollectionIsAlreadyExists,
+        CancellationToken cancellationToken = default)
+        where TLoader : IDocumentLoader, new()
+    {
         vectorStore = vectorStore ?? throw new ArgumentNullException(paramName: nameof(vectorStore));
+        dataSources = dataSources ?? throw new ArgumentNullException(paramName: nameof(dataSources));
 
         var collection = vectorStore.GetDynamicCollection(
             collectionName,
@@ -98,7 +157,7 @@ public static class VectorDatabaseExtensions
 
         await collection.AddDocumentsFromAsync<TLoader>(
             embeddingGenerator: embeddingGenerator,
-            dataSource: dataSource,
+            dataSources: dataSources,
             textSplitter: textSplitter,
             loaderSettings: loaderSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -119,11 +178,31 @@ public static class VectorDatabaseExtensions
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
-        var loader = new TLoader();
-        var documents = await loader.LoadAsync(
-            dataSource: dataSource,
-            settings: loaderSettings,
+        return await vectorCollection.AddDocumentsFromAsync<TLoader>(
+            embeddingGenerator: embeddingGenerator,
+            dataSources: new[] { dataSource },
+            textSplitter: textSplitter,
+            loaderSettings: loaderSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Adds documents loaded using <typeparamref name="TLoader"/> from multiple data sources to the vector collection. <br/>
+    /// Splitting the text into sentences is done using the default text splitter, but you can provide your own. <br/>
+    /// </summary>
+    public static async Task<IReadOnlyCollection<string>> AddDocumentsFromAsync<TLoader>(
+        this VectorStoreCollection<string, LangChainDocumentRecord> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
+        IEnumerable<DataSource> dataSources,
+        ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
+        CancellationToken cancellationToken = default)
+        where TLoader : IDocumentLoader, new()
+    {
+        var documents = await LoadDocumentsAsync<TLoader>(
+            dataSources,
+            loaderSettings,
+            cancellationToken).ConfigureAwait(false);
 
         return await vectorCollection.AddSplitDocumentsAsync(
             embeddingGenerator: embeddingGenerator,
@@ -144,11 +223,30 @@ public static class VectorDatabaseExtensions
         CancellationToken cancellationToken = default)
         where TLoader : IDocumentLoader, new()
     {
-        var loader = new TLoader();
-        var documents = await loader.LoadAsync(
-            dataSource: dataSource,
-            settings: loaderSettings,
+        return await vectorCollection.AddDocumentsFromAsync<TLoader>(
+            embeddingGenerator: embeddingGenerator,
+            dataSources: new[] { dataSource },
+            textSplitter: textSplitter,
+            loaderSettings: loaderSettings,
             cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Adds documents loaded using <typeparamref name="TLoader"/> from multiple data sources to a dynamically mapped vector collection.
+    /// </summary>
+    public static async Task<IReadOnlyCollection<string>> AddDocumentsFromAsync<TLoader>(
+        this VectorStoreCollection<object, Dictionary<string, object?>> vectorCollection,
+        IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
+        IEnumerable<DataSource> dataSources,
+        ITextSplitter? textSplitter = null,
+        DocumentLoaderSettings? loaderSettings = null,
+        CancellationToken cancellationToken = default)
+        where TLoader : IDocumentLoader, new()
+    {
+        var documents = await LoadDocumentsAsync<TLoader>(
+            dataSources,
+            loaderSettings,
+            cancellationToken).ConfigureAwait(false);
 
         return await vectorCollection.AddSplitDocumentsAsync(
             embeddingGenerator: embeddingGenerator,
@@ -195,5 +293,26 @@ public static class VectorDatabaseExtensions
             embeddingGenerator: embeddingGenerator,
             documents: splitDocuments,
             cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
+    private static async Task<IReadOnlyCollection<Document>> LoadDocumentsAsync<TLoader>(
+        IEnumerable<DataSource> dataSources,
+        DocumentLoaderSettings? loaderSettings,
+        CancellationToken cancellationToken)
+        where TLoader : IDocumentLoader, new()
+    {
+        dataSources = dataSources ?? throw new ArgumentNullException(paramName: nameof(dataSources));
+
+        var loader = new TLoader();
+        var documents = new List<Document>();
+        foreach (var dataSource in dataSources)
+        {
+            documents.AddRange(await loader.LoadAsync(
+                dataSource: dataSource,
+                settings: loaderSettings,
+                cancellationToken: cancellationToken).ConfigureAwait(false));
+        }
+
+        return documents;
     }
 }
